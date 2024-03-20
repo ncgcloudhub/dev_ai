@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\CustomTemplateController;
 use App\Http\Controllers\Backend\AIChatController;
 use App\Http\Controllers\Backend\DallEImageGenerate;
+use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -103,6 +104,13 @@ Route::prefix('generate')->group(function() {
         Route::get('/image/view', [DallEImageGenerate::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [DallEImageGenerate::class, 'generateImage'])->name('generate.image');
         });
+
+
+//Profile 
+    Route::prefix('profile')->group(function() {
+        Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
+        Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
+    });
         
 
 
