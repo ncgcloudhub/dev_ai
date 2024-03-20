@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('role');
             $table->text('expertise');
-            $table->text('train_expert');
-            $table->text('image');
+            $table->text('train_expert')->nullable();
+            $table->text('image')->nullable();;
             $table->string('active');
             $table->timestamps();
         });
