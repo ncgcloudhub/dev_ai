@@ -14,6 +14,21 @@ use OpenAI;
 
 class CustomTemplateController extends Controller
 {
+
+
+    public function AIImageGallery(){
+        
+        return view('frontend.ai_image_gallery');
+    }
+
+
+
+
+
+
+
+
+
     // Custom Template Category
     public function CustomTemplateCategoryAdd(){
         $categories = CustomTemplateCategory::latest()->get();

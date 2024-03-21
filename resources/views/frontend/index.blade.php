@@ -586,8 +586,13 @@
                             </div>
                         </div>
                         <!-- end col -->
+                        
                     </div>
                     <!-- end row -->
+                    <div class="mx-auto d-flex justify-content-center">
+                        <a href="{{ route('ai.image.gallery') }}" class="btn btn-primary">Show More</a>
+                    </div>
+                    
                 </div>
             </section>
 

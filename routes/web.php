@@ -111,6 +111,9 @@ Route::prefix('generate')->group(function() {
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
     });
+
+
+    Route::get('/ai/image/gallery', [CustomTemplateController::class, 'AIImageGallery'])->name('ai.image.gallery');
         
 
 
