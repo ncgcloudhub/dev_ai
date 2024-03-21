@@ -305,7 +305,8 @@
                                     <div class="chat-input-feedback">
                                         Please Enter a Message
                                     </div>
-                                    <input type="text" class="form-control chat-input bg-light border-light fs-13 auto-expand" id="message-input" placeholder="Type your message..." autocomplete="off">
+                                    <textarea class="form-control chat-input bg-light border-light auto-expand" id="message-input" placeholder="Type your message..." autocomplete="off"></textarea>
+
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">

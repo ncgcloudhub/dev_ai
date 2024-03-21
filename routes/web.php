@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\CustomTemplateController;
 use App\Http\Controllers\Backend\AIChatController;
+use App\Http\Controllers\Backend\ExpertController;
 use App\Http\Controllers\Backend\DallEImageGenerate;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
@@ -86,14 +87,14 @@ Route::prefix('custom/Template')->group(function(){
 Route::prefix('chat')->group(function(){
 
         // CHAT
-    Route::get('/expert/add', [AIChatController::class, 'ExpertAdd'])->name('expert.add');
-    Route::post('/expert/store', [AIChatController::class, 'ExpertStore'])->name('expert.store');
+    Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add');
+    Route::post('/expert/store', [ExpertController::class, 'ExpertStore'])->name('expert.store');
 
 
 
     // TEST CHAT
-    Route::get('/expert/view', [AIChatController::class, 'index'])->name('chat');
-    Route::get('/expert/{id}', [AIChatController::class, 'ExpertChat'])->name('expert.chat');
+    Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
+    Route::get('/expert/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
     Route::post('/reply', [AIChatController::class, 'SendMessages']);
         
         });
