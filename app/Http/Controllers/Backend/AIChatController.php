@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\AIChat;
 use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AISettings;

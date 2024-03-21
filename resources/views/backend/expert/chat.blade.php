@@ -6,6 +6,15 @@
 @endsection
 @section('content')
 
+<style>
+    .auto-expand {
+    min-height: 50px; /* Set a minimum height to start with */
+    resize: none; /* Disable the resizing handle */
+    overflow: hidden; /* Hide any overflow content */
+}
+
+</style>
+
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar">
         <div class="px-4 pt-4 mb-4">
@@ -188,7 +197,9 @@
                                     <div class="chat-input-feedback">
                                         Please Enter a Message
                                     </div>
-                                    <input type="text" class="form-control chat-input bg-light border-light" id="message-input" placeholder="Type your message..." autocomplete="off">
+                                    <textarea class="form-control chat-input bg-light border-light auto-expand" id="message-input" placeholder="Type your message..." autocomplete="off"></textarea>
+
+
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">
@@ -460,17 +471,32 @@
 @endsection
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#send-button').on('click', function () {
-                sendMessage();
-            });
 
-            $('#message-input').on('keypress', function (e) {
-                if (e.which === 13) {
-                    sendMessage();
-                }
-            });
+<script>
+    $(document).ready(function() {
+        // Function to auto-expand textarea
+        $('.auto-expand').on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+    </script>
+
+   <script>
+$(document).ready(function() {
+    // Function to auto-expand textarea
+    $('.auto-expand').on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Function to send message when Enter key is pressed
+    $('.auto-expand').on('keydown', function(e) {
+        if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
+            e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
+            sendMessage(); // Call the function to send the message
+        }
+    });
 
     
     function sendMessage() {

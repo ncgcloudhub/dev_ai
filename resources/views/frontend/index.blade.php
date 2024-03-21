@@ -486,6 +486,133 @@
             </section>
             <!-- end cta -->
 
+            <section class="section bg-light py-5">
+                <div class="container">
+                    <div class="row gallery-wrapper">
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-1.jpg') }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-1.jpg') }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">Glasses and laptop from above</h5>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-1">
+                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
+                                        <div class="flex-shrink-0">
+                                            <div class="d-flex gap-3">
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 2.2K
+                                                </button>
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1.3K
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing" data-category="project designing">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-10.jpg') }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-10.jpg') }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">Fun day at the Hill Station</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-1">
+                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Henry Baird</a></div>
+                                        <div class="flex-shrink-0">
+                                            <div class="d-flex gap-3">
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 632
+                                                </button>
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 95
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-11.jpg') }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-11.jpg') }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">Cycling in the countryside</h5>
+                                        </div>
+                                    </a>
+
+                                </div>
+
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-1">
+                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Nancy Martino</a></div>
+                                        <div class="flex-shrink-0">
+                                            <div class="d-flex gap-3">
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 3.2K
+                                                </button>
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1.1K
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-12.jpg') }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-12.jpg') }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">A mix of friends and strangers heading off to find an adventure.</h5>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-1">
+                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Erica Kernan</a></div>
+                                        <div class="flex-shrink-0">
+                                            <div class="d-flex gap-3">
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 3.4K
+                                                </button>
+                                                <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
+                                                    <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1.3k
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+            </section>
+
             <!-- start features -->
             <section class="section">
                 <div class="container">
