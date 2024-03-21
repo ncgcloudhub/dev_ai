@@ -1,8 +1,8 @@
 @extends('admin.layouts.master')
 @section('title') @lang('translation.dashboards') @endsection
 @section('css')
-<link href="assets/libs/jsvectormap/jsvectormap.min.css" rel="stylesheet" type="text/css" />
-<link href="assets/libs/swiper/swiper.min.css" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('build/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -209,5 +209,5 @@ function appendToPrompt(inputName) {
 @endsection
 
 @section('script')
-<script src="{{ URL::asset('/assets/js/app.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection
