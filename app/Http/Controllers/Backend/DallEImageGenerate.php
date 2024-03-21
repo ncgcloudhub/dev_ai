@@ -97,9 +97,9 @@ class DallEImageGenerate extends Controller
      if ($response !== null) { // Check if $response is not null before using it
         if ($response->successful()) {
             $responseData = $response->json();
-            $imageURL = $responseData['data'][0]['url'];
-            return response()->json(['imageURL' => $imageURL]);
-            // return  $responseData;
+            // $imageURL = $responseData['data'][0]['url'];
+            // return response()->json(['imageURL' => $imageURL]);
+            return  $responseData;
             // return view('backend.image_generate.generate_image', ['imageURL' => $imageURL]);
         } else {
             return response()->json(['error' => 'Failed to generate image'], 500);

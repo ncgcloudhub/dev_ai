@@ -240,7 +240,7 @@
                     <span class="sr-only">Loading...</span>
                 </div>
 
-                <div id="image-container"></div>
+              
 
 
                 <div class="gallery-container">
@@ -259,32 +259,18 @@
                         
                     @endif
                 </div>
-                
-            
-             {{-- @else
-            <p>Error: Failed to generate image.</p>
-             @endif --}}
-             
-             {{-- <div class="row gallery-wrapper">
-                <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
-                    <div class="gallery-box card">
-                        <div class="gallery-container">
-                            @if(isset($imageURL))
-                            <a class="image-popup" href="{{ $imageURL }}" title="">
-                                <img class="gallery-img img-fluid mx-auto" src="{{ $imageURL }}" alt="" />
-                                @endif
-                            </a>
-                        </div>
-                    </div>
-                </div>
-          
-            </div> --}}
-
         </div>
 
-        
-        <!-- end row -->
-  
+    {{-- Image Row --}}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row gallery-wrapper" id="image-container">
+
+            </div>
+        </div>
+    </div>
+    {{-- Image Row End --}}
+
     </div>
 </div>
 
@@ -297,10 +283,7 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 
-
-{{-- Test Ajax --}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 
 <script>
     $(document).ready(function() {
@@ -320,28 +303,40 @@
                 data: formData,
                 success: function(response) {
 
-                    // console.log(response);
-
-                    if (response.hasOwnProperty('imageURL')) {
-                    // Create an image element
-
-                    var img = $('<img>').attr('src', response.imageURL);
-                    
-                    // When the image is fully loaded, hide the loader
-                    img.on('load', function() {
-                        $('#loader').addClass('d-none');
-                    });
-                    
-                    // Append the image to the container
-                    $('#image-container').html(img);
-                } else {
                     console.log(response);
-                }
+
+                    
+                        $('#image-container').empty(); // Clear previous images if any
+                        response.data.forEach(function(imageData) {
+                             // Create an image element
+                             var temp = `<div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
+                                    <div class="gallery-box card">
+                                        <div class="gallery-container">
+                                            <a class="image-popup" href="${imageData.url}" title="">
+                                                <img style="height: 256px; width:256px" class="gallery-img img-fluid mx-auto" src="${imageData.url}" alt="" />
+                                                <div class="gallery-overlay">
+                                                    <h5 class="overlay-caption">Glasses and laptop from above</h5>
+                                                </div>
+                                            </a>
+                                        </div> 
+                                    </div>
+                                </div>`;
+
+                             var img = $('<img>').attr('src', imageData.url);
+
+                            // Append the image to the container
+                            $('#image-container').append(temp);
+            });
+              
+
+                  // Hide loader
+                  $('#loader').addClass('d-none');
                 },
                 error: function(xhr, status, error) {
                     // Handle error response
                     // You may display an error message or perform any other actions here
                     console.error(xhr.responseText);
+                    $('#loader').addClass('d-none');
                 }
             });
         });
