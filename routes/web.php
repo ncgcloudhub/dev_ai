@@ -94,7 +94,7 @@ Route::prefix('chat')->group(function(){
     // TEST CHAT
     Route::get('/expert/view', [AIChatController::class, 'index'])->name('chat');
     Route::get('/expert/{id}', [AIChatController::class, 'ExpertChat'])->name('expert.chat');
-    Route::post('/chat', [AIChatController::class, 'SendMessages']);
+    Route::post('/reply', [AIChatController::class, 'SendMessages']);
         
         });
 

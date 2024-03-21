@@ -494,6 +494,7 @@ $(document).ready(function() {
     $('.auto-expand').on('keydown', function(e) {
         if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
             e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
+            console.log('Enter Pressed');
             sendMessage(); // Call the function to send the message
         }
     });

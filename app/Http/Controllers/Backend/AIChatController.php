@@ -69,12 +69,13 @@ class AIChatController extends Controller
         $expert_selected = AIChat::findOrFail($id);
         $expert_selected_id = $id;
         $experts = AIChat::latest()->get();
-        return view('backend.expert.chat', compact('experts','expert_selected_id','expert_selected'));
+        return view('backend.expert.chat1', compact('experts','expert_selected_id','expert_selected'));
     }
 
 
     public function SendMessages(Request $request){
 
+       
             $search = $request->input('message');
             $expert = $request->input('expert');
             $expert_id = AIChat::findOrFail($expert);
