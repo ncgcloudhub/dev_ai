@@ -73,10 +73,9 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8 col-sm-10">
                             <div class="text-center mt-lg-5 pt-5">
-                                <h1 class="display-6 fw-semibold mb-3 lh-base">The better way to manage your website with
-                                    <span class="text-success">Velzon </span></h1>
-                                <p class="lead text-muted lh-base">Velzon is a fully responsive, multipurpose and premium
-                                    Bootstrap 5 Admin & Dashboard Template built in multiple frameworks.</p>
+                                <h1 class="display-6 fw-semibold mb-3 lh-base">Explore deep into <span class="text-success">AI </span>With us</h1>
+                                <p class="lead text-muted lh-base">Elevate your business with state-of-the-art AI
+                                    services tailored to your unique needs</p>
 
                                 <div class="d-flex gap-2 justify-content-center mt-4">
                                     <a href="auth-signup-basic" class="btn btn-primary">Get Started <i
@@ -96,26 +95,21 @@
                                 <div class="carousel slide carousel-fade" data-bs-ride="carousel">
                                     <div class="carousel-inner shadow-lg p-2 bg-white rounded">
                                         <div class="carousel-item active" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/default.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ URL::asset('build/images/demos/1.jpg') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/saas.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ URL::asset('build/images/demos/2.png') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/material.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ URL::asset('build/images/demos/3.png') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/minimal.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ URL::asset('build/images/demos/4.png') }}" class="d-block w-100" alt="...">
                                         </div>
                                         <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/creative.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ URL::asset('build/images/demos/5.png') }}" class="d-block w-100" alt="...">
                                         </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/modern.png') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/interactive.png') }}" class="d-block w-100" alt="...">
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -204,10 +198,9 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div class="text-center mb-5">
-                                <h1 class="mb-3 ff-secondary fw-semibold lh-base">A Digital web design studio creating
-                                    modern & engaging online</h1>
-                                <p class="text-muted">To achieve this, it would be necessary to have uniform grammar,
-                                    pronunciation and more common words. If several languages coalesce the grammar</p>
+                                <h1 class="mb-3 ff-secondary fw-semibold lh-base">Awesome Features</h1>
+                                <p class="text-muted">Elevate Your Digital Presence with Intelligent Solutions - Unleashing AI Chatbots,
+                                    Multimedia Transformation, and Dynamic Content Generation</p>
                             </div>
                         </div>
                         <!-- end col -->
@@ -225,9 +218,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Creative Design</h5>
-                                    <p class="text-muted my-3 ff-secondary">The creative design includes designs that are
-                                        unique, effective and memorable.</p>
+                                    <h5 class="fs-18">AI Chatbot Integration</h5>
+                                    <p class="text-muted my-3 ff-secondary">Engage and assist your website visitors with TrionxAI's advanced AI chatbot, providing seamless communication and support.</p>
                                     <div>
                                         <a href="#" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
@@ -246,9 +238,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Unlimited Colors</h5>
-                                    <p class="text-muted my-3 ff-secondary">The collection of rules and guidelines which
-                                        designers use to communicate with users through appealing.</p>
+                                    <h5 class="fs-18">Text to Image Conversion</h5>
+                                    <p class="text-muted my-3 ff-secondary">Transform textual content into captivating visuals effortlessly, as TrionxAI converts text to images, enhancing the visual appeal and accessibility of your information.</p>
                                     <div>
                                         <a href="#" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
@@ -267,9 +258,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Strategy Solutions</h5>
-                                    <p class="text-muted my-3 ff-secondary">Business development firm that provides
-                                        strategic planning, market research services and project.</p>
+                                    <h5 class="fs-18">AI Article Generation</h5>
+                                    <p class="text-muted my-3 ff-secondary">Streamline content creation with TrionxAI's AI article generation, harnessing the power of artificial intelligence to produce high-quality, relevant, and tailored articles for your website or business needs.</p>
                                     <div>
                                         <a href="#" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
@@ -288,7 +278,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Awesome Support</h5>
+                                    <h5 class="fs-18">AI Blog Generate</h5>
                                     <p class="text-muted my-3 ff-secondary">Awesome Support is the most versatile and
                                         feature-rich support plugin for all version.</p>
                                     <div>
@@ -309,7 +299,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Truly Multipurpose</h5>
+                                    <h5 class="fs-18">Generate Facebook ADs</h5>
                                     <p class="text-muted my-3 ff-secondary">You usually get a broad range of options to
                                         play with. This enables you to use a single theme across multiple.</p>
                                     <div>
@@ -330,7 +320,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">Easy to customize</h5>
+                                    <h5 class="fs-18">AI Grammer Checker</h5>
                                     <p class="text-muted my-3 ff-secondary">Personalise your own website, no matter what
                                         theme and what customization options.</p>
                                     <div>
@@ -342,69 +332,6 @@
                         </div>
                         <!-- end col -->
 
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-slideshow-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Responsive & Clean Design</h5>
-                                    <p class="text-muted my-3 ff-secondary">Responsive design is a graphic user interface
-                                        (GUI) design approach used to create content.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-google-fill fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Google Font Collection</h5>
-                                    <p class="text-muted my-3 ff-secondary">Google Fonts is a collection of 915 fonts, all
-                                        available to use for free on your website.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-lg-4">
-                            <div class="d-flex p-3">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm icon-effect">
-                                        <div class="avatar-title bg-transparent text-success rounded-circle">
-                                            <i class="ri-briefcase-5-line fs-36"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h5 class="fs-18">Top Industry Specialists</h5>
-                                    <p class="text-muted my-3 ff-secondary">An industrial specialist works with industrial
-                                        operations to ensure that manufacturing facilities work.</p>
-                                    <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
                     </div>
                     <!-- end row -->
                 </div>
@@ -416,48 +343,104 @@
             <section class="section bg-light py-5" id="features">
                 <div class="container">
                     <div class="row align-items-center gy-4">
-                        <div class="col-lg-6 col-sm-7 mx-auto">
+                        <div class="col-lg-6 col-sm-7">
                             <div>
-                                <img src="{{ URL::asset('build/images/landing/features/img-1.png') }}" alt="" class="img-fluid mx-auto">
+                                <img src="https://ai.smsblastnet.com/public/uploads/media/lOF5TPvuGPcU0HBFb4vyvE11lvXufZemYwZBSgPq.jpg" class=" rounded-4 image-fluid" alt="about image">
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="text-muted">
-                                <div class="avatar-sm icon-effect mb-4">
-                                    <div class="avatar-title bg-transparent rounded-circle text-success h1">
-                                        <i class="ri-collage-line fs-36"></i>
-                                    </div>
-                                </div>
-                                <h3 class="mb-3 fs-20">Huge collection of widgets</h3>
+                        <div class="col-lg-6 justify-content-right">
+                            <div class="text-white">
+                              
+                                <h3 style="color: white" class="mb-3 fs-20">Huge collection of Templates</h3>
                                 <p class="mb-4 ff-secondary fs-16">Collection widgets specialize in displaying many
                                     elements of the same type, such as a collection of pictures from a collection of
                                     articles from a news app or a collection of messages from a communication app.</p>
 
-                                <div class="row pt-3">
-                                    <div class="col-3">
-                                        <div class="text-center">
-                                            <h4>5</h4>
-                                            <p>Dashboards</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="text-center">
-                                            <h4>150+</h4>
-                                            <p>Pages</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="text-center">
-                                            <h4>7+</h4>
-                                            <p>Functional Apps</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <ul class="list-unstyled d-flex flex-wrap tt-two-col mt-4 mb-4">
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open me-2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>Blog Content
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail me-2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Email Template
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2 me-2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>Social Media
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-video me-2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>Video Content
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor me-2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>Website Content
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile me-2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>Fun &amp; Quote
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-code me-2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>Medium Content
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-film me-2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>Tik Tok
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram
+                                        </li>
+                                        <li class="col-6 py-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-gift me-2"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>Success Story
+                                        </li>
+                                    </ul>
                             </div>
                         </div>
                         <!-- end col -->
                     </div>
                     <!-- end row -->
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="sticky-side-div">
+                                <div class="card ribbon-box border shadow-none right">
+                        
+                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
+                                    <div class="position-absolute bottom-0 p-3">
+                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-3">
+                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
+                                            </div>
+                        
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="sticky-side-div">
+                                <div class="card ribbon-box border shadow-none right">
+                        
+                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
+                                    <div class="position-absolute bottom-0 p-3">
+                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-3">
+                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
+                                            </div>
+                        
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="sticky-side-div">
+                                <div class="card ribbon-box border shadow-none right">
+                        
+                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
+                                    <div class="position-absolute bottom-0 p-3">
+                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
+                                        <div class="row justify-content-center">
+                                            <div class="col-3">
+                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
+                                            </div>
+                        
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- end container -->
             </section>
