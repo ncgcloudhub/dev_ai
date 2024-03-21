@@ -4,6 +4,7 @@
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection
 @section('body')
 
@@ -49,6 +50,8 @@
                                 <a class="nav-link fs-15" href="#contact">Contact</a>
                             </li>
                         </ul>
+
+                        
 
                         <div class="">
                             <a href="{{ route('login') }}"
@@ -1994,6 +1997,9 @@
         <!-- end layout wrapper -->
     @endsection
     @section('script')
+        <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+        <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+        <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
         <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
     @endsection
