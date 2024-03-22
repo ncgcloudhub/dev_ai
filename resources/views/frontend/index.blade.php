@@ -509,8 +509,8 @@
                         <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="image-popup" href="{{$item->image}}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{$item->image}}" alt="" />
+                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
                                         <div class="gallery-overlay">
                                             <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                         </div>
