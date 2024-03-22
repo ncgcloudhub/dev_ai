@@ -127,4 +127,14 @@ class DallEImageGenerateController extends Controller
     }
 
     }
+
+
+
+
+    // Admin Manage Dalle Image
+    public function DalleImageManageAdmin(){
+        $images = ModelsDalleImageGenerate::latest()->get();
+        return view('backend.image_generate.manage_admin_dalle_image', compact('images'));
+    }
+
 }

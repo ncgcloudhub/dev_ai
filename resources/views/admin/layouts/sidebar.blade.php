@@ -108,9 +108,28 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('generate.image.view')}}">
-                        <i class=" las la-image"></i> <span >Generate Image</span>
+                    <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-pencil-ruler"></i> <span >Custom Template</span>
                     </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.dalle.image.admin')}}" class="nav-link" >Manage Image</a>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
                 </li>
 
 

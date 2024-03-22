@@ -54,7 +54,10 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
 
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
         
-        });
+    });
+
+    // Dalle Manage Image
+    Route::get('/image/manage', [DallEImageGenerateController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
 });//End Admin Middleware
 
