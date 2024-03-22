@@ -109,15 +109,12 @@ class DallEImageGenerateController extends Controller
                 $imageModel = new ModelsDalleImageGenerate; 
                 $imageModel->image = $imagePath;
                 $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
-                $imageModel->status = 'active'; // Set the status as per your requirements
+                $imageModel->status = 'inactive'; // Set the status as per your requirements
                 $imageModel->prompt = $request->prompt; // Set the prompt if needed
                 $imageModel->resolution = $size; // Set the resolution if needed
                 $imageModel->save();
             }
     
-
-
-
             // $imageURL = $responseData['data'][0]['url'];
             // return response()->json(['imageURL' => $imageURL]);
             return  $responseData;
