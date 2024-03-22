@@ -16,9 +16,9 @@
             <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
                 <div class="container">
                     <a class="navbar-brand" href="{{URL::asset('/index')}}">
-                        <img src="{{ URL::asset('build/images/logo-dark.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="17">
-                        <img src="{{ URL::asset('build/images/logo-light.png') }}" class="card-logo card-logo-light" alt="logo light"
-                            height="17">
+                        <img src="{{ URL::asset('build/images/logo-dark1.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="30">
+                        <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo card-logo-light" alt="logo light"
+                            height="40">
                     </a>
                     <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
