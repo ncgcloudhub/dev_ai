@@ -42,7 +42,7 @@
                                 </div>
                             </td>
                             <td>{{ $item->prompt }}</td>
-                            <td>{{ $item->user->id }}{{ $item->user->name }}</td>
+                            <td>{{ $item->user->id }}/{{ $item->user->name }}</td>
                             <td>{{ $item->status }}</td>
                             <td>
                                 <button class="btn btn-sm btn-soft-info">Trade Now</button>
