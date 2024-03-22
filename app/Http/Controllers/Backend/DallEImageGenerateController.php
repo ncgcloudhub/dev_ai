@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class DallEImageGenerateController extends Controller
 {
     public function AIGenerateImageView(){
-        // $brands = Brand::latest()->get();
-        return view('backend.image_generate.generate_image');
+        $user_id = Auth::user()->id;
+        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->get();
+
+        return view('backend.image_generate.generate_image', compact('images'));
     }
 
 
     public function generateImage(Request $request) {
         
-       
 		$apiKey = config('app.openai_api_key');
         $size = '1024x1024';
         $style = 'vivid';
@@ -135,6 +138,29 @@ class DallEImageGenerateController extends Controller
     public function DalleImageManageAdmin(){
         $images = ModelsDalleImageGenerate::latest()->get();
         return view('backend.image_generate.manage_admin_dalle_image', compact('images'));
+    }
+
+    public function UpdateStatus(Request $request)
+    {
+        // Retrieve the image ID from the request
+        $imageId = $request->input('image_id');
+
+        // Find the image by ID
+        $image = ModelsDalleImageGenerate::find($imageId);
+
+        // Update the status (assuming 'status' is a field in your 'models_dalle_image_generates' table)
+        if ($image->status == 'inactive') {
+            $image->status = 'active';
+            $image->save();
+            return response()->json(['success' => true, 'message' => 'Image status updated successfully']);
+        }elseif($image->status == 'active'){
+            $image->status = 'inactive';
+            $image->save();
+            return response()->json(['success' => true, 'message' => 'Image status updated successfully']);
+        }
+         else {
+            return response()->json(['success' => false, 'message' => 'Image not found'], 404);
+        }
     }
 
 }

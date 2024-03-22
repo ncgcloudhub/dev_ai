@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $images = DalleImageGenerate::latest()->get();
+    $images = DalleImageGenerate::where('status', 'active')->get();
     return view('frontend.index', compact('images'));
 });
 
@@ -59,8 +59,12 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
     // Dalle Manage Image
     Route::get('/image/manage', [DallEImageGenerateController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
+    Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
+
 });//End Admin Middleware
 
+Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 // User Middleware
 Route::middleware(['auth', 'role:user'])->group(function(){

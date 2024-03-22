@@ -240,25 +240,6 @@
                     <span class="sr-only">Loading...</span>
                 </div>
 
-              
-
-
-                <div class="gallery-container">
-                    @if(isset($imageURL))
-                        <a class="image-popup" href="{{ $imageURL }}" title="">
-                            <img class="gallery-img img-fluid mx-auto" src="{{ $imageURL }}" alt="" />
-                        </a>
-                        
-                        <!-- Download Button Form -->
-                        <form action="/download-image/{imageURL}" method="get" style="margin-top: 10px;">
-                            @csrf
-                            <input type="hidden" name="imageURL" value="{{ $imageURL }}">
-                            <button type="submit" class="btn btn-primary">Download Image</button>
-                        </form>
-                        <!-- End Download Button Form -->
-                        
-                    @endif
-                </div>
         </div>
 
     {{-- Image Row --}}
@@ -272,6 +253,12 @@
     {{-- Image Row End --}}
 
     </div>
+</div>
+
+<div class="container">
+    @foreach ($images as $item)
+        <img style="height: 250px; width:250px" src="{{ asset($item->image) }}" alt="">
+    @endforeach
 </div>
 
 

@@ -6,6 +6,7 @@
 <!--datatable responsive css-->
 <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -44,9 +45,17 @@
                             <td>{{ $item->prompt }}</td>
                             <td>{{ $item->user->id }}{{ $item->user->name }}</td>
                             <td>{{ $item->status }}</td>
+
+                            @if ($item->status == 'active')
                             <td>
-                                <button class="btn btn-sm btn-soft-info">Trade Now</button>
+                                <button class="btn btn-sm btn-soft-success active_button" data-image-id="{{ $item->id }}">Activate</button>
                             </td>
+                            @else
+                            <td>
+                                <button class="btn btn-sm btn-soft-info active_button" data-image-id="{{ $item->id }}">Inactivate</button>
+                            </td>
+                            @endif
+                           
                         </tr>
                         @endforeach
 
@@ -75,5 +84,43 @@
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+<!-- Include jQuery from CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.active_button').click(function() {
+
+            var imageId = $(this).data('image-id');
+
+            console.log('Hello:' + imageId);
+            // Send AJAX request to update the image status
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '/update/image/status',
+                data: {
+                    image_id: imageId
+                },
+                headers: {
+                 'X-CSRF-TOKEN': csrfToken
+                 },
+                success: function(response) {
+                    // Handle success response
+                    console.log(response);
+                    // Optionally, update the UI to reflect the new status
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error(error);
+                    console.log('inisde Error');
+                }
+            });
+        });
+    });
+</script>
+
+
 
 @endsection
