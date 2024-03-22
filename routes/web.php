@@ -1,14 +1,16 @@
 <?php
 
+use App\Models\DalleImageGenerate;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\CustomTemplateController;
 use App\Http\Controllers\Backend\AIChatController;
 use App\Http\Controllers\Backend\ExpertController;
-use App\Http\Controllers\Backend\DallEImageGenerate;
+use App\Http\Controllers\Backend\DallEImageGenerateController;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +25,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('frontend.index');
+    $images = DalleImageGenerate::latest()->get();
+    return view('frontend.index', compact('images'));
 });
 
 Route::get('/dashboard', function () {
@@ -101,8 +104,8 @@ Route::prefix('chat')->group(function(){
 
 
 Route::prefix('generate')->group(function() {
-        Route::get('/image/view', [DallEImageGenerate::class, 'AIGenerateImageView'])->name('generate.image.view');
-        Route::post('/image', [DallEImageGenerate::class, 'generateImage'])->name('generate.image');
+        Route::get('/image/view', [DallEImageGenerateController::class, 'AIGenerateImageView'])->name('generate.image.view');
+        Route::post('/image', [DallEImageGenerateController::class, 'generateImage'])->name('generate.image');
         });
 
 
