@@ -38,7 +38,7 @@
                             <td>
                                 <div class="d-flex align-items-center fw-medium">
                                     <img src="{{ asset($item->image) }}" alt="" class="avatar-xxs me-2">
-                                    <a href="javascript:void(0);" class="currency_name">Bitcoin (BTC)</a>
+                                   
                                 </div>
                             </td>
                             <td>{{ $item->prompt }}</td>
