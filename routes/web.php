@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $images = DalleImageGenerate::latest()->get();
+    $images = DalleImageGenerate::inRandomOrder()->take(20)->get();
     return view('frontend.index', compact('images'));
 });
 
