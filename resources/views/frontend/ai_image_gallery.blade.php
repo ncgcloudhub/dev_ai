@@ -93,7 +93,7 @@
                                                     </div>
                                                     <div class="box-content">
                                                         <div class="d-flex align-items-center mt-1">
-                                                            <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Erica Kernan</a></div>
+                                                            <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
                                                             
                                                         </div>
                                                     </div>
