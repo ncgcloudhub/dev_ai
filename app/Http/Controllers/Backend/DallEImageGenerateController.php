@@ -7,7 +7,7 @@ use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class DallEImageGenerate extends Controller
+class DallEImageGenerateController extends Controller
 {
     public function AIGenerateImageView(){
         // $brands = Brand::latest()->get();

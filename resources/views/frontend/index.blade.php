@@ -503,76 +503,16 @@
                     <!-- end row -->
 
                     <div class="row gallery-wrapper">
-                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
-                            <div class="gallery-box card">
-                                <div class="gallery-container">
-                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-1.jpg') }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-1.jpg') }}" alt="" />
-                                        <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">Glasses and laptop from above</h5>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="box-content">
-                                    <div class="d-flex align-items-center mt-1">
-                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
-                                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-
-                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing" data-category="project designing">
-                            <div class="gallery-box card">
-                                <div class="gallery-container">
-                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-10.jpg') }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-10.jpg') }}" alt="" />
-                                        <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">Fun day at the Hill Station</h5>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="box-content">
-                                    <div class="d-flex align-items-center mt-1">
-                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Henry Baird</a></div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-
+                      
+                        @foreach ($images as $item)
+                          
                         <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-11.jpg') }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-11.jpg') }}" alt="" />
+                                    <a class="image-popup" href="{{$item->image}}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{$item->image}}" alt="" />
                                         <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">Cycling in the countryside</h5>
-                                        </div>
-                                    </a>
-
-                                </div>
-
-                                <div class="box-content">
-                                    <div class="d-flex align-items-center mt-1">
-                                        <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Nancy Martino</a></div>
-                                       
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-
-                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
-                            <div class="gallery-box card">
-                                <div class="gallery-container">
-                                    <a class="image-popup" href="{{ URL::asset('build/images/small/img-12.jpg') }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ URL::asset('build/images/small/img-12.jpg') }}" alt="" />
-                                        <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">A mix of friends and strangers heading off to find an adventure.</h5>
+                                            <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                         </div>
                                     </a>
                                 </div>
@@ -585,6 +525,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endforeach
                         <!-- end col -->
                         
                     </div>
