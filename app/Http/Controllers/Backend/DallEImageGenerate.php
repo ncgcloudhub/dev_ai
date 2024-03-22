@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -97,6 +98,26 @@ class DallEImageGenerate extends Controller
      if ($response !== null) { // Check if $response is not null before using it
         if ($response->successful()) {
             $responseData = $response->json();
+
+            foreach ($responseData['data'] as $imageData) {
+                // Save image to directory
+                $imageName = time() . '-' . uniqid() . '.png'; // Or whatever extension you're using
+                $imagePath = 'backend/uploads/dalle_images/' . $imageName;
+                file_put_contents($imagePath, file_get_contents($imageData['url']));
+    
+                // Save image information to database
+                $imageModel = new ModelsDalleImageGenerate; 
+                $imageModel->image = $imagePath;
+                $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
+                $imageModel->status = 'active'; // Set the status as per your requirements
+                $imageModel->prompt = $request->prompt; // Set the prompt if needed
+                $imageModel->resolution = $size; // Set the resolution if needed
+                $imageModel->save();
+            }
+    
+
+
+
             // $imageURL = $responseData['data'][0]['url'];
             // return response()->json(['imageURL' => $imageURL]);
             return  $responseData;

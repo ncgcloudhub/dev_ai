@@ -97,9 +97,8 @@ Route::prefix('chat')->group(function(){
     Route::get('/expert/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
     Route::post('/reply', [AIChatController::class, 'SendMessages']);
         
-        });
+    });
 
-        
 
 Route::prefix('generate')->group(function() {
         Route::get('/image/view', [DallEImageGenerate::class, 'AIGenerateImageView'])->name('generate.image.view');

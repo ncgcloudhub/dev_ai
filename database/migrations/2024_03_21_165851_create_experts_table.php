@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('role');
             $table->text('expertise');
             $table->text('train_expert')->nullable();
-            $table->text('image')->nullable();;
+            $table->text('image')->nullable();
             $table->string('active');
             $table->timestamps();
         });

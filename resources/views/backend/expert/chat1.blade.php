@@ -738,10 +738,8 @@ $(document).ready(function() {
 @section('script')
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
-    <!-- fgEmojiPicker js -->
     <script src="{{ URL::asset('build/libs/fg-emoji-picker/fgEmojiPicker.js') }}"></script>
 
-    <!-- chat init js -->
     <script src="{{ asset('build/js/pages/chat.init.js') }}"></script>
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
