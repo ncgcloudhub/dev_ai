@@ -5,8 +5,68 @@
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
 @endsection
 @section('body')
+
+
+<style>
+    .banner{
+	background: url({{ asset('build/images/banner.png') }}) no-repeat center top;
+	background-attachment:fixed;
+	background-size:cover;
+	height:100vh;
+	min-height:100%;
+}
+
+.banner .container, .banner .banner-static, .banner .col-lg-12 {
+    height: 100%;
+}
+.banner-text {
+    display: table;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+.banner-cell {
+    display: table-cell;
+    vertical-align: middle;
+    color: #fff;
+}
+.banner-text h1 {
+	font-family: 'nautilus_pompiliusregular';
+    letter-spacing: 2.7px;
+    position: relative;
+    display: inline-block;
+	font-size: 74px;
+    line-height: 100px;
+	color:#fff;
+	padding-bottom: 0px;
+	padding-top:100px;
+}
+
+.banner-text h2 {
+	font-family: 'nautilus_pompiliusregular';
+    letter-spacing: 2.7px;
+    position: relative;
+	font-size: 37px;
+    line-height: 100px;
+	padding-bottom:25px;
+}
+.banner-text p{
+	font-family: 'Roboto', sans-serif;
+	font-size:18px;
+	color:#ccc;
+	padding-bottom:35px;
+	margin:0px;
+}
+</style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
     @endsection
@@ -68,66 +128,58 @@
 
             <!-- start hero section -->
             <section class="section pb-0 hero-section" id="hero">
-                <div class="bg-overlay bg-overlay-pattern"></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-sm-10">
-                            <div class="text-center mt-lg-5 pt-5">
-                                <h1 class="display-6 fw-semibold mb-3 lh-base">Explore deep into <span class="text-success">AI </span>With us</h1>
-                                <p class="lead text-muted lh-base">Elevate your business with state-of-the-art AI
-                                    services tailored to your unique needs</p>
 
-                                <div class="d-flex gap-2 justify-content-center mt-4">
-                                    <a href="auth-signup-basic" class="btn btn-primary">Get Started <i
-                                            class="ri-arrow-right-line align-middle ms-1"></i></a>
-                                    <a href="pages-pricing" class="btn btn-danger">View Plans <i
-                                            class="ri-eye-line align-middle ms-1"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
-                                <div class="demo-img-patten-top d-none d-sm-block">
-                                    <img src="{{ URL::asset('build/images/landing/img-pattern.png') }}" class="d-block img-fluid" alt="...">
-                                </div>
-                                <div class="demo-img-patten-bottom d-none d-sm-block">
-                                    <img src="{{ URL::asset('build/images/landing/img-pattern.png') }}" class="d-block img-fluid" alt="...">
-                                </div>
-                                <div class="carousel slide carousel-fade" data-bs-ride="carousel">
-                                    <div class="carousel-inner shadow-lg p-2 bg-white rounded">
-                                        <div class="carousel-item active" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/1.jpg') }}" class="d-block w-100" alt="...">
+                <div id="banner" class="banner full-screen-mode parallax">
+                    <div class="container pr">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="banner-static">  
+                                <div class="banner-text">
+                                    <div class="banner-cell">
+                                        <h2 style="color: rgb(255, 255, 255)">
+                                           Get AI services Like
+                                            <span
+                                                class="typer"
+                                                id="some-id"
+                                                data-delay="200"
+                                                data-delim=":"
+                                                data-words="AI Image Generation:AI Assistant:AI Blog Generation: AI Article Generate"
+                                                data-colors="red"
+                                            ></span
+                                            ><span
+                                                class="cursor"
+                                                data-cursorDisplay="_"
+                                                data-owner="some-id"
+                                            ></span>
+                                        </h2>
+                                        <h2 style="color: rgb(166, 167, 233)">Clever Creator</h2>
+                                        <p style="color: white">
+                                            Unwind in our warm atmosphere and savor global comfort food
+                                            made with love. At Tasty Trails, every bite is a delicious
+                                            escape. Come hungry, leave happy.
+                                        </p>
+                                        <div class="book-btn">
+                                            <a
+                                                href="#reservation"
+                                                class="table-btn hvr-underline-from-center"
+                                            >Book my Table</a
+                                            >
                                         </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/2.png') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/3.png') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/4.png') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                        <div class="carousel-item" data-bs-interval="2000">
-                                            <img src="{{ URL::asset('build/images/demos/5.png') }}" class="d-block w-100" alt="...">
-                                        </div>
-                                       
+                                        <a href="#about">
+                                            <div class="mouse"></div>
+                                        </a>
                                     </div>
+                                    <!-- end banner-cell -->
                                 </div>
+                                <!-- end banner-text -->
                             </div>
+                            <!-- end banner-static -->
                         </div>
+                        <!-- end col -->
                     </div>
-                    <!-- end row -->
+                    <!-- end container -->
                 </div>
-                <!-- end container -->
-                <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
-                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        viewBox="0 0 1440 120">
-                        <g mask="url(&quot;#SvgjsMask1003&quot;)" fill="none">
-                            <path d="M 0,118 C 288,98.6 1152,40.4 1440,21L1440 140L0 140z">
-                            </path>
-                        </g>
-                    </svg>
-                </div>
-                <!-- end shape -->
+                <!-- end banner -->
+              
             </section>
             <!-- end hero section -->
 
@@ -1918,9 +1970,28 @@
         <!-- end layout wrapper -->
     @endsection
     @section('script')
+
+    <script>
+        $(document).ready(function(){
+            $('.banner-slider').slick({
+                autoplay: true,
+                autoplaySpeed: 5000,
+                arrows: false,
+                dots: true,
+                fade: true,
+                infinite: true,
+                speed: 1000,
+                slidesToShow: 1,
+                adaptiveHeight: true
+            });
+        });
+    </script>
+
+
         <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
         <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
         <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+        <script src="{{ URL::asset('build/js/all.js') }}"></script>
     @endsection

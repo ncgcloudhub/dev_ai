@@ -30,7 +30,7 @@ class AIChatController extends Controller
         $openaiModel = $setting->openaimodel;
     
         // Create prompt based on user input and expert role
-        $prompt = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\".";
+        $prompt = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\". If anyone ask any questions outside of $expertRole, please reply as I am not program to response. ";
     
         // Make API request to OpenAI
         $response = Http::withHeaders([
