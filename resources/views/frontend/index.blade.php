@@ -114,10 +114,17 @@
                         
 
                         <div class="">
-                            <a href="{{ route('login') }}"
-                                class="btn btn-link fw-medium text-decoration-none text-dark">Sign
-                                in</a>
+                            @if (Auth::check())
+                            @if (Auth::user()->role === 'admin')
+                                <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary">Dashboard</a>
+                            @elseif (Auth::user()->role === 'user')
+                                <a href="{{ url('/user/dashboard') }}" class="btn btn-primary">Dashboard</a>
+                            @endif
+                            @else
+                            <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
+
                             <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
+                            @endif
                         </div>
                     </div>
 

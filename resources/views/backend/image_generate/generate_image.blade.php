@@ -241,9 +241,12 @@
                 </div>
 
         </div>
+    </div>
+</div>
 
-    {{-- Image Row --}}
-    <div class="row">
+<div class="container">
+      {{-- Image Row --}}
+      <div class="row">
         <div class="col-lg-12">
             <div class="row gallery-wrapper" id="image-container">
 
@@ -251,8 +254,6 @@
         </div>
     </div>
     {{-- Image Row End --}}
-
-    </div>
 </div>
 
 <div class="container">
