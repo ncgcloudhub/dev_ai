@@ -9,16 +9,16 @@
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
-    @include('admin.layouts.head-css')
+    @include('user.layouts.head-css')
 </head>
 
 @section('body')
-    @include('admin.layouts.body')
+    @include('user.layouts.body')
 @show
     <!-- Begin page -->
     <div id="layout-wrapper">
-        @include('admin.layouts.topbar')
-        @include('admin.layouts.sidebar')
+        @include('user.layouts.topbar')
+        @include('user.layouts.sidebar')
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
@@ -30,16 +30,16 @@
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-            @include('admin.layouts.footer')
+            @include('user.layouts.footer')
         </div>
         <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
 
-    @include('admin.layouts.customizer')
+    @include('user.layouts.customizer')
 
     <!-- JAVASCRIPT -->
-    @include('admin.layouts.vendor-scripts')
+    @include('user.layouts.vendor-scripts')
 </body>
 
 </html>

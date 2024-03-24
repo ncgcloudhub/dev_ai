@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->get();
     return view('frontend.index', compact('images'));
-});
+})->name('home');
 
 
 Route::get('/dashboard', function () {

@@ -168,10 +168,12 @@
                         </div><!-- end card header -->
         
                         <div class="card-body">
-                            <div class="snow-editor" style="height: 500px;" readonly>
-                                {{-- {{ $content }} --}}
+                            <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
+
+                            {{-- <div class="snow-editor" >
+                                {{ $content }}
         
-                            </div> <!-- end Snow-editor-->
+                            </div>  --}}
                         </div><!-- end card-body -->
 
 
@@ -309,27 +311,44 @@
     });
     </script>
 
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: 'textarea#myeditorinstance', // Replace this CSS selector to match the placeholder element for TinyMCE
+    plugins: 'code table lists',
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+  });
+</script>
+
 <script>
     $(document).ready(function () {
-        $('#generateForm').submit(function (event) {
-            event.preventDefault(); // Prevent default form submission
+    $('#generateForm').submit(function (event) {
+        event.preventDefault(); // Prevent default form submission
 
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    // Assuming 'content' is the key in your JSON response containing the generated content
-                    $('.snow-editor').html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                    // Handle error if any
-                }
-            });
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (response) {
+                // Replace line breaks or bullet points with <li> tags
+                    response = response.replace(/\n/g, '</li><li>');
+
+                    // Wrap the entire content in <ul> tags
+                     response = '' + response + '';
+                    tinymce.get('myeditorinstance').setContent(response);  // Set the content of the TinyMCE editor
+},
+
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                // Handle error if any
+            }
         });
     });
+});
+
 </script>
+
+
 
 
 

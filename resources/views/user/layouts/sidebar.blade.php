@@ -120,9 +120,7 @@
                                     <li class="nav-item">
                                         <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('manage.dalle.image.admin')}}" class="nav-link" >Manage Image</a>
-                                    </li>
+                                  
                                    
                                 </ul>
                             </div>
@@ -133,13 +131,8 @@
                 </li>
 
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Settings</span></li>
                
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('ai.settings.add')}}">
-                        <i class="las la-flask"></i> <span >AI Settings</span>
-                    </a>
-                </li>
+              
 
             </ul>
         </div>
