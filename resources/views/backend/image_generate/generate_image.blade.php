@@ -241,18 +241,13 @@
                 </div>
 
         </div>
-        <div class="row gallery-wrapper" id="image-container">
-            
+        
+        <div id="image-container">      
+        
         </div>
+    
+    
     </div>
-</div>
-
-<div class="container">
-      {{-- Image Row --}}
-       
-          
-       
-    {{-- Image Row End --}}
 </div>
 
 <div class="container">
@@ -320,21 +315,12 @@
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                              // Create an image element
-                             var temp = `<div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
-                                    <div class="gallery-box card">
-                                        <div class="gallery-container">
-                                            <a class="image-popup" href="${imageData.url}" title="">
-                                                <img style="height: 256px; width:256px" class="gallery-img img-fluid mx-auto" src="${imageData.url}" alt="" />
-                                                <div class="gallery-overlay">
-                                                    <h5 class="overlay-caption">Glasses and laptop from above</h5>
-                                                </div>
-                                            </a>
-                                        </div> 
-                                    </div>
-                                </div>`;
+                             var temp = `<a href="${imageData.url}" title="">
+                                            <img style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                                            </a>`;
 
 
-                             var img = $('<img>').attr('src', imageData.url);
+                            //  var img = $('<img>').attr('src', imageData.url);
 
                             // Append the image to the container
                             $('#image-container').append(temp);
