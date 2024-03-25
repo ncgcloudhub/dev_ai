@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AISettings;
-use OpenAI;
 use Illuminate\Support\Carbon;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class AIChatController extends Controller
 {
