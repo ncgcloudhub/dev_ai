@@ -241,15 +241,16 @@
                 </div>
 
         </div>
+        <div class="row gallery-wrapper" id="image-container">
+            
+        </div>
     </div>
 </div>
 
 <div class="container">
       {{-- Image Row --}}
        
-            <div class="row gallery-wrapper" id="image-container">
-
-            </div>
+          
        
     {{-- Image Row End --}}
 </div>
@@ -330,6 +331,7 @@
                                         </div> 
                                     </div>
                                 </div>`;
+
 
                              var img = $('<img>').attr('src', imageData.url);
 
