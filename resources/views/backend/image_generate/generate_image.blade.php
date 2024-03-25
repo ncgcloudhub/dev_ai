@@ -315,8 +315,8 @@
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                              // Create an image element
-                             var temp = `<a href="${imageData.url}" title="">
-                                            <img style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                             var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                            <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
                                             </a>`;
 
 
