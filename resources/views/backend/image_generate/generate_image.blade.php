@@ -315,6 +315,7 @@
                     console.log(response);
 
                     
+                    
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                              // Create an image element
