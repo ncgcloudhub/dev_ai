@@ -158,31 +158,25 @@
            </div>
            <div class="col">
 
+            <!-- Add the Download Content button -->
+<button id="downloadButton" class="btn btn-success">Download Content</button>
+<button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
+
             <div class="row mt-2">
                 <div class="col-lg-12">
-        
-                
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title mb-0">Generated Content</h4>
                         </div><!-- end card header -->
-        
                         <div class="card-body">
                             <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
-
-                            {{-- <div class="snow-editor" >
-                                {{ $content }}
-        
-                            </div>  --}}
+                           
                         </div><!-- end card-body -->
-
-
                     </div><!-- end card -->
-        
-                 
                 </div>
                 <!-- end col -->
             </div>
+            
 
            </div>
 
@@ -313,40 +307,81 @@
 
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
-  tinymce.init({
-    selector: 'textarea#myeditorinstance', // Replace this CSS selector to match the placeholder element for TinyMCE
-    plugins: 'code table lists',
-    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
-  });
-</script>
-
-<script>
-    $(document).ready(function () {
-    $('#generateForm').submit(function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function (response) {
-                // Replace line breaks or bullet points with <li> tags
-                    response = response.replace(/\n/g, '</li><li>');
-
-                    // Wrap the entire content in <ul> tags
-                     response = '' + response + '';
-                    tinymce.get('myeditorinstance').setContent(response);  // Set the content of the TinyMCE editor
-},
-
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-                // Handle error if any
-            }
-        });
+    tinymce.init({
+        selector: 'textarea#myeditorinstance',
+        plugins: 'code table lists',
+        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
     });
-});
 
+    $(document).ready(function () {
+        $('#generateForm').submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+
+                    //Generated content displays in a nice Format
+                    let formattedContent = '';
+
+                    let lines = response.split('\n');
+
+                    if (lines.some(line => line.trim().startsWith('*'))) {
+                        formattedContent += '<ul>';
+                        lines.forEach(line => {
+                            if (line.trim().startsWith('*')) {
+                                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+                            } else {
+                                formattedContent += '<p>' + line.trim() + '</p>';
+                            }
+                        });
+                        formattedContent += '</ul>';
+                    } else {
+                        formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
+                    }
+
+                    tinymce.get('myeditorinstance').setContent(formattedContent);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        // Copy button click event
+        $('#copyButton').click(function () {
+            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+            const textArea = document.createElement('textarea');
+            textArea.value = editorContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Content copied to clipboard!');
+        });
+
+         // Download button click event
+         $('#downloadButton').click(function () {
+            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+
+            const blob = new Blob([editorContent], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'generated_content.doc';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        });
+
+    });
 </script>
+
 
 
 
