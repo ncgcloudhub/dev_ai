@@ -4,11 +4,13 @@ use App\Models\DalleImageGenerate;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Backend\CustomTemplateController;
-use App\Http\Controllers\Backend\AIChatController;
-use App\Http\Controllers\Backend\ExpertController;
-use App\Http\Controllers\Backend\DallEImageGenerateController;
+use App\Http\Controllers\Backend\AI\CustomTemplateController;
+use App\Http\Controllers\Backend\AI\TemplateController;
+use App\Http\Controllers\Backend\AI\AIChatController;
+use App\Http\Controllers\Backend\AI\ExpertController;
+use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use App\Http\Controllers\Backend\ProfileEditController;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
 
 use Illuminate\Support\Facades\Route;
@@ -47,15 +49,33 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
         
     });
 
-    // Dalle Manage Image
-    Route::get('/image/manage', [DallEImageGenerateController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
-    Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+    // Templates
+Route::prefix('template')->group(function(){
+
+    Route::get('/category/add', [TemplateController::class, 'TemplateCategoryAdd'])->name('template.category.add');
+    
+    Route::post('/category/store', [TemplateController::class, 'TemplateCategoryStore'])->name('template.category.store');
+    
+    Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
+
+    Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
+    
+    
+    
+    });
+
+
+
+    // Dalle Manage Image
+    Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
+
+    Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 
 });//End Admin Middleware
 
-Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 // User Middleware
 Route::middleware(['auth', 'role:user'])->group(function(){
@@ -67,7 +87,7 @@ Route::middleware(['auth', 'role:user'])->group(function(){
 
 
 // Custom Templates
-Route::prefix('custom/Template')->group(function(){
+Route::prefix('custom/template')->group(function(){
 
     Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add');
     
@@ -102,8 +122,8 @@ Route::prefix('chat')->group(function(){
 
 
 Route::prefix('generate')->group(function() {
-        Route::get('/image/view', [DallEImageGenerateController::class, 'AIGenerateImageView'])->name('generate.image.view');
-        Route::post('/image', [DallEImageGenerateController::class, 'generateImage'])->name('generate.image');
+        Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
+        Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
         });
 
 
@@ -113,10 +133,14 @@ Route::prefix('generate')->group(function() {
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
     });
 
+//AI Image Gallery Page
+    Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
 
-    Route::get('/ai/image/gallery', [CustomTemplateController::class, 'AIImageGallery'])->name('ai.image.gallery');
-        
+    
+//Fixed Templates 
 
+Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
+    
+Route::get('template/view/{id}', [TemplateController::class, 'TemplateView'])->name('template.view');
 
-
- 
+Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');

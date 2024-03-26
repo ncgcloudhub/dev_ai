@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers\Backend\AI;
 
 use App\Models\Expert;
 use GuzzleHttp\Client;

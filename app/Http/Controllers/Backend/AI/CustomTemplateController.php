@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\CustomTemplateCategory;
 use App\Models\CustomTemplate;
-use App\Models\DalleImageGenerate;
 use App\Models\AISettings;
 use Illuminate\Support\Str;
 
@@ -15,13 +14,6 @@ use OpenAI;
 
 class CustomTemplateController extends Controller
 {
-
-
-    public function AIImageGallery(){
-        $images = DalleImageGenerate::latest()->get();
-        return view('frontend.ai_image_gallery', compact('images'));
-    }
-
 
     // Custom Template Category
     public function CustomTemplateCategoryAdd(){

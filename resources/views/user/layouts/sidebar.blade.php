@@ -3,7 +3,7 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Dark Logo-->
-        <a href="{{route('admin.dashboard')}}" class="logo logo-dark">
+        <a href="{{route('user.dashboard')}}" class="logo logo-dark">
             <span class="logo-sm">
                 <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
             </span>
@@ -12,7 +12,7 @@
             </span>
         </a>
         <!-- Light Logo-->
-        <a href="{{route('admin.dashboard')}}" class="logo logo-light">
+        <a href="{{route('user.dashboard')}}" class="logo logo-light">
             <span class="logo-sm">
                 <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="22">
             </span>
@@ -34,7 +34,7 @@
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('admin.dashboard')}}">
+                    <a class="nav-link menu-link" href="{{route('user.dashboard')}}">
                         <i data-feather="home" class="icon-dual"></i> <span >Dashboard</span>
                     </a>
                 </li>
@@ -45,6 +45,15 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
+
+                {{-- Fixed Template --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('template.manage')}}">
+                        <i class="lab la-blogger"></i> <span >Template</span>
+                    </a>
+                </li>
+
+                {{-- Custom Template --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#AITools" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -54,16 +63,6 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-                                    {{-- <li class="nav-item">
-                                        <a href="{{route('custom.category.add')}}" class="nav-link" >Categories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('custom.template.add')}}" class="nav-link" >Add Template</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('custom.template.manage')}}" class="nav-link" >Manage Template</a>
-                                    </li> --}}
-
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.category.add')}}" class="nav-link" >Categories</a>
                                     </li>

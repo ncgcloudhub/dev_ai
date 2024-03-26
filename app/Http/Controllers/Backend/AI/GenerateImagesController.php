@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class DallEImageGenerateController extends Controller
+class GenerateImagesController extends Controller
 {
     public function AIGenerateImageView(){
         $user_id = Auth::user()->id;
