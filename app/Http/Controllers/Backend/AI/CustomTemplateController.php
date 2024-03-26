@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\CustomTemplateCategory;
 use App\Models\CustomTemplate;
 use App\Models\AISettings;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 use OpenAI;
@@ -17,15 +18,18 @@ class CustomTemplateController extends Controller
 
     // Custom Template Category
     public function CustomTemplateCategoryAdd(){
-        $categories = CustomTemplateCategory::latest()->get();
+        $user_id = Auth::user()->id;
+        $categories = CustomTemplateCategory::where('user_id', $user_id)->get();
         return view('backend.custom_template.category', compact('categories'));
     }
 
     public function CustomTemplateCategoryStore (Request $request){
 
+        $user_id = Auth::user()->id;
 
         $customTemplateCategory = CustomTemplateCategory::insertGetId([
             
+          'user_id' => $user_id,
           'category_name' => $request->category_name,
           'category_icon' => $request->category_icon,
           'created_at' => Carbon::now(),   
@@ -50,8 +54,9 @@ public function CustomTemplateAdd(){
 }
 
 public function CustomTemplateManage(){
-    $templates = CustomTemplate::orderby('id', 'asc')->get();
-    $customtemplatecategories = CustomTemplateCategory::latest()->get();
+    $user_id = Auth::user()->id;
+    $templates = CustomTemplate::where('user_id', $user_id)->get();
+    $customtemplatecategories = CustomTemplateCategory::where('user_id', $user_id)->get();
     return view('backend.custom_template.template_manage', compact('templates','customtemplatecategories'));
 }
 
@@ -72,6 +77,9 @@ public function CustomTemplateView($id) {
 
 public function CustomTemplateStore (Request $request){
 
+    $user_id = Auth::user()->id;
+    
+
     // Validate the incoming request
     $validatedData = $request->validate([
         'template_name' => 'required|string',
@@ -88,6 +96,7 @@ public function CustomTemplateStore (Request $request){
 
     $templateInput = new CustomTemplate();
     $templateInput->template_name = $validatedData['template_name'];
+    $templateInput->user_id = $user_id;
     $templateInput->slug = $slug;
     $templateInput->icon = $validatedData['icon'];
     $templateInput->category_id = $validatedData['category_id'];
