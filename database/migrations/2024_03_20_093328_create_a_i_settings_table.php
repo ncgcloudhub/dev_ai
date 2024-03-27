@@ -26,3 +26,7 @@ return new class extends Migration
         Schema::dropIfExists('a_i_settings');
     }
 };
+
+$table->string('category_name');
+$table->string('category_icon');
+$table->unsignedBigInteger('user_id')->nullable();

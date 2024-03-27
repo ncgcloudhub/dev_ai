@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('custom_templates', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('template_name');
             $table->string('slug');
             $table->string('icon')->nullable();
