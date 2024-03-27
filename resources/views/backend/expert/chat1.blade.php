@@ -140,11 +140,11 @@
                                         <div class="flex-grow-1 overflow-hidden">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
-                                                    <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="rounded-circle avatar-xs" alt="">
+                                                    <img src="{{ URL::asset('backend/uploads/expert/' . $expert_selected->image) }}" class="rounded-circle avatar-xs" alt="">
                                                     <span class="user-status"></span>
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">Lisa Parker</a></h5>
+                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">{{ $expert_selected->expert_name}}</a></h5>
                                                     <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>Online</small></p>
                                                 </div>
                                             </div>
