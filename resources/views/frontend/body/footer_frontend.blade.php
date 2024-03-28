@@ -4,13 +4,13 @@
             <div class="col-lg-4 mt-4">
                 <div>
                     <div>
-                        <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="logo light" height="17">
+                        <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo " alt="logo light"
+                height="40">
                     </div>
                     <div class="mt-4 fs-13">
-                        <p>Simple Multipurpose Admin & Dashboard Template</p>
+                        <p>Empower Your Projects with AI</p>
                         <p class="ff-secondary">You can build any type of web application like eCommerce,
-                            CRM, CMS, Project
-                            management apps, Admin Panels, etc using Velzon.</p>
+                            Image Generation, Content Creation, and Intelligent Chat Assistants </p>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                     <p class="copy-rights mb-0">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> © Velzon - Themesbrand
+                        </script> © TrionxAI
                     </p>
                 </div>
             </div>

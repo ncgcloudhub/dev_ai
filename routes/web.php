@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\DalleImageGenerate;
+use App\Models\Template;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -18,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->get();
-    return view('frontend.index', compact('images'));
+    $templates = Template::orderby('id', 'asc')->limit(8)->get();
+    return view('frontend.index', compact('images','templates'));
 })->name('home');
 
 

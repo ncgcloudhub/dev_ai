@@ -73,65 +73,7 @@
     @section('content')
         <!-- Begin page -->
         <div class="layout-wrapper landing">
-            <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
-                <div class="container">
-                    <a class="navbar-brand" href="{{URL::asset('/index')}}">
-                        <img src="{{ URL::asset('build/images/logo-dark1.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="30">
-                        <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo card-logo-light" alt="logo light"
-                            height="40">
-                    </a>
-                    <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="mdi mdi-menu"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
-                            <li class="nav-item">
-                                <a class="nav-link fs-15 active" href="#hero">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#services">Services</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#features">Features</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#plans">Plans</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#reviews">Reviews</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#team">Team</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fs-15" href="#contact">Contact</a>
-                            </li>
-                        </ul>
-
-                        
-
-                        <div class="">
-                            @if (Auth::check())
-                            @if (Auth::user()->role === 'admin')
-                                <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary">Dashboard</a>
-                            @elseif (Auth::user()->role === 'user')
-                                <a href="{{ url('/user/dashboard') }}" class="btn btn-primary">Dashboard</a>
-                            @endif
-                            @else
-                            <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
-
-                            <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
-                            @endif
-                        </div>
-                    </div>
-
-                </div>
-            </nav>
-            <!-- end navbar -->
-            <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent.show"></div>
+           @include('frontend.body.nav_frontend')
 
             <!-- start hero section -->
             <section class="section pb-0 hero-section" id="hero">
@@ -160,12 +102,10 @@
                                         </h2>
                                         <h1 style="color: rgb(99, 199, 95)">Clever Creator</h1>
                                         <p style="color: white">
-                                            Unwind in our warm atmosphere and savor global comfort food
-                                            made with love. At Tasty Trails, every bite is a delicious
-                                            escape. Come hungry, leave happy.
+                                            Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                                         </p>
                                         
-                                        <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-primary">Use Our Pre-defined Templates</a>
+                                        <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-primary">Generate Image</a>
 
                                     </div>
                                     <!-- end banner-cell -->
@@ -514,6 +454,91 @@
             </section>
             <!-- end features -->
 
+            <section class="section ">
+                <div class="container">
+                   
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="text-center mb-5">
+                                    <h1 class="mb-3 fw-semibold lh-base">How <span class="text-primary">it works</span> </h1>
+                                    <p class="text-muted">Experience our streamlined process: Register an account, select a template, input your brand details, and leverage advanced options to generate tailored content effortlessly.</p>
+                                </div>
+                            </div>
+                            <!-- end col -->
+                        </div>
+                  
+                    <!--end row-->
+                    <div class="row">
+                        
+                        <div class="col-lg-3 col-md-6">
+                        <a href="{{route('login')}}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>1</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Register Account</h6>
+                                    <p class="text-muted mb-0 fs-15">First, You need to make a account.</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>2</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Select Template</h6>
+                                    <p class="text-muted mb-0 fs-15">Select the template first that you want to generate</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>3</span>
+                                    </h1>
+    
+                                    <h6 class="fs-17 mb-2">Write prompt</h6>
+                                    <p class="text-muted mb-0 fs-15">Enter a few sentence about your brand and product</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>4</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Select Advance option and Generate</h6>
+                                    <p class="text-muted mb-0 fs-15">Multile option for each campaign that you're working on</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+                <!--end container-->
+            </section>
+
+
+
             <!-- start cta -->
             <section class="py-5 bg-primary position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
@@ -618,167 +643,67 @@
             <!-- start features -->
             <section class="section">
                 <div class="container">
+                    <div class="text-center mb-5">
+                        <h1 class="mb-3 ff-secondary fw-semibold lh-base">Generate Contents</h1>
+                        <p class="text-muted">Generate your contents easily with our pre-defined templates</p>
+                    </div>
                     <div class="row align-items-center gy-4">
-                        <div class="col-lg-6 order-2 order-lg-1">
-                            <div class="text-muted">
-                                <h5 class="fs-12 text-uppercase text-success">Design</h5>
-                                <h4 class="mb-3">Well Designed Dashboards</h4>
-                                <p class="mb-4 ff-secondary">Quality Dashboards (QD) is a condition-specific, actionable
-                                    web-based application for quality reporting and population
-                                    management that is integrated into the Electronic Health Record (EHR).</p>
-
-                                <div class="row">
-                                    <div class="col-sm-5">
-                                        <div class="vstack gap-2">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <div class="avatar-xs icon-effect">
-                                                        <div
-                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                            <i class="ri-check-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-14 mb-0">Ecommerce</h5>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <div class="avatar-xs icon-effect">
-                                                        <div
-                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                            <i class="ri-check-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-14 mb-0">Analytics</h5>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <div class="avatar-xs icon-effect">
-                                                        <div
-                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                            <i class="ri-check-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-14 mb-0">CRM</h5>
-                                                </div>
-                                            </div>
+                       
+                        <div class="row template-row">
+                            @foreach ($templates as $item)
+                           
+                            <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}">
+                                
+                                <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <div class="card-body">
+                                        <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
+                                            {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
+                                            <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                         </div>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <div class="vstack gap-2">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <div class="avatar-xs icon-effect">
-                                                        <div
-                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                            <i class="ri-check-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-14 mb-0">Crypto</h5>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <div class="avatar-xs icon-effect">
-                                                        <div
-                                                            class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                            <i class="ri-check-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="fs-14 mb-0">Projects</h5>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h3 ><a href="{{ auth()->check() ? route('custom.template.view', ['id' => $item->id]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                        <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
+                                       
+                                        <small class="text-muted">0 Words generated</small>
+                                        
+                                      
+                                        <ul class="list-inline hstack gap-2 mb-0">
+                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
+                                                <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
+                                                    <i class="ri-eye-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-
-                                <div class="mt-4">
-                                    <a href="index" class="btn btn-primary">Learn More <i
-                                            class="ri-arrow-right-line align-middle ms-1"></i></a>
-                                </div>
+                           
                             </div>
+                            
+                                @endforeach
                         </div>
-                        <!-- end col -->
-                        <div class="col-lg-6 col-sm-7 col-10 ms-auto order-1 order-lg-2">
-                            <div>
-                                <img src="{{ URL::asset('build/images/landing/features/img-2.png') }}" alt="" class="img-fluid">
-                            </div>
+                        <div class="mx-auto d-flex justify-content-center">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-primary">Show More</a>
                         </div>
                     </div>
                     <!-- end row -->
 
-                    <div class="row align-items-center mt-5 pt-lg-5 gy-4">
-                        <div class="col-lg-6 col-sm-7 col-10 mx-auto">
-                            <div>
-                                <img src="{{ URL::asset('build/images/landing/features/img-3.png') }}" alt="" class="img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="text-muted ps-lg-5">
-                                <h5 class="fs-12 text-uppercase text-success">structure</h5>
-                                <h4 class="mb-3">Well Documented</h4>
-                                <p class="mb-4">used to describe something that is known about or known to be
-                                    true because there are many documents that describe it,
-                                    prove it, etc.</p>
-
-                                <div class="vstack gap-2">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs icon-effect">
-                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                    <i class="ri-check-fill"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0">Dynamic Conetnt</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs icon-effect">
-                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                    <i class="ri-check-fill"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0">Setup plugin's information.</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs icon-effect">
-                                                <div class="avatar-title bg-transparent text-success rounded-circle h2">
-                                                    <i class="ri-check-fill"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0">Themes customization information</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                    </div>
+                   
                     <!-- end row -->
                 </div>
                 <!-- end container -->
             </section>
             <!-- end features -->
+
+          
 
             <!-- start plan -->
             <section class="section bg-light" id="plans">
