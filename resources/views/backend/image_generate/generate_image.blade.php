@@ -241,24 +241,42 @@
                 </div>
 
         </div>
-
-    {{-- Image Row --}}
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="row gallery-wrapper" id="image-container">
-
-            </div>
+        
+        <div id="image-container">      
+        
         </div>
-    </div>
-    {{-- Image Row End --}}
-
+    
+    
     </div>
 </div>
 
 <div class="container">
-    @foreach ($images as $item)
-        <img style="height: 250px; width:250px" src="{{ asset($item->image) }}" alt="">
-    @endforeach
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="">
+                <div class="card-body">
+                    <div class="row gallery-wrapper">
+                        @foreach ($images as $item)
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">{{$item->prompt}}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+
+                               
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -293,23 +311,16 @@
                     console.log(response);
 
                     
+                    
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                              // Create an image element
-                             var temp = `<div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
-                                    <div class="gallery-box card">
-                                        <div class="gallery-container">
-                                            <a class="image-popup" href="${imageData.url}" title="">
-                                                <img style="height: 256px; width:256px" class="gallery-img img-fluid mx-auto" src="${imageData.url}" alt="" />
-                                                <div class="gallery-overlay">
-                                                    <h5 class="overlay-caption">Glasses and laptop from above</h5>
-                                                </div>
-                                            </a>
-                                        </div> 
-                                    </div>
-                                </div>`;
+                             var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                            <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                                            </a>`;
 
-                             var img = $('<img>').attr('src', imageData.url);
+
+                            //  var img = $('<img>').attr('src', imageData.url);
 
                             // Append the image to the container
                             $('#image-container').append(temp);

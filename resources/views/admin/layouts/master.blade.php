@@ -18,7 +18,13 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
         @include('admin.layouts.topbar')
+       
+        @if (Auth::user()->role === 'admin')
         @include('admin.layouts.sidebar')
+        @else
+        @include('user.layouts.sidebar') 
+        @endif
+        
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->

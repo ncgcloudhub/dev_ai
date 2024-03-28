@@ -646,13 +646,104 @@ $(document).ready(function() {
             sendMessage(); // Call the function to send the message
         }
     });
+    
+
+    function displayMessage(message, reply, image) {
+    let formattedMessage = formatContent(message);
+    let formattedReply = formatContent(reply);
+
+    $('#users-conversation').append(`
+        <li class="chat-list right"> 
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${formattedMessage}</p>
+                        </div>
+                        <div class="dropdown align-self-start message-box-drop"> 
+                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i></a> 
+                            <div class="dropdown-menu"> 
+                                <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
+                                <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>
+                                <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
+                                <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a> 
+                                <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <span class="d-none name">Frank Thomas</span>
+                        <small class="text-muted time">09:08 am</small> 
+                        <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
+                    </div>
+                </div>    
+            </div>    
+        </li>
+        <li class="chat-list left">   
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ URL::asset('backend/uploads/expert/') }}/${image}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${formattedReply}</p>
+                        </div>
+                        <div class="dropdown align-self-start message-box-drop">                
+                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i></a>     
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a> 
+                                <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>
+                                <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>   
+                                <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a> 
+                                <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>   
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <span class="d-none name">Lisa Parker</span>
+                        <small class="text-muted time">09:07 am</small> 
+                        <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
+                    </div>
+                </div>              
+            </div>           
+        </li>
+    `);
+
+    // Scroll to the last message
+    let conversationList = document.getElementById('users-conversation');
+    let lastMessage = conversationList.lastElementChild;
+    lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+function formatContent(content) {
+    let formattedContent = '';
+    let lines = content.split('\n');
+
+    if (lines.some(line => line.trim().startsWith('#'))) {
+        formattedContent = '<pre style="font-family: Calibri;">' + content + '</pre>';
+    } else if (lines.some(line => line.trim().startsWith('*'))) {
+        formattedContent += '<ul style="font-family: Calibri;">';
+        lines.forEach(line => {
+            if (line.trim().startsWith('*')) {
+                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+            } else {
+                formattedContent += '<p>' + line.trim() + '</p>';
+            }
+        });
+        formattedContent += '</ul>';
+    } else {
+        formattedContent = '<p style="font-family: Calibri;">' + lines.join('</p><p style="font-family: Calibri;">') + '</p>';
+    }
+
+    return formattedContent;
+}
 
     
-    function sendMessage() {
+function sendMessage() {
     var message = $('#message-input').val();
     var expert = $('#expert_id_selected').val();
 
-    // $('#message-input').val('');
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         type: 'POST',
@@ -662,80 +753,14 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': csrfToken
         },
         success: function (response) {
-        
             var reply = response.content;
             var image = response.expert_image;
 
-            $('#users-conversation').append(
-                                    `<li class="chat-list right"> 
-                                    <div class="conversation-list">
-                                        <div class="user-chat-content">
-                                            <div class="ctext-wrap">
-                                                <div class="ctext-wrap-content">
-                                                    <p class="mb-0 ctext-content">`+ message +`</p>
-                                                </div>
-                                                <div class="dropdown align-self-start message-box-drop"> 
-                                                   <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i>
-                                                     </a> 
-                                                    <div class="dropdown-menu"> 
-                                                        <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>
-                                                         <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>
-                                                          <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                                                          <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a> 
-                                                          <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>
-                                                           </div>  
-                                                             </div>
-                                                            </div>
-                                                            <div class="conversation-name"><span class="d-none name">Frank Thomas</span><small class="text-muted time">09:08 am</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i>
-                                                            </span>
-                                                </div>
-                                            </div>    
-                                        </div>    
-                                    </li>`);    
+            displayMessage(message, reply, image);
 
-
-            $('#users-conversation').append(` <li class="chat-list left" id="1">   
-                                    <div class="conversation-list">
-                                     <div class="chat-avatar">
-                                         <img src="{{ URL::asset('backend/uploads/expert/') }}/`+image+`" alt="">
-                                     </div>
-                                     <div class="user-chat-content">
-                                         <div class="ctext-wrap">
-                                             <div class="ctext-wrap-content" id="1">
-                                                 <p class="mb-0 ctext-content">`+ reply +`</p>
-                                             </div>
-                                             <div class="dropdown align-self-start message-box-drop">                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i> 
-                                                  </a>     
-                                                  <div class="dropdown-menu">
-                                          <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a> 
-                                           <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>
-                                             <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>   
-                                            <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a> 
-                                             <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>   
-                                               </div>    
-                                                     </div>
-                                                 </div>
-                                                 <div class="conversation-name"><span class="d-none name">Lisa Parker</span><small class="text-muted time">09:07 am</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
-                                                 </div>
-                                             </div>              
-                                           </div>           
-                                          </li>`);
-
-                    
-                            var conversationList = document.getElementById('users-conversation');
-
-                            // Get the last li element within the ul
-                            var lastMessage = conversationList.lastElementChild;
-
-                            // Scroll the last li element into view, aligning it to the bottom
-                            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-                        // Clear the input field
-                        $('#message-input').val('');
-
-
-             
-         },
+            // Clear the input field
+            $('#message-input').val('');
+        },
         error: function (error) {
             console.error(error);
         }
