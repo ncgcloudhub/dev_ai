@@ -61,7 +61,7 @@
                     <p class="copy-rights mb-0">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> © TrionxAI
+                        </script> © CleverCreator
                     </p>
                 </div>
             </div>

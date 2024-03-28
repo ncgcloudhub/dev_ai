@@ -471,7 +471,9 @@
                     <div class="row">
                         
                         <div class="col-lg-3 col-md-6">
-                        <a href="{{route('login')}}">
+                            <a href="{{ Auth::check() ? route('user.dashboard') : route('login') }}">
+                                
+                            
                             <div class="card shadow-lg h-100">
                                 <div class="card-body p-4">
                                     <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
@@ -546,15 +548,15 @@
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Create Your Contents with our Pre-defined Templates</h4>
                             </div>
                         </div>
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="https://1.envato.market/velzon-admin" target="_blank"
+                                <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" target="_blank"
                                     class="btn bg-gradient btn-danger"><i
-                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
+                                        class=" align-middle me-1"></i> Create Content</a>
                             </div>
                         </div>
                         <!-- end col -->
@@ -660,7 +662,7 @@
                                             {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
                                             <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                         </div>
-                                        <h3 ><a href="{{ auth()->check() ? route('custom.template.view', ['id' => $item->id]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                        <h3 ><a href="{{ auth()->check() ? route('template.view', ['id' => $item->id]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
                                         <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                        
                                         <small class="text-muted">0 Words generated</small>
@@ -725,15 +727,15 @@
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Build your web App/SaaS with Velzon dashboard</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Create Your Own Images</h4>
                             </div>
                         </div>
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="https://1.envato.market/velzon-admin" target="_blank"
+                                <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
                                     class="btn bg-gradient btn-danger"><i
-                                        class="ri-shopping-cart-2-line align-middle me-1"></i> Buy Now</a>
+                                        class="align-middle me-1"></i> Generate Image</a>
                             </div>
                         </div>
                         <!-- end col -->

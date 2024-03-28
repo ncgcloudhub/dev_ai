@@ -255,14 +255,14 @@ public function githubcallbackHandel()
     {
           // Get user data from Google
     $githubUser = Socialite::driver('github')->user();
-
+        // dd($githubUser);
     // Check if the user exists in your database
     $user = User::where('email', $githubUser->email)->first();
-
+    $name = $githubUser->name ?? $githubUser->nickname ?? $githubUser->email;
     // If the user doesn't exist, create a new user
     if (is_null($user)) {
         $newUser = User::create([
-            'name' => $githubUser->name,
+            'name' => $name,
             'email' => $githubUser->email,
             'role' => 'user', // You might want to adjust the role here
             'password' => '', // Since this is a social login, you don't need a password
