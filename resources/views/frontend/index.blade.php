@@ -471,8 +471,7 @@
                     <div class="row">
                         
                         <div class="col-lg-3 col-md-6">
-                            <a href="{{ Auth::check() ? route('user.dashboard') : route('login') }}">
-                                
+                            <a href="{{ Auth::check() ? (Auth::user()->role == 'admin' ? route('admin.dashboard') : route('user.dashboard')) : route('login') }}">                                
                             
                             <div class="card shadow-lg h-100">
                                 <div class="card-body p-4">

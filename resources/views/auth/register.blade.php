@@ -137,7 +137,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="text-center">
-                                <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> Clever Creator. Crafted with <i class="mdi mdi-heart text-danger"></i> by Clever Creator</p>
                             </div>
                         </div>
                     </div>
