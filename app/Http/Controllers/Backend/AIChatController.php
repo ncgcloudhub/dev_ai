@@ -7,10 +7,13 @@ use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use App\Models\AiChat;
+use App\Models\AiChatMessage;
 use Illuminate\Http\Request;
 use App\Models\AISettings;
 use OpenAI;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AIChatController extends Controller
 {
@@ -48,6 +51,25 @@ class AIChatController extends Controller
     
         // Extract completion from API response
         $content = $response->json('choices.0.text');
+
+
+        // TEST SAVE CHAT
+         // Save chat data to the database
+    $aiChat = new AiChat();
+    $aiChat->user_id = Auth::id(); // Assuming you are using authentication
+    $aiChat->expert_id = $expertId;
+    $aiChat->title = $userInput; // You may want to change this
+    $aiChat->total_words = str_word_count($userInput);
+    $aiChat->save();
+
+    $aiChatMessage = new AiChatMessage();
+    $aiChatMessage->ai_chat_id = $aiChat->id;
+    $aiChatMessage->user_id = Auth::id(); // Assuming you are using authentication
+    $aiChatMessage->prompt = $prompt;
+    $aiChatMessage->response = $content;
+    $aiChatMessage->words = str_word_count($content);
+    $aiChatMessage->save();
+        // TEST SAVE CHAT END
     
         // Return response to the client
         return response()->json([

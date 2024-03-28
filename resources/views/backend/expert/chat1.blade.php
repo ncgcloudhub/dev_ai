@@ -56,7 +56,7 @@
                             <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Message">
 
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-soft-primary btn-sm">
+                                <button id="new-message-button" type="button" class="btn btn-soft-primary btn-sm">
                                     <i class="ri-add-line align-bottom"></i>
                                 </button>
                             </div>
@@ -104,6 +104,27 @@
                     <div class="chat-message-list">
 
                         <ul class="list-unstyled chat-list chat-user-list mb-0" id="channelList">
+
+                            <li id="" data-name="channel" class="active">
+                                <a href="javascript: void(0);" class="unread-msg-user">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 chat-user-img align-self-center me-2 ms-0">
+                                            <div class="avatar-xxs">
+                                                <div class="avatar-title bg-light rounded-circle text-body">#</div> 
+                                            </div>   
+                                        </div>   
+                                        <div class="flex-grow-1 overflow-hidden"> 
+                                            <p class="text-truncate mb-0">Landing Design</p>     
+                                        </div>   
+                                            <div>
+                                                <div class="flex-shrink-0 ms-2"><span class="badge bg-dark-subtle text-body rounded p-1">7</span>
+                                                </div>
+                                            </div>
+                                    </div>           
+                                </a>        
+                             </li>
+
+
                         </ul>
                     </div>
                     <!-- End chat-message-list -->
@@ -140,11 +161,11 @@
                                         <div class="flex-grow-1 overflow-hidden">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
-                                                    <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="rounded-circle avatar-xs" alt="">
+                                                    <img src="{{ URL::asset('backend/uploads/expert/' . $expert_selected->image) }}" class="rounded-circle avatar-xs" alt="">
                                                     <span class="user-status"></span>
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">Lisa Parker</a></h5>
+                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">{{ $expert_selected->expert_name}}</a></h5>
                                                     <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>Online</small></p>
                                                 </div>
                                             </div>
@@ -720,6 +741,42 @@ $(document).ready(function() {
         }
     });
 }
+
+
+// NEW CONVERSATION
+// Event listener for the "New Message" button click
+$('#new-message-button').click(function() {
+        // Example message and user data (you can customize this)
+        var message = "This is a new message";
+        var userName = "John Doe";
+        var userImage = "path/to/user/image.jpg";
+        var timestamp = "09:08 am";
+
+        // Construct the HTML for the new message
+        var newMessageHTML = `<li id="" data-name="channel" class="active">
+                                <a href="javascript: void(0);" class="unread-msg-user">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 chat-user-img align-self-center me-2 ms-0">
+                                            <div class="avatar-xxs">
+                                                <div class="avatar-title bg-light rounded-circle text-body">#</div> 
+                                            </div>   
+                                        </div>   
+                                        <div class="flex-grow-1 overflow-hidden"> 
+                                            <p class="text-truncate mb-0">Landing Design</p>     
+                                        </div>   
+                                            <div>
+                                                <div class="flex-shrink-0 ms-2"><span class="badge bg-dark-subtle text-body rounded p-1">7</span>
+                                                </div>
+                                            </div>
+                                    </div>           
+                                </a>        
+                             </li>`;
+
+        // Append the new message to the conversation list
+        $('#channelList').append(newMessageHTML);
+    });
+// NEW CONVERSTATION END
+
 
         });
     </script>
