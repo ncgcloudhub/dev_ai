@@ -27,6 +27,4 @@ return new class extends Migration
     }
 };
 
-$table->string('category_name');
-$table->string('category_icon');
-$table->unsignedBigInteger('user_id')->nullable();
+

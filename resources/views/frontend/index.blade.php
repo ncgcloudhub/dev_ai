@@ -164,16 +164,9 @@
                                             made with love. At Tasty Trails, every bite is a delicious
                                             escape. Come hungry, leave happy.
                                         </p>
-                                        <div class="book-btn">
-                                            <a
-                                                href="#reservation"
-                                                class="table-btn hvr-underline-from-center"
-                                            >Book my Table</a
-                                            >
-                                        </div>
-                                        <a href="#about">
-                                            <div class="mouse"></div>
-                                        </a>
+                                        
+                                        <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-primary">Use Our Pre-defined Templates</a>
+
                                     </div>
                                     <!-- end banner-cell -->
                                 </div>
