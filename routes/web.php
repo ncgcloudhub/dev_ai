@@ -146,3 +146,13 @@ Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->na
 Route::get('template/view/{id}', [TemplateController::class, 'TemplateView'])->name('template.view');
 
 Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
+
+
+// GOOGLE SOCIALITE
+Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
+Route::get('google/callback', [TemplateController::class, 'callbackHandel'])->name('google.login.callback');
+
+
+// GITHUB SOCIALITE
+Route::get('github/login', [TemplateController::class, 'githubprovider'])->name('github.login');
+Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'])->name('github.login.callback');

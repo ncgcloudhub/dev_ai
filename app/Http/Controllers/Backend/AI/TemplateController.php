@@ -8,7 +8,11 @@ use Illuminate\Support\Carbon;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
+
 
 use OpenAI;
 
@@ -200,4 +204,81 @@ public function TemplateStore (Request $request){
 		// return view('backend.template.template_view', compact('title', 'content'));
 		return $content;
 	}
+
+
+
+    // GOOGLE SOCIALITE
+    public function provider ()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+    public function callbackHandel()
+    {
+          // Get user data from Google
+    $googleUser = Socialite::driver('google')->user();
+
+    // Check if the user exists in your database
+    $user = User::where('email', $googleUser->email)->first();
+
+    // If the user doesn't exist, create a new user
+    if (is_null($user)) {
+        $newUser = User::create([
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'role' => 'user', // You might want to adjust the role here
+            'password' => '', // Since this is a social login, you don't need a password
+        ]);
+
+        // Log in the new user
+        Auth::login($newUser);
+
+        // Redirect to dashboard or any other page
+        return redirect('/user/dashboard');
+    }
+
+    // If the user exists, log them in
+    Auth::login($user);
+
+    // Redirect to dashboard or any other page
+    return redirect('/user/dashboard');
+  }
+
+
+
+//   GITHUB
+public function githubprovider()
+{
+    return Socialite::driver('github')->redirect();
+}
+
+public function githubcallbackHandel()
+    {
+          // Get user data from Google
+    $githubUser = Socialite::driver('github')->user();
+
+    // Check if the user exists in your database
+    $user = User::where('email', $githubUser->email)->first();
+
+    // If the user doesn't exist, create a new user
+    if (is_null($user)) {
+        $newUser = User::create([
+            'name' => $githubUser->name,
+            'email' => $githubUser->email,
+            'role' => 'user', // You might want to adjust the role here
+            'password' => '', // Since this is a social login, you don't need a password
+        ]);
+
+        // Log in the new user
+        Auth::login($newUser);
+
+        // Redirect to dashboard or any other page
+        return redirect('/user/dashboard');
+    }
+
+    // If the user exists, log them in
+    Auth::login($user);
+
+    // Redirect to dashboard or any other page
+    return redirect('/user/dashboard');
+  }
 }
