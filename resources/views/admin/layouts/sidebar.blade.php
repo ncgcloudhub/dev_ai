@@ -161,11 +161,17 @@
                 </li>
 
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Settings</span></li>
+                <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('ai.settings.add')}}">
                         <i class="las la-flask"></i> <span >AI Settings</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('site.settings.add')}}">
+                        <i class="las la-flask"></i> <span >Site Settings</span>
                     </a>
                 </li>
 

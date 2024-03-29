@@ -24,7 +24,7 @@ class GenerateImagesController extends Controller
 		$apiKey = config('app.openai_api_key');
         $size = '1024x1024';
         $style = 'vivid';
-		$quality = 'standard';
+		$quality = 'hd';
 		$n = 1;
       
         $response = null;

@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
+use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,15 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add');
 
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
+        
+    });
+
+     // Site Settings
+     Route::prefix('settings/site')->group(function(){
+
+        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add');
+
+        Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
         
     });
 
