@@ -26,12 +26,12 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
                                             Dall-E 2
                                     </a>
                                 </li>
                                 <li class="nav-item waves-effect waves-light">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
                                     </a>
                                 </li>
@@ -94,8 +94,8 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input4">No. of Result</label>
-                                                            <input type="integer" name="no_of_result" id="no_of_result" value="2">
-                                                            {{-- <select name="no_of_result" class="form-control" id="no_of_result">
+                                                         
+                                                            <select name="no_of_result" class="form-control" id="no_of_result">
                                                                 <option disabled selected="">Enter no. of Images</option>
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
@@ -107,7 +107,7 @@
                                                                 <option value="8">8</option>
                                                                 <option value="9">9</option>
                                                                 <option value="10">10</option>
-                                                            </select> --}}
+                                                            </select>
                                                         </div>
                                                         
 
