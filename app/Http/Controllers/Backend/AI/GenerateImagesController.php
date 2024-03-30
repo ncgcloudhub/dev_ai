@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class GenerateImagesController extends Controller
 {
@@ -15,12 +16,24 @@ class GenerateImagesController extends Controller
         $user_id = Auth::user()->id;
         $images = ModelsDalleImageGenerate::where('user_id', $user_id)->get();
 
-        return view('backend.image_generate.generate_image', compact('images'));
+        $get_user = User::where('role','user')->where('id',$user_id)->first();
+        $images_count = $get_user->images_generated;
+        // dd($pcount);
+
+        if ($images_count == 4 || $images_count == 24) {
+           return redirect()->route('all.package');
+        }else{
+
+            return view('backend.image_generate.generate_image', compact('images'));
+        }
+
     }
 
 
     public function generateImage(Request $request) {
-        
+
+        $id = Auth::user()->id;
+
 		$apiKey = config('app.openai_api_key');
         $size = '1024x1024';
         $style = 'vivid';
@@ -117,6 +130,14 @@ class GenerateImagesController extends Controller
                 $imageModel->resolution = $size; // Set the resolution if needed
                 $imageModel->save();
             }
+
+
+            // Image Increment
+            User::where('id', $id)->update([
+                'images_generated' => DB::raw('images_generated + ' . $n),
+            ]);
+    
+
     
             // $imageURL = $responseData['data'][0]['url'];
             // return response()->json(['imageURL' => $imageURL]);
@@ -128,6 +149,9 @@ class GenerateImagesController extends Controller
     } else {
         return response()->json(['error' => 'No condition met'], 500);
     }
+
+
+
 
     }
 

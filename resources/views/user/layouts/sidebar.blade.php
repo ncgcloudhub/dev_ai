@@ -106,6 +106,32 @@
                     </div>
                 </li>
 
+                {{-- Subscription --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#subscription" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="subscription">
+                        <i class="l las la-sms"></i> <span >Subscription</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="subscription">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{route('all.package')}}" class="nav-link" >Buy Package</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('chat')}}" class="nav-link" >Lets Chat</a>
+                                    </li>
+                                  
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </li>
+                 {{-- End Subscription --}}
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">

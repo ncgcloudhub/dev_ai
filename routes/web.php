@@ -14,7 +14,7 @@ use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
-
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -94,6 +94,14 @@ Route::middleware(['auth', 'role:user'])->group(function(){
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
+
+    // Subscriptions
+    Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
+
+    Route::get('/buy/subscription/plan', [SubscriptionController::class, 'BuySubscriptionPlan'])->name('buy.subscription.plan');
+
+    Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
+    
 
 });//End User Middleware
 
