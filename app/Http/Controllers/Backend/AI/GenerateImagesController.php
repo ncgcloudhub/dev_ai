@@ -33,6 +33,7 @@ class GenerateImagesController extends Controller
     public function generateImage(Request $request) {
 
         $id = Auth::user()->id;
+        $imagesLeft = Auth::user()->images_left;
 
 		$apiKey = config('app.openai_api_key');
         $size = '1024x1024';
@@ -60,6 +61,9 @@ class GenerateImagesController extends Controller
         if($request->no_of_result){
             $n = $request->no_of_result;
             $n = intval($n);
+            if($n > $imagesLeft){
+                return response()->json(['error' => 'Failed to generate image'], 500);
+            }
         }
 
         $response = Http::withHeaders([
