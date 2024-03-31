@@ -22,7 +22,7 @@
                    
                     <div class="card">
                         <div class="card-body">
-                           
+                            <h3 class="images-left card-title mb-0 flex-grow-1">Images Left:  {{ $get_user->images_left }}</h3>
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
@@ -319,13 +319,17 @@
                                             <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
                                             </a>`;
 
-
                             //  var img = $('<img>').attr('src', imageData.url);
 
                             // Append the image to the container
                             $('#image-container').append(temp);
-            });
+                            
+                         });
               
+
+                         var imagesLeft = response.images_left;
+                         console.log("Images Left: " + imagesLeft);
+                         $('.images-left').html("Images Left: " + imagesLeft);
 
                   // Hide loader
                   $('#loader').addClass('d-none');

@@ -24,7 +24,7 @@ class GenerateImagesController extends Controller
            return redirect()->route('all.package');
         }else{
 
-            return view('backend.image_generate.generate_image', compact('images'));
+            return view('backend.image_generate.generate_image', compact('images','get_user'));
         }
 
     }
@@ -135,10 +135,12 @@ class GenerateImagesController extends Controller
             // Image Increment
             User::where('id', $id)->update([
                 'images_generated' => DB::raw('images_generated + ' . $n),
+                'images_left' => DB::raw('images_left - ' . $n),
             ]);
     
-
-    
+             $newImagesLeft = Auth::user()->images_left - $n;
+              // Add images_left to the $responseData array
+             $responseData['images_left'] = $newImagesLeft;
             // $imageURL = $responseData['data'][0]['url'];
             // return response()->json(['imageURL' => $imageURL]);
             return  $responseData;
