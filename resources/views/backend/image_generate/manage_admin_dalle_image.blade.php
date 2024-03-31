@@ -47,14 +47,23 @@
                             <td>{{ $item->status }}</td>
 
                             @if ($item->status == 'active')
-                            <td>
-                                <button class="btn btn-sm btn-soft-success active_button" data-image-id="{{ $item->id }}">Activate</button>
-                            </td>
+                                <td>
+                                    <div class="form-check form-switch form-switch-md" dir="ltr">
+                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-image-id="{{ $item->id }}" checked>
+                                        <label class="form-check-label" for="customSwitchsizemd"></label>
+                                    </div>
+                                </td>
                             @else
-                            <td>
-                                <button class="btn btn-sm btn-soft-info active_button" data-image-id="{{ $item->id }}">Inactivate</button>
-                            </td>
+                                <td>
+                                    <div class="form-check form-switch form-switch-md" dir="ltr">
+                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-image-id="{{ $item->id }}">
+                                        <label class="form-check-label" for="customSwitchsizemd"></label>
+                                    </div>
+                                </td>
                             @endif
+
+                           
+
                            
                         </tr>
                         @endforeach

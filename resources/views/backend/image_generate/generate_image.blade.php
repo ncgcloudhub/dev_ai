@@ -39,7 +39,7 @@
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content text-muted">
-                                <div class="tab-pane active" id="pill-justified-home-1" role="tabpanel">
+                                <div class="tab-pane" id="pill-justified-home-1" role="tabpanel">
 
 
                                     <!-- Base Example -->
@@ -144,7 +144,7 @@
                                
 
                                     
-                                <div class="tab-pane" id="pill-justified-profile-1" role="tabpanel">
+                                <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
                                     <form  action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
                                     <input type="hidden" name="dall_e_3" value="dall_e_3">
