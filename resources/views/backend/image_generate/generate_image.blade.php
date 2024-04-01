@@ -22,7 +22,7 @@
                    
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="images-left card-title mb-0 flex-grow-1">Images Left:  {{ $get_user->images_left }}</h3>
+                            {{-- <h3 class="images-left card-title mb-0 flex-grow-1">Images Left:  {{ $get_user->images_left }}</h3> --}}
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
