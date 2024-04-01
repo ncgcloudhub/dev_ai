@@ -16,9 +16,17 @@ class GenerateImagesController extends Controller
         $user_id = Auth::user()->id;
         $images = ModelsDalleImageGenerate::where('user_id', $user_id)->get();
 
-        $get_user = User::where('role','user')->where('id',$user_id)->first();
-        $images_count = $get_user->images_generated;
+     
         // dd($pcount);
+        $check_user = Auth::user()->role;
+        
+        if($check_user == 'admin'){
+             $get_user = User::where('role','admin')->where('id',$user_id)->first();
+             $images_count = $get_user->images_generated;
+        }else{
+            $get_user = User::where('role','user')->where('id',$user_id)->first();
+            $images_count = $get_user->images_generated;
+        }
 
         if ($images_count == 10 || $images_count == 30) {
            return redirect()->route('all.package');
