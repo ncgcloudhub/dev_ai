@@ -11,9 +11,9 @@
     <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
     @include('admin.layouts.head-css')
 
-    {{-- @section('css')
     <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
-    @endsection --}}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
 
@@ -35,6 +35,8 @@
         <!-- ============================================================== -->
         <div class="main-content">
             <div class="page-content">
+                                 
+            @include('admin.layouts.alerts')
                 <div class="container-fluid">
                     @yield('content')
                 </div>
@@ -49,9 +51,9 @@
 
     @include('admin.layouts.customizer')
 
-    @include('admin.layouts.alerts')
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')
+
 </body>
 
 
