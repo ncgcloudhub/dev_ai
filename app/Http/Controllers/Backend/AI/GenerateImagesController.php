@@ -20,7 +20,7 @@ class GenerateImagesController extends Controller
         $images_count = $get_user->images_generated;
         // dd($pcount);
 
-        if ($images_count == 10 || $images_count == 30) {
+        if ($images_count == 4 || $images_count == 24) {
            return redirect()->route('all.package');
         }else{
 
