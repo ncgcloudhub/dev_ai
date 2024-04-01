@@ -25,24 +25,26 @@ class CustomTemplateController extends Controller
 
     public function CustomTemplateCategoryStore (Request $request){
 
+
         $user_id = Auth::user()->id;
 
         $customTemplateCategory = CustomTemplateCategory::insertGetId([
             
           'user_id' => $user_id,
-          'category_name' => $request->category_name,
+          'category_names' => $request->category_name,
           'category_icon' => $request->category_icon,
           'created_at' => Carbon::now(),   
   
         ]);
+    
+        return redirect()->back()->with('success', 'Your success message here');
   
+        //  $notification = array(
+        //       'message' => 'Settings Changed Successfully',
+        //       'alert-type' => 'success'
+        //   );
   
-         $notification = array(
-              'message' => 'Settings Changed Successfully',
-              'alert-type' => 'success'
-          );
-  
-          return redirect()->back()->with($notification);
+        //   return redirect()->back()->with($notification);
   
       }
 

@@ -10,6 +10,11 @@
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
     @include('admin.layouts.head-css')
+
+    {{-- @section('css')
+    <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
+    @endsection --}}
+
 </head>
 
 @section('body')
@@ -44,8 +49,10 @@
 
     @include('admin.layouts.customizer')
 
+    @include('admin.layouts.alerts')
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')
 </body>
+
 
 </html>

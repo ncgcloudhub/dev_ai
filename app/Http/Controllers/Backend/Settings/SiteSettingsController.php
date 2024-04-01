@@ -48,8 +48,6 @@ class SiteSettingsController extends Controller
             $footer_logo->move('backend/uploads/site', $footer_logo_Name);
         }
 
-
-
         $expert_id = SiteSettings::insertGetId([
             
             'favicon'=>$faviconName,

@@ -15,7 +15,11 @@
         </div><!-- end card header -->
 
         <div class="card-body">
-          
+
+            @include('admin.layouts.alerts')
+
+            <button type="button" class="btn btn-primary btn-sm" id="sa-position">Click me</button>
+
             <div class="live-preview">
                 <form  action="{{ route('template.category.store') }}" method="post" class="row g-3">
                     @csrf
@@ -61,4 +65,10 @@
 @endsection
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/sweetalerts.init.js') }}"></script>
+
 @endsection

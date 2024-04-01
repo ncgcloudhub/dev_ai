@@ -26,7 +26,6 @@ class TemplateController extends Controller
 
     public function TemplateCategoryStore (Request $request){
 
-
         $TemplateCategory = TemplateCategory::insertGetId([
             
           'category_name' => $request->category_name,
@@ -34,14 +33,17 @@ class TemplateController extends Controller
           'created_at' => Carbon::now(),   
   
         ]);
+
+        return redirect()->back()->with('success', 'Template Saved Successfully');
+
   
   
-         $notification = array(
-              'message' => 'Settings Changed Successfully',
-              'alert-type' => 'success'
-          );
+        //  $notification = array(
+        //       'message' => 'Settings Changed Successfully',
+        //       'alert-type' => 'success'
+        //   );
   
-          return redirect()->back()->with($notification);
+        //   return redirect()->back()->with($notification);
   
       }
 
