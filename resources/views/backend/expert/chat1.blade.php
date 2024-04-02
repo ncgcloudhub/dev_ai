@@ -332,7 +332,7 @@
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">
                                         <div class="links-list-item">
-                                            <button type="submit" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                            <button type="button" onclick="sendMessage()" class="btn btn-success chat-send waves-effect waves-light fs-13">
                                                 <i class="ri-send-plane-2-fill align-bottom"></i>
                                             </button>
                                         </div>
@@ -648,6 +648,77 @@ $(document).ready(function() {
     });
     
 
+
+
+    
+
+
+
+// NEW CONVERSATION
+// Event listener for the "New Message" button click
+$('#new-message-button').click(function() {
+        // Example message and user data (you can customize this)
+        var message = "This is a new message";
+        var userName = "John Doe";
+        var userImage = "path/to/user/image.jpg";
+        var timestamp = "09:08 am";
+
+        // Construct the HTML for the new message
+        var newMessageHTML = `<li id="" data-name="channel" class="active">
+                                <a href="javascript: void(0);" class="unread-msg-user">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 chat-user-img align-self-center me-2 ms-0">
+                                            <div class="avatar-xxs">
+                                                <div class="avatar-title bg-light rounded-circle text-body">#</div> 
+                                            </div>   
+                                        </div>   
+                                        <div class="flex-grow-1 overflow-hidden"> 
+                                            <p class="text-truncate mb-0">Landing Design</p>     
+                                        </div>   
+                                            <div>
+                                                <div class="flex-shrink-0 ms-2"><span class="badge bg-dark-subtle text-body rounded p-1">7</span>
+                                                </div>
+                                            </div>
+                                    </div>           
+                                </a>        
+                             </li>`;
+
+        // Append the new message to the conversation list
+        $('#channelList').append(newMessageHTML);
+    });
+// NEW CONVERSTATION END
+
+
+        });
+    </script>
+
+
+
+
+<script>
+    function formatContent(content) {
+    let formattedContent = '';
+    let lines = content.split('\n');
+
+    if (lines.some(line => line.trim().startsWith('#'))) {
+        formattedContent = '<pre style="font-family: Calibri;">' + content + '</pre>';
+    } else if (lines.some(line => line.trim().startsWith('*'))) {
+        formattedContent += '<ul style="font-family: Calibri;">';
+        lines.forEach(line => {
+            if (line.trim().startsWith('*')) {
+                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+            } else {
+                formattedContent += '<p>' + line.trim() + '</p>';
+            }
+        });
+        formattedContent += '</ul>';
+    } else {
+        formattedContent = '<p style="font-family: Calibri;">' + lines.join('</p><p style="font-family: Calibri;">') + '</p>';
+    }
+
+    return formattedContent;
+}
+
     function displayMessage(message, reply, image) {
     let formattedMessage = formatContent(message);
     let formattedReply = formatContent(reply);
@@ -716,30 +787,6 @@ $(document).ready(function() {
     lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 
-function formatContent(content) {
-    let formattedContent = '';
-    let lines = content.split('\n');
-
-    if (lines.some(line => line.trim().startsWith('#'))) {
-        formattedContent = '<pre style="font-family: Calibri;">' + content + '</pre>';
-    } else if (lines.some(line => line.trim().startsWith('*'))) {
-        formattedContent += '<ul style="font-family: Calibri;">';
-        lines.forEach(line => {
-            if (line.trim().startsWith('*')) {
-                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-            } else {
-                formattedContent += '<p>' + line.trim() + '</p>';
-            }
-        });
-        formattedContent += '</ul>';
-    } else {
-        formattedContent = '<p style="font-family: Calibri;">' + lines.join('</p><p style="font-family: Calibri;">') + '</p>';
-    }
-
-    return formattedContent;
-}
-
-    
 function sendMessage() {
     var message = $('#message-input').val();
     var expert = $('#expert_id_selected').val();
@@ -768,46 +815,7 @@ function sendMessage() {
 }
 
 
-// NEW CONVERSATION
-// Event listener for the "New Message" button click
-$('#new-message-button').click(function() {
-        // Example message and user data (you can customize this)
-        var message = "This is a new message";
-        var userName = "John Doe";
-        var userImage = "path/to/user/image.jpg";
-        var timestamp = "09:08 am";
 
-        // Construct the HTML for the new message
-        var newMessageHTML = `<li id="" data-name="channel" class="active">
-                                <a href="javascript: void(0);" class="unread-msg-user">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 chat-user-img align-self-center me-2 ms-0">
-                                            <div class="avatar-xxs">
-                                                <div class="avatar-title bg-light rounded-circle text-body">#</div> 
-                                            </div>   
-                                        </div>   
-                                        <div class="flex-grow-1 overflow-hidden"> 
-                                            <p class="text-truncate mb-0">Landing Design</p>     
-                                        </div>   
-                                            <div>
-                                                <div class="flex-shrink-0 ms-2"><span class="badge bg-dark-subtle text-body rounded p-1">7</span>
-                                                </div>
-                                            </div>
-                                    </div>           
-                                </a>        
-                             </li>`;
-
-        // Append the new message to the conversation list
-        $('#channelList').append(newMessageHTML);
-    });
-// NEW CONVERSTATION END
-
-
-        });
-    </script>
-
-
-<script>
     function selectExpert(element) {
         // Extract the expert name and log it to the console
         var message = $('#expert_id_selected').val(element);
