@@ -26,10 +26,10 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="index" class="d-inline-block auth-logo">
-                                    <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="20">
+                                    <img src="{{ URL::asset('build/images/logo-dark1.png') }}" alt="" height="40">
                                 </a>
                             </div>
-                            <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                           
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
                                     <h5 class="text-primary">Welcome Back !</h5>
-                                    <p class="text-muted">Sign in to continue to Velzon.</p>
+                                    <p class="text-muted">Sign in to continue to Clever Creator.</p>
                                 </div>
                                 <div class="p-2 mt-4">
                                     <form method="POST" action="{{ route('login') }}">
@@ -88,12 +88,13 @@
                                                 <button type="button"
                                                     class="btn btn-primary btn-icon waves-effect waves-light"><i
                                                         class="ri-facebook-fill fs-16"></i></button>
-                                                <button type="button"
-                                                    class="btn btn-danger btn-icon waves-effect waves-light"><i
-                                                        class="ri-google-fill fs-16"></i></button>
-                                                <button type="button"
-                                                    class="btn btn-dark btn-icon waves-effect waves-light"><i
-                                                        class="ri-github-fill fs-16"></i></button>
+                                                        <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light">
+                                                            <i class="ri-google-fill fs-16"></i>
+                                                        </a>
+
+                                                        <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light">
+                                                            <i class="ri-github-fill fs-16"></i>
+                                                        </a>
                                                 <button type="button"
                                                     class="btn btn-info btn-icon waves-effect waves-light"><i
                                                         class="ri-twitter-fill fs-16"></i></button>
@@ -107,7 +108,7 @@
                         <!-- end card -->
 
                         <div class="mt-4 text-center">
-                            <p class="mb-0">Don't have an account ? <a href="auth-signup-basic"
+                            <p class="mb-0">Don't have an account ? <a href={{ route('register') }}
                                     class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
                         </div>
 
@@ -127,8 +128,8 @@
                         <div class="text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> Velzon. Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                            </script> Clever Creator. Crafted with <i
+                                    class="mdi mdi-heart text-danger"></i> by Clever Creator</p>
                         </div>
                     </div>
                 </div>

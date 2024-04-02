@@ -26,3 +26,5 @@ return new class extends Migration
         Schema::dropIfExists('a_i_settings');
     }
 };
+
+

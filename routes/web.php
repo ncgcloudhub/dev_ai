@@ -1,22 +1,27 @@
 <?php
 
 use App\Models\DalleImageGenerate;
+use App\Models\Template;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Backend\CustomTemplateController;
-use App\Http\Controllers\Backend\AIChatController;
-use App\Http\Controllers\Backend\ExpertController;
-use App\Http\Controllers\Backend\DallEImageGenerateController;
+use App\Http\Controllers\Backend\AI\CustomTemplateController;
+use App\Http\Controllers\Backend\AI\TemplateController;
+use App\Http\Controllers\Backend\AI\AIChatController;
+use App\Http\Controllers\Backend\AI\ExpertController;
+use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use App\Http\Controllers\Backend\ProfileEditController;
+use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
-
+use App\Http\Controllers\Backend\Settings\SiteSettingsController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->get();
-    return view('frontend.index', compact('images'));
+    $templates = Template::orderby('id', 'asc')->limit(8)->get();
+    return view('frontend.index', compact('images','templates'));
 })->name('home');
 
 
@@ -47,15 +52,42 @@ Route::middleware(['auth', 'role:admin'])->group(function(){
         
     });
 
-    // Dalle Manage Image
-    Route::get('/image/manage', [DallEImageGenerateController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
+     // Site Settings
+     Route::prefix('settings/site')->group(function(){
 
-    Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add');
+
+        Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
+        
+    });
+
+
+    // Templates
+Route::prefix('template')->group(function(){
+
+    Route::get('/category/add', [TemplateController::class, 'TemplateCategoryAdd'])->name('template.category.add');
+    
+    Route::post('/category/store', [TemplateController::class, 'TemplateCategoryStore'])->name('template.category.store');
+    
+    Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
+
+    Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
+    
+    
+    
+    });
+
+
+
+    // Dalle Manage Image
+    Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
+
+    Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 
 });//End Admin Middleware
 
-Route::post('/update/image/status', [DallEImageGenerateController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 // User Middleware
 Route::middleware(['auth', 'role:user'])->group(function(){
@@ -63,11 +95,19 @@ Route::middleware(['auth', 'role:user'])->group(function(){
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
 
+    // Subscriptions
+    Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
+
+    Route::get('/buy/subscription/plan', [SubscriptionController::class, 'BuySubscriptionPlan'])->name('buy.subscription.plan');
+
+    Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
+    
+
 });//End User Middleware
 
 
 // Custom Templates
-Route::prefix('custom/Template')->group(function(){
+Route::prefix('custom/template')->group(function(){
 
     Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add');
     
@@ -102,8 +142,8 @@ Route::prefix('chat')->group(function(){
 
 
 Route::prefix('generate')->group(function() {
-        Route::get('/image/view', [DallEImageGenerateController::class, 'AIGenerateImageView'])->name('generate.image.view');
-        Route::post('/image', [DallEImageGenerateController::class, 'generateImage'])->name('generate.image');
+        Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
+        Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
         });
 
 
@@ -113,10 +153,24 @@ Route::prefix('generate')->group(function() {
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
     });
 
+//AI Image Gallery Page
+    Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
 
-    Route::get('/ai/image/gallery', [CustomTemplateController::class, 'AIImageGallery'])->name('ai.image.gallery');
-        
+    
+//Fixed Templates 
+
+Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
+    
+Route::get('template/view/{id}', [TemplateController::class, 'TemplateView'])->name('template.view');
+
+Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
 
 
+// GOOGLE SOCIALITE
+Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
+Route::get('google/callback', [TemplateController::class, 'callbackHandel'])->name('google.login.callback');
 
- 
+
+// GITHUB SOCIALITE
+Route::get('github/login', [TemplateController::class, 'githubprovider'])->name('github.login');
+Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'])->name('github.login.callback');

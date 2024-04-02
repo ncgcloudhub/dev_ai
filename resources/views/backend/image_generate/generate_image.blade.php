@@ -22,16 +22,16 @@
                    
                     <div class="card">
                         <div class="card-body">
-                           
+                            <h3 class="images-left card-title mb-0 flex-grow-1">Images Left:  {{ $get_user->images_left }}</h3>
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
                                             Dall-E 2
                                     </a>
                                 </li>
                                 <li class="nav-item waves-effect waves-light">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
                                     </a>
                                 </li>
@@ -39,7 +39,7 @@
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content text-muted">
-                                <div class="tab-pane active" id="pill-justified-home-1" role="tabpanel">
+                                <div class="tab-pane" id="pill-justified-home-1" role="tabpanel">
 
 
                                     <!-- Base Example -->
@@ -94,8 +94,8 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input4">No. of Result</label>
-                                                            <input type="integer" name="no_of_result" id="no_of_result" value="2">
-                                                            {{-- <select name="no_of_result" class="form-control" id="no_of_result">
+                                                         
+                                                            <select name="no_of_result" class="form-control" id="no_of_result">
                                                                 <option disabled selected="">Enter no. of Images</option>
                                                                 <option value="1">1</option>
                                                                 <option value="2">2</option>
@@ -107,7 +107,7 @@
                                                                 <option value="8">8</option>
                                                                 <option value="9">9</option>
                                                                 <option value="10">10</option>
-                                                            </select> --}}
+                                                            </select>
                                                         </div>
                                                         
 
@@ -144,7 +144,7 @@
                                
 
                                     
-                                <div class="tab-pane" id="pill-justified-profile-1" role="tabpanel">
+                                <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
                                     <form  action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
                                     <input type="hidden" name="dall_e_3" value="dall_e_3">
@@ -313,17 +313,21 @@
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                              // Create an image element
-                             var temp = `<a href="${imageData.url}" title="">
-                                            <img style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                             var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                            <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
                                             </a>`;
-
 
                             //  var img = $('<img>').attr('src', imageData.url);
 
                             // Append the image to the container
                             $('#image-container').append(temp);
-            });
+                            
+                         });
               
+
+                         var imagesLeft = response.images_left;
+                         console.log("Images Left: " + imagesLeft);
+                         $('.images-left').html("Images Left: " + imagesLeft);
 
                   // Hide loader
                   $('#loader').addClass('d-none');
