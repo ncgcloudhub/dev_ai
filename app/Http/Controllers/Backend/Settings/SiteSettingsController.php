@@ -48,7 +48,7 @@ class SiteSettingsController extends Controller
             $footer_logo->move('backend/uploads/site', $footer_logo_Name);
         }
 
-        $expert_id = SiteSettings::insertGetId([
+        SiteSettings::findOrFail(1)->update([
             
             'favicon'=>$faviconName,
             'title' => $request->title,
@@ -68,12 +68,7 @@ class SiteSettingsController extends Controller
     
           ]);
 
-        $notification = array(
-            'message' => 'Expert Added Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
+          return redirect()->back()->with('success', 'Setting updated Successfully');
 
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\SiteSettings;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $siteSettings = SiteSettings::find(1); // Assuming the site settings are stored in the database with ID 1
+            $view->with('siteSettings', $siteSettings);
+        });
     }
 }
