@@ -35,15 +35,6 @@ class TemplateController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Template Saved Successfully');
-
-  
-  
-        //  $notification = array(
-        //       'message' => 'Settings Changed Successfully',
-        //       'alert-type' => 'success'
-        //   );
-  
-        //   return redirect()->back()->with($notification);
   
       }
 
