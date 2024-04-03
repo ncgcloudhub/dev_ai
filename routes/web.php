@@ -161,7 +161,7 @@ Route::prefix('generate')->group(function() {
 
 Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
     
-Route::get('template/view/{id}', [TemplateController::class, 'TemplateView'])->name('template.view');
+Route::get('template/view/{slug}', [TemplateController::class, 'TemplateView'])->name('template.view');
 
 Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
 

@@ -85,7 +85,7 @@
                                             {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
                                             <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                         </div>
-                                        <h3 ><a href="{{ route('template.view', ['id' => $item->id]) }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                        <h3 ><a href="{{ route('template.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
                                         <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                        
                                         <small class="text-muted">0 Words generated</small>

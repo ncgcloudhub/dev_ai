@@ -51,8 +51,9 @@ public function TemplateManage(){
     return view('backend.template.template_manage', compact('templates','templatecategories'));
 }
 
-public function TemplateView($id) {
-    $Template = Template::findOrFail($id);
+public function TemplateView($slug) {
+    // Find the template by slug
+    $Template = Template::where('slug', $slug)->firstOrFail();
 
     // Convert JSON strings to arrays
     $inputTypes = json_decode($Template->input_types, true);
