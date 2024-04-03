@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
 @section('title') @lang('translation.dashboards') @endsection
 @section('css')
-<link href="/assets/libs/jsvectormap/jsvectormap.min.css" rel="stylesheet" type="text/css" />
-<link href="{{ URL::asset('/build/libs/dropzone/dropzone.min.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="{{ URL::asset('/build/libs/filepond/filepond.min.css') }}" type="text/css" />
-<link rel="stylesheet" href="{{ URL::asset('/build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
+<link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ URL::asset('build/libs/filepond/filepond.min.css') }}" type="text/css" />
+<link rel="stylesheet"
+    href="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
 @endsection
 
 @section('content')
@@ -24,23 +24,31 @@
         <div class="card-body">
             <div class="live-preview">
                 
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Favicon Picture Selection</h4>
-                        </div><!-- end card header -->
-                
-                        <div class="card-body">
-                          
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="favicon"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-                
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Favicon Picture Selection</h4>
+                    </div><!-- end card header -->
+                    
+                    <div class="card-body">
+                      
+                        <div class="avatar-xl mx-auto">
+                            <input type="file"
+                                   class="filepond filepond-input-circle"
+                                   name="favicon"
+                                   accept="image/png, image/jpeg, image/gif"/>
                         </div>
-                        <!-- end card body -->
+                
+                        <!-- Display current favicon image -->
+                        <div class="mt-3">
+                            @if($setting->favicon)
+                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->favicon) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                            @else
+                                <p></p>
+                            @endif
+                        </div>
                     </div>
+                    <!-- end card body -->
+                </div>
 
                     <div class="col-md-12">
                         <label for="title" class="form-label">Title</label>
@@ -60,10 +68,38 @@
                                 name="header_logo_light"
                                 accept="image/png, image/jpeg, image/gif"/>
                             </div>
+                            <!-- Display current favicon image -->
+                            <div class="mt-3">
+                                @if($setting->header_logo_light)
+                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_light) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                @else
+                                    <p></p>
+                                @endif
+                            </div>
                 
                         </div>
                         <!-- end card body -->
                     </div>
+
+                   
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Profile Picture Selection</h4>
+                            </div><!-- end card header -->
+    
+                            <div class="card-body">
+                                <p class="text-muted">FilePond is a JavaScript library with profile picture-shaped file
+                                    upload variation.</p>
+                                <div class="avatar-xl mx-auto">
+                                    <input type="file" class="filepond filepond-input-circle" name="filepond"
+                                        accept="image/png, image/jpeg, image/gif" />
+                                </div>
+    
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                   
+                   
 
                     <div class="card">
                         <div class="card-header">
@@ -174,21 +210,21 @@
 
 @section('script')
 <script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/filepond/filepond.min.js') }}"></script>
-    <script src="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js') }}">
-    </script>
-    <script
-        src="{{ URL::asset('build/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}">
-    </script>
-    <script
-        src="{{ URL::asset('build/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}">
-    </script>
-    <script src="{{ URL::asset('build/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/filepond/filepond.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js') }}">
+</script>
+<script
+    src="{{ URL::asset('build/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}">
+</script>
+<script
+    src="{{ URL::asset('build/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}">
+</script>
+<script src="{{ URL::asset('build/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/pages/form-file-upload.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/form-file-upload.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.3/mammoth.browser.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.3/mammoth.browser.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
 @endsection

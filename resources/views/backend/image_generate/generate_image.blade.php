@@ -310,19 +310,26 @@
 
                     console.log(response);
                     
-                        $('#image-container').empty(); // Clear previous images if any
-                        response.data.forEach(function(imageData) {
-                             // Create an image element
-                             var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                                            <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
-                                            </a>`;
+                    $('#image-container').empty(); // Clear previous images if any
+response.data.forEach(function(imageData) {
+    // Create an image element
+    var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                    <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                </a>`;
 
-                            //  var img = $('<img>').attr('src', imageData.url);
+    // Append the image to the container
+    $('#image-container').append(temp);
+});
 
-                            // Append the image to the container
-                            $('#image-container').append(temp);
-                            
-                         });
+// Initialize Glightbox
+$(document).ready(function() {
+    const lightbox = GLightbox({
+        selector: '.image-popup',
+        touchNavigation: true,
+        loop: true
+    });
+});
+
               
 
                          var imagesLeft = response.images_left;

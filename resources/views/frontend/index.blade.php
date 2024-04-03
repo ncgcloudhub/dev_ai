@@ -123,69 +123,127 @@
             </section>
             <!-- end hero section -->
 
-            <!-- start client section -->
-            <div class="pt-5 mt-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-
-                            <div class="text-center mt-5">
-                                <h5 class="fs-20">Trusted <span
-                                        class="text-primary text-decoration-underline">by</span> the world's best</h5>
-
-                                <!-- Swiper -->
-                                <div class="swiper trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4" dir="ltr">
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/amazon.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/walmart.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/lenovo.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/paypal.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/shopify.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="client-images">
-                                                <img src="{{ URL::asset('build/images/clients/verizon.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
-                                            </div>
-                                        </div>
-                                    </div>
+            <section class="section bg-light py-5">
+                <div class="container">  
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="text-center mb-5">
+                                    <h1 class="mb-3 fw-semibold lh-base">How <span class="text-primary">it works</span> </h1>
+                                    <p class="text-muted">Experience our streamlined process: Register an account, select a template, input your brand details, and leverage advanced options to generate tailored content effortlessly.</p>
                                 </div>
                             </div>
+                            <!-- end col -->
+                        </div>
+                  
+                    <!--end row-->
+                    <div class="row">
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ Auth::check() ? (Auth::user()->role == 'admin' ? route('admin.dashboard') : route('user.dashboard')) : route('login') }}">                                
+                            
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>1</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Register Account</h6>
+                                    <p class="text-muted mb-0 fs-15">First, You need to make a account.</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>2</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Select Template</h6>
+                                    <p class="text-muted mb-0 fs-15">Select the template first that you want to generate</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
 
+
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>3</span>
+                                    </h1>
+    
+                                    <h6 class="fs-17 mb-2">Write prompt</h6>
+                                    <p class="text-muted mb-0 fs-15">Enter a few sentence about your brand and product</p>
+                                </div>
+                            </div>
+                        </a>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-6">
+                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                            <div class="card shadow-lg h-100">
+                                <div class="card-body p-4">
+                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                                        <div class="job-icon-effect"></div>
+                                        <span>4</span>
+                                    </h1>
+                                    <h6 class="fs-17 mb-2">Select Advance option and Generate</h6>
+                                    <p class="text-muted mb-0 fs-15">Multile option for each campaign that you're working on</p>
+                                </div>
+                            </div>
+                        </a>
                         </div>
                     </div>
-                    <!-- end row -->
                 </div>
-                <!-- end container -->
-            </div>
-            <!-- end client section -->
+                <!--end container-->
+            </section>
+
+  
+
+
+            {{-- AI Image Gallery Slider --}}
+
+            <div class="col-lg-12">
+                <div class="card">
+                  
+                    <div class="card-body">
+                        <div class="text-center mb-5">
+                            <h1 class="mb-3 ff-secondary fw-semibold lh-base">AI Image Gallery</h1>
+                            <p class="text-muted">Images generated by our users from our Website</p>
+                        </div>
+    
+                        <!-- Swiper -->
+                        <div class="swiper effect-coverflow-swiper rounded pb-5">
+                            <div class="swiper-wrapper">
+                                @foreach ($images as $item)
+                                <div class="swiper-slide">
+                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                    </a>
+                                </div>
+                                @endforeach
+                            </div>
+                            <div class="swiper-pagination swiper-pagination-dark"></div>
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!--end col-->
+
+            {{-- AI Image gallery Slider Ends --}}
+
+         
+
 
             <!-- start services -->
-            <section class="section" id="services">
+            <section class="section bg-light py-5" id="services">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -331,6 +389,67 @@
             </section>
             <!-- end services -->
 
+                      <!-- start client section -->
+                      <div class="pt-5 mt-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+        
+                                    <div class="text-center mt-5">
+                                        <h5 class="fs-20">Trusted <span
+                                                class="text-primary text-decoration-underline">by</span> the world's best</h5>
+        
+                                        <!-- Swiper -->
+                                        <div class="swiper trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4" dir="ltr">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/amazon.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/walmart.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/lenovo.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/paypal.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/shopify.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide">
+                                                    <div class="client-images">
+                                                        <img src="{{ URL::asset('build/images/clients/verizon.svg') }}" alt="client-img"
+                                                            class="mx-auto img-fluid d-block">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+        
+                                </div>
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- end container -->
+                    </div>
+                    <!-- end client section -->
+
             <!-- start features -->
             <section class="section bg-light py-5" id="features">
                 <div class="container">
@@ -454,89 +573,7 @@
             </section>
             <!-- end features -->
 
-            <section class="section ">
-                <div class="container">
-                   
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="text-center mb-5">
-                                    <h1 class="mb-3 fw-semibold lh-base">How <span class="text-primary">it works</span> </h1>
-                                    <p class="text-muted">Experience our streamlined process: Register an account, select a template, input your brand details, and leverage advanced options to generate tailored content effortlessly.</p>
-                                </div>
-                            </div>
-                            <!-- end col -->
-                        </div>
-                  
-                    <!--end row-->
-                    <div class="row">
-                        
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ Auth::check() ? (Auth::user()->role == 'admin' ? route('admin.dashboard') : route('user.dashboard')) : route('login') }}">                                
-                            
-                            <div class="card shadow-lg h-100">
-                                <div class="card-body p-4">
-                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
-                                        <div class="job-icon-effect"></div>
-                                        <span>1</span>
-                                    </h1>
-                                    <h6 class="fs-17 mb-2">Register Account</h6>
-                                    <p class="text-muted mb-0 fs-15">First, You need to make a account.</p>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                        
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
-                            <div class="card shadow-lg h-100">
-                                <div class="card-body p-4">
-                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
-                                        <div class="job-icon-effect"></div>
-                                        <span>2</span>
-                                    </h1>
-                                    <h6 class="fs-17 mb-2">Select Template</h6>
-                                    <p class="text-muted mb-0 fs-15">Select the template first that you want to generate</p>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-
-
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
-                            <div class="card shadow-lg h-100">
-                                <div class="card-body p-4">
-                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
-                                        <div class="job-icon-effect"></div>
-                                        <span>3</span>
-                                    </h1>
-    
-                                    <h6 class="fs-17 mb-2">Write prompt</h6>
-                                    <p class="text-muted mb-0 fs-15">Enter a few sentence about your brand and product</p>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-
-
-                        <div class="col-lg-3 col-md-6">
-                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
-                            <div class="card shadow-lg h-100">
-                                <div class="card-body p-4">
-                                    <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
-                                        <div class="job-icon-effect"></div>
-                                        <span>4</span>
-                                    </h1>
-                                    <h6 class="fs-17 mb-2">Select Advance option and Generate</h6>
-                                    <p class="text-muted mb-0 fs-15">Multile option for each campaign that you're working on</p>
-                                </div>
-                            </div>
-                        </a>
-                        </div>
-                    </div>
-                </div>
-                <!--end container-->
-            </section>
+          
 
 
 
@@ -566,31 +603,7 @@
             </section>
             <!-- end cta -->
 
-            <div class="col-lg-12">
-                <div class="card">
-                  
-                    <div class="card-body">
-                        <div class="text-center mb-5">
-                            <h1 class="mb-3 ff-secondary fw-semibold lh-base">AI Image Gallery</h1>
-                            <p class="text-muted">Images generated by our users from our Website</p>
-                        </div>
-    
-                        <!-- Swiper -->
-                        <div class="swiper effect-coverflow-swiper rounded pb-5">
-                            <div class="swiper-wrapper">
-                                @foreach ($images as $item)
-                                <div class="swiper-slide">
-                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
-                                    </a>
-                                </div>
-                                @endforeach
-                            </div>
-                            <div class="swiper-pagination swiper-pagination-dark"></div>
-                        </div>
-                    </div><!-- end card-body -->
-                </div><!-- end card -->
-            </div><!--end col-->
+            
 
             <section class="section bg-light py-5">
                 <div class="container">

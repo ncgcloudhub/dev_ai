@@ -79,7 +79,7 @@
         </div><!-- end card header -->
 
         <div class="card-body">
-            <p class="text-muted">FilePond is a JavaScript library with profile picture-shaped file upload variation.</p>
+            <p class="text-muted">Upload Expert Image</p>
             <div class="avatar-xl mx-auto">
                 <input type="file"
                 class="filepond filepond-input-circle"

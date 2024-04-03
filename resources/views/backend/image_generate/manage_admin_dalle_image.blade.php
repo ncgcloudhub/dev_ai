@@ -1,6 +1,7 @@
 @extends('admin.layouts.master')
 @section('title') @lang('translation.datatables') @endsection
 @section('css')
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 <!--datatable css-->
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
 <!--datatable responsive css-->
@@ -21,12 +22,12 @@
                 <h5 class="card-title mb-0">Admin Manage Dalle</h5>
             </div>
             <div class="card-body">
-                <table id="alternative-pagination" class="table nowrap dt-responsive align-middle table-hover table-bordered" style="width:100%">
+                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>SR No.</th>
                             <th>Image</th>
-                            <th>Prompt</th>
+                            <th >Prompt</th>
                             <th>User ID/Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -37,11 +38,13 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <div class="d-flex align-items-center fw-medium">
-                                    <img src="{{ asset($item->image) }}" alt="" class="avatar-xxs me-2">
-                                    {{-- <a href="javascript:void(0);" class="currency_name">Bitcoin (BTC)</a> --}}
-                                </div>
+                                <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                    <div class="d-flex align-items-center fw-medium">
+                                        <img src="{{ asset($item->image) }}" alt="" class="avatar-xxs me-2">
+                                    </div>
+                                </a>
                             </td>
+                            
                             <td>{{ $item->prompt }}</td>
                             <td>{{ $item->user->id }}/{{ $item->user->name }}</td>
                             <td>{{ $item->status }}</td>
@@ -77,6 +80,10 @@
 
 @endsection
 @section('script')
+
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
