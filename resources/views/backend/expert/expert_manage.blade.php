@@ -16,7 +16,7 @@
  
     <div class="card mb-1">
     <div class="card-body">
-        <a class="d-flex align-items-center" href="{{ route('expert.chat',$item->id) }}" role="button">
+        <a class="d-flex align-items-center" href="{{ route('expert.chat',$item->slug) }}" role="button">
             <div class="flex-shrink-0">
                 <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" alt="" class="avatar-xs rounded-circle">
             </div>

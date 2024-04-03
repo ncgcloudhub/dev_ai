@@ -160,11 +160,18 @@ public function TemplateStore (Request $request){
 		if($input->creative_level != NULL){
 			$creative_level = $input->creative_level; 
 		}
+
 		
 
 		$prompt =  $input->prompt;
 
-		$prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
+        if ($input->emoji == 1) {
+            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
+        } else {
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
+        }
+        
+		
 
 
 		foreach ($input->all() as $name => $inpVal) {

@@ -223,7 +223,7 @@
                         <!-- Swiper -->
                         <div class="swiper effect-coverflow-swiper rounded pb-5">
                             <div class="swiper-wrapper">
-                                @foreach ($images as $item)
+                                @foreach ($images_slider as $item)
                                 <div class="swiper-slide">
                                     <a class="image-popup" href="{{ asset($item->image) }}" title="">
                                         <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
@@ -674,7 +674,7 @@
                                             {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
                                             <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                         </div>
-                                        <h3 ><a href="{{ auth()->check() ? route('template.view', ['id' => $item->id]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                        <h3 ><a href="{{ auth()->check() ? route('template.view', ['slug' => $item->slug]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
                                         <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                        
                                         <small class="text-muted">0 Words generated</small>

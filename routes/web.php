@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->get();
     $templates = Template::orderby('id', 'asc')->limit(8)->get();
-    return view('frontend.index', compact('images','templates'));
+    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->get();
+    return view('frontend.index', compact('images','templates','images_slider'));
 })->name('home');
 
 
@@ -135,7 +136,7 @@ Route::prefix('chat')->group(function(){
 
     // TEST CHAT
     Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
-    Route::get('/expert/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
+    Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
     Route::post('/reply', [AIChatController::class, 'SendMessages']);
         
     });

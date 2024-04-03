@@ -51,7 +51,13 @@
                                 </div>
                             @endforeach
                             @endisset                                                
-                           
+
+                            <!-- Use Emoji -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" name="emoji" value="1" id="SwitchCheck1">
+                                <label class="form-check-label" for="SwitchCheck1">Use Emoji</label>
+                            </div>
+                            {{-- End Use Emoji --}}
 
                             <!-- Accordion Flush Example -->
                             <div class="accordion accordion-flush" id="accordionFlushExample">

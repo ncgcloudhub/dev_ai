@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Expert;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class ExpertController extends Controller
 {
@@ -27,12 +28,13 @@ class ExpertController extends Controller
         //     'image'=>$imageName,
         // ]);
 
+        $slug = Str::slug($request->expert_name);
 
         $expert_id = Expert::insertGetId([
             
             'expert_name' => $request->expert_name,
             'character_name' => $request->character_name,
-            'slug' => $request->expert_name,
+            'slug' => $slug,
             'description' => $request->description,
             'role' => $request->role,
             'expertise' => $request->expertise,
@@ -59,10 +61,10 @@ class ExpertController extends Controller
         return view('backend.expert.expert_manage', compact('experts'));
     }
 
-    public function ExpertChat($id)
+    public function ExpertChat($slug)
     {
-        $expert_selected = Expert::findOrFail($id);
-        $expert_selected_id = $id;
+        $expert_selected = Expert::where('slug', $slug)->firstOrFail();
+        $expert_selected_id = $slug;
         $experts = Expert::latest()->get();
         return view('backend.expert.chat1', compact('experts','expert_selected_id','expert_selected'));
     }
