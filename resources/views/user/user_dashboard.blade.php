@@ -245,12 +245,8 @@
                     <!-- card -->
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Sales by Locations</h4>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-soft-primary btn-sm">
-                                    Export Report
-                                </button>
-                            </div>
+                            <h4 class="card-title mb-0 flex-grow-1">Our users across the Globe</h4>
+                           
                         </div><!-- end card header -->
 
                         <!-- card body -->
@@ -259,24 +255,19 @@
                             <div id="sales-by-locations" data-colors='["--vz-light", "--vz-secondary", "--vz-primary"]' style="height: 269px" dir="ltr"></div>
 
                             <div class="px-2 py-2 mt-1">
-                                <p class="mb-1">Canada <span class="float-end">75%</span></p>
-                                <div class="progress mt-2" style="height: 6px;">
-                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="75">
-                                    </div>
-                                </div>
-
-                                <p class="mt-3 mb-1">Greenland <span class="float-end">47%</span>
+                               
+                            @foreach ($usersByCountry as $item)
+                               
+                                <p class="mt-3 mb-1">{{$item->country}}<span class="float-end">{{ number_format(($item->total_users / $totalUsers) * 100, 0) }}%
+                                </span>
                                 </p>
                                 <div class="progress mt-2" style="height: 6px;">
-                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 47%" aria-valuenow="47" aria-valuemin="0" aria-valuemax="47">
+                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{ number_format(($item->total_users / $totalUsers) * 100, 0) }}%" aria-valuenow="{{ number_format(($item->total_users / $totalUsers) * 100, 0) }}" aria-valuemin="0" aria-valuemax="{{ number_format(($item->total_users / $totalUsers) * 100, 0) }}">
                                     </div>
                                 </div>
-
-                                <p class="mt-3 mb-1">Russia <span class="float-end">82%</span></p>
-                                <div class="progress mt-2" style="height: 6px;">
-                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="82">
-                                    </div>
-                                </div>
+     
+                             @endforeach
+                              
                             </div>
                         </div>
                         <!-- end card body -->

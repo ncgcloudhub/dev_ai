@@ -33,6 +33,7 @@ class ProfileEditController extends Controller
           'username' => $request->username,
           'address' => $request->address,
           'phone' => $request->phone,
+          'country' => $request->country,
           'updated_at' => Carbon::now(),   
   
         ]);

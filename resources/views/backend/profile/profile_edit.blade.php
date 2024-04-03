@@ -105,11 +105,26 @@
                                                 placeholder="Enter your address" value="{{$user->address}}">
                                         </div>
                                     </div>
-                                    <!--end col-->
-
+                                <!--end col-->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">Country</label>
+                                            <select name="country" class="form-control" id="country">
+                                                <option disabled selected="">Select Country</option>
+                                                <option value="Bangladesh">Bangladesh</option>
+                                                <option value="USA">USA</option>
+                                                <option value="Germany">Germany</option>
+                                                <option value="India">India</option>
+                                                <option value="France">France</option>
+                                            </select>
+                                          
+                                        </div>
+                                    </div>
+                                   
+                                <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
-                                            <button type="submit" class="btn btn-primary">Updates</button>
+                                            <button type="submit" class="btn btn-primary">Update</button>
                                             <button type="button" class="btn btn-soft-secondary">Cancel</button>
                                         </div>
                                     </div>
