@@ -88,7 +88,7 @@
                                         <h3 ><a href="{{ route('template.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
                                         <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                        
-                                        <small class="text-muted">0 Words generated</small>
+                                        <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
                                         
                                       
                                         <ul class="list-inline hstack gap-2 mb-0">

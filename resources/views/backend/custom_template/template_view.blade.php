@@ -330,12 +330,26 @@
             url: $(this).attr('action'),
             data: $(this).serialize(),
             success: function (response) {
-                // Replace line breaks or bullet points with <li> tags
-                    response = response.replace(/\n/g, '</li><li>');
+                //Generated content displays in a nice Format
+                let formattedContent = '';
 
-                    // Wrap the entire content in <ul> tags
-                     response = '' + response + '';
-                    tinymce.get('myeditorinstance').setContent(response);  // Set the content of the TinyMCE editor
+let lines = response.split('\n');
+
+if (lines.some(line => line.trim().startsWith('*'))) {
+    formattedContent += '<ul>';
+    lines.forEach(line => {
+        if (line.trim().startsWith('*')) {
+            formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+        } else {
+            formattedContent += '<p>' + line.trim() + '</p>';
+        }
+    });
+    formattedContent += '</ul>';
+} else {
+    formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
+}
+
+tinymce.get('myeditorinstance').setContent(formattedContent);
 },
 
             error: function (xhr, status, error) {
