@@ -81,25 +81,7 @@
                         <!-- end card body -->
                     </div>
 
-                   
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">Profile Picture Selection</h4>
-                            </div><!-- end card header -->
-    
-                            <div class="card-body">
-                                <p class="text-muted">FilePond is a JavaScript library with profile picture-shaped file
-                                    upload variation.</p>
-                                <div class="avatar-xl mx-auto">
-                                    <input type="file" class="filepond filepond-input-circle" name="filepond"
-                                        accept="image/png, image/jpeg, image/gif" />
-                                </div>
-    
-                            </div>
-                            <!-- end card body -->
-                        </div>
-                   
-                   
+            
 
                     <div class="card">
                         <div class="card-header">
