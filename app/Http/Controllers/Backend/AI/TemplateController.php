@@ -205,11 +205,7 @@ public function TemplateStore (Request $request){
         $num_words = str_word_count($content);
 
         if($user->words_left <= 0){
-            $data = [
-                'status'  => 400,
-                'success' => false,
-                'message' => 'Your input does not match with the custom prompt',
-            ];
+            $data = 0;
             return $data;
         }else{
             // Words Increment
@@ -221,7 +217,7 @@ public function TemplateStore (Request $request){
             Template::where('id', $template->id)->update([
                 'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
             ]);
-            
+
             return $content;
         }
 

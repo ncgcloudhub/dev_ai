@@ -329,6 +329,12 @@
                 data: $(this).serialize(),
                 success: function (response) {
 
+                    if (response == 0) {
+                    // Display alert for error message
+                        alert('Please Upgrade Plan');
+                    return;
+                     }
+
                     //Generated content displays in a nice Format
                     let formattedContent = '';
 
