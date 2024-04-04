@@ -183,61 +183,39 @@
                 <div class="col-xl-8">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Revenue</h4>
-                            <div>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    ALL
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    1M
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    6M
-                                </button>
-                                <button type="button" class="btn btn-soft-primary btn-sm">
-                                    1Y
-                                </button>
-                            </div>
+                            <h4 class="card-title mb-0 flex-grow-1">Latest Images</h4>
                         </div><!-- end card header -->
 
                         <div class="card-header p-0 border-0 bg-light-subtle">
-                            <div class="row g-0 text-center">
-                                <div class="col-6 col-sm-3">
-                                    <div class="p-3 border border-dashed border-start-0">
-                                        <h5 class="mb-1"><span class="counter-value" data-target="7585">0</span></h5>
-                                        <p class="text-muted mb-0">Orders</p>
+                            <div class="row gallery-wrapper">
+                      
+                                @foreach ($images as $item)
+                                  
+                                <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
+                                    <div class="gallery-box card">
+                                        <div class="gallery-container">
+                                            <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                                <div class="gallery-overlay">
+                                                    <h5 class="overlay-caption">{{$item->prompt}}</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+        
+                                        <div class="box-content">
+                                            <div class="d-flex align-items-center mt-1">
+                                                <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!--end col-->
-                                <div class="col-6 col-sm-3">
-                                    <div class="p-3 border border-dashed border-start-0">
-                                        <h5 class="mb-1">$<span class="counter-value" data-target="22.89">0</span>k</h5>
-                                        <p class="text-muted mb-0">Earnings</p>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-6 col-sm-3">
-                                    <div class="p-3 border border-dashed border-start-0">
-                                        <h5 class="mb-1"><span class="counter-value" data-target="367">0</span></h5>
-                                        <p class="text-muted mb-0">Refunds</p>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-6 col-sm-3">
-                                    <div class="p-3 border border-dashed border-start-0 border-end-0">
-                                        <h5 class="mb-1 text-primary"><span class="counter-value" data-target="18.92">0</span>%</h5>
-                                        <p class="text-muted mb-0">Conversation Ratio</p>
-                                    </div>
-                                </div>
-                                <!--end col-->
+                                @endforeach
+                                <!-- end col -->
+                                
                             </div>
                         </div><!-- end card header -->
 
-                        <div class="card-body p-0 pb-2">
-                            <div class="w-100">
-                                <div id="customer_impression_charts" data-colors='["--vz-light", "--vz-primary", "--vz-info"]' class="apex-charts" dir="ltr"></div>
-                            </div>
-                        </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
 
