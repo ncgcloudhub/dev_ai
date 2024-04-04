@@ -10,4 +10,8 @@ class CustomTemplate extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function template_category(){
+    	return $this->belongsTo(TemplateCategory::class,'category_id','id');
+    }
 }
