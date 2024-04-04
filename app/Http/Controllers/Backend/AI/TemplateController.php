@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 use OpenAI;
@@ -111,9 +112,11 @@ public function TemplateStore (Request $request){
 // Generate Using Open AI
   public function templategenerate(Request $input)
 	{
-
+        $template_id = $input->template_id;
         $setting = AISettings::find(1);
-		
+        $template = Template::find($template_id);
+        $user = Auth::user();
+       
 
 		$language = 'English';
 		$max_result_length_value = 100;
@@ -171,8 +174,6 @@ public function TemplateStore (Request $request){
             $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
         }
         
-		
-
 
 		foreach ($input->all() as $name => $inpVal) {
             if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
@@ -183,7 +184,7 @@ public function TemplateStore (Request $request){
                     $data = [
                         'status'  => 400,
                         'success' => false,
-                        'message' => localize('Your input does not match with the custom prompt'),
+                        'message' => 'Your input does not match with the custom prompt',
                     ];
                     return $data;
                 }
@@ -201,9 +202,31 @@ public function TemplateStore (Request $request){
 		]);
 	
 		$content = trim($result['choices'][0]['text']);
+        $num_words = str_word_count($content);
+
+        if($user->words_left <= 0){
+            $data = [
+                'status'  => 400,
+                'success' => false,
+                'message' => 'Your input does not match with the custom prompt',
+            ];
+            return $data;
+        }else{
+            // Words Increment
+            User::where('id', $user->id)->update([
+                'words_generated' => DB::raw('words_generated + ' . $num_words),
+                'words_left' => DB::raw('words_left - ' . $num_words),
+            ]);
+
+            Template::where('id', $template->id)->update([
+                'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
+            ]);
+            
+            return $content;
+        }
 
 		// return view('backend.template.template_view', compact('title', 'content'));
-		return $content;
+		
 	}
 
 

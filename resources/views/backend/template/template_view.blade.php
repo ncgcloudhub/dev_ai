@@ -23,7 +23,7 @@
                     <div class="live-preview">
                         <form id="generateForm"  action="{{route ('template.generate')}}" method="post" class="row g-3">
                             @csrf
-                            {{-- <input type="hidden" name="template_code" value="{{ $template->slug }}"> --}}
+                            <input type="hidden" name="template_id" value="{{ $Template->id }}">
                             <div class="col-md-12">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
