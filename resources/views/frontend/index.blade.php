@@ -271,7 +271,7 @@
                                     <h5 class="fs-18">AI Chatbot Integration</h5>
                                     <p class="text-muted my-3 ff-secondary">Engage and assist your website visitors with TrionxAI's advanced AI chatbot, providing seamless communication and support.</p>
                                     <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                        <a href="{{route('chat')}}" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                                     <h5 class="fs-18">Text to Image Conversion</h5>
                                     <p class="text-muted my-3 ff-secondary">Transform textual content into captivating visuals effortlessly, as TrionxAI converts text to images, enhancing the visual appeal and accessibility of your information.</p>
                                     <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                        <a href="{{route('generate.image.view')}}" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
                                     </div>
                                 </div>
@@ -308,10 +308,10 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-18">AI Article Generation</h5>
-                                    <p class="text-muted my-3 ff-secondary">Streamline content creation with TrionxAI's AI article generation, harnessing the power of artificial intelligence to produce high-quality, relevant, and tailored articles for your website or business needs.</p>
+                                    <h5 class="fs-18">Create Custom Template</h5>
+                                    <p class="text-muted my-3 ff-secondary">Creating a custom template empowers users to generate personalized content through the OpenAI API, enhancing flexibility and customization in AI-driven creations.</p>
                                     <div>
-                                        <a href="#" class="fs-13 fw-medium">Learn More <i
+                                        <a href="{{route('custom.template.manage')}}" class="fs-13 fw-medium">Learn More <i
                                                 class="ri-arrow-right-s-line align-bottom"></i></a>
                                     </div>
                                 </div>
