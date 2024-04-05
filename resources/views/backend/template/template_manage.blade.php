@@ -79,37 +79,41 @@
                            
                             <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}">
                                 
-                                <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body">
-                                        <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
-                                            {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
-                                            <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
+                               
+                                    <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                        <a href="{{ route('template.view', ['slug' => $item->slug]) }}">
+                                        <div class="card-body">
+                                            <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
+                                                {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
+                                                <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
+                                            </div>
+                                            <h3 class="fw-medium link-primary">{{$item->template_name}}</h3>
+                                            <p style="height: 3em; overflow: hidden; color:black;" class="card-text customer_name">{{$item->description}}</p>
+                                    
+                                            <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
+                                    
+                                    
+                                            <ul class="list-inline hstack gap-2 mb-0">
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
+                                                    {{-- <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
+                                                        <i class="ri-eye-fill fs-16"></i>
+                                                    </a> --}}
+                                                </li>
+                                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                    {{-- <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                        <i class="ri-pencil-fill fs-16"></i>
+                                                    </a> --}}
+                                                </li>
+                                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                    {{-- <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                    </a> --}}
+                                                </li>
+                                            </ul>
                                         </div>
-                                        <h3 ><a href="{{ route('template.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
-                                        <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
-                                       
-                                        <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
-                                        
-                                      
-                                        <ul class="list-inline hstack gap-2 mb-0">
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
-                                                    <i class="ri-eye-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                    </a>
                                     </div>
-                                </div>
+                               
                            
                             </div>
                             

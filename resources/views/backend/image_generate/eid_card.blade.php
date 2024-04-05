@@ -10,7 +10,7 @@
 @endcomponent
 
 
-<div class="card">
+<div style="background-image: url('https://as1.ftcdn.net/v2/jpg/04/92/65/14/1000_F_492651409_NjJ2qPkoBdA4DJ1NHIdnaQ7DZUz8fbh6.jpg')" class="card">
     <div class="card-header align-items-center d-flex">
         <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
         <button type="button" class="images-left btn btn-outline-primary">
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="container">
+{{-- <div class="container">
     <div class="row">
         <div class="col-lg-12">
             <div class="">
@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 @endsection

@@ -22,21 +22,19 @@
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
                                 <li><a href="pages-profile">About Us</a></li>
-                                <li><a href="pages-gallery">Gallery</a></li>
-                                <li><a href="apps-projects-overview">Projects</a></li>
-                                <li><a href="pages-timeline">Timeline</a></li>
+                                <li><a href="{{route('ai.image.gallery')}}">Gallery</a></li>
+                              
                             </ul>
                         </div>
                     </div>
                     <div class="col-sm-4 mt-4">
-                        <h5 class="text-white mb-0">Apps Pages</h5>
+                        <h5 class="text-white mb-0">AI Services</h5>
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                <li><a href="pages-pricing">Calendar</a></li>
-                                <li><a href="apps-mailbox">Mailbox</a></li>
-                                <li><a href="apps-chat">Chat</a></li>
-                                <li><a href="apps-crm-deals">Deals</a></li>
-                                <li><a href="apps-tasks-kanban">Kanban Board</a></li>
+                                <li><a href="{{route('generate.image.view')}}">Image generate</a></li>
+                                <li><a href="{{route('template.manage')}}">Generate Content</a></li>
+                                <li><a href="{{route('chat')}}">Chat</a></li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -45,7 +43,7 @@
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
                                 <li><a href="pages-faqs">FAQ</a></li>
-                                <li><a href="pages-faqs">Contact</a></li>
+                                <li><a href="{{route('contact.us')}}">Contact</a></li>
                             </ul>
                         </div>
                     </div>

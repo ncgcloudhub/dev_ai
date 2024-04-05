@@ -8,6 +8,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
@@ -15,12 +20,13 @@
 @section('body')
 
 
+
 <style>
     .banner{
-	background: url({{ asset('build/images/banner.png') }}) no-repeat center top;
+	background: url({{ asset('build/images/banner1.jpg') }}) no-repeat center top;
 	background-attachment:fixed;
 	background-size:cover;
-	height:100vh;
+	height:92vh;
 	min-height:100%;
 }
 
@@ -40,19 +46,25 @@
     color: #fff;
 }
 .banner-text h1 {
-	font-family: 'nautilus_pompiliusregular';
+	font-family: 'Shantell Sans", cursive';
     letter-spacing: 2.7px;
     position: relative;
     display: inline-block;
 	font-size: 74px;
     line-height: 100px;
 	color:#fff;
-	padding-bottom: 0px;
-	padding-top:100px;
+	
 }
 
 .banner-text h2 {
-	font-family: 'nautilus_pompiliusregular';
+	font-family: "Shantell Sans", cursive;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "BNCE" 0,
+    "INFM" 0,
+    "SPAC" 0;
     letter-spacing: 2.7px;
     position: relative;
 	font-size: 37px;
@@ -65,6 +77,16 @@
 	color:#ccc;
 	padding-bottom:35px;
 	margin:0px;
+}
+
+.glass{
+/* From https://css.glass */
+background: rgba(20, 12, 12, 0.31);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5.3px);
+-webkit-backdrop-filter: blur(5.3px);
+border: 1px solid rgb(255, 255, 255);
 }
 </style>
 
@@ -92,20 +114,75 @@
                                                 data-delay="200"
                                                 data-delim=":"
                                                 data-words="AI Image Generation:AI Assistant:AI Blog Generation: AI Article Generate"
-                                                data-colors="red"
-                                            ></span
-                                            ><span
-                                                class="cursor"
-                                                data-cursorDisplay="_"
-                                                data-owner="some-id"
+                                                data-colors="orange"
                                             ></span>
                                         </h2>
-                                        <h1 style="color: rgb(99, 199, 95)">Clever Creator</h1>
+                                        <h1 style="color: orange; font-family: Shantell Sans, cursive;">Clever Creator</h1>
                                         <p style="color: white">
                                             Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                                         </p>
                                         
-                                        <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-primary">Generate Image</a>
+                                        {{-- <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-primary">Generate Image</a> --}}
+
+                                        <br><br><br>
+
+                                        {{-- UI Card Start --}}
+                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1 justify-content-center">
+                                            
+                                            <div class="col">
+                                                <div class="card card-body glass">
+                                                    <div class="d-flex mb-4 align-items-center">
+                                                       
+                                                        <div class="flex-grow-1 ms-2">
+                                                           
+                                                            <p class="text-muted mb-0">Generate Free Images</p>
+                                                        </div>
+                                                    </div>
+                                                 
+                                                      <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Generate Images</a>
+                                                </div>
+                                            </div><!-- end col -->
+                                            <div class="col">
+                                                <div class="card card-body glass">
+                                                    <div class="d-flex mb-4 align-items-center">
+                                                       
+                                                        <div class="flex-grow-1 ms-2">
+                                                            
+                                                            <p class="text-muted mb-0">Generate Free Contents</p>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                      <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Generate Contents</a>
+                                                </div>
+                                            </div><!-- end col -->
+                                            <div class="col">
+                                                <div class="card card-body glass">
+                                                    <div class="d-flex mb-4 align-items-center">
+                                                       
+                                                        <div class="flex-grow-1 ms-2">
+                                                            
+                                                            <p class="text-muted mb-0">Access To Free Chat GPT-4</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                     <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Use GPT-4</a>
+                                                </div>
+                                            </div><!-- end col -->
+                                            <div class="col">
+                                                <div class="card card-body glass">
+                                                    <div class="d-flex mb-4 align-items-center">
+                                                       
+                                                        <div class="flex-grow-1 ms-2">
+                                                         
+                                                            <p class="text-muted mb-0">Use Dall-E 3 for Free</p>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Use Dall-E 3</a>
+                                                </div>
+                                            </div><!-- end col -->
+                                        </div><!-- end row -->
+                                        {{-- UI Card End --}}
 
                                     </div>
                                     <!-- end banner-cell -->
