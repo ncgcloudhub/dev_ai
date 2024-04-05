@@ -64,7 +64,7 @@ class ExpertController extends Controller
     public function ExpertChat($slug)
     {
         $expert_selected = Expert::where('slug', $slug)->firstOrFail();
-        $expert_selected_id = $slug;
+        $expert_selected_id = $expert_selected->id;
         $experts = Expert::latest()->get();
         return view('backend.expert.chat1', compact('experts','expert_selected_id','expert_selected'));
     }

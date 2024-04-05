@@ -67,7 +67,7 @@
 
                         <ul class="list-unstyled chat-list chat-user-list" id="userList">
                             @foreach ($experts as $item) 
-                            <li class="{{ $expert_selected_id == $item->slug ? 'active' : '' }}" data-name="direct-message" onclick="selectExpert('{{$item->slug}}')">
+                            <li class="{{ $expert_selected_id == $item->id ? 'active' : '' }}" data-name="direct-message" onclick="selectExpert('{{$item->id}}')">
                                 <a href="javascript: void(0);">
                                     <div class="d-flex align-items-center">
                                       <div class="flex-shrink-0 chat-user-img online align-self-center me-2 ms-0">       
