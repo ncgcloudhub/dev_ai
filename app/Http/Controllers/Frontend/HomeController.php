@@ -9,9 +9,16 @@ use App\Models\DalleImageGenerate;
 class HomeController extends Controller
 {
     //Image Gallery Front End Page
-    public function AIImageGallery(){
+    public function AIImageGallery()
+    {
         $images = DalleImageGenerate::latest()->get();
-       
+
         return view('frontend.ai_image_gallery', compact('images'));
+    }
+
+    //Image Gallery Front End Page
+    public function ContactUs()
+    {
+        return view('frontend.contact');
     }
 }

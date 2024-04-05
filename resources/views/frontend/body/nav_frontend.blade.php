@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
                 <li class="nav-item">
-                    <a class="nav-link fs-15 active" href="#hero">Home</a>
+                    <a class="nav-link fs-15 active" href="{{route('home')}}">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link fs-15" href="#services">Services</a>
@@ -26,13 +26,11 @@
                     <a class="nav-link fs-15" href="#plans">Plans</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="#reviews">Reviews</a>
+                    <a class="nav-link fs-15" href="{{route('ai.image.gallery')}}">AI Image Gallery</a>
                 </li>
+             
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="#team">Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fs-15" href="#contact">Contact</a>
+                    <a class="nav-link fs-15" href="{{route('contact.us')}}">Contact</a>
                 </li>
             </ul>
 
