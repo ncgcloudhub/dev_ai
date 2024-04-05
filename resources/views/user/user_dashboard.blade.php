@@ -100,8 +100,8 @@
                                         Images Left</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-success fs-14 mb-0">
-                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
                                         {{$user->images_left}}
                                     </h5>
                                 </div>
@@ -132,7 +132,8 @@
                                         Images Generated</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-muted fs-14 mb-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                         {{$user->images_generated}}
                                     </h5>
                                 </div>
@@ -165,8 +166,8 @@
                                         Words Generated</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-danger fs-14 mb-0">
-                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                         {{$user->words_generated}}
                                     </h5>
                                 </div>

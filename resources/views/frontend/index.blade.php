@@ -135,7 +135,7 @@ border: 1px solid rgb(255, 255, 255);
                                                        
                                                         <div class="flex-grow-1 ms-2">
                                                            
-                                                            <p class="text-muted mb-0">Generate Free Images</p>
+                                                            <p class="text-white mb-0">Generate Free Images Using Dall-E 3</p>
                                                         </div>
                                                     </div>
                                                  
@@ -148,7 +148,7 @@ border: 1px solid rgb(255, 255, 255);
                                                        
                                                         <div class="flex-grow-1 ms-2">
                                                             
-                                                            <p class="text-muted mb-0">Generate Free Contents</p>
+                                                            <p class="text-white mb-0">Generate Free Contents with GPT-4</p>
                                                         </div>
                                                     </div>
                                                    
@@ -161,7 +161,7 @@ border: 1px solid rgb(255, 255, 255);
                                                        
                                                         <div class="flex-grow-1 ms-2">
                                                             
-                                                            <p class="text-muted mb-0">Access To Free Chat GPT-4</p>
+                                                            <p class="text-white mb-0">Generate E-Cards (Eid Holidays)</p>
                                                         </div>
                                                     </div>
                                                     
@@ -174,7 +174,7 @@ border: 1px solid rgb(255, 255, 255);
                                                        
                                                         <div class="flex-grow-1 ms-2">
                                                          
-                                                            <p class="text-muted mb-0">Use Dall-E 3 for Free</p>
+                                                            <p class="text-white mb-0">Get Eid Quotes</p>
                                                         </div>
                                                     </div>
                                                     
