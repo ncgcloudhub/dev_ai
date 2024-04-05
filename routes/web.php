@@ -159,12 +159,16 @@ Route::prefix('generate')->group(function() {
 
     
 //Fixed Templates 
-
 Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
     
 Route::get('template/view/{slug}', [TemplateController::class, 'TemplateView'])->name('template.view');
 
 Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
+
+// EID Card
+Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');
+
+Route::post('eid/card/generate', [GenerateImagesController::class, 'EidCardGenerate'])->name('generate.eid.card');
 
 
 // GOOGLE SOCIALITE

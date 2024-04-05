@@ -53,6 +53,13 @@
                     </a>
                 </li>
 
+                 {{-- Eid Card --}}
+                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('eid.card')}}">
+                        <i class="lab la-blogger"></i> <span >Eid Card</span>
+                    </a>
+                </li>
+
                 {{-- Custom Template --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#AITools" data-bs-toggle="collapse" role="button"
@@ -119,9 +126,6 @@
                                     <li class="nav-item">
                                         <a href="{{route('all.package')}}" class="nav-link" >Buy Package</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >Lets Chat</a>
-                                    </li>
                                   
                                 </ul>
                             </div>
@@ -131,6 +135,8 @@
                     </div>
                 </li>
                  {{-- End Subscription --}}
+
+        
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
