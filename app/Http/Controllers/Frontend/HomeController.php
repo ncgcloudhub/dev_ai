@@ -21,4 +21,18 @@ class HomeController extends Controller
     {
         return view('frontend.contact');
     }
+
+
+    //Privacy Policy Front End Page
+    public function PrivacyPolicy()
+    {
+        return view('frontend.privacy_policy');
+    }
+
+
+    //Terms & Conditions Front End Page
+    public function TermsConditions()
+    {
+        return view('frontend.terms_conditions');
+    }
 }

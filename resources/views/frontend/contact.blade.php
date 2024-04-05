@@ -4,12 +4,6 @@
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
 @endsection
 @section('body')
@@ -45,5 +39,5 @@
     @section('script')
 
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/all.js') }}"></script>
+       
     @endsection

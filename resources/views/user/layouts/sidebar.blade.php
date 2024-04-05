@@ -56,7 +56,7 @@
                  {{-- Eid Card --}}
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
-                        <i class="lab la-blogger"></i> <span >Eid Card</span>
+                        <i class=" las la-atom"></i> <span >Eid Card</span>
                     </a>
                 </li>
 
@@ -141,7 +141,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Dalle</span>
+                        <i class="las la-pencil-ruler"></i> <span >Generate Image</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
                         <div class="row">
@@ -149,7 +149,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image</a>
+                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate with Dall-E</a>
                                     </li>
                                   
                                    

@@ -22,6 +22,8 @@
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
                                 <li><a href="pages-profile">About Us</a></li>
+                                <li><a href="{{route('privacy.policy')}}">Privacy Policy</a></li>
+                                <li><a href="{{route('terms.condition')}}">Terms & Conditions</a></li>
                                 <li><a href="{{route('ai.image.gallery')}}">Gallery</a></li>
                               
                             </ul>

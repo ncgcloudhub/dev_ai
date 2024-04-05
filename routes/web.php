@@ -116,6 +116,22 @@ Route::middleware(['auth', 'role:user'])->group(function () {
 }); //End User Middleware
 
 
+// FrontEnd
+//AI Image Gallery Page
+Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
+
+// Contact Us Page
+Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
+
+// Privacy Policy Page
+Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');
+
+// Terms And Conditions Page
+Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name('terms.condition');
+
+
+
+
 // Custom Templates
 Route::prefix('custom/template')->group(function () {
 
@@ -161,12 +177,7 @@ Route::prefix('profile')->group(function () {
     Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
 });
 
-//AI Image Gallery Page
-Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
 
-
-// COntact Us Page
-Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 
 //Fixed Templates 
 Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
