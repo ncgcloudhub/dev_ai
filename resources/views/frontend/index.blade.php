@@ -26,7 +26,7 @@
 	background: url({{ asset('build/images/banner1.jpg') }}) no-repeat center top;
 	background-attachment:fixed;
 	background-size:cover;
-	height:92vh;
+	height:auto;
 	min-height:100%;
 }
 
@@ -104,8 +104,8 @@ border: 1px solid rgb(255, 255, 255);
                     <div class="container pr">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="banner-static">  
-                                <div class="banner-text">
-                                    <div class="banner-cell">
+                                <div class="banner-text py-5">
+                                    <div class="banner-cell py-5">
                                         <h2 style="color: rgb(255, 255, 255)">
                                            Get AI services Like
                                             <span
@@ -122,12 +122,17 @@ border: 1px solid rgb(255, 255, 255);
                                             Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                                         </p>
                                         
-                                        {{-- <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-primary">Generate Image</a> --}}
+                                        @if (Auth::check())
+                                        
+                                        @else
+                                        <a href="{{ route('register') }}" class="btn btn-soft-dark waves-effect waves-light">Sign Up for Free AI Services</a>
+                                                              
+                                        @endif
 
                                         <br><br><br>
 
                                         {{-- UI Card Start --}}
-                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1 justify-content-center">
+                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1 justify-content-center py-5">
                                             
                                             <div class="col d-flex flex-column">
                                                 <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
