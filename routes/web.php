@@ -102,7 +102,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 // User Middleware
-Route::middleware(['auth', 'role:user'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');

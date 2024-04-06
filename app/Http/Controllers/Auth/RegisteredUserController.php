@@ -40,6 +40,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => 'user',
+            'status' => 'active',
             'images_left' => 100,
             'words_left' => 5000,
             'password' => Hash::make($request->password),
@@ -47,17 +48,19 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        return redirect('/login')->with('success', 'Registration successful. Please check your email for verification.');
 
-        $url = '';
-        if($user->role === 'admin'){
-            $url = '/admin/dashboard';
-        }elseif($request->user()->role === 'user'){
-            $url = '/user/dashboard';
-        }
+        // Auth::login($user);
 
-        return redirect()->intended($url);
+        // $url = '';
+        // if($user->role === 'admin'){
+        //     $url = '/admin/dashboard';
+        // }elseif($request->user()->role === 'user'){
+        //     $url = '/user/dashboard';
+        // }
 
-        // return redirect(RouteServiceProvider::HOME);
+        // return redirect()->intended($url);
+
+      
     }
 }
