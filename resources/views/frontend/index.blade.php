@@ -122,7 +122,15 @@ border: 1px solid rgb(255, 255, 255);
                                             Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                                         </p>
                                         
-                                        {{-- <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-primary">Generate Image</a> --}}
+                                        @if (Auth::check())
+                                        @if (Auth::user()->role === 'admin')     
+                                        @elseif (Auth::user()->role === 'user')
+                                        
+                                        @endif
+                                        @else
+                                        <a href="{{ route('register') }}" class="btn btn-soft-dark waves-effect waves-light">Sign Up for Free AI Services</a>
+                                                              
+                                        @endif
 
                                         <br><br><br>
 
