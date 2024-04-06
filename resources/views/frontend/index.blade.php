@@ -169,7 +169,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use GPT-4</a>
+                                                    <a href="{{ auth()->check() ? route('eid.card') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Generate E-Card</a>
                                                 </div>
                                             </div><!-- end col -->
                                             
@@ -182,7 +182,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use Dall-E 3</a>
+                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Eid Quotes</a>
                                                 </div>
                                             </div><!-- end col -->
                                         </div><!-- end row -->
