@@ -123,10 +123,7 @@ border: 1px solid rgb(255, 255, 255);
                                         </p>
                                         
                                         @if (Auth::check())
-                                        @if (Auth::user()->role === 'admin')     
-                                        @elseif (Auth::user()->role === 'user')
                                         
-                                        @endif
                                         @else
                                         <a href="{{ route('register') }}" class="btn btn-soft-dark waves-effect waves-light">Sign Up for Free AI Services</a>
                                                               

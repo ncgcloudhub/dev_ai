@@ -92,17 +92,15 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarExpert">
-                        <i class="l las la-sms"></i> <span >Chat</span>
+                        <i class="l las la-sms"></i> <span >AI Chat</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarExpert">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
+                                    
                                     <li class="nav-item">
-                                        <a href="{{route('expert.add')}}" class="nav-link" >Expert</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >Lets Chat</a>
+                                        <a href="{{route('chat')}}" class="nav-link" >Chat with AI Assistant</a>
                                     </li>
                                   
                                 </ul>
@@ -113,30 +111,7 @@
                     </div>
                 </li>
 
-                {{-- Subscription --}}
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#subscription" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="subscription">
-                        <i class="l las la-sms"></i> <span >Subscription</span>
-                    </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="subscription">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{route('all.package')}}" class="nav-link" >Buy Package</a>
-                                    </li>
-                                  
-                                </ul>
-                            </div>
-                            
-                            
-                        </div>
-                    </div>
-                </li>
-                 {{-- End Subscription --}}
-
-        
+            
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
@@ -161,7 +136,30 @@
                     </div>
                 </li>
 
+                <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscriptions</span></li>
 
+                 {{-- Subscription --}}
+                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#subscription" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="subscription">
+                        <i class="l las la-sms"></i> <span >Subscription</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="subscription">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{route('all.package')}}" class="nav-link" >Buy Package</a>
+                                    </li>
+                                  
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </li>
+                 {{-- End Subscription --}}
                
               
 
