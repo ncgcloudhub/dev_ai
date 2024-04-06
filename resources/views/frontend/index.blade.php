@@ -129,59 +129,59 @@ border: 1px solid rgb(255, 255, 255);
                                         {{-- UI Card Start --}}
                                         <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1 justify-content-center">
                                             
-                                            <div class="col">
-                                                <div class="card card-body glass">
-                                                    <div class="d-flex mb-4 align-items-center">
-                                                       
-                                                        <div class="flex-grow-1 ms-2">
-                                                           
-                                                            <p class="text-white mb-0">Generate Free Images Using Dall-E 3</p>
+                                            <div class="col d-flex flex-column">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                    <div>
+                                                        <div class="d-flex mb-4 align-items-center">
+                                                            <div class="flex-grow-1 ms-2">
+                                                                <p class="text-white mb-0">Generate Free Images Using Dall-E 3</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                 
-                                                      <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Generate Images</a>
+                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Generate Images</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            <div class="col">
-                                                <div class="card card-body glass">
-                                                    <div class="d-flex mb-4 align-items-center">
-                                                       
-                                                        <div class="flex-grow-1 ms-2">
-                                                            
-                                                            <p class="text-white mb-0">Generate Free Contents with GPT-4</p>
+                                            
+                                            <div class="col d-flex flex-column">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                    <div>
+                                                        <div class="d-flex mb-4 align-items-center">
+                                                            <div class="flex-grow-1 ms-2">
+                                                                <p class="text-white mb-0">Generate Free Contents with GPT-4</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                   
-                                                      <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Generate Contents</a>
+                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Generate Contents</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            <div class="col">
-                                                <div class="card card-body glass">
-                                                    <div class="d-flex mb-4 align-items-center">
-                                                       
-                                                        <div class="flex-grow-1 ms-2">
-                                                            
-                                                            <p class="text-white mb-0">Generate E-Cards (Eid Holidays)</p>
+                                            
+                                            <div class="col d-flex flex-column">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                    <div>
+                                                        <div class="d-flex mb-4 align-items-center">
+                                                            <div class="flex-grow-1 ms-2">
+                                                                <p class="text-white mb-0">Generate E-Cards (Eid Holidays)</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                     <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Use GPT-4</a>
+                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use GPT-4</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            <div class="col">
-                                                <div class="card card-body glass">
-                                                    <div class="d-flex mb-4 align-items-center">
-                                                       
-                                                        <div class="flex-grow-1 ms-2">
-                                                         
-                                                            <p class="text-white mb-0">Get Eid Quotes</p>
+                                            
+                                            <div class="col d-flex flex-column">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                    <div>
+                                                        <div class="d-flex mb-4 align-items-center">
+                                                            <div class="flex-grow-1 ms-2">
+                                                                <p class="text-white mb-0">Get Eid Quotes</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light">Use Dall-E 3</a>
+                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use Dall-E 3</a>
                                                 </div>
                                             </div><!-- end col -->
                                         </div><!-- end row -->
+                                        
                                         {{-- UI Card End --}}
 
                                     </div>

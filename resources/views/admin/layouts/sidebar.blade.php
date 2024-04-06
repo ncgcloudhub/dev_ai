@@ -178,7 +178,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('site.settings.add')}}">
-                        <i class="las la-flask"></i> <span >Site Settings</span>
+                        <i class="las la-cog"></i> <span >Site Settings</span>
                     </a>
                 </li>
 
