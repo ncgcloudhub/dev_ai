@@ -81,12 +81,12 @@
 
 .glass{
 /* From https://css.glass */
-background: rgba(20, 12, 12, 0.31);
+background: rgba(172, 93, 36, 0.33);
 border-radius: 16px;
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(5.3px);
--webkit-backdrop-filter: blur(5.3px);
-border: 1px solid rgb(255, 255, 255);
+backdrop-filter: blur(7.9px);
+-webkit-backdrop-filter: blur(7.9px);
+border: 1px solid rgba(172, 93, 36, 0.25);
 }
 </style>
 
