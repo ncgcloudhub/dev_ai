@@ -202,3 +202,5 @@ Route::get('google/callback', [TemplateController::class, 'callbackHandel'])->na
 // GITHUB SOCIALITE
 Route::get('github/login', [TemplateController::class, 'githubprovider'])->name('github.login');
 Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'])->name('github.login.callback');
+
+Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');

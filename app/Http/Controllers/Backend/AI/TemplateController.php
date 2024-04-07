@@ -306,4 +306,6 @@ class TemplateController extends Controller
         // Redirect to dashboard or any other page
         return redirect('/user/dashboard');
     }
+
+
 }

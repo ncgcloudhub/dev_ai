@@ -31,7 +31,8 @@
             <!-- end col -->
             <div class="col-lg-8">
                 <div>
-                    <form>
+                    <form method="POST" action="{{ route('send.email') }}">
+                        @csrf
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-4">
@@ -68,8 +69,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-end">
-                                <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary"
-                                    value="Send Message">
+                                <button type="submit" id="submit" name="send" class="submitBnt btn btn-primary">Send Message</button>
                             </div>
                         </div>
                     </form>
