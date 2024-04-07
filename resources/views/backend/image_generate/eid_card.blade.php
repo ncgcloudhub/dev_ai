@@ -10,67 +10,69 @@
 @endcomponent
 
 
-<div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
-    <div class="card-header align-items-center d-flex">
-        <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
-        <button type="button" class="images-left btn btn-outline-primary">
-            Images Left <span class="badge bg-danger ms-1">{{ $get_user->images_left }}</span>
-        </button>
-    </div><!-- end card header -->
-
-    <div class="card-body">
-      
-        <div class="live-preview">
-                <div class="col-xxl-12 justify-content-center">
-                   
-                    <form  action="{{route('generate.eid.card')}}" method="post">
-                        @csrf
-                            <div class="row">
-                                <div class="col mb-3">
-                                    <label for="card_style" class="form-label">Card Style</label>
-                                    <select name="card_select" class="form-control" id="card_select">
-                                        <option disabled selected="">Select Card Style</option>
-                                        <option value="Family">Family</option>
-                                        <option value="Freinds">Freinds</option>
-                                        <option value="Siblings">Siblings</option>
-                                        <option value="Relatives">Relatives</option>
-                                        <option value="Colleague">Colleague</option>
-                                        <option value="Co-Operate">Co-Operate</option>
-                                        <option value="Lover">Lover</option>
-                                    </select>
-                                </div>
-                                <div class="col mb-3">
-                                    <label for="eid_text" class="form-label">Eid Text</label>
-                                    <select name="eid_text" class="form-control" id="eid_text">
-                                        <option disabled selected="">Exact Word in Eid Card</option>
-                                        <option value="Eid Day">Eid Day</option>
-                                        <option value="Eid Mubarak">Eid Mubarak</option>
-                                        <option value="Eid Holiday">Eid Holiday</option>
-                                        <option value="Eid-Ul-Fitr">Eid-Ul-Fitr</option>
-                                
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <button class="btn btn-rounded btn-primary mb-2">Create E-Card</button>
-                                </div>
-                            </div><!-- end row -->
-                    </form>
-                         
-                    </div><!-- end card -->
-                </div><!--end col-->
-                <div class="spinner-border text-primary d-none" role="status" id="loader">
-                    <span class="sr-only">Loading...</span>
-                </div>
-
-        </div>
-        
-        <div id="image-container" class="d-flex justify-content-center">     
-        
-        </div>
+<div class="container">
+    <div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
+            <button type="button" class="images-left btn btn-outline-primary">
+                Images Left <span class="badge bg-danger ms-1">{{ $get_user->images_left }}</span>
+            </button>
+        </div><!-- end card header -->
+    
+        <div class="card-body">
+    
+            <div class="live-preview">
+                    <div class="col-xxl-12 justify-content-center">
+    
+                        <form  action="{{route('generate.eid.card')}}" method="post">
+                            @csrf
+                                <div class="row">
+                                    <div class="col mb-3">
+                                        <label for="card_style" class="form-label">Card Style</label>
+                                        <select name="card_select" class="form-control" id="card_select">
+                                            <option disabled selected="">Select Card Style</option>
+                                            <option value="Family">Family</option>
+                                            <option value="Freinds">Freinds</option>
+                                            <option value="Siblings">Siblings</option>
+                                            <option value="Relatives">Relatives</option>
+                                            <option value="Colleague">Colleague</option>
+                                            <option value="Co-Operate">Co-Operate</option>
+                                            <option value="Lover">Lover</option>
+                                        </select>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <label for="eid_text" class="form-label">Eid Text</label>
+                                        <select name="eid_text" class="form-control" id="eid_text">
+                                            <option disabled selected="">Exact Word in Eid Card</option>
+                                            <option value="Eid Day">Eid Day</option>
+                                            <option value="Eid Mubarak">Eid Mubarak</option>
+                                            <option value="Eid Holiday">Eid Holiday</option>
+                                            <option value="Eid-Ul-Fitr">Eid-Ul-Fitr</option>
+    
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <button class="btn btn-rounded btn-primary mb-2">Create E-Card</button>
+                                    </div>
+                                </div><!-- end row -->
+                        </form>
+    
+                        </div><!-- end card -->
+                    </div><!--end col-->
+                    <div class="spinner-border text-primary d-none" role="status" id="loader">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+    
+            </div>
+    
+            <div id="image-container" class="d-flex justify-content-center">
+    
+            </div>
     
     
     </div>
 </div>
+
 
 {{-- <div class="container">
     <div class="row">

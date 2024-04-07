@@ -9,7 +9,7 @@
         <!-- auth page bg -->
         <div class="auth-one-bg-position auth-one-bg" id="auth-particles">
             <div class="bg-overlay"></div>
-            @include('admin.layouts.alerts')
+           
             
             <div class="shape">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -112,6 +112,8 @@
                             <p class="mb-0">Don't have an account ? <a href={{ route('register') }}
                                     class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
                         </div>
+
+                         @include('admin.layouts.alerts')
 
                     </div>
                 </div>
