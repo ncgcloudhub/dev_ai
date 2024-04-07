@@ -47,19 +47,8 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
-        return redirect('/login')->with('success', 'Registration successful. Please check your email for verification.');
-
-        // Auth::login($user);
-
-        // $url = '';
-        // if($user->role === 'admin'){
-        //     $url = '/admin/dashboard';
-        // }elseif($request->user()->role === 'user'){
-        //     $url = '/user/dashboard';
-        // }
-
-        // return redirect()->intended($url);
+     
+        return redirect()->route('user.dashboard');
 
       
     }

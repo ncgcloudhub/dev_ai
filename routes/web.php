@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController as AuthEmailVerificationPromptController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\AI\CustomTemplateController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Auth\EmailVerificationPromptController;
 
 
 Route::get('/', function () {
