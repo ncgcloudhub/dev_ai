@@ -10,7 +10,7 @@
 @endcomponent
 
 
-<div style="background-image: url('https://as1.ftcdn.net/v2/jpg/04/92/65/14/1000_F_492651409_NjJ2qPkoBdA4DJ1NHIdnaQ7DZUz8fbh6.jpg')" class="card">
+<div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
     <div class="card-header align-items-center d-flex">
         <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
         <button type="button" class="images-left btn btn-outline-primary">
@@ -27,16 +27,33 @@
                         @csrf
                             <div class="row">
                                 <div class="col mb-3">
+                                    <label for="card_style" class="form-label">Card Style</label>
                                     <select name="card_select" class="form-control" id="card_select">
                                         <option disabled selected="">Select Card Style</option>
-                                        <option value="genarate an eid card of family">Family</option>
-                                        <option value="genarate an eid card of friends">Freinds</option>
-                                        <option value="genarate an eid card of car">Cars</option>
+                                        <option value="Family">Family</option>
+                                        <option value="Freinds">Freinds</option>
+                                        <option value="Siblings">Siblings</option>
+                                        <option value="Relatives">Relatives</option>
+                                        <option value="Colleague">Colleague</option>
+                                        <option value="Co-Operate">Co-Operate</option>
+                                        <option value="Lover">Lover</option>
+                                    </select>
+                                </div>
+                                <div class="col mb-3">
+                                    <label for="eid_text" class="form-label">Eid Text</label>
+                                    <select name="eid_text" class="form-control" id="eid_text">
+                                        <option disabled selected="">Exact Word in Eid Card</option>
+                                        <option value="Eid Day">Eid Day</option>
+                                        <option value="Eid Mubarak">Eid Mubarak</option>
+                                        <option value="Eid Holiday">Eid Holiday</option>
+                                        <option value="Eid-Ul-Fitr">Eid-Ul-Fitr</option>
+                                
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                    <button class="btn btn-rounded btn-primary mb-2">Create E-Card</button>
                                 </div>
+                            </div><!-- end row -->
                     </form>
                          
                     </div><!-- end card -->
@@ -47,7 +64,7 @@
 
         </div>
         
-        <div id="image-container">      
+        <div id="image-container" class="d-flex justify-content-center">     
         
         </div>
     
@@ -124,7 +141,7 @@
 
         // Create an image element
         var temp = `<a class="image-popup" href="${imageUrl}" title="">
-                        <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageUrl}" alt="" />
+                        <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageUrl}" alt="" />
                     </a>`;
 
         // Append the image to the container
