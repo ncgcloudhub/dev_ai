@@ -81,12 +81,12 @@
 
 .glass{
 /* From https://css.glass */
-background: rgba(20, 12, 12, 0.31);
+background: rgba(255, 255, 255, 0.41);
 border-radius: 16px;
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-backdrop-filter: blur(5.3px);
--webkit-backdrop-filter: blur(5.3px);
-border: 1px solid rgb(255, 255, 255);
+backdrop-filter: blur(7.5px);
+-webkit-backdrop-filter: blur(7.5px);
+border: 1px solid rgba(255, 255, 255, 0.99);
 }
 </style>
 
@@ -143,7 +143,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Generate Images</a>
+                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Images</a>
                                                 </div>
                                             </div><!-- end col -->
                                             
@@ -156,7 +156,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Generate Contents</a>
+                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Contents</a>
                                                 </div>
                                             </div><!-- end col -->
                                             
@@ -169,7 +169,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use GPT-4</a>
+                                                    <a href="{{ auth()->check() ? route('eid.card') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate E-Card</a>
                                                 </div>
                                             </div><!-- end col -->
                                             
@@ -182,7 +182,7 @@ border: 1px solid rgb(255, 255, 255);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-info waves-effect waves-light mt-auto">Use Dall-E 3</a>
+                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Eid Quotes</a>
                                                 </div>
                                             </div><!-- end col -->
                                         </div><!-- end row -->
@@ -761,24 +761,7 @@ border: 1px solid rgb(255, 255, 255);
                                        
                                         <small class="text-muted">0 Words generated</small>
                                         
-                                      
-                                        <ul class="list-inline hstack gap-2 mb-0">
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
-                                                    <i class="ri-eye-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
-                                                    <i class="ri-pencil-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
+                                   
                                     </div>
                                 </div>
                            
