@@ -38,6 +38,7 @@
             <div class="page-content">
                                  
             @include('admin.layouts.alerts')
+            
                 <div class="container-fluid">
                     @yield('content')
                 </div>

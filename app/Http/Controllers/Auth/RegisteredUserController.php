@@ -47,9 +47,9 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-     
-        return redirect()->route('user.dashboard');
 
-      
+      return redirect()->route('login')->with('warning', 'Please verify your email to login | Check email Inbox & Spam');
+
+
     }
 }
