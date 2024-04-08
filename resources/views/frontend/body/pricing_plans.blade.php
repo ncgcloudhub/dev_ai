@@ -29,7 +29,7 @@
                                 <h5 class="mb-0 fw-semibold">Starter</h5>
                             </div>
                             <div class="ms-auto">
-                                <h2 class="month mb-0">Free</h2>
+                                <h2 class="month mb-0 text-success">Free</h2>
                             </div>
                         </div>
     
@@ -117,13 +117,23 @@
                                     </div>
                                 </div>
                             </li>
-                           
-                            
-                           
+                          
                         </ul>
-                        <div class="mt-3 pt-2">
-                            <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
-                        </div>
+
+                        @if (Auth::check())
+
+                            <div class="mt-3 pt-2">
+                                <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
+                            </div>   
+
+                        @else
+
+                            <div class="mt-3 pt-2">
+                                <a href="{{route('register')}}" class="btn btn-success w-100">Sign Up for Free</a>
+                            </div>
+                                              
+                        @endif
+
                     </div>
                 </div>
             </div>

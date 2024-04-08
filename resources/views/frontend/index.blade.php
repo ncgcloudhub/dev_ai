@@ -20,7 +20,6 @@
 @section('body')
 
 
-
 <style>
     .banner{
 	background: url({{ asset('build/images/banner1.jpg') }}) no-repeat center top;
@@ -139,7 +138,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex mb-4 align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Free Images Using Dall-E 3</p>
+                                                                <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning"> Dall-E 3</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -152,7 +151,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex mb-4 align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Free Contents with GPT-4</p>
+                                                                <p class="text-white mb-0">Generate Free Contents with <br> <strong class="text-warning">GPT-4</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
