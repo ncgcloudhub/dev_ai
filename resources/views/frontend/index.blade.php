@@ -579,16 +579,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             <div class="sticky-side-div">
                                 <div class="card ribbon-box border shadow-none right">
                         
-                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
-                                    <div class="position-absolute bottom-0 p-3">
-                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
-                                        <div class="row justify-content-center">
-                                            <div class="col-3">
-                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
-                                            </div>
-                        
-                                        </div>
-                                    </div>
+                                    <img src="{{URL::asset('build/images/nft/ai.jpg')}}" alt="" class="img-fluid rounded">
+                                    
                                 </div>
                         
                             </div>
@@ -597,16 +589,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             <div class="sticky-side-div">
                                 <div class="card ribbon-box border shadow-none right">
                         
-                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
-                                    <div class="position-absolute bottom-0 p-3">
-                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
-                                        <div class="row justify-content-center">
-                                            <div class="col-3">
-                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
-                                            </div>
-                        
-                                        </div>
-                                    </div>
+                                    <img src="{{URL::asset('build/images/nft/ai1.jpg')}}" alt="" class="img-fluid rounded">
+                                    
                                 </div>
                         
                             </div>
@@ -615,16 +599,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             <div class="sticky-side-div">
                                 <div class="card ribbon-box border shadow-none right">
                         
-                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
-                                    <div class="position-absolute bottom-0 p-3">
-                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
-                                        <div class="row justify-content-center">
-                                            <div class="col-3">
-                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
-                                            </div>
-                        
-                                        </div>
-                                    </div>
+                                    <img src="{{URL::asset('build/images/nft/ai2.jpg')}}" alt="" class="img-fluid rounded">
+                                    
                                 </div>
                         
                             </div>
@@ -633,16 +609,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             <div class="sticky-side-div">
                                 <div class="card ribbon-box border shadow-none right">
                         
-                                    <img src="{{URL::asset('build/images/nft/img-05.jpg')}}" alt="" class="img-fluid rounded">
-                                    <div class="position-absolute bottom-0 p-3">
-                                        <div class="position-absolute top-0 end-0 start-0 bottom-0 bg-white opacity-25"></div>
-                                        <div class="row justify-content-center">
-                                            <div class="col-3">
-                                                <img src="{{URL::asset('build/images/nft/img-02.jpg')}}" alt="" class="img-fluid rounded">
-                                            </div>
-                        
-                                        </div>
-                                    </div>
+                                    <img src="{{URL::asset('build/images/nft/ai3.jpg')}}" alt="" class="img-fluid rounded">
+                                    
                                 </div>
                         
                             </div>
