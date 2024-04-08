@@ -49,9 +49,9 @@ class HomeController extends Controller
             'message' => $request->input('comments')
         ];
 
-        Mail::send('admin.layouts.email_test', $data, function($message) use ($data) {
-            $message->to('fahmidh26@gmail.com')
-                    ->subject($data['subject']);
+        Mail::send('admin.layouts.email_test', $data, function ($message) use ($data) {
+            $message->to('clevercreatorai@gmail.com')
+                ->subject($data['subject']);
         });
 
         return redirect()->back()->with('success', 'Message sent successfully!');
