@@ -26,7 +26,7 @@ use Illuminate\Auth\EmailVerificationPromptController;
 
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->get();
-    $templates = Template::orderby('id', 'asc')->limit(8)->get();
+    $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->get();
     return view('frontend.index', compact('images', 'templates', 'images_slider'));
 })->name('home');
