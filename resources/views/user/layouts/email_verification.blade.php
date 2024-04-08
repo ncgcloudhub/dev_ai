@@ -97,7 +97,7 @@
                                         </table>
                                         <div style="text-align: center; margin: 25px auto 0px auto;font-family: 'Roboto', sans-serif;">
                                             <h4 style="font-weight: 500; line-height: 1.5;font-family: 'Roboto', sans-serif;">Need Help ?</h4>
-                                            <p style="color: #878a99; line-height: 1.5;">Please send and feedback or bug info to <a href="" style="font-weight: 500;">info@velzon.com</a></p>
+                                            <p style="color: #878a99; line-height: 1.5;">Please send and feedback or bug info to <a href="" style="font-weight: 500;">clevercreatorai@gmail.com</a></p>
                                             
                                         </div>
                                     </div>
