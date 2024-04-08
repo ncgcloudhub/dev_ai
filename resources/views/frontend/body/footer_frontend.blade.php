@@ -21,7 +21,7 @@
                         <h5 class="text-white mb-0">Company</h5>
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                <li><a href="pages-profile">About Us</a></li>
+                                {{-- <li><a href="pages-profile">About Us</a></li> --}}
                                 <li><a href="{{route('privacy.policy')}}">Privacy Policy</a></li>
                                 <li><a href="{{route('terms.condition')}}">Terms & Conditions</a></li>
                                 <li><a href="{{route('ai.image.gallery')}}">Gallery</a></li>
@@ -44,7 +44,7 @@
                         <h5 class="text-white mb-0">Support</h5>
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
-                                <li><a href="pages-faqs">FAQ</a></li>
+                                <li><a href="#faq">FAQ</a></li>
                                 <li><a href="{{route('contact.us')}}">Contact</a></li>
                             </ul>
                         </div>

@@ -1,4 +1,4 @@
-<section class="section">
+<section class="section" id="faq">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
