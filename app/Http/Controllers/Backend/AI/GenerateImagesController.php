@@ -212,7 +212,7 @@ if($imagesLeft >= 1){
     public function EidCard()
     {
         $user_id = Auth::user()->id;
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->get();
+        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival','yes')->get();
 
         $check_user = Auth::user()->role;
 
@@ -286,9 +286,9 @@ if($imagesLeft >= 1){
                     $imageModel->status = 'inactive'; // Set the status as per your requirements
                     $imageModel->prompt = $prompt; // Set the prompt if needed
                     $imageModel->resolution = $size; // Set the resolution if needed
+                    $imageModel->festival = 'yes'; // Set Festive Status
                     $imageModel->save();
                 }
-
 
                 // Image Increment
                 User::where('id', $id)->update([
