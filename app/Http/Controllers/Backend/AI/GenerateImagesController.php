@@ -27,12 +27,12 @@ class GenerateImagesController extends Controller
             $images_count = $get_user->images_generated;
         }
 
-        if ($images_count == 4 || $images_count == 24) {
-            return redirect()->route('all.package');
-        } else {
+        // if ($images_count <= 0) {
+        //     return redirect()->route('all.package');
+        // } else {
 
             return view('backend.image_generate.generate_image', compact('images', 'get_user'));
-        }
+        // }
     }
 
 
@@ -49,7 +49,6 @@ class GenerateImagesController extends Controller
         $n = 1;
 
         $response = null;
-
 
         if ($request->dall_e_2) {
 
@@ -73,6 +72,8 @@ class GenerateImagesController extends Controller
                 }
             }
 
+            
+if($imagesLeft >= 1){
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
                 'Content-Type' => 'application/json',
@@ -83,6 +84,9 @@ class GenerateImagesController extends Controller
                 'quality' => $quality,
                 'n' => $n,
             ]);
+        }else{
+            return response()->json(['error' => 'Failed to generate image'], 500);
+        }
 
             // return $response;
         }
@@ -110,6 +114,7 @@ class GenerateImagesController extends Controller
                 }
             }
 
+            if($imagesLeft >= 1){
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
                 'Content-Type' => 'application/json',
@@ -121,6 +126,9 @@ class GenerateImagesController extends Controller
                 'quality' => $quality,
                 'n' => $n,
             ]);
+        }else{
+            return response()->json(['error' => 'Failed to generate image'], 500);
+        }
         }
         // DAll-e 3 End
 
