@@ -417,6 +417,7 @@
                             <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Sl.</th>
                                         <th scope="col">Username</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone</th>
@@ -426,9 +427,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $sl = 1;
+                                    @endphp
                                     @foreach ($allUsers as $item)
                                   
                                     <tr>
+                                        <td width="5%">{{ $sl++ }}</td>
                                         <td>
                                             <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
                                         </td>
