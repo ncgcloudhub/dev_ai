@@ -11,11 +11,20 @@
 
 
 <div class="container">
+
+    @if($get_user->images_left == 0) 
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong> Something is very wrong! </strong> A simple <b>Dismissible danger Alert </b> — check it out!
+    </div>
+    @else 
+   
+    @endif
+
     <div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
-            <button type="button" class="images-left btn btn-outline-primary">
-                Images Left <span class="badge bg-danger ms-1">{{ $get_user->images_left }}</span>
+             <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
+                                Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
             </button>
         </div><!-- end card header -->
     
@@ -165,8 +174,7 @@ $(document).ready(function() {
 });
 
                          var imagesLeft = response.images_left;
-                         console.log("Images Left: " + imagesLeft);
-                         $('.images-left').html("Images Left: " + imagesLeft);
+                         $('.images-left').text(imagesLeft);
 
                   // Hide loader
                   $('#loader').addClass('d-none');

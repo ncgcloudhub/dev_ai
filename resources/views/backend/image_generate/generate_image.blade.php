@@ -16,13 +16,22 @@
     </div><!-- end card header -->
 
     <div class="card-body">
-      
+        @if($get_user->images_left == 0) 
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong> Something is very wrong! </strong> A simple <b>Dismissible danger Alert </b> — check it out!
+        </div>
+        @else 
+       
+        @endif
+        
         <div class="live-preview">
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="images-left card-title mb-0 flex-grow-1">Images Left:  {{ $get_user->images_left }}</h3>
+                            <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
+                                Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+                            </button>
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
@@ -333,8 +342,7 @@ $(document).ready(function() {
               
 
                          var imagesLeft = response.images_left;
-                         console.log("Images Left: " + imagesLeft);
-                         $('.images-left').html("Images Left: " + imagesLeft);
+                         $('.images-left').text(imagesLeft);
 
                   // Hide loader
                   $('#loader').addClass('d-none');
