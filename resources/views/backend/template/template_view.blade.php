@@ -382,7 +382,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'generated_content.doc';
+            a.download = 'generated_content.docx';
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
