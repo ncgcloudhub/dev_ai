@@ -61,7 +61,7 @@
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <b>71</b> AI Templates
+                                        <b>75</b> AI Templates
                                     </div>
                                 </div>
                             </li>
