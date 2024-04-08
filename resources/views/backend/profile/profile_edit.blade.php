@@ -106,20 +106,30 @@
                                         </div>
                                     </div>
                                 <!--end col-->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="emailInput" class="form-label">Country</label>
+                                        <select name="country" class="form-control" id="country">
+                                            <option disabled>Select Country</option>
+                                            <option value="Bangladesh" {{ $user->country == 'Bangladesh' ? 'selected' : '' }}>Bangladesh</option>
+                                            <option value="USA" {{ $user->country == 'USA' ? 'selected' : '' }}>USA</option>
+                                            <option value="Germany" {{ $user->country == 'Germany' ? 'selected' : '' }}>Germany</option>
+                                            <option value="India" {{ $user->country == 'India' ? 'selected' : '' }}>India</option>
+                                            <option value="France" {{ $user->country == 'France' ? 'selected' : '' }}>France</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="emailInput" class="form-label">Country</label>
-                                            <select name="country" class="form-control" id="country">
-                                                <option disabled selected="">Select Country</option>
-                                                <option value="Bangladesh">Bangladesh</option>
-                                                <option value="USA">USA</option>
-                                                <option value="Germany">Germany</option>
-                                                <option value="India">India</option>
-                                                <option value="France">France</option>
-                                            </select>
-                                          
+                                            <label for="emailInput" class="form-label">E-Mail</label>
+                                            <input type="text" class="form-control" id="email" name="email"
+                                                   placeholder="Enter your email" value="{{$user->email}}" disabled>
                                         </div>
                                     </div>
+                                    
+                                <!--end col-->
                                    
                                 <!--end col-->
                                     <div class="col-lg-12">
