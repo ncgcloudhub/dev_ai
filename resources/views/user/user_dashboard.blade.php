@@ -2,7 +2,8 @@
 @section('title') @lang('translation.dashboards') @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection
 @section('content')
 
@@ -50,7 +51,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-dollar-circle text-primary"></i>
+                                        <i class=" bx bx-receipt text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-shopping-bag text-primary"></i>
+                                        <i class=" bx bx-copy-alt text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -114,7 +115,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-user-circle text-primary"></i>
+                                        <i class=" bx bx-images text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -147,7 +148,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-wallet text-primary"></i>
+                                        <i class=" bx bx-image-add text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -180,7 +181,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-shopping-bag text-primary"></i>
+                                        <i class=" bx bx-highlight text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -212,7 +213,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-shopping-bag text-primary"></i>
+                                        <i class=" bx bx-pencil text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -235,21 +236,19 @@
                       
                                 @foreach ($images as $item)
                                   
-                                <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
+                                <div class="element-item col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 photography" data-category="photography">
                                     <div class="gallery-box card">
                                         <div class="gallery-container">
                                             <a class="image-popup" href="{{ asset($item->image) }}" title="">
-                                                <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                                <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image) }}" alt="" />
                                                 <div class="gallery-overlay">
                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                                 </div>
                                             </a>
                                         </div>
-        
                                         <div class="box-content">
                                             <div class="d-flex align-items-center mt-1">
                                                 <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -322,7 +321,7 @@
                                                     </div>
                                                     
                                                     <div>
-                                                        <h5 class="fs-14 my-1"><a href="apps-ecommerce-product-details" class="text-reset">{{$item->template_name}}</a></h5>
+                                                        <h5 class="fs-14 my-1"><a href="{{ route('template.view', ['slug' => $item->slug]) }}" class="text-reset">{{$item->template_name}}</a></h5>
                                                         <span class="text-muted">{{ date('d M, Y', strtotime($item->created_at)) }}
                                                         </span>
                                                     </div>
@@ -414,10 +413,17 @@
 @endsection
 @section('script')
 <!-- apexcharts -->
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/swiper.init.js') }}"></script>
+
 <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js')}}"></script>
+
 <!-- dashboard init -->
 <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
