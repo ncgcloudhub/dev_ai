@@ -166,7 +166,7 @@
                                                 </div>
                                                 <div class="flex-grow-1 overflow-hidden">
                                                     <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample">{{ $expert_selected->expert_name}}</a></h5>
-                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>Online</small></p>
+                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>{{ $expert_selected->role}}</small></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@
                                         <div class="flex-shrink-0 d-block d-lg-none me-3">
                                             <a href="javascript: void(0);" class="user-chat-remove fs-18 p-1"><i class="ri-arrow-left-s-line align-bottom"></i></a>
                                         </div>
-                                        <div class="flex-grow-1 overflow-hidden">
+                                        {{-- <div class="flex-grow-1 overflow-hidden">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
                                                     <img src="{{URL::asset('build/images/users/avatar-2.jpg')}}" class="rounded-circle avatar-xs" alt="">
@@ -249,7 +249,7 @@
                                                     <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small>24 Members</small></p>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                                 <div class="col-sm-8 col-4">
