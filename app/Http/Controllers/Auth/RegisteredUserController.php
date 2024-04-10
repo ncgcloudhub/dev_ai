@@ -36,6 +36,11 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Check if the email already exists in the database
+    if (User::where('email', $request->email)->exists()) {
+        dd('email exists');
+    }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
