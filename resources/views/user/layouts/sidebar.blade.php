@@ -161,9 +161,16 @@
                 </li>
                  {{-- End Subscription --}}
                
-              
-
             </ul>
+
+              <!-- Help Button -->
+              <div class="text-center mt-4">
+                <a href="{{route('contact.us')}}" class="btn btn-primary btn-block">
+                    <i class="ri-question-fill"></i> Help
+                </a>
+            </div>
+            <!-- End Help Button -->
+
         </div>
         <!-- Sidebar -->
     </div>
