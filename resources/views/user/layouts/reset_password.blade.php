@@ -46,27 +46,26 @@
                                 <div class="p-2">
                                     <form method="POST" action="{{ route('password.store') }}">
                                         @csrf
-
-                                      <!-- Password Reset Token -->
-                                        <input type="hidden" name="token" value="{{ request()->query('token') }}">
-
+                                
+                                        <!-- Password Reset Token -->
+                                        <input type="hidden" name="token" value="{{ $request->route('token') }}">                               
 
                                         <!-- Email Address -->
                                         <div class="mb-4">
                                             <label class="form-label" for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $request->email) }}" required autofocus autocomplete="username">
+                                            <input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username">
                                         </div>
 
                                         <!-- Password -->
                                         <div class="mb-4">
                                             <label class="form-label" for="password">Password</label>
-                                            <input type="password" class="form-control" id="password" name="password" required autocomplete="new-password">
+                                            <input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password">
                                         </div>
 
                                         <!-- Confirm Password -->
                                         <div class="mb-4">
                                             <label class="form-label" for="password_confirmation">Confirm Password</label>
-                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
+                                            <input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" >
                                         </div>
 
                                         <div class="flex items-center justify-end mt-4">
