@@ -145,18 +145,16 @@
                         </div>
                         <!--end tab-pane-->
                         <div class="tab-pane" id="changePassword" role="tabpanel">
-                            <form action="{{ route('password.store') }}" method="POST">
-
-                                 <!-- Password Reset Token -->
-                                    {{-- <input type="hidden" name="token" value="{{ $request->route('token') }}"> --}}
+                            <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+                                @csrf
+                                @method('put')               
 
                                 <div class="row g-2">
                                     <div class="col-lg-4">
                                         <div>
-                                            <label for="oldpasswordInput" class="form-label">Email
+                                            <label for="oldpasswordInput" class="form-label">Current
                                                </label>
-                                            <input type="email" class="form-control" id="email"
-                                                value="{{$user->email}}">
+                                            <input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -164,8 +162,7 @@
                                         <div>
                                             <label for="newpasswordInput" class="form-label">New
                                                 Password*</label>
-                                            <input type="password" class="form-control" id="password" name="password"
-                                                placeholder="Enter new password">
+                                            <input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -173,8 +170,7 @@
                                         <div>
                                             <label for="confirmpasswordInput" class="form-label">Confirm
                                                 Password*</label>
-                                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                                                placeholder="Confirm password">
+                                            <input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -190,6 +186,15 @@
                                         <div class="text-end">
                                             <button type="submit" class="btn btn-primary">Change
                                                 Password</button>
+                                                @if (session('status') === 'password-updated')
+                                                <p
+                                                    x-data="{ show: true }"
+                                                    x-show="show"
+                                                    x-transition
+                                                    x-init="setTimeout(() => show = false, 2000)"
+                                                    class="text-sm text-gray-600"
+                                                >{{ __('Saved.') }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                     <!--end col-->

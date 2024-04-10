@@ -57,8 +57,11 @@
 
                                         <div class="mb-3">
                                             <div class="float-end">
-                                                <a href="auth-pass-reset-basic" class="text-muted">Forgot
-                                                    password?</a>
+                                                @if (Route::has('password.request'))
+                                                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                                                    {{ __('Forgot your password?') }}
+                                                </a>
+                                            @endif
                                             </div>
                                             <label class="form-label" for="password-input">Password</label>
                                             <div class="position-relative auth-pass-inputgroup mb-3">
