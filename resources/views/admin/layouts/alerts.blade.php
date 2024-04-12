@@ -19,3 +19,12 @@
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+
+
+@if(session('danger'))
+<!-- Danger Alert -->
+<div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
+    <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> - {{ session('danger') }}
+    <button type="button" class="btn-close" data-bs-dismiss=" alert" aria-label="Close"></button>
+</div>
+@endif

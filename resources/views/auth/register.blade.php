@@ -49,8 +49,17 @@
                                                 <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
                                                 <input type="email" name="email"  class="form-control" id="useremail" placeholder="Enter email address" required>
                                                 <div class="invalid-feedback">
-                                                    Please enter email
+                                                    Please enter emails
                                                 </div>
+                                                @if($errors->has('email'))
+                                                <!-- Email Error Alert -->
+                                                <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
+                                                    <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('email') }}
+                                                </div>
+                                              
+                                            @endif
+                                            
+
                                             </div>
                                             <div class="mb-3">
                                                 <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
@@ -70,19 +79,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
+                                            
                                             <div class="mb-3">
-                                                <label class="form-label" for="password-input">Confirm Password</label>
+                                                <label class="form-label" for="password-input-confirm">Confirm Password</label>
                                                 <div class="position-relative auth-pass-inputgroup">
-                                                    <input type="password"  name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                    <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input-confirm" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon-confirm"><i class="ri-eye-fill align-middle"></i></button>
                                                     <div class="invalid-feedback">
                                                         Please enter password
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            
                                             <div class="mb-4">
                                                 <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Velzon <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
                                             </div>
@@ -125,6 +133,8 @@
                             <!-- end card -->
 
                             <div class="mt-4 text-center">
+                                
+                         @include('admin.layouts.alerts')
                                 <p class="mb-0">Already have an account ? <a href="{{ route('login') }}" class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
                             </div>
 
