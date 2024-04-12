@@ -96,6 +96,14 @@
                                 name="header_logo_dark"
                                 accept="image/png, image/jpeg, image/gif"/>
                             </div>
+
+                            <div class="mt-3">
+                                @if($setting->header_logo_dark)
+                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_dark) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                @else
+                                    <p></p>
+                                @endif
+                            </div>
                 
                         </div>
                         <!-- end card body -->
