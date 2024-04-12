@@ -15,7 +15,7 @@
 @if(session('warning'))
 <!-- Warning Alert -->
 <div class="alert alert-warning alert-dismissible bg-warning text-white alert-label-icon fade show" role="alert">
-    <i class="ri-alert-line label-icon"></i><strong>Warning</strong> - {{ session('warning') }}
+    <i class="ri-alert-line label-icon"></i><strong>Success</strong> - {{ session('warning') }}
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif

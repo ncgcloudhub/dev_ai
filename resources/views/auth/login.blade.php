@@ -45,6 +45,7 @@
                                     <h5 class="text-primary">Welcome Back !</h5>
                                     <p class="text-muted">Sign in to continue to Clever Creator.</p>
                                 </div>
+                                @include('admin.layouts.alerts')
                                 <div class="p-2 mt-4">
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
@@ -117,7 +118,7 @@
                                     class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
                         </div>
 
-                         @include('admin.layouts.alerts')
+                        
 
                     </div>
                 </div>
