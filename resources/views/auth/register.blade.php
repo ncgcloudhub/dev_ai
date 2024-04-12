@@ -53,11 +53,11 @@
                                                 </div>
                                                 @if($errors->has('email'))
                                                 <!-- Email Error Alert -->
-                                                <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
-                                                    <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('email') }}
-                                                </div>
+                                                    <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
+                                                        <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('email') }}
+                                                    </div>
                                               
-                                            @endif
+                                                @endif
                                             
 
                                             </div>
