@@ -5,7 +5,7 @@
         <!-- Dark Logo-->
         <a href="{{route('user.dashboard')}}" class="logo logo-dark">
             <span class="logo-sm">
-                <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_dark) }}" alt="Header Logo Dark" height="22">
+                <img src="{{ asset('backend/uploads/site/light1.jpg') }}" alt="Header Logo Dark" height="22">              
             </span>
             <span class="logo-lg">
                 <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_dark) }}" alt="Header Logo Dark" height="30">
@@ -14,7 +14,7 @@
         <!-- Light Logo-->
         <a href="{{route('user.dashboard')}}" class="logo logo-light">
             <span class="logo-sm">
-                <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_light) }}" alt="Header Logo Light" height="22">
+                <img src="{{ asset('backend/uploads/site/light2.jpg') }}" alt="Header Logo Light" height="22">
             </span>
             <span class="logo-lg">
                 <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_light) }}" alt="Header Logo Light" height="40">
