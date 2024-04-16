@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-header align-items-center d-flex">
         <h4 class="card-title mb-0 flex-grow-1">Generate Image</h4>
-        <a href="">
+        {{-- <a href="">
             <button type="button" class="btn btn-warning btn-load">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow flex-shrink-0" role="status">
@@ -24,7 +24,7 @@
                     </span>
                 </span>
             </button>
-        </a>
+        </a> --}}
     </div><!-- end card header -->
 
     <div class="card-body">
