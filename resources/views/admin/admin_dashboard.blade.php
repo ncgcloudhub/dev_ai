@@ -3,6 +3,7 @@
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
+
 @endsection
 @section('content')
 
@@ -414,54 +415,61 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sl.</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Phone</th>
-                                        <th scope="col">Images generated</th>
-                                        <th scope="col">Words Generated</th>
-                                        <th scope="col">Registered Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $sl = 1;
-                                    @endphp
-                                    @foreach ($allUsers as $item)
-                                  
-                                    <tr>
-                                        <td width="5%">{{ $sl++ }}</td>
-                                        <td>
-                                            <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                </div>
-                                                <div class="flex-grow-1">{{$item->email}}</div>
-                                            </div>
-                                        </td>
-                                        <td>{{$item->phone}}</td>
-                                        <td>
-                                            <span class="text-success">{{$item->images_generated}}</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-success">  {{$item->words_generated}}</span>
-                                          </td>
-                                        <td>
-                                            <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}
-                                            </span>
-                                        </td>
+                            <div class="table-responsive">
+                                <table id="example" class="table table-bordered table-striped align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="d-none d-md-table-cell">Sl.</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col" class="d-none d-md-table-cell">Images generated</th>
+                                            <th scope="col" class="d-none d-md-table-cell">Words Generated</th>
+                                            <th scope="col" class="d-none d-md-table-cell">Registered Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $sl = 1;
+                                        @endphp
+                                        @foreach ($allUsers as $item)
                                       
-                                    </tr><!-- end tr -->
-            
-                                    @endforeach
-                                </tbody><!-- end tbody -->
-                            </table>
+                                        <tr>
+                                            <td class="d-none d-md-table-cell">{{ $sl++ }}</td>
+                                            <td>
+                                                <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 me-2">
+                                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
+                                                    </div>
+                                                    <div class="flex-grow-1">{{$item->email}}</div>
+                                                </div>
+                                            </td>
+                                            <td>{{$item->phone}}</td>
+                                            <td class="d-none d-md-table-cell">
+                                                <span class="text-success">{{$item->images_generated}}</span>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                <span class="text-success">{{$item->words_generated}}</span>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}</span>
+                                            </td>
+                                            <td class="d-table-cell d-md-none"> <!-- Display on mobile -->
+                                                <span class="text-success">Images: {{$item->images_generated}}</span><br>
+                                                <span class="text-success">Words: {{$item->words_generated}}</span><br>
+                                                <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}</span>
+                                            </td>
+                                          
+                                        </tr><!-- end tr -->
+                            
+                                        @endforeach
+                                    </tbody><!-- end tbody -->
+                                </table>
+                            </div>
+                            
                         </div>
                     </div> <!-- .card-->
                 </div> <!-- .col-->
@@ -485,4 +493,5 @@
 <!-- dashboard init -->
 <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 @endsection

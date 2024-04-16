@@ -145,7 +145,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Dalle</span>
+                        <i class="las la-pencil-ruler"></i> <span >Generate Image</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
                         <div class="row">
@@ -153,7 +153,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image</a>
+                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image Using Dall-E</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link" >Manage Image</a>
