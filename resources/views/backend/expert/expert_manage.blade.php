@@ -12,26 +12,24 @@
 
 <div class="row">
     @foreach ($experts as $item)
-    <div class="col-3">
- 
-    <div class="card mb-1">
-    <div class="card-body">
-        <a class="d-flex align-items-center" href="{{ route('expert.chat',$item->slug) }}" role="button">
-            <div class="flex-shrink-0">
-                <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" alt="" class="avatar-xs rounded-circle">
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"> <!-- Adjust column widths for mobile and larger screens -->
+        <div class="card">
+            <div class="card-body">
+                <a class="d-flex align-items-center" href="{{ route('expert.chat', $item->slug) }}" role="button">
+                    <div class="flex-shrink-0">
+                        <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" alt="" class="avatar-xs rounded-circle">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="fs-15 mb-1">{{$item->expert_name}}</h6>
+                        <p class="text-muted mb-0">{{$item->role}}</p>
+                    </div>
+                </a>
             </div>
-            <div class="flex-grow-1 ms-3">
-                <h6 class="fs-15 mb-1">{{$item->expert_name}}</h6>
-                <p class="text-muted mb-0">{{$item->role}}</p>
-            </div>
-        </a>
+        </div>
     </div>
+    @endforeach
 </div>
-     
 
-</div>
-@endforeach
-</div>
 
 
 @endsection

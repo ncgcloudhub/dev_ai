@@ -30,7 +30,7 @@
     <div class="card-body">
         @if($get_user->images_left == 0) 
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong> Something is very wrong! </strong> A simple <b>Dismissible danger Alert </b> — check it out!
+            <strong> No Images Left! </strong> You don't have any <b>Images </b> left to generate!
         </div>
         @else 
        
