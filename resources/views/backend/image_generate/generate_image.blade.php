@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-header align-items-center d-flex">
         <h4 class="card-title mb-0 flex-grow-1">Generate Image</h4>
-        {{-- <a href="">
+        <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}">
             <button type="button" class="btn btn-warning btn-load">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow flex-shrink-0" role="status">
@@ -24,7 +24,7 @@
                     </span>
                 </span>
             </button>
-        </a> --}}
+        </a>
     </div><!-- end card header -->
 
     <div class="card-body">
@@ -40,10 +40,11 @@
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
+                        <button type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
+                            Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+                        </button>
                         <div class="card-body">
-                            <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-                                Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
-                            </button>
+                           
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
