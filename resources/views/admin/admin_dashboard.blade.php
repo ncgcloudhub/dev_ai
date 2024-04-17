@@ -3,7 +3,11 @@
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
-
+<!--datatable css-->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+<!--datatable responsive css-->
+<link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 
@@ -19,30 +23,7 @@
                             <p class="text-muted mb-0">Here's what's happening with your store
                                 today.</p>
                         </div>
-                        <div class="mt-3 mt-lg-0">
-                            <form action="javascript:void(0);">
-                                <div class="row g-3 mb-0 align-items-center">
-                                    <div class="col-sm-auto">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control border dash-filter-picker" data-provider="flatpickr" data-range-date="true" data-date-format="d M, Y" data-deafult-date="01 Jan 2022 to 31 Jan 2022">
-                                            <div class="input-group-text bg-primary border-primary text-white">
-                                                <i class="ri-calendar-2-line"></i></div>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-primary"><i class="ri-add-circle-line align-middle me-1"></i>
-                                            Add Product</button>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-soft-secondary btn-icon waves-effect waves-light layout-rightside-btn"><i class="ri-pulse-line"></i></button>
-                                    </div>
-                                    <!--end col-->
-                                </div>
-                                <!--end row-->
-                            </form>
-                        </div>
+                     
                     </div><!-- end card header -->
                 </div>
                 <!--end col-->
@@ -382,7 +363,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-4">
+                <div class="col-xl-3">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
@@ -406,7 +387,7 @@
                     </div> <!-- .card-->
                 </div> <!-- .col-->
 
-                <div class="col-xl-8">
+                <div class="col-xl-9">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Recent Users  <span class="badge bg-success-subtle text-success">{{ $totalUsers }}
@@ -415,60 +396,53 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="example" class="table table-bordered table-striped align-middle">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="d-none d-md-table-cell">Sl.</th>
-                                            <th scope="col">Username</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col" class="d-none d-md-table-cell">Images generated</th>
-                                            <th scope="col" class="d-none d-md-table-cell">Words Generated</th>
-                                            <th scope="col" class="d-none d-md-table-cell">Registered Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $sl = 1;
-                                        @endphp
-                                        @foreach ($allUsers as $item)
-                                      
-                                        <tr>
-                                            <td class="d-none d-md-table-cell">{{ $sl++ }}</td>
-                                            <td>
-                                                <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-2">
-                                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                    </div>
-                                                    <div class="flex-grow-1">{{$item->email}}</div>
+                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Sl.</th>
+                                        <th scope="col">Username</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Images generated</th>
+                                        <th scope="col">Words Generated</th>
+                                        <th scope="col">Registered Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $sl = 1;
+                                    @endphp
+                                    @foreach ($allUsers as $item)
+
+                                    <tr>
+                                        <td width="5%">{{ $sl++ }}</td>
+                                        <td>
+                                            <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 me-2">
+                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
                                                 </div>
-                                            </td>
-                                            <td>{{$item->phone}}</td>
-                                            <td class="d-none d-md-table-cell">
-                                                <span class="text-success">{{$item->images_generated}}</span>
-                                            </td>
-                                            <td class="d-none d-md-table-cell">
-                                                <span class="text-success">{{$item->words_generated}}</span>
-                                            </td>
-                                            <td class="d-none d-md-table-cell">
-                                                <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}</span>
-                                            </td>
-                                            <td class="d-table-cell d-md-none"> <!-- Display on mobile -->
-                                                <span class="text-success">Images: {{$item->images_generated}}</span><br>
-                                                <span class="text-success">Words: {{$item->words_generated}}</span><br>
-                                                <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}</span>
-                                            </td>
-                                          
-                                        </tr><!-- end tr -->
-                            
-                                        @endforeach
-                                    </tbody><!-- end tbody -->
-                                </table>
-                            </div>
+                                                <div class="flex-grow-1">{{$item->email}}</div>
+                                            </div>
+                                        </td>
+                                        <td>{{$item->phone}}</td>
+                                        <td>
+                                            <span class="text-success">{{$item->images_generated}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-success">  {{$item->words_generated}}</span>
+                                          </td>
+                                        <td>
+                                            <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}
+                                            </span>
+                                        </td>
+                                    </tr><!-- end tr -->
+
+                                    @endforeach
+                                </tbody><!-- end tbody -->
+                            </table>
                             
                         </div>
                     </div> <!-- .card-->
@@ -494,4 +468,17 @@
 <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 @endsection
