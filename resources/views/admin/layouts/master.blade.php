@@ -31,7 +31,12 @@
 @show
     <!-- Begin page -->
     <div id="layout-wrapper">
+        @if (Auth::user()->role === 'admin')
         @include('admin.layouts.topbar')
+        @else
+        @include('user.layouts.topbar') 
+        @endif
+       
        
         @if (Auth::user()->role === 'admin')
         @include('admin.layouts.sidebar')
