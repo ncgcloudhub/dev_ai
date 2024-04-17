@@ -34,21 +34,39 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
-    $templates_count = Template::count();
-    $custom_templates_count = CustomTemplate::where('user_id', $user->id)->count();
-    $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
-    $custom_templates = CustomTemplate::where('user_id', $user->id)->limit(5)->get();
-    $images = DalleImageGenerate::where('user_id', $user->id)->orderBy('id', 'desc')->limit(12)->get();
 
-    $totalUsers = User::count();
-    $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-        ->whereNotNull('country') // Exclude users with NULL country
-        ->groupBy('country')
-        ->get();
+    if ($user->role === 'admin') {
+        $templates_count = Template::count();
+        $custom_templates_count = CustomTemplate::count();
+        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
+        $custom_templates = CustomTemplate::limit(5)->get();
+        $wordCountSum = CustomTemplate::sum('total_word_generated');
+        $totalUsers = User::where('role', 'user')->count();
+        $allUsers = User::where('role', 'user')->orderBy('id', 'desc')->get();
+        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
+            ->whereNotNull('country') // Exclude users with NULL country
+            ->groupBy('country')
+            ->get();
 
-    // dd($templates_count);
-    return view('user.user_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+        return view('admin.admin_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'allUsers'));
+    } else {
+        $templates_count = Template::count();
+        $custom_templates_count = CustomTemplate::where('user_id', $user->id)->count();
+        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
+        $custom_templates = CustomTemplate::where('user_id', $user->id)->limit(5)->get();
+        $images = DalleImageGenerate::where('user_id', $user->id)->orderBy('id', 'desc')->limit(12)->get();
+
+        $totalUsers = User::count();
+        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
+            ->whereNotNull('country') // Exclude users with NULL country
+            ->groupBy('country')
+            ->get();
+
+        return view('user.user_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+    }
+})->middleware(['auth'])->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
