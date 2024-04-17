@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate">
+                    <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
@@ -61,7 +61,7 @@
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate">
+                    <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
@@ -93,39 +93,7 @@
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Images Left</p>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <h5 class="text-danger fs-14 mb-0">
-                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->images_left}}
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-end justify-content-between mt-4">
-                                <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->images_left}}">0</span>
-                                    </h4>
-                                    <a href="{{route('all.package')}}" class="link-secondary text-decoration-underline">Upgrade Plan                          </a>
-                                </div>
-                                <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class=" bx bx-images text-primary"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div><!-- end card body -->
-                    </div><!-- end card -->
-                </div><!-- end col -->
-
-                <div class="col-xl-3 col-md-6">
-                    <!-- card -->
-                    <div class="card card-animate">
+                    <div class="card card-animate bg-success-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
@@ -143,12 +111,43 @@
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->images_generated}}">0</span>
                                     </h4>
-                                    <a href="{{route('all.package')}}" class="link-secondary text-decoration-underline">See
-                                        subscription</a>
+                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class=" bx bx-image-add text-primary"></i>
+                                    <span class="avatar-title bg-success-subtle rounded fs-3">
+                                        <i class=" bx bx-image-add text-success"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate bg-danger-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Images Left</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
+                                        {{$user->images_left}}
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->images_left}}">0</span>
+                                    </h4>
+                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
+                                        <i class=" bx bx-images text-danger"></i>
                                     </span>
                                 </div>
                             </div>
@@ -160,7 +159,7 @@
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
                     <div class="card card-animate">
-                        <div class="card-body">
+                        <div class="card-body bg-success-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
@@ -176,12 +175,12 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->words_generated}}">0</span></h4>
-                                    <a href="#" class="link-secondary text-decoration-underline">View all
+                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class=" bx bx-highlight text-primary"></i>
+                                    <span class="avatar-title bg-success-subtle rounded fs-3">
+                                        <i class=" bx bx-highlight text-success"></i>
                                     </span>
                                 </div>
                             </div>
@@ -192,7 +191,7 @@
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
                     <div class="card card-animate">
-                        <div class="card-body">
+                        <div class="card-body bg-danger-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
@@ -208,12 +207,12 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->words_left}}">0</span></h4>
-                                    <a href="#" class="link-secondary text-decoration-underline">View all
+                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class=" bx bx-pencil text-primary"></i>
+                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
+                                        <i class=" bx bx-pencil text-danger"></i>
                                     </span>
                                 </div>
                             </div>
