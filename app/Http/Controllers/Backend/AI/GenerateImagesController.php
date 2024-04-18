@@ -15,7 +15,7 @@ class GenerateImagesController extends Controller
     public function AIGenerateImageView()
     {
         $user_id = Auth::user()->id;
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->get();
+        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->orderBy('id', 'desc')->get();
 
         $check_user = Auth::user()->role;
 
@@ -31,7 +31,7 @@ class GenerateImagesController extends Controller
         //     return redirect()->route('all.package');
         // } else {
 
-            return view('backend.image_generate.generate_image', compact('images', 'get_user'));
+        return view('backend.image_generate.generate_image', compact('images', 'get_user'));
         // }
     }
 
@@ -72,21 +72,21 @@ class GenerateImagesController extends Controller
                 }
             }
 
-            
-if($imagesLeft >= 1){
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->post('https://api.openai.com/v1/images/generations', [
-                'prompt' => $request->prompt,
-                'size' => $size,
-                'style' => $style,
-                'quality' => $quality,
-                'n' => $n,
-            ]);
-        }else{
-            return response()->json(['error' => 'Failed to generate image'], 500);
-        }
+
+            if ($imagesLeft >= 1) {
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.openai.com/v1/images/generations', [
+                    'prompt' => $request->prompt,
+                    'size' => $size,
+                    'style' => $style,
+                    'quality' => $quality,
+                    'n' => $n,
+                ]);
+            } else {
+                return response()->json(['error' => 'Failed to generate image'], 500);
+            }
 
             // return $response;
         }
@@ -114,21 +114,21 @@ if($imagesLeft >= 1){
                 }
             }
 
-            if($imagesLeft >= 1){
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->post('https://api.openai.com/v1/images/generations', [
-                'model' => 'dall-e-3',
-                'prompt' => $request->prompt,
-                'size' => $size,
-                'style' => $style,
-                'quality' => $quality,
-                'n' => $n,
-            ]);
-        }else{
-            return response()->json(['error' => 'Failed to generate image'], 500);
-        }
+            if ($imagesLeft >= 1) {
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Content-Type' => 'application/json',
+                ])->post('https://api.openai.com/v1/images/generations', [
+                    'model' => 'dall-e-3',
+                    'prompt' => $request->prompt,
+                    'size' => $size,
+                    'style' => $style,
+                    'quality' => $quality,
+                    'n' => $n,
+                ]);
+            } else {
+                return response()->json(['error' => 'Failed to generate image'], 500);
+            }
         }
         // DAll-e 3 End
 
@@ -212,7 +212,7 @@ if($imagesLeft >= 1){
     public function EidCard()
     {
         $user_id = Auth::user()->id;
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival','yes')->get();
+        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival', 'yes')->get();
 
         $check_user = Auth::user()->role;
 
