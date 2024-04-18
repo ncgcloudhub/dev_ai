@@ -116,7 +116,7 @@
                                                     {{-- <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button> --}}
                                                     <div class="mt-2">
                                                         <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light w-100">
-                                                            <i class="ri-google-fill fs-16"></i> Sign Up with Google
+                                                            <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
                                                         </a>
                                                     </div>
                                                     <div class="mt-4 text-center">
@@ -125,7 +125,7 @@
                                                     </div>
                                                     <div class="mt-2">
                                                         <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
-                                                            <i class="ri-github-fill fs-16"></i> Sign Up with GitHub
+                                                            <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
                                                         </a>
                                                     </div>
                                                     {{-- <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button> --}}
