@@ -99,7 +99,10 @@
                                                                 <i class="ri-google-fill fs-16"></i> Sign In with Google
                                                             </a>
                                                         </div>
-                                                        
+                                                        <div class="mt-4 text-center">
+                                                            <h2 class="mb-3">OR</h2>
+                                                            <hr class="mx-auto" style="width: 50px; border-top: 2px solid #888;">
+                                                        </div>
                                                         <div class="mt-2">
                                                             <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
                                                                 <i class="ri-github-fill fs-16"></i> Sign In with GitHub
