@@ -4,6 +4,7 @@ use App\Models\DalleImageGenerate;
 use App\Models\Template;
 use App\Models\CustomTemplate;
 use App\Models\User;
+use App\Models\Expert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminController;
@@ -51,6 +52,7 @@ Route::get('/dashboard', function () {
         return view('admin.admin_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'allUsers'));
     } else {
         $templates_count = Template::count();
+        $chatbot_count = Expert::count();
         $custom_templates_count = CustomTemplate::where('user_id', $user->id)->count();
         $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
         $custom_templates = CustomTemplate::where('user_id', $user->id)->limit(5)->get();
@@ -62,7 +64,7 @@ Route::get('/dashboard', function () {
             ->groupBy('country')
             ->get();
 
-        return view('user.user_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+        return view('user.user_dashboard', compact('user', 'templates_count', 'chatbot_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
     }
 })->middleware(['auth'])->name('dashboard');
 
