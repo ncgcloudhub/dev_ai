@@ -9,15 +9,17 @@ File: Ecommerce Dashboard init js
 // get colors array from the string
 function getChartColorsArray(chartId) {
     if (document.getElementById(chartId) !== null) {
-        var colors = document.getElementById(chartId).getAttribute("data-colors");
+        var colors = document
+            .getElementById(chartId)
+            .getAttribute("data-colors");
         if (colors) {
             colors = JSON.parse(colors);
             return colors.map(function (value) {
                 var newValue = value.replace(" ", "");
                 if (newValue.indexOf(",") === -1) {
-                    var color = getComputedStyle(document.documentElement).getPropertyValue(
-                        newValue
-                    );
+                    var color = getComputedStyle(
+                        document.documentElement
+                    ).getPropertyValue(newValue);
                     if (color) return color;
                     else return newValue;
                 } else {
@@ -34,7 +36,7 @@ function getChartColorsArray(chartId) {
                 }
             });
         } else {
-            console.warn('data-colors atributes not found on', chartId);
+            console.warn("data-colors atributes not found on", chartId);
         }
     }
 }
@@ -42,23 +44,25 @@ function getChartColorsArray(chartId) {
 var linechartcustomerColors = getChartColorsArray("customer_impression_charts");
 if (linechartcustomerColors) {
     var options = {
-        series: [{
-            name: "Orders",
-            type: "area",
-            data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
-        },
-        {
-            name: "Earnings",
-            type: "bar",
-            data: [
-                89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36, 88.51, 36.57,
-            ],
-        },
-        {
-            name: "Refunds",
-            type: "line",
-            data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
-        },
+        series: [
+            {
+                name: "Orders",
+                type: "area",
+                data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
+            },
+            {
+                name: "Earnings",
+                type: "bar",
+                data: [
+                    89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57,
+                    92.57, 42.36, 88.51, 36.57,
+                ],
+            },
+            {
+                name: "Refunds",
+                type: "line",
+                data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
+            },
         ],
         chart: {
             height: 370,
@@ -147,30 +151,31 @@ if (linechartcustomerColors) {
         colors: linechartcustomerColors,
         tooltip: {
             shared: true,
-            y: [{
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return y.toFixed(0);
-                    }
-                    return y;
+            y: [
+                {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0);
+                        }
+                        return y;
+                    },
                 },
-            },
-            {
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return "$" + y.toFixed(2) + "k";
-                    }
-                    return y;
+                {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return "$" + y.toFixed(2) + "k";
+                        }
+                        return y;
+                    },
                 },
-            },
-            {
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return y.toFixed(0) + " Sales";
-                    }
-                    return y;
+                {
+                    formatter: function (y) {
+                        if (typeof y !== "undefined") {
+                            return y.toFixed(0) + " Sales";
+                        }
+                        return y;
+                    },
                 },
-            },
             ],
         },
     };
@@ -195,7 +200,7 @@ if (chartDonutBasicColors) {
             position: "bottom",
         },
         stroke: {
-            show: false
+            show: false,
         },
         dataLabels: {
             dropShadow: {
@@ -234,22 +239,23 @@ function loadCharts() {
                 },
             },
             markersSelectable: true,
-            markers: [{
-                name: "Palestine",
-                coords: [31.9474, 35.2272],
-            },
-            {
-                name: "Russia",
-                coords: [61.524, 105.3188],
-            },
-            {
-                name: "Canada",
-                coords: [56.1304, -106.3468],
-            },
-            {
-                name: "Greenland",
-                coords: [71.7069, -42.6043],
-            },
+            markers: [
+                {
+                    name: "United States",
+                    coords: [39.7392, -104.9903],
+                },
+                {
+                    name: "Russia",
+                    coords: [61.524, 105.3188],
+                },
+                {
+                    name: "Bangladesh",
+                    coords: [23.8103, 90.4125],
+                },
+                {
+                    name: "Greenland",
+                    coords: [71.7069, -42.6043],
+                },
             ],
             markerStyle: {
                 initial: {
@@ -270,7 +276,7 @@ function loadCharts() {
     }
 }
 
-window.onresize = function() {
+window.onresize = function () {
     setTimeout(() => {
         loadCharts();
     }, 0);
@@ -291,24 +297,32 @@ var swiper = new Swiper(".vertical-swiper", {
     },
 });
 
-var layoutRightSideBtn = document.querySelector('.layout-rightside-btn');
+var layoutRightSideBtn = document.querySelector(".layout-rightside-btn");
 if (layoutRightSideBtn) {
-    Array.from(document.querySelectorAll(".layout-rightside-btn")).forEach(function (item) {
-        var userProfileSidebar = document.querySelector(".layout-rightside-col");
-        item.addEventListener("click", function () {
-            if (userProfileSidebar.classList.contains("d-block")) {
-                userProfileSidebar.classList.remove("d-block");
-                userProfileSidebar.classList.add("d-none");
-            } else {
-                userProfileSidebar.classList.remove("d-none");
-                userProfileSidebar.classList.add("d-block");
-            }
-        });
-    });
+    Array.from(document.querySelectorAll(".layout-rightside-btn")).forEach(
+        function (item) {
+            var userProfileSidebar = document.querySelector(
+                ".layout-rightside-col"
+            );
+            item.addEventListener("click", function () {
+                if (userProfileSidebar.classList.contains("d-block")) {
+                    userProfileSidebar.classList.remove("d-block");
+                    userProfileSidebar.classList.add("d-none");
+                } else {
+                    userProfileSidebar.classList.remove("d-none");
+                    userProfileSidebar.classList.add("d-block");
+                }
+            });
+        }
+    );
     window.addEventListener("resize", function () {
-        var userProfileSidebar = document.querySelector(".layout-rightside-col");
+        var userProfileSidebar = document.querySelector(
+            ".layout-rightside-col"
+        );
         if (userProfileSidebar) {
-            Array.from(document.querySelectorAll(".layout-rightside-btn")).forEach(function () {
+            Array.from(
+                document.querySelectorAll(".layout-rightside-btn")
+            ).forEach(function () {
                 if (window.outerWidth < 1699 || window.outerWidth > 3440) {
                     userProfileSidebar.classList.remove("d-block");
                 } else if (window.outerWidth > 1699) {
@@ -323,29 +337,39 @@ if (layoutRightSideBtn) {
             userProfileSidebar.classList.add("d-none");
         }
     });
-    var overlay = document.querySelector('.overlay');
+    var overlay = document.querySelector(".overlay");
     if (overlay) {
-        document.querySelector(".overlay").addEventListener("click", function () {
-            if (document.querySelector(".layout-rightside-col").classList.contains('d-block') == true) {
-                document.querySelector(".layout-rightside-col").classList.remove("d-block");
-            }
-        });
+        document
+            .querySelector(".overlay")
+            .addEventListener("click", function () {
+                if (
+                    document
+                        .querySelector(".layout-rightside-col")
+                        .classList.contains("d-block") == true
+                ) {
+                    document
+                        .querySelector(".layout-rightside-col")
+                        .classList.remove("d-block");
+                }
+            });
     }
 }
 
 window.addEventListener("load", function () {
     var userProfileSidebar = document.querySelector(".layout-rightside-col");
     if (userProfileSidebar) {
-        Array.from(document.querySelectorAll(".layout-rightside-btn")).forEach(function () {
-            if (window.outerWidth < 1699 || window.outerWidth > 3440) {
-                userProfileSidebar.classList.remove("d-block");
-            } else if (window.outerWidth > 1699) {
-                userProfileSidebar.classList.add("d-block");
+        Array.from(document.querySelectorAll(".layout-rightside-btn")).forEach(
+            function () {
+                if (window.outerWidth < 1699 || window.outerWidth > 3440) {
+                    userProfileSidebar.classList.remove("d-block");
+                } else if (window.outerWidth > 1699) {
+                    userProfileSidebar.classList.add("d-block");
+                }
             }
-        });
+        );
     }
 
-    var htmlAttr = document.documentElement
+    var htmlAttr = document.documentElement;
 
     if (htmlAttr.getAttribute("data-layout") == "semibox") {
         if (window.outerWidth > 1699) {
