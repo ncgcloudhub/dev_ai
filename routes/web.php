@@ -81,6 +81,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
     });
 
+    // USER MANAGE
+    Route::prefix('user')->group(function () {
+
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+
+        Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
+    });
 
     // Templates
     Route::prefix('template')->group(function () {
@@ -207,14 +214,7 @@ Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
 
 
-// USER MANAGE
-Route::prefix('user')->group(function () {
 
-    Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
-
-    Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
-
-});
 
 Route::get('/inactive', function () {
     return view('admin.error.auth-404-basic');
