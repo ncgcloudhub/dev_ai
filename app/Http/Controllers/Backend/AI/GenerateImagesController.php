@@ -56,10 +56,6 @@ class GenerateImagesController extends Controller
                 $quality = $request->quality;
             }
 
-            if ($request->style) {
-                $style = $request->style;
-            }
-
             if ($request->image_res) {
                 $size = $request->image_res;
             }
@@ -78,7 +74,7 @@ class GenerateImagesController extends Controller
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
-                    'prompt' => $request->prompt,
+                    'prompt' => $request->prompt . ' and the style should be ' . $request->style,
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,
@@ -96,10 +92,6 @@ class GenerateImagesController extends Controller
 
             if ($request->quality) {
                 $quality = $request->quality;
-            }
-
-            if ($request->style) {
-                $style = $request->style;
             }
 
             if ($request->image_res) {
@@ -120,7 +112,7 @@ class GenerateImagesController extends Controller
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
                     'model' => 'dall-e-3',
-                    'prompt' => $request->prompt,
+                    'prompt' => $request->prompt . ' and the style should be ' . $request->style,
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,
