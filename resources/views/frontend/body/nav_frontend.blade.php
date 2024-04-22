@@ -17,14 +17,15 @@
                     <a class="nav-link fs-15 active" href="{{route('home')}}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="#services">Services</a>
+                    <a class="nav-link fs-15" href="{{route('home')}}#services">Services</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="#features">Features</a>
+                    <a class="nav-link fs-15" href="{{route('home')}}#features">Features</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="#plans">Plans</a>
+                    <a class="nav-link fs-15" href="{{route('home')}}#plans">Plans</a>
                 </li>
+                
                 <li class="nav-item">
                     <a class="nav-link fs-15" href="{{route('ai.image.gallery')}}">AI Image Gallery</a>
                 </li>
