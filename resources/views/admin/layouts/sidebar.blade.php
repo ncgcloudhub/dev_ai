@@ -76,16 +76,13 @@
                                     </li>
                                    
                                 </ul>
-                            </div>
-                            
-                            
+                            </div>     
                         </div>
                     </div>
                 </li>
 
 
                 {{-- Custom Template --}}
-
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#AITools" data-bs-toggle="collapse" role="button"
@@ -108,14 +105,39 @@
                                     </li>
                                    
                                 </ul>
-                            </div>
-                            
-                            
+                            </div> 
                         </div>
                     </div>
                 </li>
 
-              
+
+                  {{-- Prompt Library --}}
+
+                  <li class="nav-item">
+                    <a class="nav-link menu-link" href="#prompt" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-pen"></i> <span >Prompt Library</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="prompt">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('template.category.add')}}" class="nav-link" >Prompt Categories</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('template.add')}}" class="nav-link" >Add Prompt</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('template.manage')}}" class="nav-link" >Manage prompt</a>
+                                    </li>
+                                   
+                                </ul>
+                            </div>     
+                        </div>
+                    </div>
+                </li>
 
 
                 <li class="nav-item">
