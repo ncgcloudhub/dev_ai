@@ -143,8 +143,7 @@
                                  <div class="row g-3 justify-content-center">
                                         <div class="col-xxl-5 col-sm-6">
                                             <div class="search-box">
-                                                <input type="text" class="form-control search" name="prompt" id="prompt"
-                                                    placeholder="Write prompt to generate Image">
+                                                <textarea class="form-control search" name="prompt" id="prompt" placeholder="Write prompt to generate Image"></textarea>
                                                 <i class="ri-search-line search-icon"></i>
                                             </div>
                                         </div>
@@ -235,8 +234,7 @@
                                     <div class="row g-3 justify-content-center">
                                         <div class="col-xxl-5 col-sm-6">
                                             <div class="search-box">
-                                                <input type="text" class="form-control search" name="prompt" id="prompt"
-                                                    placeholder="Write prompt to generate Image">
+                                                <textarea class="form-control search" name="prompt" id="prompt" placeholder="Write prompt to generate Image"></textarea>
                                                 <i class="ri-search-line search-icon"></i>
                                             </div>
                                         </div>
