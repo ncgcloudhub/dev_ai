@@ -37,4 +37,10 @@ class UserManageController extends Controller
         }
     }
 
+    public function UserDetails($id)
+    {
+        $user = User::findOrFail($id);
+        return view('backend.user.user_details', compact('user'));
+    }
+
 }

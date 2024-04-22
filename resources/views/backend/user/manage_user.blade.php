@@ -39,7 +39,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
+                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">

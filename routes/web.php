@@ -214,6 +214,8 @@ Route::prefix('user')->group(function () {
 
     Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
+    Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
+    
 });
 
 Route::get('/inactive', function () {
