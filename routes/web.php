@@ -21,6 +21,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 use App\Http\Controllers\Backend\User\UserManageController;
+use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
@@ -81,6 +82,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
     });
 
+    // USER MANAGE
+    Route::prefix('user')->group(function () {
+
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+
+        Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
+    });
 
     // Templates
     Route::prefix('template')->group(function () {
@@ -92,6 +100,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
 
         Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
+    });
+
+    // Prompt Library
+    Route::prefix('prompt')->group(function () {
+
+        Route::get('/category/add', [PromptLibraryController::class, 'PromptCategoryAdd'])->name('prompt.category.add');
+
+        Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
+
+        // Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
+
+        // Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
     });
 
     // Dalle Manage Image
@@ -205,6 +225,7 @@ Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'
 
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
+
 
 
 // USER MANAGE

@@ -32,8 +32,9 @@
                                 <div class="mt-n4">
                                     <h1 class="display-1 fw-medium">404</h1>
                                     <h3 class="text-uppercase">Sorry, Your Account is Inactive 😭</h3>
-                                    <p class="text-muted mb-4">Please Contact Our Support!</p>
+                                    <p class="text-muted mb-4">Please <a href="{{ route('contact.us')}}">Contact</a> Our Support!</p>
                                     <a href="{{ route('home')}}" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to home</a>
+                                    <a href="{{ route('contact.us')}}" class="btn btn-info"><i class="mdi mdi-contacts me-1"></i>Contact Us</a>
 
                                     <a class="btn btn-danger" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -56,7 +57,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="text-center">
-                                <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> Velzon. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                                <p class="mb-0 text-muted">&copy; <script>document.write(new Date().getFullYear())</script> © {{ $siteSettings->title }}.</p>
                             </div>
                         </div>
                     </div>
