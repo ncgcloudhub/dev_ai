@@ -6,7 +6,7 @@
 @slot('title') Starter  @endslot
 @endcomponent
 
-
+<h1>Inactive</h1>
 
 
 @endsection

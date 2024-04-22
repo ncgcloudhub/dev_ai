@@ -20,9 +20,11 @@ use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
+use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
+use Illuminate\Support\Facades\Redirect;
 
 
 Route::get('/', function () {
@@ -35,37 +37,16 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
+    $url = '';
 
     if ($user->role === 'admin') {
-        $templates_count = Template::count();
-        $custom_templates_count = CustomTemplate::count();
-        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
-        $custom_templates = CustomTemplate::limit(5)->get();
-        $wordCountSum = CustomTemplate::sum('total_word_generated');
-        $totalUsers = User::where('role', 'user')->count();
-        $allUsers = User::where('role', 'user')->orderBy('id', 'desc')->get();
-        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-            ->whereNotNull('country') // Exclude users with NULL country
-            ->groupBy('country')
-            ->get();
-
-        return view('admin.admin_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'allUsers'));
-    } else {
-        $templates_count = Template::count();
-        $chatbot_count = Expert::count();
-        $custom_templates_count = CustomTemplate::where('user_id', $user->id)->count();
-        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
-        $custom_templates = CustomTemplate::where('user_id', $user->id)->limit(5)->get();
-        $images = DalleImageGenerate::where('user_id', $user->id)->orderBy('id', 'desc')->limit(12)->get();
-
-        $totalUsers = User::count();
-        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-            ->whereNotNull('country') // Exclude users with NULL country
-            ->groupBy('country')
-            ->get();
-
-        return view('user.user_dashboard', compact('user', 'templates_count', 'chatbot_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+        $url = '/admin/dashboard';
+    } elseif ($user->role === 'user') {
+        $url = '/user/dashboard';
     }
+
+    // Redirect to the appropriate dashboard route based on user role
+    return Redirect::to($url);
 })->middleware(['auth'])->name('dashboard');
 
 
@@ -113,18 +94,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
     });
 
-
-
     // Dalle Manage Image
     Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 }); //End Admin Middleware
 
-Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 
 // User Middleware
-Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(function () {
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
@@ -154,7 +132,7 @@ Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name
 
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'check.status'])->group(function () {
 
     // Custom Templates
     Route::prefix('custom/template')->group(function () {
@@ -174,13 +152,11 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
 
-    Route::prefix('chat')->group(function () {
+    Route::prefix('chat')->middleware(['check.status'])->group(function () {
 
         // CHAT
         Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add');
         Route::post('/expert/store', [ExpertController::class, 'ExpertStore'])->name('expert.store');
-
-
 
         // TEST CHAT
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
@@ -189,14 +165,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-    Route::prefix('generate')->group(function () {
+    Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
     });
 
 
     //Profile 
-    Route::prefix('profile')->group(function () {
+    Route::prefix('profile')->middleware(['check.status'])->group(function () {
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
     });
@@ -229,3 +205,17 @@ Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'
 
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
+
+
+// USER MANAGE
+Route::prefix('user')->group(function () {
+
+    Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+
+    Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
+
+});
+
+Route::get('/inactive', function () {
+    return view('admin.error.auth-404-basic');
+})->name('inactive');
