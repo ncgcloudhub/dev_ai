@@ -1,4 +1,4 @@
-@extends('layouts.master-without-nav')
+@extends('user.layouts.master-without-nav')
 
 @section('title')
 @lang('translation.Error_404')
@@ -31,9 +31,14 @@
                                 </div>
                                 <div class="mt-n4">
                                     <h1 class="display-1 fw-medium">404</h1>
-                                    <h3 class="text-uppercase">Sorry, Page not Found 😭</h3>
-                                    <p class="text-muted mb-4">The page you are looking for not available!</p>
-                                    <a href="index" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to home</a>
+                                    <h3 class="text-uppercase">Sorry, Your Account is Inactive 😭</h3>
+                                    <p class="text-muted mb-4">Please Contact Our Support!</p>
+                                    <a href="{{ route('home')}}" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to home</a>
+
+                                    <a class="btn btn-danger" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span key="t-logout">@lang('translation.logout')</span></a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
                         </div>
