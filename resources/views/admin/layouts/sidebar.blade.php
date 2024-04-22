@@ -181,6 +181,16 @@
                         <i class="las la-cog"></i> <span >Site Settings</span>
                     </a>
                 </li>
+             
+             {{-- USER --}}
+                <li class="menu-title"><i class="ri-more-fill"></i> <span >Users</span></li>
+               
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('manage.user')}}">
+                        <i class="las la-cog"></i> <span >Manage User</span>
+                    </a>
+                </li>
+            {{-- USER END--}}
 
             </ul>
         </div>
