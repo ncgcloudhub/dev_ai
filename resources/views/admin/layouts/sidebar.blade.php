@@ -124,7 +124,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('template.category.add')}}" class="nav-link" >Prompt Categories</a>
+                                        <a href="{{route('prompt.category.add')}}" class="nav-link" >Prompt Categories</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{route('template.add')}}" class="nav-link" >Add Prompt</a>
