@@ -128,15 +128,15 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                               
                                         @endif
 
-                                        <br><br><br>
+                                       
 
                                         {{-- UI Card Start --}}
-                                        <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1 justify-content-center py-5">
+                                        <div class="row row-cols-xxl-5 row-cols-lg-6 row-cols-1 justify-content-center py-5">
                                             
                                             <div class="col d-flex flex-column">
                                                 <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
                                                     <div>
-                                                        <div class="d-flex mb-4 align-items-center">
+                                                        <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
                                                                 <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning"> Dall-E 3</strong></p>
                                                             </div>
@@ -149,7 +149,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                             <div class="col d-flex flex-column">
                                                 <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
                                                     <div>
-                                                        <div class="d-flex mb-4 align-items-center">
+                                                        <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
                                                                 <p class="text-white mb-0">Generate Free Contents with <br> <strong class="text-warning">GPT-4</strong></p>
                                                             </div>
@@ -162,7 +162,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                             <div class="col d-flex flex-column">
                                                 <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
                                                     <div>
-                                                        <div class="d-flex mb-4 align-items-center">
+                                                        <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
                                                                 <p class="text-white mb-0">Generate E-Cards (Eid Holidays)</p>
                                                             </div>
@@ -175,7 +175,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                             <div class="col d-flex flex-column">
                                                 <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
                                                     <div>
-                                                        <div class="d-flex mb-4 align-items-center">
+                                                        <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
                                                                 <p class="text-white mb-0">Get Eid Quotes</p>
                                                             </div>
