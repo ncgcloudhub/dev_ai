@@ -72,5 +72,9 @@ class PromptLibraryController extends Controller
 
     public function PromptView($slug)
     {
+        // Find the template by slug
+        $prompt_library = PromptLibrary::where('slug', $slug)->firstOrFail();
+
+        return view('backend.prompt_library.prompt_library_view', compact('prompt_library'));
     }
 }
