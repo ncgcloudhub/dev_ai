@@ -109,9 +109,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
 
-        // Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
+        Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
 
-        // Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
+        Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
     });
 
     // Dalle Manage Image
@@ -206,6 +206,12 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
 
+    //Fixed Prompt Library 
+    Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage');
+
+    Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
+
+
 
 
     // EID Card
@@ -236,7 +242,6 @@ Route::prefix('user')->group(function () {
     Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
     Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
-    
 });
 
 Route::get('/inactive', function () {
