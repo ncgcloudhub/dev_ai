@@ -6,7 +6,7 @@
     <div class="position-relative mx-n4 mt-n4">
         <div class="profile-wid-bg profile-setting-img">
             <img src="{{ URL::asset('build/images/profile-bg.jpg') }}" class="profile-wid-img" alt="">
-            <div class="overlay-content">
+            {{-- <div class="overlay-content">
                 <div class="text-end p-3">
                     <div class="p-0 ms-auto rounded-circle profile-photo-edit">
                         <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input">
@@ -15,7 +15,7 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 </div>
 
@@ -24,18 +24,26 @@
             <div class="card mt-n5">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                            <img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
-                                class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
-                            <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                <input id="profile-img-file-input" type="file" class="profile-img-file-input">
-                                <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-camera-fill"></i>
-                                    </span>
-                                </label>
+                        <form method="POST" action="{{ route('update.profile.photo') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="col-lg-12">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                                <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                                    <img src="{{ Auth::user()->photo ? asset('backend/uploads/user/' . Auth::user()->photo) : asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image" width="200" height="200">
+                                    <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                        <input id="profile-img-file-input" name="profile_photo" type="file" class="profile-img-file-input">
+                                        <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                            <span class="avatar-title rounded-circle bg-light text-body">
+                                                <i class="ri-camera-fill"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+                        
                         <h5 class="fs-16 mb-1">{{$user->name}}</h5>
                         <p class="text-muted mb-0">Lead Designer / Developer</p>
                     </div>

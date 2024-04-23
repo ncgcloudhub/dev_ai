@@ -44,7 +44,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-2">
-                                        <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
+                                        <img src="{{ $item->photo ? asset('backend/uploads/user/' . $item->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
                                     </div>
                                     <div class="flex-grow-1">{{$item->email}}</div>
                                 </div>

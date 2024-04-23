@@ -48,4 +48,31 @@ class ProfileEditController extends Controller
   
       }
 
+      public function ProfilePhotoUpdate(Request $request)
+      {
+
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+    
+        if ($request->hasFile('profile_photo')) {
+            
+            // Delete the existing profile photo
+            if ($user && $user->photo) {
+                unlink(public_path('backend/uploads/user/' . $user->photo));
+            }
+    
+            // Upload the new profile photo
+            $photo = $request->file('profile_photo');
+            $photoName = time() . '-' . uniqid() . '.' . $photo->getClientOriginalExtension();
+            $photo->move('backend/uploads/user', $photoName);
+    
+            // Update the user's photo attribute in the database
+            $user->photo = $photoName;
+            $user->save();
+        }
+    
+  
+          return redirect()->back()->with('success', 'Profile Photo Updated Successfully');
+      }
+
 }

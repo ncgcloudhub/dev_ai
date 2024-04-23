@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\Backend\PromptLibraryController;
+use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
@@ -72,6 +73,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add');
 
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
+    });
+
+    // SEO Settings
+    Route::prefix('settings/SEO')->group(function () {
+
+        Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add');
+
+        Route::post('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
     });
 
     // Site Settings
@@ -195,6 +204,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
+        Route::post('/update/photo', [ProfileEditController::class, 'ProfilePhotoUpdate'])->name('update.profile.photo');
     });
 
 
