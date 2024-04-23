@@ -202,6 +202,12 @@
                         <i class="las la-cog"></i> <span >Site Settings</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('seo.settings.add')}}">
+                        <i class="las la-cog"></i> <span >SEO Settings</span>
+                    </a>
+                </li>
              
              {{-- USER --}}
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Users</span></li>
