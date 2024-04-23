@@ -321,21 +321,25 @@
                 <div class="card-body">
                     <div class="row gallery-wrapper">
                         @foreach ($images as $item)
-                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
+                       
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
                                     <a class="image-popup" href="{{ asset($item->image) }}" title="">
                                         <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
                                         <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">{{$item->prompt}}</h5>
+                                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                                         </div>
                                     </a>
+                                   
                                 </div>
-
-                               
+                                <div class="text-center mt-2">
+                                    <a href="{{ asset($item->image) }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> <i data-feather="download"></i></a>
+                                </div>
                             </div>
                         </div>
-                        @endforeach
+                    @endforeach
+                    
                     </div>
             </div>
             </div>
