@@ -110,7 +110,6 @@
                     </div>
                 </li>
 
-
                   {{-- Prompt Library --}}
 
                   <li class="nav-item">
@@ -127,10 +126,10 @@
                                         <a href="{{route('prompt.category.add')}}" class="nav-link" >Prompt Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('template.add')}}" class="nav-link" >Add Prompt</a>
+                                        <a href="{{route('prompt.add')}}" class="nav-link" >Add Prompt</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('template.manage')}}" class="nav-link" >Manage prompt</a>
+                                        <a href="{{route('prompt.manage')}}" class="nav-link" >Manage prompt</a>
                                     </li>
                                    
                                 </ul>
