@@ -27,14 +27,7 @@ User
                     <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
                         <img src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }} @endif"
                             class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
-                        <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                            <input id="profile-img-file-input" type="file" class="profile-img-file-input">
-                            <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                <span class="avatar-title rounded-circle bg-light text-body">
-                                    <i class="ri-camera-fill"></i>
-                                </span>
-                            </label>
-                        </div>
+                      
                     </div>
                     <h5 class="fs-16 mb-1">{{$user->name}}</h5>
                     <p class="text-muted mb-0">{{$user->status}}</p>
@@ -47,46 +40,89 @@ User
             <div class="card-body">
                 <div class="d-flex align-items-center mb-4">
                     <div class="flex-grow-1">
-                        <h5 class="card-title mb-0">Portfolio</h5>
+                        <h5 class="card-title mb-0">User Statistics</h5>
                     </div>
                     
                 </div>
-                <div class="mb-3 d-flex">
-                    <div class="avatar-xs d-block flex-shrink-0 me-3">
-                        <span class="avatar-title rounded-circle fs-16 bg-body text-body">
-                            <i class="ri-github-fill"></i>
-                        </span>
-                    </div>
-                    <input type="email" class="form-control" id="gitUsername" placeholder="Username"
-                        value="@daveadame">
-                </div>
-                <div class="mb-3 d-flex">
-                    <div class="avatar-xs d-block flex-shrink-0 me-3">
-                        <span class="avatar-title rounded-circle fs-16 bg-primary-subtle text-primary">
-                            <i class="ri-global-fill"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" id="websiteInput" placeholder="www.example.com"
-                        value="www.velzon.com">
-                </div>
-                <div class="mb-3 d-flex">
-                    <div class="avatar-xs d-block flex-shrink-0 me-3">
-                        <span class="avatar-title rounded-circle fs-16 bg-success-subtle text-success">
-                            <i class="ri-dribbble-fill"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" id="dribbleName" placeholder="Username"
-                        value="@dave_adame">
-                </div>
-                <div class="d-flex">
-                    <div class="avatar-xs d-block flex-shrink-0 me-3">
-                        <span class="avatar-title rounded-circle fs-16 bg-danger-subtle text-danger">
-                            <i class="ri-pinterest-fill"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control" id="pinterestName" placeholder="Username"
-                        value="Advance Dave">
-                </div>
+
+
+                <div class="col-xl-12">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body bg-success-subtle shadow-lg">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Words Generated</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        {{$user->words_generated}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+
+                <div class="col-xl-12">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body bg-danger-subtle shadow-lg">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Words Left</p>
+                                </div>
+                            <div class="flex-shrink-0">
+                                <h5 class="text-danger fs-14 mb-0">
+                                    {{$user->words_left}}
+                                </h5>
+                            </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-12">
+                    <!-- card -->
+                    <div class="card card-animate bg-success-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Images Generated</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        {{$user->images_generated}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+                
+                <div class="col-xl-12">
+                    <!-- card -->
+                    <div class="card card-animate bg-danger-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Images Left</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->images_left}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
             </div>
         </div>
         <!--end card-->
@@ -112,7 +148,7 @@ User
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="firstnameInput" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="firstnameInput"
+                                        <input type="text" class="form-control" id="firstnameInput" disabled
                                             value="{{$user->name}}">
                                     </div>
                                 </div>
@@ -121,7 +157,7 @@ User
                                     <div class="mb-3">
                                         <label class="form-label">User
                                             Name</label>
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control" disabled
                                             value="{{$user->username}}">
                                     </div>
                                 </div>
@@ -130,7 +166,7 @@ User
                                     <div class="mb-3">
                                         <label for="phonenumberInput" class="form-label">Phone
                                             Number</label>
-                                        <input type="number" class="form-control" id="phonenumberInput"
+                                        <input type="text" class="form-control" id="phonenumberInput" disabled
                                            value="{{$user->phone}}">
                                     </div>
                                 </div>
@@ -139,96 +175,31 @@ User
                                     <div class="mb-3">
                                         <label for="emailInput" class="form-label">Email
                                             Address</label>
-                                        <input type="email" class="form-control" id="emailInput"
+                                        <input type="email" class="form-control" id="emailInput" disabled
                                             placeholder="Enter your email" value="{{$user->email}}">
                                     </div>
                                 </div>
                                 <!--end col-->
-                                <div class="col-lg-12">
+                               
+                               
+                               
+                                <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="JoiningdatInput" class="form-label">Registered
-                                            Date</label>
-                                            <input type="text" class="form-control" data-provider="flatpickr"
-                                            id="JoiningdatInput" data-date-format="d M, Y"
-                                            data-default-date="{{ $user->created_at->format('d M, Y') }}"
-                                            placeholder="Select date" />
-                                     
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="mb-3">
-                                        <label for="skillsInput" class="form-label">Skills</label>
-                                        <select class="form-control" name="skillsInput" data-choices
-                                            data-choices-removetext-unique-true Item multiple id="skillsInput">
-                                            <option value="illustrator">Illustrator</option>
-                                            <option value="photoshop">Photoshop</option>
-                                            <option value="css">CSS</option>
-                                            <option value="html">HTML</option>
-                                            <option value="javascript" selected>Javascript</option>
-                                            <option value="python">Python</option>
-                                            <option value="php">PHP</option>
-                                        </select>
+                                        <label for="cityInput" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="cityInput" placeholder="City" disabled
+                                           value="{{$user->address}}" />
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="designationInput" class="form-label">Designation</label>
-                                        <input type="text" class="form-control" id="designationInput"
-                                            placeholder="Designation" value="Lead Designer / Developer">
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="websiteInput1" class="form-label">Website</label>
-                                        <input type="text" class="form-control" id="websiteInput1"
-                                            placeholder="www.example.com" value="www.velzon.com" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label for="cityInput" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="cityInput" placeholder="City"
-                                           value="{{$user->country}}" />
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-4">
                                     <div class="mb-3">
                                         <label for="countryInput" class="form-label">Country</label>
-                                        <input type="text" class="form-control" id="countryInput"
-                                            placeholder="Country" value="United States" />
+                                        <input type="text" class="form-control" id="countryInput" disabled
+                                            placeholder="Country"  value="{{$user->country}}" />
                                     </div>
                                 </div>
                                 <!--end col-->
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
-                                        <label for="zipcodeInput" class="form-label">Zip
-                                            Code</label>
-                                        <input type="text" class="form-control" minlength="5" maxlength="6"
-                                            id="zipcodeInput" placeholder="Enter zipcode" value="90011">
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="mb-3 pb-2">
-                                        <label for="exampleFormControlTextarea"
-                                            class="form-label">Description</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea" placeholder="Enter your description"
-                                            rows="3">Hi I'm Anna Adame,It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</textarea>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="hstack gap-2 justify-content-end">
-                                        <button type="submit" class="btn btn-primary">Updates</button>
-                                        <button type="button" class="btn btn-soft-secondary">Cancel</button>
-                                    </div>
-                                </div>
-                                <!--end col-->
+
                             </div>
                             <!--end row-->
                         </form>
