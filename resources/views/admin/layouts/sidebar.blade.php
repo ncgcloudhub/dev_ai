@@ -219,6 +219,17 @@
                 </li>
             {{-- USER END--}}
 
+            {{-- SUBSCRIPTION --}}
+                <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscription</span></li>
+               
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('manage.pricing')}}">
+                        <i class="las la-cog"></i> <span >Manage Pricing</span>
+                    </a>
+                </li>
+
+            {{-- SUBSCRIPTION--}}
+
             </ul>
         </div>
         <!-- Sidebar -->
