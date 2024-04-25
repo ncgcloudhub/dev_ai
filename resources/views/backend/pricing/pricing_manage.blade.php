@@ -42,387 +42,196 @@
     <!--end row-->
 
     <div class="row">
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Starter</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$19 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$228</del></small> $171 <small
-                                    class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-
-                    <p class="text-muted">The perfect way to get started and get used to our tools.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>3</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>299</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>5</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--end col-->
-
-        {{-- <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Professional</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$29 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$348</del></small> $261 <small
-                                    class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-                    <p class="text-muted">Excellent for scalling teams to build culture. Special plan for professional
-                        business.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>8</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>449</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>7</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-primary w-100">Change Plan</a>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        <!--end col-->
-
-        {{-- <div class="col-xxl-3 col-lg-6">
+        @foreach ($pricingPlans as $item)
+            <div class="col-xxl-3 col-lg-6">
             <div class="card pricing-box ribbon-box right">
                 <div class="card-body bg-light m-2 p-4">
-                    <div class="ribbon-two ribbon-two-success"><span>Popular</span></div>
+                    @if ($item->popular === 'yes')
+                        <div class="ribbon-two ribbon-two-success"><span>Popular</span></div>
+                    @else
+                    @endif
+                    
                     <div class="d-flex align-items-center mb-3">
                         <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Enterprise</h5>
+                            <h5 class="mb-0 fw-semibold">{{$item->title}}</h5>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="month mb-0">$39 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$468</del></small> $351 <small
-                                    class="fs-13 text-muted">/Year</small></h2>
+                            <h2 class="annual month mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2>
                         </div>
                     </div>
-                    <p class="text-muted">This plan is for those who have a team alredy and running a large business.
-                    </p>
+
+                    <p class="text-muted">{{$item->description}}</p>
                     <ul class="list-unstyled vstack gap-3">
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->tokens ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->tokens ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>15</b> Projects
+                                    <b>{{$item->tokens}}</b> Tokens
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->{'71_ai_templates'} ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->{'71_ai_templates'} ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>Unlimited</b> Customers
+                                    <b>71</b> Ai Templates
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->ai_chat ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->ai_chat ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    Scalable Bandwidth
+                                    Ai Chat
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->ai_code ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->ai_code ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>12</b> FTP Login
+                                     Ai Code
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->text_to_speech ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->text_to_speech ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>24/7</b> Support
+                                    Text to Speech
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->custom_templates ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->custom_templates ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>35GB</b> Storage
+                                    Custom Templates
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="d-flex">
-                                <div class="flex-shrink-0 text-danger me-1">
-                                    <i class="ri-close-circle-fill fs-15 align-middle"></i>
+                                <div class="flex-shrink-0 {{ $item->ai_blog_wizards ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->ai_blog_wizards ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    Domain
+                                    Ai Blog Wizards
                                 </div>
                             </div>
                         </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->images ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->images ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <b>{{$item->images}}</b> Images
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->ai_images ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->ai_images ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    Ai Images
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->stable_diffusion ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->stable_diffusion ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    Stable Diffusion
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->speech_to_text ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->speech_to_text ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <b>{{$item->speech_to_text}}</b> Speech to Text
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->live_support ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->live_support ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    Live Support
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->free_support ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->free_support ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    Free Support
+                                </div>
+                            </div>
+                        </li>
+
+                        @if ($item->additional_features)
+                            @php
+                                $features = explode(',', $item->additional_features);
+                        @endphp
+                        @foreach ($features as $feature)
+                                <li>
+                                   <div class="d-flex">
+                                <div class="flex-shrink-0 text-success me-1">
+                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                   {{ $feature}}
+                                </div>
+                            </div>
+                                </li>
+                        @endforeach
+                        @endif
+
+                    <li>
+                        @if ($item->active === 'active')
+                        <span class="badge border border-success text-success fs-6">{{$item->active}}</span>
+                        @else
+                        <span class="badge border border-danger text-danger fs-6">{{$item->active}}</span>
+                        @endif
+                       
+                    </li>
+
                     </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-primary w-100">Change Plan</a>
+                    <div class="d-flex">
+                        <a href="javascript:void(0);" class="btn btn-success disabled w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
+                        <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
                     </div>
+
                 </div>
             </div>
-        </div> --}}
-        <!--end col-->
-{{-- 
-        <div class="col-xxl-3 col-lg-6">
-            <div class="card pricing-box">
-                <div class="card-body bg-light m-2 p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">Unlimited</h5>
-                        </div>
-                        <div class="ms-auto">
-                            <h2 class="month mb-0">$49 <small class="fs-13 text-muted">/Month</small></h2>
-                            <h2 class="annual mb-0"><small class="fs-16"><del>$588</del></small> $441 <small
-                                    class="fs-13 text-muted">/Year</small></h2>
-                        </div>
-                    </div>
-                    <p class="text-muted">For most businesses that want to optimize web queries.</p>
-                    <ul class="list-unstyled vstack gap-3">
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Projects
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Customers
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Scalable Bandwidth
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> FTP Login
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>24/7</b> Support
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <b>Unlimited</b> Storage
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 text-success me-1">
-                                    <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    Domain
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="mt-3 pt-2">
-                        <a href="javascript:void(0);" class="btn btn-primary w-100">Change Plan</a>
-                    </div>
-                </div>
             </div>
-        </div> --}}
-        <!--end col-->
+        @endforeach
     </div>
-    <!--end row-->
+    
 
 @endsection
 @section('script')
