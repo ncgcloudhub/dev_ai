@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.8",
+        "league/flysystem-azure-blob-storage": "^3.25",
         "openai-php/client": "^0.8.4",
         "openai-php/laravel": "^0.8.1"
     },

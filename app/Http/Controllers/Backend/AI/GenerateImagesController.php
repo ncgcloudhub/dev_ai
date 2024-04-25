@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 class GenerateImagesController extends Controller
 {
@@ -34,6 +37,7 @@ class GenerateImagesController extends Controller
         return view('backend.image_generate.generate_image', compact('images', 'get_user'));
         // }
     }
+
 
 
     public function generateImage(Request $request)
@@ -130,10 +134,16 @@ class GenerateImagesController extends Controller
                 $responseData = $response->json();
 
                 foreach ($responseData['data'] as $imageData) {
-                    // Save image to directory
+                    // Save image to Azure Blob Storage
+                    $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+
                     $imageName = time() . '-' . uniqid() . '.png'; // Or whatever extension you're using
-                    $imagePath = 'backend/uploads/dalle_images/' . $imageName;
-                    file_put_contents($imagePath, file_get_contents($imageData['url']));
+                    $imageDataBinary = file_get_contents($imageData['url']);
+
+                    $containerName = config('filesystems.disks.azure.container');
+                    $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinary, new CreateBlockBlobOptions());
+
+                    $imagePath = $imageName;
 
                     // Save image information to database
                     $imageModel = new ModelsDalleImageGenerate;
@@ -145,7 +155,6 @@ class GenerateImagesController extends Controller
                     $imageModel->save();
                 }
 
-
                 // Image Increment
                 User::where('id', $id)->update([
                     'images_generated' => DB::raw('images_generated + ' . $n),
@@ -155,10 +164,8 @@ class GenerateImagesController extends Controller
                 $newImagesLeft = Auth::user()->images_left - $n;
                 // Add images_left to the $responseData array
                 $responseData['images_left'] = $newImagesLeft;
-                // $imageURL = $responseData['data'][0]['url'];
-                // return response()->json(['imageURL' => $imageURL]);
+
                 return  $responseData;
-                // return view('backend.image_generate.generate_image', ['imageURL' => $imageURL]);
             } else {
                 return response()->json(['error' => 'Failed to generate image'], 500);
             }
