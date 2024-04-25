@@ -190,7 +190,7 @@
 <div class="text-end">
     @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
         <!-- Add the Generate Image button -->
-        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Form</a>
+        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Now</a>
     @endif
 </div>
 
