@@ -30,12 +30,12 @@ class GenerateImagesController extends Controller
             $images_count = $get_user->images_generated;
         }
 
-        // if ($images_count <= 0) {
-        //     return redirect()->route('all.package');
-        // } else {
+        // Generate Azure Blob Storage URL for each image with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
 
         return view('backend.image_generate.generate_image', compact('images', 'get_user'));
-        // }
     }
 
 
