@@ -265,3 +265,5 @@ Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->na
 
 Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
 
+Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
+
