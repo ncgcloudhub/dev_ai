@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\AI\TemplateController;
 use App\Http\Controllers\Backend\AI\AIChatController;
 use App\Http\Controllers\Backend\AI\ExpertController;
 use App\Http\Controllers\Backend\AI\GenerateImagesController;
+use App\Http\Controllers\Backend\Pricing\PricingController;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Backend\Settings\AISettingsController;
@@ -257,3 +258,10 @@ Route::prefix('user')->group(function () {
 Route::get('/inactive', function () {
     return view('admin.error.auth-404-basic');
 })->name('inactive');
+
+
+// Pricing
+Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
+
+Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
+
