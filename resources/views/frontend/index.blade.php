@@ -306,8 +306,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             <div class="swiper-wrapper">
                                 @foreach ($images_slider as $item)
                                 <div class="swiper-slide">
-                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                    <a class="image-popup" href="{{ $item->image_url }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
                                     </a>
                                 </div>
                                 @endforeach
@@ -675,8 +675,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         <div class="element-item col-xxl-3 col-xl-4 col-sm-6 photography" data-category="photography">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                    <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image_url) }}" alt="" />
                                         <div class="gallery-overlay">
                                             <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                         </div>
@@ -686,7 +686,6 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                 <div class="box-content">
                                     <div class="d-flex align-items-center mt-1">
                                         <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
-                                        
                                     </div>
                                 </div>
                             </div>
