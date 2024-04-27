@@ -129,40 +129,59 @@ class GenerateImagesController extends Controller
         // DAll-e 3 End
 
 
-        if ($response !== null) { // Check if $response is not null before using it
+        if ($response !== null) {
             if ($response->successful()) {
                 $responseData = $response->json();
 
                 foreach ($responseData['data'] as $imageData) {
-                    // Save image to Azure Blob Storage
-                    $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-
-                    $imageName = time() . '-' . uniqid() . '.png'; // Or whatever extension you're using
                     $imageDataBinary = file_get_contents($imageData['url']);
 
+                    // Create image from blob
+                    $sourceImage = imagecreatefromstring($imageDataBinary);
+
+                    // Get image dimensions
+                    $sourceWidth = imagesx($sourceImage);
+                    $sourceHeight = imagesy($sourceImage);
+
+                    // Calculate new dimensions
+                    $targetWidth = $sourceWidth;  // Keep original width
+                    $targetHeight = $sourceHeight; // Keep original height
+
+                    // Create new image with the new dimensions
+                    $targetImage = imagecreatetruecolor($targetWidth, $targetHeight);
+
+                    // Resize and compress the image
+                    imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+                    ob_start(); // Turn on output buffering
+                    imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
+                    $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
+                    ob_end_clean(); // Turn off output buffering
+
+                    // Save the compressed image to Azure Blob Storage
+                    $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+
+                    $imageName = time() . '-' . uniqid() . '.jpg';
                     $containerName = config('filesystems.disks.azure.container');
-                    $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinary, new CreateBlockBlobOptions());
+                    $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
 
                     $imagePath = $imageName;
 
                     // Save image information to database
                     $imageModel = new ModelsDalleImageGenerate;
                     $imageModel->image = $imagePath;
-                    $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
-                    $imageModel->status = 'inactive'; // Set the status as per your requirements
-                    $imageModel->prompt = $request->prompt; // Set the prompt if needed
-                    $imageModel->resolution = $size; // Set the resolution if needed
+                    $imageModel->user_id = auth()->user()->id;
+                    $imageModel->status = 'inactive';
+                    $imageModel->prompt = $request->prompt;
+                    $imageModel->resolution = $size;
                     $imageModel->save();
                 }
 
-                // Image Increment
                 User::where('id', $id)->update([
                     'images_generated' => DB::raw('images_generated + ' . $n),
                     'images_left' => DB::raw('images_left - ' . $n),
                 ]);
 
                 $newImagesLeft = Auth::user()->images_left - $n;
-                // Add images_left to the $responseData array
                 $responseData['images_left'] = $newImagesLeft;
 
                 return  $responseData;
@@ -173,8 +192,6 @@ class GenerateImagesController extends Controller
             return response()->json(['error' => 'No condition met'], 500);
         }
     }
-
-
 
 
     // Admin Manage Dalle Image
