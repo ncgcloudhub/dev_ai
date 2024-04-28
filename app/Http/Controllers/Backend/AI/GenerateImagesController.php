@@ -198,6 +198,12 @@ class GenerateImagesController extends Controller
     public function DalleImageManageAdmin()
     {
         $images = ModelsDalleImageGenerate::latest()->get();
+
+        // Generate Azure Blob Storage URL for each image with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
         return view('backend.image_generate.manage_admin_dalle_image', compact('images'));
     }
 

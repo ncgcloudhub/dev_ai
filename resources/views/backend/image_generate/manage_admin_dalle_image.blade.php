@@ -36,9 +36,9 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a class="image-popup" href="{{ asset($item->image) }}" title="">
+                                <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
                                     <div class="d-flex align-items-center fw-medium">
-                                        <img src="{{ asset($item->image) }}" alt="" class="avatar-xxs me-2">
+                                        <img src="{{ asset($item->image_url) }}" alt="" class="avatar-xxs me-2">
                                     </div>
                                 </a>
                             </td>
