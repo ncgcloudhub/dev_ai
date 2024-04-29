@@ -187,13 +187,12 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="build/libs/list.js/list.js.min.js"></script>
-        <script src="build/libs/list.pagination.js/list.pagination.js.min.js"></script>
+<script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 
-        <!--ecommerce-customer init js -->
-        <script src="build/js/pages/ecommerce-order.init.js"></script>
-
-
+<!--ecommerce-customer init js -->
+<script src="{{ URL::asset('build/js/pages/ecommerce-order.init.js') }}"></script>
+ 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 

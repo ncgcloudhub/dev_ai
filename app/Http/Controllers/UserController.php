@@ -29,6 +29,11 @@ class UserController extends Controller
             ->groupBy('country')
             ->get();
 
+        // Generate Azure Blob Storage URL for each image with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
         // dd($templates_count);
         return view('user.user_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'chatbot_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
     }
