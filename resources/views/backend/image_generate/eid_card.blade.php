@@ -2,6 +2,9 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+
+    <!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -192,6 +195,30 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Select2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#holidays').select2({
+            placeholder: 'Select Holiday',
+            allowClear: true
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#card_select').select2({
+            placeholder: 'Select Card Style',
+            allowClear: true
+        });
+    });
+</script>
+
 
 <script>
     $(document).ready(function() {
