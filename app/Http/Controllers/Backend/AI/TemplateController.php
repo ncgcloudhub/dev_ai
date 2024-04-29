@@ -113,14 +113,14 @@ class TemplateController extends Controller
         return redirect()->back()->with($notification);
     }
 
-// Generate Using Open AI
-  public function templategenerate(Request $input)
-	{
+    // Generate Using Open AI
+    public function templategenerate(Request $input)
+    {
         $template_id = $input->template_id;
         $setting = AISettings::find(1);
         $template = Template::find($template_id);
         $user = Auth::user();
-       
+
 
         $language = 'English';
         $max_result_length_value = 100;
@@ -177,7 +177,7 @@ class TemplateController extends Controller
         } else {
             $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
         }
-        
+
 
         foreach ($input->all() as $name => $inpVal) {
             if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
@@ -194,25 +194,25 @@ class TemplateController extends Controller
                     return $data;
                 }
             }
-        } 
-       
-		$result = $client->completions()->create([
-			"model" => $setting->openaimodel,
-			"temperature" => floatval($temperature_value),
-			"top_p" => floatval($top_p_value),
-			"frequency_penalty" => floatval($frequency_penalty_value),
-			"presence_penalty" => floatval($presence_penalty_value),
-			'max_tokens' => $max_result_length_value,
-			'prompt' => $prompt,
-		]);
-	
-		$content = trim($result['choices'][0]['text']);
+        }
+
+        $result = $client->completions()->create([
+            "model" => $setting->openaimodel,
+            "temperature" => floatval($temperature_value),
+            "top_p" => floatval($top_p_value),
+            "frequency_penalty" => floatval($frequency_penalty_value),
+            "presence_penalty" => floatval($presence_penalty_value),
+            'max_tokens' => $max_result_length_value,
+            'prompt' => $prompt,
+        ]);
+
+        $content = trim($result['choices'][0]['text']);
         $num_words = str_word_count($content);
 
-        if($user->words_left <= 0){
+        if ($user->words_left <= 0) {
             $data = 0;
             return $data;
-        }else{
+        } else {
             // Words Increment
             User::where('id', $user->id)->update([
                 'words_generated' => DB::raw('words_generated + ' . $num_words),
@@ -226,9 +226,9 @@ class TemplateController extends Controller
             return $content;
         }
 
-		// return view('backend.template.template_view', compact('title', 'content'));
-		
-	}
+        // return view('backend.template.template_view', compact('title', 'content'));
+
+    }
 
 
 
@@ -237,8 +237,16 @@ class TemplateController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
+
+
     public function callbackHandel()
     {
+        // Check if an error occurred during the authentication process
+        if (request()->has('error') && request()->error == 'access_denied') {
+            // Handle the error gracefully, such as redirecting back to the login page
+            return redirect('/login')->with('error', 'Google authentication was canceled.');
+        }
+
         // Get user data from Google
         $googleUser = Socialite::driver('google')->user();
 
@@ -267,6 +275,7 @@ class TemplateController extends Controller
         // Redirect to dashboard or any other page
         return redirect('/user/dashboard');
     }
+
 
 
 
@@ -306,6 +315,4 @@ class TemplateController extends Controller
         // Redirect to dashboard or any other page
         return redirect('/user/dashboard');
     }
-
-
 }
