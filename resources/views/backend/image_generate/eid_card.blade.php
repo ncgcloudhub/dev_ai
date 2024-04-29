@@ -22,7 +22,7 @@
 
     <div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
         <div class="card-header align-items-center d-flex">
-            <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
+            <h4 class="card-title mb-0 flex-grow-1">Popular Holiday Card</h4>
              <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
             Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
             </button>
@@ -51,28 +51,86 @@
                                 <div class="col-2 mb-3">
                                     <label for="card_style" class="form-label">Card Style</label>
                                     <select name="card_select" class="form-control" id="card_select">
-                                        <option disabled selected="">Select Card Style</option>
+                                        <option disabled selected>Select Card Style</option>
                                         <option value="Family">Family</option>
-                                        <option value="Freinds">Freinds</option>
+                                        <option value="Friends">Friends</option>
                                         <option value="Siblings">Siblings</option>
                                         <option value="Relatives">Relatives</option>
                                         <option value="Colleague">Colleague</option>
-                                        <option value="Co-Operate">Co-Operate</option>
-                                        <option value="Lover">Lover</option>
+                                        <option value="Co-Worker">Co-Worker</option>
+                                        <option value="Boss">Boss</option>
+                                        <option value="Teacher">Teacher</option>
+                                        <option value="Mentor">Mentor</option>
+                                        <option value="Neighbor">Neighbor</option>
+                                        <option value="Acquaintance">Acquaintance</option>
+                                        <option value="Coach">Coach</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Client">Client</option>
+                                        <option value="Customer">Customer</option>
+                                        <option value="Partner">Partner</option>
+                                        <option value="Spouse">Spouse</option>
+                                        <option value="Boyfriend">Boyfriend</option>
+                                        <option value="Girlfriend">Girlfriend</option>
+                                        <option value="Fiancé">Fiancé</option>
+                                        <option value="Husband">Husband</option>
+                                        <option value="Wife">Wife</option>
+                                        <option value="Father">Father</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Brother">Brother</option>
+                                        <option value="Sister">Sister</option>
+                                        <option value="Grandparent">Grandparent</option>
+                                        <option value="Grandchild">Grandchild</option>
+                                        <option value="Aunt">Aunt</option>
+                                        <option value="Uncle">Uncle</option>
+                                        <option value="Cousin">Cousin</option>
+                                        <option value="Nephew">Nephew</option>
+                                        <option value="Niece">Niece</option>
+                                        <option value="In-Law">In-Law</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
+                                
+
                                 <div class="col-3 mb-3">
-                                    <label for="eid_text" class="form-label">Eid Text</label>
-                                    <select name="eid_text" class="form-control" id="eid_text">
-                                        <option disabled selected="">Exact Word in Eid Card</option>
-                                        <option value="Eid Day">Eid Day</option>
-                                        <option value="Eid Mubarak">Eid Mubarak</option>
-                                        <option value="Eid Holiday">Eid Holiday</option>
-                                        <option value="Eid-Ul-Fitr">Eid-Ul-Fitr</option>
+                                    <label for="holidays" class="form-label">Holiday Name</label>
+                                    <select name="holidays" class="form-control" id="holidays">
+                                        <option disabled selected="">Select Holiday</option>
+                                        <optgroup label="Bangladesh">
+                                            <option value="Independence Day">Independence Day</option>
+                                            <option value="Victory Day">Victory Day</option>
+                                            <option value="Eid-ul-Fitr">Eid-ul-Fitr</option>
+                                            <option value="Eid-ul-Adha">Eid-ul-Adha</option>
+                                            <option value="Language Martyrs' Day">Language Martyrs' Day</option>
+                                            <option value="Bangla New Year">Bangla New Year</option>
+                                            <option value="National Mourning Day">National Mourning Day</option>
+                                            <option value="Shaheed Day">Shaheed Day</option>
+                                            <option value="Bengali Language Day">Bengali Language Day</option>
+                                            <option value="Shadhinota Dibosh">Shadhinota Dibosh</option>
+                                        </optgroup>
+                                        <optgroup label="USA">
+                                            <option value="New Year's Day">New Year's Day</option>
+                                            <option value="Memorial Day">Memorial Day</option>
+                                            <option value="Independence Day">Independence Day</option>
+                                            <option value="Labor Day">Labor Day</option>
+                                            <option value="Thanksgiving Day">Thanksgiving Day</option>
+                                            <option value="Christmas Day">Christmas Day</option>
+                                            <option value="New Year's Eve">New Year's Eve</option>
+                                            <option value="Easter Sunday">Easter Sunday</option>
+                                            <option value="Good Friday">Good Friday</option>
+                                            <option value="Mother's Day">Mother's Day</option>
+                                            <option value="Father's Day">Father's Day</option>
+                                            <option value="Halloween">Halloween</option>
+                                            <option value="Veterans Day">Veterans Day</option>
+                                            <option value="Black Friday">Black Friday</option>
+                                            <option value="Cyber Monday">Cyber Monday</option>
+                                           
+                                        </optgroup>
                                     </select>
                                 </div>
+                                
+                                
                                 <div class="col-md-3 mb-2 d-flex align-items-end">
-                                    <button class="btn btn-rounded btn-primary mb-2">Create E-Card</button>
+                                    <button class="btn btn-rounded btn-primary mb-2">Create Card</button>
                                 </div>
                             </div><!-- end row -->
                             <div id="error-msg" style="color: red;"></div>

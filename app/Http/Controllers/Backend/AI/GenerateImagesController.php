@@ -262,7 +262,7 @@ class GenerateImagesController extends Controller
         $imagesLeft = Auth::user()->images_left;
 
         $card_style = $request->card_select;
-        $eid_text = $request->eid_text;
+        $holidays = $request->holidays;
         $from = $request->from;
         $to = $request->to;
 
@@ -270,7 +270,8 @@ class GenerateImagesController extends Controller
         $size = '1024x1024';
         $style = 'vivid';
         $quality = 'hd';
-        $prompt = 'Greeting eid card with exact word ' . $eid_text . ', ' . $card_style . ' style. From: ' . $from . ', To: ' . $to . '.';
+        $prompt = 'Create a holiday card for ' . $holidays . ' with a ' . $card_style . ' style. From: ' . $from . ', To: ' . $to . '.';
+
         $n = 1;
 
         $response = null;
