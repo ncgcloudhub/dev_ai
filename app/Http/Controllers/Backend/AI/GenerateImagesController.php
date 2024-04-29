@@ -236,6 +236,11 @@ class GenerateImagesController extends Controller
         $user_id = Auth::user()->id;
         $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival', 'yes')->get();
 
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+
         $check_user = Auth::user()->role;
 
         if ($check_user == 'admin') {
@@ -294,15 +299,42 @@ class GenerateImagesController extends Controller
         // DAll-e 3 End
 
 
-        if ($response !== null) { // Check if $response is not null before using it
+        if ($response !== null) {
             if ($response->successful()) {
                 $responseData = $response->json();
 
                 foreach ($responseData['data'] as $imageData) {
-                    // Save image to directory
-                    $imageName = time() . '-' . uniqid() . '.png'; // Or whatever extension you're using
-                    $imagePath = 'backend/uploads/dalle_images/' . $imageName;
-                    file_put_contents($imagePath, file_get_contents($imageData['url']));
+                    $imageDataBinary = file_get_contents($imageData['url']);
+
+                    // Create image from blob
+                    $sourceImage = imagecreatefromstring($imageDataBinary);
+
+                    // Get image dimensions
+                    $sourceWidth = imagesx($sourceImage);
+                    $sourceHeight = imagesy($sourceImage);
+
+                    // Calculate new dimensions
+                    $targetWidth = $sourceWidth;  // Keep original width
+                    $targetHeight = $sourceHeight; // Keep original height
+
+                    // Create new image with the new dimensions
+                    $targetImage = imagecreatetruecolor($targetWidth, $targetHeight);
+
+                    // Resize and compress the image
+                    imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+                    ob_start(); // Turn on output buffering
+                    imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
+                    $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
+                    ob_end_clean(); // Turn off output buffering
+
+                    // Save the compressed image to Azure Blob Storage
+                    $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+
+                    $imageName = time() . '-' . uniqid() . '.jpg';
+                    $containerName = config('filesystems.disks.azure.container');
+                    $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
+
+                    $imagePath = $imageName;
 
                     // Save image information to database
                     $imageModel = new ModelsDalleImageGenerate;
@@ -315,14 +347,12 @@ class GenerateImagesController extends Controller
                     $imageModel->save();
                 }
 
-                // Image Increment
                 User::where('id', $id)->update([
                     'images_generated' => DB::raw('images_generated + ' . $n),
                     'images_left' => DB::raw('images_left - ' . $n),
                 ]);
 
                 $newImagesLeft = Auth::user()->images_left - $n;
-                // Add images_left to the $responseData array
                 $responseData['images_left'] = $newImagesLeft;
 
                 return  $responseData;
