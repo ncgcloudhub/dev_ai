@@ -267,3 +267,6 @@ Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->n
 
 Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
 
+Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+
+Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
