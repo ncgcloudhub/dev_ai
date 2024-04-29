@@ -24,7 +24,7 @@
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Popular Eid Card</h4>
              <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-                                Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+            Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
             </button>
         </div><!-- end card header -->
     
@@ -36,7 +36,19 @@
                         <form  action="{{route('generate.eid.card')}}" method="post">
                             @csrf
                             <div class="row">
-                                <div class="col mb-3">
+                                <div class="col-2 mb-3">
+                                    <label for="from" class="form-label">From</label>
+                                    <input name="from" id="from" type="text" class="form-control">
+                                   
+                                </div>
+                                
+                                <div class="col-2 mb-3">
+                                    <label for="to" class="form-label">To</label>
+                                    <input name="to" id="to" type="text" class="form-control">
+                                   
+                                </div>
+                               
+                                <div class="col-2 mb-3">
                                     <label for="card_style" class="form-label">Card Style</label>
                                     <select name="card_select" class="form-control" id="card_select">
                                         <option disabled selected="">Select Card Style</option>
@@ -49,7 +61,7 @@
                                         <option value="Lover">Lover</option>
                                     </select>
                                 </div>
-                                <div class="col mb-3">
+                                <div class="col-3 mb-3">
                                     <label for="eid_text" class="form-label">Eid Text</label>
                                     <select name="eid_text" class="form-control" id="eid_text">
                                         <option disabled selected="">Exact Word in Eid Card</option>
@@ -63,7 +75,7 @@
                                     <button class="btn btn-rounded btn-primary mb-2">Create E-Card</button>
                                 </div>
                             </div><!-- end row -->
-                            
+                            <div id="error-msg" style="color: red;"></div>
                         </form>
     
                         </div><!-- end card -->
@@ -187,6 +199,29 @@ $(document).ready(function() {
                 }
             });
         });
+    });
+</script>
+
+<script>
+    // Function to validate input length
+    function validateInput(inputId) {
+        var input = document.getElementById(inputId);
+        var inputValue = input.value;
+        if (inputValue.length > 4) {
+            document.getElementById("error-msg").innerText = "Input should be up to 4 characters.";
+            input.value = inputValue.substring(0, 4); // Truncate input to 4 characters
+        } else {
+            document.getElementById("error-msg").innerText = ""; // Clear error message
+        }
+    }
+
+    // Add event listeners to both input fields
+    document.getElementById("from").addEventListener("input", function() {
+        validateInput("from");
+    });
+
+    document.getElementById("to").addEventListener("input", function() {
+        validateInput("to");
     });
 </script>
 

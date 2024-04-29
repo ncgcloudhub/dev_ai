@@ -263,12 +263,14 @@ class GenerateImagesController extends Controller
 
         $card_style = $request->card_select;
         $eid_text = $request->eid_text;
+        $from = $request->from;
+        $to = $request->to;
 
         $apiKey = config('app.openai_api_key');
         $size = '1024x1024';
         $style = 'vivid';
         $quality = 'hd';
-        $prompt = 'Greeting eid card with exact word ' . $eid_text . ', ' . $card_style . ' style.';
+        $prompt = 'Greeting eid card with exact word ' . $eid_text . ', ' . $card_style . ' style. From: ' . $from . ', To: ' . $to . '.';
         $n = 1;
 
         $response = null;
