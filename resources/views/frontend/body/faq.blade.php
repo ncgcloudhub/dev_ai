@@ -30,69 +30,23 @@
                         <h5 class="mb-0 fw-semibold">General Questions</h5>
                     </div>
                 </div>
-                <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box"
-                    id="genques-accordion">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="genques-headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#genques-collapseOne" aria-expanded="true"
-                                aria-controls="genques-collapseOne">
-                                How does your AI content generation service work?
-                            </button>
-                        </h2>
-                        <div id="genques-collapseOne" class="accordion-collapse collapse show"
-                            aria-labelledby="genques-headingOne" data-bs-parent="#genques-accordion">
-                            <div class="accordion-body ff-secondary">
-                                Our AI content generation service utilizes the OpenAI API to produce high-quality, customized content based on our ready-made templates. Users can easily input their requirements and receive AI-generated content tailored to their needs.
+                <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box" id="genques-accordion">
+                    @foreach ($faqs as $index => $item)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="genques-heading{{$index}}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#genques-collapse{{$index}}" aria-expanded="false" aria-controls="genques-collapse{{$index}}">
+                                   {{$item->question}}
+                                </button>
+                            </h2>
+                            <div id="genques-collapse{{$index}}" class="accordion-collapse collapse" aria-labelledby="genques-heading{{$index}}" data-bs-parent="#genques-accordion">
+                                <div class="accordion-body ff-secondary">
+                                    {{$item->answer}}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="genques-headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#genques-collapseTwo" aria-expanded="false"
-                                aria-controls="genques-collapseTwo">
-                                What is Dall-E 3 and how can I use it to generate images?
-                            </button>
-                        </h2>
-                        <div id="genques-collapseTwo" class="accordion-collapse collapse"
-                            aria-labelledby="genques-headingTwo" data-bs-parent="#genques-accordion">
-                            <div class="accordion-body ff-secondary">
-                                Dall-E 3 is our AI-powered image generation tool. Users can input specific criteria or descriptions, and the AI will create unique and realistic images based on the provided information. It's a simple and efficient way to generate custom images without the need for complex design software.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="genques-headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#genques-collapseThree" aria-expanded="false"
-                                aria-controls="genques-collapseThree">
-                                How does the AI Chat Assistant help users?
-                            </button>
-                        </h2>
-                        <div id="genques-collapseThree" class="accordion-collapse collapse"
-                            aria-labelledby="genques-headingThree" data-bs-parent="#genques-accordion">
-                            <div class="accordion-body ff-secondary">
-                                Our AI Chat Assistant is designed to provide real-time assistance and support to users navigating our platform. It can answer questions, provide guidance on using our services, and assist with troubleshooting any issues. The AI Chat Assistant enhances user experience by offering immediate and personalized assistance.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="genques-headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#genques-collapseFour" aria-expanded="false"
-                                aria-controls="genques-collapseFour">
-                                How can I get started with your AI content generation service?
-                            </button>
-                        </h2>
-                        <div id="genques-collapseFour" class="accordion-collapse collapse"
-                            aria-labelledby="genques-headingFour" data-bs-parent="#genques-accordion">
-                            <div class="accordion-body ff-secondary">
-                                Getting started with our AI content generation service is simple. Just sign up on our platform, choose from our range of ready-made templates, input your specific requirements, and let our AI-powered system create customized content for you. Our user-friendly interface and step-by-step guidance make the process seamless and straightforward for all users.
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
+                
                 <!--end accordion-->
 
             </div>

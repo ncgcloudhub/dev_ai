@@ -757,9 +757,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end plan -->
 
             <!-- start faqs -->
-            @include('frontend.body.faq')
+            @include('frontend.body.faq', ['faqs' => $faqs])
             <!-- end faqs -->
-
 
             <!-- start contact -->
           @include('frontend.body.contact_us')

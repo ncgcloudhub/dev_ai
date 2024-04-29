@@ -228,7 +228,18 @@
                     </a>
                 </li>
 
-            {{-- SUBSCRIPTION--}}
+            {{-- SUBSCRIPTION END--}}
+
+              {{-- FAQ --}}
+              <li class="menu-title"><i class="ri-more-fill"></i> <span >Details</span></li>
+               
+              <li class="nav-item">
+                  <a class="nav-link menu-link" href="{{route('manage.faq')}}">
+                      <i class="las la-cog"></i> <span >Manage FAQ</span>
+                  </a>
+              </li>
+
+            {{-- FAQ END--}}
 
             </ul>
         </div>
