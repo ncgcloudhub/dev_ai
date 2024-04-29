@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PricingPlan;
 use App\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class SubscriptionController extends Controller
 {
     public function AllPackage(){
 
-        return view('backend.subscription.all_package');
+        $pricingPlans = PricingPlan::latest()->get();
+        return view('backend.subscription.all_package', compact('pricingPlans') );
     }// End Method  
 
     public function BuySubscriptionPlan(){

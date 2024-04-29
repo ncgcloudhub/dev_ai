@@ -222,7 +222,7 @@
 
                     </ul>
                     <div class="d-flex">
-                        <a href="javascript:void(0);" class="btn btn-success disabled w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
+                        <a href="{{ route('pricing.edit', $item->slug) }}" class="btn btn-success w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
                         <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
                     </div>
 
