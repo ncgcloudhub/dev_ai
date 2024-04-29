@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\AI\TemplateController;
 use App\Http\Controllers\Backend\AI\AIChatController;
 use App\Http\Controllers\Backend\AI\ExpertController;
 use App\Http\Controllers\Backend\AI\GenerateImagesController;
+use App\Http\Controllers\Backend\FAQ\FAQController;
 use App\Http\Controllers\Backend\Pricing\PricingController;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\FAQ;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
@@ -34,7 +36,8 @@ Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->get();
     $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->get();
-    return view('frontend.index', compact('images', 'templates', 'images_slider'));
+    $faqs = FAQ::latest()->get();
+    return view('frontend.index', compact('images', 'templates', 'images_slider','faqs'));
 })->name('home');
 
 
@@ -270,3 +273,15 @@ Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->n
 Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
 
 Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
+
+
+// FAQ
+Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
+
+Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
+
+Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
+
+// Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+
+// Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');

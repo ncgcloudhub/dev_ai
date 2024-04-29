@@ -77,7 +77,7 @@
                         <div class="row template-row">
                             @foreach ($templates as $item)
                            
-                            <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}">
+                            <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}" data-search="{{ strtolower($item->template_name . ' ' . $item->description) }}">
                                 
                                
                                     <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
@@ -121,18 +121,17 @@
                             </div>
 
 
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
-                                    trigger="loop" colors="primary:#405189,secondary:#0ab39c"
-                                    style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted">We've searched more than 150+ Orders We did
-                                    not find any
-                                    orders for you search.</p>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                        trigger="loop" colors="primary:#405189,secondary:#0ab39c"
+                                        style="width:75px;height:75px">
+                                    </lord-icon>
+                                    <h5 class="mt-2">Sorry! No Templates Found</h5>
+                                    <p class="text-muted">We've searched more than 71+ Templates. We did not find any templates matching your search.</p>
+                                </div>
                             </div>
-                        </div>
+                            
                     </div>
                     <div class="d-flex justify-content-end">
                         <div class="pagination-wrap hstack gap-2">
@@ -216,6 +215,37 @@
         });
     });
 </script>
+
+{{-- SEARCH --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('.search');
+        const templateCards = document.querySelectorAll('.template-card');
+        const noResultMessage = document.querySelector('.noresult');
+
+        searchInput.addEventListener('keyup', function (event) {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            let found = false;
+
+            templateCards.forEach(function (card) {
+                const searchContent = card.dataset.search;
+                if (searchContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                noResultMessage.style.display = 'block';
+            } else {
+                noResultMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
+
 
 @endsection
 
