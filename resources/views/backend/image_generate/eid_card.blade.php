@@ -2,6 +2,9 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+
+    <!-- Select2 CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -163,8 +166,8 @@
                         <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development"  data-category="designing development">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="image-popup" href="{{ asset($item->image) }}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image) }}" alt="" />
+                                    <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image_url) }}" alt="" />
                                         <div class="gallery-overlay">
                                             <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                         </div>
@@ -192,6 +195,30 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Select2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#holidays').select2({
+            placeholder: 'Select Holiday',
+            allowClear: true
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#card_select').select2({
+            placeholder: 'Select Card Style',
+            allowClear: true
+        });
+    });
+</script>
+
 
 <script>
     $(document).ready(function() {
