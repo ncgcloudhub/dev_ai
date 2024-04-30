@@ -40,7 +40,7 @@
                             </h2>
                             <div id="genques-collapse{{$index}}" class="accordion-collapse collapse" aria-labelledby="genques-heading{{$index}}" data-bs-parent="#genques-accordion">
                                 <div class="accordion-body ff-secondary">
-                                    {{$item->answer}}
+                                    {!! $item->answer !!} 
                                 </div>
                             </div>
                         </div>

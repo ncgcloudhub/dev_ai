@@ -84,7 +84,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add');
 
-        Route::post('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
+        Route::put('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
     });
 
     // Site Settings

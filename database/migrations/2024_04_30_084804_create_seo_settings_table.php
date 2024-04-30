@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('seo_settings', function (Blueprint $table) {
             $table->id();
+            $table->string('description')->nullable();
+            $table->string('keywords')->nullable();
+            $table->string('canonical_url')->nullable();
+            $table->string('sitemap_url')->nullable();
             $table->timestamps();
+            
         });
     }
 

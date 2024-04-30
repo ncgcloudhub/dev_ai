@@ -2,6 +2,7 @@
 @section('title')
     FAQ
 @endsection
+
 @section('content')
 @component('admin.components.breadcrumb')
     @slot('li_1')
@@ -34,6 +35,7 @@
     </div>
 @endforeach
 
+
 </div>
 
 <!-- Varying modal content -->
@@ -45,7 +47,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="faqForm">
+                <form action="{{route('store.faq')}}" method="post">
                     @csrf
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Question</label>
@@ -53,19 +55,23 @@
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Answer</label>
-                        <textarea class="form-control" name="answer" id="message-text"></textarea>
+                        <textarea name="answer" class="form-control" id="tinymceExample" rows="10"></textarea>
                     </div>
+                    <button type="submit">Submit</button>
                 </form>
             </div>
-            <div class="modal-footer">
+            {{-- <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="addBtn">Add</button>
-            </div>
+            </div> --}}
         </div>
     </div>
   </div>
 
 @endsection
+
+
+
 @section('script')
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
@@ -127,8 +133,6 @@
             });
         });
     </script>
-    
-    
-    
+
     
 @endsection

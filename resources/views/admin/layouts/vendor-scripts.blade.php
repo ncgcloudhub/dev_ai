@@ -24,5 +24,11 @@
 
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
+<!-- tinymce | TEXT EDITOR -->
+<script src="{{ asset('backend/js/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('backend/js/tinymce.js') }}"></script>
+<!--END tinymce TEXT EDITOR-->
+    
+
 @yield('script')
 @yield('script-bottom')

@@ -33,11 +33,12 @@ class FAQController extends Controller
         ]);
     
         
-        return response()->json([
-            'success' => true,
-            'message' => 'FAQ Added Successfully',
-            'faq' => $faq, // Optionally, you can return the created FAQ record
-        ]);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'FAQ Added Successfully',
+        //     'faq' => $faq, // Optionally, you can return the created FAQ record
+        // ]);
+        return redirect()->route('manage.faq');
         
     }
 
