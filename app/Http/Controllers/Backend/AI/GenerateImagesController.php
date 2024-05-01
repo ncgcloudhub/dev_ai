@@ -37,7 +37,7 @@ class GenerateImagesController extends Controller
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
-        return view('backend.image_generate.generate_image', compact('images', 'get_user','prompt_library'));
+        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library'));
     }
 
 
@@ -253,7 +253,7 @@ class GenerateImagesController extends Controller
             $images_count = $get_user->images_generated;
         }
 
-        if ($images_count > 100) {
+        if ($images_count > 500) {
             return redirect()->route('all.package');
         } else {
             return view('backend.image_generate.eid_card', compact('images', 'get_user'));
