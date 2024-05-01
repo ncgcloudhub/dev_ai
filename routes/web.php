@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Redirect;
 
 
 Route::get('/', function () {
-    $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->get();
+    $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
 
     foreach ($images as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
