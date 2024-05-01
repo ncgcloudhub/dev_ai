@@ -5,14 +5,14 @@
     <meta charset="utf-8" />
     <title>Clever Creator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="{{ $seo->description }}" name="description" />
-    <meta content="{{ $seo->keywords }}" name="keywords" />
+    <meta content="Clever Creator" name="description" />
+    <meta content="Clever Creator" name="keywords" />
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="{{ $seo->canonical_url }}">
+    {{-- <link rel="canonical" href="{{ $seo->canonical_url }}">
         
     <!-- Sitemap URL -->
-    <link rel="sitemap" type="application/xml" href="{{ $seo->sitemap_url }}" />
+    <link rel="sitemap" type="application/xml" href="{{ $seo->sitemap_url }}" /> --}}
 
     <meta content="Clever_Creator" name="author" />
     <!-- App favicon -->

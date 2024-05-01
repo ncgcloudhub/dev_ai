@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
+use App\Models\SeoSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
@@ -39,6 +40,7 @@ Route::get('/', function () {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
     }
 
+    $seo = SeoSetting::find(1);
     $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->get();
 
@@ -47,7 +49,7 @@ Route::get('/', function () {
     }
 
     $faqs = FAQ::latest()->get();
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs'));
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo'));
 })->name('home');
 
 
