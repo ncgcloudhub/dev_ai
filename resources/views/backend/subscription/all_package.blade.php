@@ -211,7 +211,12 @@
 
                     </ul>
                     <div class="d-flex">
-                        <a href="{{ route('all.package') }}" class="btn btn-success w-100 me-2"><i class=" ri-shopping-cart-fill"></i> Buy Package</a>
+                        @if (intval($lastPackageId) === intval($item->id))
+                        <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
+                        @else
+                        <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn"><i class="ri-shopping-cart-fill"></i> Buy Package</a>
+                        @endif
+                      
                         
                     </div>
 

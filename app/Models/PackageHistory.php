@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SubscriptionPlan extends Model
+class PackageHistory extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
     
+    protected $guarded = [];
 }

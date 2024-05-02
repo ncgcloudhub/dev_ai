@@ -155,7 +155,7 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
 
-    Route::get('/buy/subscription/plan', [SubscriptionController::class, 'BuySubscriptionPlan'])->name('buy.subscription.plan');
+    Route::get('/purchase/{pricingPlanId}', [SubscriptionController::class, 'Purchase'])->name('purchase.package');
 
     Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
 }); //End User Middleware
