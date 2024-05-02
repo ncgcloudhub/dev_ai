@@ -111,8 +111,9 @@
                                                 </div>
                                             </div>
 
+                                            @if($Template->slug == 'image-prompt-idea') 
+                                            @else
                                             <div class="row">
-
                                                 <div class="col-md-6">
                                                     <label for="temperature" class="form-label">Temperature (Creativity)</label>
                                                     <input type="range" name="temperature" class="form-range" id="temperature" min="0" max="1" step="0.01" value="0.00" >
@@ -125,6 +126,7 @@
                                                     <input type="number" name="top_p_value" class="form-control" id="top_p_value" min="0" max="1" step="0.01" value="1.00">
                                                 </div>
                                             </div>
+                                            @endif
 
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -138,10 +140,42 @@
                                                     <label for="presence_penalty" class="form-label">Presence Penalty</label>
                                                     <input type="range" name="presence_penalty" class="form-range" id="presence_penalty" min="0" max="2" step="0.01" value="0.00">
                                                     <input type="number" name="presence_penalty_value" class="form-control" id="presence_penalty_value" min="0" max="2" step="0.01" value="0.00">
-
-
-
                                                 </div>
+
+                                                @if($Template->slug == 'image-prompt-idea')               
+                                                <div class="col-md-6">
+                                                    <label for="style" class="form-label">Image Style</label>
+                                                    <select class="form-select" name="style" id="style" aria-label="Floating label select example">
+                                                        <option disabled selected="">Enter Style</option>
+                                                        <option value="natural">Natural</option>
+                                                        <option value="vivid">Vivid</option>
+                                                        <option value="none">NONE</option>
+                                                        <option value="cinematic">CINEMATIC</option>
+                                                        <option value="analog-film">ANALOG FILM</option>
+                                                        <option value="animation">ANIMATION</option>
+                                                        <option value="comic">COMIC</option>
+                                                        <option value="craft-clay">CRAFT CLAY</option>
+                                                        <option value="fantasy">FANTASY</option>
+                                                        <option value="line-art">LINE ART</option>
+                                                        <option value="cyberpunk">CYBERPUNK</option>
+                                                        <option value="pixel-art">PIXEL ART</option>
+                                                        <option value="photograph">PHOTOGRAPH</option>
+                                                        <option value="graffiti">GRAFFITI</option>
+                                                        <option value="game-gta">GAME GTA</option>
+                                                        <option value="3d-character">3D CHARACTER</option>
+                                                        <option value="baroque">BAROQUE</option>
+                                                        <option value="caricature">CARICATURE</option>
+                                                        <option value="colored-pencil">COLORED PENCIL</option>
+                                                        <option value="doddle-art">DODDLE ART</option>
+                                                        <option value="futurism">FUTURISM</option>
+                                                        <option value="sketch">SKETCH</option>
+                                                        <option value="surrealism">SURREALISM</option>
+                                                        <option value="sticker-designs">STICKER DESIGNS</option>
+                                                    </select>
+                                                
+                                                </div>
+                                                @endif 
+
                                             </div>
                                         </div>
                                     </div>
