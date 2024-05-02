@@ -76,6 +76,25 @@
                 </div>
             </div>
         </div>
+
+        <!-- Newsletter Section -->
+        <div class="row justify-content-center mt-5 section bg-light">
+            <div class="col-lg-8">
+                <div class="text-center mb-5">
+                    <h3 class="mb-3 fw-semibold">Subscribe to Our Newsletter</h3>
+                    <p class="text-muted mb-4 ff-secondary">Stay updated with our latest news and updates by subscribing to our newsletter.</p>
+                </div>
+                <form action="{{ route('newsletter.store') }}" method="POST">
+                    @csrf
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
+                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end Newsletter Section -->
+
         <!-- end row -->
     </div>
     <!-- end container -->

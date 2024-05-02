@@ -1,7 +1,7 @@
 <footer class="custom-footer bg-dark py-5 position-relative">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 mt-4">
+            <div class="col-lg-3 mt-4">
                 <div>
                     <div>
                         <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo " alt="logo light"
@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-7 ms-lg-auto">
+            <div class="col-lg-5 ms-lg-auto">
                 <div class="row">
                     <div class="col-sm-4 mt-4">
                         <h5 class="text-white mb-0">Company</h5>
@@ -48,6 +48,22 @@
                                 <li><a href="{{route('contact.us')}}">Contact</a></li>
                             </ul>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 ms-lg-auto">
+                <!-- Newsletter Section -->
+                <div class="row mt-4">
+                    <div>
+                        <h5 class="text-white mb-3">Subscribe to Our Newsletter</h5>
+                        <form action="{{ route('newsletter.store') }}" method="post">
+                            @csrf
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
+                                <button class="btn btn-primary" type="submit">Subscribe</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -107,5 +123,7 @@
                 </div>
             </div>
         </div>
+
+       
     </div>
 </footer>
