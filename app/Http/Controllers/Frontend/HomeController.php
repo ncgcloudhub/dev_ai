@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\NewsLetter;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -61,4 +63,18 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Message sent successfully!');
     }
+
+    public function NewsLetterStore(Request $request)
+    {
+
+        $NewsLetter = NewsLetter::insertGetId([
+
+            'email' => $request->email,
+            'name' => $request->name,
+            'created_at' => Carbon::now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Subscribed Successfully');
+    } // end method 
 }

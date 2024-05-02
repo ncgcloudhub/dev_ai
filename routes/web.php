@@ -174,6 +174,8 @@ Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('p
 // Terms And Conditions Page
 Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name('terms.condition');
 
+Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
+
 
 
 

@@ -277,7 +277,8 @@ class GenerateImagesController extends Controller
         $size = '1024x1024';
         $style = 'vivid';
         $quality = 'hd';
-        $prompt = 'Create a holiday card for ' . $holidays . ' with a ' . $card_style . ' style. From: ' . $from . ', To: ' . $to . '.';
+        $promptTemplate = "Create a unique and creative greeting card for \"{holiday}\" with a \"{card_style}\" style. Ensure that the card is vivid and has a simple 'wow' design, and includes only the text for the holiday name, 'From \"{from}\"', and 'To \"{to}\"'. No other text should be present on the card. Ensure that 'From' and 'To' are displayed exactly as typed by the user at the bottom of the image. From and to should be alwaays at the bottom of the Image";
+        $finalPrompt = str_replace(['{holiday}', '{card_style}', '{from}', '{to}'], [$holidays, $card_style, $from, $to], $promptTemplate);
 
         $n = 1;
 
@@ -290,7 +291,7 @@ class GenerateImagesController extends Controller
                 'Content-Type' => 'application/json',
             ])->post('https://api.openai.com/v1/images/generations', [
                 'model' => 'dall-e-3',
-                'prompt' => $prompt,
+                'prompt' => $finalPrompt,
                 'size' => $size,
                 'style' => $style,
                 'quality' => $quality,
@@ -325,7 +326,7 @@ class GenerateImagesController extends Controller
                     // Resize and compress the image
                     imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
                     ob_start(); // Turn on output buffering
-                    imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
+                    imagejpeg($targetImage, null, 75); // Compress and output the image as JPEG
                     $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
                     ob_end_clean(); // Turn off output buffering
 
@@ -343,7 +344,7 @@ class GenerateImagesController extends Controller
                     $imageModel->image = $imagePath;
                     $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
                     $imageModel->status = 'inactive'; // Set the status as per your requirements
-                    $imageModel->prompt = $prompt; // Set the prompt if needed
+                    $imageModel->prompt = $finalPrompt; // Set the prompt if needed
                     $imageModel->resolution = $size; // Set the resolution if needed
                     $imageModel->festival = 'yes'; // Set Festive Status
                     $imageModel->save();

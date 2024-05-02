@@ -750,6 +750,41 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             </section>
             <!-- end features -->
 
+
+             <!-- start cta -->
+             <section class="py-5 bg-primary position-relative">
+                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <form method="post" action="{{ route('newsletter.store') }}">
+                        @csrf
+                    <div class="row align-items-center gy-4">
+                        <div class="col-sm">
+                            <div>
+                                <h4 class="text-white mb-0 fw-semibold">Get updated with the latest AI contents</h4>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        
+                            <div class="col-sm-auto d-flex justify-content-end align-items-center">
+                                <!-- Input with Placeholder -->
+                                <div class="me-3 col-12 form-group">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-Mail">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn bg-gradient btn-danger">
+                                        <i class="align-middle me-1"></i>Submit
+                                    </button>
+                                </div>
+                            </div>
+                      
+                        <!-- end col -->
+                    </div>
+                </form>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end cta -->
           
 
             <!-- start plan -->
