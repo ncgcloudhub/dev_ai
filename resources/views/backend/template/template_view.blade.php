@@ -161,37 +161,33 @@
            </div>
            <div class="col">
 
-            <!-- Add the Download Content button -->
-            <button id="downloadButton" class="btn btn-success">Download Content</button>
-            <button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
+                <!-- Add the Download Content button -->
+                <button id="downloadButton" class="btn btn-success">Download Content</button>
+                <button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
 
-            <div class="row mt-2">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Generated Content</h4>
-                        </div><!-- end card header -->
-                        <div class="card-body">
-                            <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
-                           
-                        </div><!-- end card-body -->
-                    </div><!-- end card -->
+                <div class="row mt-2">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">Generated Content</h4>
+                            </div><!-- end card header -->
+                            <div class="card-body">
+                                <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
+                            
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
+                    </div>
+                    <!-- end col -->
                 </div>
-                <!-- end col -->
-            </div>
-            
+                
+                <div class="text-end">
+                    @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
+                        <!-- Add the Generate Image button -->
+                        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Now</a>
+                    @endif
+                </div>
 
            </div>
-
- 
-</div>
-
-
-<div class="text-end">
-    @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
-        <!-- Add the Generate Image button -->
-        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Now</a>
-    @endif
 </div>
 
 
@@ -400,10 +396,5 @@
 
     });
 </script>
-
-
-
-
-
 
 @endsection
