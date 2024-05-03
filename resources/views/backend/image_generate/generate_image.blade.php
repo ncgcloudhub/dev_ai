@@ -9,6 +9,13 @@
 @slot('title') Generate Image  @endslot
 @endcomponent
 
+<style>
+    textarea {
+    resize: none; /* Disable default resizing */
+    overflow: hidden; /* Hide any overflow content */
+}
+
+</style>
 
 <div class="card">
     <div class="card-header align-items-center d-flex">
@@ -167,12 +174,13 @@
                                     </div>
                                     
                                  <div class="row g-3 justify-content-center">
-                                        <div class="col-xxl-5 col-sm-6">
-                                            <div class="search-box">
-                                                <textarea class="form-control search" name="prompt" id="prompt" rows="1" placeholder="Write prompt to generate Image"></textarea>
-                                                <i class="ri-search-line search-icon"></i>
-                                            </div>
+                                    <div class="col-xxl-5 col-sm-6">
+                                        <div class="search-box">
+                                            <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                            <i class="ri-search-line search-icon"></i>
                                         </div>
+                                    </div>
+                                    
                                         <!--end col-->
                                         
                                         <div class="col-xxl-1 col-sm-4">
@@ -286,6 +294,8 @@
                                                 <i class="ri-search-line search-icon"></i>
                                             </div>
                                         </div>
+                                        
+                                        
                                         <!--end col-->
                                         
                                         <div class="col-xxl-1 col-sm-4">
@@ -406,6 +416,18 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Function to resize textarea
+        function resizeTextarea() {
+            $(this).css('height', 'auto').css('height', this.scrollHeight + 'px');
+        }
+
+        // Call the resizeTextarea function on textarea input
+        $('textarea').each(resizeTextarea).on('input', resizeTextarea);
+    });
+</script>
 
 <script>
     $(document).ready(function() {
