@@ -296,6 +296,13 @@ Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
 
 Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
 
-// Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+// PRIVACY POLICY
+Route::get('/privacy/policy', [FAQController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
 
-// Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
+Route::post('/privacy/policy/store', [FAQController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
+
+// TERMS & CONDITIONS
+Route::get('/terms/condition', [FAQController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
+
+Route::post('/terms/condition/store', [FAQController::class, 'StoreTermsCondition'])->name('store.terms.condition');
+

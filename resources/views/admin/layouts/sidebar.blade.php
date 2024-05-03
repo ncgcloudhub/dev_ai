@@ -238,8 +238,16 @@
                       <i class="las la-cog"></i> <span >Manage FAQ</span>
                   </a>
               </li>
-
-            {{-- FAQ END--}}
+              <li class="nav-item">
+                  <a class="nav-link menu-link" href="{{route('manage.privacy.policy')}}">
+                      <i class="las la-cog"></i> <span >Manage Privacy Policy</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link menu-link" href="{{route('manage.terms.condition')}}">
+                      <i class="las la-cog"></i> <span >Manage Terms & Conditions</span>
+                  </a>
+              </li>
 
             </ul>
         </div>
