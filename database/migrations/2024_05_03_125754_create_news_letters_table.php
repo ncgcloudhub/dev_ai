@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('news_letters', function (Blueprint $table) {
             $table->id();
             $table->string('email');
+            $table->string('ipaddress')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();
         });

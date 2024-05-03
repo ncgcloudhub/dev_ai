@@ -77,8 +77,8 @@ class HomeController extends Controller
         // Insert user's subscription details into the database
         $NewsLetter = NewsLetter::insertGetId([
             'email' => $request->email,
-            // 'name' => $request->name,
-            'name' => $ipAddress, // Store IP address
+            'name' => $request->name,
+            'ipaddress' => $ipAddress, // Store IP address
             'created_at' => now(),
         ]);
 
