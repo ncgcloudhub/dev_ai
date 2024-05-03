@@ -211,7 +211,11 @@ class TemplateController extends Controller
         ]);
 
         $content = trim($result['choices'][0]['text']);
+        $char_count = strlen($content); // Get the character count of the content
+        $num_tokens = ceil($char_count / 4); // Estimate the number of tokens
         $num_words = str_word_count($content);
+        $num_characters = strlen($content);
+
 
         if ($user->words_left <= 0) {
             $data = 0;
@@ -227,7 +231,13 @@ class TemplateController extends Controller
                 'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
             ]);
 
-            return $content;
+            // Return content along with statistics
+            return response()->json([
+                'content' => $content,
+                'num_tokens' => $num_tokens,
+                'num_words' => $num_words,
+                'num_characters' => $num_characters,
+            ]);
         }
 
         // return view('backend.template.template_view', compact('title', 'content'));

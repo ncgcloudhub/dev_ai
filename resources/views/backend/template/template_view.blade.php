@@ -198,7 +198,7 @@
                 <!-- Add the Download Content button -->
                 <button id="downloadButton" class="btn btn-success">Download Content</button>
                 <button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
-
+               
                 <div class="row mt-2">
                     <div class="col-lg-12">
                         <div class="card">
@@ -207,7 +207,14 @@
                             </div><!-- end card header -->
                             <div class="card-body">
                                 <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
-                            
+                                <div class="mt-2">
+                                    <p><strong>Statistics:</strong></p>
+                                    <ul>
+                                        <li>Number of Tokens: <span id="numTokens"></span></li>
+                                        <li>Number of Words: <span id="numWords"></span></li>
+                                        <li>Number of Characters: <span id="numCharacters"></span></li>
+                                    </ul>
+                                </div>
                             </div><!-- end card-body -->
                         </div><!-- end card -->
                     </div>
@@ -357,47 +364,50 @@
     });
 
     $(document).ready(function () {
-        $('#generateForm').submit(function (event) {
-            event.preventDefault();
+    $('#generateForm').submit(function (event) {
+        event.preventDefault();
 
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-
-                    if (response == 0) {
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response == 0) {
                     // Display alert for error message
-                        alert('Please Upgrade Plan');
+                    alert('Please Upgrade Plan');
                     return;
-                     }
-
-                    //Generated content displays in a nice Format
-                    let formattedContent = '';
-
-                    let lines = response.split('\n');
-
-                    if (lines.some(line => line.trim().startsWith('*'))) {
-                        formattedContent += '<ul>';
-                        lines.forEach(line => {
-                            if (line.trim().startsWith('*')) {
-                                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                            } else {
-                                formattedContent += '<p>' + line.trim() + '</p>';
-                            }
-                        });
-                        formattedContent += '</ul>';
-                    } else {
-                        formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
-                    }
-
-                    tinymce.get('myeditorinstance').setContent(formattedContent);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
                 }
-            });
+
+                //Generated content displays in a nice Format
+                let formattedContent = '';
+                let lines = response.content.split('\n');
+
+                if (lines.some(line => line.trim().startsWith('*'))) {
+                    formattedContent += '<ul>';
+                    lines.forEach(line => {
+                        if (line.trim().startsWith('*')) {
+                            formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+                        } else {
+                            formattedContent += '<p>' + line.trim() + '</p>';
+                        }
+                    });
+                    formattedContent += '</ul>';
+                } else {
+                    formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
+                }
+
+                tinymce.get('myeditorinstance').setContent(formattedContent);
+
+                // Update statistics
+                $('#numTokens').text(response.num_tokens);
+                $('#numWords').text(response.num_words);
+                $('#numCharacters').text(response.num_characters);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
+    });
 
         // Copy button click event
         $('#copyButton').click(function () {
