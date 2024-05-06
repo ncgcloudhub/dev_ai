@@ -18,25 +18,25 @@
 </style>
 
 <div class="card">
-    <div class="card-header align-items-center d-flex">
-        <h4 class="card-title mb-0 flex-grow-1">Generate Image</h4>
-        <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}">
-            <button type="button" class="btn btn-warning btn-load">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">Generate Image</h4>
+        <div class="d-flex flex-column flex-sm-row">
+            <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="btn btn-warning btn-load mb-2 mb-sm-0 me-sm-2">
                 <span class="d-flex align-items-center">
-                    <span class="spinner-grow flex-shrink-0" role="status">
+                    <span class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </span>
-                    <span class="flex-grow-1 ms-2">
-                       Get Image Prompt Ideas
+                    <span class="ms-2">
+                        Get Image Prompt Ideas
                     </span>
                 </span>
+            </a>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                Prompt Library
             </button>
-        </a>
-
-        {{-- Prompt --}}
-        <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">Prompt Library</button>
-    
+        </div>
     </div><!-- end card header -->
+    
 
     <div class="card-body">
         @if($get_user->images_left == 0) 

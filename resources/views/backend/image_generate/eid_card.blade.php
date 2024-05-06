@@ -34,25 +34,23 @@
         <div class="card-body">
     
             <div class="live-preview">
-                    <div class="col-xxl-12 justify-content-center">
+                    <div class="col-xxl-12 ">
     
                         <form  action="{{route('generate.eid.card')}}" method="post">
                             @csrf
                             <div class="row">
-                                <div class="col-2 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="from" class="form-label">From</label>
                                     <input name="from" id="from" type="text" class="form-control">
-                                   
                                 </div>
-                                
-                                <div class="col-2 mb-3">
+
+                                <div class="col-md-6 mb-3">
                                     <label for="to" class="form-label">To</label>
                                     <input name="to" id="to" type="text" class="form-control">
-                                   
                                 </div>
                                
-                                <div class="col-2 mb-3">
-                                    <label for="card_style" class="form-label">Card Style</label>
+                                <div class="col-md-6 mb-3">
+                                    <label for="card_style" class="form-label">Card Type</label>
                                     <select name="card_select" class="form-control" id="card_select">
                                         <option disabled selected>Select Card Style</option>
                                         <option value="Family">Family</option>
@@ -94,7 +92,7 @@
                                 </div>
                                 
 
-                                <div class="col-3 mb-3">
+                                <div class="col-md-6 mb-3">
                                     <label for="holidays" class="form-label">Holiday Name</label>
                                     <select name="holidays" class="form-control" id="holidays">
                                         <option disabled selected="">Select Holiday</option>
@@ -130,9 +128,40 @@
                                         </optgroup>
                                     </select>
                                 </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="input1">Image Style</label>
+                                    <select name="style" class="form-control" id="style">
+                                        <option disabled selected="">Enter Image Style</option>
+                                        <option value="natural">Natural</option>
+                                        <option value="vivid">Vivid</option>
+                                        <option value="none">NONE</option>
+                                        <option value="cinematic">CINEMATIC</option>
+                                        <option value="analog-film">ANALOG FILM</option>
+                                        <option value="animation">ANIMATION</option>
+                                        <option value="comic">COMIC</option>
+                                        <option value="craft-clay">CRAFT CLAY</option>
+                                        <option value="fantasy">FANTASY</option>
+                                        <option value="line-art">LINE ART</option>
+                                        <option value="cyberpunk">CYBERPUNK</option>
+                                        <option value="pixel-art">PIXEL ART</option>
+                                        <option value="photograph">PHOTOGRAPH</option>
+                                        <option value="graffiti">GRAFFITI</option>
+                                        <option value="game-gta">GAME GTA</option>
+                                        <option value="3d-character">3D CHARACTER</option>
+                                        <option value="baroque">BAROQUE</option>
+                                        <option value="caricature">CARICATURE</option>
+                                        <option value="colored-pencil">COLORED PENCIL</option>
+                                        <option value="doddle-art">DODDLE ART</option>
+                                        <option value="futurism">FUTURISM</option>
+                                        <option value="sketch">SKETCH</option>
+                                        <option value="surrealism">SURREALISM</option>
+                                        <option value="sticker-designs">STICKER DESIGNS</option>
+                                    </select>
+                                </div>
                                 
                                 
-                                <div class="col-md-3 mb-2 d-flex align-items-end">
+                                <div class="col-md-6 mb-3 d-flex align-items-end">
                                     <button class="btn btn-rounded btn-primary mb-2">Create Card</button>
                                 </div>
                             </div><!-- end row -->
