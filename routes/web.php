@@ -143,6 +143,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
+    // PRIVACY POLICY
+    Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
+
+    Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
+
+    // TERMS & CONDITIONS
+    Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
+
+    Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 }); //End Admin Middleware
 
 
@@ -296,15 +306,7 @@ Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
 
 Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
 
-// PRIVACY POLICY
-Route::get('/privacy/policy', [FAQController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
 
-Route::post('/privacy/policy/store', [FAQController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
-
-// TERMS & CONDITIONS
-Route::get('/terms/condition', [FAQController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
-
-Route::post('/terms/condition/store', [FAQController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 
 // Change User's Password by ADMIN
 Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
