@@ -17,7 +17,7 @@
            @include('frontend.body.nav_frontend')
 
            @php
-                $privacy_policy = \App\Models\PrivacyPolicy::all();
+                $privacy_policy = \App\Models\PrivacyPolicy::orderBy('id', 'asc')->get();
                 $latestPrivacyPolicy = \App\Models\PrivacyPolicy::latest()->first();
                 $lastUpdateDate = $latestPrivacyPolicy ? $latestPrivacyPolicy->created_at->format('d M, Y') : 'Unknown';
             @endphp

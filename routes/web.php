@@ -150,10 +150,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
 
+    Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy');
+
+    Route::post('/privacy/policy/update', [HomeController::class, 'UpdatePrivacyPolicy'])->name('update.privacy.policy');
+
+    Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy');
+
+
     // TERMS & CONDITIONS
     Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
 
     Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
+
+    Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition');
+
+    Route::post('/terms/condition/update', [HomeController::class, 'UpdateTermsCondition'])->name('update.terms.condition');
+
+    Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition');
 }); //End Admin Middleware
 
 
@@ -185,6 +198,7 @@ Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('p
 // Terms And Conditions Page
 Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name('terms.condition');
 
+// Newsletter Store for all users even without login
 Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
 
 

@@ -33,7 +33,7 @@
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
                                     <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Condition')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
                                 </div>
                             </td>
                           
@@ -46,11 +46,13 @@
     </div>
     
     <div class="col-xxl-6">
-        <form method="POST" action="{{route('store.terms.condition')}}" class="row g-3">
+        <form method="POST" action="{{route('update.terms.condition')}}" class="row g-3">
             @csrf
+
+            <input type="hidden" name="id" value="{{$terms_conditions->id}}">
         <div class="card">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Add Terms & Conditions</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Edit Terms & Conditions</h4>
             </div><!-- end card header -->
     
             <div class="card-body">
@@ -58,7 +60,7 @@
     
                         <div class="col-md-12">
                             <label class="form-label">Details</label>
-                            <textarea name="details" class="form-control" id="tinymceExample" rows="10"></textarea>
+                            <textarea name="details" value="{{$terms_conditions->details}}" class="form-control" id="tinymceExample" rows="10">{{$terms_conditions->details}}</textarea>
                         </div>
                 </div>
             </div>
@@ -66,7 +68,7 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
             </div>
         </div>
     </form>

@@ -88,10 +88,10 @@ class HomeController extends Controller
     } // end method
 
 
-    // PRIVACY POLICY
+    // PRIVACY POLICY BACKEND
     public function ManagePrivacyPolicy()
     {
-        $privacy_policy = PrivacyPolicy::latest()->get();
+        $privacy_policy = PrivacyPolicy::orderBy('id', 'asc')->get();
         return view('backend.privacy_policy.manage_privacy_policy', compact('privacy_policy'));
     }
 
@@ -105,11 +105,50 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    // TERMS & CONDITIONS
+    public function EditPrivacyPolicy($id)
+    {
+        $privacy_policy = PrivacyPolicy::orderBy('id', 'asc')->get();
+        $privacy_policys = PrivacyPolicy::findOrFail($id);
+
+        return view('backend.privacy_policy.edit_privacy_policy', compact('privacy_policy', 'privacy_policys'));
+    }
+
+
+    public function UpdatePrivacyPolicy(Request $request)
+    {
+
+        PrivacyPolicy::findOrFail($request->id)->update([
+            'details' => $request->details,
+        ]);
+
+        $notification = array(
+            'message' => 'Details Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect(route('manage.privacy.policy'))->with($notification);
+    }
+
+    public function DeletePrivacyPolicy($id)
+    {
+
+        PrivacyPolicy::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Policy Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+    } // end method
+
+
+
+    // TERMS & CONDITIONS BACKEND
     public function ManageTermsCondition()
     {
-        $terms_conditions = TermsConditions::latest()->get();
-        return view('backend.terms_conditions.manage_terms_conditions', compact('terms_conditions'));
+        $terms_condition = TermsConditions::orderBy('id', 'asc')->get();
+        return view('backend.terms_conditions.manage_terms_conditions', compact('terms_condition'));
     }
 
     public function StoreTermsCondition(Request $request)
@@ -121,4 +160,41 @@ class HomeController extends Controller
 
         return redirect()->back();
     }
+
+    public function EditTermsCondition($id)
+    {
+        $terms_condition = TermsConditions::orderBy('id', 'asc')->get();
+        $terms_conditions = TermsConditions::findOrFail($id);
+
+        return view('backend.terms_conditions.edit_terms_conditions', compact('terms_condition', 'terms_conditions'));
+    }
+
+
+    public function UpdateTermsCondition(Request $request)
+    {
+
+        TermsConditions::findOrFail($request->id)->update([
+            'details' => $request->details,
+        ]);
+
+        $notification = array(
+            'message' => 'Conditions Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect(route('manage.terms.condition'))->with($notification);
+    }
+
+    public function DeleteTermsCondition($id)
+    {
+
+        TermsConditions::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Conditions Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+    } // end method
 }
