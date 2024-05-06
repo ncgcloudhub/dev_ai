@@ -218,6 +218,21 @@
                     </a>
                 </li>
             {{-- USER END--}}
+             
+            {{-- JOB --}}
+                <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>
+               
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('add.job')}}">
+                        <i class="las la-cog"></i> <span >Add Job</span>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('manage.job')}}">
+                        <i class="las la-cog"></i> <span >Manage Job</span>
+                    </a>
+                </li> --}}
+            {{-- JOB END--}}
 
             {{-- SUBSCRIPTION --}}
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscription</span></li>
