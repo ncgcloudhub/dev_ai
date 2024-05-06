@@ -45,7 +45,7 @@
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                        <label for="username" class="form-label">Username<span class="text-danger">*</span></label>
                                         <input type="text" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', 'admin@themesbrand.com') }}" id="username" name="email" placeholder="Enter username">
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">

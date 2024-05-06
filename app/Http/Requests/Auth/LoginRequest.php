@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,14 +42,28 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        $user = User::where('email', $this->login)->orWhere('username', $this->login)->orWhere('phone', $this->login)->first();
 
+        if (!$user) {
+            RateLimiter::hit($this->throttleKey());
+    
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
+    
+       // Determine the login field based on whether the input was an email, username, or phone number
+    $loginField = filter_var($this->login, FILTER_VALIDATE_EMAIL) ? 'email' : (is_numeric($this->login) ? 'phone' : 'username');
 
+    
+        if (!Auth::attempt([$loginField => $this->login, 'password' => $this->password], $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+    
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+    
         RateLimiter::clear($this->throttleKey());
     }
 
