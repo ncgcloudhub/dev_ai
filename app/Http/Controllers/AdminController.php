@@ -55,4 +55,13 @@ class AdminController extends Controller
         return redirect()->route('admin.users.changePassword.view', ['user' => $user->id])
             ->with('success', 'Password updated successfully.');
     }
+
+    public function destroy(User $user)
+    {
+        // Delete the user
+        $user->delete();
+
+        // Optionally, you can redirect the user to a specific page after deletion
+        return redirect()->route('manage.user')->with('success', 'User deleted successfully.');
+    }
 }

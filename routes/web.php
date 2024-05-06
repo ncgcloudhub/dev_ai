@@ -313,3 +313,5 @@ Route::get('/admin/users/{user}/change-password', [AdminController::class, 'show
 
 Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
     ->name('admin.users.updatePassword');
+
+Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');

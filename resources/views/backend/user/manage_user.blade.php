@@ -56,6 +56,15 @@
                                         
                                         <!--Change Password-->
                                         <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="btn btn-primary waves-effect waves-light"><i class="ri-lock-2-fill"></i></a>
+
+                                        {{-- Delete User --}}
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                <i class="ri-delete-bin-7-fill"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             @else
@@ -63,6 +72,15 @@
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
                                         <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}">
                                         <label class="form-check-label" for="customSwitchsizemd"></label>
+
+                                        {{-- Delete User --}}
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                <i class="ri-delete-bin-7-fill"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             @endif
