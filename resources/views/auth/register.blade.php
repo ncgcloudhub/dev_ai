@@ -63,11 +63,18 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                                <input type="text" name="name" class="form-control" id="username" placeholder="Enter username" required>
+                                                <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
                                                 <div class="invalid-feedback">
                                                     Please enter username
                                                 </div>
                                             </div>
+                                            @if($errors->has('username'))
+                                            <!-- Email Error Alert -->
+                                                <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
+                                                    <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('username') }}
+                                                </div>
+                                          
+                                            @endif
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="password-input">Password</label>

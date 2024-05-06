@@ -51,7 +51,7 @@
                                         @csrf
 
                                         <div class="mb-3">
-                                            <label for="username" class="form-label">Email/Username</label>
+                                            <label for="username" class="form-label">Email/Username/Phone</label>
                                             <input type="text" class="form-control" id="login" name="login"
                                                 placeholder="Enter email/username">
                                         </div>
