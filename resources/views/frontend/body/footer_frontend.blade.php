@@ -77,7 +77,7 @@
                     <p class="copy-rights mb-0">
                         <script>
                             document.write(new Date().getFullYear())
-                        </script> © {{ $siteSettings->title }}
+                        </script> © {{ $siteSettings->footer_text }}
                     </p>
                 </div>
             </div>
