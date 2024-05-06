@@ -20,6 +20,8 @@ class JobController extends Controller
     public function storeJob(Request $request)
     {
 
+        // dd($request);
+
         // Validate the form data
         $validatedData = $request->validate([
             'job_title' => 'required|string|max:255',
@@ -38,9 +40,6 @@ class JobController extends Controller
             'tags' => 'nullable|max:255',
         ]);
 
-      
-
-
          // Generate slug
             $slug = Str::slug($request->input('job_title'));
 
@@ -51,6 +50,7 @@ class JobController extends Controller
             $validatedData['slug'] = $uniqueSlug;
             $validatedData['user_id'] = auth()->id();
 
+            // dd($validatedData);
         // Create a new job instance
         $job = new Job();
         $job->fill($validatedData);
@@ -58,5 +58,14 @@ class JobController extends Controller
 
         // Optionally, you can return a response or redirect
         return redirect()->back()->with('success', 'Job added successfully.');
+    }
+
+        public function manage()
+    {
+        // Retrieve all jobs
+        $jobs = Job::all();
+
+        // Pass the jobs to the view
+        return view('backend.job.manage_job', ['jobs' => $jobs]);
     }
 }

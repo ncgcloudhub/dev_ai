@@ -324,3 +324,5 @@ Route::get('/add-job', [JobController::class, 'addJob'])
     ->name('add.job');
 
 Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
+
+Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');

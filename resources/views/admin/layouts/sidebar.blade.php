@@ -227,11 +227,11 @@
                         <i class="las la-cog"></i> <span >Add Job</span>
                     </a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.job')}}">
                         <i class="las la-cog"></i> <span >Manage Job</span>
                     </a>
-                </li> --}}
+                </li>
             {{-- JOB END--}}
 
             {{-- SUBSCRIPTION --}}

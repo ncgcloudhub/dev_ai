@@ -90,14 +90,14 @@
                         <div class="col-lg-6">
                             <div>
                                 <label for="last-apply-date-Input" class="form-label">Last Date of Apply <span class="text-danger">*</span></label>
-                                <input type="text" name="last_date_of_apply" class="form-control" id="last-apply-date-Input" data-provider="flatpickr" data-date-format="d M, Y" placeholder="Select date"  />
+                                <input type="date" name="last_date_of_apply" class="form-control" id="last_date_of_apply-Input" data-provider="flatpickr" placeholder="Select date"  />
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div>
                                 <label for="close-date-Input" class="form-label">Close Date <span class="text-danger">*</span></label>
-                                <input type="text" name="close_date" class="form-control" id="close-date-Input" data-provider="flatpickr" data-date-format="d M, Y" placeholder="Select date"  />
+                                <input type="date" name="close_date" class="form-control" id="close-date-Input" data-provider="flatpickr" placeholder="Select date"  />
                             </div>
                         </div>
 
