@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -31,5 +32,27 @@ class AdminController extends Controller
         // dd($templates_count);
         return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers'));
        
+    }
+
+    public function showChangePasswordForm(User $user)
+    {
+        // Pass the user data to the view
+        return view('backend.user.user_password', compact('user'));
+    }
+
+    public function changeUserPassword(Request $request, User $user)
+    {
+        // Validate the form data
+        $request->validate([
+            'password' => ['required', 'string', 'confirmed', 'min:8'],
+        ]);
+
+        // Update the user's password
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // Redirect back to the form with success message
+        return redirect()->route('admin.users.changePassword.view', ['user' => $user->id])
+            ->with('success', 'Password updated successfully.');
     }
 }

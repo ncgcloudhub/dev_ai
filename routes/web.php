@@ -306,3 +306,10 @@ Route::get('/terms/condition', [FAQController::class, 'ManageTermsCondition'])->
 
 Route::post('/terms/condition/store', [FAQController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 
+// Change User's Password by ADMIN
+Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
+    ->name('admin.users.changePassword.view');
+
+
+Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
+    ->name('admin.users.updatePassword');

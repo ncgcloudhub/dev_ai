@@ -16,60 +16,46 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Manage User</h5>
-            </div>
-            <div class="card-body">
-                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sl.</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($users as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}</a>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-2">
-                                        <img src="{{ $item->photo ? asset('backend/uploads/user/' . $item->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                    </div>
-                                    <div class="flex-grow-1">{{$item->email}}</div>
-                                </div>
-                            </td>
-                          
-                            <td>{{ $item->status }}</td>
+            <div class="card-header">{{ __('Change Password') }}</div>
 
-                            @if ($item->status == 'active')
-                                <td>
-                                    <div class="form-check form-switch form-switch-md" dir="ltr">
-                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
-                                        <label class="form-check-label" for="customSwitchsizemd"></label>
-                                        
-                                        <!--Change Password-->
-                                        <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="btn btn-primary waves-effect waves-light"><i class="ri-lock-2-fill"></i></a>
-                                    </div>
-                                </td>
-                            @else
-                                <td>
-                                    <div class="form-check form-switch form-switch-md" dir="ltr">
-                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}">
-                                        <label class="form-check-label" for="customSwitchsizemd"></label>
-                                    </div>
-                                </td>
-                            @endif
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="card-body">
+                <form method="POST" action="{{ route('admin.users.updatePassword', ['user' => $user->id]) }}">
+                    @csrf
+                    @method('PUT')
+
+                    <!-- New Password Input -->
+                    <div class="form-group row">
+                        <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('New Password') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Confirm New Password Input -->
+                    <div class="form-group row">
+                        <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Change Password') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
