@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
+use App\Models\PrivacyPolicy;
+use App\Models\TermsConditions;
 use Illuminate\Support\Facades\Mail;
 
 
@@ -83,5 +85,40 @@ class HomeController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Subscribed Successfully');
-    } // end method 
+    } // end method
+
+
+    // PRIVACY POLICY
+    public function ManagePrivacyPolicy()
+    {
+        $privacy_policy = PrivacyPolicy::latest()->get();
+        return view('backend.privacy_policy.manage_privacy_policy', compact('privacy_policy'));
+    }
+
+    public function StorePrivacyPolicy(Request $request)
+    {
+
+        $privacy_policy = PrivacyPolicy::create([
+            'details' => $request->details
+        ]);
+
+        return redirect()->back();
+    }
+
+    // TERMS & CONDITIONS
+    public function ManageTermsCondition()
+    {
+        $terms_conditions = TermsConditions::latest()->get();
+        return view('backend.terms_conditions.manage_terms_conditions', compact('terms_conditions'));
+    }
+
+    public function StoreTermsCondition(Request $request)
+    {
+
+        $privacy_policy = TermsConditions::create([
+            'details' => $request->details
+        ]);
+
+        return redirect()->back();
+    }
 }
