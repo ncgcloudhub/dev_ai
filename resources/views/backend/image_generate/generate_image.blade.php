@@ -320,7 +320,7 @@
 
         </div>
         
-        <div id="image-container">      
+        <div id="image-container" class="d-flex justify-content-center">      
         
         </div>
     
@@ -453,7 +453,7 @@
 response.data.forEach(function(imageData) {
     // Create an image element
     var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                    <img class="gallery-img img-fluid mx-auto" style="height: 256px; width:256px" src="${imageData.url}" alt="" />
+                    <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
                 </a>`;
 
     // Append the image to the container
