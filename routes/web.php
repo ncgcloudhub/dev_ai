@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\AI\AIChatController;
 use App\Http\Controllers\Backend\AI\ExpertController;
 use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use App\Http\Controllers\Backend\FAQ\FAQController;
+use App\Http\Controllers\Backend\Job\JobController;
 use App\Http\Controllers\Backend\Pricing\PricingController;
 use App\Http\Controllers\Backend\ProfileEditController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -317,3 +318,9 @@ Route::put('/admin/users/{user}/change-password', [AdminController::class, 'chan
     ->name('admin.users.updatePassword');
 
 Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
+
+// JOB Admin
+Route::get('/add-job', [JobController::class, 'addJob'])
+    ->name('add.job');
+
+Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
