@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($privacy_policy as $item)
+                        @foreach ($privacy_policys as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
@@ -46,11 +46,14 @@
     </div>
     
     <div class="col-xxl-6">
-        <form method="POST" action="{{route('store.privacy.policy')}}" class="row g-3">
+        <form method="POST" action="{{ route('update.privacy.policy') }}" class="row g-3">
+
             @csrf
+
+            <input type="hidden" name="id" value="{{$privacy_policy->id}}">
         <div class="card">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Add Privacy Policy</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Edit Privacy Policy</h4>
             </div><!-- end card header -->
     
             <div class="card-body">
@@ -58,7 +61,7 @@
     
                         <div class="col-md-12">
                             <label class="form-label">Details</label>
-                            <textarea name="details" class="form-control" id="tinymceExample" rows="10"></textarea>
+                            <textarea name="details" value="{{$privacy_policy->details}}" class="form-control" id="tinymceExample" rows="10">{{$privacy_policy->details}}</textarea>
                         </div>
                 </div>
             </div>
@@ -66,7 +69,7 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
             </div>
         </div>
     </form>

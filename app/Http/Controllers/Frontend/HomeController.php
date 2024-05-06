@@ -88,10 +88,10 @@ class HomeController extends Controller
     } // end method
 
 
-    // PRIVACY POLICY
+    // PRIVACY POLICY BACKEND
     public function ManagePrivacyPolicy()
     {
-        $privacy_policy = PrivacyPolicy::latest()->get();
+        $privacy_policy = PrivacyPolicy::orderBy('id', 'asc')->get();
         return view('backend.privacy_policy.manage_privacy_policy', compact('privacy_policy'));
     }
 
@@ -105,7 +105,43 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
-    // TERMS & CONDITIONS
+    public function EditPrivacyPolicy($id)
+    {
+        $privacy_policy = PrivacyPolicy::findOrFail($id);
+        $privacy_policys = PrivacyPolicy::orderBy('id', 'asc')->get();
+        return view('backend.privacy_policy.edit_privacy_policy', compact('privacy_policy', 'privacy_policys'));
+    }
+
+
+    public function UpdatePrivacyPolicy(Request $request)
+    {
+
+        PrivacyPolicy::findOrFail($request->id)->update([
+            'details' => $request->details,
+        ]);
+
+        $notification = array(
+            'message' => 'Details Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect(route('manage.privacy.policy'))->with($notification);
+    }
+
+    public function DeletePrivacyPolicy($id)
+    {
+
+        PrivacyPolicy::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Policy Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+    } // end method
+
+    // TERMS & CONDITIONS BACKEND
     public function ManageTermsCondition()
     {
         $terms_conditions = TermsConditions::latest()->get();

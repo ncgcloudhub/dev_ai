@@ -149,6 +149,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
 
+    Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy');
+
+    Route::post('/privacy/policy/update', [HomeController::class, 'UpdatePrivacyPolicy'])->name('update.privacy.policy');
+
+    Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy');
+
     // TERMS & CONDITIONS
     Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
 
