@@ -107,8 +107,9 @@ class HomeController extends Controller
 
     public function EditPrivacyPolicy($id)
     {
-        $privacy_policy = PrivacyPolicy::findOrFail($id);
-        $privacy_policys = PrivacyPolicy::orderBy('id', 'asc')->get();
+        $privacy_policy = PrivacyPolicy::orderBy('id', 'asc')->get();
+        $privacy_policys = PrivacyPolicy::findOrFail($id);
+
         return view('backend.privacy_policy.edit_privacy_policy', compact('privacy_policy', 'privacy_policys'));
     }
 
@@ -141,11 +142,13 @@ class HomeController extends Controller
         return redirect()->back()->with($notification);
     } // end method
 
+
+
     // TERMS & CONDITIONS BACKEND
     public function ManageTermsCondition()
     {
-        $terms_conditions = TermsConditions::latest()->get();
-        return view('backend.terms_conditions.manage_terms_conditions', compact('terms_conditions'));
+        $terms_condition = TermsConditions::orderBy('id', 'asc')->get();
+        return view('backend.terms_conditions.manage_terms_conditions', compact('terms_condition'));
     }
 
     public function StoreTermsCondition(Request $request)
@@ -157,4 +160,41 @@ class HomeController extends Controller
 
         return redirect()->back();
     }
+
+    public function EditTermsCondition($id)
+    {
+        $terms_condition = TermsConditions::orderBy('id', 'asc')->get();
+        $terms_conditions = TermsConditions::findOrFail($id);
+
+        return view('backend.terms_conditions.edit_terms_conditions', compact('terms_condition', 'terms_conditions'));
+    }
+
+
+    public function UpdateTermsCondition(Request $request)
+    {
+
+        TermsConditions::findOrFail($request->id)->update([
+            'details' => $request->details,
+        ]);
+
+        $notification = array(
+            'message' => 'Conditions Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect(route('manage.terms.condition'))->with($notification);
+    }
+
+    public function DeleteTermsCondition($id)
+    {
+
+        TermsConditions::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Conditions Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+    } // end method
 }

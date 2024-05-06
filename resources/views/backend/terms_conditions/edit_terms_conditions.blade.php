@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($privacy_policy as $item)
+                        @foreach ($terms_condition as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
@@ -32,8 +32,8 @@
                             </td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
+                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
                                 </div>
                             </td>
                           
@@ -46,14 +46,13 @@
     </div>
     
     <div class="col-xxl-6">
-        <form method="POST" action="{{ route('update.privacy.policy') }}" class="row g-3">
-
+        <form method="POST" action="{{route('update.terms.condition')}}" class="row g-3">
             @csrf
 
-            <input type="hidden" name="id" value="{{$privacy_policys->id}}">
+            <input type="hidden" name="id" value="{{$terms_conditions->id}}">
         <div class="card">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Edit Privacy Policy</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Edit Terms & Conditions</h4>
             </div><!-- end card header -->
     
             <div class="card-body">
@@ -61,7 +60,7 @@
     
                         <div class="col-md-12">
                             <label class="form-label">Details</label>
-                            <textarea name="details" value="{{$privacy_policys->details}}" class="form-control" id="tinymceExample" rows="10">{{$privacy_policys->details}}</textarea>
+                            <textarea name="details" value="{{$terms_conditions->details}}" class="form-control" id="tinymceExample" rows="10">{{$terms_conditions->details}}</textarea>
                         </div>
                 </div>
             </div>
