@@ -40,9 +40,10 @@
                     </div>
                     <div class="col-xl-12 d-none" id="found-job-alert">
                         <div class="alert alert-success mb-0 text-center" role="alert">
-                            <strong id="total-result">253</strong> jobs found
+                            <strong id="total-result">0</strong> jobs found
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -91,17 +92,15 @@
                     <div><i class="ri-briefcase-2-line align-bottom me-1"></i> <span class="job-type">{{$item->job_type}}</span></div>
                     <div class="d-none"><span class="job-experience"></span></div>
                     <div><i class="ri-map-pin-2-line align-bottom me-1"></i> <span class="job-location">{{$item->state}}</span></div>
-                    <div><i class="ri-user-3-line align-bottom me-1"></i> {{$item->no_of_vacancy}} Positions</div>
+                    <div><i class="ri-user-3-line align-bottom me-1"></i>{{$item->no_of_vacancy}} Positions</div>
                     <div><i class="ri-time-line align-bottom me-1"></i> <span class="job-postdate"> {{$item->close_date}} </span></div>
-                    <div><a href="#!" class="btn btn-primary viewjob-list">View More <i class="ri-arrow-right-line align-bottom ms-1"></i></a></div>
+                    <div><a href="{{ route('job.details', $item->slug) }}" class="btn btn-primary viewjob-list">View More <i class="ri-arrow-right-line align-bottom ms-1"></i></a></div>
                 </div>
             </div>
         </div>
                  
         @endforeach
-        
 
-     
     </div>
     <!--end col-->
 
@@ -243,4 +242,33 @@
 
 <!-- App js -->
 <script src="{{URL::asset('build/js/app.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#searchJob').on('keyup', function() {
+            var value = $(this).val().trim().toLowerCase(); // Trim whitespace from the search value
+            if (value === '') { // If search value is empty
+                $('.joblist-card').show(); // Show all job cards
+                $('#found-job-alert').addClass('d-none'); // Hide the notification
+                return; // Exit the function
+            }
+
+            var matches = 0;
+            $('.joblist-card').each(function() {
+                var text = $(this).text().toLowerCase();
+                $(this).toggle(text.indexOf(value) > -1);
+                if ($(this).is(':visible')) {
+                    matches++;
+                }
+            });
+            $('#total-result').text(matches);
+            $('#found-job-alert').toggleClass('d-none', matches == 0);
+        });
+    });
+</script>
+
+
+
+
+
 @endsection
