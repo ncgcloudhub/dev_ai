@@ -192,6 +192,9 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 // Contact Us Page
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 
+// Job Page
+Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
+
 // Privacy Policy Page
 Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');
 

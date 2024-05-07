@@ -33,6 +33,12 @@ class HomeController extends Controller
         return view('frontend.contact');
     }
 
+    //All Jobs Front End Page
+    public function AllJobs()
+    {
+        return view('frontend.job.all_jobs');
+    }
+
 
     //Privacy Policy Front End Page
     public function PrivacyPolicy()
