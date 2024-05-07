@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('job_category')->nullable();
             $table->string('job_type')->nullable();
             $table->text('description')->nullable();
+            $table->text('skills')->nullable();
+            $table->text('responsibility')->nullable();
             $table->integer('no_of_vacancy')->nullable();
             $table->string('experience')->nullable();
             $table->date('last_date_of_apply')->nullable();

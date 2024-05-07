@@ -20,15 +20,14 @@ class JobController extends Controller
     public function storeJob(Request $request)
     {
 
-        // dd($request);
-
-        // Validate the form data
         $validatedData = $request->validate([
             'job_title' => 'required|string|max:255',
             'job_position' => 'nullable|string|max:255',
             'job_category' => 'nullable|string|max:255',
             'job_type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'skills' => 'nullable|string',
+            'responsibility' => 'nullable|string',
             'no_of_vacancy' => 'nullable|integer',
             'experience' => 'nullable|string|max:255',
             'last_date_of_apply' => 'nullable|date',
@@ -67,5 +66,11 @@ class JobController extends Controller
 
         // Pass the jobs to the view
         return view('backend.job.manage_job', ['jobs' => $jobs]);
+    }
+
+    public function detailsJob($slug)
+    {
+        $job = Job::where('slug', $slug)->firstOrFail();
+        return view('backend.job.job_detail', compact('job'));
     }
 }
