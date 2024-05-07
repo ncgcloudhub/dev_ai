@@ -192,29 +192,59 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('ai.settings.add')}}">
-                        <i class="las la-flask"></i> <span >AI Settings</span>
+                    <a class="nav-link menu-link" href="#settings" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-cog"></i> <span >Settings</span>
                     </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="settings">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('ai.settings.add')}}" class="nav-link" >AI Settings</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('site.settings.add')}}" class="nav-link" >Site Settings</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('seo.settings.add')}}" class="nav-link" >SEO Settings</a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.faq')}}" class="nav-link">Manage FAQ</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.privacy.policy')}}" class="nav-link">Manage Privacy Policy</a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.terms.condition')}}" class="nav-link">Manage Terms & Conditions</a>
+                                    </li>
+                      
+
+
+                                   
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('site.settings.add')}}">
-                        <i class="las la-cog"></i> <span >Site Settings</span>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('seo.settings.add')}}">
-                        <i class="las la-cog"></i> <span >SEO Settings</span>
-                    </a>
-                </li>
-             
-             {{-- USER --}}
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >Users</span></li>
-               
+            
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.user')}}">
-                        <i class="las la-cog"></i> <span >Manage User</span>
+                        <i class=" las la-user-circle"></i> <span >Manage User</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('manage.pricing')}}">
+                        <i class="  las la-dollar-sign"></i> <span >Manage Pricing</span>
                     </a>
                 </li>
             {{-- USER END--}}
@@ -223,47 +253,34 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>
                
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('add.job')}}">
-                        <i class="las la-cog"></i> <span >Add Job</span>
+                    <a class="nav-link menu-link" href="#jobs" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class=" las la-user-tie"></i> <span >Jobs</span>
                     </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="jobs">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('add.job')}}" class="nav-link" >Add Job</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.job')}}" class="nav-link" >Manage Job</a>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('manage.job')}}">
-                        <i class="las la-cog"></i> <span >Manage Job</span>
-                    </a>
-                </li>
+
             {{-- JOB END--}}
 
-            {{-- SUBSCRIPTION --}}
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscription</span></li>
-               
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('manage.pricing')}}">
-                        <i class="las la-cog"></i> <span >Manage Pricing</span>
-                    </a>
-                </li>
-
-            {{-- SUBSCRIPTION END--}}
-
-              {{-- FAQ --}}
-              <li class="menu-title"><i class="ri-more-fill"></i> <span >Details</span></li>
-               
-              <li class="nav-item">
-                  <a class="nav-link menu-link" href="{{route('manage.faq')}}">
-                      <i class="las la-cog"></i> <span >Manage FAQ</span>
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link menu-link" href="{{route('manage.privacy.policy')}}">
-                      <i class="las la-cog"></i> <span >Manage Privacy Policy</span>
-                  </a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link menu-link" href="{{route('manage.terms.condition')}}">
-                      <i class="las la-cog"></i> <span >Manage Terms & Conditions</span>
-                  </a>
-              </li>
-
+             
+            
             </ul>
         </div>
         <!-- Sidebar -->
