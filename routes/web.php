@@ -194,6 +194,7 @@ Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.u
 
 // Job Page
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
+Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
 
 // Privacy Policy Page
 Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\Job;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
@@ -35,8 +36,14 @@ class HomeController extends Controller
 
     //All Jobs Front End Page
     public function AllJobs()
-    {
+    {   
         return view('frontend.job.all_jobs');
+    }
+
+    public function detailsJob($slug)
+    {
+        $job = Job::where('slug', $slug)->firstOrFail();
+        return view('backend.job.job_detail', compact('job'));
     }
 
 
