@@ -72,18 +72,6 @@
                                 <textarea class="form-control" name="description" id="description-field" rows="3" placeholder="Enter description" ></textarea>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="skills-field" class="form-label">Skills <span class="text-danger">*</span></label>
-                                <textarea name="skills" class="form-control" id="tinymceExample" rows="10"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="responsibility-field" class="form-label">Responsibility <span class="text-danger">*</span></label>
-                                <textarea name="responsibility" class="form-control" id="tinymceExample" rows="10"></textarea>
-                            </div>
-                        </div>
 
                         <div class="col-md-6">
                             <div>
@@ -146,6 +134,22 @@
                                 <input type="text" name="state" class="form-control" id="city-Input" placeholder="Enter city"  />
                             </div>
                         </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="skills-field" class="form-label">Skills <span class="text-danger">*</span></label>
+                                <textarea name="skills" class="form-control" id="tinymceExample" rows="10"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div>
+                                <label for="responsibility-field" class="form-label">Responsibility <span class="text-danger">*</span></label>
+                                <textarea name="responsibility" class="form-control" id="tinymceExample" rows="10"></textarea>
+                            </div>
+                        </div>
+
+                       
 
                         <div class="col-lg-12">
                             <div>
