@@ -202,6 +202,10 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
+                                        <a href="{{route('add.page.seo')}}" class="nav-link" >Page SEO Add</a>
+                                    </li>
+
+                                    <li class="nav-item">
                                         <a href="{{route('ai.settings.add')}}" class="nav-link" >AI Settings</a>
                                     </li>
 

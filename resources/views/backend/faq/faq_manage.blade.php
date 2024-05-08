@@ -1,6 +1,15 @@
 @extends('admin.layouts.master')
+
 @section('title')
-    FAQ
+    {{ $seo->title }}
+@endsection
+
+@section('description')
+    {{ $seo->description }}
+@endsection
+
+@section('keywords')
+    {{ $seo->keywords }}
 @endsection
 
 @section('content')

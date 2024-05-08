@@ -25,6 +25,7 @@ use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\Backend\PromptLibraryController;
+use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
@@ -343,3 +344,9 @@ Route::get('/add-job', [JobController::class, 'addJob'])
 Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
 Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');
 Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
+
+
+// PAGE SEO Admin
+Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
+    ->name('add.page.seo');
+Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');

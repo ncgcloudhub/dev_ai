@@ -1,5 +1,11 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+
+@section('title', $seo->title)
+
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
+
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection

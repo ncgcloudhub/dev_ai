@@ -1,5 +1,9 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.orders') @endsection
+@section('title', $seo->title)
+
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Templates @endslot
