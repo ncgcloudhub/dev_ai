@@ -18,15 +18,22 @@ class HomeController extends Controller
     //Image Gallery Front End Page
     public function AIImageGallery()
     {
-        $images = DalleImageGenerate::latest()->get();
+        $images = DalleImageGenerate::latest()->paginate(20);
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
+        if (request()->ajax()) {
+            return view('frontend.image_gallery_partial', compact('images'))->render();
+        }
+
         return view('frontend.ai_image_gallery', compact('images'));
     }
+
+
+
 
     //Image Gallery Front End Page
     public function ContactUs()
@@ -36,7 +43,7 @@ class HomeController extends Controller
 
     //All Jobs Front End Page
     public function AllJobs()
-    {   
+    {
         return view('frontend.job.all_jobs');
     }
 

@@ -1,0 +1,2 @@
+add data to pages table manually, then if want to add data to pages from backend, give this command first in terminal, 
+go to pgsql and then this command: ALTER SEQUENCE pages_id_seq RESTART WITH 2;
