@@ -12,6 +12,8 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
+     *
+     * @return void
      */
     public function register(): void
     {
@@ -20,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
+     *
+     * @return void
      */
     public function boot(): void
     {
@@ -45,14 +49,12 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-      /**
+    /**
      * Calculate Credits based on resolution.
      *
      * @param string $resolution
      * @return int
      */
-    
-    // Calculate Credits
     protected function calculateCredits($resolution)
     {
         switch ($resolution) {
