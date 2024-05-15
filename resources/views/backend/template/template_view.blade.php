@@ -399,7 +399,7 @@
                 tinymce.get('myeditorinstance').setContent(formattedContent);
 
                 // Update statistics
-                $('#numTokens').text(response.num_tokens);
+                $('#numTokens').text(response.completionTokens);
                 $('#numWords').text(response.num_words);
                 $('#numCharacters').text(response.num_characters);
             },

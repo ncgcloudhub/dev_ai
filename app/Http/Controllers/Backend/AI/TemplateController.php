@@ -210,6 +210,8 @@ class TemplateController extends Controller
             'prompt' => $prompt,
         ]);
 
+        $completionTokens = $result->usage->completionTokens;
+
         $content = trim($result['choices'][0]['text']);
         $char_count = strlen($content); // Get the character count of the content
         $num_tokens = ceil($char_count / 4); // Estimate the number of tokens
@@ -237,6 +239,8 @@ class TemplateController extends Controller
                 'num_tokens' => $num_tokens,
                 'num_words' => $num_words,
                 'num_characters' => $num_characters,
+                'completionTokens' => $completionTokens,
+                
             ]);
         }
 
