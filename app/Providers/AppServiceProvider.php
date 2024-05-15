@@ -45,6 +45,13 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
+      /**
+     * Calculate Credits based on resolution.
+     *
+     * @param string $resolution
+     * @return int
+     */
+    
     // Calculate Credits
     protected function calculateCredits($resolution)
     {
