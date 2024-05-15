@@ -221,7 +221,7 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input1">Image Style</label>
-                                                            <select name="style" class="form-control" data-choices data-choices-removeItem multiple id="style">
+                                                            <select name="style" class="form-control" id="style">
                                                                 <option disabled selected="">Enter Image Style</option>
                                                                 <option value="natural">Natural</option>
                                                                 <option value="vivid">Vivid</option>
