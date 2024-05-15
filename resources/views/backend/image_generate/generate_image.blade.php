@@ -51,8 +51,8 @@
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
-                        <button type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-                            Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+                        <button disabled type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
+                            Credits Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
                         </button>
                         <div class="card-body">
                            

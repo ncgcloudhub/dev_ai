@@ -26,7 +26,7 @@
             <!--end row-->
 
             <div class="row">
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -59,7 +59,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -92,7 +92,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -124,14 +124,14 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate bg-success-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Credits Generated</p>
+                                        Credits Used</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
@@ -156,7 +156,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate bg-danger-subtle shadow-lg">
                         <div class="card-body">
@@ -189,14 +189,14 @@
                 </div><!-- end col -->
 
                 {{-- 2nd Row --}}
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-success-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Words Generated</p>
+                                        Tokens Used</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
@@ -221,14 +221,14 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-3 col-md-6">
+                <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-danger-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Words Left</p>
+                                        Tokens Left</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
