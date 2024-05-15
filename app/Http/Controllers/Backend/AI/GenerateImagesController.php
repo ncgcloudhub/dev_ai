@@ -179,7 +179,10 @@ class GenerateImagesController extends Controller
                     $imageModel->save();
                 }
 
-                $credits = $this->calculateCredits($size);
+
+                $credits = calculateCredits($size, $quality);
+
+                // return $credits;
 
                 User::where('id', $id)->update([
                     'images_generated' => DB::raw('images_generated + ' . $credits),
@@ -353,12 +356,14 @@ class GenerateImagesController extends Controller
                     $imageModel->save();
                 }
 
+                $credits = calculateCredits($size, $quality);
+
                 User::where('id', $id)->update([
-                    'images_generated' => DB::raw('images_generated + ' . $n),
-                    'images_left' => DB::raw('images_left - ' . $n),
+                    'images_generated' => DB::raw('images_generated + ' . $credits),
+                    'images_left' => DB::raw('images_left - ' . $credits),
                 ]);
 
-                $newImagesLeft = Auth::user()->images_left - $n;
+                $newImagesLeft = Auth::user()->images_left - $credits;
                 $responseData['images_left'] = $newImagesLeft;
 
                 return  $responseData;
