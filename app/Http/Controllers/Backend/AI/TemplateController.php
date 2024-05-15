@@ -225,12 +225,12 @@ class TemplateController extends Controller
         } else {
             // Words Increment
             User::where('id', $user->id)->update([
-                'words_generated' => DB::raw('words_generated + ' . $num_words),
-                'words_left' => DB::raw('words_left - ' . $num_words),
+                'words_generated' => DB::raw('words_generated + ' . $completionTokens),
+                'words_left' => DB::raw('words_left - ' . $completionTokens),
             ]);
 
             Template::where('id', $template->id)->update([
-                'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
+                'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
             ]);
 
             // Return content along with statistics
