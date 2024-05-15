@@ -411,7 +411,9 @@
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 

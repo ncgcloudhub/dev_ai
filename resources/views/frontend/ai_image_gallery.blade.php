@@ -27,7 +27,7 @@
                                 <div class="card-body my-5">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <div class="row gallery-wrapper justify-content-center">
+                                            <div class="row gallery-wrapper justify-content-center" id="image-container">
                                                 @foreach ($images as $item)
                                                 <div class="element-item col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 photography" data-category="photography">
                                                     <div class="gallery-box card">
@@ -39,20 +39,23 @@
                                                                 </div>
                                                             </a>
                                                         </div>
-                                                        <div class="box-content">
+                                                        {{-- <div class="box-content">
                                                             <div class="d-flex align-items-center mt-1">
                                                                 <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                                 @endforeach
                                             </div>
-                                            <!-- end gallery-wrapper -->
-            
+                                            
+                                          <!-- Loader element -->
+                                          <div class="infinite-scroll-loader" style="display: none;">
                                             <div class="text-center my-2">
-                                                <a href="javascript:void(0);" class="text-primary"><i class="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i> Load More </a>
+                                                <i class="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i> Loading...
                                             </div>
+                                        </div>
+                                            
                                         </div>
                                     </div>
                                     <!-- end row -->
@@ -89,4 +92,37 @@
         <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
         <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+
+        @section('script')
+        <script>
+            var page = 1; // initialize page number
+    
+            function loadMoreImages() {
+                page++; // increment page number
+                $('.infinite-scroll-loader').show(); // show loader
+                $.ajax({
+                    url: '{{ route("ai.image.gallery") }}?page=' + page, // replace 'your_route_name' with the actual route name
+                    type: 'GET',
+                    success: function (response) {
+                        $('#image-container').append(response);
+                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                    }
+                });
+            }
+    
+            $(window).scroll(function() {
+                if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                    loadMoreImages();
+                }
+            });
+    
+            // Initial load for the first page
+            loadMoreImages();
+        </script>
+    @endsection
+    
+    
+    
+    
+
     @endsection
