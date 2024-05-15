@@ -221,7 +221,7 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input1">Image Style</label>
-                                                            <select name="style" class="form-control" id="style">
+                                                            <select name="style" class="form-control" data-choices data-choices-removeItem multiple id="style">
                                                                 <option disabled selected="">Enter Image Style</option>
                                                                 <option value="natural">Natural</option>
                                                                 <option value="vivid">Vivid</option>
@@ -411,7 +411,9 @@
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 

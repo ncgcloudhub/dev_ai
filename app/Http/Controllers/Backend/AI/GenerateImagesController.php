@@ -120,7 +120,7 @@ class GenerateImagesController extends Controller
                     'model' => 'dall-e-3',
                     'prompt' => $request->prompt . ' and the style should be ' . $request->style,
                     'size' => $size,
-                    'style' => $style,
+                    'style' => 'vivid',
                     'quality' => $quality,
                     'n' => $n,
                 ]);
