@@ -44,4 +44,17 @@ class AppServiceProvider extends ServiceProvider
             $view->with('seo', $page);
         });
     }
+
+    // Calculate Credits
+    protected function calculateCredits($resolution)
+    {
+        switch ($resolution) {
+            case '512x512':
+                return 2;
+            case '1024x1024':
+                return 3;
+            default:
+                return 1;
+        }
+    }
 }

@@ -110,7 +110,7 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">
                                         <input class="form-control form-control-sm" type="number" placeholder="Enter No. Images" name="images">
-                                        <span class="ms-2">Images</span>
+                                        <span class="ms-2">Credits</span>
                                     </div>
                                     <div class="form-check ms-3 align-self-center">
                                         <input class="form-check-input" type="checkbox" id="formCheck6" checked>

@@ -138,7 +138,7 @@
                                     <i class="{{ $item->images ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>{{$item->images}}</b> Images
+                                    <b>{{$item->images}}</b> Credits
                                 </div>
                             </div>
                         </li>
