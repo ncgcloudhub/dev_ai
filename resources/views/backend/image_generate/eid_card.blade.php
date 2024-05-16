@@ -31,7 +31,7 @@
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Popular Holiday Card</h4>
              <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-            Images Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+            Images Left <span class="credit-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
             </button>
         </div><!-- end card header -->
     
@@ -303,8 +303,9 @@ $(document).ready(function() {
     });
 });
 
-                         var imagesLeft = response.images_left;
-                         $('.images-left').text(imagesLeft);
+                         var credit_left = response.credit_left;
+                         $('.credit-left').text(credit_left);
+
 
                   // Hide loader
                   $('#loader').addClass('d-none');

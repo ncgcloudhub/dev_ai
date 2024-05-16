@@ -28,6 +28,55 @@
 <script src="{{ asset('backend/js/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('backend/js/tinymce.js') }}"></script>
 <!--END tinymce TEXT EDITOR-->
+
+
+{{-- CHAT STARt Scripts--}}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messageInput = document.getElementById('user_message_input');
+        const sendMessageBtn = document.getElementById('send_message_btn');
+        const chatConversation = document.getElementById('users-conversation');
+
+        sendMessageBtn.addEventListener('click', function () {
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                axios.post('/chat/send', { 
+                    message: message,
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                })
+                .then(response => {
+
+                    console.log(response);
+                    const newMessage = `<li class="chat-list right">
+                        <div class="conversation-list">
+                            <div class="user-chat-content">
+                                <div class="ctext-wrap">
+                                    <div class="ctext-wrap-content">
+                                        <p class="mb-0 ctext-content">${message}</p>
+                                    </div>
+                                </div>
+                                <div class="conversation-name"><small class="text-muted time">Now</small></div>
+                            </div>
+                        </div>
+                    </li>`;
+                    chatConversation.insertAdjacentHTML('beforeend', newMessage);
+                    messageInput.value = ''; // Clear input field after sending message
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+            }
+        });
+    });
+</script>
+
+{{-- CHAT END Scripts--}}
     
 
 @yield('script')

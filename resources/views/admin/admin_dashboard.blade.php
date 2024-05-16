@@ -95,6 +95,7 @@
                         </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
+                
 
                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
@@ -195,7 +196,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-8">
+                <div class="col-xl-4">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Revenue</h4>
@@ -256,6 +257,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
+                {{-- MAP --}}
                 <div class="col-xl-4">
                     <!-- card -->
                     <div class="card card-height-100">
@@ -290,6 +292,40 @@
                     <!-- end card -->
                 </div>
                 <!-- end col -->
+                {{-- MAP END --}}
+
+
+{{-- CHAT START--}}
+<div class="col-xxl-4 col-lg-6">
+    <div class="card card-height-100">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body p-0">
+            <div id="chat-conversation" class="chat-conversation p-3" data-simplebar style="height: 400px;">
+                <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
+                    <!-- Messages will be appended here -->
+                </ul>
+            </div>
+            <div class="border-top border-top-dashed">
+                <div class="row g-2 mx-3 mt-2 mb-3">
+                    <div class="col">
+                        <div class="position-relative">
+                            <input type="text" id="user_message_input" class="form-control border-light bg-light" placeholder="Enter Message...">
+                        </div>
+                    </div><!-- end col -->
+                    <div class="col-auto">
+                        <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+            </div>
+        </div><!-- end cardbody -->
+    </div><!-- end card -->
+</div><!-- end col -->
+
+        {{-- CHAT END --}}
+{{-- ------------------------------------------------------------------------------------------------------- --}}
             </div>
 
             <div class="row">

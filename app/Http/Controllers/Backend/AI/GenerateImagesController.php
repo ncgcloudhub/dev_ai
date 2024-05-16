@@ -185,12 +185,13 @@ class GenerateImagesController extends Controller
                 // return $credits;
 
                 User::where('id', $id)->update([
-                    'images_generated' => DB::raw('images_generated + ' . $credits),
-                    'images_left' => DB::raw('images_left - ' . $credits),
+                    'credits_used' => DB::raw('credits_used + ' . $credits),
+                    'credits_left' => DB::raw('credits_left - ' . $credits),
+                    'images_generated' => DB::raw('images_generated + ' . $n),
                 ]);
 
-                $newImagesLeft = Auth::user()->images_left - $credits;
-                $responseData['images_left'] = $newImagesLeft;
+                $newCreditLeft = Auth::user()->credits_left - $credits;
+                $responseData['credit_left'] = $newCreditLeft;
 
                 return  $responseData;
             } else {
@@ -359,12 +360,13 @@ class GenerateImagesController extends Controller
                 $credits = calculateCredits($size, $quality);
 
                 User::where('id', $id)->update([
-                    'images_generated' => DB::raw('images_generated + ' . $credits),
-                    'images_left' => DB::raw('images_left - ' . $credits),
+                    'credits_used' => DB::raw('credits_used + ' . $credits),
+                    'credits_left' => DB::raw('credits_left - ' . $credits),
+                    'images_generated' => DB::raw('images_generated + ' . $n),
                 ]);
 
-                $newImagesLeft = Auth::user()->images_left - $credits;
-                $responseData['images_left'] = $newImagesLeft;
+                $newCreditLeft = Auth::user()->credits_left - $credits;
+                $responseData['credit_left'] = $newCreditLeft;
 
                 return  $responseData;
             } else {

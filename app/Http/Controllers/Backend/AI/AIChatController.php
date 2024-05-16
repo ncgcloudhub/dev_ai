@@ -79,4 +79,38 @@ class AIChatController extends Controller
             'expert_image' => $expertImage
         ]);
     }
+
+
+    // Dashboard Chat Admin
+    public function send(Request $request)
+    {
+       
+        $message = $request->input('message');
+        $client = new Client();
+       
+        // return 'up to client';
+        $response = $client->post('https://api.openai.com/v1/completions', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+            ],
+            'json' => [
+                'model' => 'text-davinci', // Use 'text-davinci' for chat-like interactions
+                'prompt' => $message,
+                'max_tokens' => 150,
+            ],
+        ]);
+        
+        
+
+        return $response;
+
+        $data = json_decode($response->getBody(), true);
+
+        return response()->json([
+            'response' => $data['choices'][0]['text']
+        ]);
+    }
+    // END Dashboard Chat Admin
+    
 }

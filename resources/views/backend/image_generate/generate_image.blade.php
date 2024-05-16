@@ -39,7 +39,7 @@
     
 
     <div class="card-body">
-        @if($get_user->images_left == 0) 
+        @if($get_user->credit_left <= 0) 
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong> No Images Left! </strong> You don't have any <b>Images </b> left to generate!
         </div>
@@ -51,8 +51,8 @@
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
-                        <button disabled type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-                            Credits Left <span class="images-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+                        <button disabled type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->credit_left <= 0) btn-danger @else btn-primary @endif">
+                            Credits Left <span class="credit-left badge ms-1 @if($get_user->credit_left <= 0) bg-dark @else bg-danger @endif">{{ $get_user->credit_left }}</span>
                         </button>
                         <div class="card-body">
                            
@@ -449,8 +449,7 @@
                 data: formData,
                 success: function(response) {
 
-                    console.log(response);
-                    console.log("WOrs" + response);
+                    // console.log(response);
                     
                     $('#image-container').empty(); // Clear previous images if any
 response.data.forEach(function(imageData) {
@@ -474,8 +473,8 @@ $(document).ready(function() {
 
               
 
-                         var imagesLeft = response.images_left;
-                         $('.images-left').text(imagesLeft);
+                         var credit_left = response.credit_left;
+                         $('.credit-left').text(credit_left);
 
                   // Hide loader
                   $('#loader').addClass('d-none');

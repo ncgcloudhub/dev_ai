@@ -239,7 +239,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
         Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [AIChatController::class, 'SendMessages']);
+
+        
+        
     });
+
+    // adminDashboardChat
+    Route::post('/chat/send', [AIChatController::class, 'send']);
 
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
