@@ -225,8 +225,9 @@ class TemplateController extends Controller
         } else {
             // Words Increment
             User::where('id', $user->id)->update([
-                'words_generated' => DB::raw('words_generated + ' . $completionTokens),
-                'words_left' => DB::raw('words_left - ' . $completionTokens),
+                'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
+                'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
+                'words_generated' => DB::raw('words_generated + ' . $num_words),
             ]);
 
             Template::where('id', $template->id)->update([
@@ -243,8 +244,6 @@ class TemplateController extends Controller
                 
             ]);
         }
-
-        // return view('backend.template.template_view', compact('title', 'content'));
 
     }
 
