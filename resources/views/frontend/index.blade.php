@@ -373,7 +373,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                     <p class="text-muted my-3 ff-secondary">Transform textual content into captivating visuals effortlessly, as TrionxAI converts text to images, enhancing the visual appeal and accessibility of your information.</p>
                                     <div>
                                         <a href="{{route('generate.image.view')}}" class="fs-13 fw-medium">Learn More <i
-                                                class="ri-arrow-right-s-line align-bottom"></i></a>
+                                            class="ri-arrow-right-s-line align-bottom"></i></a>
                                     </div>
                                 </div>
                             </div>

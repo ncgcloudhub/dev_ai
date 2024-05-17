@@ -65,7 +65,48 @@
                             </div>
                         </div>
                     </li>`;
+
+                    const assistantMessage = response.data.message;
+                    const newReplyId = 'last-reply';
+                    
+                    const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
+                    const newReply = `<li class="chat-list left" id="${newReplyId}">
+                                    <div class="conversation-list">
+                                        <div class="chat-avatar">
+                                            <img src="${faviconUrl}" alt="">
+                                        </div>
+                                        <div class="user-chat-content">
+                                            <div class="ctext-wrap">
+                                                <div class="ctext-wrap-content">
+                                                    <p class="mb-0 ctext-content">${assistantMessage}</p>
+                                                </div>
+                                                <div class="dropdown align-self-start message-box-drop">
+                                                    <a class="dropdown-toggle" href="#" role="button"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                        <i class="ri-more-2-fill"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                      
+                                                        <a class="dropdown-item" href="#"><i
+                                                                class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
+                                                       
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="conversation-name"><small class="text-muted time">09:07 am</small>
+                                                <span class="text-success check-message-icon"><i
+                                                        class="ri-check-double-line align-bottom"></i></span></div>
+                                        </div>
+                                    </div>
+                                </li>`;
+
                     chatConversation.insertAdjacentHTML('beforeend', newMessage);
+                    chatConversation.insertAdjacentHTML('beforeend', newReply);
+
+                    // Scroll to the last reply
+                    document.getElementById(newReplyId).scrollIntoView({ behavior: 'smooth' });
+
                     messageInput.value = ''; // Clear input field after sending message
                 })
                 .catch(error => {

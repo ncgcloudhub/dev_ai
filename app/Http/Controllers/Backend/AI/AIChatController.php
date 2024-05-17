@@ -84,12 +84,13 @@ class AIChatController extends Controller
     // Dashboard Chat Admin
     public function send(Request $request)
     {
-       
-               // Get input messages
-               $messages = [
-                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-                ['role' => 'user', 'content' => 'Hello!']
-            ];
+        $userMessage = $request->input('message');
+
+        // Define the messages array with the dynamic user input
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $userMessage]
+        ];
     
             // Make API call
             $client = new Client();
@@ -104,11 +105,16 @@ class AIChatController extends Controller
                 ],
             ]);
     
+            
+
             $data = json_decode($response->getBody(), true);
-    
+           
+            $message = $data['choices'][0]['message']['content'];
+
+            // return $message;
             // Return the response
             return response()->json([
-                'message' => $data['choices'][0]['message']['content']
+                'message' =>  $message
             ]);
         }
     }
