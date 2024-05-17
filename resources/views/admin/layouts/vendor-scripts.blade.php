@@ -37,6 +37,7 @@
         const messageInput = document.getElementById('user_message_input');
         const sendMessageBtn = document.getElementById('send_message_btn');
         const chatConversation = document.getElementById('users-conversation');
+        const chatContainer = document.getElementById('chat-conversation'); // Chat container
 
         sendMessageBtn.addEventListener('click', function () {
             const message = messageInput.value.trim();
@@ -52,7 +53,9 @@
                 })
                 .then(response => {
 
-                    console.log(response);
+                    // console.log(response);
+                    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
                     const newMessage = `<li class="chat-list right">
                         <div class="conversation-list">
                             <div class="user-chat-content">
@@ -61,16 +64,15 @@
                                         <p class="mb-0 ctext-content">${message}</p>
                                     </div>
                                 </div>
-                                <div class="conversation-name"><small class="text-muted time">Now</small></div>
+                                <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
                             </div>
                         </div>
                     </li>`;
 
                     const assistantMessage = response.data.message;
-                    const newReplyId = 'last-reply';
-                    
+                   
                     const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
-                    const newReply = `<li class="chat-list left" id="${newReplyId}">
+                    const newReply = `<li class="chat-list left">
                                     <div class="conversation-list">
                                         <div class="chat-avatar">
                                             <img src="${faviconUrl}" alt="">
@@ -94,7 +96,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="conversation-name"><small class="text-muted time">09:07 am</small>
+                                            <div class="conversation-name"><small class="text-muted time">${currentTime}</small>
                                                 <span class="text-success check-message-icon"><i
                                                         class="ri-check-double-line align-bottom"></i></span></div>
                                         </div>
@@ -103,9 +105,6 @@
 
                     chatConversation.insertAdjacentHTML('beforeend', newMessage);
                     chatConversation.insertAdjacentHTML('beforeend', newReply);
-
-                    // Scroll to the last reply
-                    document.getElementById(newReplyId).scrollIntoView({ behavior: 'smooth' });
 
                     messageInput.value = ''; // Clear input field after sending message
                 })
