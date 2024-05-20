@@ -310,14 +310,19 @@
             </div>
             <div class="border-top border-top-dashed">
                 <div class="row g-2 mx-3 mt-2 mb-3">
+                    <div id="file_name_display"></div>
+                    <div class="col-auto">
+                        <!-- Icon -->
+                           <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                           <!-- File input (hidden) -->
+                           <input type="file" id="file_input" class="form-control" style="display: none;">
+                    </div>
                     <div class="col">
                         <div class="position-relative">
                             <input type="text" id="user_message_input" class="form-control border-light bg-light" placeholder="Enter Message...">
                         </div>
                     </div><!-- end col -->
-                    <div class="col-auto">
-                        <input type="file" id="file_input" class="form-control">
-                    </div>
+                 
                     <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                     </div><!-- end col -->

@@ -96,58 +96,65 @@ class AIChatController extends Controller
 
 
     // Dashboard Chat Admin
-    public function send(Request $request)
-{
-    $userMessage = $request->input('message');
-$file = $request->file('file');
+public function send(Request $request)
+        {
+            $userMessage = $request->input('message');
+        $file = $request->file('file');
 
-// Check if file was uploaded and has content
-if ($file && $file->isValid()) {
-    // Read file content and store it in the session
-    $fileContent = file_get_contents($file->getRealPath());
-    session(['file_content' => $fileContent]);
-} else {
-    // If no file uploaded or invalid, retrieve file content from session
-    $fileContent = session('file_content', '');
-}
+        // Validate the file
+        if ($file) {
+            $request->validate([
+                'file' => 'mimes:txt,pdf,doc,docx|max:2048', // Adjust the allowed file types and size as needed
+            ]);
+        }
 
-// Define the messages array with the dynamic user input
-$messages = [
-    ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-    ['role' => 'user', 'content' => $userMessage],
-];
+        // Check if file was uploaded and has content
+        if ($file && $file->isValid()) {
+            // Read file content and store it in the session
+            $fileContent = file_get_contents($file->getRealPath());
+            session(['file_content' => $fileContent]);
+        } else {
+            // If no file uploaded or invalid, retrieve file content from session
+            $fileContent = session('file_content', '');
+        }
 
-// Add file content to messages if it exists
-if ($fileContent) {
-    $messages[] = ['role' => 'user', 'content' => $fileContent];
-}
+        // Define the messages array with the dynamic user input
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $userMessage],
+        ];
 
-// Add user message to conversation history
-$conversationHistory = session('conversation_history', []);
-$conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
-session(['conversation_history' => $conversationHistory]);
+        // Add file content to messages if it exists
+        if ($fileContent) {
+            $messages[] = ['role' => 'user', 'content' => $fileContent];
+        }
 
-// Make API call
-$client = new Client();
-$response = $client->post('https://api.openai.com/v1/chat/completions', [
-    'headers' => [
-        'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-        'Content-Type' => 'application/json',
-    ],
-    'json' => [
-        'model' => 'gpt-4o', // Use the appropriate model name
-        'messages' => $messages,
-    ],
-]);
+        // Add user message to conversation history
+        $conversationHistory = session('conversation_history', []);
+        $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+        session(['conversation_history' => $conversationHistory]);
 
-$data = json_decode($response->getBody(), true);
+        // Make API call
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'gpt-4o', // Use the appropriate model name
+                'messages' => $messages,
+            ],
+        ]);
 
-$message = $data['choices'][0]['message']['content'];
+        $data = json_decode($response->getBody(), true);
 
-// Return the response
-return response()->json([
-    'message' => $message
-]);
+        $message = $data['choices'][0]['message']['content'];
+
+        // Return the response
+        return response()->json([
+            'message' => $message
+        ]);
 }
 
     

@@ -46,6 +46,7 @@
 
     sendMessageBtn.addEventListener('click', function () {
         const message = messageInput.value.trim();
+        document.getElementById('file_name_display').innerHTML = '';
         const file = fileInput.files[0];
 
         if (!message && !file) return; // Prevent sending empty message without file
@@ -145,9 +146,29 @@
 });
 
 </script>
-
 {{-- CHAT END Scripts--}}
-    
+
+{{-- Attach FIle Icon Start--}}
+<script>
+    document.getElementById('icon').addEventListener('click', function() {
+        document.getElementById('file_input').click();
+    });
+     // Listen for file input change event
+     document.getElementById('file_input').addEventListener('change', function() {
+        var fileInput = document.getElementById('file_input');
+        var fileNameDisplay = document.getElementById('file_name_display');
+
+        // Check if a file is selected
+        if (fileInput.files.length > 0) {
+            // Display the name of the selected file
+            fileNameDisplay.textContent = "Selected File: " + fileInput.files[0].name;
+        } else {
+            // If no file is selected, clear the display
+            fileNameDisplay.textContent = "";
+        }
+    });
+</script>
+{{-- Attach FIle Incon END --}}
 
 @yield('script')
 @yield('script-bottom')
