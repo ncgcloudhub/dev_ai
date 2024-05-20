@@ -28,18 +28,24 @@ class AIChatController extends Controller
         $expert = Expert::findOrFail($expertId);
         $expertRole = $expert->role;
         $expertImage = $expert->image;
+        // Fetch the system instruction from the database
+        $expertInstruction = $expert->expertise;
+
 
         // Fetch OpenAI settings
         $setting = AISettings::find(1);
         $openaiModel = $setting->openaimodel;
 
-        // Create prompt based on user input and expert role
-        $prompt = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\". If anyone ask any questions outside of $expertRole, please reply as I am not program to response.";
+        // Check if the expert instruction is empty
+        if (empty($expertInstruction)) {
+            // If no instruction is provided, use the default instruction
+            $expertInstruction = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\". If anyone asks any questions outside of $expertRole, please reply as I am not programmed to respond.";
+        }
 
 
         // Define the messages array with the dynamic user input
         $messages = [
-            ['role' => 'system', 'content' => $prompt],
+            ['role' => 'system', 'content' => $expertInstruction],
             ['role' => 'user', 'content' => $userInput]
         ];
 
@@ -74,7 +80,7 @@ class AIChatController extends Controller
         $aiChatMessage = new AiChatMessage();
         $aiChatMessage->ai_chat_id = $aiChat->id;
         $aiChatMessage->user_id = Auth::id(); // Assuming you are using authentication
-        $aiChatMessage->prompt = $prompt;
+        $aiChatMessage->prompt = $expertInstruction;
         $aiChatMessage->response = $content;
         $aiChatMessage->words = str_word_count($content);
         $aiChatMessage->save();
@@ -82,7 +88,7 @@ class AIChatController extends Controller
 
         // Return response to the client
         return response()->json([
-            'prompt' => $prompt,
+            'prompt' => $expertInstruction,
             'content' => $content,
             'expert_image' => $expertImage
         ]);

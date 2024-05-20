@@ -26,27 +26,27 @@
                 
                     <div class="col-md-12">
                         <label for="expert_name" class="form-label">Expert Name</label>
-                        <input type="text" name="expert_name" class="form-control mb-3" id="expert_name" placeholder="Enter Expert Name">
+                        <input type="text" name="expert_name" class="form-control mb-3" id="expert_name" placeholder="Enter Expert Name" required>
                     </div>
 
                     <div class="col-md-12">
                         <label for="character_name" class="form-label">Character Name</label>
-                        <input type="text" name="character_name" class="form-control mb-3" id="character_name" placeholder="Enter Character Name">
+                        <input type="text" name="character_name" class="form-control mb-3" id="character_name" placeholder="Enter Character Name" required>
                     </div>
 
                     <div class="col-md-12">
                         <label for="description" class="form-label">Short Description</label>
-                        <textarea name="description" class="form-control mb-3" id="description" rows="3" placeholder="Enter Short Description"></textarea>
+                        <textarea name="description" class="form-control mb-3" id="description" rows="3" placeholder="Enter Short Description" required></textarea>
                     </div>
 
                     <div class="col-md-12">
                         <label for="role" class="form-label">Role</label>
-                        <input type="text" name="role" class="form-control mb-3" id="role" placeholder="Enter Role">
+                        <input type="text" name="role" class="form-control mb-3" id="role" placeholder="Enter Role" required>
                     </div>
 
                     <div class="col-md-12">
                         <div class="col"> <label for="expertise" class="form-label">System Instruction</label></div>
-                        <textarea name="expertise" class="form-control" id="expertise" rows="3" placeholder="Enter Expertise"></textarea>
+                        <textarea name="expertise" class="form-control" id="expertise" rows="3" placeholder="Enter System Instruction"></textarea>
                     </div>
                
             </div>
