@@ -300,6 +300,18 @@
     <div class="card card-height-100">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
+            <!-- Add this code inside the card-header div -->
+            <div class="form-group mb-0 ms-auto">
+                <label for="ai_model_select" class="form-label">Select AI Model:</label>
+                <select class="form-select" id="ai_model_select">
+                    <option value="">Use Default</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+
         </div><!-- end card header -->
 
         <div class="card-body p-0">

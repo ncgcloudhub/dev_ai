@@ -54,7 +54,7 @@ class AIChatController extends Controller
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('app.openai_api_key'),
         ])->post('https://api.openai.com/v1/chat/completions', [
-            'model' => 'gpt-4o', // Use the appropriate model name
+            'model' =>  $openaiModel, // Use the appropriate model name
             'messages' => $messages,
             'temperature' => 0,
             'top_p' => 1,
@@ -96,10 +96,19 @@ class AIChatController extends Controller
 
 
     // Dashboard Chat Admin
-public function send(Request $request)
-        {
-            $userMessage = $request->input('message');
+    public function send(Request $request)
+    {
+        $userMessage = $request->input('message');
         $file = $request->file('file');
+
+        // Inside the send method of your controller
+        $openaiModel = $request->input('ai_model'); // Get the selected AI model
+
+        // If no model is selected, use the default model from settings
+        if (!$openaiModel) {
+            $setting = AISettings::find(1);
+            $openaiModel = $setting->openaimodel;
+        }
 
         // Validate the file
         if ($file) {
@@ -142,7 +151,7 @@ public function send(Request $request)
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'model' => 'gpt-4o', // Use the appropriate model name
+                'model' =>  $openaiModel, // Use the appropriate model name
                 'messages' => $messages,
             ],
         ]);
@@ -155,8 +164,6 @@ public function send(Request $request)
         return response()->json([
             'message' => $message
         ]);
-}
-
-    
+    }
 }
     // END Dashboard Chat Admin

@@ -66,6 +66,8 @@
     // Function to send message
     function sendMessage() {
         const message = messageInput.value.trim();
+        const selectedModel = document.getElementById('ai_model_select').value; // Get the selected AI model
+        console.log(selectedModel);
         document.getElementById('file_name_display').innerHTML = '';
         const file = fileInput.files[0];
 
@@ -77,6 +79,9 @@
         if (file) {
             formData.append('file', file);
         }
+
+        // Include selected AI model in the payload
+        formData.append('ai_model', selectedModel);
 
         sendMessageBtn.disabled = true;
         sendMessageBtn.innerHTML = 'Sending...';
