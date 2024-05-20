@@ -32,8 +32,27 @@
 
 {{-- CHAT STARt Scripts--}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Function to auto-expand textarea
+        $('.auto-expand').on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+
+    // Function to send message when Enter key is pressed
+    $('.auto-expand').on('keydown', function(e) {
+        if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
+            e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
+            sendMessage(); // Call the function to send the message
+        }
+    });
+    
+    </script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
     const fileInput = document.getElementById('file_input'); // File input
@@ -44,7 +63,8 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    sendMessageBtn.addEventListener('click', function () {
+    // Function to send message
+    function sendMessage() {
         const message = messageInput.value.trim();
         document.getElementById('file_name_display').innerHTML = '';
         const file = fileInput.files[0];
@@ -142,8 +162,23 @@
             sendMessageBtn.disabled = false;
             sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
         });
+    }
+
+    // Event listener for Enter key press
+    messageInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent default behavior (adding a new line)
+            sendMessage(); // Call the sendMessage function
+        }
+    });
+
+    // Event listener for Send button click
+    sendMessageBtn.addEventListener('click', function () {
+        sendMessage(); // Call the sendMessage function
     });
 });
+</script>
+
 
 </script>
 {{-- CHAT END Scripts--}}

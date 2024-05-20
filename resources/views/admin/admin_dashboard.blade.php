@@ -319,7 +319,7 @@
                     </div>
                     <div class="col">
                         <div class="position-relative">
-                            <input type="text" id="user_message_input" class="form-control border-light bg-light" placeholder="Enter Message...">
+                            <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                         </div>
                     </div><!-- end col -->
                  
