@@ -34,24 +34,32 @@ class AIChatController extends Controller
         $openaiModel = $setting->openaimodel;
 
         // Create prompt based on user input and expert role
-        $prompt = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\". If anyone ask any questions outside of $expertRole, please reply as I am not program to response. ";
+        $prompt = "You are now playing the role of $expertRole. As an expert in $expertRole for the past 40 years, I need your help. Please answer this: \"$userInput\". If anyone ask any questions outside of $expertRole, please reply as I am not program to response.";
+
+
+        // Define the messages array with the dynamic user input
+        $messages = [
+            ['role' => 'system', 'content' => $prompt],
+            ['role' => 'user', 'content' => $userInput]
+        ];
 
         // Make API request to OpenAI
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-        ])->post('https://api.openai.com/v1/completions', [
-            'model' => $openaiModel,
+        ])->post('https://api.openai.com/v1/chat/completions', [
+            'model' => 'gpt-4o', // Use the appropriate model name
+            'messages' => $messages,
             'temperature' => 0,
             'top_p' => 1,
             'frequency_penalty' => 0,
             'presence_penalty' => 0,
-            'max_tokens' => 500,
-            'prompt' => $prompt,
+
         ]);
 
         // Extract completion from API response
-        $content = $response->json('choices.0.text');
+        // $content = $response->json('choices.0.text');
+        $content = $response->json('choices.0.message.content');
 
 
         // TEST SAVE CHAT
@@ -91,32 +99,31 @@ class AIChatController extends Controller
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
             ['role' => 'user', 'content' => $userMessage]
         ];
-    
-            // Make API call
-            $client = new Client();
-            $response = $client->post('https://api.openai.com/v1/chat/completions', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-                    'Content-Type' => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o', // Use the appropriate model name
-                    'messages' => $messages,
-                ],
-            ]);
-    
-            
 
-            $data = json_decode($response->getBody(), true);
-           
-            $message = $data['choices'][0]['message']['content'];
+        // Make API call
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'gpt-4o', // Use the appropriate model name
+                'messages' => $messages,
+            ],
+        ]);
 
-            // return $message;
-            // Return the response
-            return response()->json([
-                'message' =>  $message
-            ]);
-        }
+
+
+        $data = json_decode($response->getBody(), true);
+
+        $message = $data['choices'][0]['message']['content'];
+
+        // return $message;
+        // Return the response
+        return response()->json([
+            'message' =>  $message
+        ]);
     }
+}
     // END Dashboard Chat Admin
-    

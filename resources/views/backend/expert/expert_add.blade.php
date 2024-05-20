@@ -26,26 +26,26 @@
                 
                     <div class="col-md-12">
                         <label for="expert_name" class="form-label">Expert Name</label>
-                        <input type="text" name="expert_name" class="form-control" id="expert_name" placeholder="Enter Expert Name">
+                        <input type="text" name="expert_name" class="form-control mb-3" id="expert_name" placeholder="Enter Expert Name">
                     </div>
 
                     <div class="col-md-12">
                         <label for="character_name" class="form-label">Character Name</label>
-                        <input type="text" name="character_name" class="form-control" id="character_name" placeholder="Enter Character Name">
+                        <input type="text" name="character_name" class="form-control mb-3" id="character_name" placeholder="Enter Character Name">
                     </div>
 
                     <div class="col-md-12">
                         <label for="description" class="form-label">Short Description</label>
-                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter Short Description"></textarea>
+                        <textarea name="description" class="form-control mb-3" id="description" rows="3" placeholder="Enter Short Description"></textarea>
                     </div>
 
                     <div class="col-md-12">
                         <label for="role" class="form-label">Role</label>
-                        <input type="text" name="role" class="form-control" id="role" placeholder="Enter Role">
+                        <input type="text" name="role" class="form-control mb-3" id="role" placeholder="Enter Role">
                     </div>
 
                     <div class="col-md-12">
-                        <div class="col"> <label for="expertise" class="form-label">Expertise</label></div>
+                        <div class="col"> <label for="expertise" class="form-label">System Instruction</label></div>
                         <textarea name="expertise" class="form-control" id="expertise" rows="3" placeholder="Enter Expertise"></textarea>
                     </div>
                
