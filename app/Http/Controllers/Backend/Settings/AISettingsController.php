@@ -16,11 +16,10 @@ class AISettingsController extends Controller
 
     public function AIsettingsStore(Request $request){
 
-      $openai_settings = AISettings::insertGetId([
+	  AISettings::findOrFail(1)->update([
       	
-		'openaimodel' => $request->openaimodel,
-		
-      	'created_at' => Carbon::now(),   
+		'openaimodel' => $request->openaimodel,	
+      	'updated_at' => Carbon::now(),   
 
       ]);
 

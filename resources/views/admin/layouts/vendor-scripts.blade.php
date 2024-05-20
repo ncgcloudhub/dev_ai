@@ -34,86 +34,116 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const messageInput = document.getElementById('user_message_input');
-        const sendMessageBtn = document.getElementById('send_message_btn');
-        const chatConversation = document.getElementById('users-conversation');
-        const chatContainer = document.getElementById('chat-conversation'); // Chat container
+    const messageInput = document.getElementById('user_message_input');
+    const sendMessageBtn = document.getElementById('send_message_btn');
+    const fileInput = document.getElementById('file_input'); // File input
+    const chatConversation = document.getElementById('users-conversation');
+    const chatContainer = document.getElementById('chat-conversation');
 
-        sendMessageBtn.addEventListener('click', function () {
-            const message = messageInput.value.trim();
-            if (message !== '') {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-                axios.post('/chat/send', { 
-                    message: message,
-                }, {
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                })
-                .then(response => {
+    sendMessageBtn.addEventListener('click', function () {
+        const message = messageInput.value.trim();
+        const file = fileInput.files[0];
 
-                    // console.log(response);
-                    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
-                    const newMessage = `<li class="chat-list right">
-                        <div class="conversation-list">
-                            <div class="user-chat-content">
-                                <div class="ctext-wrap">
-                                    <div class="ctext-wrap-content">
-                                        <p class="mb-0 ctext-content">${message}</p>
-                                    </div>
-                                </div>
-                                <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+        if (!message && !file) return; // Prevent sending empty message without file
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append('message', message);
+        if (file) {
+            formData.append('file', file);
+        }
+
+        sendMessageBtn.disabled = true;
+        sendMessageBtn.innerHTML = 'Sending...';
+
+        axios.post('/chat/send', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(response => {
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const newMessage = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message}</p>
                             </div>
                         </div>
-                    </li>`;
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
 
-                    const assistantMessage = response.data.message;
-                   
-                    const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
-                    const newReply = `<li class="chat-list left">
-                                    <div class="conversation-list">
-                                        <div class="chat-avatar">
-                                            <img src="${faviconUrl}" alt="">
+            const assistantMessage = response.data.message;
+
+            const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
+            const newReply = `<li class="chat-list left">
+                            <div class="conversation-list">
+                                <div class="chat-avatar">
+                                    <img src="${faviconUrl}" alt="">
+                                </div>
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            <p class="mb-0 ctext-content">${assistantMessage}</p>
                                         </div>
-                                        <div class="user-chat-content">
-                                            <div class="ctext-wrap">
-                                                <div class="ctext-wrap-content">
-                                                    <p class="mb-0 ctext-content">${assistantMessage}</p>
-                                                </div>
-                                                <div class="dropdown align-self-start message-box-drop">
-                                                    <a class="dropdown-toggle" href="#" role="button"
-                                                        data-bs-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                        <i class="ri-more-2-fill"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu">
-                                                      
-                                                        <a class="dropdown-item" href="#"><i
-                                                                class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                                                       
-                                                    </div>
-                                                </div>
+                                        <div class="dropdown align-self-start message-box-drop">
+                                            <a class="dropdown-toggle" href="#" role="button"
+                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="ri-more-2-fill"></i>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#"><i
+                                                        class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
                                             </div>
-                                            <div class="conversation-name"><small class="text-muted time">${currentTime}</small>
-                                                <span class="text-success check-message-icon"><i
-                                                        class="ri-check-double-line align-bottom"></i></span></div>
                                         </div>
                                     </div>
-                                </li>`;
+                                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small>
+                                        <span class="text-success check-message-icon"><i
+                                                class="ri-check-double-line align-bottom"></i></span></div>
+                                </div>
+                            </div>
+                        </li>`;
 
-                    chatConversation.insertAdjacentHTML('beforeend', newMessage);
-                    chatConversation.insertAdjacentHTML('beforeend', newReply);
+            chatConversation.insertAdjacentHTML('beforeend', newMessage);
+            chatConversation.insertAdjacentHTML('beforeend', newReply);
+            scrollToBottom();
 
-                    messageInput.value = ''; // Clear input field after sending message
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-            }
+            messageInput.value = ''; // Clear input field after sending message
+            fileInput.value = ''; // Clear file input after sending message
+        })
+        .catch(error => {
+            console.error(error);
+            const errorMessage = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>`;
+            chatConversation.insertAdjacentHTML('beforeend', errorMessage);
+            scrollToBottom();
+        })
+        .finally(() => {
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
         });
     });
+});
+
 </script>
 
 {{-- CHAT END Scripts--}}

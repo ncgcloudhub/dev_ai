@@ -316,6 +316,9 @@
                         </div>
                     </div><!-- end col -->
                     <div class="col-auto">
+                        <input type="file" id="file_input" class="form-control">
+                    </div>
+                    <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                     </div><!-- end col -->
                 </div><!-- end row -->
