@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AiChat;
 use App\Models\AiChatMessage;
 use Illuminate\Http\Request;
+use Smalot\PdfParser\Parser as PdfParser;
+use PhpOffice\PhpWord\IOFactory as WordIOFactory;
 use App\Models\AISettings;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -100,8 +102,6 @@ class AIChatController extends Controller
     {
         $userMessage = $request->input('message');
         $file = $request->file('file');
-
-        // Inside the send method of your controller
         $openaiModel = $request->input('ai_model'); // Get the selected AI model
 
         // If no model is selected, use the default model from settings
@@ -113,14 +113,14 @@ class AIChatController extends Controller
         // Validate the file
         if ($file) {
             $request->validate([
-                'file' => 'mimes:txt,pdf,doc,docx|max:2048', // Adjust the allowed file types and size as needed
+                'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:2048', // Adjust the allowed file types and size as needed
             ]);
         }
 
-        // Check if file was uploaded and has content
+        // Process file content if a file is uploaded
+        $fileContent = '';
         if ($file && $file->isValid()) {
-            // Read file content and store it in the session
-            $fileContent = file_get_contents($file->getRealPath());
+            $fileContent = $this->readFileContent($file->getRealPath(), $file->getClientOriginalExtension());
             session(['file_content' => $fileContent]);
         } else {
             // If no file uploaded or invalid, retrieve file content from session
@@ -151,19 +151,42 @@ class AIChatController extends Controller
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'model' =>  $openaiModel, // Use the appropriate model name
+                'model' => $openaiModel, // Use the appropriate model name
                 'messages' => $messages,
             ],
         ]);
 
         $data = json_decode($response->getBody(), true);
-
         $message = $data['choices'][0]['message']['content'];
 
         // Return the response
         return response()->json([
-            'message' => $message
+            'message' => $message,
         ]);
+    }
+
+    private function readFileContent($filePath, $extension)
+    {
+        if ($extension == 'pdf') {
+            $parser = new PdfParser();
+            $pdf = $parser->parseFile($filePath);
+            return $pdf->getText();
+        } elseif (in_array($extension, ['doc', 'docx'])) {
+            $phpWord = WordIOFactory::load($filePath);
+            $sections = $phpWord->getSections();
+            $content = '';
+            foreach ($sections as $section) {
+                $elements = $section->getElements();
+                foreach ($elements as $element) {
+                    if (method_exists($element, 'getText')) {
+                        $content .= $element->getText();
+                    }
+                }
+            }
+            return $content;
+        } else {
+            return file_get_contents($filePath);
+        }
     }
 }
     // END Dashboard Chat Admin
