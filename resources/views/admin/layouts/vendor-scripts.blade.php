@@ -52,36 +52,40 @@
     </script>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
-    const fileInput = document.getElementById('file_input'); // File input
+    const fileInput = document.getElementById('file_input');
     const chatConversation = document.getElementById('users-conversation');
     const chatContainer = document.getElementById('chat-conversation');
+    const aiModelSelect = document.getElementById('ai_model_select');
+    const fileNameDisplay = document.getElementById('file_name_display');
+    const icon = document.getElementById('icon');
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Function to send message
+    fileInput.addEventListener('change', function () {
+        const fileName = fileInput.files[0].name;
+        fileNameDisplay.textContent = `Selected file: ${fileName}`;
+    });
+
+
     function sendMessage() {
         const message = messageInput.value.trim();
-        const selectedModel = document.getElementById('ai_model_select').value; // Get the selected AI model
-        console.log(selectedModel);
-        document.getElementById('file_name_display').innerHTML = '';
+        const selectedModel = aiModelSelect.value;
         const file = fileInput.files[0];
 
-        if (!message && !file) return; // Prevent sending empty message without file
+        if (!message && !file) return;
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const formData = new FormData();
         formData.append('message', message);
+        formData.append('ai_model', selectedModel);
         if (file) {
             formData.append('file', file);
         }
-
-        // Include selected AI model in the payload
-        formData.append('ai_model', selectedModel);
 
         sendMessageBtn.disabled = true;
         sendMessageBtn.innerHTML = 'Sending...';
@@ -94,8 +98,7 @@
         })
         .then(response => {
             const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            const newMessage = `<li class="chat-list right">
+            const userMessageHTML = `<li class="chat-list right">
                 <div class="conversation-list">
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
@@ -107,49 +110,35 @@
                     </div>
                 </div>
             </li>`;
-
             const assistantMessage = response.data.message;
-
-            const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
-            const newReply = `<li class="chat-list left">
-                            <div class="conversation-list">
-                                <div class="chat-avatar">
-                                    <img src="${faviconUrl}" alt="">
-                                </div>
-                                <div class="user-chat-content">
-                                    <div class="ctext-wrap">
-                                        <div class="ctext-wrap-content">
-                                            <p class="mb-0 ctext-content">${assistantMessage}</p>
-                                        </div>
-                                        <div class="dropdown align-self-start message-box-drop">
-                                            <a class="dropdown-toggle" href="#" role="button"
-                                                data-bs-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                <i class="ri-more-2-fill"></i>
-                                            </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#"><i
-                                                        class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small>
-                                        <span class="text-success check-message-icon"><i
-                                                class="ri-check-double-line align-bottom"></i></span></div>
-                                </div>
+            const formattedMessage = formatContent(assistantMessage);
+            const assistantMessageHTML = `<li class="chat-list left">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                ${formattedMessage}
                             </div>
-                        </li>`;
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
 
-            chatConversation.insertAdjacentHTML('beforeend', newMessage);
-            chatConversation.insertAdjacentHTML('beforeend', newReply);
+            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
             scrollToBottom();
 
-            messageInput.value = ''; // Clear input field after sending message
-            fileInput.value = ''; // Clear file input after sending message
+            messageInput.value = '';
+            fileInput.value = '';
+            fileNameDisplay.textContent = '';
         })
         .catch(error => {
             console.error(error);
-            const errorMessage = `<li class="chat-list right">
+            const errorMessageHTML = `<li class="chat-list right">
                 <div class="conversation-list">
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
@@ -160,7 +149,7 @@
                     </div>
                 </div>
             </li>`;
-            chatConversation.insertAdjacentHTML('beforeend', errorMessage);
+            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
             scrollToBottom();
         })
         .finally(() => {
@@ -169,23 +158,42 @@
         });
     }
 
-    // Event listener for Enter key press
     messageInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // Prevent default behavior (adding a new line)
-            sendMessage(); // Call the sendMessage function
+            e.preventDefault();
+            sendMessage();
         }
     });
 
-    // Event listener for Send button click
     sendMessageBtn.addEventListener('click', function () {
-        sendMessage(); // Call the sendMessage function
+        sendMessage();
     });
+
+    function formatContent(content) {
+        let formattedContent = '';
+        let lines = content.split('\n');
+
+        if (lines.some(line => line.trim().startsWith('#'))) {
+            formattedContent = '<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: Calibri;">' + content + '</pre>';
+        } else if (lines.some(line => line.trim().startsWith('*'))) {
+            formattedContent += '<ul style="font-family: Calibri;">';
+            lines.forEach(line => {
+                if (line.trim().startsWith('*')) {
+                    formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+                } else {
+                    formattedContent += '<p>' + line.trim() + '</p>';
+                }
+            });
+            formattedContent += '</ul>';
+        } else {
+            formattedContent = '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + lines.join('</p><p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">') + '</p>';
+        }
+
+        return formattedContent;
+    }
 });
 </script>
 
-
-</script>
 {{-- CHAT END Scripts--}}
 
 {{-- Attach FIle Icon Start--}}

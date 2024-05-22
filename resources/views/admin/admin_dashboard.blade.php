@@ -300,7 +300,6 @@
     <div class="card card-height-100">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
-            <!-- Add this code inside the card-header div -->
             <div class="form-group mb-0 ms-auto">
                 <label for="ai_model_select" class="form-label">Select AI Model:</label>
                 <select class="form-select" id="ai_model_select">
@@ -308,10 +307,8 @@
                     <option value="gpt-3.5-turbo">GPT-3.5</option>
                     <option value="gpt-4">GPT-4</option>
                     <option value="gpt-4o">GPT-4o</option>
-                    <!-- Add more options as needed -->
                 </select>
             </div>
-
         </div><!-- end card header -->
 
         <div class="card-body p-0">
@@ -324,17 +321,15 @@
                 <div class="row g-2 mx-3 mt-2 mb-3">
                     <div id="file_name_display"></div>
                     <div class="col-auto">
-                        <!-- Icon -->
-                           <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
-                           <!-- File input (hidden) -->
-                           <input type="file" id="file_input" class="form-control" style="display: none;">
+                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="displayFileName(this)">
+
                     </div>
                     <div class="col">
                         <div class="position-relative">
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                         </div>
                     </div><!-- end col -->
-                 
                     <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                     </div><!-- end col -->
@@ -343,6 +338,7 @@
         </div><!-- end cardbody -->
     </div><!-- end card -->
 </div><!-- end col -->
+
 
         {{-- CHAT END --}}
 {{-- ------------------------------------------------------------------------------------------------------- --}}
@@ -570,4 +566,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/javascript">
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+</script>
+
 @endsection
