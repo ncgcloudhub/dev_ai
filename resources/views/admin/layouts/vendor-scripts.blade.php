@@ -66,6 +66,7 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+    
     fileInput.addEventListener('change', function () {
         const fileName = fileInput.files[0].name;
         fileNameDisplay.textContent = `Selected file: ${fileName}`;

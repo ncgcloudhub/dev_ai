@@ -120,15 +120,19 @@ class AIChatController extends Controller
             $request->validate([
                 'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:2048', // Adjust the allowed file types and size as needed
             ]);
-        }
 
-        // Process file content if a file is uploaded
-        $fileContent = '';
-        if ($file && $file->isValid()) {
-            $fileContent = $this->readFileContent($file->getRealPath(), $file->getClientOriginalExtension());
-            session(['file_content' => $fileContent]);
+            // Store the file
+            $filePath = $file->store('uploads');
+            $extension = $file->getClientOriginalExtension();
+
+            // Read file content
+            $fileContent = '';
+            if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
+                $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
+            } elseif (in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                $base64Image = $this->encodeImage(storage_path('app/' . $filePath));
+            }
         } else {
-            // If no file uploaded or invalid, retrieve file content from session
             $fileContent = session('file_content', '');
         }
 
@@ -169,6 +173,7 @@ class AIChatController extends Controller
             'message' => $message,
         ]);
     }
+
 
     private function readFileContent($filePath, $extension)
     {
