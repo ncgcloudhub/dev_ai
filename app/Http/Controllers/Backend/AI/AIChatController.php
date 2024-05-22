@@ -131,6 +131,14 @@ class AIChatController extends Controller
                 $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png'])) {
                 $base64Image = $this->encodeImage(storage_path('app/' . $filePath));
+                // Make API call for image
+                $response = $this->callOpenAIImageAPI($base64Image);
+                // Process response...
+                // For now, let's assume the response is stored in $message
+                $message = $response['choices'][0]['message']['content'];
+                return response()->json([
+                    'message' => $message,
+                ]);
             }
         } else {
             $fileContent = session('file_content', '');
@@ -153,19 +161,15 @@ class AIChatController extends Controller
         session(['conversation_history' => $conversationHistory]);
 
         // Make API call
-        $client = new Client();
-        $response = $client->post('https://api.openai.com/v1/chat/completions', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-                'Content-Type' => 'application/json',
-            ],
-            'json' => [
-                'model' => $openaiModel, // Use the appropriate model name
-                'messages' => $messages,
-            ],
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+            'Content-Type' => 'application/json',
+        ])->post('https://api.openai.com/v1/chat/completions', [
+            'model' => $openaiModel, // Use the appropriate model name
+            'messages' => $messages,
         ]);
 
-        $data = json_decode($response->getBody(), true);
+        $data = $response->json();
         $message = $data['choices'][0]['message']['content'];
 
         // Return the response
@@ -173,6 +177,8 @@ class AIChatController extends Controller
             'message' => $message,
         ]);
     }
+
+
 
 
     private function readFileContent($filePath, $extension)
@@ -231,6 +237,33 @@ class AIChatController extends Controller
         }
 
         return $content;
+    }
+
+    private function encodeImage($filePath)
+    {
+        $imageContent = file_get_contents($filePath);
+        return base64_encode($imageContent);
+    }
+
+    private function callOpenAIImageAPI($base64Image)
+    {
+        $response = OpenAI::chat()->create([
+            'model' => 'gpt-4o',
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        ['type' => 'text', 'text' => 'What’s in this image?'],
+                        ['type' => 'image_url', 'image_url' => [
+                            'url' => 'data:image/jpeg;base64,' . $base64Image,
+                        ]],
+                    ],
+                ],
+            ],
+            'max_tokens' => 300,
+        ]);
+
+        return $response;
     }
 }
     // END Dashboard Chat Admin
