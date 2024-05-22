@@ -161,15 +161,19 @@ class AIChatController extends Controller
         session(['conversation_history' => $conversationHistory]);
 
         // Make API call
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-            'Content-Type' => 'application/json',
-        ])->post('https://api.openai.com/v1/chat/completions', [
-            'model' => $openaiModel, // Use the appropriate model name
-            'messages' => $messages,
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => $openaiModel, // Use the appropriate model name
+                'messages' => $messages,
+            ],
         ]);
 
-        $data = $response->json();
+        $data = json_decode($response->getBody(), true);
         $message = $data['choices'][0]['message']['content'];
 
         // Return the response
@@ -177,6 +181,7 @@ class AIChatController extends Controller
             'message' => $message,
         ]);
     }
+
 
 
 
