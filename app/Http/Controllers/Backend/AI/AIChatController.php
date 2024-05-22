@@ -12,6 +12,11 @@ use App\Models\AiChatMessage;
 use Illuminate\Http\Request;
 use Smalot\PdfParser\Parser as PdfParser;
 use PhpOffice\PhpWord\IOFactory as WordIOFactory;
+use PhpOffice\PhpWord\Element\TextRun;
+use PhpOffice\PhpWord\Element\Text;
+use PhpOffice\PhpWord\Element\Title;
+use PhpOffice\PhpWord\Element\Table;
+use PhpOffice\PhpWord\Element\ListItem;
 use App\Models\AISettings;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -170,7 +175,7 @@ class AIChatController extends Controller
         if ($extension == 'pdf') {
             $parser = new PdfParser();
             $pdf = $parser->parseFile($filePath);
-            return $pdf->getText();
+            $content = $pdf->getText();
         } elseif (in_array($extension, ['doc', 'docx'])) {
             $phpWord = WordIOFactory::load($filePath);
             $sections = $phpWord->getSections();
@@ -178,15 +183,49 @@ class AIChatController extends Controller
             foreach ($sections as $section) {
                 $elements = $section->getElements();
                 foreach ($elements as $element) {
-                    if (method_exists($element, 'getText')) {
-                        $content .= $element->getText();
+                    // Handle different element types
+                    if ($element instanceof Text) {
+                        $content .= $element->getText() . "\n";
+                    } elseif ($element instanceof TextRun) {
+                        foreach ($element->getElements() as $textElement) {
+                            if ($textElement instanceof Text) {
+                                $content .= $textElement->getText() . "\n";
+                            }
+                        }
+                    } elseif ($element instanceof Title) {
+                        $content .= $element->getText() . "\n";
+                    } elseif ($element instanceof Table) {
+                        foreach ($element->getRows() as $row) {
+                            foreach ($row->getCells() as $cell) {
+                                foreach ($cell->getElements() as $cellElement) {
+                                    // Handle different element types within a table cell
+                                    if ($cellElement instanceof Text) {
+                                        $content .= $cellElement->getText() . "\t";
+                                    } elseif ($cellElement instanceof TextRun) {
+                                        foreach ($cellElement->getElements() as $textElement) {
+                                            if ($textElement instanceof Text) {
+                                                $content .= $textElement->getText() . "\t";
+                                            }
+                                        }
+                                    } elseif ($cellElement instanceof ListItem) {
+                                        $content .= $cellElement->getText() . "\n";
+                                    }
+                                    // Add more element types as needed
+                                }
+                                $content .= "\n";
+                            }
+                        }
+                    } elseif ($element instanceof ListItem) {
+                        $content .= $element->getText() . "\n";
                     }
+                    // Add handling for other element types as needed
                 }
             }
-            return $content;
         } else {
-            return file_get_contents($filePath);
+            $content = file_get_contents($filePath);
         }
+
+        return $content;
     }
 }
     // END Dashboard Chat Admin
