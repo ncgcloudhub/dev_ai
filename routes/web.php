@@ -250,6 +250,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
+
     });
 
 
@@ -355,3 +356,6 @@ Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('j
 Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
     ->name('add.page.seo');
 Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
+
+// Frontend Single Image
+Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');

@@ -240,5 +240,45 @@
 </script>
 {{-- Attach FIle Incon END --}}
 
+{{-- FRONTEND SINGLE IMAGE --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    $('#generateButton').click(function () {
+        var prompt = $('#prompt').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("generate.single.image") }}',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                prompt: prompt
+            },
+            success: function (response) {
+                if (response.message) {
+                    // Display the message if the user has already generated an image today
+                    $('#generatedImageContainer').html('<p>' + response.message + '</p>');
+                } else {
+                    // Extract the URL of the generated image from the response
+                    var imageUrl = response.data[0].url;
+                    if (imageUrl) {
+                        $('#generatedImageContainer').html('<img src="' + imageUrl + '" class="img-fluid" alt="Generated Image">');
+                    } else {
+                        $('#generatedImageContainer').html('<p>No image generated.</p>');
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+</script>
+
+
 @yield('script')
 @yield('script-bottom')

@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
@@ -320,7 +321,47 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
             {{-- AI Image gallery Slider Ends --}}
 
-         
+         {{-- SINGLE DALLE IMAGE GENERATE START--}}
+         <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body">
+                    <div class="text-center mb-5">
+                        <h1 class="mb-3 ff-secondary fw-semibold lh-base">AI Image Generate</h1>
+                        <p class="text-muted">Try any Prompt</p>
+                    </div>
+
+                    <form id="generateImageForm" class="row g-3">
+                        @csrf
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-xxl-5 col-sm-6">
+                                <div class="search-box">
+                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-1 col-sm-4">
+                                <div>
+                                    <button type="button" id="generateButton" class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                    </form>
+
+                    <div id="generatedImageContainer" class="text-center mt-5">
+                        <!-- Placeholder for the generated image -->
+                    </div>
+                    
+
+
+                 
+                </div><!-- end card-body -->
+            </div><!-- end card -->
+        </div><!--end col-->
+
+     {{-- SINGLE DALLE IMAGE GENERATE END--}}
 
 
             <!-- start services -->

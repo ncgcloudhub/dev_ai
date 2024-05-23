@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use App\Providers\AppServiceProvider;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Session;
 
 class GenerateImagesController extends Controller
 {
@@ -376,4 +378,45 @@ class GenerateImagesController extends Controller
             return response()->json(['error' => 'No condition met'], 500);
         }
     }
+
+
+// FRontend Single Image Generate
+public function generateSingleImage(Request $request)
+{
+    $apiKey = config('app.openai_api_key');
+    $prompt = $request->input('prompt');
+
+    // Check if the user has already generated an image today
+    if (Session::has('image_generated_at')) {
+        $lastGeneratedAt = Session::get('image_generated_at');
+        $today = now()->startOfDay();
+
+        if ($lastGeneratedAt->diffInDays($today) == 0) {
+            // If the user has already generated an image today, return a message
+            return response()->json(['message' => 'You have already generated an image today. Please try again tomorrow.']);
+        }
+    }
+
+    $client = new Client();
+    $response = $client->post('https://api.openai.com/v1/images/generations', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'model' => 'dall-e-3',
+            'prompt' => $prompt,
+            'n' => 1,
+            'size' => '1024x1024',
+        ],
+    ]);
+
+    $data = json_decode($response->getBody()->getContents(), true);
+
+    // Store the timestamp of the image generation in the session
+    Session::put('image_generated_at', now());
+
+    return response()->json($data);
+}
+
 }
