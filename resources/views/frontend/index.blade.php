@@ -350,6 +350,13 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         </div>
                     </form>
 
+                    <div id="loadingSpinner" class="text-center" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Generating image...</p>
+                    </div>
+
                     <div id="generatedImageContainer" class="text-center mt-5">
                         <!-- Placeholder for the generated image -->
                     </div>
