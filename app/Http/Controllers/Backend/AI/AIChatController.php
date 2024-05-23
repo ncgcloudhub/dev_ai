@@ -119,6 +119,12 @@ class AIChatController extends Controller
         // Initialize or retrieve uploaded files from session
         $uploadedFiles = session('uploaded_files', []);
 
+        // Initialize or retrieve conversation history from session
+        $conversationHistory = session('conversation_history', []);
+
+        // Initialize or retrieve context from session
+        $context = session('context', []);
+
         // Validate and handle the uploaded file
         if ($file) {
             $request->validate([
@@ -142,6 +148,14 @@ class AIChatController extends Controller
             // Add or update uploaded file content in the session
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
+
+            // Update context with the latest file
+            $context = [
+                'type' => 'file',
+                'timestamp' => time(),
+                'content' => $fileContent,
+            ];
+            session(['context' => $context]);
         }
 
         // Retrieve conversation history from session
@@ -151,6 +165,14 @@ class AIChatController extends Controller
         if (!empty($userMessage)) {
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
+
+            // Update context with the latest message
+            $context = [
+                'type' => 'message',
+                'timestamp' => time(),
+                'content' => $userMessage,
+            ];
+            session(['context' => $context]);
         }
 
         // Define the messages array with the dynamic user input
@@ -161,6 +183,12 @@ class AIChatController extends Controller
         // Add conversation history to messages array
         foreach ($conversationHistory as $message) {
             $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+        }
+
+        if ($context['type'] == 'file') {
+            $messages[] = ['role' => 'user', 'content' => $context['content']];
+        } elseif ($context['type'] == 'message') {
+            $messages[] = ['role' => 'user', 'content' => $context['content']];
         }
 
         // If user message is not empty, include it in messages array
