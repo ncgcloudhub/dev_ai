@@ -21,6 +21,8 @@ use App\Models\AISettings;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Session;
+
 
 class AIChatController extends Controller
 {
@@ -115,10 +117,13 @@ class AIChatController extends Controller
             $openaiModel = $setting->openaimodel;
         }
 
-        // Validate the file
+        // Initialize or retrieve uploaded files from session
+        $uploadedFiles = session('uploaded_files', []);
+
+        // Validate and handle the uploaded file
         if ($file) {
             $request->validate([
-                'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:2048', // Adjust the allowed file types and size as needed
+                'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:20480', // Adjust the allowed file types and size as needed
             ]);
 
             // Store the file
@@ -131,34 +136,48 @@ class AIChatController extends Controller
                 $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
             } elseif (in_array($extension, ['jpg', 'jpeg', 'png'])) {
                 $base64Image = $this->encodeImage(storage_path('app/' . $filePath));
-                // Make API call for image
                 $response = $this->callOpenAIImageAPI($base64Image);
-                // Process response...
-                // For now, let's assume the response is stored in $message
-                $message = $response['choices'][0]['message']['content'];
-                return response()->json([
-                    'message' => $message,
-                ]);
+                $fileContent = $response['choices'][0]['message']['content']; // Update fileContent with image analysis result
             }
-        } else {
-            $fileContent = session('file_content', '');
+
+            // Add or update uploaded file content in the session
+            $uploadedFiles[$filePath] = $fileContent;
+            session(['uploaded_files' => $uploadedFiles]);
         }
+
+        // Retrieve conversation history from session
+        $conversationHistory = session('conversation_history', []);
+
+        // Add the user message to the conversation history
+        $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+        session(['conversation_history' => $conversationHistory]);
 
         // Define the messages array with the dynamic user input
         $messages = [
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-            ['role' => 'user', 'content' => $userMessage],
         ];
 
-        // Add file content to messages if it exists
-        if ($fileContent) {
+        // Add conversation history to messages array
+        foreach ($conversationHistory as $message) {
+            $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+        }
+
+        // If user message is not empty, include it in messages array
+        if (!empty($userMessage)) {
+            $messages[] = ['role' => 'user', 'content' => $userMessage];
+        }
+
+        // Add uploaded file content to messages if it exists
+        foreach ($uploadedFiles as $uploadedFile => $fileContent) {
             $messages[] = ['role' => 'user', 'content' => $fileContent];
         }
 
-        // Add user message to conversation history
-        $conversationHistory = session('conversation_history', []);
-        $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
-        session(['conversation_history' => $conversationHistory]);
+        // Ensure UTF-8 encoding for all message contents
+        array_walk_recursive($messages, function (&$item, $key) {
+            if (is_string($item)) {
+                $item = utf8_encode($item);
+            }
+        });
 
         // Make API call
         $client = new Client();
@@ -183,7 +202,13 @@ class AIChatController extends Controller
     }
 
 
+    public function clearSession(Request $request)
+    {
+        Session::forget('uploaded_files');
+        Session::forget('conversation_history');
 
+        return redirect()->back(); // Redirect back to the previous page
+    }
 
 
     private function readFileContent($filePath, $extension)
@@ -199,7 +224,6 @@ class AIChatController extends Controller
             foreach ($sections as $section) {
                 $elements = $section->getElements();
                 foreach ($elements as $element) {
-                    // Handle different element types
                     if ($element instanceof Text) {
                         $content .= $element->getText() . "\n";
                     } elseif ($element instanceof TextRun) {
@@ -214,7 +238,6 @@ class AIChatController extends Controller
                         foreach ($element->getRows() as $row) {
                             foreach ($row->getCells() as $cell) {
                                 foreach ($cell->getElements() as $cellElement) {
-                                    // Handle different element types within a table cell
                                     if ($cellElement instanceof Text) {
                                         $content .= $cellElement->getText() . "\t";
                                     } elseif ($cellElement instanceof TextRun) {
@@ -226,7 +249,6 @@ class AIChatController extends Controller
                                     } elseif ($cellElement instanceof ListItem) {
                                         $content .= $cellElement->getText() . "\n";
                                     }
-                                    // Add more element types as needed
                                 }
                                 $content .= "\n";
                             }
@@ -234,7 +256,6 @@ class AIChatController extends Controller
                     } elseif ($element instanceof ListItem) {
                         $content .= $element->getText() . "\n";
                     }
-                    // Add handling for other element types as needed
                 }
             }
         } else {

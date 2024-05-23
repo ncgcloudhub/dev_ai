@@ -66,6 +66,18 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+   // Function to send a request to clear the session
+   window.addEventListener('beforeunload', function(event) {
+    axios.post('/clear-session', {})
+        .then(response => {
+            console.log('Session cleared successfully');
+        })
+        .catch(error => {
+            console.error('Failed to clear session:', error);
+        });
+});
+
+
     
     fileInput.addEventListener('change', function () {
         const fileName = fileInput.files[0].name;
