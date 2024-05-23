@@ -70,10 +70,10 @@
                                                             <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 22px; text-align: center;" valign="top">
                                                                 <div class="row" style="display: flex; justify-content: center;">
                                                                     <div class="col" style="margin-right: 10px;">
-                                                                        <form method="POST" action="{{ route('verification.send') }}" style="margin: 0;">
+                                                                        <form id="verificationForm" method="POST" action="{{ route('verification.send') }}" style="margin: 0;">
                                                                             @csrf
-                                                                            <button type="submit" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: .8125rem; color: #FFF; text-decoration: none; font-weight: 400; text-align: center; cursor: pointer; display: inline-block; border-radius: .25rem; text-transform: capitalize; background-color: #25a0e2; margin: 0; border-color: #25a0e2; border-style: solid; border-width: 1px; padding: .5rem .9rem;">
-                                                                                Verify Your Email
+                                                                            <button id="verificationButton" type="submit" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: .8125rem; color: #FFF; text-decoration: none; font-weight: 400; text-align: center; cursor: pointer; display: inline-block; border-radius: .25rem; text-transform: capitalize; background-color: #25a0e2; margin: 0; border-color: #25a0e2; border-style: solid; border-width: 1px; padding: .5rem .9rem;">
+                                                                                Resend Verification Link
                                                                             </button>
                                                                         </form>
                                                                     </div>
@@ -138,4 +138,22 @@
     <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
+
+    {{-- Auto send Email Link --}}
+    <script>
+        window.onload = function () {
+            // Check if the form has already been submitted
+            var isFormSubmitted = localStorage.getItem('isFormSubmitted');
+    
+            if (!isFormSubmitted) {
+                // Trigger form submission when the page loads
+                document.getElementById('verificationForm').submit();
+    
+                // Set a flag in local storage to indicate that the form has been submitted
+                localStorage.setItem('isFormSubmitted', 'true');
+            }
+        };
+    </script>
+    
+
 @endsection
