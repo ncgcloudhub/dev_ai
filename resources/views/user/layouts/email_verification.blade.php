@@ -44,33 +44,32 @@
                                     <div class="content" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
                                         <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; margin: 0; border: none;">
                                             <tr style="font-family: 'Roboto', sans-serif; font-size: 14px; margin: 0;">
-                                                <td class="content-wrap" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; color: #495057; font-size: 14px; vertical-align: top; margin: 0;padding: 30px; border: 1px solid #e9ebec;border-radius: 7px; background-color: #fff;" valign="top">
+                                                <td class="content-wrap" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; color: #495057; font-size: 14px; vertical-align: top; margin: 0;padding: 30px; border: 1px solid #e9ebec; border-radius: 7px; background-color: #fff;" valign="top">
                                                     <meta itemprop="name" content="Confirm Email" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
                                                     <table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                         <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                             <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                                                <div style="text-align: center;margin-bottom: 15px;">
-                                                                    <img src="{{URL::asset('build/images/logo-dark1.png')}}" alt="" height="23">
+                                                                <div style="text-align: center; margin-bottom: 15px;">
+                                                                    <img src="{{URL::asset('build/images/logo-dark1.png')}}" alt="Company Logo" height="23">
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                         <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                                                            <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 24px; vertical-align: top; margin: 0; padding: 0 0 10px;  text-align: center;" valign="top">
-                                                                <h4 style="font-family: 'Roboto', sans-serif; font-weight: 500;">Please Verify your email</h5>
+                                                            <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 24px; vertical-align: top; margin: 0; padding: 0 0 10px; text-align: center;" valign="top">
+                                                                <h4 style="font-family: 'Roboto', sans-serif; font-weight: 500;">Please Verify Your Email</h4>
                                                             </td>
-                                                            
                                                         </tr>
                                                         <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                             <td class="content-block" style="font-family: 'Roboto', sans-serif; color: #878a99; box-sizing: border-box; font-size: 15px; vertical-align: top; margin: 0; padding: 0 0 26px; text-align: center;" valign="top">
-                                                                You're Almost There!
+                                                                You're almost there!
                                                                 <p style="margin-bottom: 13px;"></p>
-                                                                <p style="margin-bottom: 0;">Please click on the <strong>button</strong> to get <b>E-Mail Verification</b></p>
+                                                                <p style="margin-bottom: 0;">Please click the <strong style="color: #28a118">Verify Your Email</strong> button below to complete your email verification.</p>
                                                             </td>
                                                         </tr>
                                                         <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                             <td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 22px; text-align: center;" valign="top">
-                                                                <div class="row">
-                                                                    <div class="col">
+                                                                <div class="row" style="display: flex; justify-content: center;">
+                                                                    <div class="col" style="margin-right: 10px;">
                                                                         <form method="POST" action="{{ route('verification.send') }}" style="margin: 0;">
                                                                             @csrf
                                                                             <button type="submit" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: .8125rem; color: #FFF; text-decoration: none; font-weight: 400; text-align: center; cursor: pointer; display: inline-block; border-radius: .25rem; text-transform: capitalize; background-color: #25a0e2; margin: 0; border-color: #25a0e2; border-style: solid; border-width: 1px; padding: .5rem .9rem;">
@@ -79,19 +78,21 @@
                                                                         </form>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <form method="POST" action="{{ route('logout') }}">
+                                                                        <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
                                                                             @csrf
                                                                             <button type="submit" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: .8125rem; color: #FFF; text-decoration: none; font-weight: 400; text-align: center; cursor: pointer; display: inline-block; border-radius: .25rem; text-transform: capitalize; background-color: #25a0e2; margin: 0; border-color: #25a0e2; border-style: solid; border-width: 1px; padding: .5rem .9rem;">
-                                                                               Log Out
+                                                                                Log Out
                                                                             </button>
                                                                         </form>
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                        
-                                                      
                                                     </table>
+                                                    <div style="font-family: 'Roboto', sans-serif; font-size: 16px; text-align: center; margin: 20px auto; padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px;">
+                                                        <p style="margin: 0;">Please check your spam/junk folder if you do not receive the verification email.</p>
+                                                    </div>
+                                                    
                                                 </td>
                                             </tr>
                                         </table>

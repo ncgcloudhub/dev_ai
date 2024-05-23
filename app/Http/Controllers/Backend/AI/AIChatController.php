@@ -175,9 +175,10 @@ class AIChatController extends Controller
         // Ensure UTF-8 encoding for all message contents
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
-                $item = utf8_encode($item);
+                $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
             }
         });
+
 
         // Make API call
         $client = new Client();
