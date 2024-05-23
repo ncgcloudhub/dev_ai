@@ -387,15 +387,15 @@ public function generateSingleImage(Request $request)
     $prompt = $request->input('prompt');
 
     // Check if the user has already generated an image today
-    // if (Session::has('image_generated_at')) {
-    //     $lastGeneratedAt = Session::get('image_generated_at');
-    //     $today = now()->startOfDay();
+    if (Session::has('image_generated_at')) {
+        $lastGeneratedAt = Session::get('image_generated_at');
+        $today = now()->startOfDay();
 
-    //     if ($lastGeneratedAt->diffInDays($today) == 0) {
-    //         // If the user has already generated an image today, return a message
-    //         return response()->json(['message' => 'You have already generated an image today. Please try again tomorrow.']);
-    //     }
-    // }
+        if ($lastGeneratedAt->diffInDays($today) == 0) {
+            // If the user has already generated an image today, return a message
+            return response()->json(['message' => 'You have already generated an image today. Please try again tomorrow.']);
+        }
+    }
 
     $client = new Client();
     $response = $client->post('https://api.openai.com/v1/images/generations', [
