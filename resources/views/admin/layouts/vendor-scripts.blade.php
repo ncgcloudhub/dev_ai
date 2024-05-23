@@ -52,7 +52,7 @@
     </script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
     const fileInput = document.getElementById('file_input');
@@ -60,30 +60,25 @@
     const chatContainer = document.getElementById('chat-conversation');
     const aiModelSelect = document.getElementById('ai_model_select');
     const fileNameDisplay = document.getElementById('file_name_display');
-    const icon = document.getElementById('icon');
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-   // Function to send a request to clear the session
-   window.addEventListener('beforeunload', function(event) {
-    axios.post('/clear-session', {})
-        .then(response => {
-            console.log('Session cleared successfully');
-        })
-        .catch(error => {
-            console.error('Failed to clear session:', error);
-        });
-});
+    window.addEventListener('beforeunload', function () {
+        axios.post('/clear-session', {})
+            .then(response => {
+                console.log('Session cleared successfully');
+            })
+            .catch(error => {
+                console.error('Failed to clear session:', error);
+            });
+    });
 
-
-    
     fileInput.addEventListener('change', function () {
         const fileName = fileInput.files[0].name;
         fileNameDisplay.textContent = `Selected file: ${fileName}`;
     });
-
 
     function sendMessage() {
         const message = messageInput.value.trim();
@@ -112,28 +107,29 @@
         .then(response => {
             const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             let userMessageHTML = `<li class="chat-list right">
-        <div class="conversation-list">
-            <div class="user-chat-content">
-                <div class="ctext-wrap">
-                    <div class="ctext-wrap-content">
-                        <p class="mb-0 ctext-content">${message}</p>`;
-                        
-    if (file) {
-        const fileType = file.type.split('/')[0]; // Check if file is an image
-        if (fileType === 'image') {
-            const imageUrl = URL.createObjectURL(file);
-            userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-        } else {
-            userMessageHTML += `<i class=" ri-file-2-fill">${file.name}</i>`;
-        }
-    }
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message || file.name}</p>`;
 
-    userMessageHTML += `</div>
+            if (file) {
+                const fileType = file.type.split('/')[0];
+                if (fileType === 'image') {
+                    const imageUrl = URL.createObjectURL(file);
+                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+                } else {
+                    userMessageHTML += `<i class=" ri-file-2-fill">${file.name}</i>`;
+                }
+            }
+
+            userMessageHTML += `</div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
                 </div>
-                <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-            </div>
-        </div>
-    </li>`;
+            </li>`;
+
             const assistantMessage = response.data.message;
             const formattedMessage = formatContent(assistantMessage);
             const assistantMessageHTML = `<li class="chat-list left">
@@ -216,6 +212,7 @@
         return formattedContent;
     }
 });
+
 </script>
 
 {{-- CHAT END Scripts--}}

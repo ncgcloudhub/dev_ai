@@ -148,8 +148,10 @@ class AIChatController extends Controller
         $conversationHistory = session('conversation_history', []);
 
         // Add the user message to the conversation history
-        $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
-        session(['conversation_history' => $conversationHistory]);
+        if (!empty($userMessage)) {
+            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+            session(['conversation_history' => $conversationHistory]);
+        }
 
         // Define the messages array with the dynamic user input
         $messages = [

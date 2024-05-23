@@ -309,7 +309,7 @@
                     <option value="gpt-4o">GPT-4o</option>
                 </select>
             </div>
-        </div><!-- end card header -->
+        </div>
 
         <div class="card-body p-0">
             <div id="chat-conversation" class="chat-conversation p-3" data-simplebar style="height: 400px;">
@@ -322,22 +322,23 @@
                     <div id="file_name_display"></div>
                     <div class="col-auto">
                         <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
-                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="displayFileName(this)">
+                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
 
                     </div>
                     <div class="col">
                         <div class="position-relative">
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                         </div>
-                    </div><!-- end col -->
+                    </div>
                     <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
-                    </div><!-- end col -->
-                </div><!-- end row -->
+                    </div>
+                </div>
             </div>
-        </div><!-- end cardbody -->
-    </div><!-- end card -->
-</div><!-- end col -->
+        </div>
+    </div>
+</div>
+
 
 
 
