@@ -103,7 +103,6 @@ class AIChatController extends Controller
         ]);
     }
 
-
     // Dashboard Chat Admin
     public function send(Request $request)
     {

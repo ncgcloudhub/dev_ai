@@ -111,18 +111,29 @@
         })
         .then(response => {
             const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const userMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message}</p>
-                            </div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
+            let userMessageHTML = `<li class="chat-list right">
+        <div class="conversation-list">
+            <div class="user-chat-content">
+                <div class="ctext-wrap">
+                    <div class="ctext-wrap-content">
+                        <p class="mb-0 ctext-content">${message}</p>`;
+                        
+    if (file) {
+        const fileType = file.type.split('/')[0]; // Check if file is an image
+        if (fileType === 'image') {
+            const imageUrl = URL.createObjectURL(file);
+            userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+        } else {
+            userMessageHTML += `<i class=" ri-file-2-fill">${file.name}</i>`;
+        }
+    }
+
+    userMessageHTML += `</div>
                 </div>
-            </li>`;
+                <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+            </div>
+        </div>
+    </li>`;
             const assistantMessage = response.data.message;
             const formattedMessage = formatContent(assistantMessage);
             const assistantMessageHTML = `<li class="chat-list left">
