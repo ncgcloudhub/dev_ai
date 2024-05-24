@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
 use App\Models\Job;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
+use App\Models\Template;
 use App\Models\TermsConditions;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\DB;
+use OpenAI;
 
 class HomeController extends Controller
 {
@@ -40,6 +45,115 @@ class HomeController extends Controller
     {
         return view('frontend.contact');
     }
+
+    //Template Front End Page
+    public function FrontendFreeTemplate()
+    {
+        $templates = Template::orderby('id', 'asc')->get();
+        return view('frontend.template', compact('templates'));
+    }
+
+    public function TemplateView($slug)
+    {
+        // Find the template by slug
+        $Template = Template::where('slug', $slug)->firstOrFail();
+
+        // Convert JSON strings to arrays
+        $inputTypes = json_decode($Template->input_types, true);
+        $inputNames = json_decode($Template->input_names, true);
+        $inputLabels = json_decode($Template->input_labels, true);
+
+        $content = '';
+
+        return view('frontend.template_generate', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
+    }
+
+      // Generate Using Open AI
+      public function templategenerate(Request $input)
+      {
+        $template_id = $input->template_id;
+        $setting = AISettings::find(1);
+        $template = Template::find($template_id);
+        $user = Auth::user();
+    
+        $language = $input->language ?? 'English';
+        $max_result_length_value = intval($input->max_result_length_value) ?? 100;
+        $temperature_value = floatval($input->temperature_value) ?? 0;
+        $top_p_value = floatval($input->top_p_value) ?? 1;
+        $frequency_penalty_value = floatval($input->frequency_penalty_value) ?? 0;
+        $presence_penalty_value = floatval($input->presence_penalty_value) ?? 0;
+        $tone = $input->tone ?? 'professional';
+        $creative_level = $input->creative_level ?? 'High';
+        $style = $input->style ?? '';
+    
+        $prompt = $input->prompt;
+        if ($input->emoji == 1) {
+            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+        } elseif (!empty($style)) {
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+        } else {
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+        }
+    
+        foreach ($input->all() as $name => $inpVal) {
+            if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
+                $name = '{' . $name . '}';
+                if (!is_null($inpVal) && !is_null($name)) {
+                    $prompt = str_replace($name, $inpVal, $prompt);
+                } else {
+                    return response()->json([
+                        'status'  => 400,
+                        'success' => false,
+                        'message' => 'Your input does not match with the custom prompt',
+                    ]);
+                }
+            }
+        }
+    
+        $apiKey = config('app.openai_api_key');
+        $client = OpenAI::client($apiKey);
+    
+        $result = $client->completions()->create([
+            "model" => $setting->openaimodel,
+            "temperature" => $temperature_value,
+            "top_p" => $top_p_value,
+            "frequency_penalty" => $frequency_penalty_value,
+            "presence_penalty" => $presence_penalty_value,
+            'max_tokens' => $max_result_length_value,
+            'prompt' => $prompt,
+        ]);
+    
+        $completionTokens = $result->usage->completionTokens;
+        $content = trim($result['choices'][0]['text']);
+        $char_count = strlen($content);
+        $num_tokens = ceil($char_count / 4);
+        $num_words = str_word_count($content);
+        $num_characters = strlen($content);
+    
+        if ($user) {
+            if ($user->tokens_left <= 0) {
+                return response()->json(0);
+            } else {
+                User::where('id', $user->id)->update([
+                    'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
+                    'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
+                    'words_generated' => DB::raw('words_generated + ' . $num_words),
+                ]);
+    
+                Template::where('id', $template->id)->update([
+                    'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
+                ]);
+            }
+        }
+    
+        return response()->json([
+            'content' => $content,
+            'num_tokens' => $num_tokens,
+            'num_words' => $num_words,
+            'num_characters' => $num_characters,
+            'completionTokens' => $completionTokens,
+        ]);
+      }
 
     //All Jobs Front End Page
     public function AllJobs()

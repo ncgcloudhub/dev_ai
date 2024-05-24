@@ -36,6 +36,9 @@
                 <li class="nav-item">
                     <a class="nav-link fs-15" href="{{route('contact.us')}}">Contact</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link fs-15" href="{{route('frontend.free.template')}}">Template</a>
+                </li>
             </ul>
 
             

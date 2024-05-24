@@ -193,6 +193,11 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 // Contact Us Page
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 
+// Frontend Free Template Page
+Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
+Route::get('free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
+Route::post('free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+
 // Job Page
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
 Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
