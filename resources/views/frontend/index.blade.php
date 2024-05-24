@@ -205,6 +205,58 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             </section>
             <!-- end hero section -->
 
+
+             {{-- SINGLE DALLE IMAGE GENERATE START--}}
+         <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body">
+                    <div class="text-center mb-5">
+                        <h1 class="mb-3 ff-secondary fw-semibold lh-base">AI Image Generate</h1>
+                        <p class="text-muted">Try any Prompt</p>
+                    </div>
+
+                    <form id="generateImageForm" class="row g-3">
+                        @csrf
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-xxl-5 col-sm-6">
+                                <div class="search-box">
+                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-1 col-sm-4">
+                                <div>
+                                    <button type="button" id="generateButton" class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                    </form>
+
+                    <div id="loadingSpinner" class="text-center" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Generating image...</p>
+                    </div>
+
+                    <div id="generatedImageContainer" class="text-center mt-5">
+                        <!-- Placeholder for the generated image -->
+                    </div>
+                    
+
+
+                 
+                </div><!-- end card-body -->
+            </div><!-- end card -->
+        </div><!--end col-->
+
+     {{-- SINGLE DALLE IMAGE GENERATE END--}}
+
+
+
             <section class="section bg-light py-5">
                 <div class="container">  
                         <div class="row justify-content-center">
@@ -320,55 +372,6 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             </div><!--end col-->
 
             {{-- AI Image gallery Slider Ends --}}
-
-         {{-- SINGLE DALLE IMAGE GENERATE START--}}
-         <div class="col-lg-12">
-            <div class="card">
-              
-                <div class="card-body">
-                    <div class="text-center mb-5">
-                        <h1 class="mb-3 ff-secondary fw-semibold lh-base">AI Image Generate</h1>
-                        <p class="text-muted">Try any Prompt</p>
-                    </div>
-
-                    <form id="generateImageForm" class="row g-3">
-                        @csrf
-                        <div class="row g-3 justify-content-center">
-                            <div class="col-xxl-5 col-sm-6">
-                                <div class="search-box">
-                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
-                            </div>
-                            <!--end col-->
-                            <div class="col-xxl-1 col-sm-4">
-                                <div>
-                                    <button type="button" id="generateButton" class="btn btn-rounded btn-primary mb-2">Generate</button>
-                                </div>
-                            </div>
-                            <!--end col-->
-                        </div>
-                    </form>
-
-                    <div id="loadingSpinner" class="text-center" style="display: none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p>Generating image...</p>
-                    </div>
-
-                    <div id="generatedImageContainer" class="text-center mt-5">
-                        <!-- Placeholder for the generated image -->
-                    </div>
-                    
-
-
-                 
-                </div><!-- end card-body -->
-            </div><!-- end card -->
-        </div><!--end col-->
-
-     {{-- SINGLE DALLE IMAGE GENERATE END--}}
 
 
             <!-- start services -->

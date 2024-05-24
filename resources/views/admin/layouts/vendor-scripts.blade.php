@@ -52,7 +52,7 @@
     </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
     const fileInput = document.getElementById('file_input');
@@ -178,23 +178,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    messageInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
             sendMessage();
         }
     });
 
-    sendMessageBtn.addEventListener('click', function () {
-        sendMessage();
-    });
-
     function formatContent(content) {
+        const lines = content.split('\n');
         let formattedContent = '';
-        let lines = content.split('\n');
 
-        if (lines.some(line => line.trim().startsWith('#'))) {
-            formattedContent = '<pre style="white-space: pre-wrap; word-wrap: break-word; font-family: Calibri;">' + content + '</pre>';
+        if (lines.length === 1) {
+            formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
+        } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
+            const codeContent = lines.slice(1, -1).join('\n');
+            formattedContent = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace;">${codeContent}</pre>`;
         } else if (lines.some(line => line.trim().startsWith('*'))) {
             formattedContent += '<ul style="font-family: Calibri;">';
             lines.forEach(line => {
@@ -212,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return formattedContent;
     }
 });
+
 
 </script>
 
