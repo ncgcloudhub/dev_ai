@@ -17,13 +17,10 @@
            @include('frontend.body.nav_frontend')
 
            <br><br>
-<div class="container">
+<div class="container mt-5">
     <div class="row justify-content-center"> 
 <div class="row">
     <div class="col-12">
-        <div class="justify-content-between d-flex align-items-center mt-3 mb-4">
-            <h5 class="mb-0 pb-1 text-decoration-underline">Free Template</h5>
-        </div>
         <div class="row row-cols-xxl-5 row-cols-lg-3 row-cols-1">
             @foreach ($templates as $item)       
             <div class="col">
@@ -31,16 +28,14 @@
                 <div class="card card-body">
                     <div class="d-flex mb-4 align-items-center">
                         <div class="flex-shrink-0">
-                            <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-sm rounded-circle">
+                            <img src="/build/images/templates/{{$item->icon}}.png" alt="" class="avatar-sm rounded-circle">
                         </div>
                         <div class="flex-grow-1 ms-2">
-                            <h5 class="card-title mb-1">Oliver Phillips</h5>
-                            <p class="text-muted mb-0">Digital Marketing</p>
+                            <h5 class="card-title mb-1">{{$item->template_name}}</h5>
+                            <p class="text-muted mb-0">{{$item->description}}</p>
                         </div>
                     </div>
-                    <h6 class="mb-1">$15,548</h6>
-                    <p class="card-text text-muted">Expense Account</p>
-                    <a href="javascript:void(0)" class="btn btn-primary btn-sm">Generate</a>
+                    <a href="{{ route('frontend.free.template.view', ['slug' => $item->slug]) }}" class="btn btn-primary btn-sm">Generate</a>
                 </div>
                 </a>
             </div>

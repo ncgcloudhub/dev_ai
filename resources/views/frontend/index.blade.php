@@ -245,7 +245,24 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <div id="generatedImageContainer" class="text-center mt-5">
                         <!-- Placeholder for the generated image -->
                     </div>
-                    
+
+                    <!-- Avatar Group with Tooltip -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <div class="avatar-group">
+                            @foreach ($images_slider as $item)
+                            <a href="{{ $item->image_url }}" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Christi">
+                                <img src="{{ $item->image_url }}" alt="" class="rounded-circle avatar-xl">
+                            </a>
+                            @endforeach
+                            <a href="{{route('ai.image.gallery')}}" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="more">
+                                <div class="avatar-xl">
+                                    <div class="avatar-title rounded-circle">
+                                        More...
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
 
 
                  
