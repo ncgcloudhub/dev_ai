@@ -20,7 +20,7 @@ User
 </div>
 
 <div class="row">
-    <div class="col-xxl-3">
+    <div class="col-xxl-4">
         <div class="card mt-n5">
             <div class="card-body p-4">
                 <div class="text-center">
@@ -45,8 +45,8 @@ User
                     
                 </div>
 
-
-                <div class="col-xl-12">
+            <div class="row">
+                <div class="col-xl-6">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-success-subtle shadow-lg">
@@ -66,7 +66,7 @@ User
                 </div><!-- end col -->
 
 
-                <div class="col-xl-12">
+                <div class="col-xl-6">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-danger-subtle shadow-lg">
@@ -85,7 +85,7 @@ User
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-12">
+                <div class="col-xl-6">
                     <!-- card -->
                     <div class="card card-animate bg-success-subtle shadow-lg">
                         <div class="card-body">
@@ -104,7 +104,7 @@ User
                     </div><!-- end card -->
                 </div><!-- end col -->
                 
-                <div class="col-xl-12">
+                <div class="col-xl-6">
                     <!-- card -->
                     <div class="card card-animate bg-danger-subtle shadow-lg">
                         <div class="card-body">
@@ -122,13 +122,131 @@ User
                         </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
+            </div>
+
+            <div class="row">
+                <div class="col-xl-6">
+                    <!-- card -->
+                    <div class="card card-animate bg-success-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Tokens Used</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->tokens_used}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6">
+                    <!-- card -->
+                    <div class="card card-animate bg-danger-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Tokens Left</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->tokens_left}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6">
+                    <!-- card -->
+                    <div class="card card-animate bg-success-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Credits Used</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->credits_used}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-6">
+                    <!-- card -->
+                    <div class="card card-animate bg-danger-subtle shadow-lg">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Credits Left</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->credits_left}}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                {{-- Modal --}}
+                <div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModals">Edit</button>
+                </div>
+
+                <div class="col-xl-4 col-md-6">
+                    
+                    <div id="signupModals" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 overflow-hidden">
+                                
+                                <div class="modal-body">
+                                    <form method="POST" action="{{route('update.user.stats', $user->id)}}" class="row g-3" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT') <!-- Add this line to spoof PUT method -->
+                                        <input type="hidden" name="id" value="{{$user->id}}">
+                                      
+                                        <div class="mb-3">
+                                            <label for="tokens_left" class="form-label">Tokens Left</label>
+                                            <input type="text" class="form-control" name="tokens_left" id="tokens_left" value="{{$user->tokens_left}}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="credits_left" class="form-label">Credits Left</label>
+                                            <input type="text" class="form-control" name="credits_left" id="credits_left" value="{{$user->credits_left}}">
+                                        </div>
+                                       
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div><!-- end col -->
+                {{-- Modal End --}}
+
+
+            </div> 
 
             </div>
         </div>
         <!--end card-->
     </div>
     <!--end col-->
-    <div class="col-xxl-9">
+    <div class="col-xxl-8">
         <div class="card mt-xxl-n5">
             <div class="card-header">
                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">

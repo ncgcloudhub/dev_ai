@@ -115,6 +115,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
 
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
+
+        Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
     });
 
     // Templates
@@ -250,7 +252,6 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
-
     });
 
 

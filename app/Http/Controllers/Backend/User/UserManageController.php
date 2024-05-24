@@ -43,4 +43,15 @@ class UserManageController extends Controller
         return view('backend.user.user_details', compact('user'));
     }
 
+    public function UpdateUserStats(Request $request)
+    {
+
+        User::findOrFail($request->id)->update([
+            'tokens_left' => $request->tokens_left,
+            'credits_left' => $request->credits_left,
+        ]);
+
+        // Optionally, you can return a response indicating success or redirect to a different page
+        return redirect()->back()->with('success', 'User Stats updated Successfully');
+    }
 }
