@@ -199,7 +199,7 @@ class TemplateController extends Controller
         }
 
         $result = $client->completions()->create([
-            "model" => $setting->openaimodel,
+            "model" => 'gpt-3.5-turbo-instruct',
             "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
@@ -239,10 +239,9 @@ class TemplateController extends Controller
                 'num_words' => $num_words,
                 'num_characters' => $num_characters,
                 'completionTokens' => $completionTokens,
-                
+
             ]);
         }
-
     }
 
 
