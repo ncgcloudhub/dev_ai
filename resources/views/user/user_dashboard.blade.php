@@ -330,33 +330,48 @@
                 <!-- end col -->
 
                 {{-- CHAT START--}}
-<div class="col-xxl-4 col-lg-6">
-    <div class="card card-height-100">
-        <div class="card-header align-items-center d-flex">
-            <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
-        </div><!-- end card header -->
-
-        <div class="card-body p-0">
-            <div id="chat-conversation" class="chat-conversation p-3" data-simplebar style="height: 400px;">
-                <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
-                    <!-- Messages will be appended here -->
-                </ul>
-            </div>
-            <div class="border-top border-top-dashed">
-                <div class="row g-2 mx-3 mt-2 mb-3">
-                    <div class="col">
-                        <div class="position-relative">
-                            <input type="text" id="user_message_input" class="form-control border-light bg-light" placeholder="Enter Message...">
+                <div class="col-xxl-4 col-lg-6">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
+                            <div class="form-group mb-0 ms-auto">
+                                <label for="ai_model_select" class="form-label">Select AI Model:</label>
+                                <select class="form-select" id="ai_model_select">
+                                    <option value="">Use Default</option>
+                                    <option value="gpt-3.5-turbo">GPT-3.5</option>
+                                    <option value="gpt-4">GPT-4</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                </select>
+                            </div>
                         </div>
-                    </div><!-- end col -->
-                    <div class="col-auto">
-                        <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
-                    </div><!-- end col -->
-                </div><!-- end row -->
-            </div>
-        </div><!-- end cardbody -->
-    </div><!-- end card -->
-</div><!-- end col -->
+                
+                        <div class="card-body p-0">
+                            <div id="chat-conversation" class="chat-conversation p-3" data-simplebar style="height: 400px;">
+                                <ul class="list-unstyled chat-conversation-list chat-sm" id="users-conversation">
+                                    <!-- Messages will be appended here -->
+                                </ul>
+                            </div>
+                            <div class="border-top border-top-dashed">
+                                <div class="row g-2 mx-3 mt-2 mb-3">
+                                    <div id="file_name_display"></div>
+                                    <div class="col-auto">
+                                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
+                
+                                    </div>
+                                    <div class="col">
+                                        <div class="position-relative">
+                                            <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
         {{-- CHAT END --}}
         

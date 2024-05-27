@@ -250,7 +250,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     // adminDashboardChat
     Route::post('/chat/send', [AIChatController::class, 'send']);
-    Route::post('/clear-session', [AIChatController::class, 'clearSession'])->name('clear-session');
+    // Route::post('/clear-session', [AIChatController::class, 'clearSession'])->name('clear-session');
 
 
 
