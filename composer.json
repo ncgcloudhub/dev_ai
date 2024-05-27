@@ -12,6 +12,7 @@
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.8",
         "league/flysystem-azure-blob-storage": "^3.25",
+        "maatwebsite/excel": "^3.1",
         "openai-php/client": "^0.8.4",
         "openai-php/laravel": "^0.8.1",
         "phpoffice/phpword": "^1.2",

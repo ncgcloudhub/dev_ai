@@ -281,6 +281,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
+    // Export
+    Route::get('/export', [PromptLibraryController::class , 'Export'])->name('prompt.export');
+
+    Route::post('/import', [PromptLibraryController::class , 'Import'])->name('import.store');
+
 
 
 

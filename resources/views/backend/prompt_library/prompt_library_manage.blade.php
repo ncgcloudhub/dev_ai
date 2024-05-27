@@ -23,6 +23,23 @@
     <div class="col-lg-12">
         <div class="card" id="orderList">
             <div class="card-header border-0">
+                <a href="{{ route('prompt.export') }}" class="btn btn-inverse-danger"> Download Xlsx   </a>
+                <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample" enctype="multipart/form-data">
+                    @csrf
+    
+    
+                    <div class="form-group mb-3">
+     <label for="exampleInputEmail1" class="form-label">Xlsx File Import   </label>
+         <input type="file" name="import_file" class="form-control" >
+    
+                    </div>
+    
+    
+    
+    
+      <button type="submit" class="btn btn-inverse-warning">Upload </button>
+    
+                </form>
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Templates</h5>
                    

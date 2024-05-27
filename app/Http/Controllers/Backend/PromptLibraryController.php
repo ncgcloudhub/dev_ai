@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\PromptLibraryExportt;
 use App\Http\Controllers\Controller;
+use App\Imports\PromptLibraryImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use App\Models\PromptLibraryCategory;
 use App\Models\PromptLibrary;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PromptLibraryController extends Controller
 {
@@ -77,4 +80,24 @@ class PromptLibraryController extends Controller
 
         return view('backend.prompt_library.prompt_library_view', compact('prompt_library'));
     }
+
+    // Export
+    public function Export(){
+
+        return Excel::download(new PromptLibraryExportt, 'prompt_library.xlsx');
+
+    }// End Method 
+
+    public function Import(Request $request){
+
+        Excel::import(new PromptLibraryImport(), $request->file('import_file'));
+
+         $notification = array(
+           'message' => 'Promopt Imported Successfully',
+           'alert-type' => 'success'
+       );
+
+       return redirect()->back()->with($notification);
+
+   }// End Method 
 }
