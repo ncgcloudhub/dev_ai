@@ -65,15 +65,15 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    window.addEventListener('beforeunload', function () {
-        axios.post('/clear-session', {})
-            .then(response => {
-                console.log('Session cleared successfully');
-            })
-            .catch(error => {
-                console.error('Failed to clear session:', error);
-            });
-    });
+    // window.addEventListener('beforeunload', function () {
+    //     axios.post('/clear-session', {})
+    //         .then(response => {
+    //             console.log('Session cleared successfully');
+    //         })
+    //         .catch(error => {
+    //             console.error('Failed to clear session:', error);
+    //         });
+    // });
 
     fileInput.addEventListener('change', function () {
         const fileName = fileInput.files[0].name;

@@ -232,13 +232,13 @@ class AIChatController extends Controller
     }
 
 
-    public function clearSession(Request $request)
-    {
-        Session::forget('uploaded_files');
-        Session::forget('conversation_history');
+    // public function clearSession(Request $request)
+    // {
+    //     Session::forget('uploaded_files');
+    //     Session::forget('conversation_history');
 
-        return redirect()->back(); // Redirect back to the previous page
-    }
+    //     return redirect()->back(); // Redirect back to the previous page
+    // }
 
 
     private function readFileContent($filePath, $extension)
