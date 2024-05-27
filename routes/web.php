@@ -246,6 +246,10 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
         Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [AIChatController::class, 'SendMessages']);
+
+        // GET MESSAGES TEST
+        Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
+
         
     });
 

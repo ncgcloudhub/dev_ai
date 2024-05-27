@@ -219,6 +219,75 @@
 
 {{-- CHAT END Scripts--}}
 
+
+{{-- TEST GET MESSAGES --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const sessionSelect = document.getElementById('session');
+    const chatConversation = document.getElementById('users-conversation');
+
+    sessionSelect.addEventListener('change', function() {
+        const sessionId = sessionSelect.value;
+
+        axios.get(`/chat/sessions/${sessionId}/messages`)
+            .then(response => {
+                const messages = response.data;
+
+                // Clear current chat
+                chatConversation.innerHTML = '';
+
+// Display fetched messages
+messages.forEach(message => {
+                    let content = '';
+                    let role = '';
+
+                    if (message.message) {
+                        content = message.message;
+                        role = 'user';
+                    } else if (message.reply) {
+                        content = message.reply;
+                        role = 'assistant'; // Adjust this to match your classes for assistant messages
+                    }
+
+                    const messageHTML = `
+                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                            <div class="conversation-list">
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            <p class="mb-0 ctext-content">${content}</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-name">
+                                        <small class="text-muted time">${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+                });
+
+                // Scroll to bottom of the chat
+                chatConversation.scrollTop = chatConversation.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+
+    // Optionally, trigger a change event on page load to load messages for the first session
+    if (sessionSelect.options.length > 0) {
+        sessionSelect.dispatchEvent(new Event('change'));
+    }
+});
+
+    </script>
+    
+
+
+
+
 {{-- Attach FIle Icon Start--}}
 <script>
     document.getElementById('icon').addEventListener('click', function() {

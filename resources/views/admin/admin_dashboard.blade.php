@@ -301,6 +301,17 @@
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
             <div class="form-group mb-0 ms-auto">
+                <label for="ai_model_select" class="form-label">Select Session</label>
+                <select class="form-select" id="session">
+                    @foreach ($sessions as $item)
+                   
+                    <option value="{{$item->id}}">{{$item->id}}</option>
+                         
+                    @endforeach
+                 
+                </select>
+            </div>
+            <div class="form-group mb-0 ms-auto">
                 <label for="ai_model_select" class="form-label">Select AI Model:</label>
                 <select class="form-select" id="ai_model_select">
                     <option value="">Use Default</option>

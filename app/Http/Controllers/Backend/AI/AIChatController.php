@@ -239,13 +239,19 @@ class AIChatController extends Controller
         ]);
     }
 
-    // GET MESSAGES
-    public function getMessages($sessionId)
-{
-    $messages = Message::where('session_id', $sessionId)->orderBy('created_at', 'asc')->get();
-    return response()->json($messages);
-}
+    // GET MESSAGES TEST
+    public function getSessionMessages($id)
+    {
+        // Fetch the session with its messages
+        $session = \App\Models\Session::with('messages')->find($id);
 
+        if (!$session) {
+            return response()->json(['error' => 'Session not found'], 404);
+        }
+
+        // Return the messages in JSON format
+        return response()->json($session->messages);
+    }
 
 
     // public function clearSession(Request $request)

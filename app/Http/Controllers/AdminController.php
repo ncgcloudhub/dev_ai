@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomTemplate;
+use App\Models\Session;
 use App\Models\Template;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,12 +29,18 @@ class AdminController extends Controller
         ->whereNotNull('country') // Exclude users with NULL country
         ->groupBy('country')
         ->get();
+
+        $userId = auth()->id(); // Get the authenticated user's ID
+        $sessions = Session::with('messages') // Eager load the related messages
+                        ->where('user_id', $userId)
+                        ->get();
+    
        
         // dd($templates_count);
-        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers'));
+        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers','sessions'));
        
     }
-
+ 
     public function showChangePasswordForm(User $user)
     {
         // Pass the user data to the view
