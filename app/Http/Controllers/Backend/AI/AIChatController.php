@@ -18,6 +18,8 @@ use PhpOffice\PhpWord\Element\Title;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\Element\ListItem;
 use App\Models\AISettings;
+use App\Models\Message;
+use App\Models\Session as ModelsSession;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -109,32 +111,32 @@ class AIChatController extends Controller
         $userMessage = $request->input('message');
         $file = $request->file('file');
         $openaiModel = $request->input('ai_model'); // Get the selected AI model
-
+    
         // If no model is selected, use the default model from settings
         if (!$openaiModel) {
             $setting = AISettings::find(1);
             $openaiModel = $setting->openaimodel;
         }
-
+    
         // Initialize or retrieve uploaded files from session
         $uploadedFiles = session('uploaded_files', []);
-
+    
         // Initialize or retrieve conversation history from session
         $conversationHistory = session('conversation_history', []);
-
+    
         // Initialize or retrieve context from session
         $context = session('context', []);
-
+    
         // Validate and handle the uploaded file
         if ($file) {
             $request->validate([
                 'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:20480', // Adjust the allowed file types and size as needed
             ]);
-
+    
             // Store the file
             $filePath = $file->store('uploads');
             $extension = $file->getClientOriginalExtension();
-
+    
             // Read file content
             $fileContent = '';
             if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
@@ -144,11 +146,11 @@ class AIChatController extends Controller
                 $response = $this->callOpenAIImageAPI($base64Image);
                 $fileContent = $response['choices'][0]['message']['content']; // Update fileContent with image analysis result
             }
-
+    
             // Add or update uploaded file content in the session
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
-
+    
             // Update context with the latest file
             $context = [
                 'type' => 'file',
@@ -157,15 +159,12 @@ class AIChatController extends Controller
             ];
             session(['context' => $context]);
         }
-
-        // Retrieve conversation history from session
-        $conversationHistory = session('conversation_history', []);
-
+    
         // Add the user message to the conversation history
         if (!empty($userMessage)) {
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
-
+    
             // Update context with the latest message
             $context = [
                 'type' => 'message',
@@ -173,42 +172,43 @@ class AIChatController extends Controller
                 'content' => $userMessage,
             ];
             session(['context' => $context]);
+    
+            // Save user message to the database
+            Message::create([
+                'session_id' => session('session_id'),
+                'user_id' => Auth::id(),
+                'message' => $userMessage,
+                'reply' => null,
+            ]);
         }
-
+    
         // Define the messages array with the dynamic user input
         $messages = [
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
         ];
-
+    
         // Add conversation history to messages array
         foreach ($conversationHistory as $message) {
-            $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+            if (!is_null($message['content'])) {
+                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+            }
         }
-
-        if ($context['type'] == 'file') {
-            $messages[] = ['role' => 'user', 'content' => $context['content']];
-        } elseif ($context['type'] == 'message') {
-            $messages[] = ['role' => 'user', 'content' => $context['content']];
+    
+        if (!is_null($context['content'])) {
+            if ($context['type'] == 'file') {
+                $messages[] = ['role' => 'user', 'content' => $context['content']];
+            } elseif ($context['type'] == 'message') {
+                $messages[] = ['role' => 'user', 'content' => $context['content']];
+            }
         }
-
-        // If user message is not empty, include it in messages array
-        if (!empty($userMessage)) {
-            $messages[] = ['role' => 'user', 'content' => $userMessage];
-        }
-
-        // Add uploaded file content to messages if it exists
-        foreach ($uploadedFiles as $uploadedFile => $fileContent) {
-            $messages[] = ['role' => 'user', 'content' => $fileContent];
-        }
-
+    
         // Ensure UTF-8 encoding for all message contents
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
                 $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
             }
         });
-
-
+    
         // Make API call
         $client = new Client();
         $response = $client->post('https://api.openai.com/v1/chat/completions', [
@@ -221,15 +221,31 @@ class AIChatController extends Controller
                 'messages' => $messages,
             ],
         ]);
-
+    
         $data = json_decode($response->getBody(), true);
-        $message = $data['choices'][0]['message']['content'];
-
+        $messageContent = $data['choices'][0]['message']['content'];
+    
+        // Save the AI's reply to the database
+        Message::create([
+            'session_id' => session('session_id'),
+            'user_id' => Auth::id(),
+            'message' => null,
+            'reply' => $messageContent,
+        ]);
+    
         // Return the response
         return response()->json([
-            'message' => $message,
+            'message' => $messageContent,
         ]);
     }
+
+    // GET MESSAGES
+    public function getMessages($sessionId)
+{
+    $messages = Message::where('session_id', $sessionId)->orderBy('created_at', 'asc')->get();
+    return response()->json($messages);
+}
+
 
 
     // public function clearSession(Request $request)

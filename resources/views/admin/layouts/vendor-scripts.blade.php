@@ -53,6 +53,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
     const fileInput = document.getElementById('file_input');
