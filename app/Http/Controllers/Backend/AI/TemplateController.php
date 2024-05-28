@@ -253,7 +253,7 @@ class TemplateController extends Controller
     }
 
 
-    public function callbackHandel()
+    public function callbackHandel(Request $request)
     {
         // Check if an error occurred during the authentication process
         if (request()->has('error') && request()->error == 'access_denied') {
@@ -267,13 +267,21 @@ class TemplateController extends Controller
         // Check if the user exists in your database
         $user = User::where('email', $googleUser->email)->first();
 
+        // Attempt to retrieve user's IP address from request headers
+        $ipAddress = $request->ip();
+
+
         // If the user doesn't exist, create a new user
         if (is_null($user)) {
             $newUser = User::create([
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
+                'status' => 'active',
+                'credits_left' => 100,
+                'tokens_left' => 5000,
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
+                'ipaddress' => $ipAddress, // Store IP address
             ]);
 
             // Log in the new user
@@ -299,7 +307,7 @@ class TemplateController extends Controller
         return Socialite::driver('github')->redirect();
     }
 
-    public function githubcallbackHandel()
+    public function githubcallbackHandel(Request $request)
     {
         // Get user data from Google
         $githubUser = Socialite::driver('github')->user();
@@ -307,13 +315,22 @@ class TemplateController extends Controller
         // Check if the user exists in your database
         $user = User::where('email', $githubUser->email)->first();
         $name = $githubUser->name ?? $githubUser->nickname ?? $githubUser->email;
+
+        // Attempt to retrieve user's IP address from request headers
+        $ipAddress = $request->ip();
+
+
         // If the user doesn't exist, create a new user
         if (is_null($user)) {
             $newUser = User::create([
                 'name' => $name,
                 'email' => $githubUser->email,
+                'status' => 'active',
+                'credits_left' => 100,
+                'tokens_left' => 5000,
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
+                'ipaddress' => $ipAddress, // Store IP address
             ]);
 
             // Log in the new user
