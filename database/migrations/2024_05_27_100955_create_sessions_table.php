@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
+            $table->text('session_token');
             $table->unsignedBigInteger('user_id');
             $table->timestamp('session_start')->nullable(false);
             $table->timestamp('session_end')->nullable()->default(null);

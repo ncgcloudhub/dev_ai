@@ -300,6 +300,7 @@
     <div class="card card-height-100">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
+            
             <div class="form-group mb-0 ms-auto">
                 <label for="ai_model_select" class="form-label">Select Session</label>
                 <select class="form-select" id="session">
@@ -343,6 +344,9 @@
                     </div>
                     <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" id="new_session_btn" class="btn btn-secondary">New Session</button>
                     </div>
                 </div>
             </div>

@@ -24,6 +24,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+
 
 
 class AIChatController extends Controller
@@ -172,10 +174,12 @@ class AIChatController extends Controller
                 'content' => $userMessage,
             ];
             session(['context' => $context]);
+
+            $sessionId = Session::get('session_id');
     
             // Save user message to the database
             Message::create([
-                'session_id' => session('session_id'),
+                'session_id' => $sessionId,
                 'user_id' => Auth::id(),
                 'message' => $userMessage,
                 'reply' => null,
@@ -227,7 +231,7 @@ class AIChatController extends Controller
     
         // Save the AI's reply to the database
         Message::create([
-            'session_id' => session('session_id'),
+            'session_id' => $sessionId,
             'user_id' => Auth::id(),
             'message' => null,
             'reply' => $messageContent,
@@ -248,10 +252,37 @@ class AIChatController extends Controller
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
         }
+         // Store the session ID in the Laravel session
+         session(['session_id' => $id]);
 
         // Return the messages in JSON format
         return response()->json($session->messages);
     }
+
+    // NEW SESSION
+    public function newSession(Request $request)
+{
+     // Clear session data
+     session()->forget(['uploaded_files', 'conversation_history', 'context']);
+        
+     // Generate a new session ID and store it
+     $token = bin2hex(random_bytes(16));// Generate a unique session ID
+   
+     // Log the new session in the database
+     $session = ModelsSession::create([
+         'session_token' => $token,
+         'user_id' => Auth::id(),
+         'session_start' => now(),
+         'created_at' => now(),
+     ]);
+
+     
+     // Store the session ID in the Laravel session
+     session(['session_id' => $session->id]);
+
+     return response()->json(['success' => true, 'session_id' => $session->id]);
+}
+
 
 
     // public function clearSession(Request $request)

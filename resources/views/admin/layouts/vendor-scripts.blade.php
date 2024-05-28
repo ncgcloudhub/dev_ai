@@ -61,10 +61,31 @@
     const chatContainer = document.getElementById('chat-conversation');
     const aiModelSelect = document.getElementById('ai_model_select');
     const fileNameDisplay = document.getElementById('file_name_display');
+    const newSessionBtn = document.getElementById('new_session_btn');
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+
+    // NEW SESSION
+    newSessionBtn.addEventListener('click', function () {
+        axios.post('/chat/new-session')
+            .then(response => {
+                if (response.data.success) {
+                    // Clear the chat UI
+                    chatConversation.innerHTML = '';
+                    // Clear input fields
+                    messageInput.value = '';
+                    fileInput.value = '';
+                    fileNameDisplay.textContent = '';
+                    // Scroll to bottom
+                    scrollToBottom();
+                }
+            })
+            .catch(error => {
+                console.error('Failed to start a new session:', error);
+            });
+    });
 
     // window.addEventListener('beforeunload', function () {
     //     axios.post('/clear-session', {})
