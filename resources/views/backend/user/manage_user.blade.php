@@ -55,13 +55,13 @@
                                         <label class="form-check-label" for="customSwitchsizemd"></label>
                                         
                                         <!--Change Password-->
-                                        <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="btn btn-primary waves-effect waves-light"><i class="ri-lock-2-fill"></i></a>
+                                        <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="btn btn-primary btn-sm waves-effect waves-light d-inline-block"><i class="ri-lock-2-fill"></i></a>
 
                                         {{-- Delete User --}}
-                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST">
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
+                                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
                                                 <i class="ri-delete-bin-7-fill"></i>
                                             </button>
                                         </form>
@@ -74,11 +74,11 @@
                                         <label class="form-check-label" for="customSwitchsizemd"></label>
 
                                         {{-- Delete User --}}
-                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST">
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
-                                                <i class="ri-delete-bin-7-fill"></i>
+                                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                <i class="ri-delete-bin-3-fill"></i>
                                             </button>
                                         </form>
                                     </div>
