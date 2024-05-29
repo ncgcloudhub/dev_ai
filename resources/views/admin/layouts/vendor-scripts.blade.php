@@ -378,6 +378,48 @@ messages.forEach(message => {
     });
 </script>
 
+{{-- NEWSLETTER --}}
+<script>
+    document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Fetch form data
+        var formData = new FormData(this);
+
+        // Send form data asynchronously using fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                // Optionally display a success message
+                alert('Subscribed Successfully');
+            } else {
+                // Handle errors if any
+                alert('Error occurred while subscribing');
+            }
+        })
+        .catch(error => {
+            console.error('Error occurred:', error);
+            alert('Error occurred while subscribing');
+        });
+
+        // Prevent the form from being submitted again
+        return false;
+    });
+</script>
+
+<script>
+    // Auto dismiss success alert after 3 seconds
+    window.setTimeout(function() {
+        $("#successAlert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+        });
+    }, 3000);
+</script>
+
+
 
 @yield('script')
 @yield('script-bottom')

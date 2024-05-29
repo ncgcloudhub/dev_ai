@@ -202,22 +202,23 @@ class HomeController extends Controller
 
     public function NewsLetterStore(Request $request)
     {
+    
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
-
+    
         // If the IP address is not found in the request headers, use fallback
         if ($ipAddress == '127.0.0.1') {
             $ipAddress = $_SERVER['REMOTE_ADDR'] ?? null;
         }
-
+    
         // Insert user's subscription details into the database
         $NewsLetter = NewsLetter::insertGetId([
-            'email' => $request->email,
+            'email' => $request['email'],
             'name' => $request->name,
             'ipaddress' => $ipAddress, // Store IP address
             'created_at' => now(),
         ]);
-
+    
         return redirect()->back()->with('success', 'Subscribed Successfully');
     } // end method
 

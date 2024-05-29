@@ -92,7 +92,14 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
     @endsection
+      
+    
     @section('content')
+    @if(session('success'))
+    <div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
         <!-- Begin page -->
         <div class="layout-wrapper landing">
            @include('frontend.body.nav_frontend')
@@ -825,14 +832,12 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                 <div class="container">
                     <form method="post" action="{{ route('newsletter.store') }}">
                         @csrf
-                    <div class="row align-items-center gy-4">
-                        <div class="col-sm">
-                            <div>
-                                <h4 class="text-white mb-0 fw-semibold">Get updated with the latest AI contents</h4>
+                        <div class="row align-items-center gy-4">
+                            <div class="col-sm">
+                                <div>
+                                    <h4 class="text-white mb-0 fw-semibold">Get updated with the latest AI contents</h4>
+                                </div>
                             </div>
-                        </div>
-                        <!-- end col -->
-                        
                             <div class="col-sm-auto d-flex justify-content-end align-items-center">
                                 <!-- Input with Placeholder -->
                                 <div class="me-3 col-12 form-group">
@@ -844,10 +849,9 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                     </button>
                                 </div>
                             </div>
-                      
-                        <!-- end col -->
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                    
                     <!-- end row -->
                 </div>
                 <!-- end container -->
