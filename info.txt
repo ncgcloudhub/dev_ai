@@ -10,3 +10,8 @@ credits_used
 credits_left
 tokens_left
 tokens_used
+
+
+
+.............................
+In users table add a new column called ipaddress
