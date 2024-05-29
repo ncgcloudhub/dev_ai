@@ -53,6 +53,7 @@ class PromptLibraryController extends Controller
             'icon' => $request->icon,
             'slug' => $slug,
             'category_id' => $request->category_id,
+            'sub_category_id' => $request->subcategory_id,
             'description' => $request->description,
             'actual_prompt' => $request->actual_prompt,
             'created_at' => Carbon::now(),

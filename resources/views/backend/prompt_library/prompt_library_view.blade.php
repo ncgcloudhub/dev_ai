@@ -35,6 +35,36 @@
                     </div>
                 </div> 
             </div>
+            <div class="card">
+                <div class="card-body"> 
+                    <div class="live-preview">
+                            <div class="col-md-12">
+                                <label for="language" class="form-label">Prompt Instruction</label>
+                                <p class="fw-medium link-primary">
+                                    @if (is_null($prompt_library->sub_category_id))
+                                        --
+                                    @else
+                                    {{$prompt_library->subcategory->sub_category_instruction}}</p>
+                                    @endif
+                                 
+                            </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="card">
+                <div class="card-body"> 
+                    <div class="live-preview">
+                            <div class="col-md-12">
+                                <label for="language" class="form-label">Category / Sub-Category Name</label>
+                                <p class="fw-medium link-primary">{{$prompt_library->category->category_name}} /@if (is_null($prompt_library->sub_category_id))
+                                    --</p>
+                                @else
+                                {{$prompt_library->subcategory->sub_category_name}}</p>
+                                @endif
+                            </div>
+                    </div>
+                </div> 
+            </div>
 
             <div class="card">
                 <div class="card-body"> 

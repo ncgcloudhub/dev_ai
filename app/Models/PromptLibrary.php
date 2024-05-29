@@ -11,8 +11,12 @@ class PromptLibrary extends Model
 
     protected $guarded = [];
 
-    public function prompt_category()
+    public function category()
     {
         return $this->belongsTo(PromptLibraryCategory::class, 'category_id', 'id');
+    }
+    public function subcategory()
+    {
+        return $this->belongsTo(PromptLibrarySubCategory::class, 'sub_category_id', 'id');
     }
 }
