@@ -145,6 +145,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
+
+        // GET SUB CATEGORY
+        Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
+
     });
 
     // Dalle Manage Image

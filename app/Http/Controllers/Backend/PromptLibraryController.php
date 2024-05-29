@@ -123,4 +123,11 @@ class PromptLibraryController extends Controller
 
         return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
     }
+
+    // GET SUB CATEGORY PROMPT
+    public function getPromptSubCategory($category_id)
+    {
+        $subcategories = PromptLibrarySubCategory::where('category_id', $category_id)->get();
+        return response()->json($subcategories);
+    }
 }
