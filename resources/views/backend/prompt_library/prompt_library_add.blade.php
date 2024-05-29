@@ -25,10 +25,22 @@
                         <input type="text" name="prompt_name" class="form-control" id="prompt_name" placeholder="Enter Template Name">
                         <label for="prompt_name" class="form-label">Prompt Name</label>
                     </div>
+                    
                     <div class="form-floating mb-3">
                         <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
                         <label for="icon" class="form-label">Icon</label>
                     </div>
+
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
+                            <option disabled selected="">Select Category</option>
+                            @foreach ($categories as $item)
+                            <option value="{{$item->id}}">{{$item->category_name}}</option>
+                            @endforeach
+                        </select>
+                        <label for="category_id" class="form-label">Category</label>
+                    </div>
+
                     <div class="form-floating mb-3">
                         <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
                             <option disabled selected="">Select Category</option>

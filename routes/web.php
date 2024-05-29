@@ -138,6 +138,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
 
+        Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add');
+
+        Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');
+
         Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
@@ -252,9 +256,6 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         // NEW SESSION
         Route::post('/new-session', [AIChatController::class, 'newSession']);
-
-
-        
     });
 
     // adminDashboardChat
@@ -291,9 +292,9 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
     // Export
-    Route::get('/export', [PromptLibraryController::class , 'Export'])->name('prompt.export');
+    Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
 
-    Route::post('/import', [PromptLibraryController::class , 'Import'])->name('import.store');
+    Route::post('/import', [PromptLibraryController::class, 'Import'])->name('import.store');
 
 
 

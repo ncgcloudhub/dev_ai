@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use App\Models\PromptLibraryCategory;
 use App\Models\PromptLibrary;
+use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PromptLibraryController extends Controller
@@ -82,22 +83,44 @@ class PromptLibraryController extends Controller
     }
 
     // Export
-    public function Export(){
+    public function Export()
+    {
 
         return Excel::download(new PromptLibraryExportt, 'prompt_library.xlsx');
+    } // End Method 
 
-    }// End Method 
-
-    public function Import(Request $request){
+    public function Import(Request $request)
+    {
 
         Excel::import(new PromptLibraryImport(), $request->file('import_file'));
 
-         $notification = array(
-           'message' => 'Promopt Imported Successfully',
-           'alert-type' => 'success'
-       );
+        $notification = array(
+            'message' => 'Promopt Imported Successfully',
+            'alert-type' => 'success'
+        );
 
-       return redirect()->back()->with($notification);
+        return redirect()->back()->with($notification);
+    } // End Method 
 
-   }// End Method 
+    public function PromptSubCategoryAdd()
+    {
+        $categories = PromptLibraryCategory::latest()->get();
+        $subcategories = PromptLibrarySubCategory::latest()->get();
+        return view('backend.prompt_library.sub_category', compact('categories', 'subcategories'));
+    }
+
+    public function PromptSubCategoryStore(Request $request)
+    {
+
+        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
+
+            'category_id' => $request->category_id,
+            'sub_category_name' => $request->sub_category_name,
+            'sub_category_instruction' => $request->sub_category_instruction,
+            'created_at' => Carbon::now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
+    }
 }
