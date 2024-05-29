@@ -24,6 +24,9 @@
 
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
+{{-- Select Multiple Tag --}}
+<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+
 <!-- tinymce | TEXT EDITOR -->
 <script src="{{ asset('backend/js/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('backend/js/tinymce.js') }}"></script>

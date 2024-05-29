@@ -54,8 +54,12 @@ class GenerateImagesController extends Controller
         $apiKey = config('app.openai_api_key');
         $size = '1024x1024';
         $style = 'vivid';
+        $userStyles = $request->input('style', []);
         $quality = 'standard';
         $n = 1;
+
+         // Convert array to string
+            $userStyleImplode = implode(', ', $userStyles);
 
         $response = null;
 
@@ -83,7 +87,7 @@ class GenerateImagesController extends Controller
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
-                    'prompt' => $request->prompt . ' and the style should be ' . $request->style,
+                    'prompt' => $request->prompt . ' and the style should be ' . $request->userStyleImplode,
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,
@@ -121,7 +125,7 @@ class GenerateImagesController extends Controller
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
                     'model' => 'dall-e-3',
-                    'prompt' => $request->prompt . ' and the style should be ' . $request->style,
+                    'prompt' => $request->prompt . ' and the style should be ' . $request->userStyleImplode,
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,
@@ -177,7 +181,7 @@ class GenerateImagesController extends Controller
                     $imageModel->user_id = auth()->user()->id;
                     $imageModel->status = 'inactive';
                     $imageModel->prompt = $request->prompt;
-                    $imageModel->resolution = $size;
+                    $imageModel->resolution = $userStyleImplode;
                     $imageModel->save();
                 }
 
