@@ -77,13 +77,10 @@
         .then(response => {
             // Handle the response
             if (response.data.hasSession) {
-                // User has an active session
-                const userId = response.data.userId;
-                console.log('succcess', response);
-                // Do something with the user ID or session information
+              
             } else {
                 newSessionBtn.click();
-                console.log('error' , response);
+              
             }
         })
         .catch(error => {
