@@ -233,13 +233,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->tokens_generated}}
+                                        {{$user->tokens_left}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->tokens_generated}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->tokens_left}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
