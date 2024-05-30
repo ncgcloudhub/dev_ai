@@ -68,14 +68,14 @@ class HomeController extends Controller
         return view('frontend.template_generate', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
     }
 
-      // Generate Using Open AI
-      public function templategenerate(Request $input)
-      {
+    // Generate Using Open AI
+    public function templategenerate(Request $input)
+    {
         $template_id = $input->template_id;
         $setting = AISettings::find(1);
         $template = Template::find($template_id);
         $user = Auth::user();
-    
+
         $language = $input->language ?? 'English';
         $max_result_length_value = intval($input->max_result_length_value) ?? 100;
         $temperature_value = floatval($input->temperature_value) ?? 0;
@@ -85,7 +85,7 @@ class HomeController extends Controller
         $tone = $input->tone ?? 'professional';
         $creative_level = $input->creative_level ?? 'High';
         $style = $input->style ?? '';
-    
+
         $prompt = $input->prompt;
         if ($input->emoji == 1) {
             $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
@@ -94,7 +94,7 @@ class HomeController extends Controller
         } else {
             $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
         }
-    
+
         foreach ($input->all() as $name => $inpVal) {
             if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
                 $name = '{' . $name . '}';
@@ -109,12 +109,12 @@ class HomeController extends Controller
                 }
             }
         }
-    
+
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
-    
+
         $result = $client->completions()->create([
-            "model" => $setting->openaimodel,
+            "model" => 'gpt-3.5-turbo-instruct',
             "temperature" => $temperature_value,
             "top_p" => $top_p_value,
             "frequency_penalty" => $frequency_penalty_value,
@@ -122,14 +122,14 @@ class HomeController extends Controller
             'max_tokens' => $max_result_length_value,
             'prompt' => $prompt,
         ]);
-    
+
         $completionTokens = $result->usage->completionTokens;
         $content = trim($result['choices'][0]['text']);
         $char_count = strlen($content);
         $num_tokens = ceil($char_count / 4);
         $num_words = str_word_count($content);
         $num_characters = strlen($content);
-    
+
         if ($user) {
             if ($user->tokens_left <= 0) {
                 return response()->json(0);
@@ -139,13 +139,13 @@ class HomeController extends Controller
                     'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
                     'words_generated' => DB::raw('words_generated + ' . $num_words),
                 ]);
-    
+
                 Template::where('id', $template->id)->update([
                     'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
                 ]);
             }
         }
-    
+
         return response()->json([
             'content' => $content,
             'num_tokens' => $num_tokens,
@@ -153,7 +153,7 @@ class HomeController extends Controller
             'num_characters' => $num_characters,
             'completionTokens' => $completionTokens,
         ]);
-      }
+    }
 
     //All Jobs Front End Page
     public function AllJobs()
@@ -202,15 +202,15 @@ class HomeController extends Controller
 
     public function NewsLetterStore(Request $request)
     {
-    
+
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
-    
+
         // If the IP address is not found in the request headers, use fallback
         if ($ipAddress == '127.0.0.1') {
             $ipAddress = $_SERVER['REMOTE_ADDR'] ?? null;
         }
-    
+
         // Insert user's subscription details into the database
         $NewsLetter = NewsLetter::insertGetId([
             'email' => $request['email'],
@@ -218,7 +218,7 @@ class HomeController extends Controller
             'ipaddress' => $ipAddress, // Store IP address
             'created_at' => now(),
         ]);
-    
+
         return redirect()->back()->with('success', 'Subscribed Successfully');
     } // end method
 
