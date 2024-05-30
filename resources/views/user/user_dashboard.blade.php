@@ -136,13 +136,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                        {{$user->images_generated}}
+                                        {{$user->credits_used}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->images_generated}}">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->credits_used}}">0</span>
                                     </h4>
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
@@ -168,13 +168,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->images_left}}
+                                        {{$user->credits_left}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->images_left}}">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->credits_left}}">0</span>
                                     </h4>
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
@@ -201,13 +201,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                        {{$user->words_generated}}
+                                        {{$user->tokens_used}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->words_generated}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->tokens_used}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
@@ -233,13 +233,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->words_left}}
+                                        {{$user->tokens_generated}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->words_left}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->tokens_generated}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
