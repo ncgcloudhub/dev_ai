@@ -58,8 +58,8 @@ class GenerateImagesController extends Controller
         $quality = 'standard';
         $n = 1;
 
-         // Convert array to string
-            $userStyleImplode = implode(', ', $userStyles);
+        // Convert array to string
+        $userStyleImplode = implode(', ', $userStyles);
 
         $response = null;
 
@@ -181,7 +181,8 @@ class GenerateImagesController extends Controller
                     $imageModel->user_id = auth()->user()->id;
                     $imageModel->status = 'inactive';
                     $imageModel->prompt = $request->prompt;
-                    $imageModel->resolution = $userStyleImplode;
+                    $imageModel->resolution = $size;
+                    $imageModel->style = $userStyleImplode;
                     $imageModel->save();
                 }
 
@@ -384,43 +385,42 @@ class GenerateImagesController extends Controller
     }
 
 
-// FRontend Single Image Generate
-public function generateSingleImage(Request $request)
-{
-    $apiKey = config('app.openai_api_key');
-    $prompt = $request->input('prompt');
+    // FRontend Single Image Generate
+    public function generateSingleImage(Request $request)
+    {
+        $apiKey = config('app.openai_api_key');
+        $prompt = $request->input('prompt');
 
-    // Check if the user has already generated an image today
-    if (Session::has('image_generated_at')) {
-        $lastGeneratedAt = Session::get('image_generated_at');
-        $today = now()->startOfDay();
+        // Check if the user has already generated an image today
+        if (Session::has('image_generated_at')) {
+            $lastGeneratedAt = Session::get('image_generated_at');
+            $today = now()->startOfDay();
 
-        if ($lastGeneratedAt->diffInDays($today) == 0) {
-            // If the user has already generated an image today, return a message
-            return response()->json(['message' => 'You have already generated an image today. Please try again tomorrow.']);
+            if ($lastGeneratedAt->diffInDays($today) == 0) {
+                // If the user has already generated an image today, return a message
+                return response()->json(['message' => 'You have already generated an image today. Please try again tomorrow.']);
+            }
         }
+
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/images/generations', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'dall-e-3',
+                'prompt' => $prompt,
+                'n' => 1,
+                'size' => '1024x1024',
+            ],
+        ]);
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        // Store the timestamp of the image generation in the session
+        Session::put('image_generated_at', now());
+
+        return response()->json($data);
     }
-
-    $client = new Client();
-    $response = $client->post('https://api.openai.com/v1/images/generations', [
-        'headers' => [
-            'Authorization' => 'Bearer ' . $apiKey,
-            'Content-Type' => 'application/json',
-        ],
-        'json' => [
-            'model' => 'dall-e-3',
-            'prompt' => $prompt,
-            'n' => 1,
-            'size' => '1024x1024',
-        ],
-    ]);
-
-    $data = json_decode($response->getBody()->getContents(), true);
-
-    // Store the timestamp of the image generation in the session
-    Session::put('image_generated_at', now());
-
-    return response()->json($data);
-}
-
 }
