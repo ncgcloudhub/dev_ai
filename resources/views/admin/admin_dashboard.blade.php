@@ -465,7 +465,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-3">
+                {{-- <div class="col-xl-3">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
@@ -487,9 +487,9 @@
                             <div id="store-visits-source" data-colors='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]' class="apex-charts" dir="ltr"></div>
                         </div>
                     </div> <!-- .card-->
-                </div> <!-- .col-->
+                </div> <!-- .col--> --}}
 
-                <div class="col-xl-9">
+                <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Recent Users  <span class="badge bg-success-subtle text-success">{{ $totalUsers }}
