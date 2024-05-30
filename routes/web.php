@@ -44,7 +44,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
-    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->get();
+    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
@@ -148,7 +148,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // GET SUB CATEGORY
         Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
-
     });
 
     // Dalle Manage Image
