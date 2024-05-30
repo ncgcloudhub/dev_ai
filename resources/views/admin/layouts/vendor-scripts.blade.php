@@ -90,6 +90,9 @@
             });
     });
 
+      // Trigger the button click when the page loads
+      newSessionBtn.click();
+
     // window.addEventListener('beforeunload', function () {
     //     axios.post('/clear-session', {})
     //         .then(response => {
