@@ -58,7 +58,7 @@
                                                 --
                                             @endif
                                             
-                                            <td>
+                                        </td>
                           
                             <td>{{ $item->status }}</td>
 
