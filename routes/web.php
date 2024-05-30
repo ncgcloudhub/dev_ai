@@ -258,6 +258,10 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
 
+        // CHECK SESSION
+        Route::get('/check-session', [AIChatController::class, 'checkUserSession']);
+
+
         // NEW SESSION
         Route::post('/new-session', [AIChatController::class, 'newSession']);
     });

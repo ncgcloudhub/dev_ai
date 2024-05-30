@@ -70,6 +70,29 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+    // CHECK SESSION
+    const checkUserSession = () => {
+    // Make an HTTP GET request to your Laravel backend
+    axios.get('/chat/check-session')
+        .then(response => {
+            // Handle the response
+            if (response.data.hasSession) {
+                // User has an active session
+                const userId = response.data.userId;
+                console.log('succcess', response);
+                // Do something with the user ID or session information
+            } else {
+                newSessionBtn.click();
+                console.log('error' , response);
+            }
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error('Error checking user session:', error);
+        });
+};
+
+
     // NEW SESSION
     newSessionBtn.addEventListener('click', function () {
         axios.post('/chat/new-session')
@@ -90,8 +113,9 @@
             });
     });
 
-      // Trigger the button click when the page loads
-      newSessionBtn.click();
+     // Call the function to check user session when needed
+checkUserSession();
+     
 
     // window.addEventListener('beforeunload', function () {
     //     axios.post('/clear-session', {})
