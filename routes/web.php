@@ -295,13 +295,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
-    // Export
+    // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
 
     Route::post('/import', [PromptLibraryController::class, 'Import'])->name('import.store');
 
-
-
+    // User Export
+    Route::get('/all/user/export', [UserController::class, 'export'])->name('user.export');
 
     // EID Card
     Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');

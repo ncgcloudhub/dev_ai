@@ -18,6 +18,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">Manage User</h5>
+                <a href="{{route('user.export')}}">Download</a>
             </div>
             <div class="card-body">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
