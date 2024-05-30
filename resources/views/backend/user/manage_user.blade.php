@@ -18,6 +18,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">Manage User</h5>
+                <a href="{{route('user.export')}}">Download</a>
             </div>
             <div class="card-body">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
@@ -26,6 +27,8 @@
                             <th scope="col">Sl.</th>
                             <th scope="col">Username</th>
                             <th scope="col">Email</th>
+                            <th scope="col">IP Address</th>
+                            <th scope="col">Email Verified</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -45,6 +48,17 @@
                                     <div class="flex-grow-1">{{$item->email}}</div>
                                 </div>
                             </td>
+
+                            <td>{{$item->ip_address}}</td>
+                                        <td>
+                                            @if ($item->email_verified_at)
+                                            {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
+    
+                                            @else
+                                                --
+                                            @endif
+                                            
+                                            <td>
                           
                             <td>{{ $item->status }}</td>
 

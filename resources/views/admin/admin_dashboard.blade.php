@@ -505,6 +505,8 @@
                                         <th scope="col">Username</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone</th>
+                                        <th scope="col">IP Address</th>
+                                        <th scope="col">Email Verified</th>
                                         <th scope="col">Images generated</th>
                                         <th scope="col">Words Generated</th>
                                         <th scope="col">Registered Time</th>
@@ -530,6 +532,15 @@
                                             </div>
                                         </td>
                                         <td>{{$item->phone}}</td>
+                                        <td>{{$item->ip_address}}</td>
+                                        <td>
+                                            @if ($item->email_verified_at)
+                                            {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
+    
+                                            @else
+                                                --
+                                            @endif
+                                            
                                         <td>
                                             <span class="text-success">{{$item->images_generated}}</span>
                                         </td>

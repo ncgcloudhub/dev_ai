@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AllUsersExport;
 use App\Models\CustomTemplate;
 use App\Models\Template;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\DalleImageGenerate;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Session;
 
 class UserController extends Controller
@@ -42,5 +44,11 @@ class UserController extends Controller
 
         // dd($templates_count);
         return view('user.user_dashboard', compact('user', 'templates_count', 'sessions', 'custom_templates_count', 'chatbot_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+    }
+
+    // User Export ALL
+    public function export()
+    {
+        return Excel::download(new AllUsersExport, 'all_users.xlsx');
     }
 }
