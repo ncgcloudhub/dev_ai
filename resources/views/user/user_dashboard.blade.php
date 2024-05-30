@@ -365,17 +365,17 @@
                             </div>
                             <div class="border-top border-top-dashed">
                                 <div class="row g-2 mx-3 mt-2 mb-3">
-                                    <div id="file_name_display"></div>
-                                    {{-- <div class="col-auto">
+                                    {{-- <div id="file_name_display"></div>
+                                    <div class="col-auto">
                                         <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
                                         <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                 
-                                    </div>
+                                    </div> --}}
                                     <div class="col">
                                         <div class="position-relative">
                                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                     <div class="col-auto">
                                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                                     </div>
