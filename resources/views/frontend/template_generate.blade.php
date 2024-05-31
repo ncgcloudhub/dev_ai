@@ -24,7 +24,17 @@
 <div class="container">
     <div class="row justify-content-center"> 
         <div class="row">
-   
+             <!-- Token Information -->
+             <div class="col-xxl-12 mb-3">
+                <div class="alert alert-info text-center">
+                    <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}">Sign up now for FREE</a></strong>
+                    to unlock your creativity!
+                    <br>
+                </div>
+            </div>
+            
+            
+            <!-- End Token Information -->
             <div class="col-xxl-6">
              <div class="card">
                 
@@ -276,6 +286,45 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    // Your JavaScript code goes here
+    $(document).ready(function() {
+        // Update token count display on page load
+        let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 300;
+        $('#tokenCount').text(remainingTokens); // Update token count display
+
+        // Submit form event handler
+        $('#generateForm').submit(function(event) {
+            event.preventDefault();
+
+            // Show loading spinner
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    // Hide loading spinner
+
+                    // Update remaining tokens
+                    remainingTokens -= response.completionTokens;
+                    localStorage.setItem('remainingTokens', remainingTokens);
+
+                    // Update token count display
+                    $('#tokenCount').text(remainingTokens);
+
+                    // Update content and other details on the page
+                },
+                error: function(xhr, status, error) {
+                    // Hide loading spinner
+                    // Handle errors properly
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
     function disableInputs() {
         var creativeLevel = document.getElementById("creative_level").value;
         var temperatureInput = document.getElementById("temperature");
@@ -394,6 +443,7 @@
         plugins: 'code table lists',
         toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
     });
+
 
     $(document).ready(function () {
     $('#generateForm').submit(function (event) {
