@@ -136,13 +136,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                        {{$user->images_generated}}
+                                        {{$user->credits_used}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->images_generated}}">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->credits_used}}">0</span>
                                     </h4>
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
@@ -168,13 +168,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->images_left}}
+                                        {{$user->credits_left}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->images_left}}">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->credits_left}}">0</span>
                                     </h4>
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
@@ -201,13 +201,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                        {{$user->words_generated}}
+                                        {{$user->tokens_used}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->words_generated}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->tokens_used}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
@@ -233,13 +233,13 @@
                                 <div class="flex-shrink-0">
                                     <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                        {{$user->words_left}}
+                                        {{$user->tokens_left}}
                                     </h5>
                                 </div>
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->words_left}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->tokens_left}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
@@ -334,6 +334,18 @@
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
+                            
+                            <div class="form-group mb-0 ms-auto">
+                                <label for="ai_model_select" class="form-label">Select Session</label>
+                                <select class="form-select" id="session">
+                                    @foreach ($sessions as $item)
+                                   
+                                    <option value="{{$item->id}}">{{$item->id}}</option>
+                                         
+                                    @endforeach
+                                 
+                                </select>
+                            </div>
                             <div class="form-group mb-0 ms-auto">
                                 <label for="ai_model_select" class="form-label">Select AI Model:</label>
                                 <select class="form-select" id="ai_model_select">
@@ -355,9 +367,8 @@
                                 <div class="row g-2 mx-3 mt-2 mb-3">
                                     <div id="file_name_display"></div>
                                     <div class="col-auto">
-                                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                                        <i class="hidden" id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
                                         <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
-                
                                     </div>
                                     <div class="col">
                                         <div class="position-relative">
@@ -367,11 +378,15 @@
                                     <div class="col-auto">
                                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                                     </div>
+                                    <div class="col-auto">
+                                        <button type="button" id="new_session_btn" class="btn btn-secondary">New Session</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
 
         {{-- CHAT END --}}
         

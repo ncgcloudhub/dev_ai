@@ -284,7 +284,27 @@ class AIChatController extends Controller
      return response()->json(['success' => true, 'session_id' => $session->id]);
 }
 
+public function checkUserSession(Request $request)
+{
+    // Check if the user is authenticated
+    if (Auth::check()) {
+        $userId = Auth::id();
 
+        // Query the sessions table to find any active session for the authenticated user
+        $session = ModelsSession::where('user_id', $userId)->first();
+
+        if ($session) {
+            // User has an active session in the database
+            return response()->json(['hasSession' => true, 'userId' => $userId]);
+        } else {
+            // User does not have an active session
+            return response()->json(['hasSession' => false]);
+        }
+    } else {
+        // User is not authenticated
+        return response()->json(['hasSession' => false]);
+    }
+}
 
     // public function clearSession(Request $request)
     // {

@@ -10,3 +10,10 @@ credits_used
 credits_left
 tokens_left
 tokens_used
+
+
+
+.............................
+In users table add a new column called ipaddress, character_varying
+
+In prompt library table, add sub_category_id column, bigint

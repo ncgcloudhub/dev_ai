@@ -465,7 +465,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-3">
+                {{-- <div class="col-xl-3">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
@@ -487,9 +487,9 @@
                             <div id="store-visits-source" data-colors='["--vz-primary", "--vz-primary-rgb, 0.85", "--vz-primary-rgb, 0.70", "--vz-primary-rgb, 0.60", "--vz-primary-rgb, 0.45"]' class="apex-charts" dir="ltr"></div>
                         </div>
                     </div> <!-- .card-->
-                </div> <!-- .col-->
+                </div> <!-- .col--> --}}
 
-                <div class="col-xl-9">
+                <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Recent Users  <span class="badge bg-success-subtle text-success">{{ $totalUsers }}
@@ -505,6 +505,8 @@
                                         <th scope="col">Username</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Phone</th>
+                                        <th scope="col">IP Address</th>
+                                        <th scope="col">Email Verified</th>
                                         <th scope="col">Images generated</th>
                                         <th scope="col">Words Generated</th>
                                         <th scope="col">Registered Time</th>
@@ -530,6 +532,15 @@
                                             </div>
                                         </td>
                                         <td>{{$item->phone}}</td>
+                                        <td>{{$item->ip_address}}</td>
+                                        <td>
+                                            @if ($item->email_verified_at)
+                                            {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
+    
+                                            @else
+                                                --
+                                            @endif
+                                            
                                         <td>
                                             <span class="text-success">{{$item->images_generated}}</span>
                                         </td>

@@ -24,6 +24,9 @@
 
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
+{{-- Select Multiple Tag --}}
+<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+
 <!-- tinymce | TEXT EDITOR -->
 <script src="{{ asset('backend/js/tinymce/tinymce.min.js') }}"></script>
 <script src="{{ asset('backend/js/tinymce.js') }}"></script>
@@ -67,6 +70,26 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+    // CHECK SESSION
+    const checkUserSession = () => {
+    // Make an HTTP GET request to your Laravel backend
+    axios.get('/chat/check-session')
+        .then(response => {
+            // Handle the response
+            if (response.data.hasSession) {
+              
+            } else {
+                newSessionBtn.click();
+              
+            }
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error('Error checking user session:', error);
+        });
+};
+
+
     // NEW SESSION
     newSessionBtn.addEventListener('click', function () {
         axios.post('/chat/new-session')
@@ -86,6 +109,10 @@
                 console.error('Failed to start a new session:', error);
             });
     });
+
+     // Call the function to check user session when needed
+checkUserSession();
+     
 
     // window.addEventListener('beforeunload', function () {
     //     axios.post('/clear-session', {})
@@ -377,6 +404,48 @@ messages.forEach(message => {
         });
     });
 </script>
+
+{{-- NEWSLETTER --}}
+<script>
+    document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Fetch form data
+        var formData = new FormData(this);
+
+        // Send form data asynchronously using fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                // Optionally display a success message
+                alert('Subscribed Successfully');
+            } else {
+                // Handle errors if any
+                alert('Error occurred while subscribing');
+            }
+        })
+        .catch(error => {
+            console.error('Error occurred:', error);
+            alert('Error occurred while subscribing');
+        });
+
+        // Prevent the form from being submitted again
+        return false;
+    });
+</script>
+
+<script>
+    // Auto dismiss success alert after 3 seconds
+    window.setTimeout(function() {
+        $("#successAlert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+        });
+    }, 3000);
+</script>
+
 
 
 @yield('script')

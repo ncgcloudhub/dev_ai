@@ -44,7 +44,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
-    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->get();
+    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
@@ -138,9 +138,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
 
+        Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add');
+
+        Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');
+
         Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
+
+        // GET SUB CATEGORY
+        Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
     });
 
     // Dalle Manage Image
@@ -250,11 +257,12 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
 
+        // CHECK SESSION
+        Route::get('/check-session', [AIChatController::class, 'checkUserSession']);
+
+
         // NEW SESSION
         Route::post('/new-session', [AIChatController::class, 'newSession']);
-
-
-        
     });
 
     // adminDashboardChat
@@ -290,13 +298,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
-    // Export
-    Route::get('/export', [PromptLibraryController::class , 'Export'])->name('prompt.export');
+    // Export Prompt
+    Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
 
-    Route::post('/import', [PromptLibraryController::class , 'Import'])->name('import.store');
+    Route::post('/import', [PromptLibraryController::class, 'Import'])->name('import.store');
 
-
-
+    // User Export
+    Route::get('/all/user/export', [UserController::class, 'export'])->name('user.export');
 
     // EID Card
     Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');

@@ -25,10 +25,12 @@
                         <input type="text" name="prompt_name" class="form-control" id="prompt_name" placeholder="Enter Template Name">
                         <label for="prompt_name" class="form-label">Prompt Name</label>
                     </div>
+                    
                     <div class="form-floating mb-3">
                         <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
                         <label for="icon" class="form-label">Icon</label>
                     </div>
+
                     <div class="form-floating mb-3">
                         <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
                             <option disabled selected="">Select Category</option>
@@ -38,7 +40,13 @@
                         </select>
                         <label for="category_id" class="form-label">Category</label>
                     </div>
-                  
+
+                    <div class="form-floating mb-3">
+                    <select class="form-select" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example">
+                        <option disabled selected>Select Subcategory</option>
+                    </select>
+                    </div>
+                    
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
                         <label for="description">Description</label>
@@ -67,4 +75,24 @@
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+{{-- SUB CATEGORY PROMPT--}}
+<script>
+    document.getElementById('category_id').addEventListener('change', function() {
+    var categoryId = this.value;
+    fetch('/prompt/subcategories/' + categoryId)
+        .then(response => response.json())
+        .then(data => {
+            var subcategorySelect = document.getElementById('subcategory_id');
+            subcategorySelect.innerHTML = '';
+            data.forEach(subcategory => {
+                var option = document.createElement('option');
+                option.value = subcategory.id;
+                option.text = subcategory.sub_category_name;
+                subcategorySelect.appendChild(option);
+            });
+        });
+});
+
+</script>
 @endsection

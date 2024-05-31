@@ -94,47 +94,47 @@
             
 
                                                     
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input1">Image Style</label>
-                                                            <select name="style" class="form-control" id="style">
-                                                                <option disabled selected="">Enter Image Style</option>
-                                                                <option value="natural">Natural</option>
-                                                                <option value="vivid">Vivid</option>
-                                                                <option value="none">NONE</option>
-                                                                <option value="cinematic">CINEMATIC</option>
-                                                                <option value="analog-film">ANALOG FILM</option>
-                                                                <option value="animation">ANIMATION</option>
-                                                                <option value="comic">COMIC</option>
-                                                                <option value="craft-clay">CRAFT CLAY</option>
-                                                                <option value="fantasy">FANTASY</option>
-                                                                <option value="line-art">LINE ART</option>
-                                                                <option value="cyberpunk">CYBERPUNK</option>
-                                                                <option value="pixel-art">PIXEL ART</option>
-                                                                <option value="photograph">PHOTOGRAPH</option>
-                                                                <option value="graffiti">GRAFFITI</option>
-                                                                <option value="game-gta">GAME GTA</option>
-                                                                <option value="3d-character">3D CHARACTER</option>
-                                                                <option value="baroque">BAROQUE</option>
-                                                                <option value="caricature">CARICATURE</option>
-                                                                <option value="colored-pencil">COLORED PENCIL</option>
-                                                                <option value="doddle-art">DODDLE ART</option>
-                                                                <option value="futurism">FUTURISM</option>
-                                                                <option value="sketch">SKETCH</option>
-                                                                <option value="surrealism">SURREALISM</option>
-                                                                <option value="sticker-designs">STICKER DESIGNS</option>
-                                                            </select>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input2">Image Quality</label>
-                                                            <select name="quality" class="form-control" id="quality">
-                                                                <option disabled selected="">Enter Image Quality</option>
-                                                                <option value="standard">Standard</option>
-                                                                <option value="hd">HD</option>
-                                                            </select>
-                                                        </div>                                                        
+                    <div class="row">
+                        
+                        <div class="col-md-3 mb-3">
+                            <label for="input1">Image Style</label>
+                        
+                            <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
+                                <option value="natural">Natural</option>
+                                <option value="vivid">Vivid</option>
+                                <option value="none">NONE</option>
+                                <option value="cinematic">CINEMATIC</option>
+                                <option value="analog-film">ANALOG FILM</option>
+                                <option value="animation">ANIMATION</option>
+                                <option value="comic">COMIC</option>
+                                <option value="craft-clay">CRAFT CLAY</option>
+                                <option value="fantasy">FANTASY</option>
+                                <option value="line-art">LINE ART</option>
+                                <option value="cyberpunk">CYBERPUNK</option>
+                                <option value="pixel-art">PIXEL ART</option>
+                                <option value="photograph">PHOTOGRAPH</option>
+                                <option value="graffiti">GRAFFITI</option>
+                                <option value="game-gta">GAME GTA</option>
+                                <option value="3d-character">3D CHARACTER</option>
+                                <option value="baroque">BAROQUE</option>
+                                <option value="caricature">CARICATURE</option>
+                                <option value="colored-pencil">COLORED PENCIL</option>
+                                <option value="doddle-art">DODDLE ART</option>
+                                <option value="futurism">FUTURISM</option>
+                                <option value="sketch">SKETCH</option>
+                                <option value="surrealism">SURREALISM</option>
+                                <option value="sticker-designs">STICKER DESIGNS</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3 mb-3">
+                            <label for="input2">Image Quality</label>
+                            <select name="quality" class="form-control" id="quality">
+                                <option disabled selected="">Enter Image Quality</option>
+                                <option value="standard">Standard</option>
+                                <option value="hd">HD</option>
+                            </select>
+                        </div>                                                        
 
                                                         
                                                         <div class="col-md-3 mb-3">
@@ -221,8 +221,8 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input1">Image Style</label>
-                                                            <select name="style" class="form-control" id="style">
-                                                                <option disabled selected="">Enter Image Style</option>
+                                                            <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
+                                                               
                                                                 <option value="natural">Natural</option>
                                                                 <option value="vivid">Vivid</option>
                                                                 <option value="none">NONE</option>

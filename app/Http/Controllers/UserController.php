@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AllUsersExport;
 use App\Models\CustomTemplate;
 use App\Models\Template;
 use App\Models\User;
@@ -10,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\DalleImageGenerate;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Session;
 
 class UserController extends Controller
 {
@@ -29,12 +32,23 @@ class UserController extends Controller
             ->groupBy('country')
             ->get();
 
+        $userId = auth()->id(); // Get the authenticated user's ID
+        $sessions = Session::with('messages') // Eager load the related messages
+            ->where('user_id', $userId)
+            ->get();
+
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
         // dd($templates_count);
-        return view('user.user_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'chatbot_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+        return view('user.user_dashboard', compact('user', 'templates_count', 'sessions', 'custom_templates_count', 'chatbot_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+    }
+
+    // User Export ALL
+    public function export()
+    {
+        return Excel::download(new AllUsersExport, 'all_users.xlsx');
     }
 }

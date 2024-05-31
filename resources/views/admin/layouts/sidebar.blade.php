@@ -126,6 +126,9 @@
                                         <a href="{{route('prompt.category.add')}}" class="nav-link" >Prompt Categories</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{{route('prompt.subcategory.add')}}" class="nav-link" >Prompt Sub-Categories</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{route('prompt.add')}}" class="nav-link" >Add Prompt</a>
                                     </li>
                                     <li class="nav-item">
