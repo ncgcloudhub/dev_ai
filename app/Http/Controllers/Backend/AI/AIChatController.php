@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -122,12 +123,15 @@ class AIChatController extends Controller
     
         // Initialize or retrieve uploaded files from session
         $uploadedFiles = session('uploaded_files', []);
+        Log::info('Uploaded files: ', $uploadedFiles);
     
         // Initialize or retrieve conversation history from session
         $conversationHistory = session('conversation_history', []);
+        Log::info('Conversation history: ', $conversationHistory);
     
         // Initialize or retrieve context from session
         $context = session('context', []);
+        Log::info('Context: ', $context);
     
         // Validate and handle the uploaded file
         if ($file) {
@@ -138,6 +142,7 @@ class AIChatController extends Controller
             // Store the file
             $filePath = $file->store('uploads');
             $extension = $file->getClientOriginalExtension();
+            Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
     
             // Read file content
             $fileContent = '';
@@ -148,18 +153,16 @@ class AIChatController extends Controller
                 $response = $this->callOpenAIImageAPI($base64Image);
                 $fileContent = $response['choices'][0]['message']['content']; // Update fileContent with image analysis result
             }
+            Log::info('File content: ', ['content' => $fileContent]);
     
             // Add or update uploaded file content in the session
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
     
-            // Update context with the latest file
-            $context = [
-                'type' => 'file',
-                'timestamp' => time(),
-                'content' => $fileContent,
-            ];
+            // Update context with the latest file content
+            $context['file_content'] = $fileContent;
             session(['context' => $context]);
+            Log::info('Updated context with file: ', $context);
         }
     
         // Add the user message to the conversation history
@@ -168,13 +171,10 @@ class AIChatController extends Controller
             session(['conversation_history' => $conversationHistory]);
     
             // Update context with the latest message
-            $context = [
-                'type' => 'message',
-                'timestamp' => time(),
-                'content' => $userMessage,
-            ];
+            $context['latest_message'] = $userMessage;
             session(['context' => $context]);
-
+            Log::info('Updated context with message: ', $context);
+    
             $sessionId = Session::get('session_id');
     
             // Save user message to the database
@@ -191,6 +191,11 @@ class AIChatController extends Controller
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
         ];
     
+        // Add file content if it exists
+        if (!empty($context['file_content'])) {
+            $messages[] = ['role' => 'user', 'content' => $context['file_content']];
+        }
+    
         // Add conversation history to messages array
         foreach ($conversationHistory as $message) {
             if (!is_null($message['content'])) {
@@ -198,12 +203,9 @@ class AIChatController extends Controller
             }
         }
     
-        if (!is_null($context['content'])) {
-            if ($context['type'] == 'file') {
-                $messages[] = ['role' => 'user', 'content' => $context['content']];
-            } elseif ($context['type'] == 'message') {
-                $messages[] = ['role' => 'user', 'content' => $context['content']];
-            }
+        // Add the latest user message to the messages array
+        if (!empty($context['latest_message'])) {
+            $messages[] = ['role' => 'user', 'content' => $context['latest_message']];
         }
     
         // Ensure UTF-8 encoding for all message contents
@@ -212,6 +214,8 @@ class AIChatController extends Controller
                 $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
             }
         });
+    
+        Log::info('Messages to send to API: ', $messages);
     
         // Make API call
         $client = new Client();
@@ -230,6 +234,8 @@ class AIChatController extends Controller
         $messageContent = $data['choices'][0]['message']['content'];
         $sessionId = Session::get('session_id');
     
+        Log::info('AI Response: ', ['content' => $messageContent]);
+    
         // Save the AI's reply to the database
         Message::create([
             'session_id' => $sessionId,
@@ -243,68 +249,70 @@ class AIChatController extends Controller
             'message' => $messageContent,
         ]);
     }
-
+    
+    
+    
     // GET MESSAGES TEST
     public function getSessionMessages($id)
     {
         // Fetch the session with its messages
         $session = \App\Models\Session::with('messages')->find($id);
-
+    
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
         }
-         // Store the session ID in the Laravel session
-         session(['session_id' => $id]);
-
+    
+        // Store the session ID in the Laravel session
+        session(['session_id' => $id]);
+    
         // Return the messages in JSON format
         return response()->json($session->messages);
     }
-
+    
     // NEW SESSION
     public function newSession(Request $request)
-{
-     // Clear session data
-     session()->forget(['uploaded_files', 'conversation_history', 'context']);
-        
-     // Generate a new session ID and store it
-     $token = bin2hex(random_bytes(16));// Generate a unique session ID
-   
-     // Log the new session in the database
-     $session = ModelsSession::create([
-         'session_token' => $token,
-         'user_id' => Auth::id(),
-         'session_start' => now(),
-         'created_at' => now(),
-     ]);
-
-     
-     // Store the session ID in the Laravel session
-     session(['session_id' => $session->id]);
-
-     return response()->json(['success' => true, 'session_id' => $session->id]);
-}
-
-public function checkUserSession(Request $request)
-{
-    // Check if the user is authenticated
-    if (Auth::check()) {
-        $userId = Auth::id();
-
-        // Query the sessions table to find any active session for the authenticated user
-        $session = ModelsSession::where('user_id', $userId)->first();
-
-        if ($session) {
-            // User has an active session in the database
-            return response()->json(['hasSession' => true, 'userId' => $userId]);
+    {
+        // Clear session data
+        session()->forget(['uploaded_files', 'conversation_history', 'context']);
+            
+        // Generate a new session ID and store it
+        $token = bin2hex(random_bytes(16)); // Generate a unique session ID
+       
+        // Log the new session in the database
+        $session = ModelsSession::create([
+            'session_token' => $token,
+            'user_id' => Auth::id(),
+            'session_start' => now(),
+            'created_at' => now(),
+        ]);
+    
+        // Store the session ID in the Laravel session
+        session(['session_id' => $session->id]);
+    
+        return response()->json(['success' => true, 'session_id' => $session->id]);
+    }
+    
+    public function checkUserSession(Request $request)
+    {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            $userId = Auth::id();
+    
+            // Query the sessions table to find any active session for the authenticated user
+            $session = ModelsSession::where('user_id', $userId)->first();
+    
+            if ($session) {
+                // User has an active session in the database
+                return response()->json(['hasSession' => true, 'userId' => $userId]);
+            } else {
+                // User does not have an active session
+                return response()->json(['hasSession' => false]);
+            }
         } else {
-            // User does not have an active session
+            // User is not authenticated
             return response()->json(['hasSession' => false]);
         }
-    } else {
-        // User is not authenticated
-        return response()->json(['hasSession' => false]);
     }
-}
 
     // public function clearSession(Request $request)
     // {
