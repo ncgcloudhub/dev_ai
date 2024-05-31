@@ -257,7 +257,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <div class="d-flex justify-content-center mt-4">
                         <div class="avatar-group">
                             @foreach ($images_slider as $item)
-                            <a href="{{ $item->image_url }}" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="Christi">
+                            <a href="{{ $item->image_url }}" class="avatar-group-item image-popup" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $item->prompt }}">
                                 <img src="{{ $item->image_url }}" alt="" class="rounded-circle avatar-xl">
                             </a>
                             @endforeach
