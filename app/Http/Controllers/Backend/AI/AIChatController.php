@@ -228,6 +228,7 @@ class AIChatController extends Controller
     
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
+        $sessionId = Session::get('session_id');
     
         // Save the AI's reply to the database
         Message::create([
