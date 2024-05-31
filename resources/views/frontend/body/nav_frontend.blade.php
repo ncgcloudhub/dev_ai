@@ -37,8 +37,13 @@
                     <a class="nav-link fs-15" href="{{route('contact.us')}}">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="{{route('frontend.free.template')}}">Template</a>
+                    @auth <!-- Check if user is authenticated -->
+                        <a class="nav-link fs-15" href="{{ route('template.manage') }}">Template</a> <!-- Redirect to template.manage if user is signed in -->
+                    @else <!-- If user is not signed in -->
+                        <a class="nav-link fs-15" href="{{ route('frontend.free.template') }}">Template</a> <!-- Redirect to frontend.free.template -->
+                    @endauth
                 </li>
+                
             </ul>
 
             
