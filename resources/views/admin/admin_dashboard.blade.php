@@ -196,7 +196,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-4">
+                {{-- <div class="col-xl-4">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Revenue</h4>
@@ -255,10 +255,10 @@
                             </div>
                         </div><!-- end card body -->
                     </div><!-- end card -->
-                </div><!-- end col -->
+                </div><!-- end col --> --}}
 
                 {{-- MAP --}}
-                <div class="col-xl-4">
+                {{-- <div class="col-xl-4">
                     <!-- card -->
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
@@ -290,13 +290,13 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                </div>
+                </div> --}}
                 <!-- end col -->
                 {{-- MAP END --}}
 
 
 {{-- CHAT START--}}
-<div class="col-xxl-4 col-lg-6">
+<div class="col-xxl-12 col-lg-12">
     <div class="card card-height-100">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
@@ -521,7 +521,7 @@
                                     <tr>
                                         <td width="5%">{{ $sl++ }}</td>
                                         <td>
-                                            <a href="apps-ecommerce-order-details" class="fw-medium link-primary">{{$item->name}}</a>
+                                            <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}</a>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
