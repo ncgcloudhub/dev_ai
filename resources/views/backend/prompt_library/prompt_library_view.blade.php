@@ -92,6 +92,44 @@
                 </div> 
             </div>
 
+            <!-- Display Existing Examples -->
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="live-preview">
+            <div class="col-md-12">
+                <label for="existing-examples" class="form-label">Existing Examples</label>
+                <div id="existing-examples-container">
+                    @foreach($prompt_library_examples as $item)
+                        <div class="form-group mt-3">
+                            <textarea class="form-control" rows="3" readonly>{{ $item->example }}</textarea>
+                            <p class="text-muted">Status: {{ $item->active ? 'Active' : 'Inactive' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- Container for adding examples -->
+<div class="card mt-3">
+    <div class="card-body">
+        <form action="{{ route('prompt_examples.store', $prompt_library->id) }}" method="POST">
+            @csrf
+            <div class="live-preview">
+                <div class="col-md-12">
+                    <label for="examples" class="form-label">Examples</label>
+                    <div id="examples-container">
+                        <!-- Example editor boxes will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">Add Example</button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Save Examples</button>
+        </form>
+    </div>
+</div>
+
 
            </div>
 </div>
@@ -111,6 +149,24 @@
         alert("Text copied to clipboard");
     }
     </script>
+
+<script>
+    function addExampleEditor() {
+        const container = document.getElementById('examples-container');
+        const exampleEditor = document.createElement('div');
+        exampleEditor.className = 'form-group mt-3';
+        exampleEditor.innerHTML = `
+            <textarea class="form-control" name="examples[]" rows="3" placeholder="Enter example text"></textarea>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">Remove</button>
+        `;
+        container.appendChild(exampleEditor);
+    }
+
+    function removeExampleEditor(button) {
+        button.parentElement.remove();
+    }
+
+</script>
 
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script src="{{ URL::asset('build/libs/quill/quill.min.js') }}"></script>
