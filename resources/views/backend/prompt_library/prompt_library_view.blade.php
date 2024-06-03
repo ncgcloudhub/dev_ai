@@ -39,7 +39,7 @@
                 <div class="card-body"> 
                     <div class="live-preview">
                             <div class="col-md-12">
-                                <label for="language" class="form-label">Prompt Instruction</label>
+                                <label for="language" class="form-label">System Instruction</label>
                                 <p class="fw-medium link-primary">
                                     @if (is_null($prompt_library->sub_category_id))
                                         --
