@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\SubscriptionPlan;
+use App\Models\Template;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ class SubscriptionController extends Controller
     public function AllPackage(){
 
         $pricingPlans = PricingPlan::latest()->get();
+        $totalTemplates = Template::count();
 
          // Get the authenticated user
          $user = Auth::user();
@@ -26,7 +28,7 @@ class SubscriptionController extends Controller
         
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
 
-        return view('backend.subscription.all_package', compact('pricingPlans','lastPackageId') );
+        return view('backend.subscription.all_package', compact('pricingPlans','lastPackageId','totalTemplates') );
     }// End Method  
 
     public function purchase($pricingPlanId)

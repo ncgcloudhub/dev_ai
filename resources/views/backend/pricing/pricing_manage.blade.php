@@ -78,7 +78,7 @@
                                     <i class="{{ $item->{'71_ai_templates'} ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <b>71</b> Ai Templates
+                                    <b>{{$totalTemplates}}</b> Ai Templates
                                 </div>
                             </div>
                         </li>

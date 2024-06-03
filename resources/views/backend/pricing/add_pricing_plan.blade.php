@@ -49,7 +49,7 @@
                             <li>
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">
-                                        <span class="ms-2">71 AI Templates</span>
+                                        <span class="ms-2">{{$totalTemplates}} AI Templates</span>
                                     </div>
                                     <div class="form-check ms-3 align-self-center">
                                         <input class="form-check-input" name="71_ai_templates" type="checkbox" id="formCheck6" checked>

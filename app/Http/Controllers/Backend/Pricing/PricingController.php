@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Pricing;
 
 use App\Http\Controllers\Controller;
 use App\Models\PricingPlan;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,12 +13,14 @@ class PricingController extends Controller
     public function ManagePricingPlan()
     {
         $pricingPlans = PricingPlan::latest()->get();
-        return view('backend.pricing.pricing_manage', compact('pricingPlans'));
+        $totalTemplates = Template::count();
+        return view('backend.pricing.pricing_manage', compact('pricingPlans','totalTemplates'));
     }
 
     public function addPricingPlan()
     {
-        return view('backend.pricing.add_pricing_plan');
+        $totalTemplates = Template::count();
+        return view('backend.pricing.add_pricing_plan', compact('totalTemplates'));
     }
 
     public function StorePricingPlan(Request $request)
