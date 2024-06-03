@@ -8,6 +8,7 @@
 <!--datatable responsive css-->
 <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+
 @endsection
 @section('content')
 
@@ -342,6 +343,7 @@
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                         </div>
                     </div>
+                    <div id="whatever"></div>
                     <div class="col-auto">
                         <button type="button" id="send_message_btn" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i></button>
                     </div>
@@ -602,6 +604,60 @@
   MathJax.Hub.Config({
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
   });
+</script>
+
+<script>
+    var input = document.getElementsByTagName("textarea")[0];
+    input.addEventListener('paste', pasteHandler);
+    var whatever = document.getElementById('whatever');
+    /*Handle paste event*/
+    function pasteHandler(e){    //e:  ClipboardEvent
+        //check if event.clipboardData is supported(chrome)
+        if(e.clipboardData){
+            var items = e.clipboardData.items;
+            if(items){
+                for(var i=0;i<items.length;i++){
+//                    console.log(items[i]);
+                    if(items[i].kind == 'file' && items[i].type.indexOf('image') > -1){
+                        //need to represent the image as a file
+                        var blob = items[i].getAsFile();
+
+                        var reader = new FileReader();
+                        //need base64 to upload to server
+                        reader.readAsDataURL(blob);
+                        reader.onload = function (event) {
+                            var image = new Image();
+                            image.src = event.target.result;
+                            image.width = 250; // a fake resize
+                            whatever.appendChild(image);
+                            uploadFile(blob);
+                        };
+                    }
+                }
+            }
+        }
+    };
+
+    var uploadFile = function (file) {
+        var formData = new FormData();
+        formData.append('upload_file', file);
+
+        // now post a new XHR request
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload/attachments');
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    console.log('uploaded done!');
+                } else {
+                  
+                }
+            }
+        };
+
+        xhr.send(formData);
+    };
 </script>
 
 @endsection
