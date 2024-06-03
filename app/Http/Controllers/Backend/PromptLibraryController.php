@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Exports\PromptLibraryExportt;
 use App\Http\Controllers\Controller;
 use App\Imports\PromptLibraryImport;
+use App\Models\PromptExample;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -79,8 +80,10 @@ class PromptLibraryController extends Controller
     {
         // Find the template by slug
         $prompt_library = PromptLibrary::where('slug', $slug)->firstOrFail();
+        // Get the related examples
+        $prompt_library_examples = $prompt_library->examples;
 
-        return view('backend.prompt_library.prompt_library_view', compact('prompt_library'));
+        return view('backend.prompt_library.prompt_library_view', compact('prompt_library', 'prompt_library_examples'));
     }
 
     // Export
@@ -130,5 +133,25 @@ class PromptLibraryController extends Controller
     {
         $subcategories = PromptLibrarySubCategory::where('category_id', $category_id)->get();
         return response()->json($subcategories);
+    }
+
+
+    // Example Store
+    public function PromptExampleStore(Request $request, PromptLibrary $promptLibrary)
+    {
+        $request->validate([
+            'examples' => 'required|array',
+            'examples.*' => 'required|string',
+        ]);
+
+        foreach ($request->examples as $exampleText) {
+            PromptExample::create([
+                'prompt_id' => $promptLibrary->id,
+                'example' => $exampleText,
+                'active' => true, // Default to active, adjust as needed
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Examples saved successfully!');
     }
 }

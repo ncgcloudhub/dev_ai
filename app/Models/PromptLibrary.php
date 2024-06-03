@@ -19,4 +19,9 @@ class PromptLibrary extends Model
     {
         return $this->belongsTo(PromptLibrarySubCategory::class, 'sub_category_id', 'id');
     }
+
+    public function examples()
+    {
+        return $this->hasMany(PromptExample::class, 'prompt_id', 'id');
+    }
 }
