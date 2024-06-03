@@ -55,8 +55,8 @@ class SubscriptionController extends Controller
 
       // Image Increment
     User::where('id', $user_id)->update([
-        'images_left' => DB::raw('images_left + ' . $pricingPlan->images),
-        'words_left' => DB::raw('words_left + ' . $pricingPlan->tokens)
+        'credits_left' => DB::raw('credits_left + ' . $pricingPlan->images),
+        'tokens_left' => DB::raw('tokens_left + ' . $pricingPlan->tokens)
     ]);
 
        $notification = array(

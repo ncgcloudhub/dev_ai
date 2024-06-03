@@ -201,6 +201,19 @@
                             <li>
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">
+                                        <select class="form-select form-select-sm  mb-3" aria-label=".form-select-sm example" name="package_type">
+                                            <option selected>Select Plan Type</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="yearly">Yearly</option>
+                                        </select>
+                                        <span class="ms-2">Plan Type</span>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li>
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 d-flex align-items-center">
                                         <span class="ms-2">Popular Ribbon</span>
                                     </div>
                                     <div class="form-check ms-3 align-self-center">
