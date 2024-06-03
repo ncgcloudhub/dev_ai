@@ -103,4 +103,13 @@ class PricingController extends Controller
 
         return redirect()->route('manage.pricing')->with($notification);
     }
+
+        public function destroy($slug)
+    {
+        $item = PricingPlan::where('slug', $slug)->firstOrFail();
+        $item->delete();
+
+        return redirect()->route('manage.pricing')->with('success', 'Plan deleted successfully.');
+    }
+
 }

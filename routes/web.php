@@ -346,6 +346,8 @@ Route::get('/inactive', function () {
 // Pricing
 Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
 
+Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
+
 Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
 
 Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');

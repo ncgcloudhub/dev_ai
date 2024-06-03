@@ -223,7 +223,13 @@
                     </ul>
                     <div class="d-flex">
                         <a href="{{ route('pricing.edit', $item->slug) }}" class="btn btn-success w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
-                        <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
+                        <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light">
+                                <i class="ri-delete-bin-5-line"></i>
+                            </button>
+                        </form>
                     </div>
 
                 </div>
