@@ -29,8 +29,8 @@
                             </div>
                             <div class="ms-auto d-flex align-items-center m-2">
                                 <h3 class="me-1">$</h3>
-                                <input class="form-control form-control-sm me-1" name="price" type="number" placeholder="Enter Price">
-                                <input class="form-control form-control-sm" name="discounted_price" type="number" placeholder="Enter Discounted Price">
+                                <input class="form-control form-control-sm me-1" step="any" name="price" type="number" placeholder="Enter Price">
+                                <input class="form-control form-control-sm" step="any" name="discounted_price" type="number" placeholder="Enter Discounted Price">
                             </div>
                     
                         <ul class="list-unstyled vstack gap-3">
