@@ -307,6 +307,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     // User Export
     Route::get('/all/user/export', [UserController::class, 'export'])->name('user.export');
+    Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
     Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');

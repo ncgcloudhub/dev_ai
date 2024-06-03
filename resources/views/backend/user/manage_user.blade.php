@@ -17,9 +17,11 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Manage User</h5>
-                <a href="{{route('user.export')}}">Download</a>
+                <h5 class="card-title mb-1">Manage User</h5>
+                <a href="{{ route('user.export') }}" class="btn btn-primary">Export All Data From User</a>
+                <a href="{{ route('user.export1') }}" class="btn btn-success">Export for Sending Email</a>
             </div>
+            
             <div class="card-body">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>

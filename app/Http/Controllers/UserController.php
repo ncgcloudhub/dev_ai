@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AllUserExport1;
 use App\Exports\AllUsersExport;
 use App\Models\CustomTemplate;
 use App\Models\Template;
@@ -50,5 +51,9 @@ class UserController extends Controller
     public function export()
     {
         return Excel::download(new AllUsersExport, 'all_users.xlsx');
+    }
+    public function export1()
+    {
+        return Excel::download(new AllUserExport1, 'all_users1.xlsx');
     }
 }
