@@ -12,7 +12,7 @@ class PricingController extends Controller
 {
     public function ManagePricingPlan()
     {
-        $pricingPlans = PricingPlan::all();
+        $pricingPlans = PricingPlan::orderBy('id', 'asc')->get();
 
         $monthlyPlans = $pricingPlans->filter(function ($plan) {
             return $plan->package_type === 'monthly';

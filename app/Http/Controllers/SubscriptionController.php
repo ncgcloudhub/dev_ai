@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
     public function AllPackage()
     {
 
-        $pricingPlans = PricingPlan::all();
+        $pricingPlans = PricingPlan::orderBy('id', 'asc')->get();
 
         $monthlyPlans = $pricingPlans->filter(function ($plan) {
             return $plan->package_type === 'monthly';
