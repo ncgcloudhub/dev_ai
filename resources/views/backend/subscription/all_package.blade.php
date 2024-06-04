@@ -54,7 +54,8 @@
                             <h5 class="mb-0 fw-semibold">{{$item->title}}</h5>
                         </div>
                         <div class="ms-auto">
-                            <h2 class="annual month mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2>
+                            <h2 class="month mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2> 
+                            <h2 class="annual mb-0"><small class="fs-16"><del>Taka{{$item->discounted_price}}</del></small> Taka{{$item->price}}</h2>
                         </div>
                     </div>
 

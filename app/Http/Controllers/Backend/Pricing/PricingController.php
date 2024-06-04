@@ -12,9 +12,18 @@ class PricingController extends Controller
 {
     public function ManagePricingPlan()
     {
-        $pricingPlans = PricingPlan::latest()->get();
+        $pricingPlans = PricingPlan::all();
+
+        $monthlyPlans = $pricingPlans->filter(function ($plan) {
+            return $plan->package_type === 'monthly';
+        });
+
+        $yearlyPlans = $pricingPlans->filter(function ($plan) {
+            return $plan->package_type === 'yearly';
+        });
+
         $totalTemplates = Template::count();
-        return view('backend.pricing.pricing_manage', compact('pricingPlans','totalTemplates'));
+        return view('backend.pricing.pricing_manage', compact('monthlyPlans', 'totalTemplates', 'yearlyPlans'));
     }
 
     public function addPricingPlan()
@@ -107,12 +116,11 @@ class PricingController extends Controller
         return redirect()->route('manage.pricing')->with($notification);
     }
 
-        public function destroy($slug)
+    public function destroy($slug)
     {
         $item = PricingPlan::where('slug', $slug)->firstOrFail();
         $item->delete();
 
         return redirect()->route('manage.pricing')->with('success', 'Plan deleted successfully.');
     }
-
 }
