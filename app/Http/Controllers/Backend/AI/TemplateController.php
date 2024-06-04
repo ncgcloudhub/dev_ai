@@ -277,8 +277,8 @@ class TemplateController extends Controller
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
                 'status' => 'active',
-                'credits_left' => 100,
-                'tokens_left' => 5000,
+                'credits_left' => 10,
+                'tokens_left' => 500,
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
