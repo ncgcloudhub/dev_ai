@@ -12,15 +12,7 @@
                         <div class="row justify-content-center mb-4">
                             <div class="col-lg-6">
                                 <div class="row g-2">
-                                    <div class="col">
-                                        <div class="position-relative mb-3">
-                                            <input type="text" class="form-control form-control-lg bg-light border-light"
-                                                placeholder="Search here.." value="Admin Dashboard">
-                                            <a class="btn btn-link link-success btn-lg position-absolute end-0 top-0"
-                                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                                                aria-controls="offcanvasExample"><i class="ri-mic-fill"></i></a>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-auto">
                                         <div class="search-box">
                                             <input type="text" class="form-control search bg-light border-light" id="searchJob" autocomplete="off" placeholder="Search for jobs...">

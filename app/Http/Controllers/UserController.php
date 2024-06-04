@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\DalleImageGenerate;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Session;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -55,5 +57,17 @@ class UserController extends Controller
     public function export1()
     {
         return Excel::download(new AllUserExport1, 'all_users1.xlsx');
+    }
+
+    // Resend email verification
+    public function sendVerificationEmail(User $user)
+    {
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->back()->with('success', 'Email is already verified.');
+        }
+
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->back()->with('success', 'Verification email sent.');
     }
 }

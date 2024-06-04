@@ -317,6 +317,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::post('eid/card/generate', [GenerateImagesController::class, 'EidCardGenerate'])->name('generate.eid.card');
 }); //End Auth Middleware
 
+
+ // RESEND EMAIL VERIFICATION
+ Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
+
+
 // GOOGLE SOCIALITE
 Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
 Route::get('google/callback', [TemplateController::class, 'callbackHandel'])->name('google.login.callback');
