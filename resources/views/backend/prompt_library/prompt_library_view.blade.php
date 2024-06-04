@@ -132,6 +132,33 @@
 
 
            </div>
+{{-- 2nd column --}}
+<div class="col-xxl-6">
+
+    <div class="card">
+        <div class="card-body"> 
+            <div class="live-preview">
+                <div class="row">
+                    <label for="language" class="form-label">Ask AI</label>
+                    <div class="col-md-9"> 
+                        <textarea class="form-control chat-input bg-light border-light auto-expand" id="ask_ai" rows="1" placeholder="Type your message..." autocomplete="off">{{$prompt_library->actual_prompt}}</textarea>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9"> 
+                        <textarea class="form-control chat-input bg-light border-light auto-expand" id="result"  rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
+                    </div>
+                </div> 
+            </div>
+           
+        </div> 
+    </div>
+</div>
+
+
 </div>
 @endsection
 @section('script')
@@ -167,6 +194,30 @@
     }
 
 </script>
+
+{{-- ASK AI --}}
+<script>
+    $(document).ready(function() {
+        $('#ask').click(function() {
+            var message = $('#ask_ai').val();
+            $.ajax({
+                url: "{{ route('ask.ai.prompt') }}",
+                type: "POST",
+                data: {
+                    message: message,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $('#result').html(response.message);
+                },
+                error: function(xhr) {
+                    // Handle error
+                }
+            });
+        });
+    });
+</script>
+
 
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script src="{{ URL::asset('build/libs/quill/quill.min.js') }}"></script>

@@ -267,7 +267,6 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     // adminDashboardChat
     Route::post('/chat/send', [AIChatController::class, 'send']);
-    // Route::post('/clear-session', [AIChatController::class, 'clearSession'])->name('clear-session');
 
 
 
@@ -302,8 +301,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
-
+    // Import Prompt
     Route::post('/import', [PromptLibraryController::class, 'Import'])->name('import.store');
+    // ASK AI PROMPT LIBRARY
+    Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
+
 
     // User Export
     Route::get('/all/user/export', [UserController::class, 'export'])->name('user.export');

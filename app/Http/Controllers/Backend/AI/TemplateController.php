@@ -216,7 +216,6 @@ class TemplateController extends Controller
         $num_words = str_word_count($content);
         $num_characters = strlen($content);
 
-
         if ($user->words_left <= 0) {
             $data = 0;
             return $data;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Exports\PromptLibraryExportt;
 use App\Http\Controllers\Controller;
 use App\Imports\PromptLibraryImport;
+use App\Models\AISettings;
 use App\Models\PromptExample;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -13,6 +14,7 @@ use App\Models\PromptLibraryCategory;
 use App\Models\PromptLibrary;
 use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
+use GuzzleHttp\Client;
 
 class PromptLibraryController extends Controller
 {
@@ -153,5 +155,37 @@ class PromptLibraryController extends Controller
         }
 
         return redirect()->back()->with('success', 'Examples saved successfully!');
+    }
+
+    // ASK AI PROMPT
+    public function AskAiPromptLibrary(Request $request)
+    {
+        $setting = AISettings::find(1);
+        $openaiModel = $setting->openaimodel;
+
+        $prompt = $request->input('message');
+
+        // Make API call
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => $openaiModel, // Use the appropriate model name
+                'messages' => [
+                    ['role' => 'system', 'content' => $prompt],
+                ],
+            ],
+        ]);
+    
+        $data = json_decode($response->getBody(), true);
+        $messageContent = $data['choices'][0]['message']['content'];
+    
+        // Return the response
+        return response()->json([
+            'message' => $messageContent,
+        ]);
     }
 }
