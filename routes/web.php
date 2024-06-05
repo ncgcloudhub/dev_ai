@@ -207,9 +207,11 @@ Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->n
 Route::get('free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
 Route::post('free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
 
-// Job Page
+// Job Page Frontend
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
-Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
+// Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
+Route::get('/jobs/{id}', [HomeController::class, 'JobDetails'])->name('jobs.details.frontend');
+
 
 // Privacy Policy Page
 Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');

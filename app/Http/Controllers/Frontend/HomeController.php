@@ -167,6 +167,15 @@ class HomeController extends Controller
         return view('backend.job.job_detail', compact('job'));
     }
 
+    public function JobDetails($id)
+    {
+        // Fetch job details from the database
+        $job = Job::findOrFail($id);
+           
+    // Return job details as JSON response
+    return response()->json($job);
+    }
+
 
     //Privacy Policy Front End Page
     public function PrivacyPolicy()
