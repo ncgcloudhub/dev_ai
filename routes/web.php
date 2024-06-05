@@ -138,6 +138,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
 
+        Route::get('/category/edit/{id}', [PromptLibraryController::class, 'PromptCategoryEdit'])->name('prompt.category.edit');
+
+        Route::post('/category/update', [PromptLibraryController::class, 'PromptCategoryUpdate'])->name('prompt.category.update');
+
+        Route::get('/category/delete/{id}', [PromptLibraryController::class, 'PromptCategoryDelete'])->name('prompt.category.delete');
+
         Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add');
 
         Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');

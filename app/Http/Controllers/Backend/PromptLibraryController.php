@@ -18,10 +18,10 @@ use GuzzleHttp\Client;
 
 class PromptLibraryController extends Controller
 {
-    // Custom Template Category
+    // Prompt Category
     public function PromptCategoryAdd()
     {
-        $categories = PromptLibraryCategory::latest()->get();
+        $categories = PromptLibraryCategory::orderBy('id', 'ASC')->get();
         return view('backend.prompt_library.category', compact('categories'));
     }
 
@@ -38,6 +38,64 @@ class PromptLibraryController extends Controller
 
         return redirect()->back()->with('success', 'Prompt Category Saved Successfully');
     }
+
+
+    public function PromptCategoryEdit($id)
+    {
+        $categories = PromptLibraryCategory::orderBy('id', 'ASC')->get();
+        $category = PromptLibraryCategory::findOrFail($id);
+        return view('backend.prompt_library.category_edit', compact('category', 'categories'));
+    }
+
+
+    public function PromptCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        PromptLibraryCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'category_icon' => $request->category_icon,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Customer Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function PromptCategoryDelete($id)
+    {
+        $category = PromptLibraryCategory::findOrFail($id);
+
+        PromptLibraryCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('prompt.category.add')->with($notification);
+    } // end method
+
+
+
+
+
+
+
+
+
+
+
 
     public function PromptAdd()
     {
@@ -108,27 +166,7 @@ class PromptLibraryController extends Controller
         return redirect()->back()->with($notification);
     } // End Method 
 
-    public function PromptSubCategoryAdd()
-    {
-        $categories = PromptLibraryCategory::latest()->get();
-        $subcategories = PromptLibrarySubCategory::latest()->get();
-        return view('backend.prompt_library.sub_category', compact('categories', 'subcategories'));
-    }
 
-    public function PromptSubCategoryStore(Request $request)
-    {
-
-        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
-
-            'category_id' => $request->category_id,
-            'sub_category_name' => $request->sub_category_name,
-            'sub_category_instruction' => $request->sub_category_instruction,
-            'created_at' => Carbon::now(),
-
-        ]);
-
-        return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
-    }
 
     // GET SUB CATEGORY PROMPT
     public function getPromptSubCategory($category_id)
@@ -179,10 +217,10 @@ class PromptLibraryController extends Controller
                 ],
             ],
         ]);
-    
+
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
-    
+
         // Return the response
         return response()->json([
             'message' => $messageContent,
