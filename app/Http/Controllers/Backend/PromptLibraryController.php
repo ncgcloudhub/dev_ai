@@ -88,7 +88,76 @@ class PromptLibraryController extends Controller
 
 
 
+    // Prompt Sub Category
+    public function PromptSubCategoryAdd()
+    {
+        $categories = PromptLibraryCategory::orderBy('id', 'ASC')->get();
+        $subcategories = PromptLibrarySubCategory::orderBy('id', 'ASC')->get();
+        return view('backend.prompt_library.sub_category', compact('categories', 'subcategories'));
+    }
 
+    public function PromptSubCategoryStore(Request $request)
+    {
+
+        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
+
+            'category_id' => $request->category_id,
+            'sub_category_name' => $request->sub_category_name,
+            'sub_category_instruction' => $request->sub_category_instruction,
+            'created_at' => Carbon::now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
+    }
+
+    public function PromptSubCategoryEdit($id)
+    {
+        $categories = PromptLibraryCategory::orderBy('id', 'ASC')->get();
+        $subcategories = PromptLibrarySubCategory::orderBy('id', 'ASC')->get();
+        $subcategory = PromptLibrarySubCategory::findOrFail($id);
+        return view('backend.prompt_library.sub_category_edit', compact('categories', 'subcategories', 'subcategory'));
+    }
+
+
+    public function PromptSubCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        PromptLibrarySubCategory::findOrFail($id)->update([
+            'category_id' => $request->category_id,
+            'sub_category_name' => $request->sub_category_name,
+            'sub_category_instruction' => $request->sub_category_instruction,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Customer Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function PromptSubCategoryDelete($id)
+    {
+        $category = PromptLibrarySubCategory::findOrFail($id);
+
+        PromptLibrarySubCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('prompt.subcategory.add')->with($notification);
+    } // end method
 
 
 

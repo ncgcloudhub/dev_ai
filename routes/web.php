@@ -148,6 +148,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');
 
+        Route::get('/subcategory/edit/{id}', [PromptLibraryController::class, 'PromptSubCategoryEdit'])->name('prompt.subcategory.edit');
+
+        Route::post('/subcategory/update', [PromptLibraryController::class, 'PromptSubCategoryUpdate'])->name('prompt.subcategory.update');
+
+        Route::get('/subcategory/delete/{id}', [PromptLibraryController::class, 'PromptSubCategoryDelete'])->name('prompt.subcategory.delete');
+
         Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
@@ -326,8 +332,8 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 }); //End Auth Middleware
 
 
- // RESEND EMAIL VERIFICATION
- Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
+// RESEND EMAIL VERIFICATION
+Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
 
 
 // GOOGLE SOCIALITE
