@@ -51,7 +51,7 @@
                                 </div>
                             </td>
 
-                            <td>{{$item->ip_address}}</td>
+                            <td>{{$item->ipaddress}}</td>
                                         <td>
                                             @if ($item->email_verified_at)
                                             {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
