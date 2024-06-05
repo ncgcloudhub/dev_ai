@@ -26,7 +26,7 @@
 
 
                                 {{-- alert email verification send --}}
-                                 {{-- @if (session('status') == 'verification-link-sent') --}}
+                                 @if (session('status') == 'verification-link-sent')
                                     <div class="d-flex justify-content-center py-5">
                                     <!-- Success Alert -->
                                     <div class="alert alert-success alert-dismissible alert-additional fade show" role="alert">
@@ -47,7 +47,7 @@
                                         </div>
                                     </div>
                                     </div>
-                                {{-- @endif --}}
+                                @endif
                                 {{-- Alert End --}}
 
 
