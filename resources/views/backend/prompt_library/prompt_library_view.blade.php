@@ -140,7 +140,7 @@
             <div class="live-preview">
                 <div class="row">
                     <label for="language" class="form-label">Ask AI</label>
-                    <div class="col-md-9"> 
+                    <div class="col-md-9 mb-3"> 
                         <textarea class="form-control chat-input bg-light border-light auto-expand" id="ask_ai" rows="1" placeholder="Type your message..." autocomplete="off">{{$prompt_library->actual_prompt}}</textarea>
                     </div>
                     <div class="col-md-3">
@@ -149,7 +149,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-9"> 
-                        <textarea class="form-control chat-input bg-light border-light auto-expand" id="result"  rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
+                        <textarea class="form-control chat-input bg-light border-light auto-expand" id="result1"  rows="3" placeholder="Your Result Here" autocomplete="off"></textarea>
+                      
                     </div>
                 </div> 
             </div>
@@ -208,7 +209,7 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    $('#result').html(response.message);
+                    $('#result1').html(response.message);
                 },
                 error: function(xhr) {
                     // Handle error
