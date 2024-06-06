@@ -100,11 +100,16 @@
                                     <label for="holidays" class="form-label">Holiday Name</label>
                                     <select name="holidays" class="form-control" id="holidays">
                                         <option disabled selected="">Select Holiday</option>
-                                        <optgroup label="Bangladesh">
-                                            <option value="Independence Day">Independence Day</option>
-                                            <option value="Victory Day">Victory Day</option>
+                                        <optgroup label="Common">
+                                            <option value="Birthday Card">Birthday Card</option>
                                             <option value="Eid-ul-Fitr">Eid-ul-Fitr</option>
                                             <option value="Eid-ul-Adha">Eid-ul-Adha</option>
+                                           
+                                        </optgroup>
+                                        <optgroup label="Bangladesh">
+                                            <option value="Bangladesh Independence Day">Independence Day</option>
+                                            <option value="Victory Day">Victory Day</option>
+                                           
                                             <option value="Language Martyrs' Day">Language Martyrs' Day</option>
                                             <option value="Bangla New Year">Bangla New Year</option>
                                             <option value="National Mourning Day">National Mourning Day</option>
@@ -115,7 +120,7 @@
                                         <optgroup label="USA">
                                             <option value="New Year's Day">New Year's Day</option>
                                             <option value="Memorial Day">Memorial Day</option>
-                                            <option value="Independence Day">Independence Day</option>
+                                            <option value="4th Of July">4th Of July</option>
                                             <option value="Labor Day">Labor Day</option>
                                             <option value="Thanksgiving Day">Thanksgiving Day</option>
                                             <option value="Christmas Day">Christmas Day</option>
@@ -130,6 +135,8 @@
                                             <option value="Cyber Monday">Cyber Monday</option>
                                            
                                         </optgroup>
+
+                                      
                                     </select>
                                 </div>
 
