@@ -196,28 +196,43 @@
 
                     <div class="col-4">
                         <div class="modal-body login-modal p-5">
-                            <h5 class="text-white fs-20">Apply Now!</h5>
+                            <h5 class="text-white fs-20">Apply Now</h5>
+                            @guest
+                            <p class="text-white-50 mb-4">Don't have an account?</p>
+                            <div class="vstack gap-2 justify-content-center">
+                                <a href="{{ route('google.login') }}" class="btn btn-light">
+                                    <i class="ri-google-fill align-bottom text-danger"></i> Google
+                                </a>
+                                <a href="/login" class="btn btn-info"><i class="ri-sign-up-fill align-bottom"></i> Sign Up</a>
+                               
+                            </div> 
+                            @endguest
                         </div>
+                       
+                            
                         <div class="modal-body p-5">
-                            <h5 class="mb-3">Fill up the Details</h5>
-                            <form>
-                                <div class="mb-3">
-                                    <label for="fullName" class="form-label">Full Name</label>
-                                    <input type="email" class="form-control" id="fullName" placeholder="Enter your name">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="emailInput" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
-                                </div>
-                                <div class="mb-3">
-                                    <input type="file" class="form-control" placeholder="Upload CV">
-                                </div>
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkTerms">
-                                    <label class="form-check-label" for="checkTerms">I agree to the <span class="fw-semibold">Terms of Service</span> and Privacy Policy</label>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Submit</button>
-                            </form>
+                           @auth
+                           <h5 class="mb-3">Fill up the Details</h5>
+                           <form method="POST" action="{{ route('job.apply') }}" enctype="multipart/form-data"  onsubmit="showSuccessModal()">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="Enter your name" value="{{ auth()->user()->name }}" name="fullName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emailInput" class="form-label">Email address</label>
+                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email" value="{{ auth()->user()->email }}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <input type="file" name="cv" class="form-control" placeholder="Upload CV">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="checkTerms">
+                                <label class="form-check-label" for="checkTerms">I agree to the <span class="fw-semibold"><a href="">Terms of Service</a></span> and <a href="">Privacy Policy</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </form>                        
+                           @endauth
                         </div>
                     </div>
                 
@@ -229,5 +244,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-                   
+
 </section>
