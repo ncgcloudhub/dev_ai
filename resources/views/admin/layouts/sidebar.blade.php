@@ -42,7 +42,7 @@
                   {{-- Eid Card --}}
                   <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
-                        <i class=" las la-atom"></i> <span >Eid Card</span>
+                        <i class=" las la-atom"></i> <span >Greeting Card</span>
                     </a>
                 </li>
 
