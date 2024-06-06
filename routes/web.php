@@ -135,6 +135,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
 
         Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
+
+        Route::get('/edit/{id}', [TemplateController::class, 'TemplateEdit'])->name('template.edit');
+
+        Route::post('/update', [TemplateController::class, 'TemplateUpdate'])->name('template.update');
     });
 
     // Prompt Library

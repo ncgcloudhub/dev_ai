@@ -96,7 +96,7 @@
                                     
                                             <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
                                     
-                                    
+                                            @if(auth()->user()->role == 'admin')
                                             <ul class="list-inline hstack gap-2 mb-0">
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
                                                     {{-- <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
@@ -104,9 +104,9 @@
                                                     </a> --}}
                                                 </li>
                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                    {{-- <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                    <a href="{{route('template.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn">
                                                         <i class="ri-pencil-fill fs-16"></i>
-                                                    </a> --}}
+                                                    </a>
                                                 </li>
                                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                     {{-- <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
@@ -114,6 +114,7 @@
                                                     </a> --}}
                                                 </li>
                                             </ul>
+                                           @endif
                                         </div>
                                     </a>
                                     </div>

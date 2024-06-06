@@ -11,8 +11,9 @@
 @endcomponent
 
 <div class="col-xxl-6">
-    <form method="POST" action="{{route('template.store')}}" class="row g-3">
+    <form method="POST" action="{{route('template.update')}}" class="row g-3">
         @csrf
+        <input type="hidden" name="id" value="{{$template->id}}">  
     <div class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Basic Information</h4>
@@ -22,16 +23,16 @@
             <div class="live-preview">
                 
                     <div class="form-floating mb-3">
-                        <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter Template Name">
+                        <input type="text" name="template_name" value="{{$template->template_name}}" class="form-control" id="template_name" placeholder="Enter Template Name">
                         <label for="template_name" class="form-label">Template Name</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
+                        <input type="text" name="icon" value="{{$template->icon}}" class="form-control" id="icon" placeholder="Enter Icon">
                         <label for="icon" class="form-label">Icon</label>
                     </div>
                     <div class="form-floating mb-3">
                         <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                            <option disabled selected="">Select Category</option>
+                            <option value="{{$template->category_id}}" selected="">{{$template->template_category->category_name}}</option>
                             @foreach ($categories as $item)
                             <option value="{{$item->id}}">{{$item->category_name}}</option>
                             @endforeach
@@ -40,7 +41,7 @@
                     </div>
                   
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
-                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
+                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" >{{$template->description}}</textarea>
                         <label for="description">Description</label>
                     </div>
                
@@ -57,28 +58,31 @@
         <div class="card-body custom-input-informations">
             <div class="live-preview">
                 <div class="row">
+                    @foreach($templateInputsArray as $index => $input)
                     <div class="col-md-4">
-                        <label for="input_types" class="form-label">Input Type</label>
-                        <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example">
-                            <option value="text">Input Field</option>
-                            <option value="textarea">Textarea Field</option>
+                        <label for="input_types_{{ $index }}" class="form-label">Input Type</label>
+                        <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" aria-label="Floating label select example">
+                            <option value="text" {{ $input['type'] == 'text' ? 'selected' : '' }}>Input Field</option>
+                            <option value="textarea" {{ $input['type'] == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="input_names" class="form-label">Input Name</label>
-                        <input type="text" name="input_names[]" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
+                        <label for="input_names_{{ $index }}" class="form-label">Input Name</label>
+                        <input type="text" name="input_names[]" value="{{ $input['name'] }}" id="input_names_{{ $index }}" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
                     </div>
                     <div class="col-md-4">
-                        <label for="input_label" class="form-label">Input Label</label>
-                        <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" required>
+                        <label for="input_label_{{ $index }}" class="form-label">Input Label</label>
+                        <input type="text" name="input_labels[]" value="{{ $input['label'] }}" id="input_label_{{ $index }}" placeholder="Type input label" class="form-control" required>
                     </div>
+                    @endforeach
                 </div>
-            
+                
                 <a name="add" id="add" class="btn bg-gradient-dark mb-0"><i class="las la-plus" aria-hidden="true"></i>Add</a>
                 <div id="template_info" class="input-informations">
                     <!-- Additional input fields will be appended here -->
                 </div>
             </div>
+            
         </div>
     </div>
     {{-- 2nd Card End --}}
@@ -97,7 +101,7 @@
             <div class="live-preview">
                 <label for="custom_prompt" class="form-label">Custom Prompt</label>
                 <div class="col-md-12">
-                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message"></textarea>
+                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{$template->prompt}}</textarea>
                 </div>
             </div>
         </div>

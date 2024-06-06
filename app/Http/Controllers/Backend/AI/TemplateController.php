@@ -98,30 +98,6 @@ class TemplateController extends Controller
         return view('backend.template.template_add', compact('categories'));
     }
 
-    public function TemplateManage()
-    {
-        $templates = Template::orderby('id', 'asc')->get();
-        $templatecategories = TemplateCategory::latest()->get();
-        return view('backend.template.template_manage', compact('templates', 'templatecategories'));
-    }
-
-    public function TemplateView($slug)
-    {
-        // Find the template by slug
-        $Template = Template::where('slug', $slug)->firstOrFail();
-
-        // Convert JSON strings to arrays
-        $inputTypes = json_decode($Template->input_types, true);
-        $inputNames = json_decode($Template->input_names, true);
-        $inputLabels = json_decode($Template->input_labels, true);
-
-        $content = '';
-
-
-        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
-    }
-
-
     public function TemplateStore(Request $request)
     {
 
@@ -162,6 +138,84 @@ class TemplateController extends Controller
 
         return redirect()->back()->with($notification);
     }
+
+
+    public function TemplateEdit($id)
+    {
+        $categories = TemplateCategory::orderBy('id', 'ASC')->get();
+        $template = Template::findOrFail($id);
+
+        $templateInputs = json_decode($template->input_types, true);
+        $inputNames = json_decode($template->input_names, true);
+        $inputLabels = json_decode($template->input_labels, true);
+
+        $templateInputsArray = [];
+        foreach ($templateInputs as $index => $type) {
+            $templateInputsArray[] = [
+                'type' => $type,
+                'name' => $inputNames[$index] ?? '',
+                'label' => $inputLabels[$index] ?? '',
+            ];
+        }
+        return view('backend.template.template_edit', compact('template', 'categories', 'templateInputsArray'));
+    }
+
+
+    public function TemplateUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'template_name' => 'required|string',
+            'icon' => 'nullable|string',
+            'category_id' => 'required|exists:template_categories,id',
+            'description' => 'nullable|string',
+            'input_types' => 'required|array',
+            'input_names' => 'required|array',
+            'input_labels' => 'required|array',
+            'prompt' => 'nullable|string',
+        ]);
+
+        $template = Template::findOrFail($id);
+        $template->template_name = $validatedData['template_name'];
+        $template->icon = $validatedData['icon'];
+        $template->category_id = $validatedData['category_id'];
+        $template->description = $validatedData['description'];
+        $template->input_types = json_encode($validatedData['input_types']);
+        $template->input_names = json_encode($validatedData['input_names']);
+        $template->input_labels = json_encode($validatedData['input_labels']);
+        $template->prompt = $validatedData['prompt'];
+        $template->save();
+
+        return redirect()->back()->with('success', 'Template updated successfully');
+    } // end method 
+
+    public function TemplateManage()
+    {
+        $templates = Template::orderby('id', 'asc')->get();
+        $templatecategories = TemplateCategory::latest()->get();
+        return view('backend.template.template_manage', compact('templates', 'templatecategories'));
+    }
+
+    public function TemplateView($slug)
+    {
+        // Find the template by slug
+        $Template = Template::where('slug', $slug)->firstOrFail();
+
+        // Convert JSON strings to arrays
+        $inputTypes = json_decode($Template->input_types, true);
+        $inputNames = json_decode($Template->input_names, true);
+        $inputLabels = json_decode($Template->input_labels, true);
+
+        $content = '';
+
+
+        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
+    }
+
+
+
 
     // Generate Using Open AI
     public function templategenerate(Request $input)
