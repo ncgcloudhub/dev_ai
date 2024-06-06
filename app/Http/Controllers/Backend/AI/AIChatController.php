@@ -229,6 +229,8 @@ class AIChatController extends Controller
                 'messages' => $messages,
             ],
         ]);
+
+       Log::info('OpenAI API Response: ' . $response->getBody()->getContents());
     
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
