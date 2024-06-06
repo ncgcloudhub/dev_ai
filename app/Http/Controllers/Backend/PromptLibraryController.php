@@ -160,12 +160,6 @@ class PromptLibraryController extends Controller
     } // end method
 
 
-
-
-
-
-
-
     public function PromptAdd()
     {
         $categories = PromptLibraryCategory::latest()->get();
