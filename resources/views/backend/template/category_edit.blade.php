@@ -6,6 +6,9 @@
 @slot('title') Starter  @endslot
 @endcomponent
 
+<a href="{{ route('template.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category
+</a>
+
 <div class="row">
 
     <div class="col-xxl-6">
@@ -27,9 +30,7 @@
                             @foreach ($categories as $item)
                             <tr>
                                 <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
-                                  
-                                <td><i class="{{ $item->category_icon }}"></i>  {{ $item->category_name }}</td>    
-                                
+                                <td>{{ $item->category_name }}</td>    
                                 <td>
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
@@ -61,16 +62,16 @@
                 {{-- @include('admin.layouts.alerts') --}}
     
                 <div class="live-preview">
-                    <form  action="{{ route('template.category.store') }}" method="post" class="row g-3">
+                    <form  action="{{ route('template.category.update') }}" method="post" class="row g-3">
                         @csrf
-    
+                        <input type="hidden" name="id" value="{{$category->id}}">  
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category">
+                            <input type="text" name="category_name" value="{{$category->category_name}}" class="form-control" id="category_name" placeholder="Enter Category">
                             <label for="category_name">Category</label>
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon">
+                            <input type="text" name="category_icon" value="{{$category->category_icon}}" class="form-control" id="category_icon" placeholder="Enter Icon">
                             <label for="icon">Enter Icon</label>
                         </div>
     

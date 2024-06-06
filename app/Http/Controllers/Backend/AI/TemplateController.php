@@ -20,7 +20,7 @@ class TemplateController extends Controller
     // Custom Template Category
     public function TemplateCategoryAdd()
     {
-        $categories = TemplateCategory::latest()->get();
+        $categories = TemplateCategory::orderBy('id', 'ASC')->get();
         return view('backend.template.category', compact('categories'));
     }
 
@@ -37,6 +37,58 @@ class TemplateController extends Controller
 
         return redirect()->back()->with('success', 'Template Saved Successfully');
     }
+
+    public function TemplateCategoryEdit($id)
+    {
+        $categories = TemplateCategory::orderBy('id', 'ASC')->get();
+        $category = TemplateCategory::findOrFail($id);
+        return view('backend.template.category_edit', compact('category', 'categories'));
+    }
+
+
+    public function TemplateCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        TemplateCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'category_icon' => $request->category_icon,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Category Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function TemplateCategoryDelete($id)
+    {
+        $category = TemplateCategory::findOrFail($id);
+
+        TemplateCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('template.category.add')->with($notification);
+    } // end method
+
+
+
+
+
+
 
     // Custom Template
 

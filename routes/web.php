@@ -126,6 +126,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/category/store', [TemplateController::class, 'TemplateCategoryStore'])->name('template.category.store');
 
+        Route::get('/category/edit/{id}', [TemplateController::class, 'TemplateCategoryEdit'])->name('template.category.edit');
+
+        Route::post('/category/update', [TemplateController::class, 'TemplateCategoryUpdate'])->name('template.category.update');
+
+        Route::get('/category/delete/{id}', [TemplateController::class, 'TemplateCategoryDelete'])->name('template.category.delete');
+
         Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
 
         Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
