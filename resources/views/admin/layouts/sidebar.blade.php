@@ -185,8 +185,7 @@
                                    
                                 </ul>
                             </div>
-                            
-                            
+      
                         </div>
                     </div>
                 </li>
@@ -274,6 +273,9 @@
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{route('manage.job')}}" class="nav-link" >Manage Job</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.job.applications')}}" class="nav-link" >Manage Job Application</a>
                                     </li>
                                    
                                 </ul>
