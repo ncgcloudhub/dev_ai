@@ -97,10 +97,8 @@
                             <div class="snow-editor" style="height: 200px;">
                                 {!! $item->example !!}
                             </div>
-                                {{-- <div class="form-group mt-3">
-                                    <textarea class="form-control" rows="3" readonly>{{ $item->example }}</textarea>
-                                    <p class="text-muted">Status: {{ $item->active ? 'Active' : 'Inactive' }}</p>
-                                </div> --}}
+                            <br>
+                               
                             @endforeach
                         </div>
                     </div>

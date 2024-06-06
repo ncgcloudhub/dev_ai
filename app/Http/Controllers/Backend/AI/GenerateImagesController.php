@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\LikedImagesDalle;
 use App\Models\PromptLibrary;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use App\Providers\AppServiceProvider;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class GenerateImagesController extends Controller
 {
@@ -422,5 +424,37 @@ class GenerateImagesController extends Controller
         Session::put('image_generated_at', now());
 
         return response()->json($data);
+    }
+
+    // Like Image
+    public function toggleLike(Request $request)
+    {
+        // Get the image ID from the request
+        $imageId = $request->input('image_id');
+        
+        // Get the current authenticated user
+        $user = Auth::user();
+
+        // Check if the user has already liked the image
+        $liked = $user->likedImages()->where('image_id', $imageId)->exists();
+
+        // Log user and image ID for debugging purposes
+        //  Log::info('User ID: ' . $user->id . ', Image ID: ' . $imageId . 'liked: ' . $liked);
+        
+        if ($liked) {
+            // User has already liked the image, so unlike it
+            $user->likedImages()->detach($imageId);
+            $liked = false;
+        } else {
+            // User hasn't liked the image yet, so like it
+            LikedImagesDalle::create([
+                'user_id' => $user->id,
+                'image_id' => $imageId
+            ]);
+            $liked = true;
+        }
+        
+        // Return response indicating success and the new like status
+        return response()->json(['success' => true, 'liked' => $liked]);
     }
 }

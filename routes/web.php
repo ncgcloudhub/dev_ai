@@ -214,6 +214,10 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
     Route::get('/purchase/{pricingPlanId}', [SubscriptionController::class, 'Purchase'])->name('purchase.package');
 
     Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
+
+    // Like Image
+    Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
+
 }); //End User Middleware
 
 

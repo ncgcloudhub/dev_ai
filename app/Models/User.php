@@ -51,6 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(Session::class);
     }
 
+    public function likedImages()
+    {
+        return $this->belongsToMany(DalleImageGenerate::class, 'liked_images_dalles', 'user_id', 'image_id')->withTimestamps();
+    }
+
 
     
 }

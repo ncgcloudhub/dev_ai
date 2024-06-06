@@ -34,17 +34,17 @@
                                                         <div class="gallery-container">
                                                             <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
                                                                 <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
+                                                               
                                                                 <div class="gallery-overlay">
                                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
+                                                                    
                                                                 </div>
                                                             </a>
                                                         </div>
-                                                        {{-- <div class="box-content">
-                                                            <div class="d-flex align-items-center mt-1">
-                                                                <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">{{$item->user->name}}</a></div>
-                                                            </div>
-                                                        </div> --}}
+                                                      
+                                                        
                                                     </div>
+                                                    <button class="like-button" data-image-id="{{ $item->id }}">Like</button>
                                                 </div>
                                                 @endforeach
                                             </div>
@@ -118,6 +118,35 @@
     
             // Initial load for the first page
             loadMoreImages();
+        </script>
+
+{{-- LIKE --}}
+        <script>
+            $(document).ready(function() {
+    $('.like-button').on('click', function() {
+        var imageId = $(this).data('image-id');
+        $.ajax({
+            url: '/like',
+            method: 'POST',
+            headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+            data: { image_id: imageId },
+            success: function(response) {
+                // Update UI to reflect the new like status
+                if (response.liked) {
+                    $('.like-button[data-image-id="' + imageId + '"]').text('Unlike');
+                } else {
+                    $('.like-button[data-image-id="' + imageId + '"]').text('Like');
+                }
+            },
+            error: function(xhr) {
+                // Handle errors
+            }
+        });
+    });
+});
+
         </script>
     @endsection
     
