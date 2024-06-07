@@ -13,7 +13,10 @@ class PageSeoController extends Controller
     {
         // Get all routes
         $routes = collect(Route::getRoutes())->map(function ($route) {
-            return $route->getName();
+            return [
+                'name' => $route->getName(),
+                'url' => $route->uri()
+            ];
         })->filter()->toArray();
 
         // Pass routes to the view
@@ -23,28 +26,26 @@ class PageSeoController extends Controller
     public function storePageSeo(Request $request)
     {
         // Validate the incoming request data
-    $validatedData = $request->validate([
-        'route_name' => 'required|string',
-        'title' => 'required|string',
-        'keywords' => 'nullable|string',
-        'description' => 'nullable|string',
-    ]);
+        $validatedData = $request->validate([
+            'route_name' => 'required|string',
+            'title' => 'required|string',
+            'keywords' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
 
-    // Create a new Page instance
-    $page = new Page();
-    
-    // Fill the Page instance with the validated data
-    $page->route_name = $validatedData['route_name'];
-    $page->title = $validatedData['title'];
-    $page->keywords = $validatedData['keywords'];
-    $page->description = $validatedData['description'];
-    
-    // Save the Page instance to the database
-    $page->save();
+        // Create a new Page instance
+        $page = new Page();
 
-    // Redirect the user to a success page or back to the form with a success message
-    return redirect()->back()->with('success', 'Page SEO added successfully!');
+        // Fill the Page instance with the validated data
+        $page->route_name = $validatedData['route_name'];
+        $page->title = $validatedData['title'];
+        $page->keywords = $validatedData['keywords'];
+        $page->description = $validatedData['description'];
+
+        // Save the Page instance to the database
+        $page->save();
+
+        // Redirect the user to a success page or back to the form with a success message
+        return redirect()->back()->with('success', 'Page SEO added successfully!');
     }
-
-
 }

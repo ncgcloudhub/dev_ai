@@ -17,15 +17,16 @@
 
         <div class="card-body">
             <div class="live-preview">
-                    <div class="col-md-12 mb-3">
-                        <label for="Banner Text" class="form-label">Route</label>
-                        <select class="form-select" name="route_name" data-choices aria-label="Default select example">
-                            <option selected="">Select Route</option>
-                            @foreach($routes as $route)
-                                <option value="{{ $route }}">{{ $route }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="col-md-12 mb-3">
+                    <label for="Banner Text" class="form-label">Route</label>
+                    <select class="form-select" name="route_name" data-choices aria-label="Default select example">
+                        <option selected="">Select Route</option>
+                        @foreach($routes as $route)
+                            <option value="{{ $route['url'] }}">{{ $route['name'] }} ({{ $route['url'] }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                
 
                     <div class="col-md-12">
                         <label for="title" class="form-label">Title</label>
