@@ -16,7 +16,24 @@ class PromptLibraryExportt implements FromCollection, WithHeadings, WithStyles
      */
     public function collection()
     {
-        return PromptLibrary::all();
+        // Load PromptLibrary with related category and subcategory names
+        $prompts = PromptLibrary::with(['category', 'subcategory'])->get();
+
+        // Map the data to replace category_id and sub_category_id with their names
+        return $prompts->map(function ($prompt) {
+            return [
+                'id' => $prompt->id,
+                'prompt_name' => $prompt->prompt_name,
+                'slug' => $prompt->slug,
+                'icon' => $prompt->icon,
+                'category_name' => $prompt->category ? $prompt->category->category_name : null,
+                'description' => $prompt->description,
+                'actual_prompt' => $prompt->actual_prompt,
+                'created_at' => $prompt->created_at,
+                'updated_at' => $prompt->updated_at,
+                'sub_category_name' => $prompt->subcategory ? $prompt->subcategory->sub_category_name : null,
+            ];
+        });
     }
 
     /**
@@ -24,8 +41,18 @@ class PromptLibraryExportt implements FromCollection, WithHeadings, WithStyles
      */
     public function headings(): array
     {
-        // Get all column names for the PromptLibrary table
-        return Schema::getColumnListing((new PromptLibrary)->getTable());
+        return [
+            'ID',
+            'Prompt Name',
+            'Slug',
+            'Icon',
+            'Category Name',
+            'Description',
+            'Actual Prompt',
+            'Created At',
+            'Updated At',
+            'Sub Category Name',
+        ];
     }
 
     /**
