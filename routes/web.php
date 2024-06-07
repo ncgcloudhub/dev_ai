@@ -168,6 +168,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
 
+        Route::get('/edit/{id}', [PromptLibraryController::class, 'PromptEdit'])->name('prompt.edit');
+
+        Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
+
+        Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
+
         // GET SUB CATEGORY
         Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
     });
@@ -217,7 +223,6 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
 
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
-
 }); //End User Middleware
 
 

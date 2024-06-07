@@ -192,10 +192,67 @@ class PromptLibraryController extends Controller
         return redirect()->back()->with($notification);
     }
 
+
+    public function PromptEdit($id)
+    {
+        $categories = PromptLibraryCategory::orderBy('id', 'ASC')->get();
+        $category = PromptLibrary::findOrFail($id);
+
+        return view('backend.prompt_library.prompt_library_edit', compact('categories', 'category'));
+    }
+
+
+    public function PromptUpdate(Request $request)
+    {
+
+        $id = $request->id;
+        $slug = Str::slug($request->prompt_name);
+
+        PromptLibrary::findOrFail($id)->update([
+            'prompt_name' => $request->prompt_name,
+            'icon' => $request->icon,
+            'slug' => $slug,
+            'category_id' => $request->category_id,
+            'sub_category_id' => $request->subcategory_id,
+            'description' => $request->description,
+            'actual_prompt' => $request->actual_prompt,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Prompt Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function PromptDelete($id)
+    {
+        $category = PromptLibrary::findOrFail($id);
+
+        PromptLibrary::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Prompt Delectd Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('prompt.manage')->with($notification);
+    } // end method
+
+
+
+
     public function PromptManage()
     {
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
-        $prompt_library_category = PromptLibraryCategory::latest()->get();
+        $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
         return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category'));
     }
 
