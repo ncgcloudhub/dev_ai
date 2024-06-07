@@ -159,31 +159,7 @@
         </div>
         <!--end card-->
    
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Contact Us</h5>
-            </div>
-            <div class="card-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="nameInput" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="nameInput" placeholder="Enter your name">
-                    </div>
-                    <div class="mb-3">
-                        <label for="emailInput" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="emailInput" placeholder="Enter your email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="messageInput" class="form-label">Message</label>
-                        <textarea class="form-control" id="messageInput" rows="3" placeholder="Message"></textarea>
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!--end card-->
+        
     </div>
 </div>
 
