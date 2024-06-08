@@ -182,7 +182,7 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->words_left}}">0</span></h4>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->words_generated}}">0</span></h4>
                                     <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
                                         templates</a>
                                 </div>
