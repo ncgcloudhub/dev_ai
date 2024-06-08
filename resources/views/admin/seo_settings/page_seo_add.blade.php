@@ -22,7 +22,7 @@
                     <select class="form-select" name="route_name" data-choices aria-label="Default select example">
                         <option selected="">Select Route</option>
                         @foreach($routes as $route)
-                            <option value="{{ $route['url'] }}">{{ $route['name'] }} ({{ $route['url'] }})</option>
+                            <option value="{{ $route['name'] }}">{{ $route['name'] }} ({{ $route['url'] }})</option>
                         @endforeach
                     </select>
                 </div>

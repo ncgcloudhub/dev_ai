@@ -100,13 +100,15 @@
                                     <label for="holidays" class="form-label">Holiday Name</label>
                                     <select name="holidays" class="form-control" id="holidays">
                                         <option disabled selected="">Select Holiday</option>
-                                        <optgroup label="Common">
+                                        <optgroup label="Popular">
                                             <option value="Birthday Card">Birthday Card</option>
                                             <option value="Eid-ul-Fitr">Eid-ul-Fitr</option>
                                             <option value="Eid-ul-Adha">Eid-ul-Adha</option>
                                            
                                         </optgroup>
-                                        <optgroup label="Bangladesh">
+
+                                        <optgroup label="Others">
+                                     
                                             <option value="Bangladesh Independence Day">Independence Day</option>
                                             <option value="Victory Day">Victory Day</option>
                                            
@@ -116,8 +118,8 @@
                                             <option value="Shaheed Day">Shaheed Day</option>
                                             <option value="Bengali Language Day">Bengali Language Day</option>
                                             <option value="Shadhinota Dibosh">Shadhinota Dibosh</option>
-                                        </optgroup>
-                                        <optgroup label="USA">
+                                      
+                                       
                                             <option value="New Year's Day">New Year's Day</option>
                                             <option value="Memorial Day">Memorial Day</option>
                                             <option value="4th Of July">4th Of July</option>
