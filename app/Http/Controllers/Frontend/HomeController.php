@@ -113,6 +113,11 @@ class HomeController extends Controller
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
 
+        if ($user->tokens_left <= 0) {
+            $data = 0;
+            return $data;
+        }
+
         $result = $client->completions()->create([
             "model" => 'gpt-3.5-turbo-instruct',
             "temperature" => $temperature_value,
@@ -171,9 +176,9 @@ class HomeController extends Controller
     {
         // Fetch job details from the database
         $job = Job::findOrFail($id);
-           
-    // Return job details as JSON response
-    return response()->json($job);
+
+        // Return job details as JSON response
+        return response()->json($job);
     }
 
 

@@ -304,6 +304,11 @@ class TemplateController extends Controller
             }
         }
 
+        if ($user->tokens_left <= 0) {
+            $data = 0;
+            return $data;
+        }
+
         $result = $client->completions()->create([
             "model" => 'gpt-3.5-turbo-instruct',
             "temperature" => floatval($temperature_value),
@@ -322,7 +327,7 @@ class TemplateController extends Controller
         $num_words = str_word_count($content);
         $num_characters = strlen($content);
 
-        if ($user->words_left <= 0) {
+        if ($user->tokens_left <= 0) {
             $data = 0;
             return $data;
         } else {
