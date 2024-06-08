@@ -51,7 +51,7 @@ class GenerateImagesController extends Controller
     {
 
         $id = Auth::user()->id;
-        $imagesLeft = Auth::user()->images_left;
+        $creditsLeft = Auth::user()->credits_left;
 
         $apiKey = config('app.openai_api_key');
         $size = '1024x1024';
@@ -78,13 +78,13 @@ class GenerateImagesController extends Controller
             if ($request->no_of_result) {
                 $n = $request->no_of_result;
                 $n = intval($n);
-                if ($n > $imagesLeft) {
+                if ($n > $creditsLeft) {
                     return response()->json(['error' => 'Failed to generate image'], 500);
                 }
             }
 
 
-            if ($imagesLeft >= 1) {
+            if ($creditsLeft >= 1) {
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
@@ -116,12 +116,12 @@ class GenerateImagesController extends Controller
             if ($request->no_of_result) {
                 $n = $request->no_of_result;
                 $n = intval($n);
-                if ($n > $imagesLeft) {
+                if ($n > $creditsLeft) {
                     return response()->json(['error' => 'Failed to generate image'], 500);
                 }
             }
 
-            if ($imagesLeft >= 1) {
+            if ($creditsLeft >= 1) {
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
@@ -282,7 +282,7 @@ class GenerateImagesController extends Controller
 
         $id = Auth::user()->id;
         $user = Auth::user();
-        $imagesLeft = Auth::user()->images_left;
+        $creditsLeft = Auth::user()->credits_left;
 
         $card_style = $request->card_select;
         $holidays = $request->holidays;
@@ -300,7 +300,7 @@ class GenerateImagesController extends Controller
 
         $response = null;
 
-        if ($imagesLeft >= 1) {
+        if ($creditsLeft >= 1) {
 
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
@@ -431,7 +431,7 @@ class GenerateImagesController extends Controller
     {
         // Get the image ID from the request
         $imageId = $request->input('image_id');
-        
+
         // Get the current authenticated user
         $user = Auth::user();
 
@@ -440,7 +440,7 @@ class GenerateImagesController extends Controller
 
         // Log user and image ID for debugging purposes
         //  Log::info('User ID: ' . $user->id . ', Image ID: ' . $imageId . 'liked: ' . $liked);
-        
+
         if ($liked) {
             // User has already liked the image, so unlike it
             $user->likedImages()->detach($imageId);
@@ -453,7 +453,7 @@ class GenerateImagesController extends Controller
             ]);
             $liked = true;
         }
-        
+
         // Return response indicating success and the new like status
         return response()->json(['success' => true, 'liked' => $liked]);
     }

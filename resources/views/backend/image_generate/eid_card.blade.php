@@ -19,7 +19,7 @@
 
 <div class="container">
 
-    @if($get_user->images_left == 0) 
+    @if($get_user->credits_left == 0) 
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong> No Images Left! </strong> You don't have any <b>Images </b> left to generate!
     </div>
@@ -30,8 +30,8 @@
     <div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Popular Holiday Card</h4>
-             <button type="button" class="btn waves-effect waves-light @if($get_user->images_left == 0) btn-danger @else btn-primary @endif">
-            Images Left <span class="credit-left badge ms-1 @if($get_user->images_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->images_left }}</span>
+             <button type="button" class="btn waves-effect waves-light @if($get_user->credits_left == 0) btn-danger @else btn-primary @endif">
+            Credits Left <span class="credit-left badge ms-1 @if($get_user->credits_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->credits_left }}</span>
             </button>
         </div><!-- end card header -->
     
@@ -312,8 +312,8 @@ $(document).ready(function() {
     });
 });
 
-                         var credit_left = response.credit_left;
-                         $('.credit-left').text(credit_left);
+                         var credits_left = response.credits_left;
+                         $('.credit-left').text(credits_left);
 
 
                   // Hide loader
