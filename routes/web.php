@@ -176,6 +176,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // GET SUB CATEGORY
         Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
+
+        Route::get('/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
+
     });
 
     // Dalle Manage Image
