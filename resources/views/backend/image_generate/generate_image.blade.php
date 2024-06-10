@@ -337,27 +337,61 @@
                 <div class="card-body">
                     <div class="row gallery-wrapper">
                         @foreach ($images as $item)
-                            <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
-                                <div class="gallery-box card">
-                                    <div class="gallery-container">
-                                        <a class="image-popup" href="{{ $item->image_url }}" title="">
-                                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
-                                            <div class="gallery-overlay">
-                                                <h5 class="overlay-caption">{{ $item->prompt }}</h5>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> <i data-feather="download"></i></a>
-                                    </div>
+                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}">
+                                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="text-center mt-2">
+                                    <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
+                                        <i data-feather="download"></i>
+                                    </a>
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+{{-- Image Description --}}
+<div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 overflow-hidden">
+            <div class="row g-0">
+                <div class="col-lg-7">
+                    <div class="modal-body p-5">
+                        <h2 class="lh-base modal-title" id="imageModalLabel"></h2>
+                        <p class="text-muted mb-4">A free bet is a bet which is provided by a betting
+                            site for a customer to place and then benefit from the winnings. Free bets are commonly used as welcome offers.</p>
+                        <div class="input-group mb-3">
+
+                            <input type="text" class="form-control" placeholder="Enter your email" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                            <button class="btn btn-primary" type="button" id="button-addon1">Subscript Now</button>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">By subscribing to a particular channel or user on YouTube, you can receive instant updates.</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="subscribe-modals-cover h-100">
+                        <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
 
 {{-- Modal --}}
@@ -418,6 +452,24 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var imageModal = document.getElementById('imageModal');
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var imageUrl = button.getAttribute('data-image-url'); // Extract info from data-* attributes
+            var imagePrompt = button.getAttribute('data-image-prompt');
+            
+            // Update the modal's content.
+            var modalImage = imageModal.querySelector('#modalImage');
+            var modalTitle = imageModal.querySelector('.modal-title');
+            
+            modalImage.src = imageUrl;
+            modalTitle.textContent = imagePrompt;
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
