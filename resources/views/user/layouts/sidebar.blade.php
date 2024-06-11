@@ -88,6 +88,28 @@
                     </div>
                 </li>
 
+                {{-- Prompt Library --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#prompt" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-pen"></i> <span >Prompt Library</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="prompt">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('user.prompt.library')}}" class="nav-link" >Manage Prompt</a>
+                                    </li>
+                                   
+                                </ul>
+                            </div>     
+                        </div>
+                    </div>
+                </li>
+
+
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarExpert" data-bs-toggle="collapse" role="button"

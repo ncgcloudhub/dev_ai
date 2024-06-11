@@ -365,5 +365,16 @@ class PromptLibraryController extends Controller
     
         return response()->json($prompt_library);
     }
+
+
+
+    // USER PROMPT-------------------------------------------------------------------------------
+    public function UserPromptManage()
+    {
+        $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
+        $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
+        $categories = PromptLibraryCategory::latest()->get();
+        return view('user.prompt_library.user_prompt_library', compact('prompt_library', 'prompt_library_category','categories'));
+    }
     
 }

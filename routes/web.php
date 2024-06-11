@@ -174,11 +174,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
 
-        // GET SUB CATEGORY
-        Route::get('/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
-
-        Route::get('/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
-
     });
 
     // Dalle Manage Image
@@ -226,6 +221,10 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
 
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
+
+    // User Prompt Library
+    Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
+
 }); //End User Middleware
 
 
@@ -351,6 +350,14 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');
 
     Route::post('eid/card/generate', [GenerateImagesController::class, 'EidCardGenerate'])->name('generate.eid.card');
+
+
+    // GET SUB CATEGORY
+    Route::get('/prompt/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
+
+    Route::get('/prompt/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
+
+
 }); //End Auth Middleware
 
 
