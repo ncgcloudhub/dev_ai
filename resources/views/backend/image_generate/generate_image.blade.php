@@ -557,7 +557,7 @@ $(document).ready(function() {
 
               
 
-                         var credits_left = response.credits_left;
+                         var credits_left = response.credit_left;
                          $('.credit-left').text(credits_left);
 
                   // Hide loader
