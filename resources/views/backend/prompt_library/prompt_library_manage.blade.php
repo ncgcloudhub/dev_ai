@@ -72,7 +72,7 @@
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th scope="col">Sl.</th>
+                            <th scope="col">ID.</th>
                             <th scope="col">Prompt Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Category</th>
@@ -85,7 +85,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->prompt_name}}</a>
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->prompt_name}}</a>
                             </td>
                              <td>
                                 <div class="d-flex align-items-center">
