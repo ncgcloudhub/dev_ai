@@ -372,18 +372,28 @@
                         <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
                     </div>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-7 d-flex align-items-center">
                     <div class="modal-body p-5">
                         <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
                         <span class="text-muted mb-4" id="resolution"></span>
-                      
                     </div>
+                    <!-- Right button -->
+                    <button type="button" class="btn btn-outline-secondary btn-sm ms-auto" id="nextButton">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                
+                <!-- Left button -->
+                <button type="button" class="btn btn-outline-secondary btn-sm me-auto mt-auto mb-auto" id="prevButton">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+
+
+
 
 {{-- Modal --}}
 <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -447,23 +457,51 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var imageModal = document.getElementById('imageModal');
-        imageModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // Button that triggered the modal
-            var imageUrl = button.getAttribute('data-image-url'); // Extract info from data-* attributes
-            var imagePrompt = button.getAttribute('data-image-prompt');
-            var imageResolution = button.getAttribute('data-image-resolution');
-            
-            // Update the modal's content.
+        var prevButton = document.getElementById('prevButton');
+        var nextButton = document.getElementById('nextButton');
+        var images = {!! json_encode($images) !!}; // Assuming $images is an array of image objects
+        var currentIndex = 0;
+
+        // Function to update modal content based on current index
+        function updateModalContent(index) {
+            var imageUrl = images[index].image_url;
+            var imagePrompt = images[index].prompt;
+            var imageResolution = images[index].resolution;
+
             var modalImage = imageModal.querySelector('#modalImage');
             var modalTitle = imageModal.querySelector('.modal-title');
             var modalDescription = imageModal.querySelector('#resolution');
-            
+
             modalImage.src = imageUrl;
             modalTitle.textContent = imagePrompt;
             modalDescription.textContent = imageResolution;
+        }
+
+        // Update modal content when modal is shown
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            currentIndex = 0; // Reset index when modal is opened
+            updateModalContent(currentIndex);
+        });
+
+        // Previous button click event
+        prevButton.addEventListener('click', function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateModalContent(currentIndex);
+            }
+        });
+
+        // Next button click event
+        nextButton.addEventListener('click', function () {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                updateModalContent(currentIndex);
+            }
         });
     });
 </script>
+
+
 
 <script>
     $(document).ready(function() {
