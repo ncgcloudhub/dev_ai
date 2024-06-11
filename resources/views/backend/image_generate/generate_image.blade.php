@@ -265,8 +265,12 @@
                                                             <select name="image_res" class="form-control" id="image_res">
                                                                 <option disabled selected="">Enter Image Resolution</option>
                                                                 <option value="1024x1024">1024x1024</option>
+                                                                @if ($lastPackageId)
                                                                 <option value="1792x1024">1792x1024</option>
                                                                 <option value="1024x1792">1024x1792</option>
+                                                                @else
+                                                                <option disabled>Upgrade to access more options</option>
+                                                            @endif
                                                             </select>
                                                         </div>
                                                         

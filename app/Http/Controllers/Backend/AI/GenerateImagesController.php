@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\AI;
 use App\Http\Controllers\Controller;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\LikedImagesDalle;
+use App\Models\PackageHistory;
 use App\Models\PromptLibrary;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -42,7 +43,13 @@ class GenerateImagesController extends Controller
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
-        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library'));
+        // Get the last package bought by the user
+        $lastPackageHistory = PackageHistory::where('user_id', $user_id)
+        ->latest()
+        ->first();
+        $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
+
+        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library','lastPackageId'));
     }
 
 
