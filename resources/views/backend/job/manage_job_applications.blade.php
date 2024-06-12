@@ -28,7 +28,7 @@
                             <th scope="col">Full Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">User ID</th>
-                            <th scope="col">CV</th>
+                            <th scope="col">Resume (CV)</th>
                         
                         </tr>
                     </thead>
