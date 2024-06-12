@@ -32,7 +32,7 @@
                                                 <div class="element-item col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 photography" data-category="photography">
                                                     <div class="gallery-box card">
                                                         <div class="gallery-container">
-                                                            <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
+                                                            <a class="image-popups" href="{{ asset($item->image_url) }}" title="">
                                                                 <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
                                                                
                                                                 <div class="gallery-overlay">
@@ -44,7 +44,9 @@
                                                       
                                                         
                                                     </div>
-                                                    <button class="like-button" data-image-id="{{ $item->id }}">Like</button>
+                                                    <!-- Buttons Group -->
+                                                    <button type="button" class="btn btn-primary ri-thumb-up-fill like-button" data-image-id="{{ $item->id }}"></button>
+                                                
                                                 </div>
                                                 @endforeach
                                             </div>
@@ -135,9 +137,8 @@
             success: function(response) {
                 // Update UI to reflect the new like status
                 if (response.liked) {
-                    $('.like-button[data-image-id="' + imageId + '"]').text('Unlike');
-                } else {
-                    $('.like-button[data-image-id="' + imageId + '"]').text('Like');
+                    $('.like-button[data-image-id="' + imageId + '"]').toggleClass('ri-thumb-up-fill ri-thumb-down-fill');
+
                 }
             },
             error: function(xhr) {
