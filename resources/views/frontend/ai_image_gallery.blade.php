@@ -34,21 +34,17 @@
                                                         <div class="gallery-container">
                                                             <a class="image-popups" href="{{ asset($item->image_url) }}" title="">
                                                                 <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
-                                                               
                                                                 <div class="gallery-overlay">
                                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
-                                                                    
                                                                 </div>
                                                             </a>
                                                         </div>
-                                                      
-                                                        
                                                     </div>
                                                     <!-- Buttons Group -->
-                                                    <button type="button" class="btn btn-primary ri-thumb-up-fill like-button" data-image-id="{{ $item->id }}"></button>
-                                                
+                                                    <button type="button" class="btn btn-primary like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}"></button>
                                                 </div>
-                                                @endforeach
+                                            @endforeach
+                                            
                                             </div>
                                             
                                           <!-- Loader element -->
@@ -124,21 +120,26 @@
 
 {{-- LIKE --}}
         <script>
-            $(document).ready(function() {
+           $(document).ready(function() {
     $('.like-button').on('click', function() {
         var imageId = $(this).data('image-id');
+        var likeButton = $(this); // Store a reference to the clicked like button
+
         $.ajax({
             url: '/like',
             method: 'POST',
             headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: { image_id: imageId },
             success: function(response) {
                 // Update UI to reflect the new like status
                 if (response.liked) {
-                    $('.like-button[data-image-id="' + imageId + '"]').toggleClass('ri-thumb-up-fill ri-thumb-down-fill');
-
+                    // Image is liked
+                    likeButton.toggleClass('ri-thumb-up-fill ri-thumb-down-fill');
+                } else {
+                    // Image is unliked
+                    likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-down-fill');
                 }
             },
             error: function(xhr) {
@@ -147,6 +148,7 @@
         });
     });
 });
+
 
         </script>
     @endsection

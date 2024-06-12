@@ -7,6 +7,7 @@ use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
 use App\Models\Job;
+use App\Models\LikedImagesDalle;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
@@ -28,6 +29,9 @@ class HomeController extends Controller
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())
+            ->where('image_id', $image->id)
+            ->exists();
         }
 
         if (request()->ajax()) {
