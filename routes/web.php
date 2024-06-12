@@ -117,7 +117,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
+
+        Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
     });
+
 
     // Templates
     Route::prefix('template')->group(function () {
@@ -173,13 +176,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
 
         Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
-
     });
+
 
     // Dalle Manage Image
     Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin');
 
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
 
     // PRIVACY POLICY
     Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
@@ -203,6 +207,56 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/terms/condition/update', [HomeController::class, 'UpdateTermsCondition'])->name('update.terms.condition');
 
     Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition');
+
+
+    // Pricing Plans
+    Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
+
+    Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
+
+    Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
+
+    Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
+
+    Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+
+    Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
+
+
+    // FAQ
+    Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
+    // Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
+    Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
+
+
+    // JOB Admin
+    Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');
+    Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
+    Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');
+    Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications');
+    Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
+    Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
+
+
+    // PAGE SEO Admin
+    Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
+        ->name('add.page.seo');
+    Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
+
+
+    // Change User's Password by ADMIN
+    Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
+        ->name('admin.users.changePassword.view');
+
+    Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
+        ->name('admin.users.updatePassword');
+
+
+    // RESEND EMAIL VERIFICATION
+    Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
+
+    // Delete user from admin manage user table
+    Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
 }); //End Admin Middleware
 
 
@@ -224,7 +278,6 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
 
     // User Prompt Library
     Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
-
 }); //End User Middleware
 
 
@@ -356,14 +409,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('/prompt/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
 
     Route::get('/prompt/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
-
-
 }); //End Auth Middleware
-
-
-// RESEND EMAIL VERIFICATION
-Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
-
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
@@ -378,72 +424,14 @@ Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
 
 
-
-// USER MANAGE
-Route::prefix('user')->group(function () {
-
-    Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
-
-    Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
-
-    Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
-});
-
 Route::get('/inactive', function () {
     return view('admin.error.auth-404-basic');
 })->name('inactive');
 
 
-// Pricing
-Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
-
-Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
-
-Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
-
-Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
-
-Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
-
-Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
-
-
-// FAQ
-Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
-
-Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
-
-Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
-
-
-
-// Change User's Password by ADMIN
-Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
-    ->name('admin.users.changePassword.view');
-
-
-Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
-    ->name('admin.users.updatePassword');
-
-Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
-
-// JOB Admin
-Route::get('/add-job', [JobController::class, 'addJob'])
-    ->name('add.job');
-Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
-Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');
-Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications');
-Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
-Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
-
 // Frontend Job Apply
 Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name('job.apply');
 
-
-// PAGE SEO Admin
-Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
-    ->name('add.page.seo');
-Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
 
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');

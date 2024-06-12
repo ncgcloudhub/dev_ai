@@ -16,10 +16,10 @@ class FAQController extends Controller
         return view('backend.faq.faq_manage', compact('faqs'));
     }
 
-    public function AddFAQ()
-    {
-        return view('backend.pricing.add_pricing_plan');
-    }
+    // public function AddFAQ()
+    // {
+    //     return view('backend.pricing.add_pricing_plan');
+    // }
 
     public function StoreFAQ(Request $request)
     {
