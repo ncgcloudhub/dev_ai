@@ -217,11 +217,19 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" placeholder="Enter your name" value="{{ auth()->user()->name }}" name="fullName" readonly>
+                                <input type="text" class="form-control" id="fullName" placeholder="Enter your name" value="{{ auth()->user()->name }}" name="fullName" required>
                             </div>
                             <div class="mb-3">
                                 <label for="emailInput" class="form-label">Email address</label>
-                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email" value="{{ auth()->user()->email }}" readonly>
+                                <input type="email" class="form-control" name="email" id="emailInput" placeholder="Enter your email" value="{{ auth()->user()->email }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="phone" class="form-control" name="phone" id="phone" placeholder="Enter your phone" value="{{ auth()->user()->phone }}" >
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="address" class="form-control" name="address" id="address" placeholder="Enter your address" value="{{ auth()->user()->address }}" >
                             </div>
                             <div class="mb-3">
                                 <input type="file" name="cv" class="form-control" placeholder="Upload CV">

@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->full_name}}</a>
+                                <a href="{{ route('user.details',$item->user_id) }}" class="fw-medium link-primary">{{$item->full_name}}</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">

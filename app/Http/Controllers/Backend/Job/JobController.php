@@ -41,17 +41,17 @@ class JobController extends Controller
             'tags' => 'nullable|max:255',
         ]);
 
-         // Generate slug
-            $slug = Str::slug($request->input('job_title'));
+        // Generate slug
+        $slug = Str::slug($request->input('job_title'));
 
-            // Append a unique identifier to ensure uniqueness
-            $uniqueSlug = Job::where('slug', $slug)->exists() ? $slug . '-' . uniqid() : $slug;
+        // Append a unique identifier to ensure uniqueness
+        $uniqueSlug = Job::where('slug', $slug)->exists() ? $slug . '-' . uniqid() : $slug;
 
-            // Add the slug to validated data
-            $validatedData['slug'] = $uniqueSlug;
-            $validatedData['user_id'] = auth()->id();
+        // Add the slug to validated data
+        $validatedData['slug'] = $uniqueSlug;
+        $validatedData['user_id'] = auth()->id();
 
-            // dd($validatedData);
+        // dd($validatedData);
         // Create a new job instance
         $job = new Job();
         $job->fill($validatedData);
@@ -61,7 +61,7 @@ class JobController extends Controller
         return redirect()->back()->with('success', 'Job added successfully.');
     }
 
-        public function manage()
+    public function manage()
     {
         // Retrieve all jobs
         $jobs = Job::all();
@@ -97,6 +97,8 @@ class JobController extends Controller
         $formData = new JobApplication();
         $formData->full_name = $request->input('fullName');
         $formData->email = $request->input('email');
+        $formData->phone = $request->input('phone');
+        $formData->address = $request->input('address');
         $formData->user_id = $userId;
         $formData->cv_path = $cvPath; // Save the file path to the database
         // Set other form fields here
@@ -120,20 +122,20 @@ class JobController extends Controller
 
     // Download CV
     public function downloadCV($id)
-{
-    // Retrieve the FormData instance by ID
-    $formData = JobApplication::findOrFail($id);
+    {
+        // Retrieve the FormData instance by ID
+        $formData = JobApplication::findOrFail($id);
 
-    // Get the CV path from the FormData instance
-    $cvPath = $formData->cv_path;
+        // Get the CV path from the FormData instance
+        $cvPath = $formData->cv_path;
 
-    // Check if the file exists
-    if (Storage::exists($cvPath)) {
-        // Return the file for download
-        return Storage::download($cvPath);
-    } else {
-        // File not found, handle accordingly (e.g., redirect with error message)
-        return redirect()->back()->with('error', 'CV file not found.');
+        // Check if the file exists
+        if (Storage::exists($cvPath)) {
+            // Return the file for download
+            return Storage::download($cvPath);
+        } else {
+            // File not found, handle accordingly (e.g., redirect with error message)
+            return redirect()->back()->with('error', 'CV file not found.');
+        }
     }
-}
 }
