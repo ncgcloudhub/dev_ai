@@ -85,7 +85,7 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{$item->subcategory->sub_category_name}}
+                                    {{-- {{$item->subcategory->sub_category_name}} --}}
                                 </div>
                             </td>
                           
@@ -108,18 +108,10 @@
     <div class="offcanvas-body p-0 overflow-hidden">
         <div data-simplebar style="height: calc(100vh - 112px);">
             <div class="acitivity-timeline p-4">
-             @foreach ($prompt_library_category as $item)
-                <div class="acitivity-item py-3 d-flex">
-                    <div class="flex-shrink-0 avatar-xs acitivity-avatar">
-                        <div class="avatar-title bg-success-subtle text-success rounded-circle">
-                            <i class="{{$item->category_icon}} align-middle ms-2"></i>
-                        </div>
-                    </div>
-                    <div class="flex-grow-1 ms-3">
-                        <h6 class="mb-1">{{$item->category_name}}</h6>
-                    </div>
-                </div> 
+                @foreach ($prompt_library_category as $item)
+                <span class="badge badge-label bg-primary category-label"><i class="mdi mdi-circle-medium"></i>{{$item->category_name}}</span>
             @endforeach
+            
             </div>
         </div>
     </div>
@@ -175,7 +167,8 @@ $(document).ready(function() {
         var offcanvasRight = document.getElementById('offcanvasRight');
         var offcanvasCategories = offcanvasRight.querySelectorAll('.acitivity-item');
         var tableRows = document.querySelectorAll('#alternative-pagination tbody tr');
-    
+        var categoryLabels = document.querySelectorAll('.category-label'); // Selecting category labels
+
         // Function to filter table rows based on category
         function filterTable(category) {
             tableRows.forEach(function (row) {
@@ -186,17 +179,26 @@ $(document).ready(function() {
                 }
             });
         }
-    
-        // Event listener for category selection
-        offcanvasCategories.forEach(function (category) {
-            category.addEventListener('click', function () {
-                var selectedCategory = category.querySelector('h6').textContent;
-                filterTable(selectedCategory);
+
+       // Event listener for category selection
+    categoryLabels.forEach(function (category) {
+        category.addEventListener('click', function () {
+            var selectedCategory = category.textContent.trim(); // Get text content of the category label
+            filterTable(selectedCategory);
+
+            // Remove 'active' class from all category labels
+            categoryLabels.forEach(function (label) {
+                label.classList.remove('bg-danger');
             });
+
+            // Add 'active' class to the clicked category label
+            category.classList.add('bg-danger');
         });
+    });
 
     });
-    </script>
+</script>
+
 
 
 
