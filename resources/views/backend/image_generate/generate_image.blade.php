@@ -483,7 +483,13 @@
 
         // Update modal content when modal is shown
         imageModal.addEventListener('show.bs.modal', function (event) {
-            currentIndex = 0; // Reset index when modal is opened
+            var triggerElement = event.relatedTarget; // Element that triggered the modal
+            var imageUrl = triggerElement.getAttribute('data-image-url');
+
+            // Find the index of the clicked image
+            currentIndex = images.findIndex(image => image.image_url === imageUrl);
+
+            // Update the modal content based on the current index
             updateModalContent(currentIndex);
         });
 
