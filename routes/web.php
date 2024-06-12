@@ -281,36 +281,6 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
 }); //End User Middleware
 
 
-// FrontEnd
-//AI Image Gallery Page
-Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
-
-// Contact Us Page
-Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
-
-// Frontend Free Template Page
-Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
-Route::get('free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
-Route::post('free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
-
-// Job Page Frontend
-Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
-// Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
-Route::get('/jobs/{id}', [HomeController::class, 'JobDetails'])->name('jobs.details.frontend');
-
-
-// Privacy Policy Page
-Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');
-
-// Terms And Conditions Page
-Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name('terms.condition');
-
-// Newsletter Store for all users even without login
-Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
-
-
-
-
 Route::middleware(['auth', 'check.status'])->group(function () {
 
     // Custom Templates
@@ -410,6 +380,33 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::get('/prompt/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
 }); //End Auth Middleware
+
+// FrontEnd
+//AI Image Gallery Page
+Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
+
+// Contact Us Page
+Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
+
+// Frontend Free Template Page
+Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
+Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
+Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+
+// Job Page Frontend
+Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
+// Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
+Route::get('/jobs/{id}', [HomeController::class, 'JobDetails'])->name('jobs.details.frontend');
+
+
+// Privacy Policy Page
+Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');
+
+// Terms And Conditions Page
+Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name('terms.condition');
+
+// Newsletter Store for all users even without login
+Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
