@@ -285,15 +285,15 @@
                                                         
                                                         <div class="col-md-3 mb-3">
                                                             <label for="input3">Image Resolution</label>
-                                                            <select name="image_res" class="form-control" id="image_res">
+                                                            <select name="image_res" class="form-control upgrade_option" id="image_res">
                                                                 <option disabled selected="">Enter Image Resolution</option>
                                                                 <option value="1024x1024">1024x1024</option>
                                                                 @if ($lastPackageId)
-                                                                <option value="1792x1024">1792x1024</option>
-                                                                <option value="1024x1792">1024x1792</option>
+                                                                    <option value="1792x1024">1792x1024</option>
+                                                                    <option value="1024x1792">1024x1792</option>
                                                                 @else
-                                                                <option disabled>Upgrade to access more options</option>
-                                                            @endif
+                                                                    <option value="upgrade">Upgrade to access more options</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                         
@@ -485,6 +485,19 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var selectElement = document.querySelector('.upgrade_option');
+        selectElement.addEventListener('change', function() {
+            var selectedValue = this.value;
+            if (selectedValue === 'upgrade') {
+                window.location.href = "{{ route('all.package') }}";
+            }
+        });
+    });
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
