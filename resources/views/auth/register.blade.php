@@ -45,6 +45,16 @@
                                     <div class="p-2 mt-4">
                                         <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}">
                                             @csrf
+
+                                            <div class="mb-3">
+                                                <label for="useremail" class="form-label">Name <span class="text-danger">*</span></label>
+                                                <input type="text" name="name"  class="form-control" id="name" placeholder="Enter your name" required>
+                                                <div class="invalid-feedback">
+                                                    Please enter name
+                                                </div>
+                                             
+                                            </div>
+
                                             <div class="mb-3">
                                                 <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
                                                 <input type="email" name="email"  class="form-control" id="useremail" placeholder="Enter email address" required>
@@ -56,11 +66,9 @@
                                                     <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
                                                         <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('email') }}
                                                     </div>
-                                              
                                                 @endif
-                                            
-
                                             </div>
+
                                             <div class="mb-3">
                                                 <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
                                                 <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
@@ -77,7 +85,7 @@
                                             @endif
 
                                             <div class="mb-3">
-                                                <label class="form-label" for="password-input">Password</label>
+                                                <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>
                                                 <div class="position-relative auth-pass-inputgroup">
                                                     <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                                                     <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
@@ -88,7 +96,7 @@
                                             </div>
                                             
                                             <div class="mb-3">
-                                                <label class="form-label" for="password-input-confirm">Confirm Password</label>
+                                                <label class="form-label" for="password-input-confirm">Confirm Password<span class="text-danger">*</span></label>
                                                 <div class="position-relative auth-pass-inputgroup">
                                                     <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input-confirm" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                                                     <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon-confirm"><i class="ri-eye-fill align-middle"></i></button>
