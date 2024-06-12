@@ -24,7 +24,7 @@ class HomeController extends Controller
     //Image Gallery Front End Page
     public function AIImageGallery()
     {
-        $images = DalleImageGenerate::latest()->paginate(20);
+        $images = DalleImageGenerate::withCount('likes')->latest()->paginate(20);
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {

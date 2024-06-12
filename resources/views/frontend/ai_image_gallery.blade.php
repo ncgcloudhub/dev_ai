@@ -36,12 +36,16 @@
                                                                 <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
                                                                 <div class="gallery-overlay">
                                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
+                                                                    
                                                                 </div>
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <!-- Buttons Group -->
-                                                    <button type="button" class="btn btn-primary like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}"></button>
+                                                    <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
+                                                        Likes <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
+                                                    </button>
+                            
                                                 </div>
                                             @endforeach
                                             
