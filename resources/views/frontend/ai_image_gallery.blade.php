@@ -32,12 +32,13 @@
                                                 <div class="element-item col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6 photography" data-category="photography">
                                                     <div class="gallery-box card">
                                                         <div class="gallery-container">
-                                                            <a class="image-popups" href="{{ asset($item->image_url) }}" title="">
+                                                            <!-- Trigger modal when image clicked -->
+                                                            <a class="image-popups" href="#" data-bs-toggle="modal" data-bs-target="#imageModal" title="{{ $item->prompt }}"
+                                                                data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
                                                                 <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
-                                                                <div class="gallery-overlay">
+                                                                {{-- <div class="gallery-overlay">
                                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
-                                                                    
-                                                                </div>
+                                                                </div> --}}
                                                             </a>
                                                         </div>
                                                     </div>
@@ -45,7 +46,6 @@
                                                     <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
                                                         Likes <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
                                                     </button>
-                            
                                                 </div>
                                             @endforeach
                                             
@@ -87,6 +87,42 @@
 
         </div>
         <!-- end layout wrapper -->
+
+<!-- Modal -->
+{{-- Image Description --}}
+<div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0 overflow-hidden">
+            <div class="row g-0">
+              
+                <div class="col-lg-5">
+                    <div class="subscribe-modals-cover h-100 d-flex align-items-center justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
+                            <i class="ri-arrow-left-s-line"></i>
+                        </button>
+                        <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
+                        <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-7 d-flex align-items-center">
+                    <div class="modal-body p-5">
+                        <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
+                        <span class="text-muted mb-4" id="resolution"></span>
+                    </div>
+                    
+                </div>
+                <!-- Left button -->
+              
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
     @endsection
     @section('script')
         <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
@@ -95,7 +131,35 @@
         <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
 
+
         @section('script')
+
+        
+        <script>
+          document.querySelectorAll('.image-popups').forEach(item => {
+        item.addEventListener('click', event => {
+            const imageUrl = item.getAttribute('data-image-url');
+            const title = item.getAttribute('title');
+            const prompt = item.getAttribute('data-image-prompt');
+            const resolution = item.getAttribute('data-image-resolution');
+            
+            // Update modal content
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModalLabel').innerText = title;
+            document.getElementById('modalPrompt').innerText = prompt;
+            document.getElementById('modalResolution').innerText = resolution;
+            
+            // Show the modal
+            $('#imageModal').modal('show');
+        });
+    });
+        </script>
+
+
+
+
+
+
         <script>
             var page = 1; // initialize page number
     
