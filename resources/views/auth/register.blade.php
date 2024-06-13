@@ -83,6 +83,7 @@
                                                 </div>
                                           
                                             @endif
+                                            <input type="hidden" name="ref" value="{{ request()->query('ref') }}">
 
                                             <div class="mb-3">
                                                 <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>

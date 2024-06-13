@@ -45,7 +45,9 @@
                         </form>
                         
                         <h5 class="fs-16 mb-1">{{$user->name}}</h5>
-                        <p class="text-muted mb-0">Lead Designer / Developer</p>
+                        {{-- <p class="text-muted mb-0">Lead Designer / Developer</p> --}}
+                        <p class="mb-1">Referral Link <strong class="text-muted text-info"> {{$user->referral_link}}</strong></p>
+                           
                     </div>
                 </div>
             </div>

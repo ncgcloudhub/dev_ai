@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Referral;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -29,7 +30,8 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
+{
+    
         $request->validate([
             // 'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -52,6 +54,26 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'ipaddress' => $ipAddress, // Store IP address
         ]);
+
+         // Generate a referral link for the user
+         $user->referral_link = route('register', ['ref' => $user->id]);
+         $user->save();
+
+        // Check if there's a referrer ID in the query parameters
+        if ($request->ref) {
+            // Extract the referrer ID from the query parameters
+            $referrerId = $request->ref;
+
+            // Store referral information in the database
+            Referral::create([
+                'referrer_id' => $referrerId,
+                'referral_id' => $user->id,
+                'status' => 'completed',
+            ]);
+
+            $referrer = User::find($referrerId);
+            $referrer->increment('credits_left', 10);
+        }
 
         event(new Registered($user));
 
