@@ -57,8 +57,8 @@
 
         <div class="card-body custom-input-informations">
             <div class="live-preview">
-                <div class="row">
-                    @foreach($templateInputsArray as $index => $input)
+                @foreach($templateInputsArray as $index => $input)
+                <div class="row input-row">
                     <div class="col-md-3">
                         <label for="input_types_{{ $index }}" class="form-label">Input Type</label>
                         <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" aria-label="Floating label select example">
@@ -78,8 +78,16 @@
                         <label for="input_placeholders_{{ $index }}" class="form-label">Input Placeholder</label>
                         <input type="text" name="input_placeholders[]" value="{{ $input['placeholder'] }}" id="input_placeholders_{{ $index }}" placeholder="Type input placeholder" class="form-control" required>
                     </div>
-                    @endforeach
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="minus"></i>
+                                <span>Remove</span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
+                @endforeach
                 
                 <a name="add" id="add" class="btn bg-gradient-dark mb-0"><i class="las la-plus" aria-hidden="true"></i>Add</a>
                 <div id="template_info" class="input-informations">
@@ -125,7 +133,7 @@
 <script>
     $(document).ready(function(){
         var additionalInputs = `
-            <div class="row">
+            <div class="row input-row">
                 <div class="col-md-3">
                     <label for="input_types" class="form-label">Input Type</label>
                     <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example">
@@ -141,7 +149,7 @@
                     <label for="input_label" class="form-label">Input Label</label>
                     <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" required>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
                         <div class="d-flex align-items-center">
                             <i data-feather="minus"></i>
@@ -152,14 +160,9 @@
             </div>`;
 
             $("#add").click(function(){
-		$("#template_info").append(additionalInputs);
-		
-	  });
-        // Append the additional inputs to the target container
-        // document.querySelector('.custom-input-informations').insertAdjacentHTML('beforeend', additionalInputs);
-
-        // Move the "Add More" button to the end
-        // document.getElementById('inputRow').appendChild(document.getElementById('inputrow'));
+                $("#template_info").append(additionalInputs);
+            });
+     
     });
 
 function removeRow(button) {
@@ -206,9 +209,6 @@ function appendToPrompt(inputName) {
     promptTextarea.val(promptText);
 }
 </script>
-
-
-
 
 @endsection
 
