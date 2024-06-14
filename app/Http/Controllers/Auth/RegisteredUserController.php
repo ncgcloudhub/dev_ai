@@ -68,11 +68,9 @@ class RegisteredUserController extends Controller
             Referral::create([
                 'referrer_id' => $referrerId,
                 'referral_id' => $user->id,
-                'status' => 'completed',
+                'status' => 'pending',
             ]);
 
-            $referrer = User::find($referrerId);
-            $referrer->increment('credits_left', 10);
         }
 
         event(new Registered($user));
