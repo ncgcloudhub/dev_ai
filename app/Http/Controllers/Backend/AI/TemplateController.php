@@ -110,6 +110,7 @@ class TemplateController extends Controller
             'input_types' => 'required|array',
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
+            'input_placeholders' => 'required|array',
             'prompt' => 'nullable|string',
         ]);
 
@@ -124,6 +125,7 @@ class TemplateController extends Controller
         $templateInput->input_types = json_encode($validatedData['input_types']);
         $templateInput->input_names = json_encode($validatedData['input_names']);
         $templateInput->input_labels = json_encode($validatedData['input_labels']);
+        $templateInput->input_placeholders = json_encode($validatedData['input_placeholders']);
         $templateInput->prompt = $validatedData['prompt'];
         $templateInput->total_word_generated = '0';
 
@@ -207,11 +209,12 @@ class TemplateController extends Controller
         $inputTypes = json_decode($Template->input_types, true);
         $inputNames = json_decode($Template->input_names, true);
         $inputLabels = json_decode($Template->input_labels, true);
+        $inputPlaceholders = json_decode($Template->input_placeholders, true);
 
         $content = '';
 
 
-        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
+        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
 

@@ -24,3 +24,5 @@ Add 2 column in job_applications; phone and address
 
 -------14/6/24-----------
 User table -> add -> referral_link -> text 
+
+Templates table -> add -> input_placeholders -> text
