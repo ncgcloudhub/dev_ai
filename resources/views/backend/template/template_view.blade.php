@@ -75,8 +75,8 @@
             
                                             <div class="col-md-12">
                                                 <label for="max_result_length" class="form-label">Max Result Length</label>
-                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
-                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
+                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="1000" max="4000" step="10" value="1000">
+                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="1000" max="4000" step="10" value="1000">
                                                 
                                             </div>
                 
