@@ -27,13 +27,13 @@
                             <div class="col-md-12">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
-                                    <option disabled selected="">Enter Language</option>
-                                    <option value="English">English</option>
+                                    <option disabled>Enter Language</option>
+                                    <option value="English" selected>English</option>
                                     <option value="Bengali">Bengali</option>
-                                    
-                                  </select>
-                             
+                                </select>
+                                <small class="form-text text-muted">English is selected by default</small>
                             </div>
+                            
 
                             @isset($inputTypes)
                             @foreach($inputTypes as $key => $type)
