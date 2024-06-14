@@ -59,20 +59,24 @@
             <div class="live-preview">
                 <div class="row">
                     @foreach($templateInputsArray as $index => $input)
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="input_types_{{ $index }}" class="form-label">Input Type</label>
                         <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" aria-label="Floating label select example">
                             <option value="text" {{ $input['type'] == 'text' ? 'selected' : '' }}>Input Field</option>
                             <option value="textarea" {{ $input['type'] == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="input_names_{{ $index }}" class="form-label">Input Name</label>
                         <input type="text" name="input_names[]" value="{{ $input['name'] }}" id="input_names_{{ $index }}" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="input_label_{{ $index }}" class="form-label">Input Label</label>
                         <input type="text" name="input_labels[]" value="{{ $input['label'] }}" id="input_label_{{ $index }}" placeholder="Type input label" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="input_placeholders_{{ $index }}" class="form-label">Input Placeholder</label>
+                        <input type="text" name="input_placeholders[]" value="{{ $input['placeholder'] }}" id="input_placeholders_{{ $index }}" placeholder="Type input placeholder" class="form-control" required>
                     </div>
                     @endforeach
                 </div>
