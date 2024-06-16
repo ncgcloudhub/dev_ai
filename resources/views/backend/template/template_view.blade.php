@@ -40,9 +40,9 @@
                                 <div class="col-md-12">
                                      <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
                                 @if($type == 'text')
-                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? 'Default Placeholder' }}">
+                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}">
                                 @elseif($type == 'textarea')
-                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? 'Default Placeholder' }}" rows="3"></textarea>
+                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3"></textarea>
                                 @endif
                                 </div>
 
@@ -75,8 +75,8 @@
             
                                             <div class="col-md-12">
                                                 <label for="max_result_length" class="form-label">Max Result Length</label>
-                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="1000" max="4000" step="10" value="1000">
-                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="1000" max="4000" step="10" value="1000">
+                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="3900" max="8000" step="10" value="3900">
+                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="3900" max="8000" step="10" value="3900">
                                                 
                                             </div>
                 

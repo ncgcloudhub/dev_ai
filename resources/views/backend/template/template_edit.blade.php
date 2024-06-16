@@ -121,7 +121,7 @@
     {{-- 3rd Card End --}}
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
         </div>
     </div>
 </form>
