@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
+use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -400,6 +401,23 @@ class TemplateController extends Controller
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
             ]);
+
+            // Generate a referral link for the new user
+            $newUser->referral_link = route('register', ['ref' => $newUser->id]);
+            $newUser->save();
+
+            // Check if there's a referrer ID in the query parameters
+            if ($request->ref) {
+                // Extract the referrer ID from the query parameters
+                $referrerId = $request->ref;
+
+                // Store referral information in the database
+                Referral::create([
+                    'referrer_id' => $referrerId,
+                    'referral_id' => $newUser->id,
+                    'status' => 'pending',
+                ]);
+            }
 
             // Log in the new user
             Auth::login($newUser);
