@@ -27,6 +27,7 @@ use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
+use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
 use App\Models\SeoSetting;
@@ -241,6 +242,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
 
 
+    // DYNAMIC PAGE
+    Route::resource('dynamic-pages', DynamicPageController::class);
+
+
+
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
         ->name('add.page.seo');
@@ -435,3 +441,4 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
+

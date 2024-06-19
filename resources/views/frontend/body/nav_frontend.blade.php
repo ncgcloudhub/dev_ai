@@ -33,6 +33,11 @@
                 <li class="nav-item">
                     <a class="nav-link fs-15" href="{{route('all.jobs')}}">Career</a>
                 </li>
+
+                {{-- <li class="nav-item">
+                    <a class="nav-link fs-15" href="{{ url('http://127.0.0.1:8000/dynamic-pages/hello-fahmid') }}">Link Text</a>
+                </li> --}}
+                
                 <li class="nav-item">
                     <a class="nav-link fs-15" href="{{route('contact.us')}}">Contact</a>
                 </li>
