@@ -2,8 +2,8 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Prompt Category  @endslot
+@slot('li_1') Prompt Category @endslot
+@slot('title') Edit | {{$category->category_name}} @endslot
 @endcomponent
 
 

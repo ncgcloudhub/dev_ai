@@ -10,7 +10,7 @@
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') User @endslot
-@slot('title')Manage @endslot
+@slot('title') Change Password | {{ $user->name }} @endslot
 @endcomponent
 
 <div class="row">

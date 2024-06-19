@@ -9,8 +9,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Site Settings @endslot
-@slot('title') Add @endslot
+@slot('li_1') Settings @endslot
+@slot('title') Add Site Settings @endslot
 @endcomponent
 
 <div class="col-xxl-6">

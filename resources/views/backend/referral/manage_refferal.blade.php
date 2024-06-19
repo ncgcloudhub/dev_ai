@@ -10,7 +10,7 @@
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Referrals @endslot
-@slot('title')Manage @endslot
+@slot('title')Manage Refferals @endslot
 @endcomponent
 
 <div class="row">

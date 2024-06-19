@@ -2,8 +2,8 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Prompt Sub-Category  @endslot
+@slot('li_1') Prompt Sub-Category @endslot
+@slot('title') Edit | {{$subcategory->sub_category_name}}  @endslot
 @endcomponent
 
 <a href="{{ route('prompt.subcategory.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Sub Category

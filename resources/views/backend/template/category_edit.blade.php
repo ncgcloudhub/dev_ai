@@ -2,8 +2,8 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Starter  @endslot
+@slot('li_1') Template @endslot
+@slot('title') Edit | {{$category->category_name}} @endslot
 @endcomponent
 
 <a href="{{ route('template.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category

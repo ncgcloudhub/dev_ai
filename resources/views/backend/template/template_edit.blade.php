@@ -7,7 +7,7 @@
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1')  Template @endslot
-@slot('title') Add @endslot
+@slot('title') Edit | {{$template->template_name}} @endslot
 @endcomponent
 
 <div class="col-xxl-6">

@@ -8,7 +8,7 @@
 User
 @endslot
 @slot('title')
-{{$user->name}}
+Profile | {{$user->name}}
 @endslot
 @endcomponent
 
