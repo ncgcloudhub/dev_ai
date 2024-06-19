@@ -121,6 +121,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
     });
 
+    // REFERRAL MANAGE
+    Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral');
+
 
     // Templates
     Route::prefix('template')->group(function () {

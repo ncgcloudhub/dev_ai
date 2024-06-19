@@ -254,6 +254,13 @@
                     </a>
                 </li>
             {{-- USER END--}}
+
+            {{-- REFERRAL --}}
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="{{route('manage.referral')}}">
+                    <i class=" las la-user-circle"></i> <span >Manage Refferal</span>
+                </a>
+            </li>
              
             {{-- JOB --}}
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>

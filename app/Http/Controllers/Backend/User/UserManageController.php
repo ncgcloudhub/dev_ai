@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -53,5 +54,16 @@ class UserManageController extends Controller
 
         // Optionally, you can return a response indicating success or redirect to a different page
         return redirect()->back()->with('success', 'User Stats updated Successfully');
+    }
+
+
+    // REFERRAL
+    public function ManageReferral()
+    {
+        $referrals = Referral::with(['referrer', 'referralUser'])
+        ->orderBy('id', 'desc')
+        ->get();
+
+        return view('backend.referral.manage_refferal', compact('referrals'));
     }
 }
