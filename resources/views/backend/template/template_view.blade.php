@@ -27,22 +27,22 @@
                             <div class="col-md-12">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
-                                    <option disabled selected="">Enter Language</option>
-                                    <option value="English">English</option>
+                                    <option disabled>Enter Language</option>
+                                    <option value="English" selected>English</option>
                                     <option value="Bengali">Bengali</option>
-                                    
-                                  </select>
-                             
+                                </select>
+                                <small class="form-text text-muted">English is selected by default</small>
                             </div>
+                            
 
                             @isset($inputTypes)
                             @foreach($inputTypes as $key => $type)
                                 <div class="col-md-12">
                                      <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
                                 @if($type == 'text')
-                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="Enter {{ $inputLabels[$key] }}">
+                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}">
                                 @elseif($type == 'textarea')
-                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" rows="3"></textarea>
+                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3"></textarea>
                                 @endif
                                 </div>
 
@@ -75,8 +75,8 @@
             
                                             <div class="col-md-12">
                                                 <label for="max_result_length" class="form-label">Max Result Length</label>
-                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
-                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
+                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="3900" max="8000" step="10" value="3900">
+                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="3900" max="8000" step="10" value="3900">
                                                 
                                             </div>
                 

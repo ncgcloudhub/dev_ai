@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
+use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -110,6 +111,7 @@ class TemplateController extends Controller
             'input_types' => 'required|array',
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
+            'input_placeholders' => 'required|array',
             'prompt' => 'nullable|string',
         ]);
 
@@ -124,6 +126,7 @@ class TemplateController extends Controller
         $templateInput->input_types = json_encode($validatedData['input_types']);
         $templateInput->input_names = json_encode($validatedData['input_names']);
         $templateInput->input_labels = json_encode($validatedData['input_labels']);
+        $templateInput->input_placeholders = json_encode($validatedData['input_placeholders']);
         $templateInput->prompt = $validatedData['prompt'];
         $templateInput->total_word_generated = '0';
 
@@ -148,6 +151,7 @@ class TemplateController extends Controller
         $templateInputs = json_decode($template->input_types, true);
         $inputNames = json_decode($template->input_names, true);
         $inputLabels = json_decode($template->input_labels, true);
+        $inputPlaceholders = json_decode($template->input_placeholders, true);
 
         $templateInputsArray = [];
         foreach ($templateInputs as $index => $type) {
@@ -155,6 +159,7 @@ class TemplateController extends Controller
                 'type' => $type,
                 'name' => $inputNames[$index] ?? '',
                 'label' => $inputLabels[$index] ?? '',
+                'placeholder' => $inputPlaceholders[$index] ?? '',
             ];
         }
         return view('backend.template.template_edit', compact('template', 'categories', 'templateInputsArray'));
@@ -174,6 +179,7 @@ class TemplateController extends Controller
             'input_types' => 'required|array',
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
+            'input_placeholders' => 'required|array',
             'prompt' => 'nullable|string',
         ]);
 
@@ -185,6 +191,7 @@ class TemplateController extends Controller
         $template->input_types = json_encode($validatedData['input_types']);
         $template->input_names = json_encode($validatedData['input_names']);
         $template->input_labels = json_encode($validatedData['input_labels']);
+        $template->input_placeholders = json_encode($validatedData['input_placeholders']);
         $template->prompt = $validatedData['prompt'];
         $template->save();
 
@@ -207,11 +214,12 @@ class TemplateController extends Controller
         $inputTypes = json_decode($Template->input_types, true);
         $inputNames = json_decode($Template->input_names, true);
         $inputLabels = json_decode($Template->input_labels, true);
+        $inputPlaceholders = json_decode($Template->input_placeholders, true);
 
         $content = '';
 
 
-        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
+        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
 
@@ -393,6 +401,23 @@ class TemplateController extends Controller
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
             ]);
+
+            // Generate a referral link for the new user
+            $newUser->referral_link = route('register', ['ref' => $newUser->id]);
+            $newUser->save();
+
+            // Check if there's a referrer ID in the query parameters
+            if ($request->ref) {
+                // Extract the referrer ID from the query parameters
+                $referrerId = $request->ref;
+
+                // Store referral information in the database
+                Referral::create([
+                    'referrer_id' => $referrerId,
+                    'referral_id' => $newUser->id,
+                    'status' => 'pending',
+                ]);
+            }
 
             // Log in the new user
             Auth::login($newUser);
