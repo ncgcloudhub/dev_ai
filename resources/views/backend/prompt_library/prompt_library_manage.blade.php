@@ -99,7 +99,7 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{$item->subcategory->sub_category_name}}
+                                    {{-- {{$item->subcategory->sub_category_name}} --}}
                                 </div>
                             </td>
                             <td>
