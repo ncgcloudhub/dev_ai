@@ -43,11 +43,15 @@
                                                         </div>
                                                     </div>
                                                     <!-- Buttons Group -->
+                                                     <!-- Share Button -->
+    <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
+        Share
+    </button>
+
                                                     <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
-                                                        Likes <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
+                                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
                                                     </button>
-                                                </div>
-                                            @endforeach
+                                                </div>                                      @endforeach
                                             
                                             </div>
                                             
@@ -133,6 +137,36 @@
 
 
         @section('script')
+
+        {{-- SHAREE --}}
+        <script>
+            $(document).ready(function() {
+                $('.share-button').click(function() {
+                    var imageUrl = $(this).data('image-url');
+                    var promptText = $(this).data('image-prompt');
+        
+                    // Construct the share message
+                    var shareMessage = promptText + ': ' + imageUrl;
+        
+                    // Open share dialog based on the platform
+                    if (navigator.share) {
+                        navigator.share({
+                            title: promptText,
+                            text: shareMessage,
+                            url: imageUrl
+                        }).then(() => console.log('Successful share')).catch((error) => console.log('Error sharing', error));
+                    } else {
+                        // Fallback for browsers that do not support native share API
+                        var whatsappUrl = 'whatsapp://send?text=' + encodeURIComponent(shareMessage);
+                        window.open(whatsappUrl);
+                    }
+                });
+            });
+        </script>
+
+
+
+
 
         
         <script>
