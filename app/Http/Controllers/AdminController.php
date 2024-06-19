@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomTemplate;
+use App\Models\DalleImageGenerate;
 use App\Models\Session;
 use App\Models\Template;
 use App\Models\User;
@@ -34,10 +35,22 @@ class AdminController extends Controller
         $sessions = Session::with('messages') // Eager load the related messages
                         ->where('user_id', $userId)
                         ->get();
-    
+
+         // Fetch images with their likes, order by the number of likes
+         $images = DalleImageGenerate::withCount('likes')
+         ->whereHas('likes') // Filter images that have at least one like
+         ->orderByDesc('likes_count') // Order by the number of likes in descending order
+         ->get();
+
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+        // Calculate the total number of likes
+        $totalLikes = $images->sum('likes_count');
        
         // dd($templates_count);
-        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers','sessions'));
+        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers','sessions','images','totalLikes'));
        
     }
  

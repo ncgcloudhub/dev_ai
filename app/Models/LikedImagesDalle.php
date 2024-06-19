@@ -11,4 +11,9 @@ class LikedImagesDalle extends Model
 
     protected $guarded = [];
 
+    public function image()
+    {
+        return $this->belongsTo(DalleImageGenerate::class, 'image_id');
+    }
+
 }
