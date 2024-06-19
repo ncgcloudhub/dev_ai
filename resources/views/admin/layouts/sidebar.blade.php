@@ -263,7 +263,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link menu-link" href="{{ route('dynamic-pages.index') }}">
-                    <i class=" las la-user-circle"></i> <span >Manage Dynamic Page</span>
+                    <i class=" las la-user-circle"></i> <span >Manage Page</span>
                 </a>
             </li>
              
