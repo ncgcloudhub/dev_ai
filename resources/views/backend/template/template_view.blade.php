@@ -8,8 +8,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Dashboards @endslot
-@slot('title') Dashboard @endslot
+@slot('li_1') Template @endslot
+@slot('title') {{$Template->template_name}} @endslot
 @endcomponent
 
 <div class="row">
