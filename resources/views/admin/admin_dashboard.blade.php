@@ -20,9 +20,7 @@
                 <div class="col-12">
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
-                            <h4 class="fs-16 mb-1">Good Morning, {{$user->name}}</h4>
-                            <p class="text-muted mb-0">Here's what's happening with your store
-                                today.</p>
+                            <h4 class="fs-16 mb-1" id="greeting">Good Morning, {{$user->name}}</h4>
                         </div>
                      
                     </div><!-- end card header -->
@@ -774,6 +772,30 @@
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
   });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var greetingElement = document.getElementById('greeting');
+        var currentTime = new Date();
+        var currentHour = currentTime.getHours();
+        var greeting;
+
+        if (currentHour < 12) {
+            greeting = "Good Morning";
+        } else if (currentHour < 14) {
+            greeting = "Good Noon";
+        } else if (currentHour < 18) {
+            greeting = "Good Afternoon";
+        } else {
+            greeting = "Good Evening";
+        }
+
+        var currentGreetingText = greetingElement.textContent;
+        var name = currentGreetingText.replace(/^Good (Morning|Noon|Afternoon|Evening), /, '');
+        greetingElement.textContent = greeting + ", " + name;
+    });
+</script>
+
 
 
 @endsection
