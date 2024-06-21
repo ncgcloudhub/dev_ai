@@ -65,6 +65,9 @@
     const aiModelSelect = document.getElementById('ai_model_select');
     const fileNameDisplay = document.getElementById('file_name_display');
     const newSessionBtn = document.getElementById('new_session_btn');
+    const imageDisplay = document.getElementById('image_display');
+
+    let pastedImageFile = null;
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -87,7 +90,7 @@
             // Handle any errors
             console.error('Error checking user session:', error);
         });
-};
+    };
 
 
     // NEW SESSION
@@ -111,7 +114,7 @@
     });
 
      // Call the function to check user session when needed
-checkUserSession();
+    checkUserSession();
      
 
     // window.addEventListener('beforeunload', function () {
@@ -129,12 +132,40 @@ checkUserSession();
         fileNameDisplay.textContent = `Selected file: ${fileName}`;
     });
 
+  // Function to handle image paste
+  function handleImagePaste(event) {
+        const clipboardItems = event.clipboardData.items;
+        for (let i = 0; i < clipboardItems.length; i++) {
+            const item = clipboardItems[i];
+            if (item.type.indexOf("image") !== -1) {
+                const blob = item.getAsFile();
+                pastedImageFile = blob;
+                const imageUrl = URL.createObjectURL(blob);
+
+                // Display the pasted image in image_display div
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.style.maxWidth = '20%'; // Optional: Adjust image size
+                imageDisplay.innerHTML = ''; // Clear any previous image
+                imageDisplay.appendChild(img);
+
+                // Stop further processing to prevent multiple image pastes
+                event.preventDefault();
+                break;
+            }
+        }
+    }
+
+    // Listen for paste events on messageInput
+    messageInput.addEventListener('paste', handleImagePaste);
+
+
     function sendMessage() {
         const message = messageInput.value.trim();
         const selectedModel = aiModelSelect.value;
         const file = fileInput.files[0];
 
-        if (!message && !file) return;
+        if (!message && !file && !pastedImageFile) return;
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const formData = new FormData();
@@ -142,6 +173,8 @@ checkUserSession();
         formData.append('ai_model', selectedModel);
         if (file) {
             formData.append('file', file);
+        } else if (pastedImageFile) {
+            formData.append('file', pastedImageFile, 'pasted_image.png'); // Name the file appropriately
         }
 
         sendMessageBtn.disabled = true;
@@ -160,15 +193,15 @@ checkUserSession();
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
                             <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message || file.name}</p>`;
+                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
 
-            if (file) {
-                const fileType = file.type.split('/')[0];
+            if (file || pastedImageFile) {
+                const fileType = (file || pastedImageFile).type.split('/')[0];
                 if (fileType === 'image') {
-                    const imageUrl = URL.createObjectURL(file);
+                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
                     userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
                 } else {
-                    userMessageHTML += `<i class=" ri-file-2-fill">${file.name}</i>`;
+                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
                 }
             }
 
@@ -204,6 +237,8 @@ checkUserSession();
             messageInput.value = '';
             fileInput.value = '';
             fileNameDisplay.textContent = '';
+            imageDisplay.innerHTML = ''; // Clear pasted image display
+            pastedImageFile = null; // Reset pasted image file
         })
         .catch(error => {
             console.error(error);
@@ -235,6 +270,7 @@ checkUserSession();
         }
     });
 
+
     function formatContent(content) {
         const lines = content.split('\n');
         let formattedContent = '';
@@ -260,7 +296,7 @@ checkUserSession();
 
         return formattedContent;
     }
-});
+    });
 
 
 </script>

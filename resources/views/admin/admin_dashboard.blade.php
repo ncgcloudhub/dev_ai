@@ -468,6 +468,8 @@
 
                     </div>
                     <div class="col">
+                        <!-- Display area for the image -->
+                        <div id="image_display"></div>
                         <div class="position-relative">
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                         </div>

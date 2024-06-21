@@ -124,7 +124,11 @@ class AIChatController extends Controller
         // Initialize or retrieve uploaded files from session
         $uploadedFiles = session('uploaded_files', []);
         Log::info('Uploaded files: ', $uploadedFiles);
-    
+
+        // Initialize or retrieve pasted images from session
+        $pastedImages = session('pasted_images', []);
+        Log::info('Pasted images: ', $pastedImages);
+
         // Initialize or retrieve conversation history from session
         $conversationHistory = session('conversation_history', []);
         Log::info('Conversation history: ', $conversationHistory);
@@ -164,7 +168,22 @@ class AIChatController extends Controller
             session(['context' => $context]);
             Log::info('Updated context with file: ', $context);
         }
-    
+
+        // Handle pasted images (currently only handling PNG for example)
+        if ($file && $file->getMimeType() === 'image/png') {
+            $filePath = $file->store('pasted', 'public');
+            $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
+            $response = $this->callOpenAIImageAPI($base64Image);
+            $imageContent = $response['choices'][0]['message']['content'];
+
+            $pastedImages[$filePath] = $imageContent;
+            session(['pasted_images' => $pastedImages]);
+
+            // Update context with the latest pasted image content
+            $context['pasted_image_content'] = $imageContent;
+            session(['context' => $context]);
+        }
+
         // Add the user message to the conversation history
         if (!empty($userMessage)) {
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
@@ -190,7 +209,12 @@ class AIChatController extends Controller
         $messages = [
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
         ];
-    
+
+        // Add pasted image content if it exists
+        if (!empty($context['pasted_image_content'])) {
+            $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
+        }
+
         // Add file content if it exists
         if (!empty($context['file_content'])) {
             $messages[] = ['role' => 'user', 'content' => $context['file_content']];
