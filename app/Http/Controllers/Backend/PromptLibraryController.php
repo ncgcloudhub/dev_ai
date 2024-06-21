@@ -366,6 +366,15 @@ class PromptLibraryController extends Controller
         return response()->json($prompt_library);
     }
 
+    // DELETE
+    public function delete(PromptExample $example)
+    {
+
+        $example->delete();
+
+        return redirect()->back()->with('success', 'Example deleted successfully.');
+    }
+
 
 
     // USER PROMPT-------------------------------------------------------------------------------

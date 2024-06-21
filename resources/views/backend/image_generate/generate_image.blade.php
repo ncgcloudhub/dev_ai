@@ -341,9 +341,24 @@
                         </div><!-- end card-body -->
                     </div><!-- end card -->
                 </div><!--end col-->
-                <div class="spinner-border text-primary d-none" role="status" id="loader">
+               
+                
+<div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
+    <button class="btn btn-outline-primary btn-load">
+        <span class="d-flex align-items-center">
+            <span class="spinner-border flex-shrink-0" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </span>
+            <span class="flex-grow-1 ms-2">
+                Loading...
+            </span>
+        </span>
+    </button>
+
+            
+                {{-- <div class="spinner-border text-primary d-none" role="status" id="loader">
                     <span class="sr-only">Loading...</span>
-                </div>
+                </div> --}}
 
         </div>
         
