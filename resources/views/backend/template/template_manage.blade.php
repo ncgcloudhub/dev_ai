@@ -97,7 +97,7 @@
                                             <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
                                         
                                             <div dir="ltr">
-                                                <div id="rater-onhover" class="align-middle"></div>
+                                                <div id="rater-onhover-{{$item->id}}" class="align-middle"></div>
                                                 <span class="ratingnum badge bg-info align-middle ms-2"></span>
                                             </div>
                                     
@@ -121,7 +121,7 @@
                                             </ul>
                                            @endif
                                         </div>
-                                    </a>
+                                        </a>
                                     </div>
                                
                            
