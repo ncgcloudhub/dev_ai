@@ -242,12 +242,19 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         </div>
                     </form>
 
-                    <div id="loadingSpinner" class="text-center" style="display: none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                        <p>Generating image...</p>
+                    <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loadingSpinner">
+                        <button class="btn btn-outline-primary btn-load">
+                            <span class="d-flex align-items-center">
+                                <span class="spinner-border flex-shrink-0" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                                <span class="flex-grow-1 ms-2">
+                                    Loading...
+                                </span>
+                            </span>
+                        </button>
                     </div>
+
 
                     <div id="generatedImageContainer" class="text-center mt-5">
                         <!-- Placeholder for the generated image -->

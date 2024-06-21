@@ -180,6 +180,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
 
         Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
+
+        // Route for deleting an example
+        Route::delete('/example/{example}', [PromptLibraryController::class, 'delete'])->name('prompt.example.delete');
+
+        // Route for updating an example (if not defined already)
+        Route::put('/example/{id}',  [PromptLibraryController::class, 'update'])->name('prompt.example.update');
+
+        
     });
 
 

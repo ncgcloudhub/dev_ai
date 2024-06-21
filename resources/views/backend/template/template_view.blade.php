@@ -181,6 +181,20 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
+                                <button class="btn btn-outline-primary btn-load">
+                                    <span class="d-flex align-items-center">
+                                        <span class="spinner-border flex-shrink-0" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </span>
+                                        <span class="flex-grow-1 ms-2">
+                                            Loading...
+                                        </span>
+                                    </span>
+                                </button>
+                            </div>
+
                     <div class="col-12">
                         <div class="text-end">
                             <button class="btn btn-rounded btn-primary mb-5">Generate</button>
@@ -366,6 +380,9 @@
     $(document).ready(function () {
     $('#generateForm').submit(function (event) {
         event.preventDefault();
+   
+        // Show loader
+        $('#loader').removeClass('d-none');
 
         $.ajax({
             type: 'POST',
@@ -402,6 +419,9 @@
                 $('#numTokens').text(response.completionTokens);
                 $('#numWords').text(response.num_words);
                 $('#numCharacters').text(response.num_characters);
+
+                // Hide loader
+                $('#loader').addClass('d-none');
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

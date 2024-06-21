@@ -95,6 +95,11 @@
                                             <p style="height: 3em; overflow: hidden; color:black;" class="card-text customer_name">{{$item->description}}</p>
                                     
                                             <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
+                                        
+                                            <div dir="ltr">
+                                                <div id="rater-onhover" class="align-middle"></div>
+                                                <span class="ratingnum badge bg-info align-middle ms-2"></span>
+                                            </div>
                                     
                                             @if(auth()->user()->role == 'admin')
                                             <ul class="list-inline hstack gap-2 mb-0">
@@ -193,6 +198,9 @@
 
 <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
 <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/rater-js/index.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/rating.init.js') }}"></script>
+<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
 
 <!--ecommerce-customer init js -->
 <script src="{{ URL::asset('build/js/pages/ecommerce-order.init.js') }}"></script>

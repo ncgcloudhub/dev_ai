@@ -41,6 +41,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    public function hasRole($role)
+    {
+        return $this->role === $role; // Assuming you have a 'role' column in your users table
+    }
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmailNotification);

@@ -86,25 +86,41 @@
                 </div>
             </div> 
         </div>
-        <!-- Display Existing Examples -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <div class="live-preview">
-                    <div class="col-md-12">
-                        <label for="existing-examples" class="form-label">Existing Examples</label>
-                        <div id="existing-examples-container">
-                            @foreach($prompt_library_examples as $item)
-                            <div class="snow-editor" style="height: 200px;">
-                                {!! $item->example !!}
+
+       
+              <!-- Display Existing Examples -->
+              <div class="card mt-3">
+                <div class="card-body">
+                    <div class="live-preview">
+                        <div class="col-md-12">
+                            <label for="existing-examples" class="form-label">Existing Examples</label>
+                            <div id="existing-examples-container">
+                                @foreach($prompt_library_examples as $item)
+                                <div class="example-item mb-3">
+                                    <div class="snow-editor" style="height: 200px;" id="exampleContent{{ $item->id }}">
+                                        {!! $item->example !!}
+                                    </div>
+                                    <div class="mt-2">
+                                        <!-- Delete Button -->
+                                        <form method="POST" action="{{ route('prompt.example.delete', $item->id) }}" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
+                                        </form>
+                                        
+                                        
+                                    </div>
+                                </div>
+                                @endforeach
                             </div>
-                            <br>
-                               
-                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            
+            
+
+        @if (Auth::check() && Auth::user()->hasRole('admin'))
         <!-- Container for adding examples -->
         <div class="card mt-3">
             <div class="card-body">
@@ -123,6 +139,8 @@
                 </form>
             </div>
         </div>
+        @endif
+      
     </div>
     {{-- 2nd column --}}
     <div class="col-xxl-6">
@@ -137,11 +155,24 @@
                         <div class="col-md-3">
                             <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
+                        {{-- Loader --}}
+                        <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
+                            <button class="btn btn-outline-primary btn-load">
+                                <span class="d-flex align-items-center">
+                                    <span class="spinner-border flex-shrink-0" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </span>
+                                    <span class="flex-grow-1 ms-2">
+                                        Loading...
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        {{-- Loader END --}}
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-md-9"> 
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="result1"  rows="3" placeholder="Your Result Here" autocomplete="off"></textarea>
-                           
                         </div>
                     </div> 
                 </div>
@@ -153,6 +184,7 @@
 @endsection
 
 @section('script')
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -170,6 +202,10 @@
 
         $('#ask').click(function() {
             var message = $('#ask_ai').val();
+            
+        // Show loader
+        $('#loader').removeClass('d-none');
+
             $.ajax({
                 url: "{{ route('ask.ai.prompt') }}",
                 type: "POST",
@@ -179,6 +215,10 @@
                 },
                 success: function(response) {
                     $('#result1').html(response.message);
+                    
+                // Hide loader
+                $('#loader').addClass('d-none');
+
                 },
                 error: function(xhr) {
                     // Handle error
