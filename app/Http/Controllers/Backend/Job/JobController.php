@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Backend\Job;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\JobApplication;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 
 class JobController extends Controller
@@ -90,8 +93,18 @@ class JobController extends Controller
             // Add validation rules for other fields
         ]);
 
-        // Handle file upload
-        $cvPath = $request->file('cv')->store('cv_files');
+        // Handle file upload to Azure Blob Storage
+        $cvFile = $request->file('cv');
+        $cvFileName = time() . '-' . uniqid() . '.' . $cvFile->getClientOriginalExtension();
+        $cvFilePath = $cvFile->getPathname();
+
+        // Create Blob client
+        $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+        $containerName = config('filesystems.disks.azure.container_resume');
+
+        // Upload file to Azure Blob Storage
+        $blobClient->createBlockBlob($containerName, $cvFileName, fopen($cvFilePath, 'r'), new CreateBlockBlobOptions());
+
 
         // Create a new FormData instance
         $formData = new JobApplication();
@@ -100,7 +113,7 @@ class JobController extends Controller
         $formData->phone = $request->input('phone');
         $formData->address = $request->input('address');
         $formData->user_id = $userId;
-        $formData->cv_path = $cvPath; // Save the file path to the database
+        $formData->cv_path = $cvFileName; // Save the file name or URL to the database
         // Set other form fields here
 
         // Save the FormData instance to the database
@@ -129,12 +142,21 @@ class JobController extends Controller
         // Get the CV path from the FormData instance
         $cvPath = $formData->cv_path;
 
-        // Check if the file exists
-        if (Storage::exists($cvPath)) {
-            // Return the file for download
-            return Storage::download($cvPath);
-        } else {
-            // File not found, handle accordingly (e.g., redirect with error message)
+        // Create Blob client
+        $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+        $containerName = config('filesystems.disks.azure.container_resume');
+
+        try {
+            // Download the blob
+            $blob = $blobClient->getBlob($containerName, $cvPath);
+            $content = stream_get_contents($blob->getContentStream());
+
+            // Prepare the response for download
+            return response($content, 200)
+                ->header('Content-Type', $blob->getProperties()->getContentType())
+                ->header('Content-Disposition', 'attachment; filename="' . $cvPath . '"');
+        } catch (Exception $e) {
+            // Handle the error (e.g., file not found in Azure Blob Storage)
             return redirect()->back()->with('error', 'CV file not found.');
         }
     }

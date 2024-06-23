@@ -65,6 +65,9 @@ return [
             'sas_token' => env('AZURE_STORAGE_SAS_TOKEN'),
             'prefix' => null,
             'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
+
+            'container_resume' => env('AZURE_STORAGE_CONTAINER_RESUME'),
+
         ],
 
     ],
