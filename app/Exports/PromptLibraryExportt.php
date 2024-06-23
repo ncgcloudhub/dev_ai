@@ -27,11 +27,12 @@ class PromptLibraryExportt implements FromCollection, WithHeadings, WithStyles
                 'slug' => $prompt->slug,
                 'icon' => $prompt->icon,
                 'category_name' => $prompt->category ? $prompt->category->category_name : null,
+                'sub_category_name' => $prompt->subcategory ? $prompt->subcategory->sub_category_name : null,
                 'description' => $prompt->description,
                 'actual_prompt' => $prompt->actual_prompt,
                 'created_at' => $prompt->created_at,
                 'updated_at' => $prompt->updated_at,
-                'sub_category_name' => $prompt->subcategory ? $prompt->subcategory->sub_category_name : null,
+
             ];
         });
     }
@@ -47,11 +48,12 @@ class PromptLibraryExportt implements FromCollection, WithHeadings, WithStyles
             'Slug',
             'Icon',
             'Category Name',
+            'Sub Category Name',
             'Description',
             'Actual Prompt',
             'Created At',
             'Updated At',
-            'Sub Category Name',
+
         ];
     }
 
