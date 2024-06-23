@@ -27,6 +27,7 @@
                             <th scope="col">Sl.</th>
                             <th scope="col">Full Name</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Applied Date</th>
                             <th scope="col">User ID</th>
                             <th scope="col">Resume (CV)</th>
                         
@@ -45,6 +46,7 @@
                                     <div class="flex-grow-1">{{$item->email}}</div>
                                 </div>
                             </td>
+                            <td>  {{ \Carbon\Carbon::parse($item->created_at)->format('F j, Y, g:i a') }}</td>
 
                             <td>{{$item->user->id}}</td>
                             <td><a href="{{ route('download.cv', ['id' => $item->id]) }}" class="btn btn-success btn-icon waves-effect waves-light"><i class="ri-file-download-fill"></i></a>
