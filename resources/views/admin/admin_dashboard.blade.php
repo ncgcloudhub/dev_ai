@@ -114,8 +114,7 @@
                                 <div>
                                     <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$totalUsers}}">0</span>
                                     </h4>
-                                    <a href="" class="link-secondary text-decoration-underline">See
-                                        subscription</a>
+                                    <a href="{{route('manage.user')}}" class="link-secondary text-decoration-underline">Manage User</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
@@ -146,13 +145,13 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->images_generated}}">0</span>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->images_generated}}">0</span>
                                     </h4>
-                                    <a href="{{route('all.package')}}" class="link-secondary text-decoration-underline">Upgrade Plan                          </a>
+                                    <a href="{{route('all.package')}}" class="link-secondary text-decoration-underline">Upgrade Plan</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
-                                        <i class="bx bx-user-circle text-primary"></i>
+                                        <i class=" bx bx-images text-primary"></i>
                                     </span>
                                 </div>
                             </div>
@@ -250,7 +249,7 @@
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
-                                        <i class=" bx bx-images text-success"></i>
+                                        <i class=" bx bx-image text-success"></i>
                                     </span>
                                 </div>
                             </div>
