@@ -135,7 +135,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Images Generated</p>
+                                        Total Images Generated</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-primary fs-14 mb-0">
@@ -169,11 +169,11 @@
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
-                                        Words Generated</p>
+                                        Total Words Generated</p>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <h5 class="text-primary fs-14 mb-0">
-                                        <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                         {{$user->words_generated}}
                                     </h5>
                                 </div>
@@ -196,7 +196,7 @@
 
                 <div class="col-xl-2 col-md-4">
                     <!-- card -->
-                    <div class="card card-animate bg-success-subtle shadow-lg">
+                    <div class="card card-animate bg-danger-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
@@ -204,7 +204,7 @@
                                         Credits Used</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-success fs-14 mb-0">
+                                    <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                         {{$user->credits_used}}
                                     </h5>
@@ -217,8 +217,8 @@
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-success-subtle rounded fs-3">
-                                        <i class=" bx bx-image-add text-success"></i>
+                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
+                                        <i class=" bx bx-image-add text-danger"></i>
                                     </span>
                                 </div>
                             </div>
@@ -228,7 +228,7 @@
 
                 <div class="col-xl-2 col-md-4">
                     <!-- card -->
-                    <div class="card card-animate bg-danger-subtle shadow-lg">
+                    <div class="card card-animate bg-success-subtle shadow-lg">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
@@ -236,7 +236,7 @@
                                         Credits Left</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-danger fs-14 mb-0">
+                                    <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
                                         {{$user->credits_left}}
                                     </h5>
@@ -249,8 +249,8 @@
                                     <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
-                                        <i class=" bx bx-images text-danger"></i>
+                                    <span class="avatar-title bg-success-subtle rounded fs-3">
+                                        <i class=" bx bx-images text-success"></i>
                                     </span>
                                 </div>
                             </div>
@@ -262,14 +262,14 @@
                 <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate">
-                        <div class="card-body bg-success-subtle shadow-lg">
+                        <div class="card-body bg-danger-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
                                         Tokens Used</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-success fs-14 mb-0">
+                                    <h5 class="text-danger fs-14 mb-0">
                                         <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
                                         {{$user->tokens_used}}
                                     </h5>
@@ -282,8 +282,8 @@
                                         templates</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-success-subtle rounded fs-3">
-                                        <i class=" bx bx-highlight text-success"></i>
+                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
+                                        <i class=" bx bx-highlight text-danger"></i>
                                     </span>
                                 </div>
                             </div>
@@ -294,14 +294,14 @@
                 <div class="col-xl-2 col-md-4">
                     <!-- card -->
                     <div class="card card-animate">
-                        <div class="card-body bg-danger-subtle shadow-lg">
+                        <div class="card-body bg-success-subtle shadow-lg">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
                                         Tokens Left</p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <h5 class="text-danger fs-14 mb-0">
+                                    <h5 class="text-success fs-14 mb-0">
                                         <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
                                         {{$user->tokens_left}}
                                     </h5>
@@ -314,8 +314,8 @@
                                         templates</a>
                                 </div>
                                 <div class="avatar-sm flex-shrink-0">
-                                    <span class="avatar-title bg-danger-subtle rounded fs-3">
-                                        <i class=" bx bx-pencil text-danger"></i>
+                                    <span class="avatar-title bg-success-subtle rounded fs-3">
+                                        <i class=" bx bx-pencil text-success"></i>
                                     </span>
                                 </div>
                             </div>
