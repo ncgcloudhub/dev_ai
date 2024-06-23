@@ -222,19 +222,19 @@ class AIChatController extends Controller
         }
 
 
-        // // Add conversation history to messages array
-        // foreach ($conversationHistory as $message) {
-        //     if (!is_null($message['content'])) {
-        //         $messages[] = ['role' => $message['role'], 'content' => $message['content']];
-        //     }
-        // }
+        // Add conversation history to messages array
+        foreach ($conversationHistory as $message) {
+            if (!is_null($message['content'])) {
+                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+            }
+        }
 
         // $messages = [];
 
 
-        // Prepare messages array with the latest user message and conversation history
-        $historyToSend = array_slice($conversationHistory, -10); // Send the last 10 messages to limit token usage
-        $messages = array_merge($messages, $historyToSend);
+        // // Prepare messages array with the latest user message and conversation history
+        // $historyToSend = array_slice($conversationHistory, -10); // Send the last 10 messages to limit token usage
+        // $messages = array_merge($messages, $historyToSend);
 
         // Ensure UTF-8 encoding for all message contents
         array_walk_recursive($messages, function (&$item, $key) {
