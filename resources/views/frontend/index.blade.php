@@ -172,11 +172,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate E-Cards (Eid Holidays)</p>
+                                                                <p class="text-white mb-0">Get Access to countless <br> <strong class="text-warning">Prompt Library</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('eid.card') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate E-Card</a>
+                                                    <a href="{{ auth()->check() ? route('prompt.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a>
                                                 </div>
                                             </div><!-- end col -->
                                             
@@ -185,11 +185,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Get Eid Quotes</p>
+                                                                <p class="text-white mb-0">Generate Greeting Cards using <br><strong class="text-warning">Dall-E 3</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Eid Quotes</a>
+                                                    <a href="{{ auth()->check() ? route('eid.card') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate E-Card</a>
                                                 </div>
                                             </div><!-- end col -->
                                         </div><!-- end row -->
