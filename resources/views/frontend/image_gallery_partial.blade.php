@@ -15,5 +15,14 @@
             </div>
         </div> --}}
     </div>
+   <!-- Buttons Group -->
+    <!-- Share Button -->
+    <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
+        Share
+    </button>
+    {{-- Like Button --}}
+    <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
+         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
+    </button>
 </div>
 @endforeach

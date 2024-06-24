@@ -17,8 +17,6 @@
             <!-- end navbar -->
             <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent.show"></div>
 
-          
-
             <section class="section pb-0 hero-section" id="hero">
                 <div class="container">
                     <div class="row">
@@ -44,14 +42,15 @@
                                                     </div>
                                                     <!-- Buttons Group -->
                                                      <!-- Share Button -->
-    <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
-        Share
-    </button>
+                                                    <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
+                                                        <i class="ri-share-forward-fill"></i>
+                                                    </button>
 
                                                     <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
                                                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
                                                     </button>
-                                                </div>                                      @endforeach
+                                                </div>                                     
+                                                 @endforeach
                                             
                                             </div>
                                             
@@ -76,8 +75,6 @@
             </section>
             
             <!-- end row -->
-
-
 
             <!-- Start footer -->
             @include('frontend.body.footer_frontend')
@@ -164,10 +161,6 @@
             });
         </script>
 
-
-
-
-
         
         <script>
           document.querySelectorAll('.image-popups').forEach(item => {
@@ -188,11 +181,6 @@
         });
     });
         </script>
-
-
-
-
-
 
         <script>
             var page = 1; // initialize page number
@@ -255,8 +243,4 @@
         </script>
     @endsection
     
-    
-    
-    
-
     @endsection
