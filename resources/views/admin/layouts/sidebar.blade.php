@@ -182,6 +182,10 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link" >Manage Image</a>
                                     </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.favourite.image')}}" class="nav-link" >Manage Favorite Image</a>
+                                    </li>
                                    
                                 </ul>
                             </div>
