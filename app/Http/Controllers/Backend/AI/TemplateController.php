@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use OpenAI;
 
 class TemplateController extends Controller
@@ -287,11 +288,11 @@ class TemplateController extends Controller
         $prompt =  $input->prompt;
 
         if ($input->emoji == 1) {
-            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. ';
         } elseif (isset($input->style) && $input->style != "") {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Do not write translations. ';
         } else {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. Please make sure that the output should be within ' . $max_result_length_value . ' tokens. Consider simplifying your request or providing more specific instructions to ensure the output fits within the token limit.';
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. ';
         }
 
 
@@ -373,14 +374,24 @@ class TemplateController extends Controller
 
     public function callbackHandel(Request $request)
     {
+
+        // Log session state and request state
+        Log::info('Session state: ' . session('state'));
+        Log::info('Request state: ' . $request->input('state'));
+
         // Check if an error occurred during the authentication process
         if (request()->has('error') && request()->error == 'access_denied') {
             // Handle the error gracefully, such as redirecting back to the login page
             return redirect('/login')->with('error', 'Google authentication was canceled.');
         }
 
-        // Get user data from Google
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            // Get user data from Google
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Laravel\Socialite\Two\InvalidStateException $e) {
+            Log::error('Invalid state exception: ' . $e->getMessage());
+            return redirect('/login')->with('error', 'Invalid state.');
+        }
 
         // Check if the user exists in your database
         $user = User::where('email', $googleUser->email)->first();
@@ -422,14 +433,12 @@ class TemplateController extends Controller
 
             // Log in the new user
             Auth::login($newUser);
-
             // Redirect to dashboard or any other page
             return redirect('/user/dashboard');
         }
 
         // If the user exists, log them in
         Auth::login($user);
-
         // Redirect to dashboard or any other page
         return redirect('/user/dashboard');
     }

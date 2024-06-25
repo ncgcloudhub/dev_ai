@@ -14,7 +14,6 @@
     resize: none; /* Disable default resizing */
     overflow: hidden; /* Hide any overflow content */
 }
-
 </style>
 
 <style>
@@ -38,7 +37,6 @@
         background: rgba(255, 255, 255, 0.5); /* Optional: To make buttons more visible on the image */
     }
 </style>
-
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -113,115 +111,107 @@
                                                 </h2>
                                                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                                                     data-bs-parent="#accordionFlushExample">
-                                                    <div class="accordion-body">
-            
-
+                                                    <div class="accordion-body">           
                                                     
-                    <div class="row">
-                        
-                        <div class="col-md-3 mb-3">
-                            <label for="input1">Image Style</label>
-                        
-                            <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
-                                <option value="natural">Natural</option>
-                                <option value="vivid">Vivid</option>
-                                <option value="none">NONE</option>
-                                <option value="cinematic">CINEMATIC</option>
-                                <option value="analog-film">ANALOG FILM</option>
-                                <option value="animation">ANIMATION</option>
-                                <option value="comic">COMIC</option>
-                                <option value="craft-clay">CRAFT CLAY</option>
-                                <option value="fantasy">FANTASY</option>
-                                <option value="line-art">LINE ART</option>
-                                <option value="cyberpunk">CYBERPUNK</option>
-                                <option value="pixel-art">PIXEL ART</option>
-                                <option value="photograph">PHOTOGRAPH</option>
-                                <option value="graffiti">GRAFFITI</option>
-                                <option value="game-gta">GAME GTA</option>
-                                <option value="3d-character">3D CHARACTER</option>
-                                <option value="baroque">BAROQUE</option>
-                                <option value="caricature">CARICATURE</option>
-                                <option value="colored-pencil">COLORED PENCIL</option>
-                                <option value="doddle-art">DODDLE ART</option>
-                                <option value="futurism">FUTURISM</option>
-                                <option value="sketch">SKETCH</option>
-                                <option value="surrealism">SURREALISM</option>
-                                <option value="sticker-designs">STICKER DESIGNS</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-md-3 mb-3">
-                            <label for="input2">Image Quality</label>
-                            <select name="quality" class="form-control" id="quality">
-                                <option disabled selected="">Enter Image Quality</option>
-                                <option value="standard">Standard</option>
-                                <option value="hd">HD</option>
-                            </select>
-                        </div>                                                        
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input1">Image Style</label>
+                                                            
+                                                                <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
+                                                                    <option value="natural">Natural</option>
+                                                                    <option value="vivid">Vivid</option>
+                                                                    <option value="none">NONE</option>
+                                                                    <option value="cinematic">CINEMATIC</option>
+                                                                    <option value="analog-film">ANALOG FILM</option>
+                                                                    <option value="animation">ANIMATION</option>
+                                                                    <option value="comic">COMIC</option>
+                                                                    <option value="craft-clay">CRAFT CLAY</option>
+                                                                    <option value="fantasy">FANTASY</option>
+                                                                    <option value="line-art">LINE ART</option>
+                                                                    <option value="cyberpunk">CYBERPUNK</option>
+                                                                    <option value="pixel-art">PIXEL ART</option>
+                                                                    <option value="photograph">PHOTOGRAPH</option>
+                                                                    <option value="graffiti">GRAFFITI</option>
+                                                                    <option value="game-gta">GAME GTA</option>
+                                                                    <option value="3d-character">3D CHARACTER</option>
+                                                                    <option value="baroque">BAROQUE</option>
+                                                                    <option value="caricature">CARICATURE</option>
+                                                                    <option value="colored-pencil">COLORED PENCIL</option>
+                                                                    <option value="doddle-art">DODDLE ART</option>
+                                                                    <option value="futurism">FUTURISM</option>
+                                                                    <option value="sketch">SKETCH</option>
+                                                                    <option value="surrealism">SURREALISM</option>
+                                                                    <option value="sticker-designs">STICKER DESIGNS</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input2">Image Quality</label>
+                                                                <select name="quality" class="form-control" id="quality">
+                                                                    <option disabled selected="">Enter Image Quality</option>
+                                                                    <option value="standard">Standard</option>
+                                                                    <option value="hd">HD</option>
+                                                                </select>
+                                                            </div>                                                        
+                                                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input3">Image Resolution</label>
+                                                                <select name="image_res" class="form-control" id="image_res">
+                                                                    <option disabled selected="">Enter Image Resolution</option>
+                                                                    <option value="256x256">256x256</option>
+                                                                    <option value="512x512">512x512</option>
+                                                                    <option value="1024x1024">1024x1024</option>
+                                                                </select>
+                                                            </div>
+                                                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input4">No. of Result</label>
+                                                                
+                                                                <select name="no_of_result" class="form-control" id="no_of_result">
+                                                                    <option disabled selected="">Enter no. of Images</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                    <option value="10">10</option>
+                                                                </select>
+                                                            </div>                                                                                           
 
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input3">Image Resolution</label>
-                                                            <select name="image_res" class="form-control" id="image_res">
-                                                                <option disabled selected="">Enter Image Resolution</option>
-                                                                <option value="256x256">256x256</option>
-                                                                <option value="512x512">512x512</option>
-                                                                <option value="1024x1024">1024x1024</option>
-                                                            </select>
                                                         </div>
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input4">No. of Result</label>
-                                                         
-                                                            <select name="no_of_result" class="form-control" id="no_of_result">
-                                                                <option disabled selected="">Enter no. of Images</option>
-                                                                <option value="1">1</option>
-                                                                <option value="2">2</option>
-                                                                <option value="3">3</option>
-                                                                <option value="4">4</option>
-                                                                <option value="5">5</option>
-                                                                <option value="6">6</option>
-                                                                <option value="7">7</option>
-                                                                <option value="8">8</option>
-                                                                <option value="9">9</option>
-                                                                <option value="10">10</option>
-                                                            </select>
-                                                        </div>
-                                                        
-
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                     
-                                 <div class="row g-3 justify-content-center">
-                                    <div class="col-xxl-5 col-sm-6">
-                                        <div class="search-box">
-                                            <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                            <i class="ri-search-line search-icon"></i>
-                                        </div>
-                                    </div>
-                                    
-                                        <!--end col-->
-                                        
-                                        <div class="col-xxl-1 col-sm-4">
-                                            <div>
-                                                <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                        <div class="row g-3 justify-content-center">
+                                            <div class="col-xxl-5 col-sm-6">
+                                                <div class="search-box">
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <i class="ri-search-line search-icon"></i>
+                                                </div>
                                             </div>
+                                            
+                                                <!--end col-->
+                                                
+                                            <div class="col-xxl-1 col-sm-4">
+                                                    <div>
+                                                        <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                                    </div>
+                                            </div>
+                                                <!--end col-->
                                         </div>
-                                        <!--end col-->
-                                    </div>
-                                    <!--end row-->
-                                </form>
+                                            <!--end row-->
+                                    </form>
                                    
                                 </div>
 
-
-                               
-
-                                    
+                         
                                 <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
                                     <form  action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
@@ -305,9 +295,7 @@
                                                                 
                                                             </select>
                                                         </div>
-                                                        
-
-
+                                                  
                                                     </div>
                                                 </div>
                                             </div>
@@ -322,7 +310,6 @@
                                             </div>
                                         </div>
                                         
-                                        
                                         <!--end col-->
                                         
                                         <div class="col-xxl-1 col-sm-4">
@@ -332,162 +319,151 @@
                                         </div>
                                         <!--end col-->
                                     </div>
-                                </form>
+                                    </form>
                                 </div>
                            
-                              
-                               
                             </div>
                         </div><!-- end card-body -->
                     </div><!-- end card -->
                 </div><!--end col-->
                
                 
-<div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
-    <button class="btn btn-outline-primary btn-load">
-        <span class="d-flex align-items-center">
-            <span class="spinner-border flex-shrink-0" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </span>
-            <span class="flex-grow-1 ms-2">
-                Loading...
-            </span>
-        </span>
-    </button>
-
-            
-                {{-- <div class="spinner-border text-primary d-none" role="status" id="loader">
-                    <span class="sr-only">Loading...</span>
-                </div> --}}
-
-        </div>
+                <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
+                    <button class="btn btn-outline-primary btn-load">
+                        <span class="d-flex align-items-center">
+                            <span class="spinner-border flex-shrink-0" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </span>
+                            <span class="flex-grow-1 ms-2">
+                                Loading...
+                            </span>
+                        </span>
+                    </button>
+                </div>
         
-        <div id="image-container" class="d-flex justify-content-center">      
-        
-        </div>
+                <div id="image-container" class="d-flex justify-content-center">      
+                
+                </div>
     
     
+        </div>
     </div>
-</div>
 
-
-
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="">
-                <div class="card-body">
-                    <div class="row gallery-wrapper">
-                        @foreach ($images as $item)
-                        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
-                            <div class="gallery-box card">
-                                <div class="gallery-container">
-                                    <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
-                                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
-                                        {{-- <div class="gallery-overlay">
-                                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
-                                        </div> --}}
-                                    </a>
-                                </div>
-                                <div class="text-center mt-2">
-                                    <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
-                                        <i data-feather="download"></i>
-                                    </a>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="">
+                    <div class="card-body">
+                        <div class="row gallery-wrapper">
+                            @foreach ($images as $item)
+                            <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
+                                <div class="gallery-box card">
+                                    <div class="gallery-container">
+                                        <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
+                                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                                            {{-- <div class="gallery-overlay">
+                                                <h5 class="overlay-caption">{{ $item->prompt }}</h5>
+                                            </div> --}}
+                                        </a>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
+                                            <i data-feather="download"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
+                        @endforeach
                         </div>
-                    @endforeach
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-{{-- Image Description --}}
-<div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content border-0 overflow-hidden">
-            <div class="row g-0">
-              
-                <div class="col-lg-5">
-                    <div class="subscribe-modals-cover h-100 d-flex align-items-center justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
-                            <i class="ri-arrow-left-s-line"></i>
-                        </button>
-                        <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
-                        <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
-                            <i class="ri-arrow-right-s-line"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-7 d-flex align-items-center">
-                    <div class="modal-body p-5">
-                        <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
-                        <span class="text-muted mb-4" id="resolution"></span>
-                    </div>
-                    
-                </div>
-                <!-- Left button -->
-              
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
-
-
-
-
-{{-- Modal --}}
-<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Prompt Library</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <h6 class="fs-15">Generate your images in the best format</h6>
-                @foreach ($prompt_library as $item)
-                <div class="card card-height-100">
-                    <div class="d-flex">
-                        <div class="flex-grow-1 p-2">
-                            <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                <h5 class="mb-3">{{$item->prompt_name}}</h5>
-                            </a>
-                            <p class="mb-0 text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                <span class="badge bg-light text-success mb-0">{{ substr($item->actual_prompt, 0, 65) }}</span>
-                            </p>
+    {{-- Image Description --}}
+    <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0 overflow-hidden">
+                <div class="row g-0">
+                
+                    <div class="col-lg-5">
+                        <div class="subscribe-modals-cover h-100 d-flex align-items-center justify-content-center">
+                            <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </button>
+                            <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
+                            <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
+                                <i class="ri-arrow-right-s-line"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
+                    <div class="col-lg-7 d-flex align-items-center">
+                        <div class="modal-body p-5">
+                            <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
+                            <span class="text-muted mb-4" id="resolution"></span>
+                        </div>
+                        
+                    </div>
+                    <!-- Left button -->
                 
-                {{-- <div class="d-flex mt-2">
-                    <div class="flex-shrink-0">
-                        <i class="ri-checkbox-circle-fill text-success"></i>
-                    </div>
-                    <div class="flex-grow-1 ms-2">
-                        <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                            <p class="text-muted mb-0">{{$item->prompt_name}}</p>
-                        </a>
-                    </div>
-                </div>     --}}
-                @endforeach
+                </div>
+                <div class="modal-footer">
+                    <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                <a class="btn btn-primary" href="{{route('prompt.manage')}}">Get More Prompts</a>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
+
+
+
+    {{-- Modal --}}
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Prompt Library</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="fs-15">Generate your images in the best format</h6>
+                    @foreach ($prompt_library as $item)
+                    <div class="card card-height-100">
+                        <div class="d-flex">
+                            <div class="flex-grow-1 p-2">
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                    <h5 class="mb-3">{{$item->prompt_name}}</h5>
+                                </a>
+                                <p class="mb-0 text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <span class="badge bg-light text-success mb-0">{{ substr($item->actual_prompt, 0, 65) }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- <div class="d-flex mt-2">
+                        <div class="flex-shrink-0">
+                            <i class="ri-checkbox-circle-fill text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                <p class="text-muted mb-0">{{$item->prompt_name}}</p>
+                            </a>
+                        </div>
+                    </div>     --}}
+                    @endforeach
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-primary" href="{{route('prompt.manage')}}">Get More Prompts</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 @endsection
 @section('script')
@@ -567,8 +543,6 @@
     });
 </script>
 
-
-
 <script>
     $(document).ready(function() {
         // Function to resize textarea
@@ -602,27 +576,25 @@
                     // console.log(response);
                     
                     $('#image-container').empty(); // Clear previous images if any
-response.data.forEach(function(imageData) {
-    // Create an image element
-    var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                    <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
-                </a>`;
+                    response.data.forEach(function(imageData) {
+                        // Create an image element
+                        var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
+                                    </a>`;
 
-    // Append the image to the container
-    $('#image-container').append(temp);
-});
+                        // Append the image to the container
+                        $('#image-container').append(temp);
+                    });
 
-// Initialize Glightbox
-$(document).ready(function() {
-    const lightbox = GLightbox({
-        selector: '.image-popup',
-        touchNavigation: true,
-        loop: true
-    });
-});
-
+                    // Initialize Glightbox
+                    $(document).ready(function() {
+                        const lightbox = GLightbox({
+                            selector: '.image-popup',
+                            touchNavigation: true,
+                            loop: true
+                        });
+                    });
               
-
                          var credits_left = response.credit_left;
                          $('.credit-left').text(credits_left);
 
@@ -640,8 +612,4 @@ $(document).ready(function() {
     });
 </script>
 
-
-
 @endsection
-
-

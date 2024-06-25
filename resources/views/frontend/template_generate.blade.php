@@ -457,7 +457,7 @@
 
         if (!userSignedIn && tokensUsedToday >= 300) {
             $('#loadingSpinner').hide();
-            alert('You have reached the daily limit of 500 tokens. Please try again tomorrow.');
+            alert('You have reached the daily limit of 300 tokens. Please try again tomorrow.');
             return;
         }
 
@@ -498,7 +498,7 @@
 
                 tinymce.get('myeditorinstance').setContent(formattedContent);
 
-                $('#numTokens').text(response.num_tokens);
+                $('#numTokens').text(response.completionTokens);
                 $('#numWords').text(response.num_words);
                 $('#numCharacters').text(response.num_characters);
             },

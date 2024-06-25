@@ -25,7 +25,78 @@
             <!--end row-->
 
             <div class="row">
-                <div class="col-xl-2 col-md-4">
+
+                <div class="col-auto">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body bg-secondary-subtle shadow-lg">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Total Images <br> Generated</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
+                                        {{$user->images_generated}}
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    @if($user->credits_left == 0)
+                                    <a href="{{ route('all.package') }}" class="link-secondary text-decoration-underline">Upgrade Plan</a>
+                                @else
+                                    <a href="{{ route('generate.image.view') }}" class="link-secondary text-decoration-underline">Generate Image</a>
+                                @endif
+                                
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <span class="avatar-title bg-secondary-subtle rounded fs-3">
+                                        <i class=" bx bx-images text-secondary"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-auto">
+                    <!-- card -->
+                    <div class="card card-animate">
+                        <div class="card-body bg-secondary-subtle shadow-lg">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                        Total Words <br> Generated</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
+                                        {{$user->words_generated}}
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    @if($user->tokens_left == 0)
+                                    <a href="{{ route('all.package') }}" class="link-secondary text-decoration-underline">Upgrade Plan</a>
+                                @else
+                                    <a href="{{ route('template.manage') }}" class="link-secondary text-decoration-underline">Manage Template</a>
+                                @endif
+                                   
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <span class="avatar-title bg-secondary-subtle rounded fs-3">
+                                        <i class=" bx bx-pencil text-secondary"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -43,12 +114,11 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$templates_count}}">0</span>
-                                    </h4>
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all templates
+                                   
+                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br> templates
                                         </a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
                                         <i class=" bx bx-receipt text-primary"></i>
                                     </span>
@@ -58,7 +128,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -76,12 +146,11 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$chatbot_count}}">0</span>
-                                    </h4>
-                                    <a href="{{route('chat')}}" class="link-secondary text-decoration-underline">View all Chat Experts
+                                  
+                                    <a href="{{route('chat')}}" class="link-secondary text-decoration-underline">View all <br> Chat Experts
                                         </a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
                                         <i class="bx bx-chat text-primary"></i>
                                     </span>
@@ -91,7 +160,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate bg-info-subtle shadow-lg">
                         <div class="card-body">
@@ -109,11 +178,11 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$custom_templates_count}}">0</span></h4>
-                                    <a href="{{ route('custom.template.manage')}}" class="link-secondary text-decoration-underline">View all custom
+                                 
+                                    <a href="{{ route('custom.template.manage')}}" class="link-secondary text-decoration-underline">View all <br> custom
                                         templates</a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-primary-subtle rounded fs-3">
                                         <i class=" bx bx-copy-alt text-primary"></i>
                                     </span>
@@ -123,7 +192,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate bg-success-subtle shadow-lg">
                         <div class="card-body">
@@ -141,11 +210,10 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->credits_used}}">0</span>
-                                    </h4>
-                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
+                                   
+                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate <br> Image</a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
                                         <i class=" bx bx-image-add text-success"></i>
                                     </span>
@@ -155,7 +223,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate bg-danger-subtle shadow-lg">
                         <div class="card-body">
@@ -173,11 +241,10 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="   {{$user->credits_left}}">0</span>
-                                    </h4>
-                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate Image</a>
+                                   
+                                    <a href="{{route('generate.image.view')}}" class="link-secondary text-decoration-underline">Generate <br> Image</a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-danger-subtle rounded fs-3">
                                         <i class=" bx bx-images text-danger"></i>
                                     </span>
@@ -188,7 +255,7 @@
                 </div><!-- end col -->
 
                 {{-- 2nd Row --}}
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-success-subtle shadow-lg">
@@ -206,11 +273,11 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target=" {{$user->tokens_used}}">0</span></h4>
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
+                                    
+                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br>
                                         templates</a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-success-subtle rounded fs-3">
                                         <i class=" bx bx-highlight text-success"></i>
                                     </span>
@@ -220,7 +287,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-2 col-md-4">
+                <div class="col-auto">
                     <!-- card -->
                     <div class="card card-animate">
                         <div class="card-body bg-danger-subtle shadow-lg">
@@ -238,11 +305,11 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="{{$user->tokens_left}}">0</span></h4>
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all
+                                   
+                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br>
                                         templates</a>
                                 </div>
-                                <div class="avatar-sm flex-shrink-0">
+                                <div class="flex-shrink-0">
                                     <span class="avatar-title bg-danger-subtle rounded fs-3">
                                         <i class=" bx bx-pencil text-danger"></i>
                                     </span>
@@ -251,6 +318,8 @@
                         </div><!-- end card body -->
                     </div><!-- end card -->
                 </div><!-- end col -->
+
+               
 
 
             </div> <!-- end row-->
