@@ -31,6 +31,7 @@
                             <th scope="col">Email</th>
                             <th scope="col">IP Address</th>
                             <th scope="col">Email Verified</th>
+                            <th scope="col">Role</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -67,7 +68,14 @@
                                             @endif
                                             
                                         </td>
-                          
+
+                                        @if ($item->role == 'admin')
+                                       
+                                        <td> <span class="badge border border-danger text-danger">{{ $item->role }}</span></td>
+                                        @else
+                                        <td>{{ $item->role }}</td>
+                                        @endif
+                         
                             <td>{{ $item->status }}</td>
 
                             @if ($item->status == 'active')
