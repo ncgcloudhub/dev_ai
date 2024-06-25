@@ -290,9 +290,6 @@ Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(func
 
     Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
 
-    // Like Image
-    Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
-
     // User Prompt Library
     Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
 }); //End User Middleware
@@ -317,6 +314,10 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
+
+    // Like Image
+    Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
+
 
     Route::prefix('chat')->middleware(['check.status'])->group(function () {
 

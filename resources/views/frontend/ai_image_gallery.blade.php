@@ -46,7 +46,7 @@
                                                         <i class="ri-share-forward-fill"></i>
                                                     </button>
 
-                                                    <button type="button" class="btn btn-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-down-fill' : 'ri-thumb-up-fill' }}" data-image-id="{{ $item->id }}">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
                                                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
                                                     </button>
                                                 </div>                                     
@@ -213,7 +213,8 @@
            $(document).ready(function() {
     $('.like-button').on('click', function() {
         var imageId = $(this).data('image-id');
-        var likeButton = $(this); // Store a reference to the clicked like button
+        var likeButton = $(this); 
+        var likeCountBadge = likeButton.find('.badge');
 
         $.ajax({
             url: '/like',
@@ -226,10 +227,12 @@
                 // Update UI to reflect the new like status
                 if (response.liked) {
                     // Image is liked
-                    likeButton.toggleClass('ri-thumb-up-fill ri-thumb-down-fill');
+                    likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
+                    likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
                 } else {
                     // Image is unliked
-                    likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-down-fill');
+                    likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
+                    likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
                 }
             },
             error: function(xhr) {

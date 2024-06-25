@@ -411,6 +411,7 @@ class TemplateController extends Controller
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
+                'email_verified_at' => now(),
             ]);
 
             // Generate a referral link for the new user
