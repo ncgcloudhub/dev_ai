@@ -45,6 +45,30 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
+                {{-- Favorites --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#favorite" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-pencil-ruler"></i> <span >Favorites</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="favorite">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.favourite.image')}}" class="nav-link" >Manage Favorite Image</a>
+                                    </li>
+                                  
+                                   
+                                </ul>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </li>
+
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\FavoriteImageDalle;
 use App\Models\LikedImagesDalle;
 use App\Models\PackageHistory;
 use App\Models\PromptLibrary;
@@ -231,6 +232,22 @@ class GenerateImagesController extends Controller
 
         return view('backend.image_generate.manage_admin_dalle_image', compact('images'));
     }
+
+    public function ManageFavoriteImage()
+    {
+        // Retrieve the authenticated user
+        $user = Auth::user();
+
+        // Eager load the favorited images for the user
+        $images = $user->favoritedImages()->with(['user', 'favorites'])->latest()->get();
+
+        // Modify each image to include the Azure Blob Storage URL with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+        return view('backend.image_generate.manage_favorite_dalle_image', compact('images'));
+        }
 
     public function UpdateStatus(Request $request)
     {
@@ -463,5 +480,35 @@ class GenerateImagesController extends Controller
 
         // Return response indicating success and the new like status
         return response()->json(['success' => true, 'liked' => $liked]);
+    }
+
+
+    // Toggle Favorite
+    public function toggleFavorite(Request $request)
+    {
+        // Get the image ID from the request
+        $imageId = $request->input('image_id');
+
+        // Get the current authenticated user
+        $user = Auth::user();
+
+        // Check if the user has already favorited the image
+        $favorited = $user->favoritedImages()->where('image_id', $imageId)->exists();
+
+        if ($favorited) {
+            // User has already favorited the image, so unfavorite it
+            $user->favoritedImages()->detach($imageId);
+            $favorited = false;
+        } else {
+            // User hasn't favorited the image yet, so favorite it
+            FavoriteImageDalle::create([
+                'user_id' => $user->id,
+                'image_id' => $imageId
+            ]);
+            $favorited = true;
+        }
+
+        // Return response indicating success and the new favorite status
+        return response()->json(['success' => true, 'favorited' => $favorited]);
     }
 }

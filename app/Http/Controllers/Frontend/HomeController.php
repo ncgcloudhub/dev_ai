@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\FavoriteImageDalle;
 use App\Models\Job;
 use App\Models\LikedImagesDalle;
 use App\Models\NewsLetter;
@@ -24,14 +25,16 @@ class HomeController extends Controller
     //Image Gallery Front End Page
     public function AIImageGallery()
     {
-        $images = DalleImageGenerate::withCount('likes')->latest()->paginate(20);
-
+        $images = DalleImageGenerate::withCount(['likes', 'favorites'])->latest()->paginate(20);
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
-            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())
-                ->where('image_id', $image->id)
-                ->exists();
+            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)
+            ->exists();
+
+            $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())
+            ->where('image_id', $image->id)
+            ->exists();
         }
 
         if (request()->ajax()) {

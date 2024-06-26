@@ -11,7 +11,7 @@ class UserManageController extends Controller
 {
     public function ManageUser()
     {
-        $users = User::where('role', 'user')->orderBy('id', 'desc')->get();
+        $users = User::orderBy('id', 'desc')->get();
 
         return view('backend.user.manage_user', compact('users'));
     }

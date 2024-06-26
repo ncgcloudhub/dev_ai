@@ -316,6 +316,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
 
+    // Favorite Image
+    Route::post('/favorite', [GenerateImagesController::class, 'toggleFavorite'])->name('image.favorite');
+
+    // Dalle Manage Image
+    Route::get('/favorite/image/manage', [GenerateImagesController::class, 'ManageFavoriteImage'])->name('manage.favourite.image');
 
     Route::prefix('chat')->middleware(['check.status'])->group(function () {
 

@@ -19,5 +19,10 @@ class DalleImageGenerate extends Model
     {
         return $this->hasMany(LikedImagesDalle::class, 'image_id');
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(FavoriteImageDalle::class, 'image_id');
+    }
     
 }
