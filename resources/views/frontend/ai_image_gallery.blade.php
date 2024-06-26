@@ -41,10 +41,7 @@
                                                         </div>
                                                     </div>
                                                     <!-- Buttons Group -->
-                                                     <!-- Share Button -->
-                                                    <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
-                                                        <i class="ri-share-forward-fill"></i>
-                                                    </button>
+                                                    
 
                                                     <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
                                                          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"> {{ $item->likes_count }}</span>
@@ -54,6 +51,14 @@
                                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
                                                     </button>
                                                     
+                                                    <!-- Download Button -->
+                                                <a href="{{ asset($item->image_url) }}" download="{{ $item->prompt }}.jpg" class="btn btn-sm btn-outline-secondary position-relative download-button">
+                                                    <i class="ri-download-line"></i>
+                                                </a>
+                                                 <!-- Share Button -->
+                                                 <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ asset($item->image_url) }}" data-image-prompt="{{ $item->prompt }}">
+                                                    <i class="ri-share-forward-fill"></i>
+                                                </button>
                                                     
                                                 </div>                                     
                                                  @endforeach
