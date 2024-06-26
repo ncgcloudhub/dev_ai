@@ -43,9 +43,9 @@
                 </li>
                 <li class="nav-item">
                     @auth <!-- Check if user is authenticated -->
-                        <a class="nav-link fs-15" href="{{ route('template.manage') }}">Template</a> <!-- Redirect to template.manage if user is signed in -->
+                        <a class="nav-link fs-15" href="{{ route('template.manage') }}">Templates</a> <!-- Redirect to template.manage if user is signed in -->
                     @else <!-- If user is not signed in -->
-                        <a class="nav-link fs-15" href="{{ route('frontend.free.template') }}">Template</a> <!-- Redirect to frontend.free.template -->
+                        <a class="nav-link fs-15" href="{{ route('frontend.free.template') }}">Templates</a> <!-- Redirect to frontend.free.template -->
                     @endauth
                 </li>
                 
