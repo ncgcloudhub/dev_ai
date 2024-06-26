@@ -428,6 +428,7 @@ Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name
 
 // Newsletter Store for all users even without login
 Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
+Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage');
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');

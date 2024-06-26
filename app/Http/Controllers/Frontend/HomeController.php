@@ -226,6 +226,14 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Subscribed Successfully');
     } // end method
 
+    public function NewsLetterManage()
+    {
+
+        $newsletter = NewsLetter::orderby('id', 'asc')->get();
+
+        return view('backend.newsletter.manage_newsletter', compact('newsletter'));
+    }
+
 
     // PRIVACY POLICY BACKEND
     public function ManagePrivacyPolicy()
