@@ -434,13 +434,13 @@ class TemplateController extends Controller
             // Log in the new user
             Auth::login($newUser);
             // Redirect to dashboard or any other page
-            return redirect('/user/dashboard');
+            return redirect('/generate/image/view');
         }
 
         // If the user exists, log them in
         Auth::login($user);
         // Redirect to dashboard or any other page
-        return redirect('/user/dashboard');
+        return redirect('/generate/image/view');
     }
 
 
