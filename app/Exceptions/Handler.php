@@ -27,4 +27,17 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    // ERROR PAGE
+    public function render($request, Throwable $exception)
+    {
+        if ($this->isHttpException($exception)) {
+            if ($exception->getStatusCode() == 404) {
+                return response()->view('admin.error.auth-404-not-found', [], 404);
+            }
+        }
+    
+        return parent::render($request, $exception);
+    }
+    
 }
