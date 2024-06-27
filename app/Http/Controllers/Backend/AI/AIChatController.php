@@ -20,6 +20,8 @@ use PhpOffice\PhpWord\Element\ListItem;
 use App\Models\AISettings;
 use App\Models\Message;
 use App\Models\Session as ModelsSession;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -184,11 +186,22 @@ class AIChatController extends Controller
             ],
         ]);
 
+        $user = Auth::user();
+
         Log::info('OpenAI API Response: ' . $response->getBody()->getContents());
 
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
+        $totalTokens = $data['usage']['completionTokens'];
         $sessionId = Session::get('session_id');
+
+        Log::info('Total Tokens', $messages);
+        
+         // Words Increment
+         User::where('id', $user->id)->update([
+            'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
+            'tokens_left' => DB::raw('tokens_left - ' . $totalTokens),
+        ]);
 
         Log::info('AI Response: ', ['content' => $messageContent]);
 
