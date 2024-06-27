@@ -18,8 +18,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Dashboards @endslot
-@slot('title') Dashboard @endslot
+@slot('li_1') Prompt Library @endslot
+@slot('title') {{$prompt_library->prompt_name}} @endslot
 @endcomponent
 
 <div class="row">

@@ -605,67 +605,7 @@
                            
                         </div><!-- end card header -->
 
-                        <div class="card-body">
-                            <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Sl.</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Phone</th>
-                                        <th scope="col">IP Address</th>
-                                        <th scope="col">Email Verified</th>
-                                        <th scope="col">Images generated</th>
-                                        <th scope="col">Words Generated</th>
-                                        <th scope="col">Registered Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $sl = 1;
-                                    @endphp
-                                    @foreach ($allUsers as $item)
-
-                                    <tr>
-                                        <td width="5%">{{ $sl++ }}</td>
-                                        <td>
-                                            <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}</a>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0 me-2">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
-                                                </div>
-                                                <div class="flex-grow-1">{{$item->email}}</div>
-                                            </div>
-                                        </td>
-                                        <td>{{$item->phone}}</td>
-                                        <td>{{$item->ipaddress}}</td>
-                                        <td>
-                                            @if ($item->email_verified_at)
-                                            {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
-    
-                                            @else
-                                                --
-                                            @endif
-                                            
-                                        <td>
-                                            <span class="text-success">{{$item->images_generated}}</span>
-                                        </td>
-                                        <td>
-                                            <span class="text-success">  {{$item->words_generated}}</span>
-                                          </td>
-                                        <td>
-                                            <span class="badge bg-success-subtle text-success">{{ \Carbon\Carbon::parse($item->created_at)->format('jS, M y') }}
-                                            </span>
-                                        </td>
-                                    </tr><!-- end tr -->
-
-                                    @endforeach
-                                </tbody><!-- end tbody -->
-                            </table>
-                            
-                        </div>
+                      @include('backend.common.manage_user')
                     </div> <!-- .card-->
                 </div> <!-- .col-->
             </div> <!-- end row-->
