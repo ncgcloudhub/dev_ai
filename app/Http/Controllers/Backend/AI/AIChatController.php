@@ -192,11 +192,9 @@ class AIChatController extends Controller
 
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
-        $totalTokens = $data['usage']['completionTokens'];
+        $totalTokens = $data['usage']['total_tokens'];
         $sessionId = Session::get('session_id');
 
-        Log::info('Total Tokens', $messages);
-        
          // Words Increment
          User::where('id', $user->id)->update([
             'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
