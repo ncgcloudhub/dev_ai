@@ -657,37 +657,58 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <!-- end row -->
 
                     <div class="row">
-                        <div class="col-lg-3">
-                            <div class="sticky-side-div">
-                                <div class="card ribbon-box border shadow-none right">
-                        
-                                    <img src="{{URL::asset('build/images/nft/ai.jpg')}}" alt="" class="img-fluid rounded">
-                                    
+                        <div class="col-lg-4 product-item music crypto-card games">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                 </div>
-                        
+                                <div class="explore-place-bid-img">
+                                    <img src="{{URL::asset('build/images/nft/ai.jpg')}}" alt="" class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="{{route('generate.image.view')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i> Generate Image</a>
+                                    </div>
+                                </div>
+                               
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="sticky-side-div">
-                                <div class="card ribbon-box border shadow-none right">
-                        
-                                    <img src="{{URL::asset('build/images/nft/ai1.jpg')}}" alt="" class="img-fluid rounded">
-                                    
+
+                        <div class="col-lg-4 product-item music crypto-card games">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                 </div>
-                        
+                                <div class="explore-place-bid-img">
+                                    <img src="{{URL::asset('build/images/nft/ai1.jpg')}}" alt="" class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="{{route('prompt.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Prompt Library</a>
+                                    </div>
+                                </div>
+                               
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="sticky-side-div">
-                                <div class="card ribbon-box border shadow-none right">
-                        
-                                    <img src="{{URL::asset('build/images/nft/ai2.jpg')}}" alt="" class="img-fluid rounded">
-                                    
+
+                        <div class="col-lg-4 product-item music crypto-card games">
+                            <div class="card explore-box card-animate">
+                                <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                                    <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                                 </div>
-                        
+                                <div class="explore-place-bid-img">
+                                    <img src="{{URL::asset('build/images/nft/ai2.jpg')}}" alt="" class="card-img-top explore-img" />
+                                    <div class="bg-overlay"></div>
+                                    <div class="place-bid-btn">
+                                        <a href="{{route('template.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Free AI Templates</a>
+                                    </div>
+                                </div>
+                               
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        
+                        
+                       
+                        
+                        {{-- <div class="col-lg-3">
                             <div class="sticky-side-div">
                                 <div class="card ribbon-box border shadow-none right">
                         
@@ -696,7 +717,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                 </div>
                         
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                 </div>
