@@ -9,7 +9,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') User @endslot
+@slot('li_1') Newsletter @endslot
 @slot('title')Manage @endslot
 @endcomponent
 
@@ -17,14 +17,35 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Manage User</h5>
-                <a href="{{ route('user.export') }}" class="btn btn-primary">Export All Data From User</a>
-                <a href="{{ route('user.export1') }}" class="btn btn-success">Export for Sending Email</a>
+                <h5 class="card-title mb-0">Manage Newsletter</h5>
             </div>
-            
-           {{-- Include Table --}}
-            @include('backend.common.manage_user')
+            <div class="card-body">
+                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>SR No.</th>
+                            <th>Email</th>
+                            <th >IP ADDRESS</th>
+                            
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($newsletter as $index => $item)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                         
+                            
+                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->ipaddress }}</td>
+                          
 
+                          
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -67,16 +88,16 @@ $(document).ready(function() {
 
     // Event delegation for the toggle button
     $(document).on('click', '.active_button', function() {
-        var userId = $(this).data('user-id');
+        var imageId = $(this).data('image-id');
         var toggleSwitch = $(this);
 
         // Send AJAX request to update the image status
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             type: 'POST',
-            url: '/user/update/status',
+            url: '/update/image/status',
             data: {
-                user_id: userId
+                image_id: imageId
             },
             headers: {
                 'X-CSRF-TOKEN': csrfToken
@@ -102,6 +123,5 @@ $(document).ready(function() {
 });
 
 </script>
-
 
 @endsection

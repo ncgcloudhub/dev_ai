@@ -241,13 +241,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.terms.condition')}}" class="nav-link">Manage Terms & Conditions</a>
                                     </li>
-                      
-
-
-                                   
+               
                                 </ul>
                             </div>
-                            
                             
                         </div>
                     </div>
@@ -259,13 +255,19 @@
                         <i class=" las la-user-circle"></i> <span >Manage User</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.pricing')}}">
                         <i class="  las la-dollar-sign"></i> <span >Manage Pricing</span>
                     </a>
                 </li>
-            {{-- USER END--}}
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('newsletter.manage')}}">
+                        <i class="  las la-dollar-sign"></i> <span >Manage Newsletter</span>
+                    </a>
+                </li>
+           
             {{-- REFERRAL --}}
             <li class="nav-item">
                 <a class="nav-link menu-link" href="{{route('manage.referral')}}">
@@ -308,10 +310,7 @@
                         </div>
                     </div>
                 </li>
-
-            {{-- JOB END--}}
-
-             
+            {{-- JOB END--}}            
             
             </ul>
         </div>

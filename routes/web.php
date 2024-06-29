@@ -186,8 +186,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // Route for updating an example (if not defined already)
         Route::put('/example/{id}',  [PromptLibraryController::class, 'update'])->name('prompt.example.update');
-
-        
     });
 
 
@@ -333,7 +331,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         // TEST CHAT
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
         Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
-        Route::post('/reply', [AIChatController::class, 'SendMessages']);
+        Route::post('/reply', [ExpertController::class, 'SendMessages']);
 
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
@@ -433,6 +431,7 @@ Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name
 
 // Newsletter Store for all users even without login
 Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
+Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage');
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
@@ -458,4 +457,3 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
-

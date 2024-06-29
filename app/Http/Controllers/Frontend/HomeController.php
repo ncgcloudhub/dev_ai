@@ -30,11 +30,11 @@ class HomeController extends Controller
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
             $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)
-            ->exists();
+                ->exists();
 
             $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())
-            ->where('image_id', $image->id)
-            ->exists();
+                ->where('image_id', $image->id)
+                ->exists();
         }
 
         if (request()->ajax()) {
@@ -120,10 +120,7 @@ class HomeController extends Controller
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
 
-        // if ($user->tokens_left <= 0) {
-        //     $data = 0;
-        //     return $data;
-        // }
+
 
         $result = $client->completions()->create([
             "model" => 'gpt-3.5-turbo-instruct',
@@ -142,21 +139,7 @@ class HomeController extends Controller
         $num_words = str_word_count($content);
         $num_characters = strlen($content);
 
-        // if ($user) {
-        //     if ($user->tokens_left <= 0) {
-        //         return response()->json(0);
-        //     } else {
-        //         User::where('id', $user->id)->update([
-        //             'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
-        //             'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
-        //             'words_generated' => DB::raw('words_generated + ' . $num_words),
-        //         ]);
 
-        //         Template::where('id', $template->id)->update([
-        //             'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
-        //         ]);
-        //     }
-        // }
 
         return response()->json([
             'content' => $content,
@@ -242,6 +225,14 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Subscribed Successfully');
     } // end method
+
+    public function NewsLetterManage()
+    {
+
+        $newsletter = NewsLetter::orderby('id', 'asc')->get();
+
+        return view('backend.newsletter.manage_newsletter', compact('newsletter'));
+    }
 
 
     // PRIVACY POLICY BACKEND

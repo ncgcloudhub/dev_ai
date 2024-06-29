@@ -24,7 +24,6 @@ class AdminController extends Controller
         $wordCountSum = CustomTemplate::sum('total_word_generated');
         
         $totalUsers = User::where('role', 'user')->count();
-        $allUsers = User::where('role', 'user')->orderBy('id', 'desc')->get();
 
         $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
         ->whereNotNull('country') // Exclude users with NULL country
@@ -50,7 +49,7 @@ class AdminController extends Controller
         $totalLikes = $images->sum('likes_count');
        
         // dd($templates_count);
-        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum','allUsers','sessions','images','totalLikes'));
+        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum', 'sessions','images','totalLikes'));
        
     }
  

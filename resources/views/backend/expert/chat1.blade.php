@@ -327,17 +327,17 @@
                                         Please Enter a Message
                                     </div>
                                     <textarea class="form-control chat-input bg-light border-light auto-expand" id="message-input" placeholder="Type your message..." autocomplete="off"></textarea>
-
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">
                                         <div class="links-list-item">
-                                            <button type="button" onclick="sendMessage()" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                            <button type="button" id="send-button" class="btn btn-success chat-send waves-effect waves-light fs-13">
                                                 <i class="ri-send-plane-2-fill align-bottom"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                                
 
                             </div>
                         </form>
@@ -621,15 +621,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        // Function to auto-expand textarea
-        $('.auto-expand').on('input', function () {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-    });
-    </script>
 
    <script>
 $(document).ready(function() {
@@ -646,14 +637,13 @@ $(document).ready(function() {
             sendMessage(); // Call the function to send the message
         }
     });
+
+    // Attach click event to send button
+    $('#send-button').on('click', function() {
+        sendMessage();
+    });
+});
     
-
-
-
-    
-
-
-
 // NEW CONVERSATION
 // Event listener for the "New Message" button click
 $('#new-message-button').click(function() {
@@ -691,9 +681,6 @@ $('#new-message-button').click(function() {
 
         });
     </script>
-
-
-
 
 <script>
     function formatContent(content) {
@@ -788,10 +775,17 @@ $('#new-message-button').click(function() {
 }
 
 function sendMessage() {
-    var message = $('#message-input').val();
-    var expert = $('#expert_id_selected').val();
+    console.log('sendMessage called'); // Debug log
 
+    var message = $('#message-input').val();
+    if (!message.trim()) return; // Prevent empty messages
+
+    var expert = $('#expert_id_selected').val();
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+    // Disable the send button to prevent multiple clicks
+    $('#send-button').prop('disabled', true);
+
     $.ajax({
         type: 'POST',
         url: '/chat/reply',
@@ -810,6 +804,10 @@ function sendMessage() {
         },
         error: function (error) {
             console.error(error);
+        },
+        complete: function() {
+            // Re-enable the send button after the request completes
+            $('#send-button').prop('disabled', false);
         }
     });
 }

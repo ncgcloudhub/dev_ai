@@ -11,9 +11,7 @@ class UserManageController extends Controller
 {
     public function ManageUser()
     {
-        $users = User::orderBy('id', 'desc')->get();
-
-        return view('backend.user.manage_user', compact('users'));
+        return view('backend.user.manage_user');
     }
 
     public function UpdateUserStatus(Request $request)

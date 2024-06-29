@@ -27,7 +27,7 @@
              <!-- Token Information -->
              <div class="col-xxl-12 mb-3">
                 <div class="alert alert-info text-center">
-                    <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}">Sign up now for FREE</a></strong>
+                    <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}"><u>Sign up now for FREE</u></a></strong>
                     to unlock your creativity!
                     <br>
                 </div>
@@ -93,13 +93,12 @@
                                          data-bs-parent="#accordionFlushExample">
                                          <div class="accordion-body">
  
-             
+            
                                              <div class="col-md-12">
-                                                 <label for="max_result_length" class="form-label">Max Result Length</label>
-                                                 <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
-                                                 <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
-                                                 
-                                             </div>
+                                                <label for="max_result_length" class="form-label">Max Result Length</label>
+                                                <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
+                                                <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
+                                            </div>
                  
  
                                              <div class="row">
@@ -205,22 +204,24 @@
                      <div class="col-12">
                          <div class="text-end">
                              <button class="btn btn-rounded btn-primary mb-5">Generate</button>
-                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
+                            
                          </div>
                      </div>
                          </form>
 
                          <!-- Loading Spinner -->
-<div id="loadingSpinner" style="display:none;">
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</div>
+                        <div id="loadingSpinner" style="display:none;">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                      </div>
                      
                  </div>
              </div>
             </div>
+
+
             <div class="col">
  
                  <!-- Add the Download Content button -->
@@ -274,7 +275,9 @@
         </div>
         <!-- end layout wrapper -->
     @endsection
-    @section('script')
+
+
+@section('script')
 
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
 
@@ -283,275 +286,290 @@
         <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script>
 
         {{-- Submit Form Editor --}}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    // Your JavaScript code goes here
-    $(document).ready(function() {
-        // Update token count display on page load
-        let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 300;
-        $('#tokenCount').text(remainingTokens); // Update token count display
+        <script>
+            $(document).ready(function() {
+                // Retrieve and update the token count display on page load
+                let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
+                $('#tokenCount').text(remainingTokens); // Update token count display
 
-        // Submit form event handler
-        $('#generateForm').submit(function(event) {
-            event.preventDefault();
+                function adjustToNearestLower10(value) {
+            return Math.floor(value / 10) * 10;
+        }
 
-            // Show loading spinner
+                // Update number input when the range slider changes
+                $('#max_result_length').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
 
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function(response) {
-                    // Hide loading spinner
+                    if (value > remainingTokens) {
+                        alert('You have exceeded the available tokens.');
+                        value = adjustToNearestLower10(remainingTokens);
+                        $(this).val(value);
+                    }
 
-                    // Update remaining tokens
-                    remainingTokens -= response.completionTokens;
-                    localStorage.setItem('remainingTokens', remainingTokens);
+                    $('#max_result_length_value').val(value);
+                });
 
-                    // Update token count display
-                    $('#tokenCount').text(remainingTokens);
+                // Update range slider when the number input changes
+                $('#max_result_length_value').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
 
-                    // Update content and other details on the page
-                },
-                error: function(xhr, status, error) {
-                    // Hide loading spinner
-                    // Handle errors properly
-                    console.error(xhr.responseText);
-                }
+                    if (value > remainingTokens) {
+                        alert('You have exceeded the available tokens.');
+                        value = adjustToNearestLower10(remainingTokens);
+                        $(this).val(value);
+                    }
+
+                    $('#max_result_length').val(value);
+                });
+
+                // Submit form event handler
+                $('#generateForm').submit(function(event) {
+                    event.preventDefault();
+
+                    // Show loading spinner
+
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('action'),
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            // Hide loading spinner
+
+                            // Update remaining tokens
+                            remainingTokens -= response.completionTokens;
+                            localStorage.setItem('remainingTokens', remainingTokens);
+
+                            // Update token count display
+                            $('#tokenCount').text(remainingTokens);
+
+                            // Update content and other details on the page
+                        },
+                        error: function(xhr, status, error) {
+                            // Hide loading spinner
+                            // Handle errors properly
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+
+               
             });
-        });
-    });
-</script>
+        </script>
 
-<script>
-    function disableInputs() {
-        var creativeLevel = document.getElementById("creative_level").value;
-        var temperatureInput = document.getElementById("temperature");
-        var temperatureValueInput = document.getElementById("temperature_value");
-        var topPInput = document.getElementById("top_p");
-        var topPValueInput = document.getElementById("top_p_value");
 
-        if (creativeLevel === "") {
-            temperatureInput.disabled = false;
-            temperatureValueInput.disabled = false;
-            topPInput.disabled = false;
-            topPValueInput.disabled = false;
-        } else {
-            temperatureInput.disabled = true;
-            temperatureValueInput.disabled = true;
-            topPInput.disabled = true;
-            topPValueInput.disabled = true;
-        }
-    }
-</script>
+        <script>
+            function disableInputs() {
+                var creativeLevel = document.getElementById("creative_level").value;
+                var temperatureInput = document.getElementById("temperature");
+                var temperatureValueInput = document.getElementById("temperature_value");
+                var topPInput = document.getElementById("top_p");
+                var topPValueInput = document.getElementById("top_p_value");
 
-<script>
-    $(document).ready(function() {
-        // Update number input when the range slider changes
-        $('#max_result_length').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
-            $('#max_result_length_value').val(value);
-        });
-    
-        // Update range slider when the number input changes
-        $('#max_result_length_value').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
-            if (!isNaN(value)) {
-                $('#max_result_length').val(value);
+                if (creativeLevel === "") {
+                    temperatureInput.disabled = false;
+                    temperatureValueInput.disabled = false;
+                    topPInput.disabled = false;
+                    topPValueInput.disabled = false;
+                } else {
+                    temperatureInput.disabled = true;
+                    temperatureValueInput.disabled = true;
+                    topPInput.disabled = true;
+                    topPValueInput.disabled = true;
+                }
             }
-        });
-    });
-    </script>
+        </script>
 
-<script>
-    $(document).ready(function() {
-        // Update number input when the range slider changes
-        $('#presence_penalty').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            $('#presence_penalty_value').val(value);
-        });
-    
-        // Update range slider when the number input changes
-        $('#presence_penalty_value').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            if (!isNaN(value)) {
-                $('#presence_penalty').val(value);
-            }
-        });
-    });
-    </script>
+        <script>
+            $(document).ready(function() {
+                // Update number input when the range slider changes
+                $('#presence_penalty').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    $('#presence_penalty_value').val(value);
+                });
+            
+                // Update range slider when the number input changes
+                $('#presence_penalty_value').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    if (!isNaN(value)) {
+                        $('#presence_penalty').val(value);
+                    }
+                });
+            });
+        </script>
 
-<script>
-    $(document).ready(function() {
-        // Update number input when the range slider changes
-        $('#frequency_penalty').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            $('#frequency_penalty_value').val(value);
-        });
-    
-        // Update range slider when the number input changes
-        $('#frequency_penalty_value').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            if (!isNaN(value)) {
-                $('#frequency_penalty').val(value);
-            }
-        });
-    });
-    </script>
+        <script>
+            $(document).ready(function() {
+                // Update number input when the range slider changes
+                $('#frequency_penalty').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    $('#frequency_penalty_value').val(value);
+                });
+            
+                // Update range slider when the number input changes
+                $('#frequency_penalty_value').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    if (!isNaN(value)) {
+                        $('#frequency_penalty').val(value);
+                    }
+                });
+            });
+        </script>
 
-<script>
-    $(document).ready(function() {
-        // Update number input when the range slider changes
-        $('#top_p').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            $('#top_p_value').val(value);
-        });
-    
-        // Update range slider when the number input changes
-        $('#top_p_value').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            if (!isNaN(value)) {
-                $('#top_p').val(value);
-            }
-        });
-    });
-    </script>
+        <script>
+            $(document).ready(function() {
+                // Update number input when the range slider changes
+                $('#top_p').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    $('#top_p_value').val(value);
+                });
+            
+                // Update range slider when the number input changes
+                $('#top_p_value').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    if (!isNaN(value)) {
+                        $('#top_p').val(value);
+                    }
+                });
+            });
+        </script>
 
-<script>
-    $(document).ready(function() {
-        // Update number input when the range slider changes
-        $('#temperature').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            $('#temperature_value').val(value);
-        });
-    
-        // Update range slider when the number input changes
-        $('#temperature_value').on('input', function() {
-            var value = parseFloat($(this).val()).toFixed(2);
-            if (!isNaN(value)) {
-                $('#temperature').val(value);
-            }
-        });
-    });
-    </script>
+        <script>
+            $(document).ready(function() {
+                // Update number input when the range slider changes
+                $('#temperature').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    $('#temperature_value').val(value);
+                });
+            
+                // Update range slider when the number input changes
+                $('#temperature_value').on('input', function() {
+                    var value = parseFloat($(this).val()).toFixed(2);
+                    if (!isNaN(value)) {
+                        $('#temperature').val(value);
+                    }
+                });
+            });
+        </script>
 
-<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<script>
-    tinymce.init({
-        selector: 'textarea#myeditorinstance',
-        plugins: 'code table lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
-    });
+        <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+        <script>
+            tinymce.init({
+                selector: 'textarea#myeditorinstance',
+                plugins: 'code table lists',
+                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+            });
 
 
-    $(document).ready(function () {
-    $('#generateForm').submit(function (event) {
-        event.preventDefault();
+            $(document).ready(function () {
+            $('#generateForm').submit(function (event) {
+                event.preventDefault();
 
-        // Show the spinner
-        $('#loadingSpinner').show();
+                // Show the spinner
+                $('#loadingSpinner').show();
 
-        let userSignedIn = {{ Auth::check() ? 'true' : 'false' }};
-        let tokensUsedToday = parseInt(localStorage.getItem('tokensUsedToday')) || 0;
+                let userSignedIn = {{ Auth::check() ? 'true' : 'false' }};
+                let tokensUsedToday = parseInt(localStorage.getItem('tokensUsedToday')) || 0;
 
-        if (!userSignedIn && tokensUsedToday >= 300) {
-            $('#loadingSpinner').hide();
-            alert('You have reached the daily limit of 300 tokens. Please try again tomorrow.');
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function (response) {
-                // Hide the spinner
-                $('#loadingSpinner').hide();
-
-                if (response == 0) {
-                    alert('Please Upgrade Plan');
+                if (!userSignedIn && tokensUsedToday >= 2000) {
+                    $('#loadingSpinner').hide();
+                    alert('You have reached the daily limit of 2000 tokens. Please try again tomorrow.');
                     return;
                 }
 
-                if (!userSignedIn) {
-                    tokensUsedToday += response.completionTokens;
-                    localStorage.setItem('tokensUsedToday', tokensUsedToday);
-                }
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        // Hide the spinner
+                        $('#loadingSpinner').hide();
 
-                let formattedContent = '';
-                let lines = response.content.split('\n');
-
-                if (lines.some(line => line.trim().startsWith('*'))) {
-                    formattedContent += '<ul>';
-                    lines.forEach(line => {
-                        if (line.trim().startsWith('*')) {
-                            formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                        } else {
-                            formattedContent += '<p>' + line.trim() + '</p>';
+                        if (response == 0) {
+                            alert('Please Upgrade Plan');
+                            return;
                         }
-                    });
-                    formattedContent += '</ul>';
-                } else {
-                    formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
-                }
 
-                tinymce.get('myeditorinstance').setContent(formattedContent);
+                        if (!userSignedIn) {
+                            tokensUsedToday += response.completionTokens;
+                            localStorage.setItem('tokensUsedToday', tokensUsedToday);
+                        }
 
-                $('#numTokens').text(response.completionTokens);
-                $('#numWords').text(response.num_words);
-                $('#numCharacters').text(response.num_characters);
-            },
-            error: function (xhr, status, error) {
-                // Hide the spinner
-                $('#loadingSpinner').hide();
-                console.error(xhr.responseText);
+                        let formattedContent = '';
+                        let lines = response.content.split('\n');
+
+                        if (lines.some(line => line.trim().startsWith('*'))) {
+                            formattedContent += '<ul>';
+                            lines.forEach(line => {
+                                if (line.trim().startsWith('*')) {
+                                    formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+                                } else {
+                                    formattedContent += '<p>' + line.trim() + '</p>';
+                                }
+                            });
+                            formattedContent += '</ul>';
+                        } else {
+                            formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
+                        }
+
+                        tinymce.get('myeditorinstance').setContent(formattedContent);
+
+                        $('#numTokens').text(response.completionTokens);
+                        $('#numWords').text(response.num_words);
+                        $('#numCharacters').text(response.num_characters);
+                    },
+                    error: function (xhr, status, error) {
+                        // Hide the spinner
+                        $('#loadingSpinner').hide();
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+
+            // Reset the token count at midnight
+            function resetTokenCount() {
+                let now = new Date();
+                let millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0) - now;
+                setTimeout(function() {
+                    localStorage.setItem('tokensUsedToday', '0');
+                    resetTokenCount();
+                }, millisTillMidnight);
             }
-        });
-    });
 
-    // Reset the token count at midnight
-    function resetTokenCount() {
-        let now = new Date();
-        let millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0) - now;
-        setTimeout(function() {
-            localStorage.setItem('tokensUsedToday', '0');
             resetTokenCount();
-        }, millisTillMidnight);
-    }
 
-    resetTokenCount();
+                // Copy button click event
+                $('#copyButton').click(function () {
+                    const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+                    const textArea = document.createElement('textarea');
+                    textArea.value = editorContent;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('Content copied to clipboard!');
+                });
 
-        // Copy button click event
-        $('#copyButton').click(function () {
-            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
-            const textArea = document.createElement('textarea');
-            textArea.value = editorContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
-        });
+                // Download button click event
+                $('#downloadButton').click(function () {
+                    const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
 
-         // Download button click event
-         $('#downloadButton').click(function () {
-            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+                    const blob = new Blob([editorContent], { type: 'application/msword' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'generated_content.docx';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    }, 0);
+                });
 
-            const blob = new Blob([editorContent], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'generated_content.docx';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 0);
-        });
-
-    });
-</script>
+            });
+        </script>
        
-    @endsection
+@endsection

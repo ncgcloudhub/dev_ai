@@ -10,8 +10,15 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+
+     protected $commands = [
+        Commands\ResetMonthlyUserTokens::class,
+    ];
+
+
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('reset:monthlyusertokens')->daily();
         // $schedule->command('inspire')->hourly();
     }
 
