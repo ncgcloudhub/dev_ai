@@ -4,6 +4,8 @@
 <link href="{{ URL::asset('build/libs/quill/quill.core.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.bubble.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.snow.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
 <style>
     .copy-icon {
         position: absolute;
@@ -171,38 +173,46 @@
                         {{-- Loader END --}}
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-9">
-                            <textarea class="form-control chat-input bg-light border-light auto-expand" id="result1" rows="3" placeholder="Your Result Here" autocomplete="off"></textarea>
+                        <div class="col-md-12">
+                            <textarea id="myeditorinstance" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12 text-end">
+                            <button id="copyButton" class="btn btn-secondary me-2">Copy</button>
+                            <button id="downloadButton" class="btn btn-secondary">Download</button>
                         </div>
                     </div>
                 </div>
-                
             </div> 
         </div>
     </div>
+    
+    
+    
 </div>
 
 @endsection
 
 @section('script')
 
+<!-- Include SimpleMDE JS -->
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<!-- Include FileSaver.js for saving files -->
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Function to copy text to clipboard
-    window.copyText = function(element) {
-        const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
-        const tempInput = document.createElement("textarea");
-        tempInput.style = "position: absolute; left: -9999px";
-        tempInput.value = textToCopy;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        alert("Text copied to clipboard");
-    };
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize SimpleMDE
+        var simplemde = new SimpleMDE({ 
+            element: document.getElementById("myeditorinstance"),
+            spellChecker: false,
+            toolbar: false,
+            status: false,
+            readOnly: true
+        });
 
-    // Function to auto-expand textareas
+        // Function to auto-expand textareas
     function autoExpand(textarea) {
         textarea.style.height = 'auto';
         textarea.style.height = (textarea.scrollHeight) + 'px';
@@ -216,78 +226,59 @@
 
         // Initial expand to adjust height on load
         autoExpand(textarea);
-    });
-
-    $('#ask').click(function() {
-        var message = $('#ask_ai').val();
-        
-        // Show loader
-        $('#loader').removeClass('d-none');
-
-        $.ajax({
-            url: "{{ route('ask.ai.prompt') }}",
-            type: "POST",
-            data: {
-                message: message,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                $('#result1').html(response.message);
-                
-                // Auto-expand result textarea
-                autoExpand(document.getElementById('result1'));
-
-                // Hide loader
-                $('#loader').addClass('d-none');
-            },
-            error: function(xhr) {
-                // Handle error
-            }
+    })
+    
+        $('#ask').click(function() {
+            var message = $('#ask_ai').val();
+            
+            // Show loader
+            $('#loader').removeClass('d-none');
+    
+            $.ajax({
+                url: "{{ route('ask.ai.prompt') }}",
+                type: "POST",
+                data: {
+                    message: message,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    // Update SimpleMDE content with the generated response
+                    simplemde.value(response.message);
+    
+                    // Hide loader
+                    $('#loader').addClass('d-none');
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    
+        // Copy button click event
+        $('#copyButton').click(function () {
+            const editorContent = simplemde.value();
+            const textArea = document.createElement('textarea');
+            textArea.value = editorContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Content copied to clipboard!');
+        });
+    
+        // Download button click event using FileSaver.js
+        $('#downloadButton').click(function () {
+            const editorContent = simplemde.value();
+    
+            // Create a new Blob with the content
+            const blob = new Blob([editorContent], { type: 'application/msword' });
+    
+            // Use FileSaver.js to save the blob as a file
+            saveAs(blob, 'generated_content.doc');
         });
     });
-
-    window.addExampleEditor = function() {
-        const container = document.getElementById('examples-container');
-        const exampleEditor = document.createElement('div');
-        exampleEditor.className = 'form-group mt-3';
-        exampleEditor.innerHTML = `
-            <div class="snow-editor" style="height: 200px;"></div>
-            <input type="hidden" name="examples[]">
-            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">Remove</button>
-        `;
-        container.appendChild(exampleEditor);
-
-        // Initialize Quill editor with default configuration
-        const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'font': [] }, { 'size': [] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'direction': 'rtl' }, { 'align': [] }],
-                    ['link', 'image', 'video'],
-                    ['clean']
-                ]
-            }
-        });
-
-        // Sync Quill content to the hidden input field
-        quill.on('text-change', function() {
-            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
-            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
-        });
-    };
-
-    window.removeExampleEditor = function(button) {
-        button.parentElement.remove();
-    };
-});
-
-</script>
+    </script>
+    
 
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script src="{{ URL::asset('build/libs/quill/quill.min.js') }}"></script>
