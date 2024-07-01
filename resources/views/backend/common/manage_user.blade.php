@@ -9,10 +9,10 @@
                 <th scope="col">Sl.</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
-                <th scope="col">IP Address</th>
                 <th scope="col">Email Verified</th>
                 <th scope="col">Role</th>
-                <th scope="col">Status</th>
+                <th scope="col">Credits Used</th>
+                <th scope="col">Tokens Used</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -32,7 +32,7 @@
                     </div>
                 </td>
 
-                <td>{{$item->ipaddress}}</td>
+                
                             <td>
                                 @if ($item->email_verified_at)
                                 {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
@@ -55,8 +55,11 @@
                             @else
                             <td>{{ $item->role }}</td>
                             @endif
+
+                            <td>{{ $item->credits_used }}</td>
+                            <td>{{ $item->tokens_used }}</td>
              
-                <td>{{ $item->status }}</td>
+              
 
                 @if ($item->status == 'active')
                     <td>

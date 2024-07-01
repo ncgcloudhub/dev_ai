@@ -135,9 +135,9 @@ class AIChatController extends Controller
 
 
         // Define the messages array with the dynamic user input
-        $messages = [
-            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-        ];
+        // $messages = [
+        //     ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+        // ];
 
         // Add file content if it exists
         if (!empty($context['file_content'])) {

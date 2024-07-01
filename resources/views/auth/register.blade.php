@@ -42,112 +42,82 @@
                                         <h5 class="text-primary">Create New Account</h5>
                                         <p class="text-muted">Get started with Clever Creator</p>
                                     </div>
+                                    <div class="mt-2">
+                                        <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light w-100">
+                                            <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
+                                        </a>
+                                    </div>
+                                  
+                                    <div class="mt-2">
+                                        <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
+                                            <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
+                                        </a>
+                                    </div>
                                     <div class="p-2 mt-4">
-                                        <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}">
+                                        <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}" id="registrationForm">
                                             @csrf
-
-                                            <div class="mb-3">
-                                                <label for="useremail" class="form-label">Name <span class="text-danger">*</span></label>
-                                                <input type="text" name="name"  class="form-control" id="name" placeholder="Enter your name" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter name
-                                                </div>
-                                             
-                                            </div>
-
+                                        
                                             <div class="mb-3">
                                                 <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
-                                                <input type="email" name="email"  class="form-control" id="useremail" placeholder="Enter email address" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter emails
-                                                </div>
+                                                <input type="email" name="email" class="form-control" id="useremail" placeholder="Enter email address" required>
+                                                <div class="invalid-feedback">Please enter an email</div>
                                                 @if($errors->has('email'))
-                                                <!-- Email Error Alert -->
                                                     <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
                                                         <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('email') }}
                                                     </div>
                                                 @endif
                                             </div>
-
-                                            <div class="mb-3">
-                                                <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                                <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
-                                                <div class="invalid-feedback">
-                                                    Please enter username
+                                        
+                                            <div id="otherFields" style="display: none;">
+                                                <div class="mb-3">
+                                                    <label for="username" class="form-label">Name <span class="text-danger">*</span></label>
+                                                    <input type="text" name="name" class="form-control" id="username" placeholder="Enter your name" required>
+                                                    <div class="invalid-feedback">Please enter your name</div>
                                                 </div>
-                                            </div>
-                                            @if($errors->has('username'))
-                                            <!-- Email Error Alert -->
-                                                <div class="alert alert-danger alert-dismissible alert-label-icon label-arrow fade show" role="alert">
-                                                    <i class="ri-error-warning-line label-icon"></i><strong>Error</strong> -{{ $errors->first('username') }}
+                                        
+                                                <div class="mb-3">
+                                                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                                    <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
+                                                    <div class="invalid-feedback">Please enter username</div>
                                                 </div>
-                                          
-                                            @endif
-                                            <input type="hidden" name="ref" value="{{ request()->query('ref') }}">
-
-                                            <div class="mb-3">
-                                                <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>
-                                                <div class="position-relative auth-pass-inputgroup">
-                                                    <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                                    <div class="invalid-feedback">
-                                                        Please enter password
+                                        
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>
+                                                    <div class="position-relative auth-pass-inputgroup">
+                                                        <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                                        <div class="invalid-feedback">Please enter password</div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="mb-3">
-                                                <label class="form-label" for="password-input-confirm">Confirm Password<span class="text-danger">*</span></label>
-                                                <div class="position-relative auth-pass-inputgroup">
-                                                    <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input-confirm" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-                                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon-confirm"><i class="ri-eye-fill align-middle"></i></button>
-                                                    <div class="invalid-feedback">
-                                                        Please enter password
+                                        
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="password-input-confirm">Confirm Password<span class="text-danger">*</span></label>
+                                                    <div class="position-relative auth-pass-inputgroup">
+                                                        <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input-confirm" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon-confirm"><i class="ri-eye-fill align-middle"></i></button>
+                                                        <div class="invalid-feedback">Please enter password</div>
                                                     </div>
                                                 </div>
+                                        
+                                                <input type="hidden" name="ref" value="{{ request()->query('ref') }}">
                                             </div>
-                                            
-                                            <div class="mb-4">
-                                                <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the Velzon <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
-                                            </div>
-
-                                            <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                                <h5 class="fs-13">Password must contain:</h5>
-                                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
-                                                <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
-                                            </div>
-
-                                            <div class="mt-4">
-                                                <button class="btn btn-success w-100" type="submit">Sign Up</button>
-                                            </div>
-
-                                            <div class="mt-4 text-center">
-                                                <div class="signin-other-title">
-                                                    <h5 class="fs-13 mb-4 title text-muted">Create account with</h5>
-                                                </div>
-
-                                                <div>
-                                                    {{-- <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button> --}}
-                                                    <div class="mt-2">
-                                                        <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light w-100">
-                                                            <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
-                                                        </a>
-                                                    </div>
-                                                    <div class="mt-4 text-center">
-                                                        <h2 class="mb-3">OR</h2>
-                                                        <hr class="mx-auto" style="width: 50px; border-top: 2px solid #888;">
-                                                    </div>
-                                                    <div class="mt-2">
-                                                        <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
-                                                            <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
-                                                        </a>
-                                                    </div>
-                                                    {{-- <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button> --}}
-                                                </div>
-                                            </div>
+                                        
+                                            <button type="submit" class="btn btn-success w-100">Sign Up</button>
                                         </form>
+                                        
+                                        <script>
+                                            document.getElementById('useremail').addEventListener('input', function() {
+                                                var email = this.value.trim();
+                                                var otherFields = document.getElementById('otherFields');
+                                        
+                                                if (email !== '') {
+                                                    otherFields.style.display = 'block';
+                                                } else {
+                                                    otherFields.style.display = 'none';
+                                                }
+                                            });
+                                        </script>
+                                        
 
                                     </div>
                                 </div>

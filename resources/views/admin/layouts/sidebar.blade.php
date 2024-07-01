@@ -47,6 +47,13 @@
                 </li>
 
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('calender')}}">
+                        <i class=" las la-atom"></i> <span >Calender</span>
+                    </a>
+                </li>
+
+
              
 
 

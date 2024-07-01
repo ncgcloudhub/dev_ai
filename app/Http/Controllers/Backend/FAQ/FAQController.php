@@ -37,4 +37,11 @@ class FAQController extends Controller
 
         return redirect()->route('manage.faq');
     }
+
+
+    // Calender
+    public function calender()
+    {
+        return view('admin.calender.apps-calendar');
+    }
 }
