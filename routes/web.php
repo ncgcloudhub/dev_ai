@@ -28,6 +28,7 @@ use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\DynamicPageController;
+use App\Http\Controllers\MainChat;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
 use App\Models\SeoSetting;
@@ -312,6 +313,19 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
+
+    // Main Chat
+        // Custom Templates
+        Route::prefix('main')->group(function () {
+
+            Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
+            
+            // NEW SESSION
+            Route::post('/new-session', [MainChat::class, 'MainNewSession']);
+
+            Route::post('/chat/send', [MainChat::class, 'send']);
+        });
+
 
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
