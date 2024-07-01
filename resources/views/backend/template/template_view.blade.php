@@ -4,6 +4,7 @@
 <link href="{{ URL::asset('build/libs/quill/quill.core.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.bubble.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.snow.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
 @endsection
 @section('content')
@@ -211,16 +212,19 @@
 
                 <!-- Add the Download Content button -->
                 <button id="downloadButton" class="btn btn-success">Download Content</button>
-                <button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
-               
+                <button id="copyButton" class="btn btn-primary">Copy Content</button>
+                
                 <div class="row mt-2">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title mb-0">Generated Content</h4>
+                                <button class="btn btn-primary">
+                                    Tokens Left: <span id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
+                                </button>
                             </div><!-- end card header -->
                             <div class="card-body">
-                                <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
+                                <textarea id="myeditorinstance" readonly></textarea>
                                 <div class="mt-2">
                                     <p><strong>Statistics:</strong></p>
                                     <ul>
@@ -369,69 +373,59 @@
     });
     </script>
 
-<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Include SimpleMDE JS -->
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<!-- Include FileSaver.js for saving files -->
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
 <script>
-    tinymce.init({
-        selector: 'textarea#myeditorinstance',
-        plugins: 'code table lists',
-        toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
-    });
-
-    $(document).ready(function () {
-    $('#generateForm').submit(function (event) {
-        event.preventDefault();
-   
-        // Show loader
-        $('#loader').removeClass('d-none');
-
-        $.ajax({
-            type: 'POST',
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            success: function (response) {
-                if (response == 0) {
-                    // Display alert for error message
-                    alert('Please Upgrade Plan');
-                    return;
-                }
-
-                //Generated content displays in a nice Format
-                let formattedContent = '';
-                let lines = response.content.split('\n');
-
-                if (lines.some(line => line.trim().startsWith('*'))) {
-                    formattedContent += '<ul>';
-                    lines.forEach(line => {
-                        if (line.trim().startsWith('*')) {
-                            formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                        } else {
-                            formattedContent += '<p>' + line.trim() + '</p>';
-                        }
-                    });
-                    formattedContent += '</ul>';
-                } else {
-                    formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
-                }
-
-                tinymce.get('myeditorinstance').setContent(formattedContent);
-
-                // Update statistics
-                $('#numTokens').text(response.completionTokens);
-                $('#numWords').text(response.num_words);
-                $('#numCharacters').text(response.num_characters);
-
-                // Hide loader
-                $('#loader').addClass('d-none');
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize SimpleMDE
+        var simplemde = new SimpleMDE({ 
+            element: document.getElementById("myeditorinstance"),
+            spellChecker: false,
+            toolbar: false,
+            status: false,
+            readOnly: true
         });
-    });
+
+        $('#generateForm').submit(function (event) {
+            event.preventDefault();
+       
+            // Show loader
+            $('#loader').removeClass('d-none');
+    
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response == 0) {
+                        // Display alert for error message
+                        alert('Please Upgrade Plan');
+                        return;
+                    }
+
+                    // Update editor content
+                    simplemde.value(response.content);
+
+                    // Update statistics
+                    $('#numTokens').text(response.completionTokens);
+                    $('#numWords').text(response.num_words);
+                    $('#numCharacters').text(response.num_characters);
+
+                    // Hide loader
+                    $('#loader').addClass('d-none');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
 
         // Copy button click event
         $('#copyButton').click(function () {
-            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+            const editorContent = simplemde.value();
             const textArea = document.createElement('textarea');
             textArea.value = editorContent;
             document.body.appendChild(textArea);
@@ -441,23 +435,16 @@
             alert('Content copied to clipboard!');
         });
 
-         // Download button click event
-         $('#downloadButton').click(function () {
-            const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
+        // Download button click event using FileSaver.js
+        $('#downloadButton').click(function () {
+            const editorContent = simplemde.value();
 
+            // Create a new Blob with the content
             const blob = new Blob([editorContent], { type: 'application/msword' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'generated_content.docx';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 0);
-        });
 
+            // Use FileSaver.js to save the blob as a file
+            saveAs(blob, 'generated_content.doc');
+        });
     });
 </script>
 
