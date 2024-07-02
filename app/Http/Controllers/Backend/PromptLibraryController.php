@@ -254,7 +254,7 @@ class PromptLibraryController extends Controller
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
         $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
         $categories = PromptLibraryCategory::latest()->get();
-        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category','categories'));
+        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories'));
     }
 
     public function PromptView($slug)
@@ -316,6 +316,22 @@ class PromptLibraryController extends Controller
         return redirect()->back()->with('success', 'Examples saved successfully!');
     }
 
+    // Update Prompt Example
+    public function updatePromptExample(Request $request, PromptExample $promptExample)
+    {
+        $request->validate([
+            'example' => 'required|string',
+        ]);
+
+        $promptExample->update([
+            'example' => $request->example,
+        ]);
+
+        return redirect()->back()->with('success', 'Example updated successfully!');
+    }
+
+
+
     // ASK AI PROMPT
     public function AskAiPromptLibrary(Request $request)
     {
@@ -352,17 +368,17 @@ class PromptLibraryController extends Controller
     public function filterPrompts(Request $request)
     {
         $query = PromptLibrary::query();
-    
+
         if ($request->has('category_id')) {
             $query->where('category_id', $request->category_id);
         }
-    
+
         if ($request->has('subcategory_id')) {
             $query->where('sub_category_id', $request->subcategory_id);
         }
-    
+
         $prompt_library = $query->with(['category', 'subcategory'])->get();
-    
+
         return response()->json($prompt_library);
     }
 
@@ -383,7 +399,6 @@ class PromptLibraryController extends Controller
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
         $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
         $categories = PromptLibraryCategory::latest()->get();
-        return view('user.prompt_library.user_prompt_library', compact('prompt_library', 'prompt_library_category','categories'));
+        return view('user.prompt_library.user_prompt_library', compact('prompt_library', 'prompt_library_category', 'categories'));
     }
-    
 }

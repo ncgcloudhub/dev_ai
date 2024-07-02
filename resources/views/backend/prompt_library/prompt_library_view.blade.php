@@ -90,33 +90,65 @@
         </div>
 
        
-            <!-- Display Existing Examples -->
-            <div class="card mt-3">
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="col-md-12">
-                            <label for="existing-examples" class="form-label">Existing Examples</label>
-                            <div id="existing-examples-container">
-                                @foreach($prompt_library_examples as $item)
-                                <div class="example-item mb-3">
-                                    <div class="snow-editor" style="height: 200px;" id="exampleContent{{ $item->id }}">
-                                        {!! $item->example !!}
-                                    </div>
-                                    <div class="mt-2">
-                                        <!-- Delete Button -->
-                                        <form method="POST" action="{{ route('prompt.example.delete', $item->id) }}" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
-                                        </form>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
+          <!-- Display Existing Examples -->
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="live-preview">
+            <div class="col-md-12">
+                <label for="existing-examples" class="form-label">Existing Examples</label>
+                <div id="existing-examples-container">
+                    @foreach($prompt_library_examples as $item)
+                    <div class="example-item mb-3">
+                        <div class="snow-editor" style="height: 200px;" id="exampleContent{{ $item->id }}">
+                            {!! $item->example !!}
+                        </div>
+                        <div class="mt-2">
+                            <!-- Edit Button -->
+                            <button type="button" class="btn btn-primary btn-icon waves-effect waves-light" onclick="editExample({{ $item->id }})"><i class="ri-edit-line"></i></button>
+                            <!-- Delete Button -->
+                            <form method="POST" action="{{ route('prompt.example.delete', $item->id) }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
+                            </form>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+   <!-- Edit Example Modal -->
+<div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editExampleForm" method="POST" action="">
+                @csrf
+                <input type="hidden" name="_method" value="PUT">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editExampleModalLabel">Edit Example</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="example-editor" class="form-label">Example Content</label>
+                        <div id="example-editor" style="height: 200px;"></div>
+                        <input type="hidden" name="example" id="example-content">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 
             
@@ -347,6 +379,56 @@ document.addEventListener("DOMContentLoaded", function() {
     quill{{ $item->id }}.clipboard.dangerouslyPasteHTML(content);
     @endforeach
 });
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    @foreach($prompt_library_examples as $item)
+    var quill{{ $item->id }} = new Quill('#exampleContent{{ $item->id }}', {
+        readOnly: true,
+        theme: 'snow',
+        modules: {
+            toolbar: false // Disable toolbar for read-only mode
+        }
+    });
+
+    // Set the editor content
+    var content = {!! json_encode($item->example) !!};
+    quill{{ $item->id }}.clipboard.dangerouslyPasteHTML(content);
+    @endforeach
+});
+
+function editExample(exampleId) {
+    var quill = new Quill('#example-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'font': [] }, { 'size': [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }, { 'align': [] }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+    var exampleContent = document.getElementById(`exampleContent${exampleId}`).innerHTML;
+    quill.clipboard.dangerouslyPasteHTML(exampleContent);
+
+    var form = document.getElementById('editExampleForm');
+    form.action = `/prompt-examples/${exampleId}`;
+
+    var modal = new bootstrap.Modal(document.getElementById('editExampleModal'));
+    modal.show();
+
+    quill.on('text-change', function() {
+        document.getElementById('example-content').value = quill.root.innerHTML;
+    });
+}
 
 </script>
     
