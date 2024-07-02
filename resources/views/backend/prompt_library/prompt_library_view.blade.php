@@ -203,81 +203,71 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize SimpleMDE
-        var simplemde = new SimpleMDE({ 
-            element: document.getElementById("myeditorinstance"),
-            spellChecker: false,
-            toolbar: false,
-            status: false,
-            readOnly: true
-        });
+    var simplemde = new SimpleMDE({ 
+        element: document.getElementById("myeditorinstance"),
+        spellChecker: false,
+        toolbar: false,
+        status: false,
+        readOnly: true
+    });
 
-        // Function to auto-expand textareas
     function autoExpand(textarea) {
         textarea.style.height = 'auto';
         textarea.style.height = (textarea.scrollHeight) + 'px';
     }
 
-    // Apply auto-expand on input for all textareas with class 'auto-expand'
     document.querySelectorAll('.auto-expand').forEach(function(textarea) {
         textarea.addEventListener('input', function() {
             autoExpand(textarea);
         });
-
-        // Initial expand to adjust height on load
         autoExpand(textarea);
-    })
-    
-        $('#ask').click(function() {
-            var message = $('#ask_ai').val();
-            
-            // Show loader
-            $('#loader').removeClass('d-none');
-    
-            $.ajax({
-                url: "{{ route('ask.ai.prompt') }}",
-                type: "POST",
-                data: {
-                    message: message,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    // Update SimpleMDE content with the generated response
-                    simplemde.value(response.message);
-    
-                    // Hide loader
-                    $('#loader').addClass('d-none');
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    
-        // Copy button click event
-        $('#copyButton').click(function () {
-            const editorContent = simplemde.value();
-            const textArea = document.createElement('textarea');
-            textArea.value = editorContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
-        });
-    
-        // Download button click event using FileSaver.js
-        $('#downloadButton').click(function () {
-            const editorContent = simplemde.value();
-    
-            // Create a new Blob with the content
-            const blob = new Blob([editorContent], { type: 'application/msword' });
-    
-            // Use FileSaver.js to save the blob as a file
-            saveAs(blob, 'generated_content.doc');
+    });
+
+    $('#ask').click(function() {
+        var message = $('#ask_ai').val();
+        $('#loader').removeClass('d-none');
+
+        $.ajax({
+            url: "{{ route('ask.ai.prompt') }}",
+            type: "POST",
+            data: {
+                message: message,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                // Remove markdown syntax characters from the response
+                var strippedContent = response.message
+                    .replace(/[#*]+/g, '')  // Remove # and * characters
+                    .replace(/(!\[.*?\]\(.*?\))/g, ''); // Remove markdown images
+
+                simplemde.value(strippedContent);
+                $('#loader').addClass('d-none');
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+            }
         });
     });
-    </script>
+
+    $('#copyButton').click(function () {
+        const editorContent = simplemde.value();
+        const textArea = document.createElement('textarea');
+        textArea.value = editorContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Content copied to clipboard!');
+    });
+
+    $('#downloadButton').click(function () {
+        const editorContent = simplemde.value();
+        const blob = new Blob([editorContent], { type: 'application/msword' });
+        saveAs(blob, 'generated_content.doc');
+    });
+});
+
+</script>
     
 
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
