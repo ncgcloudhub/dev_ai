@@ -166,10 +166,14 @@
                             <div id="examples-container">
                                 <!-- Example editor boxes will be added here -->
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">Add Example</button>
+                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">
+                                <i class="la la-plus"></i>
+                              </button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">Save Examples</button>
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="la la-save"></i>
+                      </button>
                 </form>
             </div>
         </div>
@@ -211,10 +215,10 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 text-end">
-                            <button id="copyButton" class="btn btn-secondary me-2">
+                            <button id="copyButton" class="btn btn-primary me-2">
                                 <i class="las la-copy"></i>
                             </button>
-                            <button id="downloadButton" class="btn btn-secondary">
+                            <button id="downloadButton" class="btn btn-success">
                                 <i class="las la-download"></i>
                             </button>
                         </div>
@@ -310,7 +314,10 @@
         exampleEditor.innerHTML = `
             <div class="snow-editor" style="height: 200px;"></div>
             <input type="hidden" name="examples[]">
-            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">Remove</button>
+            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
+                <i class="la la-minus"></i>
+            </button>
+
         `;
         container.appendChild(exampleEditor);
 
