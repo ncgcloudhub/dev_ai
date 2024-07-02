@@ -47,7 +47,6 @@
                     </div>
 
                     <div class="chat-message-list">
-
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
                             <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->session_token }}" class="{{ $loop->first ? 'active' : '' }}">                    
@@ -213,7 +212,7 @@
         </script>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const messageInput = document.getElementById('user_message_input');
@@ -255,6 +254,19 @@
     // Call checkUserSession on page load
     checkUserSession();
 
+    // Function to set active session
+    function setActiveSession(sessionId) {
+        const previousActive = sessionList.querySelector('li.active');
+        if (previousActive) {
+            previousActive.classList.remove('active');
+        }
+
+        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+        if (newActive) {
+            newActive.classList.add('active');
+        }
+    }
+
     // NEW SESSION
     newSessionBtn.addEventListener('click', function () {
         axios.post('/main/new-session')
@@ -281,6 +293,10 @@
                     fileInput.value = '';
                     fileNameDisplay.textContent = '';
                     scrollToBottom();
+
+                    // Set the new session as active
+                    setActiveSession(newSessionId);
+                    isFirstMessage = true; // Reset flag for new session
                 }
             })
             .catch(error => {
@@ -393,6 +409,7 @@
             chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
             scrollToBottom();
         })
+        
         .finally(() => {
             sendMessageBtn.disabled = false;
             sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
@@ -410,8 +427,6 @@
 
 
 </script>
-
-
 
 <script>
         function formatContent(content) {
