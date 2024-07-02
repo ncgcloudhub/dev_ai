@@ -47,21 +47,23 @@
                     </div>
 
                     <div class="chat-message-list">
-
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
-                            <li id="contact-id-1" data-name="direct-message" class="">                    
-                                <a href="javascript: void(0);"> 
-                                    <div class="d-flex align-items-center">
-        
-                                        <div class="flex-grow-1 overflow-hidden">
-                                            <p class="text-truncate mb-0">{{$item->session_token}}</p>
-                                        </div>               
-                                    </div>  
-                                </a>     
-                            </li>
+                                <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">                    
+                                    <a href="javascript: void(0);"> 
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-truncate mb-0">{{ $item->title }}</p>
+                                            </div>               
+                                        </div>  
+                                    </a>     
+                                </li>
                             @endforeach
                         </ul>
+                        
+                        
+                        
+                        
                     </div>
 
                 </div>
@@ -210,83 +212,83 @@
         </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const messageInput = document.getElementById('user_message_input');
+    const sendMessageBtn = document.getElementById('main_send_message_btn');
+    const fileInput = document.getElementById('file_input');
+    const chatConversation = document.getElementById('users-conversation');
+    const chatContainer = document.getElementById('chat-conversation');
+    const fileNameDisplay = document.getElementById('file_name_display');
+    const newSessionBtn = document.getElementById('main_new_session_btn');
+    const imageDisplay = document.getElementById('image_display');
+    let pastedImageFile = null;
+    const sessionList = document.getElementById('session-list');
+    let isFirstMessage = true;
 
-        const messageInput = document.getElementById('user_message_input');
-        const sendMessageBtn = document.getElementById('main_send_message_btn');
-        const fileInput = document.getElementById('file_input');
-        const chatConversation = document.getElementById('users-conversation');
-        const chatContainer = document.getElementById('chat-conversation');
-        const fileNameDisplay = document.getElementById('file_name_display');
-        const newSessionBtn = document.getElementById('main_new_session_btn');
-        const imageDisplay = document.getElementById('image_display');
-        let pastedImageFile = null;
-        
-        const sessionList = document.getElementById('session-list');
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
+    function summarizeMessage(message) {
+        return message.length > 20 ? message.substring(0, 20) + '...' : message;
+    }
 
-function scrollToBottom() {
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-}
+    const checkUserSession = () => {
+        axios.get('/chat/check-session')
+            .then(response => {
+                if (!response.data.hasSession) {
+                    newSessionBtn.click();
+                }
+            })
+            .catch(error => {
+                console.error('Error checking user session:', error);
+            });
+    };
 
-// CHECK SESSION
-const checkUserSession = () => {
-// Make an HTTP GET request to your Laravel backend
-axios.get('/chat/check-session')
-    .then(response => {
-        // Handle the response
-        if (response.data.hasSession) {
-          
-        } else {
-            newSessionBtn.click();
-          
+    checkUserSession();
+
+    function setActiveSession(sessionId) {
+        const previousActive = sessionList.querySelector('li.active');
+        if (previousActive) {
+            previousActive.classList.remove('active');
         }
-    })
-    .catch(error => {
-        // Handle any errors
-        console.error('Error checking user session:', error);
-    });
-};
 
+        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+        if (newActive) {
+            newActive.classList.add('active');
+        }
+    }
 
-
-    // NEW SESSION
     newSessionBtn.addEventListener('click', function () {
         axios.post('/main/new-session')
             .then(response => {
                 if (response.data.success) {
-                    
                     const newSessionId = response.data.session_id;
-                    console.log('newSessionId', newSessionId);
-                    
-                     // Create new session list item
-                     const li = document.createElement('li');
+                    const li = document.createElement('li');
                     li.id = `contact-id-${newSessionId}`;
                     li.dataset.name = "direct-message";
+                    li.dataset.sessionId = newSessionId;
+                    li.classList.add('active');
                     li.innerHTML = `
                         <a href="javascript: void(0);"> 
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-truncate mb-0">${newSessionId}</p>
+                                    <p class="text-truncate mb-0">New Chat</p>
                                 </div>               
                             </div>  
                         </a>
                     `;
                     sessionList.appendChild(li);
-
-
-                   // Clear the chat UI
-                   chatConversation.innerHTML = '';
-                    // Clear input fields
+                    chatConversation.innerHTML = '';
                     messageInput.value = '';
                     fileInput.value = '';
                     fileNameDisplay.textContent = '';
-                    // Scroll to bottom
                     scrollToBottom();
 
-                   
+                    setActiveSession(newSessionId);
+                    isFirstMessage = true;
                 }
             })
             .catch(error => {
@@ -296,7 +298,6 @@ axios.get('/chat/check-session')
 
     function sendMessage() {
         const message = messageInput.value.trim();
-    
         const file = fileInput.files[0];
 
         if (!message && !file && !pastedImageFile) return;
@@ -304,11 +305,16 @@ axios.get('/chat/check-session')
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const formData = new FormData();
         formData.append('message', message);
-      
+
         if (file) {
             formData.append('file', file);
         } else if (pastedImageFile) {
-            formData.append('file', pastedImageFile, 'pasted_image.png'); // Name the file appropriately
+            formData.append('file', pastedImageFile, 'pasted_image.png');
+        }
+
+        if (isFirstMessage) {
+            const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+            formData.append('title', chatTitle);
         }
 
         sendMessageBtn.disabled = true;
@@ -368,11 +374,20 @@ axios.get('/chat/check-session')
             chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
             scrollToBottom();
 
+            if (isFirstMessage) {
+                const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+                const activeSession = sessionList.querySelector('li.active');
+                if (activeSession) {
+                    activeSession.querySelector('p').textContent = chatTitle;
+                }
+                isFirstMessage = false;
+            }
+
             messageInput.value = '';
             fileInput.value = '';
             fileNameDisplay.textContent = '';
-            imageDisplay.innerHTML = ''; // Clear pasted image display
-            pastedImageFile = null; // Reset pasted image file
+            imageDisplay.innerHTML = '';
+            pastedImageFile = null;
         })
         .catch(error => {
             console.error(error);
@@ -403,9 +418,8 @@ axios.get('/chat/check-session')
             sendMessage();
         }
     });
-
-
 });
+
 
 </script>
 
@@ -436,6 +450,89 @@ axios.get('/chat/check-session')
         return formattedContent;
     }
 </script>
+
+{{-- GET MESSAGES FROM SESSION --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sessionList = document.getElementById('session-list');
+        const chatConversation = document.getElementById('users-conversation');
+
+        sessionList.addEventListener('click', function(event) {
+            const target = event.target.closest('li');
+            if (!target) return;
+
+            const sessionId = target.dataset.sessionId;
+            setActiveSession(sessionId);
+
+            axios.get(`/chat/sessions/${sessionId}/messages`)
+                .then(response => {
+                    const messages = response.data;
+
+                    // Clear current chat
+                    chatConversation.innerHTML = '';
+
+                    // Display fetched messages
+                    messages.forEach(message => {
+                        let content = '';
+                        let role = '';
+
+                        if (message.message) {
+                            content = message.message;
+                            role = 'user';
+                        } else if (message.reply) {
+                            content = message.reply;
+                            role = 'assistant'; // Adjust this to match your classes for assistant messages
+                        }
+
+                        const messageHTML = `
+                            <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                                <div class="conversation-list">
+                                    <div class="user-chat-content">
+                                        <div class="ctext-wrap">
+                                            <div class="ctext-wrap-content">
+                                                <p class="mb-0 ctext-content">${content}</p>
+                                            </div>
+                                        </div>
+                                        <div class="conversation-name">
+                                            <small class="text-muted time">${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        `;
+                        chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+                    });
+
+                    // Scroll to bottom of the chat
+                    chatConversation.scrollTop = chatConversation.scrollHeight;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+
+        // Function to set the active session
+        function setActiveSession(sessionId) {
+            const previousActive = sessionList.querySelector('li.active');
+            if (previousActive) {
+                previousActive.classList.remove('active');
+            }
+
+            const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+            if (newActive) {
+                newActive.classList.add('active');
+            }
+        }
+
+        // Optionally, trigger a click event on the first session to load messages on page load
+        const firstSession = sessionList.querySelector('li');
+        if (firstSession) {
+            firstSession.click();
+        }
+    });
+</script>
+
+
 
 
 
