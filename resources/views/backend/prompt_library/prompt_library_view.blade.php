@@ -179,9 +179,14 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 text-end">
-                            <button id="copyButton" class="btn btn-secondary me-2">Copy</button>
-                            <button id="downloadButton" class="btn btn-secondary">Download</button>
+                            <button id="copyButton" class="btn btn-secondary me-2">
+                                <i class="las la-copy"></i>
+                            </button>
+                            <button id="downloadButton" class="btn btn-secondary">
+                                <i class="las la-download"></i>
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
             </div> 
@@ -203,6 +208,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+
+        // Function to copy text to clipboard
+    window.copyText = function(element) {
+        const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
+        const tempInput = document.createElement("textarea");
+        tempInput.style = "position: absolute; left: -9999px";
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Text copied to clipboard");
+    };
+
     var simplemde = new SimpleMDE({ 
         element: document.getElementById("myeditorinstance"),
         spellChecker: false,
@@ -248,6 +267,46 @@
             }
         });
     });
+
+    window.addExampleEditor = function() {
+        const container = document.getElementById('examples-container');
+        const exampleEditor = document.createElement('div');
+        exampleEditor.className = 'form-group mt-3';
+        exampleEditor.innerHTML = `
+            <div class="snow-editor" style="height: 200px;"></div>
+            <input type="hidden" name="examples[]">
+            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">Remove</button>
+        `;
+        container.appendChild(exampleEditor);
+
+         // Initialize Quill editor with default configuration
+         const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }, { 'size': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+        // Sync Quill content to the hidden input field
+        quill.on('text-change', function() {
+            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
+            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+        });
+
+        window.removeExampleEditor = function(button) {
+        button.parentElement.remove();
+    };
+    };
+    
 
     $('#copyButton').click(function () {
         const editorContent = simplemde.value();
