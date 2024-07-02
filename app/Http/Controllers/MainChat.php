@@ -60,186 +60,162 @@ class MainChat extends Controller
 
 
       // Dashboard Chat Admin
-    public function send(Request $request)
-    {
-        $userMessage = $request->input('message');
-        $file = $request->file('file');
-        Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
-        // If no model is selected, use the default model from settings
+      public function send(Request $request)
+      {
+          $userMessage = $request->input('message');
+          $file = $request->file('file');
+          $title = $request->input('title');
+          Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
       
-            $setting = AISettings::find(1);
-            $openaiModel = $setting->openaimodel;
-
-        // Initialize or retrieve uploaded files from session
-        $uploadedFiles = session('uploaded_files', []);
-        Log::info('Uploaded files: ', $uploadedFiles);
-
-        // Initialize or retrieve pasted images from session
-        $pastedImages = session('pasted_images', []);
-        Log::info('Pasted images: ', $pastedImages);
-
-        // Initialize or retrieve conversation history from session
-        $conversationHistory = session('conversation_history', []);
-        Log::info('Conversation history: ', $conversationHistory);
-
-        // Initialize or retrieve context from session
-        $context = session('context', []);
-        Log::info('Context: ', $context);
-
-        // Validate and handle the uploaded file
-        if ($file) {
-            $request->validate([
-                'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:20480', // Adjust the allowed file types and size as needed
-            ]);
-
-            // Store the file
-            $filePath = $file->store('uploads');
-            $extension = $file->getClientOriginalExtension();
-            Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
-
-            // Read file content
-            $fileContent = '';
-            if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
-                $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
-            } elseif (in_array($extension, ['jpg', 'jpeg', 'png'])) {
-                $base64Image = $this->encodeImage(storage_path('app/' . $filePath));
-                $response = $this->callOpenAIImageAPI($base64Image);
-                $fileContent = $response['choices'][0]['message']['content']; // Update fileContent with image analysis result
-            }
-            Log::info('File content: ', ['content' => $fileContent]);
-
-            // Add or update uploaded file content in the session
-            $uploadedFiles[$filePath] = $fileContent;
-            session(['uploaded_files' => $uploadedFiles]);
-
-            // Update context with the latest file content
-            $context['file_content'] = $fileContent;
-            session(['context' => $context]);
-            Log::info('Updated context with file: ', $context);
-        }
-
-        // Handle pasted images (currently only handling PNG for example)
-        if ($file && $file->getMimeType() === 'image/png') {
-            $filePath = $file->store('pasted', 'public');
-            $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
-            $response = $this->callOpenAIImageAPI($base64Image);
-            $imageContent = $response['choices'][0]['message']['content'];
-
-            $pastedImages[$filePath] = $imageContent;
-            session(['pasted_images' => $pastedImages]);
-
-            // Update context with the latest pasted image content
-            $context['pasted_image_content'] = $imageContent;
-            session(['context' => $context]);
-        }
-
-        // Add the user message to the conversation history
-        if (!empty($userMessage)) {
-            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
-            session(['conversation_history' => $conversationHistory]);
-
-            // Update context with the latest message
-            $context['latest_message'] = $userMessage;
-            session(['context' => $context]);
-            Log::info('Updated context with message: ', $context);
-            
-            Log::info('139 Session ID: ', ['session_id' => session('session_id')]);
-
-            $sessionId = session('session_id');
-
-            // Save user message to the database
-            Message::create([
-                'session_id' => $sessionId,
-                'user_id' => Auth::id(),
-                'message' => $userMessage,
-                'reply' => null,
-            ]);
-        }
-
-
-        // Define the messages array with the dynamic user input
-        $messages = [
-            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-        ];
-
-        // Add file content if it exists
-        if (!empty($context['file_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['file_content']];
-        }
-
-        // Add pasted image content if it exists
-        if (!empty($context['pasted_image_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
-        }
-
-
-        // Add conversation history to messages array
-        foreach ($conversationHistory as $message) {
-            if (!is_null($message['content'])) {
-                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
-            }
-        }
-
-        // $messages = [];
-
-
-        // // Prepare messages array with the latest user message and conversation history
-        // $historyToSend = array_slice($conversationHistory, -10); // Send the last 10 messages to limit token usage
-        // $messages = array_merge($messages, $historyToSend);
-
-        // Ensure UTF-8 encoding for all message contents
-        array_walk_recursive($messages, function (&$item, $key) {
-            if (is_string($item)) {
-                $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
-            }
-        });
-
-        Log::info('Messages to send to API: ', $messages);
-
-        // Make API call
-        $client = new Client();
-        $response = $client->post('https://api.openai.com/v1/chat/completions', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-                'Content-Type' => 'application/json',
-            ],
-            'json' => [
-                'model' => $openaiModel, // Use the appropriate model name
-                'messages' => $messages,
-            ],
-        ]);
-
-        $user = Auth::user();
-
-        Log::info('OpenAI API Response: ' . $response->getBody()->getContents());
-
-        $data = json_decode($response->getBody(), true);
-        $messageContent = $data['choices'][0]['message']['content'];
-        $totalTokens = $data['usage']['total_tokens'];
-
-         // Words Increment
-         User::where('id', $user->id)->update([
-            'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
-            'tokens_left' => DB::raw('tokens_left - ' . $totalTokens),
-        ]);
-
-        Log::info('AI Response: ', ['content' => $messageContent]);
-
-        $sessionId = session('session_id');
-
-        // Save the AI's reply to the database
-        Message::create([
-            'session_id' => $sessionId,
-            'user_id' => Auth::id(),
-            'message' => null,
-            'reply' => $messageContent,
-        ]);
-
-        // Return the response
-        return response()->json([
-            'message' => $messageContent,
-        ]);
-    }
+          $setting = AISettings::find(1);
+          $openaiModel = $setting->openaimodel;
+      
+          $uploadedFiles = session('uploaded_files', []);
+          Log::info('Uploaded files: ', $uploadedFiles);
+      
+          $pastedImages = session('pasted_images', []);
+          Log::info('Pasted images: ', $pastedImages);
+      
+          $conversationHistory = session('conversation_history', []);
+          Log::info('Conversation history: ', $conversationHistory);
+      
+          $context = session('context', []);
+          Log::info('Context: ', $context);
+      
+          if ($file) {
+              $request->validate([
+                  'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:20480',
+              ]);
+      
+              $filePath = $file->store('uploads');
+              $extension = $file->getClientOriginalExtension();
+              Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
+      
+              $fileContent = '';
+              if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
+                  $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
+              } elseif (in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                  $base64Image = $this->encodeImage(storage_path('app/' . $filePath));
+                  $response = $this->callOpenAIImageAPI($base64Image);
+                  $fileContent = $response['choices'][0]['message']['content'];
+              }
+              Log::info('File content: ', ['content' => $fileContent]);
+      
+              $uploadedFiles[$filePath] = $fileContent;
+              session(['uploaded_files' => $uploadedFiles]);
+      
+              $context['file_content'] = $fileContent;
+              session(['context' => $context]);
+              Log::info('Updated context with file: ', $context);
+          }
+      
+          if ($file && $file->getMimeType() === 'image/png') {
+              $filePath = $file->store('pasted', 'public');
+              $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
+              $response = $this->callOpenAIImageAPI($base64Image);
+              $imageContent = $response['choices'][0]['message']['content'];
+      
+              $pastedImages[$filePath] = $imageContent;
+              session(['pasted_images' => $pastedImages]);
+      
+              $context['pasted_image_content'] = $imageContent;
+              session(['context' => $context]);
+          }
+      
+          if (!empty($userMessage)) {
+              $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+              session(['conversation_history' => $conversationHistory]);
+      
+              $context['latest_message'] = $userMessage;
+              session(['context' => $context]);
+              Log::info('Updated context with message: ', $context);
+      
+              $sessionId = session('session_id');
+      
+              Message::create([
+                  'session_id' => $sessionId,
+                  'user_id' => Auth::id(),
+                  'message' => $userMessage,
+                  'reply' => null,
+              ]);
+          }
+      
+          $messages = [
+              ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+          ];
+      
+          if (!empty($context['file_content'])) {
+              $messages[] = ['role' => 'user', 'content' => $context['file_content']];
+          }
+      
+          if (!empty($context['pasted_image_content'])) {
+              $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
+          }
+      
+          foreach ($conversationHistory as $message) {
+              if (!is_null($message['content'])) {
+                  $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+              }
+          }
+      
+          array_walk_recursive($messages, function (&$item, $key) {
+              if (is_string($item)) {
+                  $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
+              }
+          });
+      
+          Log::info('Messages to send to API: ', $messages);
+      
+          $client = new Client();
+          $response = $client->post('https://api.openai.com/v1/chat/completions', [
+              'headers' => [
+                  'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                  'Content-Type' => 'application/json',
+              ],
+              'json' => [
+                  'model' => $openaiModel,
+                  'messages' => $messages,
+              ],
+          ]);
+      
+          $user = Auth::user();
+      
+          Log::info('OpenAI API Response: ' . $response->getBody()->getContents());
+      
+          $data = json_decode($response->getBody(), true);
+          $messageContent = $data['choices'][0]['message']['content'];
+          $totalTokens = $data['usage']['total_tokens'];
+      
+          User::where('id', $user->id)->update([
+              'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
+              'tokens_left' => DB::raw('tokens_left - ' . $totalTokens),
+          ]);
+      
+          Log::info('AI Response: ', ['content' => $messageContent]);
+      
+          $sessionId = session('session_id');
+      
+          Message::create([
+              'session_id' => $sessionId,
+              'user_id' => Auth::id(),
+              'message' => null,
+              'reply' => $messageContent,
+          ]);
+      
+          if ($title) {
+              $session = ModelsSession::find($sessionId);
+              if (empty($session->title)) {
+                  $session->title = $title;
+                  $session->save();
+              }
+          }
+      
+          return response()->json([
+              'message' => $messageContent,
+              'title' => $title,
+          ]);
+      }
+      
 
     private function readFileContent($filePath, $extension)
     {

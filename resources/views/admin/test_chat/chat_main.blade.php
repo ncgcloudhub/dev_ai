@@ -53,7 +53,7 @@
                                 <a href="javascript: void(0);"> 
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <p class="text-truncate mb-0">{{ $item->session_token }}</p>
+                                            <p class="text-truncate mb-0">{{ $item->title }}</p>
                                         </div>               
                                     </div>  
                                 </a>     
@@ -225,24 +225,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const imageDisplay = document.getElementById('image_display');
     let pastedImageFile = null;
     const sessionList = document.getElementById('session-list');
-    let isFirstMessage = true; // Flag to check if it's the first message in the session
+    let isFirstMessage = true;
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     function summarizeMessage(message) {
-        // Replace this with actual summarization logic if needed
         return message.length > 20 ? message.substring(0, 20) + '...' : message;
     }
 
-    // CHECK SESSION
     const checkUserSession = () => {
         axios.get('/chat/check-session')
             .then(response => {
-                if (response.data.hasSession) {
-                    // Session exists, no further action needed
-                } else {
+                if (!response.data.hasSession) {
                     newSessionBtn.click();
                 }
             })
@@ -251,10 +247,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     };
 
-    // Call checkUserSession on page load
     checkUserSession();
 
-    // Function to set active session
     function setActiveSession(sessionId) {
         const previousActive = sessionList.querySelector('li.active');
         if (previousActive) {
@@ -267,7 +261,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // NEW SESSION
     newSessionBtn.addEventListener('click', function () {
         axios.post('/main/new-session')
             .then(response => {
@@ -276,8 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const li = document.createElement('li');
                     li.id = `contact-id-${newSessionId}`;
                     li.dataset.name = "direct-message";
-                    li.dataset.sessionId = newSessionId; // Add data-session-id attribute
-                    li.classList.add('active'); // Mark the new session as active
+                    li.dataset.sessionId = newSessionId;
+                    li.classList.add('active');
                     li.innerHTML = `
                         <a href="javascript: void(0);"> 
                             <div class="d-flex align-items-center">
@@ -294,9 +287,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     fileNameDisplay.textContent = '';
                     scrollToBottom();
 
-                    // Set the new session as active
                     setActiveSession(newSessionId);
-                    isFirstMessage = true; // Reset flag for new session
+                    isFirstMessage = true;
                 }
             })
             .catch(error => {
@@ -318,6 +310,11 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('file', file);
         } else if (pastedImageFile) {
             formData.append('file', pastedImageFile, 'pasted_image.png');
+        }
+
+        if (isFirstMessage) {
+            const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+            formData.append('title', chatTitle);
         }
 
         sendMessageBtn.disabled = true;
@@ -377,7 +374,6 @@ document.addEventListener('DOMContentLoaded', function () {
             chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
             scrollToBottom();
 
-            // Update the chat title for the first message
             if (isFirstMessage) {
                 const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
                 const activeSession = sessionList.querySelector('li.active');
@@ -390,8 +386,8 @@ document.addEventListener('DOMContentLoaded', function () {
             messageInput.value = '';
             fileInput.value = '';
             fileNameDisplay.textContent = '';
-            imageDisplay.innerHTML = ''; // Clear pasted image display
-            pastedImageFile = null; // Reset pasted image file
+            imageDisplay.innerHTML = '';
+            pastedImageFile = null;
         })
         .catch(error => {
             console.error(error);
@@ -409,7 +405,6 @@ document.addEventListener('DOMContentLoaded', function () {
             chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
             scrollToBottom();
         })
-        
         .finally(() => {
             sendMessageBtn.disabled = false;
             sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
