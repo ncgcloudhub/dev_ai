@@ -242,7 +242,7 @@
         autoExpand(textarea);
     });
 
-    $('#ask').click(function() {
+        $('#ask').click(function() {
         var message = $('#ask_ai').val();
         $('#loader').removeClass('d-none');
 
@@ -254,19 +254,22 @@
                 _token: "{{ csrf_token() }}"
             },
             success: function(response) {
-                // Remove markdown syntax characters from the response
                 var strippedContent = response.message
                     .replace(/[#*]+/g, '')  // Remove # and * characters
                     .replace(/(!\[.*?\]\(.*?\))/g, ''); // Remove markdown images
 
-                simplemde.value(strippedContent);
-                $('#loader').addClass('d-none');
+                setTimeout(function() {
+                    simplemde.value(strippedContent);
+                    simplemde.codemirror.refresh(); // Force update
+                    $('#loader').addClass('d-none');
+                }, 100); // Add a delay before setting the content
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
             }
         });
     });
+
 
     window.addExampleEditor = function() {
         const container = document.getElementById('examples-container');
