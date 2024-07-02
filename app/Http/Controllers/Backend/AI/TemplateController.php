@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
+use App\Models\NewsLetter;
 use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -431,6 +432,12 @@ class TemplateController extends Controller
                 ]);
             }
 
+            // Populate the NewsLetter model
+            NewsLetter::create([
+                'email' => $newUser->email,
+                'ipaddress' => $ipAddress,
+            ]);
+
             // Log in the new user
             Auth::login($newUser);
             // Redirect to dashboard or any other page
@@ -476,6 +483,12 @@ class TemplateController extends Controller
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
+            ]);
+
+            // Populate the NewsLetter model
+            NewsLetter::create([
+                'email' => $newUser->email,
+                'ipaddress' => $ipAddress,
             ]);
 
             // Log in the new user
