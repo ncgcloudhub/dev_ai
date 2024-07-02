@@ -90,8 +90,8 @@
         </div>
 
        
-              <!-- Display Existing Examples -->
-              <div class="card mt-3">
+            <!-- Display Existing Examples -->
+            <div class="card mt-3">
                 <div class="card-body">
                     <div class="live-preview">
                         <div class="col-md-12">
@@ -109,8 +109,6 @@
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
                                         </form>
-                                        
-                                        
                                     </div>
                                 </div>
                                 @endforeach
@@ -119,6 +117,8 @@
                     </div>
                 </div>
             </div>
+
+
             
             
 
@@ -327,6 +327,25 @@
         const blob = new Blob([editorContent], { type: 'application/msword' });
         saveAs(blob, 'generated_content.doc');
     });
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    @foreach($prompt_library_examples as $item)
+    var quill{{ $item->id }} = new Quill('#exampleContent{{ $item->id }}', {
+        readOnly: true,
+        theme: 'snow',
+        modules: {
+            toolbar: false // Disable toolbar for read-only mode
+        }
+    });
+
+    // Set the editor content
+    var content = {!! json_encode($item->example) !!};
+    quill{{ $item->id }}.clipboard.dangerouslyPasteHTML(content);
+    @endforeach
 });
 
 </script>
