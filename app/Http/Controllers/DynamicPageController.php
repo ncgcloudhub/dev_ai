@@ -44,13 +44,13 @@ class DynamicPageController extends Controller
 
         // Redirect to a relevant page after creation
         return redirect()->route('dynamic-pages.index', ['dynamic_page' => $dynamicPage->route])
-                         ->with('success', 'Dynamic page created successfully.');
+            ->with('success', 'Dynamic page created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-        public function show($route)
+    public function show($route)
     {
         // Find the dynamic page by route
         $page = DynamicPage::where('route', $route)->firstOrFail();
@@ -80,6 +80,14 @@ class DynamicPageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $page = DynamicPage::findOrFail($id);
+        $page->delete();
+
+        $notification = array(
+            'message' => 'Dynamic Page Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('dynamic-pages.index')->with($notification);
     }
 }
