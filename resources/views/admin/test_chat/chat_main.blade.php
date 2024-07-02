@@ -50,18 +50,21 @@
 
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
-                            <li id="contact-id-1" data-name="direct-message" class="">                    
+                            <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->session_token }}" class="{{ $loop->first ? 'active' : '' }}">                    
                                 <a href="javascript: void(0);"> 
                                     <div class="d-flex align-items-center">
-        
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <p class="text-truncate mb-0">{{$item->session_token}}</p>
+                                            <p class="text-truncate mb-0">{{ $item->session_token }}</p>
                                         </div>               
                                     </div>  
                                 </a>     
                             </li>
                             @endforeach
                         </ul>
+                        
+                        
+                        
+                        
                     </div>
 
                 </div>
@@ -210,193 +213,204 @@
         </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const messageInput = document.getElementById('user_message_input');
+    const sendMessageBtn = document.getElementById('main_send_message_btn');
+    const fileInput = document.getElementById('file_input');
+    const chatConversation = document.getElementById('users-conversation');
+    const chatContainer = document.getElementById('chat-conversation');
+    const fileNameDisplay = document.getElementById('file_name_display');
+    const newSessionBtn = document.getElementById('main_new_session_btn');
+    const imageDisplay = document.getElementById('image_display');
+    let pastedImageFile = null;
+    const sessionList = document.getElementById('session-list');
+    let isFirstMessage = true; // Flag to check if it's the first message in the session
 
-        const messageInput = document.getElementById('user_message_input');
-        const sendMessageBtn = document.getElementById('main_send_message_btn');
-        const fileInput = document.getElementById('file_input');
-        const chatConversation = document.getElementById('users-conversation');
-        const chatContainer = document.getElementById('chat-conversation');
-        const fileNameDisplay = document.getElementById('file_name_display');
-        const newSessionBtn = document.getElementById('main_new_session_btn');
-        const imageDisplay = document.getElementById('image_display');
-        let pastedImageFile = null;
-        
-        const sessionList = document.getElementById('session-list');
+    function scrollToBottom() {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-        function scrollToBottom() {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
+    function summarizeMessage(message) {
+        // Replace this with actual summarization logic if needed
+        return message.length > 20 ? message.substring(0, 20) + '...' : message;
+    }
 
-        // CHECK SESSION
-        const checkUserSession = () => {
-            // Make an HTTP GET request to your Laravel backend
-            axios.get('/chat/check-session')
-                .then(response => {
-                    // Handle the response
-                    if (!response.data.hasSession) {
-                        newSessionBtn.click();
-                    }
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error('Error checking user session:', error);
-                });
-        };
-
-        // Call the checkUserSession function when the page loads
-        checkUserSession();
-
-        // NEW SESSION
-        newSessionBtn.addEventListener('click', function () {
-            axios.post('/main/new-session')
-                .then(response => {
-                    if (response.data.success) {
-                        const newSessionId = response.data.session_id;
-                        console.log('newSessionId', newSessionId);
-                        
-                        // Create new session list item
-                        const li = document.createElement('li');
-                        li.id = `contact-id-${newSessionId}`;
-                        li.dataset.name = "direct-message";
-                        li.innerHTML = `
-                            <a href="javascript: void(0);"> 
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <p class="text-truncate mb-0">${newSessionId}</p>
-                                    </div>               
-                                </div>  
-                            </a>
-                        `;
-                        sessionList.appendChild(li);
-
-                        // Clear the chat UI
-                        chatConversation.innerHTML = '';
-                        // Clear input fields
-                        messageInput.value = '';
-                        fileInput.value = '';
-                        fileNameDisplay.textContent = '';
-                        // Scroll to bottom
-                        scrollToBottom();
-                    }
-                })
-                .catch(error => {
-                    console.error('Failed to start a new session:', error);
-                });
-        });
-
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            const file = fileInput.files[0];
-
-            if (!message && !file && !pastedImageFile) return;
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const formData = new FormData();
-            formData.append('message', message);
-          
-            if (file) {
-                formData.append('file', file);
-            } else if (pastedImageFile) {
-                formData.append('file', pastedImageFile, 'pasted_image.png'); // Name the file appropriately
-            }
-
-            sendMessageBtn.disabled = true;
-            sendMessageBtn.innerHTML = 'Sending...';
-
-            axios.post('/main/chat/send', formData, {
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
+    // CHECK SESSION
+    const checkUserSession = () => {
+        axios.get('/chat/check-session')
             .then(response => {
-                const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                let userMessageHTML = `<li class="chat-list right">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
-                                    <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
-
-                if (file || pastedImageFile) {
-                    const fileType = (file || pastedImageFile).type.split('/')[0];
-                    if (fileType === 'image') {
-                        const imageUrl = URL.createObjectURL(file || pastedImageFile);
-                        userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-                    } else {
-                        userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
-                    }
+                if (response.data.hasSession) {
+                    // Session exists, no further action needed
+                } else {
+                    newSessionBtn.click();
                 }
-
-                userMessageHTML += `</div>
-                            </div>
-                            <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                        </div>
-                    </div>
-                </li>`;
-
-                const assistantMessage = response.data.message;
-                const formattedMessage = formatContent(assistantMessage);
-                const assistantMessageHTML = `<li class="chat-list left">
-                    <div class="conversation-list">
-                        <div class="chat-avatar">
-                            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                        </div>
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
-                                    ${formattedMessage}
-                                </div>
-                            </div>
-                            <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                        </div>
-                    </div>
-                </li>`;
-
-                chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-                chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
-                scrollToBottom();
-
-                messageInput.value = '';
-                fileInput.value = '';
-                fileNameDisplay.textContent = '';
-                imageDisplay.innerHTML = ''; // Clear pasted image display
-                pastedImageFile = null; // Reset pasted image file
             })
             .catch(error => {
-                console.error(error);
-                const errorMessageHTML = `<li class="chat-list right">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
-                                    <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
-                                </div>
+                console.error('Error checking user session:', error);
+            });
+    };
+
+    // Call checkUserSession on page load
+    checkUserSession();
+
+    // NEW SESSION
+    newSessionBtn.addEventListener('click', function () {
+        axios.post('/main/new-session')
+            .then(response => {
+                if (response.data.success) {
+                    const newSessionId = response.data.session_id;
+                    const li = document.createElement('li');
+                    li.id = `contact-id-${newSessionId}`;
+                    li.dataset.name = "direct-message";
+                    li.dataset.sessionId = newSessionId; // Add data-session-id attribute
+                    li.classList.add('active'); // Mark the new session as active
+                    li.innerHTML = `
+                        <a href="javascript: void(0);"> 
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-truncate mb-0">New Chat</p>
+                                </div>               
+                            </div>  
+                        </a>
+                    `;
+                    sessionList.appendChild(li);
+                    chatConversation.innerHTML = '';
+                    messageInput.value = '';
+                    fileInput.value = '';
+                    fileNameDisplay.textContent = '';
+                    scrollToBottom();
+                }
+            })
+            .catch(error => {
+                console.error('Failed to start a new session:', error);
+            });
+    });
+
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        const file = fileInput.files[0];
+
+        if (!message && !file && !pastedImageFile) return;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append('message', message);
+
+        if (file) {
+            formData.append('file', file);
+        } else if (pastedImageFile) {
+            formData.append('file', pastedImageFile, 'pasted_image.png');
+        }
+
+        sendMessageBtn.disabled = true;
+        sendMessageBtn.innerHTML = 'Sending...';
+
+        axios.post('/main/chat/send', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(response => {
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let userMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
+
+            if (file || pastedImageFile) {
+                const fileType = (file || pastedImageFile).type.split('/')[0];
+                if (fileType === 'image') {
+                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
+                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+                } else {
+                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
+                }
+            }
+
+            userMessageHTML += `</div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            const assistantMessage = response.data.message;
+            const formattedMessage = formatContent(assistantMessage);
+            const assistantMessageHTML = `<li class="chat-list left">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                ${formattedMessage}
+                            </div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+            scrollToBottom();
+
+            // Update the chat title for the first message
+            if (isFirstMessage) {
+                const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+                const activeSession = sessionList.querySelector('li.active');
+                if (activeSession) {
+                    activeSession.querySelector('p').textContent = chatTitle;
+                }
+                isFirstMessage = false;
+            }
+
+            messageInput.value = '';
+            fileInput.value = '';
+            fileNameDisplay.textContent = '';
+            imageDisplay.innerHTML = ''; // Clear pasted image display
+            pastedImageFile = null; // Reset pasted image file
+        })
+        .catch(error => {
+            console.error(error);
+            const errorMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
                             </div>
                         </div>
                     </div>
-                </li>`;
-                chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-                scrollToBottom();
-            })
-            .finally(() => {
-                sendMessageBtn.disabled = false;
-                sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
-            });
-        }
-
-        sendMessageBtn.addEventListener('click', sendMessage);
-        messageInput.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
+                </div>
+            </li>`;
+            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+            scrollToBottom();
+        })
+        .finally(() => {
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
         });
+    }
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
     });
+});
+
+
 </script>
+
 
 
 <script>
