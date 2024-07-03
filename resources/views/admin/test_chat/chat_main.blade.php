@@ -4,9 +4,10 @@
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css')}}">
-
 @endsection
 @section('content')
+
+
 
 
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
@@ -49,16 +50,21 @@
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
-                                <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">                    
-                                    <a href="javascript: void(0);"> 
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-truncate mb-0">{{ $item->title }}</p>
-                                            </div>               
-                                        </div>  
-                                    </a>     
-                                </li>
-                            @endforeach
+                            <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">
+                                <a href="javascript: void(0);">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <p class="text-truncate mb-0">{{ $item->title }}</p>
+                                        </div>
+                                        {{-- <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button> --}}
+                                        <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                        
                         </ul>
                         
                         
@@ -532,6 +538,42 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 </script>
 
+{{-- DELETE SESSION --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const sessionList = document.getElementById('session-list');
+
+    // Add event listener for delete buttons
+    sessionList.addEventListener('click', function (event) {
+            const deleteButton = event.target.closest('.delete-session-btn');
+            if (deleteButton) {
+                const sessionId = deleteButton.getAttribute('data-session-id');
+                deleteSession(sessionId);
+            }
+        });
+
+    function deleteSession(sessionId) {
+        axios.post(`/main/session/delete`, {
+            session_id: sessionId
+        })
+        .then(response => {
+            if (response.data.success) {
+                // Remove the session item from the UI
+                const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+                if (sessionItem) {
+                    sessionItem.remove();
+                }
+            } else {
+                console.error('Failed to delete session');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting session:', error);
+        });
+    }
+});
+
+</script>
 
 
 

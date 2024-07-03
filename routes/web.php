@@ -324,6 +324,8 @@ Route::middleware(['auth', 'check.status'])->group(function () {
             Route::post('/new-session', [MainChat::class, 'MainNewSession']);
 
             Route::post('/chat/send', [MainChat::class, 'send']);
+
+            Route::post('/session/delete', [MainChat::class, 'delete']);
         });
 
 
