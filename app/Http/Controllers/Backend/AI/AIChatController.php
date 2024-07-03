@@ -219,22 +219,34 @@ class AIChatController extends Controller
 
 
 
-    // GET MESSAGES TEST
-    public function getSessionMessages($id)
-    {
-        // Fetch the session with its messages
-        $session = \App\Models\Session::with('messages')->find($id);
+// GET MESSAGES TEST
+public function getSessionMessages($id)
+{
+    // Fetch the session with its messages
+    $session = \App\Models\Session::with(['messages' => function($query) {
+        $query->orderBy('created_at', 'asc');
+    }])->find($id);
 
-        if (!$session) {
-            return response()->json(['error' => 'Session not found'], 404);
-        }
-
-        // Store the session ID in the Laravel session
-        session(['session_id' => $id]);
-
-        // Return the messages in JSON format
-        return response()->json($session->messages);
+    if (!$session) {
+        return response()->json(['error' => 'Session not found'], 404);
     }
+
+    // Store the session ID in the Laravel session
+    session(['session_id' => $id]);
+
+    // Format messages to include role
+    $formattedMessages = $session->messages->map(function($message) {
+        return [
+            'content' => $message->message ?? $message->reply,
+            'role' => $message->message ? 'user' : 'assistant',
+            'created_at' => $message->created_at->toDateTimeString()
+        ];
+    });
+
+    // Return the formatted messages in JSON format
+    return response()->json($formattedMessages);
+}
+
 
     // NEW SESSION
     public function newSession(Request $request)

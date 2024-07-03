@@ -459,83 +459,76 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {{-- GET MESSAGES FROM SESSION --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sessionList = document.getElementById('session-list');
-        const chatConversation = document.getElementById('users-conversation');
+  document.addEventListener('DOMContentLoaded', function() {
+    const sessionList = document.getElementById('session-list');
+    const chatConversation = document.getElementById('users-conversation');
 
-        sessionList.addEventListener('click', function(event) {
-            const target = event.target.closest('li');
-            if (!target) return;
+    sessionList.addEventListener('click', function(event) {
+        const target = event.target.closest('li');
+        if (!target) return;
 
-            const sessionId = target.dataset.sessionId;
-            setActiveSession(sessionId);
+        const sessionId = target.dataset.sessionId;
+        setActiveSession(sessionId);
 
-            axios.get(`/chat/sessions/${sessionId}/messages`)
-                .then(response => {
-                    const messages = response.data;
+        axios.get(`/chat/sessions/${sessionId}/messages`)
+            .then(response => {
+                const messages = response.data;
 
-                    // Clear current chat
-                    chatConversation.innerHTML = '';
+                // Clear current chat
+                chatConversation.innerHTML = '';
 
-                    // Display fetched messages
-                    messages.forEach(message => {
-                        let content = '';
-                        let role = '';
+                // Display fetched messages
+                messages.forEach(message => {
+                    const { content, role, created_at } = message;
 
-                        if (message.message) {
-                            content = message.message;
-                            role = 'user';
-                        } else if (message.reply) {
-                            content = message.reply;
-                            role = 'assistant'; // Adjust this to match your classes for assistant messages
-                        }
-
-                        const messageHTML = `
-                            <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                                <div class="conversation-list">
-                                    <div class="user-chat-content">
-                                        <div class="ctext-wrap">
-                                            <div class="ctext-wrap-content">
-                                                <p class="mb-0 ctext-content">${content}</p>
-                                            </div>
-                                        </div>
-                                        <div class="conversation-name">
-                                            <small class="text-muted time">${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                    const messageHTML = `
+                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                            <div class="conversation-list">
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            <p class="mb-0 ctext-content">${content}</p>
                                         </div>
                                     </div>
+                                    <div class="conversation-name">
+                                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                    </div>
                                 </div>
-                            </li>
-                        `;
-                        chatConversation.insertAdjacentHTML('beforeend', messageHTML);
-                    });
-
-                    // Scroll to bottom of the chat
-                    chatConversation.scrollTop = chatConversation.scrollHeight;
-                })
-                .catch(error => {
-                    console.error(error);
+                            </div>
+                        </li>
+                    `;
+                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
-        });
 
-        // Function to set the active session
-        function setActiveSession(sessionId) {
-            const previousActive = sessionList.querySelector('li.active');
-            if (previousActive) {
-                previousActive.classList.remove('active');
-            }
-
-            const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
-            if (newActive) {
-                newActive.classList.add('active');
-            }
-        }
-
-        // Optionally, trigger a click event on the first session to load messages on page load
-        const firstSession = sessionList.querySelector('li');
-        if (firstSession) {
-            firstSession.click();
-        }
+                // Scroll to bottom of the chat
+                chatConversation.scrollTop = chatConversation.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     });
+
+    // Function to set the active session
+    function setActiveSession(sessionId) {
+        const previousActive = sessionList.querySelector('li.active');
+        if (previousActive) {
+            previousActive.classList.remove('active');
+        }
+
+        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+        if (newActive) {
+            newActive.classList.add('active');
+        }
+    }
+
+    // Optionally, trigger a click event on the first session to load messages on page load
+    const firstSession = sessionList.querySelector('li');
+    if (firstSession) {
+        firstSession.click();
+    }
+});
+
+
 </script>
 
 {{-- DELETE SESSION --}}
