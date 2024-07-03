@@ -90,35 +90,67 @@
         </div>
 
        
-              <!-- Display Existing Examples -->
-              <div class="card mt-3">
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="col-md-12">
-                            <label for="existing-examples" class="form-label">Existing Examples</label>
-                            <div id="existing-examples-container">
-                                @foreach($prompt_library_examples as $item)
-                                <div class="example-item mb-3">
-                                    <div class="snow-editor" style="height: 200px;" id="exampleContent{{ $item->id }}">
-                                        {!! $item->example !!}
-                                    </div>
-                                    <div class="mt-2">
-                                        <!-- Delete Button -->
-                                        <form method="POST" action="{{ route('prompt.example.delete', $item->id) }}" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
-                                        </form>
-                                        
-                                        
-                                    </div>
-                                </div>
-                                @endforeach
-                            </div>
+          <!-- Display Existing Examples -->
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="live-preview">
+            <div class="col-md-12">
+                <label for="existing-examples" class="form-label">Existing Examples</label>
+                <div id="existing-examples-container">
+                    @foreach($prompt_library_examples as $item)
+                    <div class="example-item mb-3">
+                        <div class="snow-editor" style="height: 200px;" id="exampleContent{{ $item->id }}">
+                            {!! $item->example !!}
+                        </div>
+                        <div class="mt-2">
+                            <!-- Edit Button -->
+                            <button type="button" class="btn btn-primary btn-icon waves-effect waves-light" onclick="editExample({{ $item->id }})"><i class="ri-edit-line"></i></button>
+                            <!-- Delete Button -->
+                            <form method="POST" action="{{ route('prompt.example.delete', $item->id) }}" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button>
+                            </form>
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+
+   <!-- Edit Example Modal -->
+<div class="modal fade" id="editExampleModal" tabindex="-1" aria-labelledby="editExampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editExampleForm" method="POST" action="">
+                @csrf
+                <input type="hidden" name="_method" value="PUT">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editExampleModalLabel">Edit Example</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="example-editor" class="form-label">Example Content</label>
+                        <div id="example-editor" style="height: 200px;"></div>
+                        <input type="hidden" name="example" id="example-content">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
             
             
 
@@ -134,10 +166,14 @@
                             <div id="examples-container">
                                 <!-- Example editor boxes will be added here -->
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">Add Example</button>
+                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">
+                                <i class="la la-plus"></i>
+                              </button>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">Save Examples</button>
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="la la-save"></i>
+                      </button>
                 </form>
             </div>
         </div>
@@ -179,9 +215,14 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 text-end">
-                            <button id="copyButton" class="btn btn-secondary me-2">Copy</button>
-                            <button id="downloadButton" class="btn btn-secondary">Download</button>
+                            <button id="copyButton" class="btn btn-primary me-2">
+                                <i class="las la-copy"></i>
+                            </button>
+                            <button id="downloadButton" class="btn btn-success">
+                                <i class="las la-download"></i>
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
             </div> 
@@ -203,81 +244,200 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize SimpleMDE
-        var simplemde = new SimpleMDE({ 
-            element: document.getElementById("myeditorinstance"),
-            spellChecker: false,
-            toolbar: false,
-            status: false,
-            readOnly: true
-        });
 
-        // Function to auto-expand textareas
+        // Function to copy text to clipboard
+    window.copyText = function(element) {
+        const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
+        const tempInput = document.createElement("textarea");
+        tempInput.style = "position: absolute; left: -9999px";
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Text copied to clipboard");
+    };
+
+    var simplemde = new SimpleMDE({ 
+        element: document.getElementById("myeditorinstance"),
+        spellChecker: false,
+        toolbar: false,
+        status: false,
+        readOnly: true
+    });
+
     function autoExpand(textarea) {
         textarea.style.height = 'auto';
         textarea.style.height = (textarea.scrollHeight) + 'px';
     }
 
-    // Apply auto-expand on input for all textareas with class 'auto-expand'
     document.querySelectorAll('.auto-expand').forEach(function(textarea) {
         textarea.addEventListener('input', function() {
             autoExpand(textarea);
         });
-
-        // Initial expand to adjust height on load
         autoExpand(textarea);
-    })
-    
+    });
+
         $('#ask').click(function() {
-            var message = $('#ask_ai').val();
-            
-            // Show loader
-            $('#loader').removeClass('d-none');
-    
-            $.ajax({
-                url: "{{ route('ask.ai.prompt') }}",
-                type: "POST",
-                data: {
-                    message: message,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    // Update SimpleMDE content with the generated response
-                    simplemde.value(response.message);
-    
-                    // Hide loader
+        var message = $('#ask_ai').val();
+        $('#loader').removeClass('d-none');
+
+        $.ajax({
+            url: "{{ route('ask.ai.prompt') }}",
+            type: "POST",
+            data: {
+                message: message,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                var strippedContent = response.message
+                    .replace(/[#*]+/g, '')  // Remove # and * characters
+                    .replace(/(!\[.*?\]\(.*?\))/g, ''); // Remove markdown images
+
+                setTimeout(function() {
+                    simplemde.value(strippedContent);
+                    simplemde.codemirror.refresh(); // Force update
                     $('#loader').addClass('d-none');
-                },
-                error: function(xhr) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    
-        // Copy button click event
-        $('#copyButton').click(function () {
-            const editorContent = simplemde.value();
-            const textArea = document.createElement('textarea');
-            textArea.value = editorContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
-        });
-    
-        // Download button click event using FileSaver.js
-        $('#downloadButton').click(function () {
-            const editorContent = simplemde.value();
-    
-            // Create a new Blob with the content
-            const blob = new Blob([editorContent], { type: 'application/msword' });
-    
-            // Use FileSaver.js to save the blob as a file
-            saveAs(blob, 'generated_content.doc');
+                }, 100); // Add a delay before setting the content
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+            }
         });
     });
-    </script>
+
+
+    window.addExampleEditor = function() {
+        const container = document.getElementById('examples-container');
+        const exampleEditor = document.createElement('div');
+        exampleEditor.className = 'form-group mt-3';
+        exampleEditor.innerHTML = `
+            <div class="snow-editor" style="height: 200px;"></div>
+            <input type="hidden" name="examples[]">
+            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
+                <i class="la la-minus"></i>
+            </button>
+
+        `;
+        container.appendChild(exampleEditor);
+
+         // Initialize Quill editor with default configuration
+         const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }, { 'size': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
+        // Sync Quill content to the hidden input field
+        quill.on('text-change', function() {
+            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
+            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+        });
+
+        window.removeExampleEditor = function(button) {
+        button.parentElement.remove();
+    };
+    };
+    
+
+    $('#copyButton').click(function () {
+        const editorContent = simplemde.value();
+        const textArea = document.createElement('textarea');
+        textArea.value = editorContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Content copied to clipboard!');
+    });
+
+    $('#downloadButton').click(function () {
+        const editorContent = simplemde.value();
+        const blob = new Blob([editorContent], { type: 'application/msword' });
+        saveAs(blob, 'generated_content.doc');
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    @foreach($prompt_library_examples as $item)
+    var quill{{ $item->id }} = new Quill('#exampleContent{{ $item->id }}', {
+        readOnly: true,
+        theme: 'snow',
+        modules: {
+            toolbar: false // Disable toolbar for read-only mode
+        }
+    });
+
+    // Set the editor content
+    var content = {!! json_encode($item->example) !!};
+    quill{{ $item->id }}.clipboard.dangerouslyPasteHTML(content);
+    @endforeach
+});
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    @foreach($prompt_library_examples as $item)
+    var quill{{ $item->id }} = new Quill('#exampleContent{{ $item->id }}', {
+        readOnly: true,
+        theme: 'snow',
+        modules: {
+            toolbar: false // Disable toolbar for read-only mode
+        }
+    });
+
+    // Set the editor content
+    var content = {!! json_encode($item->example) !!};
+    quill{{ $item->id }}.clipboard.dangerouslyPasteHTML(content);
+    @endforeach
+});
+
+function editExample(exampleId) {
+    var quill = new Quill('#example-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'font': [] }, { 'size': [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],
+                [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }, { 'align': [] }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+    var exampleContent = document.getElementById(`exampleContent${exampleId}`).innerHTML;
+    quill.clipboard.dangerouslyPasteHTML(exampleContent);
+
+    var form = document.getElementById('editExampleForm');
+    form.action = `/prompt-examples/${exampleId}`;
+
+    var modal = new bootstrap.Modal(document.getElementById('editExampleModal'));
+    modal.show();
+
+    quill.on('text-change', function() {
+        document.getElementById('example-content').value = quill.root.innerHTML;
+    });
+}
+
+</script>
     
 
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>

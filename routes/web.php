@@ -315,18 +315,18 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     });
 
     // Main Chat
-        // Custom Templates
-        Route::prefix('main')->group(function () {
+    // Custom Templates
+    Route::prefix('main')->group(function () {
 
-            Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
-            
-            // NEW SESSION
-            Route::post('/new-session', [MainChat::class, 'MainNewSession']);
+        Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
 
-            Route::post('/chat/send', [MainChat::class, 'send']);
+        // NEW SESSION
+        Route::post('/new-session', [MainChat::class, 'MainNewSession']);
 
-            Route::post('/session/delete', [MainChat::class, 'delete']);
-        });
+        Route::post('/chat/send', [MainChat::class, 'send']);
+
+        Route::post('/session/delete', [MainChat::class, 'delete']);
+    });
 
 
     // Like Image
@@ -396,6 +396,10 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
     Route::post('/prompt-examples/{promptLibrary}', [PromptLibraryController::class, 'PromptExampleStore'])->name('prompt_examples.store');
+
+    Route::put('/prompt-examples/{promptExample}', [PromptLibraryController::class, 'updatePromptExample'])->name('prompt_examples.update');
+
+
 
     // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');

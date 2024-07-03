@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\NewsLetter;
 use App\Models\Referral;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -30,8 +31,8 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-{
-    
+    {
+
         $request->validate([
             // 'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -55,9 +56,9 @@ class RegisteredUserController extends Controller
             'ipaddress' => $ipAddress, // Store IP address
         ]);
 
-         // Generate a referral link for the user
-         $user->referral_link = route('register', ['ref' => $user->id]);
-         $user->save();
+        // Generate a referral link for the user
+        $user->referral_link = route('register', ['ref' => $user->id]);
+        $user->save();
 
         // Check if there's a referrer ID in the query parameters
         if ($request->ref) {
@@ -70,8 +71,15 @@ class RegisteredUserController extends Controller
                 'referral_id' => $user->id,
                 'status' => 'pending',
             ]);
-
         }
+
+
+        // Populate the NewsLetter model
+        NewsLetter::create([
+            'email' => $user->email,
+            'ipaddress' => $ipAddress,
+        ]);
+
 
         event(new Registered($user));
 

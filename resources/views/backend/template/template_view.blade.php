@@ -211,8 +211,12 @@
            <div class="col">
 
                 <!-- Add the Download Content button -->
-                <button id="downloadButton" class="btn btn-success">Download Content</button>
-                <button id="copyButton" class="btn btn-primary">Copy Content</button>
+                <button id="copyButton" class="btn btn-primary me-2">
+                    <i class="las la-copy"></i>
+                </button>
+                <button id="downloadButton" class="btn btn-success">
+                    <i class="las la-download"></i>
+                </button>
                 
                 <div class="row mt-2">
                     <div class="col-lg-12">
