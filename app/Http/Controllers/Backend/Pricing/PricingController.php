@@ -34,12 +34,22 @@ class PricingController extends Controller
 
     public function StorePricingPlan(Request $request)
     {
-        $slug = Str::slug($request->title);
+
+        // Assuming $request is an instance of Illuminate\Http\Request
+        $title = $request->input('title');
+        $packageType = $request->input('package_type');
+
+        // Generate slugs for each part
+        $titleSlug = Str::slug($title);
+        $packageTypeSlug = Str::slug($packageType);
+
+        // Combine the slugs with an underscore
+        $combinedSlug = $titleSlug . '_' . $packageTypeSlug;
         // dd($request);
         $pricingPlan = PricingPlan::create([
             'title' => $request->title,
             'description' => $request->description,
-            'slug' => $slug,
+            'slug' => $combinedSlug,
             'open_id_model' => $request->open_id_model,
             'package_type' => $request->package_type,
             'price' => $request->price,
@@ -79,8 +89,11 @@ class PricingController extends Controller
 
     public function UpdatePricing(Request $request, PricingPlan $pricingPlan)
     {
-        // dd($pricingPlan);
-        $slug = Str::slug($request->title);
+
+        // Generate the slug by combining the title and package type
+        $titleSlug = Str::slug($request->title);
+        $packageTypeSlug = Str::slug($request->package_type);
+        $slug = $titleSlug . '_' . $packageTypeSlug;
 
         $pricingPlan->update([
             'title' => $request->title,

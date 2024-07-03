@@ -26,3 +26,7 @@ Add 2 column in job_applications; phone and address
 User table -> add -> referral_link -> text 
 
 Templates table -> add -> input_placeholders -> text
+
+
+------------------3rd july, 2024--------------
+In session table, add title column

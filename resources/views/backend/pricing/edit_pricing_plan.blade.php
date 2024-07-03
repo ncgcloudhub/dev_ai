@@ -187,9 +187,11 @@
                                     <div class="flex-grow-1 d-flex align-items-center">
                                         <select class="form-select form-select-sm  mb-3" aria-label=".form-select-sm example" name="open_id_model">
                                             <option selected>{{$pricing_plan->open_id_model}}</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            <option value="gpt-4o">gpt-4o</option>
+                                            <option value="gpt-4-turbo">gpt-4-turbo</option>
+                                            <option value="gpt-4">gpt-4</option>
+                                            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                                            <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct</option>
                                         </select>
                                         <span class="ms-2">Open Ai Model</span>
                                     </div>
