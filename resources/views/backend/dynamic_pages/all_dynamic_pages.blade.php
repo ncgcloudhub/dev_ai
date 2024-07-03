@@ -39,7 +39,8 @@
                                 <a href="{{ route('dynamic-pages.show', ['dynamic_page' => $item->route]) }}" class="dynamic-page-link">{{ $item->title }}</a>
                             </td>
                             <td>{{ $item->route }}</td>
-                            <td>{{ $item->content }}</td>
+                            <td>{{ strip_tags($item->content) }}</td>
+
                             <td>Edit (On Process)
 
                                 {{-- <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
