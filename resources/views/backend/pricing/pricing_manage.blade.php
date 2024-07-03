@@ -196,6 +196,16 @@
                                 </div>
                             </div>
                         </li>
+                        <li>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 {{ $item->open_id_model ? 'text-success' : 'text-danger' }} me-1">
+                                    <i class="{{ $item->open_id_model ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                  {{$item->open_id_model}}
+                                </div>
+                            </div>
+                        </li>
 
                         @if ($item->additional_features)
                             @php
@@ -393,6 +403,16 @@
                             </div>
                             <div class="flex-grow-1">
                                 Free Support
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 {{ $item->open_id_model ? 'text-success' : 'text-danger' }} me-1">
+                                <i class="{{ $item->open_id_model ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                              {{$item->open_id_model}}
                             </div>
                         </div>
                     </li>
