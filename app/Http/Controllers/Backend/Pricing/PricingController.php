@@ -45,6 +45,19 @@ class PricingController extends Controller
 
         // Combine the slugs with an underscore
         $combinedSlug = $titleSlug . '_' . $packageTypeSlug;
+
+        // Calculate discounted price based on discount type
+        $price = $request->input('price');
+        $discount = $request->input('discount');
+        $discountType = $request->input('discount_type');
+        $discountedPrice = $price; // Default to price if no discount or invalid input
+
+        if ($discountType === 'percentage' && $discount > 0 && $discount <= 100) {
+            $discountedPrice = $price - ($price * ($discount / 100));
+        } elseif ($discountType === 'flat' && $discount > 0) {
+            $discountedPrice = $price - $discount;
+        }
+
         // dd($request);
         $pricingPlan = PricingPlan::create([
             'title' => $request->title,
@@ -52,8 +65,10 @@ class PricingController extends Controller
             'slug' => $combinedSlug,
             'open_id_model' => $request->open_id_model,
             'package_type' => $request->package_type,
-            'price' => $request->price,
-            'discounted_price' => $request->discounted_price,
+            'discount' => $request->discount,
+            'discount_type' => $request->discount_type,
+            'price' => $price,
+            'discounted_price' => $discountedPrice, // Use calculated discounted price
             'tokens' => $request->tokens,
             '71_ai_templates' => $request->has('71_ai_templates') ? true : false,
             'ai_chat' => $request->has('ai_chat') ? true : false,
@@ -95,14 +110,28 @@ class PricingController extends Controller
         $packageTypeSlug = Str::slug($request->package_type);
         $slug = $titleSlug . '_' . $packageTypeSlug;
 
+        // Calculate discounted price based on discount type
+        $price = $request->input('price');
+        $discount = $request->input('discount');
+        $discountType = $request->input('discount_type');
+        $discountedPrice = $price; // Default to price if no discount or invalid input
+
+        if ($discountType === 'percentage' && $discount > 0 && $discount <= 100) {
+            $discountedPrice = $price - ($price * ($discount / 100));
+        } elseif ($discountType === 'flat' && $discount > 0) {
+            $discountedPrice = $price - $discount;
+        }
+
         $pricingPlan->update([
             'title' => $request->title,
             'description' => $request->description,
             'slug' => $slug,
             'open_id_model' => $request->open_id_model,
             'package_type' => $request->package_type,
-            'price' => $request->price,
-            'discounted_price' => $request->discounted_price,
+            'price' => $price,
+            'discount' => $request->discount,
+            'discount_type' => $request->discount_type,
+            'discounted_price' => $discountedPrice, // Use calculated discounted price
             'tokens' => $request->tokens,
             '71_ai_templates' => $request->has('71_ai_templates') ? true : false,
             'ai_chat' => $request->has('ai_chat') ? true : false,

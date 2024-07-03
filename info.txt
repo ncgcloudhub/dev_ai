@@ -29,4 +29,6 @@ Templates table -> add -> input_placeholders -> text
 
 
 ------------------3rd july, 2024--------------
-In session table, add title column
+In session table, add title column {text}
+
+In pricing plan tbale, add: discount, and discount_type {both character_varying}

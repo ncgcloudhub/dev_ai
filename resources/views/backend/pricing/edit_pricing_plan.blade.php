@@ -30,8 +30,15 @@
                             </div>
                             <div class="ms-auto d-flex align-items-center m-2">
                                 <h3 class="me-1">$</h3>
-                                <input class="form-control form-control-sm me-1" step="any" value="{{$pricing_plan->price}}" name="price" type="number" placeholder="Enter Price">
-                                <input class="form-control form-control-sm" step="any" value="{{$pricing_plan->discounted_price}}" name="discounted_price" type="number" placeholder="Enter Discounted Price">
+                                <input class="form-control form-control-sm me-1" step="any" value="{{ $pricing_plan->price }}" name="price" type="number" placeholder="Enter Price">
+                                <div class="input-group">
+                                    <input class="form-control form-control-sm" step="any" value="{{ $pricing_plan->discount }}" name="discount" type="number" placeholder="Enter Discount">
+                                    <select class="form-select form-select-sm" name="discount_type">
+                                        <option value="percentage" {{ $pricing_plan->discount_type === 'percentage' ? 'selected' : '' }}>%</option>
+                                        <option value="flat" {{ $pricing_plan->discount_type === 'flat' ? 'selected' : '' }}>Flat</option>
+                                    </select>
+                                </div>
+                                <input class="form-control form-control-sm" step="any" value="{{ $pricing_plan->discounted_price }}" name="discounted_price" type="number" placeholder="Discounted Price" readonly>
                             </div>
                     
                         <ul class="list-unstyled vstack gap-3">
@@ -255,4 +262,31 @@
     <script src="{{ URL::asset('build/js/pages/pricing.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Function to calculate discounted price based on input changes
+            function calculateDiscountedPrice() {
+                var price = parseFloat($('input[name="price"]').val());
+                var discount = parseFloat($('input[name="discount"]').val());
+                var discountType = $('select[name="discount_type"]').val();
+
+                if (discountType === 'percentage') {
+                    var discountedPrice = price - (price * (discount / 100));
+                } else if (discountType === 'flat') {
+                    var discountedPrice = price - discount;
+                }
+
+                $('input[name="discounted_price"]').val(discountedPrice.toFixed(2));
+            }
+
+            // Trigger calculation on change or keyup
+            $('input[name="discount"], select[name="discount_type"]').on('change keyup', function() {
+                calculateDiscountedPrice();
+            });
+
+            // Initial calculation on page load
+            calculateDiscountedPrice();
+        });
+    </script>
 @endsection

@@ -30,8 +30,18 @@
                             <div class="ms-auto d-flex align-items-center m-2">
                                 <h3 class="me-1">$</h3>
                                 <input class="form-control form-control-sm me-1" step="any" name="price" type="number" placeholder="Enter Price">
-                                <input class="form-control form-control-sm" step="any" name="discounted_price" type="number" placeholder="Enter Discounted Price">
+                                
+                                <div class="input-group">
+                                    <input class="form-control form-control-sm" step="any" name="discount" type="number" placeholder="Enter Discount">
+                                    <select class="form-select form-select-sm" name="discount_type">
+                                        <option value="percentage">%</option>
+                                        <option value="flat">Flat</option>
+                                    </select>
+                                </div>
+                                
+                                <input class="form-control form-control-sm" step="any" name="discounted_price" type="number" placeholder="Discounted Price" readonly>
                             </div>
+                            
                     
                         <ul class="list-unstyled vstack gap-3">
                             <li>
@@ -254,4 +264,23 @@
     <script src="{{ URL::asset('build/js/pages/pricing.init.js') }}"></script>
 
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('input[name="discount"], select[name="discount_type"]').on('change keyup', function() {
+                var price = parseFloat($('input[name="price"]').val());
+                var discount = parseFloat($('input[name="discount"]').val());
+                var discountType = $('select[name="discount_type"]').val();
+    
+                if (discountType === 'percentage') {
+                    var discountedPrice = price - (price * (discount / 100));
+                } else if (discountType === 'flat') {
+                    var discountedPrice = price - discount;
+                }
+    
+                $('input[name="discounted_price"]').val(discountedPrice.toFixed(2));
+            });
+        });
+    </script>
+    
 @endsection
