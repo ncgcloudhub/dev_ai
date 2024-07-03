@@ -32,7 +32,7 @@ class HomeController extends Controller
             $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
         }
 
-        $images = $query->latest()->get();
+        $images = $query->latest()->paginate(20);
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
@@ -47,6 +47,7 @@ class HomeController extends Controller
 
         return view('frontend.ai_image_gallery', compact('images'));
     }
+
 
 
     //Image Gallery Front End Page

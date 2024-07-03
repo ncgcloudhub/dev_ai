@@ -71,11 +71,12 @@
 
 {{-- LIKE --}}
 <script>
-    $(document).on('click', '.like-button', function() {
+   $(document).ready(function() {
+    // Like button functionality
+    $(document).off('click', '.like-button').on('click', '.like-button', function() {
         var imageId = $(this).data('image-id');
         var likeButton = $(this); 
         var likeCountBadge = likeButton.find('.badge');
-
         $.ajax({
             url: '/like',
             method: 'POST',
@@ -87,7 +88,7 @@
                 // Update UI to reflect the new like status
                 if (response.liked) {
                     // Image is liked
-                    likeButton.removeClass('ri-thumb-up-line').addClass('ri-thumb-up-fill');
+                    likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
                     likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
                 } else {
                     // Image is unliked
@@ -96,17 +97,16 @@
                 }
             },
             error: function(xhr) {
-                console.error('Error liking image:', xhr);
+                // Handle errors
             }
         });
     });
 
-    // Favorite button click event
-    $(document).on('click', '.favorite-button', function() {
+    // Favorite button functionality
+    $(document).off('click', '.favorite-button').on('click', '.favorite-button', function() {
         var imageId = $(this).data('image-id');
         var favoriteButton = $(this);
         var favoriteCountBadge = favoriteButton.find('.badge');
-
         $.ajax({
             url: '/favorite',
             method: 'POST',
@@ -127,8 +127,11 @@
                 }
             },
             error: function(xhr) {
-                console.error('Error favoriting image:', xhr);
+                // Handle errors
             }
         });
     });
+});
+
 </script>
+

@@ -117,91 +117,10 @@
 
         @section('script')
 
+        {{-- SHAREE --}}
         <script>
             $(document).ready(function() {
-                // Infinite scroll
-                // var page = 1;
-                // function loadMoreImages() {
-                //     page++;
-                //     $('.infinite-scroll-loader').show();
-                //     $.ajax({
-                //         url: '{{ route("ai.image.gallery") }}?page=' + page,
-                //         type: 'GET',
-                //         success: function(response) {
-                //             $('#image-container').append(response);
-                //             $('.infinite-scroll-loader').hide();
-                //         }
-                //     });
-                // }
-
-                // $(window).scroll(function() {
-                //     if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-                //         loadMoreImages();
-                //     }
-                // });
-
-                // Like button click event using event delegation
-                $(document).on('click', '.like-button', function() {
-                    var imageId = $(this).data('image-id');
-                    var likeButton = $(this);
-                    var likeCountBadge = likeButton.find('.badge');
-
-                    $.ajax({
-                        url: '/like',
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: { image_id: imageId },
-                        success: function(response) {
-                            if (response.liked) {
-                                // Image is liked
-                                likeButton.removeClass('ri-thumb-up-line').addClass('ri-thumb-up-fill');
-                                likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
-                            } else {
-                                // Image is unliked
-                                likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
-                                likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
-                            }
-                        },
-                        error: function(xhr) {
-                            console.error('Error liking image:', xhr);
-                        }
-                    });
-                });
-
-                // Favorite button click event using event delegation
-                $(document).on('click', '.favorite-button', function() {
-                    var imageId = $(this).data('image-id');
-                    var favoriteButton = $(this);
-                    var favoriteCountBadge = favoriteButton.find('.badge');
-
-                    $.ajax({
-                        url: '/favorite',
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: { image_id: imageId },
-                        success: function(response) {
-                            if (response.favorited) {
-                                // Image is favorited
-                                favoriteButton.removeClass('ri-heart-2-line').addClass('ri-heart-2-fill');
-                                favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) + 1);
-                            } else {
-                                // Image is unfavorited
-                                favoriteButton.removeClass('ri-heart-2-fill').addClass('ri-heart-2-line');
-                                favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) - 1);
-                            }
-                        },
-                        error: function(xhr) {
-                            console.error('Error favoriting image:', xhr);
-                        }
-                    });
-                });
-
-                // Share functionality
-                $(document).on('click', '.share-button', function() {
+                $('.share-button').click(function() {
                     var imageUrl = $(this).data('image-url');
                     var promptText = $(this).data('image-prompt');
         
@@ -221,26 +140,121 @@
                         window.open(whatsappUrl);
                     }
                 });
+            });
+        </script>
 
-                // Image popups for modal
-                $(document).on('click', '.image-popups', function() {
-                    const imageUrl = $(this).attr('data-image-url');
-                    const title = $(this).attr('title');
-                    const prompt = $(this).attr('data-image-prompt');
-                    const resolution = $(this).attr('data-image-resolution');
-                    
-                    // Update modal content
-                    $('#modalImage').attr('src', imageUrl);
-                    $('#imageModalLabel').text(title);
-                    $('#modalPrompt').text(prompt);
-                    $('#modalResolution').text(resolution);
-                    
-                    // Show the modal
-                    $('#imageModal').modal('show');
+        <script>
+            document.querySelectorAll('.image-popups').forEach(item => {
+        item.addEventListener('click', event => {
+            const imageUrl = item.getAttribute('data-image-url');
+            const title = item.getAttribute('title');
+            const prompt = item.getAttribute('data-image-prompt');
+            const resolution = item.getAttribute('data-image-resolution');
+            
+            // Update modal content
+            document.getElementById('modalImage').src = imageUrl;
+            document.getElementById('imageModalLabel').innerText = title;
+            document.getElementById('modalPrompt').innerText = prompt;
+            document.getElementById('modalResolution').innerText = resolution;
+            
+            // Show the modal
+            $('#imageModal').modal('show');
+        });
+        });
+        </script>
+
+        <script>
+            var page = 1; // initialize page number
+
+            function loadMoreImages() {
+                page++; // increment page number
+                $('.infinite-scroll-loader').show(); // show loader
+                $.ajax({
+                    url: '{{ route("ai.image.gallery") }}?page=' + page, // replace 'your_route_name' with the actual route name
+                    type: 'GET',
+                    success: function (response) {
+                        $('#image-container').append(response);
+                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                    }
                 });
+                }
+            
+            $(window).scroll(function() {
+                if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                    loadMoreImages();
+                }
+            });
 
-                // Search functionality
-                $('#search').on('input', function() {
+            // Initial load for the first page
+            loadMoreImages();
+        </script>
+
+        {{-- LIKE --}}
+        <script>
+           $(document).ready(function() {
+    // Like button functionality
+    $(document).off('click', '.like-button').on('click', '.like-button', function() {
+        var imageId = $(this).data('image-id');
+        var likeButton = $(this); 
+        var likeCountBadge = likeButton.find('.badge');
+        $.ajax({
+            url: '/like',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { image_id: imageId },
+            success: function(response) {
+                // Update UI to reflect the new like status
+                if (response.liked) {
+                    // Image is liked
+                    likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
+                    likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
+                } else {
+                    // Image is unliked
+                    likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
+                    likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
+                }
+            },
+            error: function(xhr) {
+                // Handle errors
+            }
+        });
+    });
+
+    // Favorite button functionality
+    $(document).off('click', '.favorite-button').on('click', '.favorite-button', function() {
+        var imageId = $(this).data('image-id');
+        var favoriteButton = $(this);
+        var favoriteCountBadge = favoriteButton.find('.badge');
+        $.ajax({
+            url: '/favorite',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { image_id: imageId },
+            success: function(response) {
+                // Update UI to reflect the new favorite status
+                if (response.favorited) {
+                    // Image is favorited
+                    favoriteButton.removeClass('ri-heart-2-line').addClass('ri-heart-2-fill');
+                    favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) + 1);
+                } else {
+                    // Image is unfavorited
+                    favoriteButton.removeClass('ri-heart-2-fill').addClass('ri-heart-2-line');
+                    favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) - 1);
+                }
+            },
+            error: function(xhr) {
+                // Handle errors
+            }
+        });
+    });
+
+
+      // Search functionality
+      $('#search').on('input', function() {
                     var searchText = $(this).val().toLowerCase();
                     $.ajax({
                         url: '{{ route("ai.image.gallery") }}',
@@ -251,8 +265,9 @@
                         }
                     });
                 });
-            });
-        </script>
+ });
+         </script>
+
 
     @endsection
     
