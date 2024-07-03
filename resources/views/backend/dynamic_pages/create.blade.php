@@ -34,8 +34,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="content">Content (Blade Template Name)</label>
-                                <input id="content" type="text" class="form-control @error('content') is-invalid @enderror" name="content" value="{{ old('content') }}" required>
+                                <label for="content">Content</label>
+                                <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content') }}</textarea>
 
                                 @error('content')
                                     <span class="invalid-feedback" role="alert">
@@ -79,7 +79,19 @@
 @endsection
 
 @section('script')
-
-<script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
-
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea#myeditorinstance',
+        plugins: 'code table lists image media',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code | image media',
+        height: 400,
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        }
+    });
+</script>
 @endsection
+
