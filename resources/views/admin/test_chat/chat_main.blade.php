@@ -4,9 +4,10 @@
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css')}}">
-
 @endsection
 @section('content')
+
+
 
 
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
@@ -49,16 +50,21 @@
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
-                                <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">                    
-                                    <a href="javascript: void(0);"> 
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <p class="text-truncate mb-0">{{ $item->title }}</p>
-                                            </div>               
-                                        </div>  
-                                    </a>     
-                                </li>
-                            @endforeach
+                            <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">
+                                <a href="javascript: void(0);">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <p class="text-truncate mb-0">{{ $item->title }}</p>
+                                        </div>
+                                        {{-- <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button> --}}
+                                        <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
+                                            <i class="ri-delete-bin-5-line"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                        
                         </ul>
                         
                         
@@ -453,85 +459,114 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {{-- GET MESSAGES FROM SESSION --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sessionList = document.getElementById('session-list');
-        const chatConversation = document.getElementById('users-conversation');
+  document.addEventListener('DOMContentLoaded', function() {
+    const sessionList = document.getElementById('session-list');
+    const chatConversation = document.getElementById('users-conversation');
 
-        sessionList.addEventListener('click', function(event) {
-            const target = event.target.closest('li');
-            if (!target) return;
+    sessionList.addEventListener('click', function(event) {
+        const target = event.target.closest('li');
+        if (!target) return;
 
-            const sessionId = target.dataset.sessionId;
-            setActiveSession(sessionId);
+        const sessionId = target.dataset.sessionId;
+        setActiveSession(sessionId);
 
-            axios.get(`/chat/sessions/${sessionId}/messages`)
-                .then(response => {
-                    const messages = response.data;
+        axios.get(`/chat/sessions/${sessionId}/messages`)
+            .then(response => {
+                const messages = response.data;
 
-                    // Clear current chat
-                    chatConversation.innerHTML = '';
+                // Clear current chat
+                chatConversation.innerHTML = '';
 
-                    // Display fetched messages
-                    messages.forEach(message => {
-                        let content = '';
-                        let role = '';
+                // Display fetched messages
+                messages.forEach(message => {
+                    const { content, role, created_at } = message;
 
-                        if (message.message) {
-                            content = message.message;
-                            role = 'user';
-                        } else if (message.reply) {
-                            content = message.reply;
-                            role = 'assistant'; // Adjust this to match your classes for assistant messages
-                        }
-
-                        const messageHTML = `
-                            <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                                <div class="conversation-list">
-                                    <div class="user-chat-content">
-                                        <div class="ctext-wrap">
-                                            <div class="ctext-wrap-content">
-                                                <p class="mb-0 ctext-content">${content}</p>
-                                            </div>
-                                        </div>
-                                        <div class="conversation-name">
-                                            <small class="text-muted time">${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                    const messageHTML = `
+                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                            <div class="conversation-list">
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            <p class="mb-0 ctext-content">${content}</p>
                                         </div>
                                     </div>
+                                    <div class="conversation-name">
+                                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                    </div>
                                 </div>
-                            </li>
-                        `;
-                        chatConversation.insertAdjacentHTML('beforeend', messageHTML);
-                    });
-
-                    // Scroll to bottom of the chat
-                    chatConversation.scrollTop = chatConversation.scrollHeight;
-                })
-                .catch(error => {
-                    console.error(error);
+                            </div>
+                        </li>
+                    `;
+                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
-        });
 
-        // Function to set the active session
-        function setActiveSession(sessionId) {
-            const previousActive = sessionList.querySelector('li.active');
-            if (previousActive) {
-                previousActive.classList.remove('active');
-            }
-
-            const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
-            if (newActive) {
-                newActive.classList.add('active');
-            }
-        }
-
-        // Optionally, trigger a click event on the first session to load messages on page load
-        const firstSession = sessionList.querySelector('li');
-        if (firstSession) {
-            firstSession.click();
-        }
+                // Scroll to bottom of the chat
+                chatConversation.scrollTop = chatConversation.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     });
+
+    // Function to set the active session
+    function setActiveSession(sessionId) {
+        const previousActive = sessionList.querySelector('li.active');
+        if (previousActive) {
+            previousActive.classList.remove('active');
+        }
+
+        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+        if (newActive) {
+            newActive.classList.add('active');
+        }
+    }
+
+    // Optionally, trigger a click event on the first session to load messages on page load
+    const firstSession = sessionList.querySelector('li');
+    if (firstSession) {
+        firstSession.click();
+    }
+});
+
+
 </script>
 
+{{-- DELETE SESSION --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const sessionList = document.getElementById('session-list');
+
+    // Add event listener for delete buttons
+    sessionList.addEventListener('click', function (event) {
+            const deleteButton = event.target.closest('.delete-session-btn');
+            if (deleteButton) {
+                const sessionId = deleteButton.getAttribute('data-session-id');
+                deleteSession(sessionId);
+            }
+        });
+
+    function deleteSession(sessionId) {
+        axios.post(`/main/session/delete`, {
+            session_id: sessionId
+        })
+        .then(response => {
+            if (response.data.success) {
+                // Remove the session item from the UI
+                const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+                if (sessionItem) {
+                    sessionItem.remove();
+                }
+            } else {
+                console.error('Failed to delete session');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting session:', error);
+        });
+    }
+});
+
+</script>
 
 
 

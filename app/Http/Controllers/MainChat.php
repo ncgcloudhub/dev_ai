@@ -297,4 +297,19 @@ class MainChat extends Controller
 
         return $response;
     }
+
+    // DELETE
+    public function delete(Request $request)
+    {
+        $sessionId = $request->input('session_id');
+
+        try {
+            $session = Session::findOrFail($sessionId);
+            $session->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 }
