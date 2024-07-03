@@ -22,29 +22,31 @@ use OpenAI;
 
 class HomeController extends Controller
 {
-    //Image Gallery Front End Page
-    public function AIImageGallery()
+    // Image Gallery Front End Page
+    public function AIImageGallery(Request $request)
     {
-        $images = DalleImageGenerate::withCount(['likes', 'favorites'])->latest()->paginate(20);
+        $query = DalleImageGenerate::withCount(['likes', 'favorites']);
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
+        }
+
+        $images = $query->latest()->get();
+
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
-            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)
-                ->exists();
-
-            $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())
-                ->where('image_id', $image->id)
-                ->exists();
+            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
+            $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
         }
 
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             return view('frontend.image_gallery_partial', compact('images'))->render();
         }
 
         return view('frontend.ai_image_gallery', compact('images'));
     }
-
-
 
 
     //Image Gallery Front End Page
