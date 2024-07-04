@@ -54,11 +54,7 @@
                 </li>
 
 
-             
-
-
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
-
 
                   {{-- Fixed Template --}}
 
@@ -81,6 +77,39 @@
                                     <li class="nav-item">
                                         <a href="{{route('template.manage')}}" class="nav-link" >Manage Template</a>
                                     </li>
+                                   
+                                </ul>
+                            </div>     
+                        </div>
+                    </div>
+                </li>
+
+                {{-- Permission ROLE --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#role" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class=" lab la-blogger"></i> <span >Role & Permission</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="role">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('all.permission') }}" class="nav-link" >All Permission</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('all.roles') }}" class="nav-link" >All Roles</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
+                                      </li>
+
+                                    <li class="nav-item">
+                                    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
+                                    </li>
+                                    
                                    
                                 </ul>
                             </div>     

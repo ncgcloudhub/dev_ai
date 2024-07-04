@@ -32,3 +32,9 @@ Templates table -> add -> input_placeholders -> text
 In session table, add title column {text}
 
 In pricing plan tbale, add: discount, and discount_type {both character_varying}
+
+
+--------4 july
+Permission tbale = group_name character_varying 255
+
+Video 222-223
