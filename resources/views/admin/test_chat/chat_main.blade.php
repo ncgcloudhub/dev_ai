@@ -66,10 +66,7 @@
                         @endforeach
                         
                         </ul>
-                        
-                        
-                        
-                        
+     
                     </div>
 
                 </div>
@@ -278,14 +275,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     li.dataset.sessionId = newSessionId;
                     li.classList.add('active');
                     li.innerHTML = `
-                        <a href="javascript: void(0);"> 
+                        <a href="javascript: void(0);">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-truncate mb-0">New Chat</p>
-                                </div>               
-                            </div>  
+                                </div>
+                                <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
+                                    <i class="ri-delete-bin-5-line"></i>
+                                </button>
+                            </div>
                         </a>
                     `;
+
                     sessionList.appendChild(li);
                     chatConversation.innerHTML = '';
                     messageInput.value = '';
