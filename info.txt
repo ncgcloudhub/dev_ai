@@ -38,3 +38,6 @@ In pricing plan tbale, add: discount, and discount_type {both character_varying}
 Permission tbale = group_name character_varying 255
 
 Video 222-223
+
+
+Add context{text} column in sessions table

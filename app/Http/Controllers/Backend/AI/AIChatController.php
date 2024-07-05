@@ -195,8 +195,8 @@ class AIChatController extends Controller
         $totalTokens = $data['usage']['total_tokens'];
         $sessionId = Session::get('session_id');
 
-         // Words Increment
-         User::where('id', $user->id)->update([
+        // Words Increment
+        User::where('id', $user->id)->update([
             'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
             'tokens_left' => DB::raw('tokens_left - ' . $totalTokens),
         ]);
@@ -219,34 +219,50 @@ class AIChatController extends Controller
 
 
 
-// GET MESSAGES TEST
-public function getSessionMessages($id)
-{
-    // Fetch the session with its messages
-    $session = \App\Models\Session::with(['messages' => function($query) {
-        $query->orderBy('created_at', 'asc');
-    }])->find($id);
+    // GET MESSAGES TEST
+    public function getSessionMessages($id)
+    {
+        // Fetch the session with its messages
+        $session = \App\Models\Session::with(['messages' => function ($query) {
+            $query->orderBy('created_at', 'asc');
+        }])->find($id);
 
-    if (!$session) {
-        return response()->json(['error' => 'Session not found'], 404);
-    }
+        if (!$session) {
+            return response()->json(['error' => 'Session not found'], 404);
+        }
 
-    // Store the session ID in the Laravel session
-    session(['session_id' => $id]);
+        // Store the session ID in the Laravel session
+        session(['session_id' => $id]);
 
-    // Format messages to include role
-    $formattedMessages = $session->messages->map(function($message) {
-        return [
-            'content' => $message->message ?? $message->reply,
-            'role' => $message->message ? 'user' : 'assistant',
-            'created_at' => $message->created_at->toDateTimeString()
+        // Format messages to include role
+        $formattedMessages = $session->messages->map(function ($message) {
+            return [
+                'content' => $message->message ?? $message->reply,
+                'role' => $message->message ? 'user' : 'assistant',
+                'created_at' => $message->created_at->toDateTimeString()
+            ];
+        })->toArray();
+
+        // Store the conversation history in the session
+        $conversationHistory = array_map(function ($message) {
+            return ['role' => $message['role'], 'content' => $message['content']];
+        }, $formattedMessages);
+        session(['conversation_history' => $conversationHistory]);
+
+        // Retrieve context from the session
+        $context = json_decode($session->context, true) ?? [
+            'uploaded_files' => [],
+            'pasted_images' => [],
+            'conversation_history' => [],
+            'context' => [],
         ];
-    });
 
-    // Return the formatted messages in JSON format
-    return response()->json($formattedMessages);
-}
-
+        // Return the formatted messages and context in JSON format
+        return response()->json([
+            'messages' => $formattedMessages,
+            'context' => $context,
+        ]);
+    }
 
     // NEW SESSION
     public function newSession(Request $request)
