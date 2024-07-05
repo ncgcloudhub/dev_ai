@@ -473,7 +473,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         axios.get(`/chat/sessions/${sessionId}/messages`)
             .then(response => {
-                const messages = response.data;
+                const messages = response.data.messages;
+                const context = response.data.context;
 
                 // Clear current chat
                 chatConversation.innerHTML = '';
@@ -500,6 +501,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                     chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
+
+                // Store context in session storage
+                sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
 
                 // Scroll to bottom of the chat
                 chatConversation.scrollTop = chatConversation.scrollHeight;
@@ -528,7 +532,6 @@ document.addEventListener('DOMContentLoaded', function () {
         firstSession.click();
     }
 });
-
 
 </script>
 

@@ -65,10 +65,18 @@ class MainChat extends Controller
         $userMessage = $request->input('message');
         $file = $request->file('file');
         $title = $request->input('title');
+        $sessionId = session('session_id');
+
         Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
 
         $setting = AISettings::find(1);
         $openaiModel = $setting->openaimodel;
+
+        // Retrieve the session and its messages from the database
+        $session = ModelsSession::with('messages')->find($sessionId);
+        if (!$session) {
+            return response()->json(['error' => 'Session not found'], 404);
+        }
 
         $uploadedFiles = session('uploaded_files', []);
         Log::info('Uploaded files: ', $uploadedFiles);
@@ -130,14 +138,18 @@ class MainChat extends Controller
             session(['context' => $context]);
             Log::info('Updated context with message: ', $context);
 
-            $sessionId = session('session_id');
-
             Message::create([
                 'session_id' => $sessionId,
                 'user_id' => Auth::id(),
                 'message' => $userMessage,
                 'reply' => null,
             ]);
+
+            // Save context to database
+            $session->context = json_encode($context);
+            $session->save();
+        } else {
+            $conversationHistory = json_decode($session->messages->pluck('message')->toJson(), true);
         }
 
         $messages = [
@@ -152,10 +164,14 @@ class MainChat extends Controller
             $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
         }
 
+        // foreach ($conversationHistory as $message) {
+        //     if (!is_null($message['content'])) {
+        //         $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+        //     }
+        // }
+
         foreach ($conversationHistory as $message) {
-            if (!is_null($message['content'])) {
-                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
-            }
+            $messages[] = ['role' => $message['role'], 'content' => $message['content']];
         }
 
         array_walk_recursive($messages, function (&$item, $key) {
