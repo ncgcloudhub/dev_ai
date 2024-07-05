@@ -73,32 +73,38 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Referral::class, 'referrer_id');
     }
 
-    public static function getpermissionGroups(){
-        $permission_groups = DB::table('permissions')->select('group_name')->groupBy('group_name')->get();
+    public static function getPermissionGroups()
+    {
+        $permission_groups = DB::table('permissions')
+            ->select('group_name')
+            ->groupBy('group_name')
+            ->get();
+
         return $permission_groups;
-    } // End Method 
+    }
 
-    public static function getpermissionByGroupName($group_name){
-
+    public static function getPermissionByGroupName($group_name)
+    {
         $permissions = DB::table('permissions')
-                         ->select('name','id')
-                         ->where('group_name',$group_name)
-                         ->get();
+            ->select('name', 'id')
+            ->where('group_name', $group_name)
+            ->get();
+
         return $permissions;
+    }
 
-    }// End Method 
-
-    public static function roleHasPermissions($role,$permissions){
-
+    public static function roleHasPermissions($role, $permissions)
+    {
         $hasPermission = true;
-        foreach($permissions as $permission){
+        foreach ($permissions as $permission) {
             if (!$role->hasPermissionTo($permission->name)) {
-                 $hasPermission = false;
+                $hasPermission = false;
+                break;
             }
-            return $hasPermission;
         }
 
-    }// End Method 
+        return $hasPermission;
+    }
     
 
 

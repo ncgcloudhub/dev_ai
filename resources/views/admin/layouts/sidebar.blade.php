@@ -284,6 +284,11 @@
                         <i class=" las la-user-circle"></i> <span >Manage User</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('all.admin')}}">
+                        <i class=" las la-user-circle"></i> <span >Manage Admin</span>
+                    </a>
+                </li>
               
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('main.chat.form')}}">

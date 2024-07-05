@@ -52,7 +52,7 @@
                                     </a>
                                 </li>
                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <a class="text-danger d-inline-block remove-item-btn" href="{{ route('delete.roles',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
+                                    <a class="text-danger d-inline-block remove-item-btn" href="{{ route('admin.delete.roles',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                     </a>
                                 </li>
