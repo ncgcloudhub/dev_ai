@@ -46,7 +46,15 @@
             <div class="col-xxl-3 col-lg-6 month">
             <div class="card pricing-box ribbon-box right">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">{{$item->title}}</h4>
+                    <h4 class="card-title mb-0">{{$item->title}}  
+                        @if ($item->discount_type == 'percentage')
+                        <span class="badge bg-danger">{{ $item->discount }}% off</span>
+                      
+                        @elseif ($item->discount_type == 'flat')
+                        <span class="badge bg-danger">${{ $item->discount }} off</span>
+                           
+                        @endif
+                    </h4>
                 </div>
                 <div class="card-body bg-light m-2 p-4">
                     @if ($item->popular === 'yes')
@@ -57,8 +65,12 @@
                     <div class="d-flex align-items-center mb-0">
                        
                         <div class="ms-auto">
-                          
+                          @if ($item->discounted_price != NULL)
                             <h2 class="month mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2> 
+                          @else
+                            <h2 class="month mb-0"><small class="fs-16"></small> ${{$item->price}}</h2> 
+                          @endif
+                            
 
                             
                         </div>
@@ -248,7 +260,15 @@
         <div class="col-xxl-3 col-lg-6 annual">
         <div class="card pricing-box ribbon-box right">
             <div class="card-header">
-                <h4 class="card-title mb-0">{{$item->title}}</h4>
+                <h4 class="card-title mb-0">{{$item->title}}  
+                    @if ($item->discount_type == 'percentage')
+                    <span class="badge bg-danger">{{ $item->discount }}% off</span>
+                  
+                    @elseif ($item->discount_type == 'flat')
+                    <span class="badge bg-danger">${{ $item->discount }} off</span>
+                       
+                    @endif
+                </h4>
             </div>
             <div class="card-body bg-light m-2 p-4">
                 @if ($item->popular === 'yes')
@@ -260,7 +280,11 @@
                    
                     <div class="ms-auto">
                        
-                        <h2 class="annual mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2>
+                        @if ($item->discounted_price != NULL)
+                        <h2 class="month mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2> 
+                      @else
+                        <h2 class="month mb-0"><small class="fs-16"></small> ${{$item->price}}</h2> 
+                      @endif
                       
                         
                     </div>
