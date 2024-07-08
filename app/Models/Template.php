@@ -14,4 +14,14 @@ class Template extends Model
     public function template_category(){
     	return $this->belongsTo(TemplateCategory::class,'category_id','id');
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(RatingTemplate::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
 }

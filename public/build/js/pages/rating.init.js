@@ -67,29 +67,45 @@ if (document.querySelector("#rater-unlimitedstar"))
     });
 
 // rater-onhover
-document
-    .querySelectorAll('[id^="rater-onhover-"]')
-    .forEach(function (ratingElement) {
-        var starRatinghover = raterJs({
-            starSize: 22,
-            rating: 1,
-            element: ratingElement,
-            rateCallback: function rateCallback(rating, done) {
-                this.setRating(rating);
-                done();
-            },
-            onHover: function (currentIndex, currentRating) {
-                ratingElement.parentElement.querySelector(
-                    ".ratingnum"
-                ).textContent = currentIndex;
-            },
-            onLeave: function (currentIndex, currentRating) {
-                ratingElement.parentElement.querySelector(
-                    ".ratingnum"
-                ).textContent = currentRating;
-            },
-        });
+document.querySelectorAll('[id^="rater-onhover-"]').forEach(function (ratingElement) {
+    var templateId = ratingElement.id.replace('rater-onhover-', '');
+    var starRatinghover = raterJs({
+        starSize: 22,
+        rating: 1,
+        element: ratingElement,
+        rateCallback: function rateCallback(rating, done) {
+            this.setRating(rating);
+            done();
+
+            // AJAX request to submit the rating
+            $.ajax({
+                url: '/rate-template',
+                type: 'POST',
+                data: {
+                    _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    template_id: templateId,
+                    rating: rating
+                },
+                success: function (response) {
+                    console.log('Rating submitted successfully:', response);
+                    alert('Rating submitted!');
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to submit rating:', status, error);
+                    console.log(xhr.responseText);
+                    alert('Failed to submit rating');
+                }
+            });
+        },
+        onHover: function (currentIndex, currentRating) {
+            ratingElement.parentElement.querySelector(".ratingnum").textContent = currentIndex;
+        },
+        onLeave: function (currentIndex, currentRating) {
+            ratingElement.parentElement.querySelector(".ratingnum").textContent = currentRating;
+        },
     });
+});
 
 // rater-reset
 if (document.querySelector("#raterreset"))
