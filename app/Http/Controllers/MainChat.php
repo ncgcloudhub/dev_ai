@@ -110,14 +110,18 @@ class MainChat extends Controller
             Log::info('File content: ', ['content' => $fileContent]);
 
             // Update session variables and context
-            $uploadedFiles = session('uploaded_files', []);
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
 
             $context['file_content'] = $fileContent;
             session(['context' => $context]);
 
-            $conversationHistory[] = ['role' => 'user', 'content' => $fileContent];
+            // Provide default message if userMessage is empty
+            if (empty($userMessage)) {
+                $userMessage = 'Summarize this in 3 lines';
+            }
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
         }
 
@@ -131,7 +135,15 @@ class MainChat extends Controller
             $pastedImages[$filePath] = $imageContent;
             session(['pasted_images' => $pastedImages]);
             $context['pasted_image_content'] = $imageContent;
-            $conversationHistory[] = ['role' => 'user', 'content' => $imageContent];
+            session(['context' => $context]);
+
+            // Provide default message if userMessage is empty
+            if (empty($userMessage)) {
+                $userMessage = 'Summarize this in 3 lines';
+            }
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+            session(['conversation_history' => $conversationHistory]);
         }
 
         if (!empty($userMessage)) {
