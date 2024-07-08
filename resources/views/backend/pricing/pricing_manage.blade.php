@@ -31,7 +31,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-semibold" id="annual-tab" data-bs-toggle="pill"
                                 data-bs-target="#annual" type="button" role="tab" aria-selected="false">Annually <span
-                                    class="badge bg-success">{{$highestDiscount}}% Off</span></button>
+                                    class="badge bg-danger">{{$highestDiscount}}% Off</span></button>
                         </li>
                     </ul>
                 </div>
@@ -52,7 +52,8 @@
                           
                             @elseif ($item->discount_type == 'flat')
                             <span class="badge bg-danger">${{ $item->discount }} off</span>
-                               
+                            @else
+
                             @endif
                         </h4>
                           
@@ -275,7 +276,7 @@
                       
                         @elseif ($item->discount_type == 'flat')
                         <span class="badge bg-danger">${{ $item->discount }} off</span>
-                           
+                        @else
                         @endif
                     </h4>
                 </div>
