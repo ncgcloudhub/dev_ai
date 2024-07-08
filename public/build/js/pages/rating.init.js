@@ -1,12 +1,3 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Rating Js File
-*/
-
-// basic-rater
 if (document.querySelector("#basic-rater"))
     var basicRating = raterJs({
         starSize: 22,
@@ -69,9 +60,11 @@ if (document.querySelector("#rater-unlimitedstar"))
 // rater-onhover
 document.querySelectorAll('[id^="rater-onhover-"]').forEach(function (ratingElement) {
     var templateId = ratingElement.id.replace('rater-onhover-', '');
+    var userRating = ratingElement.getAttribute('data-user-rating');
     var starRatinghover = raterJs({
         starSize: 22,
-        rating: 1,
+        rating: userRating ? parseInt(userRating) : 0,
+        readOnly: !!userRating, // Make readOnly if user has already rated
         element: ratingElement,
         rateCallback: function rateCallback(rating, done) {
             this.setRating(rating);

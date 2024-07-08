@@ -91,7 +91,10 @@
                                             <p style="height: 3em; overflow: hidden; color:black;" class="card-text customer_name">{{$item->description}}</p>
                                             <small class="text-muted">{{$item->total_word_generated}} Words generated</small>
                                             <div dir="ltr">
-                                                <div id="rater-onhover-{{$item->id}}" class="align-middle"></div>
+                                                @php
+                                                    $userRating = $userRatings[$item->id] ?? null;
+                                                @endphp
+                                                <div id="rater-onhover-{{$item->id}}" class="align-middle" data-user-rating="{{ $userRating }}"></div>
                                                 <span class="ratingnum badge bg-info align-middle ms-2">{{ number_format($item->averageRating(), 1) }} stars</span>
                                             </div>
                                             @if(auth()->user()->role == 'admin')
@@ -118,7 +121,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                             </div>
 
 

@@ -15,17 +15,12 @@ class RatingController extends Controller
             'template_id' => 'required|exists:templates,id',
             'rating' => 'required|integer|min:1|max:5',
         ]);
-
+    
         $rating = RatingTemplate::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'template_id' => $request->template_id,
-            ],
-            [
-                'rating' => $request->rating,
-            ]
+            ['user_id' => auth()->id(), 'template_id' => $request->template_id],
+            ['rating' => $request->rating]
         );
-
-        return response()->json($rating, 200);
+    
+        return response()->json(['message' => 'Rating submitted successfully']);
     }
 }
