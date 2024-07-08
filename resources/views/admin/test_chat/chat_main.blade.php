@@ -138,10 +138,11 @@
                                 </div>
 
                                 <div class="col">
-                                    <div id="image_display"></div>
+
                                     <div class="chat-input-feedback">
                                         Please Enter a Message
                                     </div>
+                                    <div id="image_display"></div>
                                     <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                                 </div>
                                 <div class="col-auto">
@@ -303,120 +304,166 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
-    function sendMessage() {
-        const message = messageInput.value.trim();
-        const file = fileInput.files[0];
+    // Function to handle image paste
+    function handleImagePaste(event) {
+            const clipboardItems = event.clipboardData.items;
+            for (let i = 0; i < clipboardItems.length; i++) {
+                const item = clipboardItems[i];
+                if (item.type.indexOf("image") !== -1) {
+                    const blob = item.getAsFile();
+                    pastedImageFile = blob;
+                    const imageUrl = URL.createObjectURL(blob);
 
-        if (!message && !file && !pastedImageFile) return;
+                    // Create image element
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.style.maxWidth = '10%'; // Adjust image size as needed
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const formData = new FormData();
-        formData.append('message', message);
+                    // Create remove button
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'X';
+                    removeBtn.classList.add('remove-btn');
+                    removeBtn.addEventListener('click', () => {
+                        // Remove image and reset input
+                        imageDisplay.innerHTML = '';
+                        pastedImageFile = null; // Reset pastedImageFile
+                    });
 
-        if (file) {
-            formData.append('file', file);
-        } else if (pastedImageFile) {
-            formData.append('file', pastedImageFile, 'pasted_image.png');
+                    // Container for image and button
+                    const container = document.createElement('div');
+                    container.classList.add('image-container');
+                    container.appendChild(img);
+                    container.appendChild(removeBtn);
+
+                    // Display the pasted image in image_display div
+                    imageDisplay.innerHTML = ''; // Clear any previous image
+                    imageDisplay.appendChild(container);
+
+                    // Stop further processing to prevent multiple image pastes
+                    event.preventDefault();
+                    break;
+                }
+            }
         }
+
+        // Listen for paste events on messageInput
+        messageInput.addEventListener('paste', handleImagePaste);
+
+    function sendMessage() {
+    const message = messageInput.value.trim();
+    const file = fileInput.files[0];
+
+    if (!message && !file && !pastedImageFile) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const formData = new FormData();
+    formData.append('message', message);
+
+    if (file) {
+        formData.append('file', file);
+    } else if (pastedImageFile) {
+        formData.append('file', pastedImageFile, 'pasted_image.png');
+    }
+
+    if (isFirstMessage) {
+        const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+        formData.append('title', chatTitle);
+    }
+
+    sendMessageBtn.disabled = true;
+    sendMessageBtn.innerHTML = 'Sending...';
+
+    axios.post('/main/chat/send', formData, {
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then(response => {
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let userMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
+
+        if (file || pastedImageFile) {
+            const fileType = (file || pastedImageFile).type.split('/')[0];
+            if (fileType === 'image') {
+                const imageUrl = URL.createObjectURL(file || pastedImageFile);
+                userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+            } else {
+                userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
+            }
+        }
+
+        userMessageHTML += `</div>
+                    </div>
+                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                </div>
+            </div>
+        </li>`;
+
+        const assistantMessage = response.data.message;
+        const formattedMessage = formatContent(assistantMessage);
+        const assistantMessageHTML = `<li class="chat-list left">
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            ${formattedMessage}
+                        </div>
+                    </div>
+                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                </div>
+            </div>
+        </li>`;
+
+        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+        chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+        scrollToBottom();
 
         if (isFirstMessage) {
             const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-            formData.append('title', chatTitle);
+            const activeSession = sessionList.querySelector('li.active');
+            if (activeSession) {
+                activeSession.querySelector('p').textContent = chatTitle;
+            }
+            isFirstMessage = false;
         }
 
-        sendMessageBtn.disabled = true;
-        sendMessageBtn.innerHTML = 'Sending...';
-
-        axios.post('/main/chat/send', formData, {
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .then(response => {
-            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            let userMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
-
-            if (file || pastedImageFile) {
-                const fileType = (file || pastedImageFile).type.split('/')[0];
-                if (fileType === 'image') {
-                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
-                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-                } else {
-                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
-                }
-            }
-
-            userMessageHTML += `</div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
-                </div>
-            </li>`;
-
-            const assistantMessage = response.data.message;
-            const formattedMessage = formatContent(assistantMessage);
-            const assistantMessageHTML = `<li class="chat-list left">
-                <div class="conversation-list">
-                    <div class="chat-avatar">
-                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                    </div>
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                ${formattedMessage}
-                            </div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
-                </div>
-            </li>`;
-
-            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
-            scrollToBottom();
-
-            if (isFirstMessage) {
-                const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-                const activeSession = sessionList.querySelector('li.active');
-                if (activeSession) {
-                    activeSession.querySelector('p').textContent = chatTitle;
-                }
-                isFirstMessage = false;
-            }
-
-            messageInput.value = '';
-            fileInput.value = '';
-            fileNameDisplay.textContent = '';
-            imageDisplay.innerHTML = '';
-            pastedImageFile = null;
-        })
-        .catch(error => {
-            console.error(error);
-            const errorMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
-                            </div>
+        messageInput.value = '';
+        fileInput.value = '';
+        fileNameDisplay.textContent = '';
+        imageDisplay.innerHTML = '';
+        pastedImageFile = null;
+    })
+    .catch(error => {
+        console.error(error);
+        const errorMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
                         </div>
                     </div>
                 </div>
-            </li>`;
-            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-            scrollToBottom();
-        })
-        .finally(() => {
-            sendMessageBtn.disabled = false;
-            sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
-        });
-    }
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+        scrollToBottom();
+    })
+    .finally(() => {
+        sendMessageBtn.disabled = false;
+        sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
+    });
+}
+
 
     sendMessageBtn.addEventListener('click', sendMessage);
     messageInput.addEventListener('keydown', function (event) {

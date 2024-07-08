@@ -109,12 +109,16 @@ class MainChat extends Controller
             }
             Log::info('File content: ', ['content' => $fileContent]);
 
+            // Update session variables and context
+            $uploadedFiles = session('uploaded_files', []);
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
 
             $context['file_content'] = $fileContent;
             session(['context' => $context]);
-            Log::info('Updated context with file: ', $context);
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $fileContent];
+            session(['conversation_history' => $conversationHistory]);
         }
 
         if ($file && $file->getMimeType() === 'image/png') {
@@ -123,11 +127,11 @@ class MainChat extends Controller
             $response = $this->callOpenAIImageAPI($base64Image);
             $imageContent = $response['choices'][0]['message']['content'];
 
+            // Update session variables and context
             $pastedImages[$filePath] = $imageContent;
             session(['pasted_images' => $pastedImages]);
-
             $context['pasted_image_content'] = $imageContent;
-            session(['context' => $context]);
+            $conversationHistory[] = ['role' => 'user', 'content' => $imageContent];
         }
 
         if (!empty($userMessage)) {
@@ -152,27 +156,37 @@ class MainChat extends Controller
             $conversationHistory = json_decode($session->messages->pluck('message')->toJson(), true);
         }
 
+        // Update session data
+        session([
+            'conversation_history' => $conversationHistory,
+            'context' => $context,
+        ]);
+
         $messages = [
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
         ];
 
+        // Add file content if available
         if (!empty($context['file_content'])) {
             $messages[] = ['role' => 'user', 'content' => $context['file_content']];
         }
 
+        // Add pasted image content if available
         if (!empty($context['pasted_image_content'])) {
             $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
         }
 
-        // foreach ($conversationHistory as $message) {
-        //     if (!is_null($message['content'])) {
-        //         $messages[] = ['role' => $message['role'], 'content' => $message['content']];
-        //     }
-        // }
-
+        // Add all conversation history messages
         foreach ($conversationHistory as $message) {
-            $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+            if (is_array($message) && isset($message['content']) && isset($message['role'])) {
+                if (!is_null($message['content'])) {
+                    $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+                }
+            } else {
+                Log::warning('Invalid message structure:', ['message' => $message]);
+            }
         }
+
 
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
@@ -208,6 +222,10 @@ class MainChat extends Controller
         ]);
 
         Log::info('AI Response: ', ['content' => $messageContent]);
+
+        // Save AI response to conversation history
+        $conversationHistory[] = ['role' => 'assistant', 'content' => $messageContent];
+        session(['conversation_history' => $conversationHistory]);
 
         $sessionId = session('session_id');
 
