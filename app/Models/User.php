@@ -105,8 +105,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $hasPermission;
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(RatingTemplate::class);
+    }
     
 
+   
 
     
 }
