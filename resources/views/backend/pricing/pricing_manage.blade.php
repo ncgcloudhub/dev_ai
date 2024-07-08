@@ -31,7 +31,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-semibold" id="annual-tab" data-bs-toggle="pill"
                                 data-bs-target="#annual" type="button" role="tab" aria-selected="false">Annually <span
-                                    class="badge bg-success">25% Off</span></button>
+                                    class="badge bg-danger">{{$highestDiscount}}% Off</span></button>
                         </li>
                     </ul>
                 </div>
@@ -45,23 +45,34 @@
         @foreach ($monthlyPlans as $item)
             <div class="col-xxl-3 col-lg-6 month">
                 <div class="card pricing-box ribbon-box right">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">{{$item->title}}  
+                            @if ($item->discount_type == 'percentage')
+                            <span class="badge bg-danger">{{ $item->discount }}% off</span>
+                          
+                            @elseif ($item->discount_type == 'flat')
+                            <span class="badge bg-danger">${{ $item->discount }} off</span>
+                            @else
+
+                            @endif
+                        </h4>
+                          
+                    </div>
                     <div class="card-body bg-light m-2 p-4">
                         @if ($item->popular === 'yes')
                             <div class="ribbon-two ribbon-two-success"><span>Popular</span></div>
                         @else
                         @endif
                         
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="mb-0 fw-semibold">{{$item->title}}</h5>
-                            </div>
+                        <div class="d-flex align-items-center mb-0">
+                         
                             <div class="ms-auto">
                                 @if ($item->discount_type == 'percentage')
                                     <h2 class="month mb-0"><small class="fs-16"><del>${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
-                                    <p class="mb-0 text-success">{{ $item->discount }}% off</p>
+                                  
                                 @elseif ($item->discount_type == 'flat')
                                     <h2 class="month mb-0"><small class="fs-16"><del>${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
-                                    <p class="mb-0 text-success">${{ $item->discount }} off</p>
+                                   
                                 @endif
                             </div>
                         </div>
@@ -258,23 +269,33 @@
         
         <div class="col-xxl-3 col-lg-6 annual">
             <div class="card pricing-box ribbon-box right">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">{{$item->title}}  
+                        @if ($item->discount_type == 'percentage')
+                        <span class="badge bg-danger">{{ $item->discount }}% off</span>
+                      
+                        @elseif ($item->discount_type == 'flat')
+                        <span class="badge bg-danger">${{ $item->discount }} off</span>
+                        @else
+                        @endif
+                    </h4>
+                </div>
                 <div class="card-body bg-light m-2 p-4">
                     @if ($item->popular === 'yes')
                         <div class="ribbon-two ribbon-two-success"><span>Popular</span></div>
                     @else
                     @endif
                     
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-0 fw-semibold">{{$item->title}}</h5>
-                        </div>
+                    <div class="d-flex align-items-center mb-0">
+                      
                         <div class="ms-auto">
-                            <h2 class="annual mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2>
-                            @if ($item->discount_type == 'percentage')
-                                <p class="mb-0 text-success">{{ $item->discount }}% off</p>
-                            @elseif ($item->discount_type == 'flat')
-                                <p class="mb-0 text-success">${{ $item->discount }} off</p>
+                            @if ($item->discounted_price != NULL)
+                                <h2 class="annual mb-0"><small class="fs-16"><del>${{$item->price}}</del></small> ${{$item->discounted_price}}</h2>
+                              
+                            @else
+                                <h2 class="month mb-0"><small class="fs-16"></small> ${{$item->price}}</h2> 
                             @endif
+                           
                         </div>
     
                     </div>

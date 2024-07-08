@@ -13,6 +13,8 @@ class PricingController extends Controller
     public function ManagePricingPlan()
     {
         $pricingPlans = PricingPlan::orderBy('id', 'asc')->get();
+        $highestDiscount = PricingPlan::where('package_type', 'yearly')->where('discount_type', 'percentage')->max('discount');
+
 
         $monthlyPlans = $pricingPlans->filter(function ($plan) {
             return $plan->package_type === 'monthly';
@@ -23,7 +25,7 @@ class PricingController extends Controller
         });
 
         $totalTemplates = Template::count();
-        return view('backend.pricing.pricing_manage', compact('monthlyPlans', 'totalTemplates', 'yearlyPlans'));
+        return view('backend.pricing.pricing_manage', compact('monthlyPlans', 'totalTemplates', 'yearlyPlans','highestDiscount'));
     }
 
     public function addPricingPlan()

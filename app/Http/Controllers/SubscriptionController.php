@@ -18,6 +18,7 @@ class SubscriptionController extends Controller
     {
 
         $pricingPlans = PricingPlan::orderBy('id', 'asc')->get();
+        $highestDiscount = PricingPlan::where('package_type', 'yearly')->where('discount_type', 'percentage')->max('discount');
 
         $monthlyPlans = $pricingPlans->filter(function ($plan) {
             return $plan->package_type === 'monthly';
@@ -38,7 +39,7 @@ class SubscriptionController extends Controller
 
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
 
-        return view('backend.subscription.all_package', compact('monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates'));
+        return view('backend.subscription.all_package', compact('monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates','highestDiscount'));
     } // End Method  
 
     public function purchase($pricingPlanId)
