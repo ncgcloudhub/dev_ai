@@ -257,6 +257,15 @@ class AIChatController extends Controller
             'context' => [],
         ];
 
+        // Clear uploaded files and pasted images in the session
+        session(['uploaded_files' => []]);
+        session(['pasted_images' => []]);
+        session(['context' => []]);
+
+        // Save the updated context back to the session
+        $session->context = json_encode($context);
+        $session->save();
+
         // Return the formatted messages and context in JSON format
         return response()->json([
             'messages' => $formattedMessages,
