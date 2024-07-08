@@ -549,6 +549,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
 
+                 // Clear the session storage for the current session context
+                 sessionStorage.removeItem('currentSessionContext');
+
                 // Store context in session storage
                 sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
 
