@@ -30,7 +30,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-semibold" id="annual-tab" data-bs-toggle="pill"
                                 data-bs-target="#annual" type="button" role="tab" aria-selected="false">Annually <span
-                                    class="badge bg-success">25% Off</span></button>
+                                    class="badge bg-success">{{$highestDiscount}}% Off</span></button>
                         </li>
                     </ul>
                 </div>
