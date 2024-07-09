@@ -37,6 +37,13 @@ class PricingController extends Controller
     public function StorePricingPlan(Request $request)
     {
 
+        $gptModels = $request->input('open_id_model', []);
+        if (!is_array($gptModels)) {
+            $gptModels = [$gptModels];
+        }
+        // Convert array to string
+        $gptModelsImplode = implode(', ', $gptModels);
+
         // Assuming $request is an instance of Illuminate\Http\Request
         $title = $request->input('title');
         $packageType = $request->input('package_type');
@@ -65,7 +72,7 @@ class PricingController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'slug' => $combinedSlug,
-            'open_id_model' => $request->open_id_model,
+            'open_id_model' => $gptModelsImplode,
             'package_type' => $request->package_type,
             'discount' => $request->discount,
             'discount_type' => $request->discount_type,
@@ -107,6 +114,13 @@ class PricingController extends Controller
     public function UpdatePricing(Request $request, PricingPlan $pricingPlan)
     {
 
+        $gptModels = $request->input('open_id_model', []);
+        if (!is_array($gptModels)) {
+            $gptModels = [$gptModels];
+        }
+        // Convert array to string
+        $gptModelsImplode = implode(', ', $gptModels);
+
         // Generate the slug by combining the title and package type
         $titleSlug = Str::slug($request->title);
         $packageTypeSlug = Str::slug($request->package_type);
@@ -128,7 +142,7 @@ class PricingController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'slug' => $slug,
-            'open_id_model' => $request->open_id_model,
+            'open_id_model' => $gptModelsImplode,
             'package_type' => $request->package_type,
             'price' => $price,
             'discount' => $request->discount,
