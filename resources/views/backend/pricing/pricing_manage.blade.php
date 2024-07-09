@@ -440,7 +440,7 @@
                                     <i class="{{ $item->open_id_model ? 'ri-checkbox-circle-fill' : 'ri-close-circle-fill' }} fs-15 align-middle"></i>
                                 </div>
                                 <div class="flex-grow-1">
-                                {{$item->open_id_model}}
+                                    {{$item->open_id_model}}
                                 </div>
                             </div>
                         </li>

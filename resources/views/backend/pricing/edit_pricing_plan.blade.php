@@ -190,15 +190,19 @@
                                 
                             </li>
                             <li>
+                                @php
+                                    $selectedModels = explode(', ', $pricing_plan->open_id_model); // Convert the string to an array
+                                @endphp
+
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">
-                                        <select class="form-select form-select-sm  mb-3" aria-label=".form-select-sm example" name="open_id_model">
-                                            <option selected>{{$pricing_plan->open_id_model}}</option>
-                                            <option value="gpt-4o">gpt-4o</option>
-                                            <option value="gpt-4-turbo">gpt-4-turbo</option>
-                                            <option value="gpt-4">gpt-4</option>
-                                            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                                            <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct</option>
+                                        <select data-choices data-choices-removeItem multiple id="style" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="open_id_model[]">
+                                            {{-- <option selected>Open AI Model</option> --}}
+                                            <option value="gpt-4o" {{ in_array('gpt-4o', $selectedModels) ? 'selected' : '' }}>gpt-4o</option>
+                                            <option value="gpt-4-turbo" {{ in_array('gpt-4-turbo', $selectedModels) ? 'selected' : '' }}>gpt-4-turbo</option>
+                                            <option value="gpt-4" {{ in_array('gpt-4', $selectedModels) ? 'selected' : '' }}>gpt-4</option>
+                                            <option value="gpt-3.5-turbo" {{ in_array('gpt-3.5-turbo', $selectedModels) ? 'selected' : '' }}>gpt-3.5-turbo</option>
+                                            <option value="gpt-3.5-turbo-instruct" {{ in_array('gpt-3.5-turbo-instruct', $selectedModels) ? 'selected' : '' }}>gpt-3.5-turbo-instruct</option>
                                         </select>
                                         <span class="ms-2">Open Ai Model</span>
                                     </div>
@@ -260,7 +264,7 @@
 @endsection
 @section('script')
     <script src="{{ URL::asset('build/js/pages/pricing.init.js') }}"></script>
-
+    <script src="{{ URL::asset('build/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>  
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script>
