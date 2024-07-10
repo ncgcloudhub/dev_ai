@@ -174,31 +174,58 @@
         });
         </script>
 
-        <script>
-            var page = 1; // initialize page number
+<script>
+    $(document).ready(function() {
+        var page = 1; // initialize page number
+        var isLoading = false; // flag to prevent multiple simultaneous AJAX requests
+        var hasMoreImages = true; // flag to check if there are more images to load
 
-            function loadMoreImages() {
-                page++; // increment page number
-                $('.infinite-scroll-loader').show(); // show loader
-                $.ajax({
-                    url: '{{ route("ai.image.gallery") }}?page=' + page, // replace 'your_route_name' with the actual route name
-                    type: 'GET',
-                    success: function (response) {
+        function loadMoreImages() {
+            if (isLoading || !hasMoreImages) return; // exit if already loading or no more images
+            isLoading = true; // set loading flag
+
+            $('.infinite-scroll-loader').show(); // show loader
+            $.ajax({
+                url: '{{ route("ai.image.gallery") }}?page=' + page,
+                type: 'GET',
+                success: function(response) {
+                    if (response.trim() === '') {
+                        hasMoreImages = false; // no more images to load
+                    } else {
                         $('#image-container').append(response);
-                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                        page++; // increment page number
                     }
-                });
-                }
-            
-            $(window).scroll(function() {
-                if($(window).scrollTop() + $(window).height() == $(document).height()) {
-                    loadMoreImages();
+                    $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                    isLoading = false; // reset loading flag
                 }
             });
+        }
 
-            // Initial load for the first page
-            loadMoreImages();
-        </script>
+        $(window).scroll(function() {
+            if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                loadMoreImages();
+            }
+        });
+
+        $('#search').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $.ajax({
+                url: '{{ route("ai.image.gallery") }}',
+                type: 'GET',
+                data: { search: searchText },
+                success: function(response) {
+                    $('#image-container').html(response);
+                    page = 1; // reset page number
+                    hasMoreImages = true; // reset has more images flag
+                }
+            });
+        });
+
+        // Initial load of images
+        loadMoreImages();
+    });
+</script>
+
 
         {{-- LIKE --}}
         <script>
@@ -263,19 +290,6 @@
         });
     });
 
-
-      // Search functionality
-      $('#search').on('input', function() {
-                    var searchText = $(this).val().toLowerCase();
-                    $.ajax({
-                        url: '{{ route("ai.image.gallery") }}',
-                        type: 'GET',
-                        data: { search: searchText },
-                        success: function(response) {
-                            $('#image-container').html(response);
-                        }
-                    });
-                });
  });
          </script>
 
