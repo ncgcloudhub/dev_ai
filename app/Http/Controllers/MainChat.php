@@ -358,4 +358,22 @@ class MainChat extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
+    // DELETE
+    public function TitleEdit(Request $request)
+    {
+
+        $sessionId = $request->input('session_id');
+        $newTitle = $request->input('new_title');
+
+        try {
+            $session = Session::findOrFail($sessionId);
+            $session->title = $newTitle;
+            $session->save();
+    
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
 }
