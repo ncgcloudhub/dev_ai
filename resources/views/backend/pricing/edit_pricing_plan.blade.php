@@ -34,8 +34,10 @@
                                 <div class="input-group">
                                     <input class="form-control form-control-sm" step="any" value="{{ $pricing_plan->discount }}" name="discount" type="number" placeholder="Enter Discount">
                                     <select class="form-select form-select-sm" name="discount_type">
+                                        <option value="" {{ $pricing_plan->discount_type === '' ? 'selected' : '' }}>None</option>
                                         <option value="percentage" {{ $pricing_plan->discount_type === 'percentage' ? 'selected' : '' }}>%</option>
                                         <option value="flat" {{ $pricing_plan->discount_type === 'flat' ? 'selected' : '' }}>Flat</option>
+                                        
                                     </select>
                                 </div>
                                 <input class="form-control form-control-sm" step="any" value="{{ $pricing_plan->discounted_price }}" name="discounted_price" type="number" placeholder="Discounted Price" readonly>
