@@ -35,7 +35,7 @@ class MainChat extends Controller
 
     // NEW SESSION
     public function MainNewSession(Request $request)
-    {
+    {   
         // Clear session data
         session()->forget(['uploaded_files', 'conversation_history', 'context', 'pasted_images']);
 
