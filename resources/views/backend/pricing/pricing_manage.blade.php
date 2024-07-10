@@ -284,18 +284,18 @@
                       
                         <div class="ms-auto">
                             @if ($item->discount_type == 'percentage')
-                        <h2 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
+                        <h2 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
                        
                         <h3><span class="badge bg-danger">{{ $item->discount }}% off</span></h3>
                       
                     
                       
                     @elseif ($item->discount_type == 'flat')
-                        <h2 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
+                        <h2 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
                        
                        <h3> <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
                     @elseif ($item->discount_type == NULL)
-                        <h2 class="month mb-0"><small class="fs-16"></small> ${{ $item->price }}</h2>
+                        <h2 class="annual mb-0"><small class="fs-16"></small> ${{ $item->price }}</h2>
                     @endif
                            
                         </div>
