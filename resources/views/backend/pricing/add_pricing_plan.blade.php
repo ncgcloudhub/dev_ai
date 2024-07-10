@@ -34,6 +34,7 @@
                                 <div class="input-group">
                                     <input class="form-control form-control-sm" step="any" name="discount" type="number" placeholder="Enter Discount">
                                     <select class="form-select form-select-sm" name="discount_type">
+                                        <option value="">None</option>
                                         <option value="percentage">%</option>
                                         <option value="flat">Flat</option>
                                     </select>
