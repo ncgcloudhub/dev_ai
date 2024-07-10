@@ -373,8 +373,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         Route::post('/chat/send', [MainChat::class, 'send']);
 
+        // Title Edit
+        Route::post('/session/edit', [MainChat::class, 'TitleEdit']);
+
         Route::post('/session/delete', [MainChat::class, 'delete']);
     });
+
+    
 
 
     // Like Image
