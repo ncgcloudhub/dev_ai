@@ -95,7 +95,7 @@
                                             <label for="lastnameInput" class="form-label">User
                                                 Name</label>
                                             <input type="text" class="form-control" id="username" name="username"
-                                                placeholder="Enter your Username" value="{{$user->name}}">
+                                                placeholder="Enter your Username" value="{{$user->username}}">
                                         </div>
                                     </div>
                                     <!--end col-->

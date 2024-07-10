@@ -47,7 +47,10 @@
                                             <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
                                         </a>
                                     </div>
-                                  
+                                    <div class="mt-4 text-center">
+                                        <h2 class="mb-3">OR</h2>
+                                       
+                                    </div>
                                     <div class="mt-2">
                                         <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
                                             <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
@@ -75,11 +78,11 @@
                                                     <div class="invalid-feedback">Please enter your name</div>
                                                 </div>
                                         
-                                                <div class="mb-3">
+                                                {{-- <div class="mb-3">
                                                     <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                                    <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
+                                                    <input type="text" name="username" class="form-control" id="username" placeholder="Enter username">
                                                     <div class="invalid-feedback">Please enter username</div>
-                                                </div>
+                                                </div> --}}
                                         
                                                 <div class="mb-3">
                                                     <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>
