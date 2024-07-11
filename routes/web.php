@@ -126,7 +126,7 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
     // USER MANAGE
     Route::prefix('user')->group(function () {
 
-        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('permission:manage.user');
 
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 

@@ -40,20 +40,21 @@
                 </li>
 
                   {{-- Eid Card --}}
-                  
+
                   <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
                         <i class=" las la-atom"></i> <span >Greeting Card</span>
                     </a>
                 </li>
+               
 
-
+               
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('calender')}}">
                         <i class=" las la-atom"></i> <span >Calender</span>
                     </a>
                 </li>
-
+              
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
@@ -279,12 +280,14 @@
                     </div>
                 </li>
 
-            
+                @if(Auth::user()->can('manage.user'))
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.user')}}">
                         <i class=" las la-user-circle"></i> <span >Manage User</span>
                     </a>
                 </li>
+                @endif
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('all.admin')}}">
                         <i class=" las la-user-circle"></i> <span >Manage Admin</span>
