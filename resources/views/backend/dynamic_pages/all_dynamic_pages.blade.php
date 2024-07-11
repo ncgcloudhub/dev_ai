@@ -40,25 +40,19 @@
                             </td>
                             <td>{{ $item->route }}</td>
                             <td>{{ strip_tags($item->content) }}</td>
-
-                            <td>Edit (On Process)
-
-                                {{-- <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                    <a href="{{route('prompt.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn">
-                                        <i class="ri-pencil-fill fs-16"></i>
-                                    </a>
-                                </li> --}}
-                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;">
-                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                        </button>
-                                    </form>
-                                </li>
-                                
+                            <td>
+                                <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn">
+                                    <i class="ri-pencil-fill fs-16"></i> 
+                                </a>
+                                <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;">
+                                        <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                    </button>
+                                </form>
                             </td>
+                            
                         </tr>
                     @endforeach
                     
@@ -86,8 +80,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
-
-
 
 @endsection
