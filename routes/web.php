@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // Admin Middleware
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'roles:admin'])->group(function () {
 
     // Admin Routes
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
@@ -322,7 +322,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // User Middleware
-Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(function () {
+Route::middleware(['auth', 'verified', 'roles:user', 'check.status'])->group(function () {
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
@@ -417,15 +417,12 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::post('/chat/send', [AIChatController::class, 'send']);
 
     // Calender
-    Route::get('/calender', [FAQController::class, 'calender'])->name('calender');
-
-
+    Route::get('/calender', [FAQController::class, 'calender'])->name('calender')->middleware('permission:add.prompt');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
     });
-
 
     //Profile 
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
@@ -467,7 +464,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
-    Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');
+    Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card')->middleware('permission:eid.card');
 
     Route::post('eid/card/generate', [GenerateImagesController::class, 'EidCardGenerate'])->name('generate.eid.card');
 
