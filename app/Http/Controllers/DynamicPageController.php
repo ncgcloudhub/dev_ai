@@ -36,7 +36,10 @@ class DynamicPageController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'route' => 'required|string|unique:dynamic_pages',
-            'content' => 'required|string', // You may validate content format here
+            'content' => 'required|string',
+            'seo_title' => 'nullable|string|max:255',
+            'keywords' => 'nullable|string',
+            'description' => 'nullable|string',
         ]);
 
         // Create a new dynamic page
@@ -64,7 +67,8 @@ class DynamicPageController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $dynamicPage = DynamicPage::findOrFail($id);
+        return view('backend.dynamic_pages.dynamic_page_edit', compact('dynamicPage'));
     }
 
     /**
@@ -72,7 +76,23 @@ class DynamicPageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate incoming request data
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'route' => 'required|string|unique:dynamic_pages,route,' . $id,
+            'content' => 'required|string',
+            'seo_title' => 'nullable|string|max:255',
+            'keywords' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        // Find the dynamic page by ID and update it
+        $dynamicPage = DynamicPage::findOrFail($id);
+        $dynamicPage->update($validated);
+
+        // Redirect to a relevant page after update
+        return redirect()->route('dynamic-pages.index')
+            ->with('success', 'Dynamic page updated successfully.');
     }
 
     /**

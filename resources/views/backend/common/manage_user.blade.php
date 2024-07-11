@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th scope="col">Sl.</th>
-                <th scope="col">Username</th>
+                <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Email Verified</th>
                 <th scope="col">Role</th>

@@ -45,8 +45,23 @@
                                     <h5 class="text-primary">Welcome Back !</h5>
                                     <p class="text-muted">Sign in to continue to Clever Creator.</p>
                                 </div>
+
+                                <div class="mt-2">
+                                    <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light w-100">
+                                        <i class="ri-google-fill fs-16 mx-2"></i> Sign In with Google
+                                    </a>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
+                                        <i class="ri-github-fill fs-16 mx-2"></i> Sign In with GitHub
+                                    </a>
+                                </div>
                                 @include('admin.layouts.alerts')
-                                <div class="p-2 mt-4">
+                                <div class="signin-other-title mt-4 text-center">
+                                    <h3 class="fs-13 title">Or Sign In With</h3>
+                                </div>
+                                <div class="p-2 mt-2">
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
 
@@ -86,28 +101,13 @@
                                         </div>
 
                                         <div class="mt-4 text-center">
-                                            <div class="signin-other-title">
-                                                <h5 class="fs-13 mb-4 title">Sign In with</h5>
-                                            </div>
+                                            
                                             <div>
                                                 {{-- <button type="button" class="btn btn-primary btn-icon waves-effect waves-light">
                                                     <i class="ri-facebook-fill fs-16"></i>
                                                 </button> --}}
 
-                                                        <div class="mt-2">
-                                                            <a href="{{ route('google.login') }}" class="btn btn-danger btn-icon waves-effect waves-light w-100">
-                                                                <i class="ri-google-fill fs-16 mx-2"></i> Sign In with Google
-                                                            </a>
-                                                        </div>
-                                                        <div class="mt-4 text-center">
-                                                            <h2 class="mb-3">OR</h2>
-                                                            <hr class="mx-auto" style="width: 50px; border-top: 2px solid #888;">
-                                                        </div>
-                                                        <div class="mt-2">
-                                                            <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
-                                                                <i class="ri-github-fill fs-16 mx-2"></i> Sign In with GitHub
-                                                            </a>
-                                                        </div>
+                                                     
                                                         
                                                         
                                                 {{-- <button type="button"

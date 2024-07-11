@@ -7,9 +7,6 @@
 @endsection
 @section('content')
 
-
-
-
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border">
         <div class="px-4 pt-4 mb-4">
@@ -56,10 +53,14 @@
                                         <div class="flex-grow-1 overflow-hidden">
                                             <p class="text-truncate mb-0">{{ $item->title }}</p>
                                         </div>
-                                        {{-- <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button> --}}
+                                      
+                                        <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
                                         <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
                                             <i class="ri-delete-bin-5-line"></i>
                                         </button>
+                                       
                                     </div>
                                 </a>
                             </li>
@@ -76,49 +77,36 @@
         <!-- end tab contact -->
     </div>
     <!-- end chat leftsidebar -->
+
     <!-- Start User chat -->
     <div class="user-chat w-100 overflow-hidden border">
-
         <div class="chat-content d-lg-flex">
             <!-- start chat conversation section -->
             <div class="w-100 overflow-hidden position-relative">
                 <!-- conversation user -->
                 <div class="position-relative">
-
-
                     <div class="position-relative" id="users-chat">
                         <div class="p-3 user-chat-topbar">
                             <div class="row align-items-center">
-                                <div class="col-sm-4 col-8">
-                                   
+                                <div class="col-sm-4 col-8"> 
                                 </div>
                                 <div class="col-sm-8 col-4">
                                     <ul class="list-inline user-chat-nav text-end mb-0">
-                                  
-
                                         <li class="list-inline-item m-0">
-                                            
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                         <!-- end chat user head -->
                         <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
                             <div id="elmLoader">
-                                {{-- <div class="spinner-border text-primary avatar-sm" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div> --}}
                             </div>
                             <ul class="list-unstyled chat-conversation-list" id="users-conversation">
-
                             </ul>
                             <!-- end chat-conversation-list -->
                         </div>
-                       
                     </div>
-
                     <div class="chat-input-section p-3 p-lg-4">
 
                             <div class="row g-0 align-items-center">
@@ -154,9 +142,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                            </div>
-                        
+                            </div> 
                     </div>
 
                     <div class="replyCard">
@@ -479,30 +465,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <script>
         function formatContent(content) {
-        const lines = content.split('\n');
-        let formattedContent = '';
+    const lines = content.split('\n');
+    let formattedContent = '';
 
-        if (lines.length === 1) {
-            formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
-        } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
-            const codeContent = lines.slice(1, -1).join('\n');
-            formattedContent = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace;">${codeContent}</pre>`;
-        } else if (lines.some(line => line.trim().startsWith('*'))) {
-            formattedContent += '<ul style="font-family: Calibri;">';
-            lines.forEach(line => {
-                if (line.trim().startsWith('*')) {
-                    formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                } else {
-                    formattedContent += '<p>' + line.trim() + '</p>';
-                }
-            });
-            formattedContent += '</ul>';
-        } else {
-            formattedContent = '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + lines.join('</p><p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">') + '</p>';
-        }
-
-        return formattedContent;
+    if (lines.length === 1) {
+        formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
+    } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
+        const codeContent = lines.slice(1, -1).join('\n');
+        formattedContent = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace;">${codeContent}</pre>`;
+    } else if (lines.some(line => line.trim().startsWith('*'))) {
+        formattedContent += '<ul style="font-family: Calibri;">';
+        lines.forEach(line => {
+            if (line.trim().startsWith('*')) {
+                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
+            } else {
+                formattedContent += '<p>' + line.trim() + '</p>';
+            }
+        });
+        formattedContent += '</ul>';
+    } else {
+        formattedContent = '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + lines.join('</p><p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">') + '</p>';
     }
+
+    return formattedContent;
+}
+
 </script>
 
 {{-- GET MESSAGES FROM SESSION --}}
@@ -510,6 +497,13 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('DOMContentLoaded', function() {
     const sessionList = document.getElementById('session-list');
     const chatConversation = document.getElementById('users-conversation');
+
+    // Load the last chat session's messages from session storage
+    const savedContext = sessionStorage.getItem('currentSessionContext');
+    if (savedContext) {
+        const context = JSON.parse(savedContext);
+        loadMessagesFromContext(context);
+    }
 
     sessionList.addEventListener('click', function(event) {
         const target = event.target.closest('li');
@@ -536,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="user-chat-content">
                                     <div class="ctext-wrap">
                                         <div class="ctext-wrap-content">
-                                            <p class="mb-0 ctext-content">${content}</p>
+                                            <p class="mb-0 ctext-content">${formatContent(content)}</p>
                                         </div>
                                     </div>
                                     <div class="conversation-name">
@@ -549,8 +543,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
 
-                 // Clear the session storage for the current session context
-                 sessionStorage.removeItem('currentSessionContext');
+                // Clear the session storage for the current session context
+                sessionStorage.removeItem('currentSessionContext');
 
                 // Store context in session storage
                 sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
@@ -576,6 +570,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function loadMessagesFromContext(context) {
+        if (!context || !context.messages) return;
+
+        chatConversation.innerHTML = '';
+        context.messages.forEach(message => {
+            const { content, role, created_at } = message;
+            const messageHTML = `
+                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                    <div class="conversation-list">
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content">
+                                    <p class="mb-0 ctext-content">${formatContent(content)}</p>
+                                </div>
+                            </div>
+                            <div class="conversation-name">
+                                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+        });
+        chatConversation.scrollTop = chatConversation.scrollHeight;
+    }
+
     // Optionally, trigger a click event on the first session to load messages on page load
     const firstSession = sessionList.querySelector('li');
     if (firstSession) {
@@ -583,43 +604,77 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-</script>
 
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  
 {{-- DELETE SESSION --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const sessionList = document.getElementById('session-list');
+        const sessionList = document.getElementById('session-list');
 
-    // Add event listener for delete buttons
-    sessionList.addEventListener('click', function (event) {
+        // Add event listener for delete buttons
+        sessionList.addEventListener('click', function (event) {
             const deleteButton = event.target.closest('.delete-session-btn');
             if (deleteButton) {
                 const sessionId = deleteButton.getAttribute('data-session-id');
                 deleteSession(sessionId);
             }
-        });
 
-    function deleteSession(sessionId) {
-        axios.post(`/main/session/delete`, {
-            session_id: sessionId
-        })
-        .then(response => {
-            if (response.data.success) {
-                // Remove the session item from the UI
-                const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
-                if (sessionItem) {
-                    sessionItem.remove();
-                }
-            } else {
-                console.error('Failed to delete session');
+            const editButton = event.target.closest('.edit-session-btn');
+            if (editButton) {
+                const sessionId = editButton.getAttribute('data-session-id');
+                editSession(sessionId);
             }
-        })
-        .catch(error => {
-            console.error('Error deleting session:', error);
         });
-    }
-});
 
+        function deleteSession(sessionId) {
+            axios.post(`/main/session/delete`, {
+                session_id: sessionId
+            })
+            .then(response => {
+                if (response.data.success) {
+                    // Remove the session item from the UI
+                    const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+                    if (sessionItem) {
+                        sessionItem.remove();
+                    }
+                } else {
+                    console.error('Failed to delete session');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting session:', error);
+            });
+        }
+
+        function editSession(sessionId) {
+            // Get the current session item and title
+            const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+            const sessionTitle = sessionItem.querySelector('p').textContent;
+            console.error(sessionTitle);
+
+            // Open a prompt to edit the session title
+            const newTitle = prompt("Edit Session Title:", sessionTitle);
+            if (newTitle) {
+                axios.post(`/main/session/edit`, {
+                    session_id: sessionId,
+                    new_title: newTitle
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        // Update the session title in the UI
+                        sessionItem.querySelector('p').textContent = newTitle;
+                    } else {
+                        console.error('Failed to edit session');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error editing session:', error);
+                });
+            }
+        }
+    });
 </script>
 
 

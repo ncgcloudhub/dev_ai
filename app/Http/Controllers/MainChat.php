@@ -35,7 +35,7 @@ class MainChat extends Controller
 
     // NEW SESSION
     public function MainNewSession(Request $request)
-    {
+    {   
         // Clear session data
         session()->forget(['uploaded_files', 'conversation_history', 'context', 'pasted_images']);
 
@@ -353,6 +353,24 @@ class MainChat extends Controller
             $session = Session::findOrFail($sessionId);
             $session->delete();
 
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    // DELETE
+    public function TitleEdit(Request $request)
+    {
+
+        $sessionId = $request->input('session_id');
+        $newTitle = $request->input('new_title');
+
+        try {
+            $session = Session::findOrFail($sessionId);
+            $session->title = $newTitle;
+            $session->save();
+    
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);

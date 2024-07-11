@@ -47,7 +47,7 @@ Route::get('/', function () {
     }
 
     $seo = SeoSetting::find(1);
-    $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
+    $templates = Template::whereIn('id', [36, 37, 38, 18, 43, 39, 13, 3])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
@@ -90,15 +90,14 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
 
     // Add Admin
-    Route::controller(AdminController::class)->group(function(){
+    Route::controller(AdminController::class)->group(function () {
 
         Route::get('/all/admin', 'AllAdmin')->name('all.admin');
         Route::get('/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
         Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
         Route::post('/update/admin/{id}', 'UpdateAdmin')->name('update.admin');
-   
-   });
+    });
 
     // AI Settings
     Route::prefix('settings/OpenAI')->group(function () {
@@ -163,36 +162,34 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
     });
 
     //  Permission
-        Route::controller(RoleController::class)->group(function(){
+    Route::controller(RoleController::class)->group(function () {
 
-            Route::get('/all/permission', 'AllPermission')->name('all.permission'); 
-            Route::get('/add/permission', 'AddPermission')->name('add.permission');
-            Route::post('/store/permission', 'StorePermission')->name('store.permission');
-            Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
-            Route::post('/update/permission', 'UpdatePermission')->name('update.permission');
-            Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission'); 
+        Route::get('/all/permission', 'AllPermission')->name('all.permission');
+        Route::get('/add/permission', 'AddPermission')->name('add.permission');
+        Route::post('/store/permission', 'StorePermission')->name('store.permission');
+        Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
+        Route::post('/update/permission', 'UpdatePermission')->name('update.permission');
+        Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission');
+    });
 
-        });
+    // Roles 
+    Route::controller(RoleController::class)->group(function () {
 
-        // Roles 
-        Route::controller(RoleController::class)->group(function(){
+        Route::get('/all/roles', 'AllRoles')->name('all.roles');
+        Route::get('/add/roles', 'AddRoles')->name('add.roles');
+        Route::post('/store/roles', 'StoreRoles')->name('store.roles');
+        Route::get('/edit/roles/{id}', 'EditRoles')->name('edit.roles');
+        Route::post('/update/roles', 'UpdateRoles')->name('update.roles');
+        Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');
 
-            Route::get('/all/roles', 'AllRoles')->name('all.roles'); 
-            Route::get('/add/roles', 'AddRoles')->name('add.roles');
-            Route::post('/store/roles', 'StoreRoles')->name('store.roles'); 
-            Route::get('/edit/roles/{id}', 'EditRoles')->name('edit.roles');
-            Route::post('/update/roles', 'UpdateRoles')->name('update.roles');
-            Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');  
-            
-            // RoleSetup
-            Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission'); 
-            Route::post('/role/permission/store', 'RolePermissionStore')->name('role.permission.store'); 
-            Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission'); 
-            Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles'); 
-            Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update'); 
-            Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')->name('admin.delete.roles');
-
-        });
+        // RoleSetup
+        Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission');
+        Route::post('/role/permission/store', 'RolePermissionStore')->name('role.permission.store');
+        Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission');
+        Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles');
+        Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
+        Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')->name('admin.delete.roles');
+    });
 
     // Prompt Library
     Route::prefix('prompt')->group(function () {
@@ -283,6 +280,11 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
     // Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
     Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
+    // routes/web.php
+    Route::put('faq/update/{id}', [FAQController::class, 'update'])->name('faq.update');
+    // routes/web.php
+    Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy');
+
 
 
     // JOB Admin
@@ -366,15 +368,20 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     // Custom Templates
     Route::prefix('main')->group(function () {
 
-        Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
-
         // NEW SESSION
         Route::post('/new-session', [MainChat::class, 'MainNewSession']);
 
         Route::post('/chat/send', [MainChat::class, 'send']);
 
+        // Title Edit
+        Route::post('/session/edit', [MainChat::class, 'TitleEdit']);
+
         Route::post('/session/delete', [MainChat::class, 'delete']);
     });
+
+    Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
+
+
 
 
     // Like Image
@@ -412,15 +419,12 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::post('/chat/send', [AIChatController::class, 'send']);
 
     // Calender
-    Route::get('/calender', [FAQController::class, 'calender'])->name('calender');
-
-
+    Route::get('/calender', [FAQController::class, 'calender'])->name('calender')->middleware('permission:add.prompt');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
         Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
     });
-
 
     //Profile 
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
@@ -462,7 +466,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
-    Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card');
+    Route::get('eid/card', [GenerateImagesController::class, 'EidCard'])->name('eid.card')->middleware('permission:eid.card');
 
     Route::post('eid/card/generate', [GenerateImagesController::class, 'EidCardGenerate'])->name('generate.eid.card');
 
