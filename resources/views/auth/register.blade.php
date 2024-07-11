@@ -47,16 +47,18 @@
                                             <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
                                         </a>
                                     </div>
-                                    <div class="mt-4 text-center">
-                                        <h2 class="mb-3">OR</h2>
-                                       
-                                    </div>
+                                 
                                     <div class="mt-2">
                                         <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
                                             <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
                                         </a>
                                     </div>
-                                    <div class="p-2 mt-4">
+
+                                    <div class="signin-other-title mt-4 text-center">
+                                        <h3 class="fs-13 title">Or Sign Up With</h3>
+                                    </div>
+
+                                    <div class="p-2 mt-2">
                                         <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}" id="registrationForm">
                                             @csrf
                                         
