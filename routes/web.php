@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // Admin Middleware
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'roles:admin'])->group(function () {
 
     // Admin Routes
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
@@ -126,7 +126,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // USER MANAGE
     Route::prefix('user')->group(function () {
 
-        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('permission:manage.user');
 
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
@@ -321,7 +321,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 // User Middleware
-Route::middleware(['auth', 'verified', 'role:user', 'check.status'])->group(function () {
+Route::middleware(['auth', 'verified', 'roles:user', 'check.status'])->group(function () {
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
