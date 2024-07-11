@@ -31,6 +31,8 @@ class TemplateController extends Controller
     public function TemplateCategoryStore(Request $request)
     {
 
+        flash()->success('Operation completed successfully.');
+        
         $TemplateCategory = TemplateCategory::insertGetId([
 
             'category_name' => $request->category_name,

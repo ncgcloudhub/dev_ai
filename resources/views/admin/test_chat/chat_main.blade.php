@@ -53,10 +53,14 @@
                                         <div class="flex-grow-1 overflow-hidden">
                                             <p class="text-truncate mb-0">{{ $item->title }}</p>
                                         </div>
-                                        {{-- <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-delete-bin-5-line"></i></button> --}}
+                                      
+                                        <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
+                                            <i class="ri-pencil-line"></i>
+                                        </button>
                                         <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
                                             <i class="ri-delete-bin-5-line"></i>
                                         </button>
+                                       
                                     </div>
                                 </a>
                             </li>
@@ -602,42 +606,75 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  
 {{-- DELETE SESSION --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const sessionList = document.getElementById('session-list');
+        const sessionList = document.getElementById('session-list');
 
-    // Add event listener for delete buttons
-    sessionList.addEventListener('click', function (event) {
+        // Add event listener for delete buttons
+        sessionList.addEventListener('click', function (event) {
             const deleteButton = event.target.closest('.delete-session-btn');
             if (deleteButton) {
                 const sessionId = deleteButton.getAttribute('data-session-id');
                 deleteSession(sessionId);
             }
-        });
 
-    function deleteSession(sessionId) {
-        axios.post(`/main/session/delete`, {
-            session_id: sessionId
-        })
-        .then(response => {
-            if (response.data.success) {
-                // Remove the session item from the UI
-                const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
-                if (sessionItem) {
-                    sessionItem.remove();
-                }
-            } else {
-                console.error('Failed to delete session');
+            const editButton = event.target.closest('.edit-session-btn');
+            if (editButton) {
+                const sessionId = editButton.getAttribute('data-session-id');
+                editSession(sessionId);
             }
-        })
-        .catch(error => {
-            console.error('Error deleting session:', error);
         });
-    }
-});
 
+        function deleteSession(sessionId) {
+            axios.post(`/main/session/delete`, {
+                session_id: sessionId
+            })
+            .then(response => {
+                if (response.data.success) {
+                    // Remove the session item from the UI
+                    const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+                    if (sessionItem) {
+                        sessionItem.remove();
+                    }
+                } else {
+                    console.error('Failed to delete session');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting session:', error);
+            });
+        }
+
+        function editSession(sessionId) {
+            // Get the current session item and title
+            const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+            const sessionTitle = sessionItem.querySelector('p').textContent;
+            console.error(sessionTitle);
+
+            // Open a prompt to edit the session title
+            const newTitle = prompt("Edit Session Title:", sessionTitle);
+            if (newTitle) {
+                axios.post(`/main/session/edit`, {
+                    session_id: sessionId,
+                    new_title: newTitle
+                })
+                .then(response => {
+                    if (response.data.success) {
+                        // Update the session title in the UI
+                        sessionItem.querySelector('p').textContent = newTitle;
+                    } else {
+                        console.error('Failed to edit session');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error editing session:', error);
+                });
+            }
+        }
+    });
 </script>
 
 

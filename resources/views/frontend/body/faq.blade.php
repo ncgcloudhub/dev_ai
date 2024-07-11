@@ -20,8 +20,8 @@
         </div>
         <!-- end row -->
 
-        <div class="row g-lg-5 g-4 d-flex justify-content-center">
-            <div class="col-lg-6">
+        <div class="row g-lg-8 g-4 d-flex justify-content-center">
+            <div class="col-lg-8">
                 <div class="d-flex align-items-center mb-2">
                     <div class="flex-shrink-0 me-1">
                         <i class="ri-question-line fs-24 align-middle text-success me-1"></i>
@@ -57,3 +57,17 @@
     </div>
     <!-- end container -->
 </section>
+
+<style>
+    #faq img {
+        max-width: 100%;
+        height: auto;
+    }
+    .accordion-body {
+        overflow: auto; /* Ensures scrollable content */
+        max-height: 300px; /* Sets a maximum height for the content */
+    }
+    .accordion-button {
+        white-space: normal; /* Allows long text in the button to wrap */
+    }
+</style>

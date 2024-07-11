@@ -154,51 +154,106 @@
             });
         </script>
 
-        <script>
-            document.querySelectorAll('.image-popups').forEach(item => {
-        item.addEventListener('click', event => {
-            const imageUrl = item.getAttribute('data-image-url');
-            const title = item.getAttribute('title');
-            const prompt = item.getAttribute('data-image-prompt');
-            const resolution = item.getAttribute('data-image-resolution');
-            
-            // Update modal content
-            document.getElementById('modalImage').src = imageUrl;
-            document.getElementById('imageModalLabel').innerText = title;
-            document.getElementById('modalPrompt').innerText = prompt;
-            document.getElementById('modalResolution').innerText = resolution;
-            
-            // Show the modal
-            $('#imageModal').modal('show');
-        });
-        });
-        </script>
+<script>
+    var images = []; // To hold the list of images
+    var currentIndex = -1; // To track the current image index
 
-        <script>
-            var page = 1; // initialize page number
+    function updateModalContent(image) {
+        $('#modalImage').attr('src', image.url);
+        $('#imageModalLabel').text(image.title);
+        $('#resolution').text(image.resolution);
+    }
 
-            function loadMoreImages() {
-                page++; // increment page number
-                $('.infinite-scroll-loader').show(); // show loader
-                $.ajax({
-                    url: '{{ route("ai.image.gallery") }}?page=' + page, // replace 'your_route_name' with the actual route name
-                    type: 'GET',
-                    success: function (response) {
+    $(document).on('click', '.image-popups', function() {
+        images = $('.image-popups').map(function() {
+            return {
+                url: $(this).data('image-url'),
+                title: $(this).attr('title'),
+                resolution: $(this).data('image-resolution')
+            };
+        }).get();
+
+        currentIndex = $('.image-popups').index(this);
+        const image = images[currentIndex];
+        updateModalContent(image);
+
+        // Show the modal
+        $('#imageModal').modal('show');
+    });
+
+    $('#prevButton').click(function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateModalContent(images[currentIndex]);
+        }
+    });
+
+    $('#nextButton').click(function() {
+        if (currentIndex < images.length - 1) {
+            currentIndex++;
+            updateModalContent(images[currentIndex]);
+        }
+    });
+</script>
+
+
+<script>
+   $(document).ready(function() {
+    var page = 1; // initialize page number
+    var isLoading = false; // flag to prevent multiple simultaneous AJAX requests
+    var hasMoreImages = true; // flag to check if there are more images to load
+
+    function loadMoreImages() {
+        if (isLoading || !hasMoreImages) return; // exit if already loading or no more images
+        isLoading = true; // set loading flag
+
+        $('.infinite-scroll-loader').show(); // show loader
+        $.ajax({
+            url: '{{ route("ai.image.gallery") }}?page=' + page,
+            type: 'GET',
+            success: function(response) {
+                if (response.trim() === '') {
+                    hasMoreImages = false; // no more images to load
+                } else {
+                    // Append only if it's not the initial load (page > 1)
+                    if (page > 1) {
                         $('#image-container').append(response);
-                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
                     }
-                });
+                    page++; // increment page number
                 }
-            
-            $(window).scroll(function() {
-                if($(window).scrollTop() + $(window).height() == $(document).height()) {
-                    loadMoreImages();
-                }
-            });
+                $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                isLoading = false; // reset loading flag
+            }
+        });
+    }
 
-            // Initial load for the first page
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
             loadMoreImages();
-        </script>
+        }
+    });
+
+    $('#search').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $.ajax({
+            url: '{{ route("ai.image.gallery") }}',
+            type: 'GET',
+            data: { search: searchText },
+            success: function(response) {
+                $('#image-container').html(response);
+                page = 1; // reset page number
+                hasMoreImages = true; // reset has more images flag
+            }
+        });
+    });
+
+    // Initial load of images only if it's not an AJAX request
+    if (!window.location.href.includes('?')) {
+        loadMoreImages();
+    }
+});
+</script>
+
 
         {{-- LIKE --}}
         <script>
@@ -263,19 +318,6 @@
         });
     });
 
-
-      // Search functionality
-      $('#search').on('input', function() {
-                    var searchText = $(this).val().toLowerCase();
-                    $.ajax({
-                        url: '{{ route("ai.image.gallery") }}',
-                        type: 'GET',
-                        data: { search: searchText },
-                        success: function(response) {
-                            $('#image-container').html(response);
-                        }
-                    });
-                });
  });
          </script>
 

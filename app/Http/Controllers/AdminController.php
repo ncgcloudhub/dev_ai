@@ -15,7 +15,8 @@ use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
-    public function AdminDashboard(){
+    public function AdminDashboard()
+    {
         $user = Auth::user();
         $templates_count = Template::count();
         $custom_templates_count = CustomTemplate::count();
@@ -23,24 +24,24 @@ class AdminController extends Controller
         $custom_templates = CustomTemplate::limit(5)->get();
 
         $wordCountSum = CustomTemplate::sum('total_word_generated');
-        
+
         $totalUsers = User::where('role', 'user')->count();
 
         $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-        ->whereNotNull('country') // Exclude users with NULL country
-        ->groupBy('country')
-        ->get();
+            ->whereNotNull('country') // Exclude users with NULL country
+            ->groupBy('country')
+            ->get();
 
         $userId = auth()->id(); // Get the authenticated user's ID
         $sessions = Session::with('messages') // Eager load the related messages
-                        ->where('user_id', $userId)
-                        ->get();
+            ->where('user_id', $userId)
+            ->get();
 
-         // Fetch images with their likes, order by the number of likes
-         $images = DalleImageGenerate::withCount('likes')
-         ->whereHas('likes') // Filter images that have at least one like
-         ->orderByDesc('likes_count') // Order by the number of likes in descending order
-         ->get();
+        // Fetch images with their likes, order by the number of likes
+        $images = DalleImageGenerate::withCount('likes')
+            ->whereHas('likes') // Filter images that have at least one like
+            ->orderByDesc('likes_count') // Order by the number of likes in descending order
+            ->get();
 
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
@@ -48,12 +49,24 @@ class AdminController extends Controller
 
         // Calculate the total number of likes
         $totalLikes = $images->sum('likes_count');
-       
+
+        //Favourite count
+        $favImages = DalleImageGenerate::withCount('favorites')
+            ->whereHas('favorites') // Filter images that have at least one like
+            ->orderByDesc('favorites_count') // Order by the number of likes in descending order
+            ->get();
+
+        foreach ($favImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+        // Calculate the total number of likes
+        $totalFav = $favImages->sum('favorites_count');
+
         // dd($templates_count);
-        return view('admin.admin_dashboard', compact('user','templates_count','custom_templates_count','templates','custom_templates','usersByCountry','totalUsers','wordCountSum', 'sessions','images','totalLikes'));
-       
+        return view('admin.admin_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav'));
     }
- 
+
     public function showChangePasswordForm(User $user)
     {
         // Pass the user data to the view
@@ -86,87 +99,87 @@ class AdminController extends Controller
     }
 
     // Add Admin
-    public function AllAdmin(){
+    public function AllAdmin()
+    {
 
-        $alladmin = User::where('role','admin')->get();
-        return view('admin.all_admin',compact('alladmin'));
-    
-      }// End Method 
-    
-    public function AddAdmin(){
+        $alladmin = User::where('role', 'admin')->get();
+        return view('admin.all_admin', compact('alladmin'));
+    } // End Method 
+
+    public function AddAdmin()
+    {
 
         $roles = Role::all();
-        return view('admin.add_admin',compact('roles'));
-    
-      }// End Method 
-    
-    
-      public function StoreAdmin(Request $request)
-{
-    $user = new User();
-    $user->username = $request->username;
-    $user->name = $request->name;
-    $user->email = $request->email;
-    $user->phone = $request->phone;
-    $user->address = $request->address;
-    $user->password = Hash::make($request->password);
-    $user->role = 'admin'; // Make sure you have this column in your users table
-    $user->status = 'active';
-    $user->save();
+        return view('admin.add_admin', compact('roles'));
+    } // End Method 
 
-    if ($request->roles) {
-        // Fetch the role by ID and assign it to the user
-        $role = Role::findById($request->roles);
-        if ($role) {
-            $user->assignRole($role);
+
+    public function StoreAdmin(Request $request)
+    {
+        $user = new User();
+        $user->username = $request->username;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->password = Hash::make($request->password);
+        $user->role = 'admin'; // Make sure you have this column in your users table
+        $user->status = 'active';
+        $user->save();
+
+        if ($request->roles) {
+            // Fetch the role by ID and assign it to the user
+            $role = Role::findById($request->roles);
+            if ($role) {
+                $user->assignRole($role);
+            }
         }
+
+        $notification = [
+            'message' => 'New Admin User Inserted Successfully',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('all.admin')->with($notification);
     }
 
-    $notification = [
-        'message' => 'New Admin User Inserted Successfully',
-        'alert-type' => 'success'
-    ];
+    public function EditAdmin($id)
+    {
 
-    return redirect()->route('all.admin')->with($notification);
-}
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        return view('admin.edit_admin', compact('user', 'roles'));
+    } // End Method
 
-public function EditAdmin($id){
+    public function UpdateAdmin(Request $request, $id)
+    {
 
-    $user = User::findOrFail($id);
-    $roles = Role::all();
-    return view('admin.edit_admin',compact('user','roles'));
+        $user = User::findOrFail($id);
+        $user->username = $request->username;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->role = 'admin';
+        $user->status = 'active';
+        $user->save();
 
-  }// End Method
-
-   public function UpdateAdmin(Request $request,$id){
-
-    $user = User::findOrFail($id);
-    $user->username = $request->username;
-    $user->name = $request->name;
-    $user->email = $request->email;
-    $user->phone = $request->phone;
-    $user->address = $request->address; 
-    $user->role = 'admin';
-    $user->status = 'active';
-    $user->save();
-
-    $user->roles()->detach();
-    if ($request->roles) {
-        // Fetch the role by ID and assign it to the user
-        $role = Role::findById($request->roles);
-        if ($role) {
-            $user->assignRole($role);
+        $user->roles()->detach();
+        if ($request->roles) {
+            // Fetch the role by ID and assign it to the user
+            $role = Role::findById($request->roles);
+            if ($role) {
+                $user->assignRole($role);
+            }
         }
-    }
 
-    $notification = array(
+        $notification = array(
             'message' => 'New Admin User Updated Successfully',
             'alert-type' => 'success'
         );
 
-        return redirect()->route('all.admin')->with($notification); 
+        return redirect()->route('all.admin')->with($notification);
+    } // End Method 
 
-  }// End Method 
-  
 
 }

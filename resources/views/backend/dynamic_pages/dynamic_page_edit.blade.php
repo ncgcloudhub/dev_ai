@@ -5,15 +5,16 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create Dynamic Page | ON PROCESS (SEO)</div>
+                    <div class="card-header">Edit Dynamic Page</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('dynamic-pages.store') }}">
+                        <form method="POST" action="{{ route('dynamic-pages.update', $dynamicPage->id) }}">
                             @csrf
+                            @method('PUT')
 
                             <div class="form-group">
                                 <label for="title">Title</label>
-                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
+                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $dynamicPage->title) }}" required autofocus>
 
                                 @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -24,7 +25,7 @@
 
                             <div class="form-group">
                                 <label for="route">Route</label>
-                                <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route') }}" required>
+                                <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route', $dynamicPage->route) }}" required>
 
                                 @error('route')
                                     <span class="invalid-feedback" role="alert">
@@ -35,7 +36,7 @@
 
                             <div class="form-group">
                                 <label for="content">Content</label>
-                                <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content') }}</textarea>
+                                <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content', $dynamicPage->content) }}</textarea>
 
                                 @error('content')
                                     <span class="invalid-feedback" role="alert">
@@ -46,29 +47,27 @@
 
                             <div class="card border card-border-info mt-3">
                                 <div class="card-body">
-           
-                                        <div>
-                                            <h5 class="mt-0">Page SEO</h5>
-                                            <div class="col-md-12 mt-3">
-                                                <label for="seo_title" class="form-label">Title</label>
-                                                <input type="text" name="seo_title" value="" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
-                                            </div>
-                        
-                                            <div class="col-md-12 mb-3">
-                                                <label for="keywords" class="form-label">Keywords</label>
-                                                <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="Design, Remote"  />
-                                            </div>
-                        
-                                            <div class="col-md-12">
-                                                <label for="description" class="form-label">Description</label>
-                                                <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
-                                            </div>
+                                    <div>
+                                        <h5 class="mt-0">Page SEO</h5>
+                                        <div class="col-md-12 mt-3">
+                                            <label for="seo_title" class="form-label">Title</label>
+                                            <input type="text" name="seo_title" value="{{ old('seo_title', $dynamicPage->seo_title) }}" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
                                         </div>
-                                    
+
+                                        <div class="col-md-12 mb-3">
+                                            <label for="keywords" class="form-label">Keywords</label>
+                                            <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="{{ old('keywords', $dynamicPage->keywords) }}" />
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <label for="description" class="form-label">Description</label>
+                                            <input type="text" name="description" value="{{ old('description', $dynamicPage->description) }}" class="form-control mb-3" id="description" placeholder="Enter description">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Create Page</button>
+                            <button type="submit" class="btn btn-primary">Update Page</button>
                         </form>
                     </div>
                 </div>
@@ -93,4 +92,3 @@
     });
 </script>
 @endsection
-

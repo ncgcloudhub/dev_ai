@@ -47,13 +47,18 @@
                                             <i class="ri-google-fill fs-16 mx-2"></i> Sign Up with Google
                                         </a>
                                     </div>
-                                  
+                                 
                                     <div class="mt-2">
                                         <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
                                             <i class="ri-github-fill fs-16 mx-2"></i> Sign Up with GitHub
                                         </a>
                                     </div>
-                                    <div class="p-2 mt-4">
+
+                                    <div class="signin-other-title mt-4 text-center">
+                                        <h3 class="fs-13 title">Or Sign Up With</h3>
+                                    </div>
+
+                                    <div class="p-2 mt-2">
                                         <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}" id="registrationForm">
                                             @csrf
                                         
@@ -73,12 +78,6 @@
                                                     <label for="username" class="form-label">Name <span class="text-danger">*</span></label>
                                                     <input type="text" name="name" class="form-control" id="username" placeholder="Enter your name" required>
                                                     <div class="invalid-feedback">Please enter your name</div>
-                                                </div>
-                                        
-                                                <div class="mb-3">
-                                                    <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
-                                                    <input type="text" name="username" class="form-control" id="username" placeholder="Enter username" required>
-                                                    <div class="invalid-feedback">Please enter username</div>
                                                 </div>
                                         
                                                 <div class="mb-3">
@@ -102,7 +101,14 @@
                                                 <input type="hidden" name="ref" value="{{ request()->query('ref') }}">
                                             </div>
                                         
-                                            <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                                            <div class="mb-3 form-check">
+                                                <input type="checkbox" class="form-check-input" id="termsAgreement">
+                                                <label class="form-check-label" for="termsAgreement">
+                                                    By continuing, you agree to Clever Creator's Consumer Terms and Usage Policy, and acknowledge their Privacy Policy.
+                                                </label>
+                                            </div>
+                                        
+                                            <button type="submit" class="btn btn-success w-100" id="signUpButton" disabled>Sign Up</button>
                                         </form>
                                         
                                         <script>
@@ -160,5 +166,12 @@
             <script src="{{ URL::asset('build/js/pages/particles.app.js') }}"></script>
             <script src="{{ URL::asset('build/js/pages/form-validation.init.js') }}"></script>
             <script src="{{ URL::asset('build/js/pages/passowrd-create.init.js') }}"></script>
+
+            <script>
+                document.getElementById('termsAgreement').addEventListener('change', function() {
+                    document.getElementById('signUpButton').disabled = !this.checked;
+                });
+            </script>
+            
         @endsection
 

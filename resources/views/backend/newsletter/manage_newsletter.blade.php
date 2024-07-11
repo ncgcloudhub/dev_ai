@@ -20,27 +20,20 @@
                 <h5 class="card-title mb-0">Manage Newsletter</h5>
             </div>
             <div class="card-body">
-                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                <table id="newsletter-table" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>SR No.</th>
                             <th>Email</th>
-                            <th >IP ADDRESS</th>
-                            
-                           
+                            <th>IP ADDRESS</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($newsletter as $index => $item)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                         
-                            
+                            <td>{{ $index + 1 }}</td>                       
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->ipaddress }}</td>
-                          
-
-                          
                         </tr>
                         @endforeach
                     </tbody>
@@ -53,9 +46,6 @@
 @endsection
 @section('script')
 
-<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <!-- Include jQuery from CDN -->
@@ -71,57 +61,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    if (!$.fn.DataTable.isDataTable('#alternative-pagination')) {
-        var table = $('#alternative-pagination').DataTable({
-            "pagingType": "full_numbers",
-            "lengthMenu": [10, 25, 50, 75, 100],
-            "pageLength": 10,
-            "responsive": true,
-            "autoWidth": false,
-            "columnDefs": [
-                { "orderable": false, "targets": [0, 4, 5] },
-                { "className": "text-center", "targets": [0, 4, 5] }
+    $(document).ready(function() {
+        $('#newsletter-table').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Newsletter Data',
+                    text: 'Export to Excel',
+                    className: 'btn btn-primary mb-3'
+                }
             ]
         });
-    }
-
-    // Event delegation for the toggle button
-    $(document).on('click', '.active_button', function() {
-        var imageId = $(this).data('image-id');
-        var toggleSwitch = $(this);
-
-        // Send AJAX request to update the image status
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            type: 'POST',
-            url: '/update/image/status',
-            data: {
-                image_id: imageId
-            },
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: function(response) {
-                // Handle success response
-                console.log(response);
-
-                // Update the status text in the table cell
-                if (toggleSwitch.is(':checked')) {
-                    toggleSwitch.closest('td').prev().text('active');
-                } else {
-                    toggleSwitch.closest('td').prev().text('inactive');
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                console.error(error);
-                console.log('inside Error');
-            }
-        });
     });
-});
-
 </script>
 
 @endsection
