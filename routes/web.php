@@ -47,7 +47,7 @@ Route::get('/', function () {
     }
 
     $seo = SeoSetting::find(1);
-    $templates = Template::whereIn('id', [72, 73, 74, 18, 43, 21, 13, 3])->orderBy('id', 'desc')->get();
+    $templates = Template::whereIn('id', [36, 37, 38, 18, 43, 39, 13, 3])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
