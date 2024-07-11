@@ -368,8 +368,6 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     // Custom Templates
     Route::prefix('main')->group(function () {
 
-        Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
-
         // NEW SESSION
         Route::post('/new-session', [MainChat::class, 'MainNewSession']);
 
@@ -380,6 +378,8 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         Route::post('/session/delete', [MainChat::class, 'delete']);
     });
+
+    Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
 
 
 
