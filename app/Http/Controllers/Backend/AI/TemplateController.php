@@ -9,6 +9,7 @@ use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
 use App\Models\NewsLetter;
+use App\Models\RatingTemplate;
 use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -204,7 +205,15 @@ class TemplateController extends Controller
     {
         $templates = Template::orderby('id', 'asc')->get();
         $templatecategories = TemplateCategory::latest()->get();
-        return view('backend.template.template_manage', compact('templates', 'templatecategories'));
+        $userRatings = [];
+
+        if (auth()->check()) {
+            $userRatings = RatingTemplate::where('user_id', auth()->id())
+                ->pluck('rating', 'template_id')
+                ->toArray();
+        }
+
+        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings'));
     }
 
     public function TemplateView($slug)

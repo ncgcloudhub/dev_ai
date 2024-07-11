@@ -25,6 +25,7 @@ use App\Http\Controllers\Backend\Settings\AISettingsController;
 use App\Http\Controllers\Backend\Settings\SiteSettingsController;
 use App\Http\Controllers\Backend\User\UserManageController;
 use App\Http\Controllers\Backend\PromptLibraryController;
+use App\Http\Controllers\Backend\RatingController;
 use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\Backend\RoleController;
@@ -325,6 +326,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status'])->group(fun
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
+
+    // Template Rating
+    Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
 
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');

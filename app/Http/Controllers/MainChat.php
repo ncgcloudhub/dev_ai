@@ -65,10 +65,18 @@ class MainChat extends Controller
         $userMessage = $request->input('message');
         $file = $request->file('file');
         $title = $request->input('title');
+        $sessionId = session('session_id');
+
         Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
 
         $setting = AISettings::find(1);
         $openaiModel = $setting->openaimodel;
+
+        // Retrieve the session and its messages from the database
+        $session = ModelsSession::with('messages')->find($sessionId);
+        if (!$session) {
+            return response()->json(['error' => 'Session not found'], 404);
+        }
 
         $uploadedFiles = session('uploaded_files', []);
         Log::info('Uploaded files: ', $uploadedFiles);
@@ -101,12 +109,20 @@ class MainChat extends Controller
             }
             Log::info('File content: ', ['content' => $fileContent]);
 
+            // Update session variables and context
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
 
             $context['file_content'] = $fileContent;
             session(['context' => $context]);
-            Log::info('Updated context with file: ', $context);
+
+            // Provide default message if userMessage is empty
+            if (empty($userMessage)) {
+                $userMessage = 'Summarize this in 3 lines';
+            }
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+            session(['conversation_history' => $conversationHistory]);
         }
 
         if ($file && $file->getMimeType() === 'image/png') {
@@ -115,11 +131,19 @@ class MainChat extends Controller
             $response = $this->callOpenAIImageAPI($base64Image);
             $imageContent = $response['choices'][0]['message']['content'];
 
+            // Update session variables and context
             $pastedImages[$filePath] = $imageContent;
             session(['pasted_images' => $pastedImages]);
-
             $context['pasted_image_content'] = $imageContent;
             session(['context' => $context]);
+
+            // Provide default message if userMessage is empty
+            if (empty($userMessage)) {
+                $userMessage = 'Summarize this in 3 lines';
+            }
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
+            session(['conversation_history' => $conversationHistory]);
         }
 
         if (!empty($userMessage)) {
@@ -130,33 +154,51 @@ class MainChat extends Controller
             session(['context' => $context]);
             Log::info('Updated context with message: ', $context);
 
-            $sessionId = session('session_id');
-
             Message::create([
                 'session_id' => $sessionId,
                 'user_id' => Auth::id(),
                 'message' => $userMessage,
                 'reply' => null,
             ]);
+
+            // Save context to database
+            $session->context = json_encode($context);
+            $session->save();
+        } else {
+            $conversationHistory = json_decode($session->messages->pluck('message')->toJson(), true);
         }
+
+        // Update session data
+        session([
+            'conversation_history' => $conversationHistory,
+            'context' => $context,
+        ]);
 
         $messages = [
             ['role' => 'system', 'content' => 'You are a helpful assistant.'],
         ];
 
+        // Add file content if available
         if (!empty($context['file_content'])) {
             $messages[] = ['role' => 'user', 'content' => $context['file_content']];
         }
 
+        // Add pasted image content if available
         if (!empty($context['pasted_image_content'])) {
             $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
         }
 
+        // Add all conversation history messages
         foreach ($conversationHistory as $message) {
-            if (!is_null($message['content'])) {
-                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+            if (is_array($message) && isset($message['content']) && isset($message['role'])) {
+                if (!is_null($message['content'])) {
+                    $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+                }
+            } else {
+                Log::warning('Invalid message structure:', ['message' => $message]);
             }
         }
+
 
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
@@ -192,6 +234,10 @@ class MainChat extends Controller
         ]);
 
         Log::info('AI Response: ', ['content' => $messageContent]);
+
+        // Save AI response to conversation history
+        $conversationHistory[] = ['role' => 'assistant', 'content' => $messageContent];
+        session(['conversation_history' => $conversationHistory]);
 
         $sessionId = session('session_id');
 
