@@ -478,75 +478,82 @@
                 <div class="col-xxl-6 col-lg-6">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Liked Images  <span class="badge bg-success-subtle text-success">{{ $totalLikes }}
-                            </span></h4>
-                        
+                            <h4 class="card-title mb-0 flex-grow-1">Liked Images <span class="badge bg-success-subtle text-success">{{ $totalLikes }}</span></h4>
                         </div><!-- end card header -->
-
+                
                         <div class="card-body">
-                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                            <table id="liked-images-table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col" width="5%">#</th>
                                         <th scope="col">Image</th>
+                                        <th scope="col">Prompt</th>
                                         <th scope="col">Likes</th>
-                                    
                                     </tr>
                                 </thead>
                                 <tbody>
-                                
                                     @foreach($images as $image)
                                     <tr>
-                                        <td width="5%">{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
                                             <img height="50px" width="50px" class="gallery-img img-fluid mx-auto" src="{{ $image->image_url }}" alt="{{ $image->prompt }}" />
+                                        </td>
+                                        <td>
+                                            @if (strlen($image->prompt) > 40)
+                                                {{ substr($image->prompt, 0, 40) }}...
+                                            @else
+                                                {{ $image->prompt }}
+                                            @endif
                                         </td>
                                         <td>{{ $image->likes_count }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody><!-- end tbody -->
                             </table>
-                            
                         </div>
                     </div> <!-- .card-->
                 </div> <!-- .col-->
-
-
+                
                 <div class="col-xxl-6 col-lg-6">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Favourite Images  <span class="badge bg-success-subtle text-success">{{ $totalFav }}
-                            </span></h4>
-                        
+                            <h4 class="card-title mb-0 flex-grow-1">Favourite Images <span class="badge bg-success-subtle text-success">{{ $totalFav }}</span></h4>
                         </div><!-- end card header -->
-
+                
                         <div class="card-body">
-                            <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                            <table id="favourite-images-table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th scope="col" width="5%">#</th>
                                         <th scope="col">Image</th>
+                                        <th scope="col">Prompt</th>
                                         <th scope="col">Favourites</th>
-                                    
                                     </tr>
                                 </thead>
                                 <tbody>
-                                
                                     @foreach($favImages as $image)
                                     <tr>
-                                        <td width="5%">{{ $loop->iteration }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>
                                             <img height="50px" width="50px" class="gallery-img img-fluid mx-auto" src="{{ $image->image_url }}" alt="{{ $image->prompt }}" />
+                                        </td>
+                                        <td>
+                                            @if (strlen($image->prompt) > 40)
+                                                {{ substr($image->prompt, 0, 40) }}...
+                                            @else
+                                                {{ $image->prompt }}
+                                            @endif
                                         </td>
                                         <td>{{ $image->favorites_count }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody><!-- end tbody -->
                             </table>
-                            
                         </div>
                     </div> <!-- .card-->
                 </div> <!-- .col-->
+                
+                
 
 
             </div>
@@ -707,6 +714,21 @@
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
   });
 </script>
+
+<script>
+    $(document).ready(function() {
+        $('#liked-images-table').DataTable({
+            "responsive": true,
+            "autoWidth": false
+        });
+
+        $('#favourite-images-table').DataTable({
+            "responsive": true,
+            "autoWidth": false
+        });
+    });
+</script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
