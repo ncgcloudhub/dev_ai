@@ -40,10 +40,7 @@
                 </li>
 
                   {{-- Eid Card --}}
-<<<<<<< HEAD
               
-=======
->>>>>>> 49e90490d535daba716084a211f864e088881a9f
                   <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
                         <i class=" las la-atom"></i> <span >Greeting Card</span>
