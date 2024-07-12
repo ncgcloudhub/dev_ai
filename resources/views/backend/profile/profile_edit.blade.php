@@ -52,7 +52,175 @@
                 </div>
             </div>
             <!--end card-->
-        
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="flex-grow-1">
+                            <h5 class="card-title mb-0">{{$user->name}}'s Statistics</h5>
+                        </div>
+                        
+                    </div>
+    
+                <div class="row">
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body bg-success-subtle shadow-lg">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Words Generated</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-success fs-14 mb-0">
+                                            {{$user->words_generated}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body bg-danger-subtle shadow-lg">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Words Left</p>
+                                    </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-danger fs-14 mb-0">
+                                        {{$user->words_left}}
+                                    </h5>
+                                </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-success-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Images Generated</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-success fs-14 mb-0">
+                                            {{$user->images_generated}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-danger-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Images Left</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-danger fs-14 mb-0">
+                                            {{$user->images_left}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                </div>
+    
+                <div class="row">
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-success-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Tokens Used</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-danger fs-14 mb-0">
+                                            {{$user->tokens_used}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-danger-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Tokens Left</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-danger fs-14 mb-0">
+                                            {{$user->tokens_left}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-success-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Credits Used</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-danger fs-14 mb-0">
+                                            {{$user->credits_used}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+                    <div class="col-xl-6">
+                        <!-- card -->
+                        <div class="card card-animate bg-danger-subtle shadow-lg">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            Credits Left</p>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <h5 class="text-danger fs-14 mb-0">
+                                            {{$user->credits_left}}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+    
+                </div> 
+    
+                </div>
+            </div>
         
         </div>
         <!--end col-->
@@ -67,6 +235,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#purchaseHistory" role="tab">
+                                <i class="fas fa-home"></i>
+                                Purchase History
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
                                 <i class="far fa-user"></i>
                                 Change Password
@@ -76,6 +250,7 @@
                     </ul>
                 </div>
                 <div class="card-body p-4">
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
                             <form action="{{ route('update.profile') }}" method="post" enctype="multipart/form-data">
@@ -215,6 +390,56 @@
                         </div>
                         <!--end tab-pane-->
                       
+                        {{-- Purchase History --}}
+                        <div class="tab-pane" id="purchaseHistory" role="tabpanel">
+                                @if($packageHistory->isNotEmpty())
+                                    <h3>Package History:</h3>
+                                    <ul>
+                                        @foreach($packageHistory as $history)
+                                            <li>
+                                                <strong>Package Name:</strong> {{ $history->package->title }}<br>
+                                                <strong>Purchase Date:</strong> {{ $history->created_at }}<br>
+                                                <strong>Details:</strong> {{ $history->package->description }}<br>
+                                                <!-- Add other package details here -->
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                <div class="card bg-primary">
+                                    <div class="card-body p-0">
+                                        <div class="alert alert-success rounded-top alert-solid alert-label-icon border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
+                                            <i class="ri-error-warning-line label-icon"></i>
+                                            <div class="flex-grow-1 text-truncate">
+                                                Your free trial will be renewed in <b>--</b> days.
+                                            </div>
+                                            <div class="flex-shrink-0">
+                                                <a href="{{route('all.package')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                            </div>
+                                        </div>
+    
+                                        <div class="row align-items-end">
+                                            <div class="col-sm-8">
+                                                <div class="p-3">
+                                                    <p class="fs-16 lh-base text-white">Upgrade your plan from a <span class="fw-semibold">{{$freePricingPlan->title}}
+                                                            trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
+                                                    <div class="mt-3">
+                                                        <a href="{{route('all.package')}}" class="btn btn-info">Upgrade
+                                                            Account!</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="px-3">
+                                                    <img src="assets/images/user-illustarator-1.png" class="img-fluid" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div>
+                                  
+                                @endif
+                        </div>
+                        {{-- History END --}}
                     </div>
                 </div>
             </div>

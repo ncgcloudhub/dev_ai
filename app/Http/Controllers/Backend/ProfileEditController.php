@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\PricingPlan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,12 @@ class ProfileEditController extends Controller
 
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
-        return view('backend.profile.profile_edit', compact('user'));
+        $packageHistory = $user->packageHistory()->with('package')->get();
+        $freePricingPlan = null;
+        if ($packageHistory->isEmpty()) {
+            $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+        }
+        return view('backend.profile.profile_edit', compact('user','packageHistory','freePricingPlan'));
     
     }
 
