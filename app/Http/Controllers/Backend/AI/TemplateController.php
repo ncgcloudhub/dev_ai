@@ -32,7 +32,7 @@ class TemplateController extends Controller
     {
 
         flash()->success('Operation completed successfully.');
-        
+
         $TemplateCategory = TemplateCategory::insertGetId([
 
             'category_name' => $request->category_name,
@@ -243,9 +243,16 @@ class TemplateController extends Controller
     {
         $template_id = $input->template_id;
         $setting = AISettings::find(1);
+        $openaiModel = $setting->openaimodel;
+        Log::info('before: ' . $openaiModel);
         $template = Template::find($template_id);
         $user = Auth::user();
 
+        // Set the model to the selected one or default
+        if ($input->model) {
+            $openaiModel = $input->model;
+            Log::info('after: ' . $openaiModel);
+        }
 
         $language = 'English';
         $max_result_length_value = 100;
@@ -330,19 +337,33 @@ class TemplateController extends Controller
             return $data;
         }
 
-        $result = $client->completions()->create([
-            "model" => 'gpt-3.5-turbo-instruct',
+        // Estimate the number of tokens in the prompt
+        $promptTokens = ceil(strlen($prompt) / 4); // Average token length is around 4 characters
+        $maxTokens = min($max_result_length_value, 8192 - $promptTokens); // Ensure total tokens do not exceed 8192
+
+        if ($promptTokens + $maxTokens > 8192) {
+            return response()->json(['error' => 'The prompt is too long. Please reduce the prompt length.'], 400);
+        }
+
+        // Prepare messages for chat completions endpoint
+        $messages = [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ];
+
+        $result = $client->chat()->create([
+            "model" => $openaiModel,
             "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
-            'max_tokens' => $max_result_length_value,
-            'prompt' => $prompt,
+            'max_tokens' => $maxTokens,
+            'messages' => $messages,
         ]);
 
         $completionTokens = $result->usage->completionTokens;
 
-        $content = trim($result['choices'][0]['text']);
+        $content = trim($result['choices'][0]['message']['content']);
         $char_count = strlen($content); // Get the character count of the content
         $num_tokens = ceil($char_count / 4); // Estimate the number of tokens
         $num_words = str_word_count($content);

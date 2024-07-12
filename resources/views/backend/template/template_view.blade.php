@@ -25,6 +25,19 @@
                         <form id="generateForm"  action="{{route ('template.generate')}}" method="post" class="row g-3">
                             @csrf
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
+
+                             <!-- Model Selection Dropdown -->
+                            <div class="col-md-12">
+                                <label for="model" class="form-label">Select GPT Model</label>
+                                <select class="form-select" name="model" id="model">
+                                    <option disabled selected>Select Model</option>
+                                    <option value="text-davinci-003">text-davinci-003</option>
+                                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                                    <option value="gpt-4">gpt-4</option>
+                                </select>
+                                <small class="form-text text-muted">Default model will be used if not selected</small>
+                            </div>
+
                             <div class="col-md-12">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
@@ -208,8 +221,8 @@
                 </div>
             </div>
            </div>
-           <div class="col">
 
+           <div class="col">
                 <!-- Add the Download Content button -->
                 <button id="copyButton" class="btn btn-primary me-2">
                     <i class="las la-copy"></i>
@@ -217,6 +230,7 @@
                 <button id="downloadButton" class="btn btn-success">
                     <i class="las la-download"></i>
                 </button>
+                
                 
                 <div class="row mt-2">
                     <div class="col-lg-12">
