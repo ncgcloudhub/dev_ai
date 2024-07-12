@@ -280,14 +280,13 @@
                     </div>
                 </li>
 
-                @if(Auth::user()->can('manage.user'))
+                
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.user')}}">
                         <i class=" las la-user-circle"></i> <span >Manage User</span>
                     </a>
                 </li>
-                @endif
-
+               
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('all.admin')}}">
                         <i class=" las la-user-circle"></i> <span >Manage Admin</span>
