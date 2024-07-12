@@ -20,11 +20,21 @@ class ProfileEditController extends Controller
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
         $packageHistory = $user->packageHistory()->with('package')->get();
+       
         $freePricingPlan = null;
         if ($packageHistory->isEmpty()) {
             $freePricingPlan = PricingPlan::where('title', 'Free')->first();
         }
-        return view('backend.profile.profile_edit', compact('user','packageHistory','freePricingPlan'));
+       
+         // Calculate the next reset date
+        $now = Carbon::now();
+        $registrationDate = $user->created_at;
+        $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
+
+        // Calculate the remaining days until the next reset
+        $daysUntilNextReset = $now->diffInDays($nextResetDate);
+
+        return view('backend.profile.profile_edit', compact('user','packageHistory','freePricingPlan','daysUntilNextReset'));
     
     }
 

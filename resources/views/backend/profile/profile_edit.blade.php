@@ -410,7 +410,7 @@
                                         <div class="alert alert-success rounded-top alert-solid alert-label-icon border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
                                             <i class="ri-error-warning-line label-icon"></i>
                                             <div class="flex-grow-1 text-truncate">
-                                                Your free trial will be renewed in <b>--</b> days.
+                                                Your free trial will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <a href="{{route('all.package')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
