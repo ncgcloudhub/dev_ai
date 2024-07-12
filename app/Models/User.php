@@ -73,6 +73,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Referral::class, 'referrer_id');
     }
 
+    public function packageHistory()
+    {
+        return $this->hasMany(PackageHistory::class);
+    }
+
     public static function getPermissionGroups()
     {
         $permission_groups = DB::table('permissions')

@@ -10,4 +10,10 @@ class PackageHistory extends Model
     use HasFactory;
     
     protected $guarded = [];
+
+    public function package()
+    {
+        return $this->belongsTo(PricingPlan::class);
+    }
+
 }
