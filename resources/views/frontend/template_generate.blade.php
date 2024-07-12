@@ -11,6 +11,13 @@
 @endsection
 @section('body')
 
+<style>
+    .breadcrumb-title {
+    font-weight: bold;
+    font-size: 1.5rem; /* Adjust the size as needed */
+}
+
+</style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
     @endsection
@@ -24,6 +31,7 @@
 <div class="container">
     <div class="row justify-content-center"> 
         <div class="row">
+
              <!-- Token Information -->
              <div class="col-xxl-12 mb-3">
                 <div class="alert alert-info text-center">
@@ -32,7 +40,15 @@
                     <br>
                 </div>
             </div>
-            
+
+            <!-- Breadcrumb -->
+            <div class="col-xxl-12 mb-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active breadcrumb-title" aria-current="page"><u>{{ $Template->template_name }}</u></li>
+                    </ol>
+                </nav>
+            </div>
             
             <!-- End Token Information -->
             <div class="col-xxl-6">
@@ -221,7 +237,6 @@
              </div>
             </div>
 
-
             <div class="col">
  
                  <!-- Add the Download Content button -->
@@ -357,7 +372,6 @@
                
             });
         </script>
-
 
         <script>
             function disableInputs() {
@@ -570,6 +584,5 @@
                 });
 
             });
-        </script>
-       
+        </script>     
 @endsection
