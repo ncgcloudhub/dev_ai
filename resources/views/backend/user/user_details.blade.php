@@ -226,6 +226,15 @@ Profile | {{$user->name}}
                                             <label for="credits_left" class="form-label">Credits Left</label>
                                             <input type="text" class="form-control" name="credits_left" id="credits_left" value="{{$user->credits_left}}">
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="role" class="form-label">Role</label>
+                                            <select class="form-control" name="role" id="role">
+                                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                                            </select>
+                                        </div>
+                                        
                                        
                                         <div class="text-end">
                                             <button type="submit" class="btn btn-primary">Update</button>

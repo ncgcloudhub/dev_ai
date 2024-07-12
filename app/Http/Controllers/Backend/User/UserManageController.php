@@ -48,6 +48,7 @@ class UserManageController extends Controller
         User::findOrFail($request->id)->update([
             'tokens_left' => $request->tokens_left,
             'credits_left' => $request->credits_left,
+            'role' => $request->role,
         ]);
 
         // Optionally, you can return a response indicating success or redirect to a different page
@@ -59,8 +60,8 @@ class UserManageController extends Controller
     public function ManageReferral()
     {
         $referrals = Referral::with(['referrer', 'referralUser'])
-        ->orderBy('id', 'desc')
-        ->get();
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('backend.referral.manage_refferal', compact('referrals'));
     }
