@@ -11,6 +11,33 @@
             Pricing
         @endslot
     @endcomponent
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        .card-header.bg-gradient {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border-bottom: 1px solid #ddd;
+}
+
+.text-white {
+    color: white !important;
+}
+
+h2.mb-0.text-center {
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    font-size: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+h2.mb-0.text-center i {
+    font-size: 1.5rem;
+    vertical-align: middle;
+}
+
+    </style>
+
     <div class="row justify-content-center mt-4">
  
         <div class="col-lg-5">
@@ -45,11 +72,10 @@
         @foreach ($monthlyPlans as $item)
             <div class="col-xxl-3 col-lg-6 month">
                 <div class="card pricing-box ribbon-box right">
-                    <div class="card-header">
-                        <h2 class="mb-0">{{$item->title}}  
-                          
+                    <div class="card-header bg-gradient text-white">
+                        <h2 class="mb-0 text-center" style="font-family: 'Merriweather', serif; font-weight: bold; font-size: 2rem; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">
+                            <i class="ri-award-line me-2"></i>{{$item->title}}
                         </h2>
-                          
                     </div>
                     <div class="card-body bg-light m-2 p-4">
                         @if ($item->popular === 'yes')
@@ -61,13 +87,13 @@
                          
                             <div class="ms-auto">
                                 @if ($item->discount_type == 'percentage')
-                                    <h2 class="month mb-0"><small class="fs-16"><del>${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>         
-                                    <span class="badge bg-danger">{{ $item->discount }}% off</span>
+                                    <h3 class="month mb-0"><small class="fs-16"><del>${{ $item->price }}</del></small> ${{ $item->discounted_price }}/month <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>         
+                                   
                                 @elseif ($item->discount_type == 'flat')
-                                    <h2 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
-                                   <h3> <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
+                                    <h3 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}/month  <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
+                               
                                 @elseif ($item->discount_type == NULL)
-                                    <h2 class="month mb-0"><small class="fs-16"></small> ${{ $item->price }}</h2>
+                                    <h2 class="month mb-0"><small class="fs-16"></small> ${{ $item->price }}/month</h2>
                                 @endif
                             </div>
                         </div>
@@ -264,9 +290,9 @@
         
         <div class="col-xxl-3 col-lg-6 annual">
             <div class="card pricing-box ribbon-box right">
-                <div class="card-header">
-                    <h2 class="mb-0">{{$item->title}}  
-                      
+                <div class="card-header bg-gradient text-white">
+                    <h2 class="mb-0 text-center" style="font-family: 'Merriweather', serif; font-weight: bold; font-size: 2rem; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">
+                        <i class="ri-award-line me-2"></i>{{$item->title}}
                     </h2>
                 </div>
                 <div class="card-body bg-light m-2 p-4">
@@ -279,14 +305,11 @@
                       
                         <div class="ms-auto">
                             @if ($item->discount_type == 'percentage')
-                        <h2 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
+                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }} <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>
                        
-                        <h3><span class="badge bg-danger">{{ $item->discount }}% off</span></h3>
-             
                     @elseif ($item->discount_type == 'flat')
-                        <h2 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}</h2>
+                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}<span class="badge bg-danger">${{ $item->discount }} off</span></h3>
                        
-                       <h3> <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
                     @elseif ($item->discount_type == NULL)
                         <h2 class="annual mb-0"><small class="fs-16"></small> ${{ $item->price }}</h2>
                     @endif
@@ -295,6 +318,7 @@
     
                     </div>
 
+                    <h3 class="text-muted text-center">(Billed Annually)</h3>
                     <p class="text-muted">{{$item->description}}</p>
                     <ul class="list-unstyled vstack gap-3">
                         <li>
