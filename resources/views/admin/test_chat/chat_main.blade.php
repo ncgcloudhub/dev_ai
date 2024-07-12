@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Listen for paste events on messageInput
         messageInput.addEventListener('paste', handleImagePaste);
 
-    function sendMessage() {
+        function sendMessage() {
     const message = messageInput.value.trim();
     const file = fileInput.files[0];
 
@@ -460,11 +460,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
 </script>
 
 <script>
-        function formatContent(content) {
+  function formatContent(content) {
     const lines = content.split('\n');
     let formattedContent = '';
 
@@ -472,7 +471,12 @@ document.addEventListener('DOMContentLoaded', function () {
         formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
     } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
         const codeContent = lines.slice(1, -1).join('\n');
-        formattedContent = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace;">${codeContent}</pre>`;
+        formattedContent = `
+            <div class="code-block" style="position: relative;">
+                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${codeContent}</pre>
+                <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
+            </div>
+        `;
     } else if (lines.some(line => line.trim().startsWith('*'))) {
         formattedContent += '<ul style="font-family: Calibri;">';
         lines.forEach(line => {
@@ -484,13 +488,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         formattedContent += '</ul>';
     } else {
-        formattedContent = '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + lines.join('</p><p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">') + '</p>';
+        lines.forEach(line => {
+            if (line.trim().startsWith('###')) {
+                formattedContent += `<p style="font-weight: bold; font-family: Calibri;">${line.trim().substring(3).trim()}</p>`;
+            } else {
+                formattedContent += '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + line.trim() + '</p>';
+            }
+        });
     }
+
+    // Replace code blocks with a styled pre element
+    formattedContent = formattedContent.replace(/```([\s\S]*?)```/g, (match, code) => {
+        return `
+            <div class="code-block" style="position: relative;">
+                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${code}</pre>
+                <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
+            </div>
+        `;
+    });
 
     return formattedContent;
 }
 
-</script>
+
+    // Add this script in your main script file or where you handle dynamic content
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('copy-button')) {
+            const codeElement = event.target.previousElementSibling; // Assuming the button is placed after the <pre> element
+            const codeText = codeElement.innerText.trim(); // Use innerText to preserve line breaks
+            
+            navigator.clipboard.writeText(codeText)
+                .then(() => {
+                    event.target.textContent = 'Copied!';
+                    setTimeout(() => {
+                        event.target.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+        }
+    });
+
+
+    </script>
+    
 
 {{-- GET MESSAGES FROM SESSION --}}
 <script>
@@ -676,8 +718,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
-
-
-
 
 @endsection
