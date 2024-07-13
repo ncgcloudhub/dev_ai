@@ -63,12 +63,10 @@
                                    
                                 </ul>
                             </div>
-                            
-                            
+       
                         </div>
                     </div>
                 </li>
-
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">
@@ -77,14 +75,24 @@
                     </a>
                 </li>
 
+                {{-- AI CHAT --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('main.chat.form') }}">
+                        <i class="las la-user-circle"></i> 
+                        <span>AI Chat</span>
+                        <span class="badge bg-danger ms-2">New</span>
+                    </a>
+                </li>
+                      
+
                  {{-- Eid Card --}}
-                @if(Auth::user()->can('eid.card'))
+               
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
                         <i class=" las la-atom"></i> <span >Greeting Card</span>
                     </a>
                 </li>
-                @endif
+                
 
                 {{-- Custom Template --}}
                 <li class="nav-item">
@@ -115,7 +123,7 @@
                 </li>
 
                 {{-- Prompt Library --}}
-                @if(Auth::user()->can('add.prompt'))
+               
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#prompt" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -134,7 +142,7 @@
                         </div>
                     </div>
                 </li>
-                @endif
+               
 
 
                 <li class="nav-item">

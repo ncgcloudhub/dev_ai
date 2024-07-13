@@ -26,9 +26,9 @@
 
             <div class="row">
 
-                <div class="col-xl-4 col-md-6">
+                <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate" style="background-image: url('https://science.osti.gov/-/media/Initiatives/images/ai_banner.jpg?h=320&w=905&la=en&hash=8F62F5794F19B008A2812A1C2B4421B59252ED230302C24709FDDDDA3453A5D1'); background-size: cover; background-position: center; color: white;">
+                    <div class="card card-animate" style="background-image: url('{{ asset('build/images/d_1.png') }}'); background-size: cover; background-position: center; color: white;">
                         <div class="card-body" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 10px;">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -47,9 +47,9 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
                 
-                <div class="col-xl-4 col-md-6">
+                <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate" style="background-image: url('https://media.licdn.com/dms/image/D4E12AQGSXjHoeq6Qvg/article-cover_image-shrink_720_1280/0/1717001374666?e=2147483647&v=beta&t=3uSOkrUT70seoRg0UZI44Hgl7GX45m3eTx_ziIQZZ3o'); background-size: cover; background-position: center; color: white;">
+                    <div class="card card-animate" style="background-image: url('{{ asset('build/images/d_2.png') }}'); background-size: cover; background-position: center; color: white;">
                         <div class="card-body" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 10px;">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -68,9 +68,9 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
                 
-                 <div class="col-xl-4 col-md-6">
+                 <div class="col-xl-3 col-md-6">
                     <!-- card -->
-                    <div class="card card-animate" style="background-image: url('https://imgv3.fotor.com/images/blog-richtext-image/generated-art-image-of-a-lake-with-moutains-and-trees.png'); background-size: cover; background-position: center; color: white;">
+                    <div class="card card-animate" style="background-image: url('{{ asset('build/images/d_3.png') }}'); background-size: cover; background-position: center; color: white;">
                         <div class="card-body" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 10px;">
                             <div class="d-flex align-items-center">
                                 <div class="flex-grow-1">
@@ -81,6 +81,27 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                 <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="text-decoration-underline text-white-50">  <h4 class="fs-22 fw-semibold ff-secondary mb-4 text-white">Image Prompt Ideas</h4></a>
+                                </div>
+                              
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate" style="background-image: url('{{ asset('build/images/d_4.png') }}'); background-size: cover; background-position: center; color: white;">
+
+                        <div class="card-body" style="background-color: rgba(0, 0, 0, 0.6); border-radius: 10px;">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-uppercase fw-medium text-white-50 mb-0">AI Chat</p>
+                                </div>
+                             
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                <a href="{{ route('main.chat.form') }}" class="text-decoration-underline text-white-50">  <h4 class="fs-22 fw-semibold ff-secondary mb-4 text-white">Chat with AI</h4></a>
                                 </div>
                               
                             </div>
@@ -381,13 +402,10 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-               
-
-
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-4">
+                <div class="col-xl-8">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Latest Images</h4>
@@ -460,7 +478,7 @@
                 <!-- end col -->
 
                 {{-- CHAT START--}}
-                <div class="col-xxl-4 col-lg-6">
+                {{-- <div class="col-xxl-4 col-lg-6">
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Chat</h4>
@@ -515,10 +533,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 
-
-        {{-- CHAT END --}}
+                {{-- CHAT END --}}
         
             </div>
 
