@@ -41,13 +41,13 @@
                             <td>{{ $item->route }}</td>
                             <td>{{ strip_tags($item->content) }}</td>
                             <td>
-                                <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn">
+                                <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <i class="ri-pencil-fill fs-16"></i> 
                                 </a>
                                 <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;">
+                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                         <i class="ri-delete-bin-5-fill fs-16"></i> 
                                     </button>
                                 </form>

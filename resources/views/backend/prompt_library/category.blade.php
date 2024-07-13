@@ -30,9 +30,9 @@
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
 
-                                    <a href="{{route('prompt.category.edit',$item->id)}}" class="btn btn-primary btn-sm waves-effect waves-light d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-edit-2-fill"></i></a>
+                                    <a href="{{route('prompt.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill fs-16"></i> </a>
 
-                                    <a href="{{route('prompt.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Customer')" class="btn btn-danger btn-sm waves-effect waves-light d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-line"></i></a>
+                                    <a href="{{route('prompt.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Customer')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-5-fill fs-16"></i> </a>
 
                                 </div>
                             </td>    

@@ -87,7 +87,7 @@ h2.mb-0.text-center i {
                          
                             <div class="ms-auto">
                                 @if ($item->discount_type == 'percentage')
-                                    <h3 class="month mb-0"><small class="fs-16"><del>${{ $item->price }}</del></small> ${{ $item->discounted_price }}/month <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>         
+                                    <h3 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}/month  <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>         
                                    
                                 @elseif ($item->discount_type == 'flat')
                                     <h3 class="month mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}/month  <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
@@ -270,12 +270,12 @@ h2.mb-0.text-center i {
 
                         </ul>
                         <div class="d-flex">
-                            <a href="{{ route('pricing.edit', $item->slug) }}" class="btn btn-success w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
+                            <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
                             <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light">
-                                    <i class="ri-delete-bin-5-line"></i>
+                                <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="ri-delete-bin-5-fill fs-16"></i> 
                                 </button>
                             </form>
                         </div>
@@ -305,10 +305,10 @@ h2.mb-0.text-center i {
                       
                         <div class="ms-auto">
                             @if ($item->discount_type == 'percentage')
-                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }} <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>
+                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}/year <span class="badge bg-danger">{{ $item->discount }}% off</span></h3>
                        
                     @elseif ($item->discount_type == 'flat')
-                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}<span class="badge bg-danger">${{ $item->discount }} off</span></h3>
+                        <h3 class="annual mb-0"><small class="fs-16"><del class="text-danger">${{ $item->price }}</del></small> ${{ $item->discounted_price }}/year <span class="badge bg-danger">${{ $item->discount }} off</span></h3>
                        
                     @elseif ($item->discount_type == NULL)
                         <h2 class="annual mb-0"><small class="fs-16"></small> ${{ $item->price }}</h2>
@@ -318,7 +318,7 @@ h2.mb-0.text-center i {
     
                     </div>
 
-                    <h3 class="text-muted text-center">(Billed Annually)</h3>
+                    <p class="text-muted text-center mt-2">(Billed Annually)</p>
                     <p class="text-muted">{{$item->description}}</p>
                     <ul class="list-unstyled vstack gap-3">
                         <li>
@@ -491,12 +491,12 @@ h2.mb-0.text-center i {
 
                     </ul>
                     <div class="d-flex">
-                        <a href="{{ route('pricing.edit', $item->slug) }}" class="btn btn-success w-100 me-2"><i class="ri-pencil-fill"></i> Edit</a>
+                        <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
                         <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-icon waves-effect waves-light">
-                                <i class="ri-delete-bin-5-line"></i>
+                            <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                <i class="ri-delete-bin-5-fill fs-16"></i> 
                             </button>
                         </form>
                     </div>

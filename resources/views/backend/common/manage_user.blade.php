@@ -68,14 +68,14 @@
                             <label class="form-check-label" for="customSwitchsizemd"></label>
                             
                             <!--Change Password-->
-                            <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="btn btn-primary btn-sm waves-effect waves-light d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Password"><i class="ri-lock-2-fill"></i></a>
+                            <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Password"> <i class="ri-lock-2-fill fs-16"></i></a>
 
                             {{-- Delete User --}}
                             <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                    <i class="ri-delete-bin-7-fill"></i>
+                                <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this user?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="ri-delete-bin-7-fill fs-16"></i>
                                 </button>
                             </form>
                         </div>
@@ -90,8 +90,8 @@
                             <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                    <i class="ri-delete-bin-3-fill"></i>
+                                <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this user?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="ri-delete-bin-7-fill fs-16"></i>
                                 </button>
                             </form>
                         </div>
