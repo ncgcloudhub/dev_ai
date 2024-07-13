@@ -113,18 +113,20 @@
                                 {{-- File Selected Show --}}
                                 <div id="file_name_display"></div>
 
-                                @if(auth()->user()->role == 'admin')
+                               
                                     <div class="col-auto">
                                         <div class="chat-input-links me-2">
                                             <div class="links-list-item"> 
                                             {{-- Attachement Icon --}}
+                                            @if(auth()->user()->role == 'admin')
                                             <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                                            @endif
                                             <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                                                 
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                               
 
 
                                 <div class="col">
