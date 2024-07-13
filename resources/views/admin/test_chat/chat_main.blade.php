@@ -112,18 +112,20 @@
                             <div class="row g-0 align-items-center">
                                 {{-- File Selected Show --}}
                                 <div id="file_name_display"></div>
-                                <div class="col-auto">
-                                   
-                                    <div class="chat-input-links me-2">
-                                       
-                                        <div class="links-list-item"> 
-                                        {{-- Attachement Icon --}}
-                                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
-                                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                            
+
+                                @if(auth()->user()->role == 'admin')
+                                    <div class="col-auto">
+                                        <div class="chat-input-links me-2">
+                                            <div class="links-list-item"> 
+                                            {{-- Attachement Icon --}}
+                                            <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                                            <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                                
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
+
 
                                 <div class="col">
 
