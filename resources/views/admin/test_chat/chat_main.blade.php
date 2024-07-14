@@ -72,7 +72,12 @@
 
                 </div>
             </div>
-            
+            <div class="tab-pane" id="contacts" role="tabpanel">
+                <div class="chat-room-list pt-3" data-simplebar style="max-height: calc(100vh - 305px);">
+                    <div class="sort-contact">
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- end tab contact -->
     </div>
