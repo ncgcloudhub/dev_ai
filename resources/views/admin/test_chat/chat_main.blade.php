@@ -81,6 +81,7 @@
         </div>
         <!-- end tab contact -->
     </div>
+
     <!-- end chat leftsidebar -->
 
     <!-- Start User chat -->
@@ -93,16 +94,30 @@
                     <div class="position-relative" id="users-chat">
                         <div class="p-3 user-chat-topbar">
                             <div class="row align-items-center">
-                                <div class="col-sm-4 col-8"> 
+                                <div class="col-sm-4 col-8">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 d-block d-lg-none me-3">
+                                            <a href="javascript: void(0);" class="user-chat-remove fs-18 p-1"><i class="ri-arrow-left-s-line align-bottom"></i></a>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
+                                                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" class="rounded-circle avatar-xs" alt="">
+                                                    <span class="user-status"></span>
+                                                </div>
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="text-truncate mb-0 fs-16"><a class="text-reset username" data-bs-toggle="offcanvas" href="#userProfileCanvasExample" aria-controls="userProfileCanvasExample"></a>Clever Chat</h5>
+                                                    <p class="text-truncate text-muted fs-14 mb-0 userStatus"><small></small></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-sm-8 col-4">
-                                    <ul class="list-inline user-chat-nav text-end mb-0">
-                                        <li class="list-inline-item m-0">
-                                        </li>
-                                    </ul>
-                                </div>
+                               
                             </div>
+
                         </div>
+
                         <!-- end chat user head -->
                         <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
                             <div id="elmLoader">
@@ -366,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     sendMessageBtn.disabled = true;
-    sendMessageBtn.innerHTML = 'Sending...';
+    sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
 
     axios.post('/main/chat/send', formData, {
         headers: {
@@ -455,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .finally(() => {
         sendMessageBtn.disabled = false;
-        sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
+        sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
     });
 }
 
@@ -548,6 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('DOMContentLoaded', function() {
     const sessionList = document.getElementById('session-list');
     const chatConversation = document.getElementById('users-conversation');
+    const userStatus = document.querySelector('.userStatus small');
 
     // Load the last chat session's messages from session storage
     const savedContext = sessionStorage.getItem('currentSessionContext');
@@ -558,6 +574,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     sessionList.addEventListener('click', function(event) {
         const target = event.target.closest('li');
+        
+        const sessionTitle = target.querySelector('p').textContent; // Get the session title
+
+        // Set the session title in the header
+        if (userStatus) {
+            userStatus.textContent = sessionTitle;
+        }
+
         if (!target) return;
 
         const sessionId = target.dataset.sessionId;
