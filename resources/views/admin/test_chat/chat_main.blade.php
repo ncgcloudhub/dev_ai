@@ -291,6 +291,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="flex-grow-1 overflow-hidden">
                                     <p class="text-truncate mb-0">New Chat</p>
                                 </div>
+                                <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
+                                        <i class="ri-pencil-line"></i>
+                                </button>
                                 <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
                                     <i class="ri-delete-bin-5-line"></i>
                                 </button>
