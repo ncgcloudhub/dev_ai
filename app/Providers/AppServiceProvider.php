@@ -7,6 +7,7 @@ use App\Models\SiteSettings;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,5 +48,13 @@ class AppServiceProvider extends ServiceProvider
             // Pass the SEO data to the view
             $view->with('seo', $page);
         });
+
+        // Package WISE AI Model
+        View::composer('*', function ($view) {
+            $data = getUserLastPackageAndModels();
+            $selectedAiModel = Session::get('selectedAiModel');
+            $view->with(array_merge($data, compact('selectedAiModel')));
+        });
+
     }
 }
