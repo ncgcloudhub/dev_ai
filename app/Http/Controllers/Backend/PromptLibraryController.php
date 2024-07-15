@@ -15,6 +15,7 @@ use App\Models\PromptLibrary;
 use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Validator;
 
 class PromptLibraryController extends Controller
 {
@@ -27,16 +28,31 @@ class PromptLibraryController extends Controller
 
     public function PromptCategoryStore(Request $request)
     {
+         // Validate input data
+    $validator = Validator::make($request->all(), [
+        'category_name' => 'required|string|max:255',
+        'category_icon' => 'required|string|max:255',
+    ]);
 
-        $PromptLibraryCategory = PromptLibraryCategory::insertGetId([
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
 
-            'category_name' => $request->category_name,
-            'category_icon' => $request->category_icon,
-            'created_at' => Carbon::now(),
+        // Check for duplicate category name
+    $existingCategory = PromptLibraryCategory::where('category_name', $request->category_name)->first();
 
-        ]);
+    if ($existingCategory) {
+        return redirect()->back()->with('danger', 'Category name already exists.');
+    }
 
-        return redirect()->back()->with('success', 'Prompt Category Saved Successfully');
+    // Insert new category
+    $PromptLibraryCategory = PromptLibraryCategory::insertGetId([
+        'category_name' => $request->category_name,
+        'category_icon' => $request->category_icon,
+        'created_at' => Carbon::now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Prompt Category Saved Successfully');
     }
 
 

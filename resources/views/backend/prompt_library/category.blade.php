@@ -66,7 +66,7 @@
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon">
+                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon" required>
                             <label for="icon">Enter Icon</label>
                         </div>
     
