@@ -16,6 +16,8 @@ use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+
 
 class PromptLibraryController extends Controller
 {
@@ -271,8 +273,6 @@ class PromptLibraryController extends Controller
     } // end method
 
 
-
-
     public function PromptManage()
     {
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
@@ -300,17 +300,33 @@ class PromptLibraryController extends Controller
 
     public function Import(Request $request)
     {
-
-        Excel::import(new PromptLibraryImport(), $request->file('import_file'));
-
-        $notification = array(
-            'message' => 'Promopt Imported Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
-    } // End Method 
-
+        $request->validate([
+            'import_file' => 'required|file|mimes:xlsx,csv,txt',
+        ]);
+    
+        try {
+            Excel::import(new PromptLibraryImport(), $request->file('import_file'));
+    
+            return redirect()->back()->with('success', 'Prompt Imported Successfully');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+    
+            foreach ($failures as $failure) {
+                Log::error('Validation failure', [
+                    'row' => $failure->row(),
+                    'attribute' => $failure->attribute(),
+                    'errors' => $failure->errors(),
+                    'values' => $failure->values(),
+                ]);
+            }
+    
+            return redirect()->back()->with('error', 'There was an error importing the file. Check the log for details.');
+        } catch (\Exception $e) {
+            Log::error('General error during import', ['message' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'There was an error importing the file: ' . $e->getMessage());
+        }
+    }
+    
 
 
     // GET SUB CATEGORY PROMPT
