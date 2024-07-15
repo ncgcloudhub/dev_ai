@@ -46,10 +46,7 @@ Add context{text} column in sessions table
 in dynamic_pages, added 3 column seo_title, keywords, description {character_varying,255}
 
 
-
-
-
-
-
-
 permission, role has permission, roles, model has roles, model has permission deleted from fahmid laptop HP
+
+----------15/07/24--------------
+promptCategory table -> icon -> NULL
