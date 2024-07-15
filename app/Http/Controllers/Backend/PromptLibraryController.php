@@ -115,13 +115,21 @@ class PromptLibraryController extends Controller
     public function PromptSubCategoryStore(Request $request)
     {
 
-        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
+        // Check for duplicate sub-category name under the same category
+        $existingSubCategory = PromptLibrarySubCategory::where('category_id', $request->category_id)
+        ->where('sub_category_name', $request->sub_category_name)
+        ->first();
 
+        if ($existingSubCategory) {
+            return redirect()->back()->with('danger', 'Sub-Category name already exists under this category.');
+        }
+
+        // Insert new sub-category
+        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
             'category_id' => $request->category_id,
             'sub_category_name' => $request->sub_category_name,
             'sub_category_instruction' => $request->sub_category_instruction,
             'created_at' => Carbon::now(),
-
         ]);
 
         return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
