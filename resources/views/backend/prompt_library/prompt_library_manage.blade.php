@@ -16,23 +16,20 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-1">Manage Prompt Library</h5>
-                <a href="{{ route('prompt.export') }}" class="btn btn-primary">Export Prompt Library</a>
-                <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample"   enctype="multipart/form-data">
-                    @csrf
-                    <div class="form-group mb-3">
-                         <input type="file" name="import_file" class="form-control" >
-                    </div>
-    
-    
-    
-    
-      <button type="submit" class="btn btn-inverse-warning">Import </button>
-    
-                </form>
-    
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Manage Prompt Library</h4>
+                <a href="{{ route('prompt.export') }}" class="btn btn-primary mx-2">Export</a>
+                <div class="flex-shrink-0 d-flex align-items-center">
+                    <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-0 mx-2">
+                            <input type="file" name="import_file" class="form-control" >
+                        </div>
+                        <button type="submit" class="btn btn-warning">Import</button>
+                    </form>
+                </div>
             </div>
+            
 
             <div class="card-body border border-dashed border-end-0 border-start-0">
                 <form id="filterForm">
