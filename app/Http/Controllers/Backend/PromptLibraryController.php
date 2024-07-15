@@ -15,6 +15,9 @@ use App\Models\PromptLibrary;
 use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+
 
 class PromptLibraryController extends Controller
 {
@@ -27,16 +30,31 @@ class PromptLibraryController extends Controller
 
     public function PromptCategoryStore(Request $request)
     {
+         // Validate input data
+    $validator = Validator::make($request->all(), [
+        'category_name' => 'required|string|max:255',
+        'category_icon' => 'required|string|max:255',
+    ]);
 
-        $PromptLibraryCategory = PromptLibraryCategory::insertGetId([
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
 
-            'category_name' => $request->category_name,
-            'category_icon' => $request->category_icon,
-            'created_at' => Carbon::now(),
+        // Check for duplicate category name
+    $existingCategory = PromptLibraryCategory::where('category_name', $request->category_name)->first();
 
-        ]);
+    if ($existingCategory) {
+        return redirect()->back()->with('danger', 'Category name already exists.');
+    }
 
-        return redirect()->back()->with('success', 'Prompt Category Saved Successfully');
+    // Insert new category
+    $PromptLibraryCategory = PromptLibraryCategory::insertGetId([
+        'category_name' => $request->category_name,
+        'category_icon' => $request->category_icon,
+        'created_at' => Carbon::now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Prompt Category Saved Successfully');
     }
 
 
@@ -99,13 +117,21 @@ class PromptLibraryController extends Controller
     public function PromptSubCategoryStore(Request $request)
     {
 
-        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
+        // Check for duplicate sub-category name under the same category
+        $existingSubCategory = PromptLibrarySubCategory::where('category_id', $request->category_id)
+        ->where('sub_category_name', $request->sub_category_name)
+        ->first();
 
+        if ($existingSubCategory) {
+            return redirect()->back()->with('danger', 'Sub-Category name already exists under this category.');
+        }
+
+        // Insert new sub-category
+        $PromptLibrarySubCategory = PromptLibrarySubCategory::insertGetId([
             'category_id' => $request->category_id,
             'sub_category_name' => $request->sub_category_name,
             'sub_category_instruction' => $request->sub_category_instruction,
             'created_at' => Carbon::now(),
-
         ]);
 
         return redirect()->back()->with('success', 'Prompt Sub-Category Saved Successfully');
@@ -247,8 +273,6 @@ class PromptLibraryController extends Controller
     } // end method
 
 
-
-
     public function PromptManage()
     {
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
@@ -276,17 +300,33 @@ class PromptLibraryController extends Controller
 
     public function Import(Request $request)
     {
-
-        Excel::import(new PromptLibraryImport(), $request->file('import_file'));
-
-        $notification = array(
-            'message' => 'Promopt Imported Successfully',
-            'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
-    } // End Method 
-
+        $request->validate([
+            'import_file' => 'required|file|mimes:xlsx,csv,txt',
+        ]);
+    
+        try {
+            Excel::import(new PromptLibraryImport(), $request->file('import_file'));
+    
+            return redirect()->back()->with('success', 'Prompt Imported Successfully');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+    
+            foreach ($failures as $failure) {
+                Log::error('Validation failure', [
+                    'row' => $failure->row(),
+                    'attribute' => $failure->attribute(),
+                    'errors' => $failure->errors(),
+                    'values' => $failure->values(),
+                ]);
+            }
+    
+            return redirect()->back()->with('error', 'There was an error importing the file. Check the log for details.');
+        } catch (\Exception $e) {
+            Log::error('General error during import', ['message' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'There was an error importing the file: ' . $e->getMessage());
+        }
+    }
+    
 
 
     // GET SUB CATEGORY PROMPT

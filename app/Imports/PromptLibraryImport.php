@@ -8,28 +8,38 @@ use App\Models\PromptLibrarySubCategory;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Facades\Log;
 
 class PromptLibraryImport implements ToModel, WithHeadingRow
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
     public function model(array $row)
     {
-
         // Check if the slug is empty and generate it from prompt_name
         $slug = !empty($row['slug']) ? $row['slug'] : Str::slug($row['prompt_name']);
 
-        // Find the category and subcategory IDs by name
-        $category = PromptLibraryCategory::where('category_name', $row['category_name'])->first();
-        $subcategory = PromptLibrarySubCategory::where('sub_category_name', $row['sub_category_name'])->first();
+        // Find the category by name or create it if it doesn't exist
+        $category = PromptLibraryCategory::firstOrCreate(
+            ['category_name' => $row['category_name']],
+            [
+                'category_icon' => !empty($row['category_icon']) ? $row['category_icon'] : 'default_icon', // Provide a default value
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
 
-        // If no category or subcategory found, you might want to handle this case according to your application logic.
-        if (!$category || !$subcategory) {
-            // Handle error or return null
-            return null;
+        // Find the subcategory by name or create it if it doesn't exist
+        $subcategory = PromptLibrarySubCategory::firstOrCreate(
+            ['sub_category_name' => $row['sub_category_name'], 'category_id' => $category->id],
+            ['created_at' => now(), 'updated_at' => now()]
+        );
+
+        // Log the creation of new categories/subcategories
+        if ($category->wasRecentlyCreated) {
+            Log::info('Created new category', ['category_name' => $row['category_name']]);
+        }
+
+        if ($subcategory->wasRecentlyCreated) {
+            Log::info('Created new subcategory', ['sub_category_name' => $row['sub_category_name']]);
         }
 
         // Find the existing record by ID if it exists
@@ -48,12 +58,13 @@ class PromptLibraryImport implements ToModel, WithHeadingRow
                     'updated_at'      => $row['updated_at'],
                     'sub_category_id' => $subcategory->id,
                 ]);
+                Log::info('Updated existing record', ['row' => $row]);
                 return $promptLibrary;
             }
         }
 
         // If no ID is provided or the record does not exist, create a new one
-        return new PromptLibrary([
+        $newPromptLibrary = new PromptLibrary([
             'prompt_name'     => $row['prompt_name'],
             'slug'            => $slug,
             'icon'            => $row['icon'],
@@ -64,5 +75,8 @@ class PromptLibraryImport implements ToModel, WithHeadingRow
             'updated_at'      => $row['updated_at'],
             'sub_category_id' => $subcategory->id,
         ]);
+        Log::info('Created new record', ['row' => $row]);
+        return $newPromptLibrary;
     }
+
 }
