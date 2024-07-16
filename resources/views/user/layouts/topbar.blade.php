@@ -30,7 +30,7 @@
                         <span></span>
                     </span>
                 </button>
-            
+{{--             
                 <form action="{{ route('select.ai.model') }}" method="POST">
                     @csrf
                     <label for="aiModel">Select AI Model:</label>
@@ -41,7 +41,7 @@
                     </select>
                     <button type="submit">Select</button>
                 </form>
-
+ --}}
 
                {{-- MODEL --}}
             @if ($lastPackage)
