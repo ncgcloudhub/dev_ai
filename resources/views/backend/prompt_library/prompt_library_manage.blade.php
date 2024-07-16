@@ -17,8 +17,8 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Manage Prompt Library</h4>
-                <a href="{{ route('prompt.export') }}" class="btn btn-primary mx-2">Export</a>
+                <h4 class="card-title mb-0 flex-grow-1">Manage Prompt Library <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 ">Category</a> <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 ">Sub-Category</a></h4>
+                <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
                 <div class="flex-shrink-0 d-flex align-items-center">
                     <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
                         @csrf
@@ -28,7 +28,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-warning">Import</button>
+                        <button type="submit" class="btn text-white badge-gradient-warning">Import</button>
                     </form>
                     
                     @if(session('success'))

@@ -119,6 +119,27 @@
         </div>
     </div>
     {{-- 3rd Card End --}}
+     {{-- 4th Card --}}
+     <div class="card border card-border-primary">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Links</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body">
+            <div class="live-preview">
+                    <div class="form-floating mb-3">
+                        <input type="text"  value="{{$template->blog_link}}" name="blog_link" class="form-control" id="blog_link" placeholder="Enter Link">
+                        <label for="blog_link" class="form-label">Blog Redirection Link</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text"  value="{{$template->video_link}}" name="video_link" class="form-control" id="video_link" placeholder="Enter Link">
+                        <label for="video_link" class="form-label">Video Embedded Link</label>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- 4th Card End --}}
     <div class="col-12">
         <div class="text-end">
             <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">

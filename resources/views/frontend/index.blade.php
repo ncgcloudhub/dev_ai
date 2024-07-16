@@ -20,7 +20,6 @@
 @endsection
 @section('body')
 
-
 <style>
     .banner{
 	background: url({{ asset('build/images/banner1.jpg') }}) no-repeat center top;
@@ -159,7 +158,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Free Contents with <br> <strong class="text-warning">GPT-4</strong></p>
+                                                                <p class="text-white mb-0">Generate Free Contents with <br> <strong class="text-warning">GPT- 4</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -185,11 +184,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Greeting Cards using <br><strong class="text-warning">Dall-E 3</strong></p>
+                                                                <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning">Latest GPT</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('eid.card') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate E-Card</a>
+                                                    <a href="{{ auth()->check() ? route('main.chat.form') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Chat Bot</a>
                                                 </div>
                                             </div><!-- end col -->
                                         </div><!-- end row -->

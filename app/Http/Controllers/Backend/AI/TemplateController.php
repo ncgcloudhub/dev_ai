@@ -134,6 +134,8 @@ class TemplateController extends Controller
         $templateInput->input_placeholders = json_encode($validatedData['input_placeholders']);
         $templateInput->prompt = $validatedData['prompt'];
         $templateInput->total_word_generated = '0';
+        $templateInput->blog_link = $request->blog_link;
+        $templateInput->video_link = $request->video_link;
 
         // Save the TemplateInput instance
         $templateInput->save();
@@ -198,6 +200,8 @@ class TemplateController extends Controller
         $template->input_labels = json_encode($validatedData['input_labels']);
         $template->input_placeholders = json_encode($validatedData['input_placeholders']);
         $template->prompt = $validatedData['prompt'];
+        $template->blog_link = $request->blog_link;
+        $template->video_link = $request->video_link;
         $template->save();
 
         return redirect()->back()->with('success', 'Template updated successfully');
@@ -230,7 +234,6 @@ class TemplateController extends Controller
         $inputPlaceholders = json_decode($Template->input_placeholders, true);
 
         $content = '';
-
 
         return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }

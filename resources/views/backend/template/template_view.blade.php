@@ -21,7 +21,7 @@
         
                 <div class="card-body">
                   
-                    <div class="live-preview">
+                    <div class="live-preview ">
                         <form id="generateForm"  action="{{route ('template.generate')}}" method="post" class="row g-3">
                             @csrf
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
@@ -31,7 +31,7 @@
                                 <label for="model" class="form-label">Select GPT Model</label>
                                 <select class="form-select" name="model" id="model">
                                     <option disabled selected>Select Model</option>
-                                    <option value="text-davinci-003">text-davinci-003</option>
+                                    {{-- <option value="text-davinci-003">text-davinci-003</option> --}}
                                     <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
                                     <option value="gpt-4">gpt-4</option>
                                 </select>
@@ -211,35 +211,40 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button class="btn btn-rounded btn-primary mb-5">Generate</button>
+                            <button class="btn btn-rounded text-white badge-gradient-primary mx-1 mb-4">Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
                         </form>
                     </div>
                     
+                    <!-- Custom Ratio Video -->
+                    <div class="ratio" style="--vz-aspect-ratio: 50%;">
+                        <iframe src="{{$Template->video_link}}" title="YouTube video" allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
            </div>
 
            <div class="col">
                 <!-- Add the Download Content button -->
-                <button id="copyButton" class="btn btn-primary me-2">
+                <button id="copyButton" class="btn text-white badge-gradient-primary mx-1">
                     <i class="las la-copy"></i>
                 </button>
-                <button id="downloadButton" class="btn btn-success">
+                <button id="downloadButton" class="btn text-white badge-gradient-primary mx-1">
                     <i class="las la-download"></i>
                 </button>
                 
                 
                 <div class="row mt-2">
                     <div class="col-lg-12">
-                        <div class="card">
+                        <div class="card border border-primary">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">Generated Content</h4>
-                                <button class="btn btn-primary">
-                                    Tokens Left: <span id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
-                                </button>
+                                <h4 class="card-title mb-0">Generated Content <button type="button" class="btn btn-outline-secondary">                            
+                                    Tokens Left: <span class="badge bg-success ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
+                            </button></h4>
+                              
+                               
                             </div><!-- end card header -->
                             <div class="card-body">
                                 <textarea id="myeditorinstance" readonly></textarea>
@@ -253,9 +258,12 @@
                                 </div>
                             </div><!-- end card-body -->
                         </div><!-- end card -->
+                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" class="link"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
+                       
                     </div>
                     <!-- end col -->
                 </div>
+                
                 
                 <div class="text-end">
                     @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}

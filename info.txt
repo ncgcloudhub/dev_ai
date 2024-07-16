@@ -49,4 +49,6 @@ in dynamic_pages, added 3 column seo_title, keywords, description {character_var
 permission, role has permission, roles, model has roles, model has permission deleted from fahmid laptop HP
 
 ----------15/07/24--------------
-promptCategory table -> icon -> NULL
+1. promptCategory table -> icon -> NULL
+2. template table -> video_link -> text -> null
+               -> blog_link -> text -> null
