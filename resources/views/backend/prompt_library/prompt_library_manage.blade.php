@@ -83,8 +83,8 @@
                        {{-- Added New text to branc 1 --}}
                         <div class="col-xxl-1 col-sm-4">
                             <div>
-                                <button type="submit" class="btn btn-secondary w-100"> 
-                                    <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
+                                <button type="submit" class="btn text-white badge-gradient-dark mx-2 "> 
+                                    <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
                                 </button>
                             </div>
                         </div>
@@ -120,12 +120,12 @@
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{$item->category->category_name}}
+                                   <a href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">{{$item->category->category_name}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    {{$item->subcategory->sub_category_name}}
+                                   <a href="{{ route('sub.category.prompt.library.view', ['id' => $item->sub_category_id]) }}"> {{$item->subcategory->sub_category_name}}</a>
                                 </div>
                             </td>
                             <td>
@@ -261,7 +261,7 @@ $(document).ready(function() {
                         <td>${index + 1}</td>
                         <td><a href="/user/details/${item.id}" class="fw-medium link-primary">${item.prompt_name}</a></td>
                         <td><div class="d-flex align-items-center"><div class="flex-grow-1">${item.description}</div></div></td>
-                        <td><div class="d-flex align-items-center">${item.category.category_name}</div></td>
+                        <td><div class="d-flex align-items-center"><a href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">${item.category.category_name}</a></div></td>
                         <td><div class="d-flex align-items-center">${item.subcategory.sub_category_name}</div></td>
                         <td>
                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">

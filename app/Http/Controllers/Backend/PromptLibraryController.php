@@ -291,6 +291,24 @@ class PromptLibraryController extends Controller
         return view('backend.prompt_library.prompt_library_view', compact('prompt_library', 'prompt_library_examples'));
     }
 
+    // Catgeory Filter Prompt Library
+    public function PromptCatgeoryView($id)
+    {
+        $prompt_library = PromptLibrary::where('category_id', $id)->get();
+        $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
+        $categories = PromptLibraryCategory::latest()->get();
+        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories'));
+    }
+
+    // Sub Catgeory Filter Prompt Library
+    public function PromptSubCatgeoryView($id)
+    {
+        $prompt_library = PromptLibrary::where('sub_category_id', $id)->get();
+        $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
+        $categories = PromptLibraryCategory::latest()->get();
+        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories'));
+    }
+
     // Export
     public function Export()
     {
