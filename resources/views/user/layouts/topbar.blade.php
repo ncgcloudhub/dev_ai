@@ -44,19 +44,40 @@
  --}}
 
                {{-- MODEL --}}
-            @if ($lastPackage)
-               <p>Last Package: {{ $lastPackage->id }} - {{ $lastPackage->created_at }}</p>
-               <label for="aiModel">Select AI Model:</label>
-               <select name="aiModel" id="aiModel" class="form-select">
-                   @foreach ($aiModels as $model)
-                       <option value="{{ $model }}">{{ $model }}</option>
-                   @endforeach
-               </select>
+               @php
+               // Fetch the last package, AI models, and selected model
+               $data = getUserLastPackageAndModels();
+               $lastPackage = $data['lastPackage'];
+               $aiModels = $data['aiModels'];
+               $selectedModel = $data['selectedModel'];
+           @endphp
+           
+           @if ($lastPackage)
+               <form id="modelForm" action="{{ route('select-model') }}" method="POST">
+                   @csrf
+                   <select name="aiModel" id="aiModel" class="form-select">
+                       @foreach ($aiModels as $model)
+                           <option value="{{ trim($model) }}" {{ trim($selectedModel) === trim($model) ? 'selected' : '' }}>
+                               {{ $model }}
+                           </option>
+                       @endforeach
+                   </select>
+               </form>
            @else
-           <select name="aiModel" id="aiModel" class="form-select">
-                <option value="gpt-3.5-turbo-instruct">gpt-3.5-turbo-instruct</option>
-            </select>
+               <select name="aiModel" id="aiModel" class="form-select">
+                   <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
+                       gpt-3.5-turbo-instruct
+                   </option>
+               </select>
            @endif
+           
+           @if (session('status'))
+               <div class="alert alert-success">
+                   {{ session('status') }}
+               </div>
+           @endif          
+           
+           
 
             </div>
 
@@ -151,3 +172,15 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var aiModelSelect = document.getElementById('aiModel');
+        var modelForm = document.getElementById('modelForm');
+
+        aiModelSelect.addEventListener('change', function() {
+            modelForm.submit();
+        });
+    });
+</script>
+

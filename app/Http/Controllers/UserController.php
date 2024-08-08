@@ -74,4 +74,19 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Failed to send verification email.');
         }
     }
+
+     // SELECT USER MODEL GLOBAL
+     public function selectModel(Request $request)
+     {   
+         $user_id = Auth::user()->id;
+         $user = User::findOrFail($user_id);
+        
+         $user->selected_model = trim($request->input('aiModel'));
+         $user->save();
+ 
+         return redirect()->back()->with('status', 'AI Model selected successfully!');
+     }
+ 
+
+
 }

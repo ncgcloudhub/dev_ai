@@ -91,4 +91,5 @@ class ProfileEditController extends Controller
           return redirect()->back()->with('success', 'Profile Photo Updated Successfully');
       }
 
+     
 }

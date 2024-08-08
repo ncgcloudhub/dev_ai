@@ -279,8 +279,7 @@
                         </div>
                     </div>
                 </li>
-
-                
+ 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('manage.user')}}">
                         <i class=" las la-user-circle"></i> <span >Manage User</span>
