@@ -245,17 +245,14 @@ class TemplateController extends Controller
     public function templategenerate(Request $input)
     {
         $template_id = $input->template_id;
-        $setting = AISettings::find(1);
-        $openaiModel = $setting->openaimodel;
+        // Get the currently authenticated user
+        $user = auth()->user();
+        // Retrieve the selected model from the `selected_model` field
+        $openaiModel = $user->selected_model;
         Log::info('before: ' . $openaiModel);
         $template = Template::find($template_id);
         $user = Auth::user();
 
-        // Set the model to the selected one or default
-        if ($input->model) {
-            $openaiModel = $input->model;
-            Log::info('after: ' . $openaiModel);
-        }
 
         $language = 'English';
         $max_result_length_value = 100;
