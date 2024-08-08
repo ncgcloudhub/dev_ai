@@ -84,7 +84,7 @@ class UserController extends Controller
          $user->selected_model = trim($request->input('aiModel'));
          $user->save();
  
-         return redirect()->back()->with('status', 'AI Model selected successfully!');
+         return redirect()->back()->with('success', 'Model Updated Successfully');
      }
  
 

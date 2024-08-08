@@ -26,17 +26,6 @@
                             @csrf
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
 
-                             <!-- Model Selection Dropdown -->
-                            <div class="col-md-12">
-                                <label for="model" class="form-label">Select GPT Model</label>
-                                <select class="form-select" name="model" id="model">
-                                    <option disabled selected>Select Model</option>
-                                    {{-- <option value="text-davinci-003">text-davinci-003</option> --}}
-                                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                                    <option value="gpt-4">gpt-4</option>
-                                </select>
-                                <small class="form-text text-muted">Default model will be used if not selected</small>
-                            </div>
 
                             <div class="col-md-12">
                                 <label for="language" class="form-label">Select Language</label>

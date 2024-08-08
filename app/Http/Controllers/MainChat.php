@@ -69,8 +69,11 @@ class MainChat extends Controller
 
         Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
 
-        $setting = AISettings::find(1);
-        $openaiModel = $setting->openaimodel;
+        // Get the currently authenticated user
+        $user = auth()->user();
+        // Retrieve the selected model from the `selected_model` field
+        $openaiModel = $user->selected_model;
+        Log::info('before: ' . $openaiModel);
 
         // Retrieve the session and its messages from the database
         $session = ModelsSession::with('messages')->find($sessionId);
