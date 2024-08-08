@@ -87,6 +87,35 @@ backdrop-filter: blur(7.5px);
 -webkit-backdrop-filter: blur(7.5px);
 border: 1px solid rgba(255, 255, 255, 0.99);
 }
+
+.card-background-common {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    overflow: hidden; /* Ensure the overlay stays within the card bounds */
+}
+
+.card-background-common::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    z-index: 1; /* Ensure the overlay is on top of the image */
+}
+
+.card-background-common > * {
+    position: relative;
+    z-index: 2; /* Ensure the content is on top of the overlay */
+}
+
+
 </style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
@@ -139,48 +168,48 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
                                         {{-- UI Card Start --}}
                                         <div class="row row-cols-xxl-5 row-cols-lg-6 row-cols-1 justify-content-center py-5">
-                                            
+
                                             <div class="col d-flex flex-column">
-                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/h_1.jpg');">
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning"> Dall-E 3</strong></p>
+                                                                <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning">Dall-E 3</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Images</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            
+                                        
                                             <div class="col d-flex flex-column">
-                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/h_2.jpg');">
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Generate Free Contents with <br> <strong class="text-warning">GPT- 4</strong></p>
+                                                                <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning">GPT-4</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Contents</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            
+                                        
                                             <div class="col d-flex flex-column">
-                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/h_3.jpg');">
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
-                                                                <p class="text-white mb-0">Get Access to countless <br> <strong class="text-warning">Prompt Library</strong></p>
+                                                                <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning">Prompt Library</strong></p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <a href="{{ auth()->check() ? route('prompt.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a>
                                                 </div>
                                             </div><!-- end col -->
-                                            
+                                        
                                             <div class="col d-flex flex-column">
-                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between">
+                                                <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/h_4.jpg');">
                                                     <div>
                                                         <div class="d-flex align-items-center">
                                                             <div class="flex-grow-1 ms-2">
@@ -191,6 +220,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                     <a href="{{ auth()->check() ? route('main.chat.form') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Chat Bot</a>
                                                 </div>
                                             </div><!-- end col -->
+                                        
                                         </div><!-- end row -->
                                         
                                         {{-- UI Card End --}}
