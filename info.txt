@@ -52,3 +52,8 @@ permission, role has permission, roles, model has roles, model has permission de
 1. promptCategory table -> icon -> NULL
 2. template table -> video_link -> text -> null
                -> blog_link -> text -> null
+
+
+---------8/8/24--------------------
+1-add selected_model in users table, character_varying default=any_model_name
+

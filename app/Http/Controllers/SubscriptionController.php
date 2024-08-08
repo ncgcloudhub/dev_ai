@@ -78,4 +78,6 @@ class SubscriptionController extends Controller
 
         return redirect()->route('all.package')->with($notification);
     } // End Method 
+
+    
 }

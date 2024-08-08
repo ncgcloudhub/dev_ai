@@ -29,14 +29,14 @@ if (!function_exists('calculateCredits')) {
     }
 }
 
-// GET MODEL FRO  PACKAGE
+// GET MODEL FROM PACKAGE
 if (!function_exists('getUserLastPackageAndModels')) {
     function getUserLastPackageAndModels()
     {
         $user = Auth::user();
 
         if (!$user) {
-            return ['lastPackage' => null, 'aiModels' => []];
+            return ['lastPackage' => null, 'aiModels' => [], 'selectedModel' => null];
         }
 
         // Get the user's last package
@@ -60,7 +60,11 @@ if (!function_exists('getUserLastPackageAndModels')) {
             }
         }
 
-        return compact('lastPackage', 'aiModels');
+        // Get the currently selected model
+        $selectedModel = $user->selected_model;
+
+        return compact('lastPackage', 'aiModels', 'selectedModel');
     }
 }
+
 

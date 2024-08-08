@@ -329,6 +329,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status'])->group(fun
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
 
+    // Global Select Model
+    Route::post('/select-model', [UserController::class, 'selectModel'])->name('select-model');
+
     // Template Rating
     Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
 
