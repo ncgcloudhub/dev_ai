@@ -447,6 +447,12 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 
+    // Category Filter Prompt Library
+    Route::get('prompt/category/{id}', [PromptLibraryController::class, 'PromptCatgeoryView'])->name('category.prompt.library.view');
+    
+    // Sub Category Filter Prompt Library
+    Route::get('prompt/subcategory/{id}', [PromptLibraryController::class, 'PromptSubCatgeoryView'])->name('sub.category.prompt.library.view');
+
     Route::post('/prompt-examples/{promptLibrary}', [PromptLibraryController::class, 'PromptExampleStore'])->name('prompt_examples.store');
 
     Route::put('/prompt-examples/{promptExample}', [PromptLibraryController::class, 'updatePromptExample'])->name('prompt_examples.update');

@@ -79,7 +79,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('main.chat.form') }}">
                         <i class="las la-user-circle"></i> 
-                        <span>AI Chat</span>
+                        <span>ChatterMate</span>
                         <span class="badge bg-danger ms-2">New</span>
                     </a>
                 </li>
@@ -156,7 +156,7 @@
                                 <ul class="nav nav-sm flex-column">
                                     
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >Chat with AI Assistant</a>
+                                        <a href="{{route('chat')}}" class="nav-link" >AI Professional Bots</a>
                                     </li>
                                   
                                 </ul>

@@ -193,7 +193,7 @@
                                         <a href="{{route('expert.add')}}" class="nav-link" >Expert</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >Lets Chat</a>
+                                        <a href="{{route('chat')}}" class="nav-link" >AI Professional Bots</a>
                                     </li>
                                   
                                 </ul>
@@ -295,7 +295,7 @@
               
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('main.chat.form')}}">
-                        <i class=" las la-user-circle"></i> <span >Main Chat</span>
+                        <i class=" las la-user-circle"></i> <span >ChatterMate</span>
                     </a>
                 </li>
 

@@ -10,6 +10,7 @@
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border">
         <div class="px-4 pt-4 mb-4">
+            <div class="btn btn-primary d-grid mb-2" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))"><a class="text-white" href="{{route('chat')}}">AI Professional Bots</a></div>
             <div class="d-flex align-items-start">
                 <div class="flex-grow-1">
                     <h5 class="mb-0">New Chat</h5>
@@ -38,8 +39,8 @@
 
         <div class="tab-content text-muted">
             <div class="tab-pane active" id="chats" role="tabpanel">
-                <div class="chat-room-list pt-3" data-simplebar>
-                    <div class="d-flex align-items-center px-4 mb-2">
+                <div class="chat-room-list pt-0" data-simplebar>
+                    <div class="d-flex align-items-center px-4 mb-0">
                       
                       
                     </div>
