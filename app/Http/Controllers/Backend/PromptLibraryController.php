@@ -393,9 +393,16 @@ class PromptLibraryController extends Controller
     // ASK AI PROMPT
     public function AskAiPromptLibrary(Request $request)
     {
+       
         $setting = AISettings::find(1);
         $openaiModel = $setting->openaimodel;
 
+        if ($request->input('sub_category_instruction')) {
+            $sub_category_instruction = $request->input('sub_category_instruction');
+        } else {
+            $sub_category_instruction = "";
+        }
+        
         $prompt = $request->input('message');
 
         // Make API call
@@ -408,10 +415,13 @@ class PromptLibraryController extends Controller
             'json' => [
                 'model' => $openaiModel, // Use the appropriate model name
                 'messages' => [
-                    ['role' => 'system', 'content' => $prompt],
+                    ['role' => 'system', 'content' => $sub_category_instruction],
+                    ['role' => 'user', 'content' => $prompt],
                 ],
             ],
         ]);
+
+       
 
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];

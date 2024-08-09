@@ -190,6 +190,8 @@
                         <div class="col-md-9 mb-3">
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="ask_ai" rows="1" placeholder="Type your message..." autocomplete="off">{{$prompt_library->actual_prompt}}</textarea>
                         </div>
+                        <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
+
                         <div class="col-md-3">
                             <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
@@ -280,6 +282,7 @@
 
         $('#ask').click(function() {
         var message = $('#ask_ai').val();
+        var sub_category_instruction = $('#sub_category_instruction').val();
         $('#loader').removeClass('d-none');
 
         $.ajax({
@@ -287,6 +290,7 @@
             type: "POST",
             data: {
                 message: message,
+                sub_category_instruction: sub_category_instruction,
                 _token: "{{ csrf_token() }}"
             },
             success: function(response) {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light" data-sidebar="light" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
-    <head>
+<head>
     <meta charset="utf-8" />
     <title>Clever Creator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,14 @@
     <meta content="Clever_Creator" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}">
-        @include('admin.layouts.head-css')
+
+    <!-- Open Graph meta tags for sharing -->
+    <meta property="og:title" content="Clever Creator" />
+    <meta property="og:description" content="Clever Creator" />
+    <meta property="og:image" content="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" />
+    
+
+    @include('admin.layouts.head-css')
   </head>
 
     @yield('body')
