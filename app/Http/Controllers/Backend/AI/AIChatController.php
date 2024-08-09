@@ -226,29 +226,34 @@ class AIChatController extends Controller
         $session = \App\Models\Session::with(['messages' => function ($query) {
             $query->orderBy('created_at', 'asc');
         }])->find($id);
-
+    
         if (!$session) {
             return response()->json(['error' => 'Session not found'], 404);
         }
-
+    
         // Store the session ID in the Laravel session
         session(['session_id' => $id]);
-
-        // Format messages to include role
+    
+        // Format messages to include role and file information
         $formattedMessages = $session->messages->map(function ($message) {
+            $filePath = $message->file_path ?? null;
+            $isImage = $filePath && preg_match('/\.(jpg|jpeg|png|gif)$/i', $filePath);
+    
             return [
                 'content' => $message->message ?? $message->reply,
+                'file_path' => $filePath,
+                'is_image' => $isImage,
                 'role' => $message->message ? 'user' : 'assistant',
                 'created_at' => $message->created_at->toDateTimeString()
             ];
         })->toArray();
-
+    
         // Store the conversation history in the session
         $conversationHistory = array_map(function ($message) {
             return ['role' => $message['role'], 'content' => $message['content']];
         }, $formattedMessages);
         session(['conversation_history' => $conversationHistory]);
-
+    
         // Retrieve context from the session
         $context = json_decode($session->context, true) ?? [
             'uploaded_files' => [],
@@ -256,22 +261,28 @@ class AIChatController extends Controller
             'conversation_history' => [],
             'context' => [],
         ];
-
+    
         // Clear uploaded files and pasted images in the session
         session(['uploaded_files' => []]);
         session(['pasted_images' => []]);
         session(['context' => []]);
-
+    
         // Save the updated context back to the session
         $session->context = json_encode($context);
         $session->save();
-
+    
+        Log::info('Get Message Content ' . response()->json([
+            'messages' => $formattedMessages,
+            'context' => $context,
+        ]));
+    
         // Return the formatted messages and context in JSON format
         return response()->json([
             'messages' => $formattedMessages,
             'context' => $context,
         ]);
     }
+    
 
     // NEW SESSION
     public function newSession(Request $request)

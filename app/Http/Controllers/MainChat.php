@@ -129,7 +129,7 @@ class MainChat extends Controller
         }
 
         if ($file && $file->getMimeType() === 'image/png') {
-            $filePath = $file->store('pasted', 'public');
+            $filePath = $file->store('uploads', 'public');
             $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
             $response = $this->callOpenAIImageAPI($base64Image);
             $imageContent = $response['choices'][0]['message']['content'];
@@ -162,7 +162,9 @@ class MainChat extends Controller
                 'user_id' => Auth::id(),
                 'message' => $userMessage,
                 'reply' => null,
+                'file_path' => $filePath,
             ]);
+            Log::info('File Path: ', ['pathss' => $filePath]);
 
             // Save context to database
             $session->context = json_encode($context);

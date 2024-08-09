@@ -276,6 +276,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const imageUrl = URL.createObjectURL(file);
+
+        // Create image element
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.style.maxWidth = '100px'; // Adjust image size as needed
+
+        // Create remove button
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'X';
+        removeBtn.classList.add('remove-btn');
+        removeBtn.addEventListener('click', () => {
+            // Clear the file input and image display
+            fileInput.value = '';
+            imageDisplay.innerHTML = '';
+        });
+
+        // Container for image and button
+        const container = document.createElement('div');
+        container.classList.add('image-container');
+        container.appendChild(img);
+        container.appendChild(removeBtn);
+
+        // Display the image in image_display div
+        imageDisplay.innerHTML = ''; // Clear any previous image
+        imageDisplay.appendChild(container);
+    }
+    });
+
+
     newSessionBtn.addEventListener('click', function () {
         axios.post('/main/new-session')
             .then(response => {
@@ -491,7 +524,156 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-  function formatContent(content) {
+
+
+    // Add this script in your main script file or where you handle dynamic content
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('copy-button')) {
+            const codeElement = event.target.previousElementSibling; // Assuming the button is placed after the <pre> element
+            const codeText = codeElement.innerText.trim(); // Use innerText to preserve line breaks
+            
+            navigator.clipboard.writeText(codeText)
+                .then(() => {
+                    event.target.textContent = 'Copied!';
+                    setTimeout(() => {
+                        event.target.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+        }
+    });
+
+
+    </script>
+    
+
+{{-- GET MESSAGES FROM SESSION --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sessionList = document.getElementById('session-list');
+    const chatConversation = document.getElementById('users-conversation');
+    const userStatus = document.querySelector('.userStatus small');
+
+    // Load the last chat session's messages from session storage
+    const savedContext = sessionStorage.getItem('currentSessionContext');
+    if (savedContext) {
+        const context = JSON.parse(savedContext);
+        loadMessagesFromContext(context);
+    }
+
+    sessionList.addEventListener('click', function(event) {
+        const target = event.target.closest('li');
+        
+        const sessionTitle = target.querySelector('p').textContent; // Get the session title
+
+        // Set the session title in the header
+        if (userStatus) {
+            userStatus.textContent = sessionTitle;
+        }
+
+        if (!target) return;
+
+        const sessionId = target.dataset.sessionId;
+        setActiveSession(sessionId);
+
+        axios.get(`/chat/sessions/${sessionId}/messages`)
+            .then(response => {
+                const messages = response.data.messages;
+                const context = response.data.context;
+
+                // Clear current chat
+                chatConversation.innerHTML = '';
+
+                // Display fetched messages
+                messages.forEach(message => {
+                    const { content, role, created_at, file_path, is_image } = message;
+
+                    const basePath = 'storage/app/'; // Assuming images are stored in 'public/storage/uploads'
+                    const fullFilePath = `${basePath}${file_path}`;
+
+                    const messageHTML = `
+                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                            <div class="conversation-list">
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 100%; height: auto;">` : `<p class="mb-0 ctext-content">${formatContent(content)}</p>`}
+                                        </div>
+                                    </div>
+                                    <div class="conversation-name">
+                                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    `;
+                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+                });
+
+                // Clear the session storage for the current session context
+                sessionStorage.removeItem('currentSessionContext');
+
+                // Store context in session storage
+                sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
+
+                // Scroll to bottom of the chat
+                chatConversation.scrollTop = chatConversation.scrollHeight;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+
+    // Function to set the active session
+    function setActiveSession(sessionId) {
+        const previousActive = sessionList.querySelector('li.active');
+        if (previousActive) {
+            previousActive.classList.remove('active');
+        }
+
+        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+        if (newActive) {
+            newActive.classList.add('active');
+        }
+    }
+
+    function loadMessagesFromContext(context) {
+        if (!context || !context.messages) return;
+
+        chatConversation.innerHTML = '';
+        context.messages.forEach(message => {
+            const { content, role, created_at, file_path, is_image } = message;
+            const messageHTML = `
+                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                    <div class="conversation-list">
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content">
+                                    ${is_image ? `<img src="${file_path}" alt="Image" style="max-width: 100%; height: auto;">` : `<p class="mb-0 ctext-content">${formatContent(content)}</p>`}
+                                </div>
+                            </div>
+                            <div class="conversation-name">
+                                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `;
+            chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+        });
+        chatConversation.scrollTop = chatConversation.scrollHeight;
+    }
+
+    // Optionally, trigger a click event on the first session to load messages on page load
+    const firstSession = sessionList.querySelector('li');
+    if (firstSession) {
+        firstSession.click();
+    }
+});
+
+function formatContent(content) {
     const lines = content.split('\n');
     let formattedContent = '';
 
@@ -537,151 +719,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     return formattedContent;
 }
-
-
-    // Add this script in your main script file or where you handle dynamic content
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('copy-button')) {
-            const codeElement = event.target.previousElementSibling; // Assuming the button is placed after the <pre> element
-            const codeText = codeElement.innerText.trim(); // Use innerText to preserve line breaks
-            
-            navigator.clipboard.writeText(codeText)
-                .then(() => {
-                    event.target.textContent = 'Copied!';
-                    setTimeout(() => {
-                        event.target.textContent = 'Copy';
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy:', err);
-                });
-        }
-    });
-
-
-    </script>
-    
-
-{{-- GET MESSAGES FROM SESSION --}}
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const sessionList = document.getElementById('session-list');
-    const chatConversation = document.getElementById('users-conversation');
-    const userStatus = document.querySelector('.userStatus small');
-
-    // Load the last chat session's messages from session storage
-    const savedContext = sessionStorage.getItem('currentSessionContext');
-    if (savedContext) {
-        const context = JSON.parse(savedContext);
-        loadMessagesFromContext(context);
-    }
-
-    sessionList.addEventListener('click', function(event) {
-        const target = event.target.closest('li');
-        
-        const sessionTitle = target.querySelector('p').textContent; // Get the session title
-
-        // Set the session title in the header
-        if (userStatus) {
-            userStatus.textContent = sessionTitle;
-        }
-
-        if (!target) return;
-
-        const sessionId = target.dataset.sessionId;
-        setActiveSession(sessionId);
-
-        axios.get(`/chat/sessions/${sessionId}/messages`)
-            .then(response => {
-                const messages = response.data.messages;
-                const context = response.data.context;
-
-                // Clear current chat
-                chatConversation.innerHTML = '';
-
-                // Display fetched messages
-                messages.forEach(message => {
-                    const { content, role, created_at } = message;
-
-                    const messageHTML = `
-                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                            <div class="conversation-list">
-                                <div class="user-chat-content">
-                                    <div class="ctext-wrap">
-                                        <div class="ctext-wrap-content">
-                                            <p class="mb-0 ctext-content">${formatContent(content)}</p>
-                                        </div>
-                                    </div>
-                                    <div class="conversation-name">
-                                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
-                });
-
-                // Clear the session storage for the current session context
-                sessionStorage.removeItem('currentSessionContext');
-
-                // Store context in session storage
-                sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
-
-                // Scroll to bottom of the chat
-                chatConversation.scrollTop = chatConversation.scrollHeight;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    });
-
-    // Function to set the active session
-    function setActiveSession(sessionId) {
-        const previousActive = sessionList.querySelector('li.active');
-        if (previousActive) {
-            previousActive.classList.remove('active');
-        }
-
-        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
-        if (newActive) {
-            newActive.classList.add('active');
-        }
-    }
-
-    function loadMessagesFromContext(context) {
-        if (!context || !context.messages) return;
-
-        chatConversation.innerHTML = '';
-        context.messages.forEach(message => {
-            const { content, role, created_at } = message;
-            const messageHTML = `
-                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
-                                    <p class="mb-0 ctext-content">${formatContent(content)}</p>
-                                </div>
-                            </div>
-                            <div class="conversation-name">
-                                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            `;
-            chatConversation.insertAdjacentHTML('beforeend', messageHTML);
-        });
-        chatConversation.scrollTop = chatConversation.scrollHeight;
-    }
-
-    // Optionally, trigger a click event on the first session to load messages on page load
-    const firstSession = sessionList.querySelector('li');
-    if (firstSession) {
-        firstSession.click();
-    }
-});
 
 
 </script>
