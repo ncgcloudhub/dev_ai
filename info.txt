@@ -57,3 +57,6 @@ permission, role has permission, roles, model has roles, model has permission de
 ---------8/8/24--------------------
 1-add selected_model in users table, character_varying default=any_model_name
 
+-----------9/8/24------------------
+1 - file_path add in messages table type=text
+
