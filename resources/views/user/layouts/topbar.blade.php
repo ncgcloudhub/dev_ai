@@ -31,8 +31,8 @@
                 </button>
 
                 {{-- MODEL --}}
-                <div class="p-3"> <!-- Added padding on all sides -->
-                    @php
+                <div class="p-3"> 
+                   @php
                         // Fetch the last package, AI models, and selected model
                         $data = getUserLastPackageAndModels();
                         $lastPackage = $data['lastPackage'];
@@ -45,10 +45,12 @@
                             @csrf
                             <select name="aiModel" id="aiModel" class="form-select">
                                 @foreach ($aiModels as $model)
-                                    <option value="{{ trim($model) }}" {{ trim($selectedModel) === trim($model) ? 'selected' : '' }}>
-                                        {{ $model }}
-                                    </option>
-                                @endforeach
+                                <option value="{{ trim($model) }}" {{ trim($selectedModel) === trim($model) ? 'selected' : '' }}>
+                                    {{ $model }} 
+                                    {{ $selectedModel === $model ? '✅' : '' }}
+                                </option>
+                            @endforeach
+                            
                             </select>
                         </form>
                     @else
