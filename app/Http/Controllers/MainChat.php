@@ -157,6 +157,9 @@ class MainChat extends Controller
             session(['context' => $context]);
             Log::info('Updated context with message: ', $context);
 
+             // Check if $filePath is set and not empty
+            $filePath = !empty($filePath) ? $filePath : null;
+
             Message::create([
                 'session_id' => $sessionId,
                 'user_id' => Auth::id(),
