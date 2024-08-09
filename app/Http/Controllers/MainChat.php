@@ -128,7 +128,7 @@ class MainChat extends Controller
             session(['conversation_history' => $conversationHistory]);
         }
 
-        if ($file && $file->getMimeType() === 'image/png') {
+        if ($file && in_array($file->getMimeType(), ['image/png', 'image/jpg', 'image/jpeg'])) {
             $filePath = $file->store('uploads', 'public');
             $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
             $response = $this->callOpenAIImageAPI($base64Image);

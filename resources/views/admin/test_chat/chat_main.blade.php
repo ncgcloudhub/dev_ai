@@ -590,8 +590,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 messages.forEach(message => {
                     const { content, role, created_at, file_path, is_image } = message;
 
-                    const basePath = 'storage/app/'; // Assuming images are stored in 'public/storage/uploads'
+                    const basePath = 'storage/';
                     const fullFilePath = `${basePath}${file_path}`;
+
 
                     const messageHTML = `
                         <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
