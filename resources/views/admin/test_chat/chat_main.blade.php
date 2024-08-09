@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="user-chat-content">
                                     <div class="ctext-wrap">
                                         <div class="ctext-wrap-content">
-                                            ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 100%; height: auto;">` : `<p class="mb-0 ctext-content">${formatContent(content)}</p>`}
+                                            ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 20%; height: auto;">` : `<p class="mb-0 ctext-content">${formatContent(content)}</p>`}
                                         </div>
                                     </div>
                                     <div class="conversation-name">
