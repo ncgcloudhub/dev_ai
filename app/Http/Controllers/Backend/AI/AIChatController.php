@@ -271,11 +271,6 @@ class AIChatController extends Controller
         $session->context = json_encode($context);
         $session->save();
     
-        Log::info('Get Message Content ' . response()->json([
-            'messages' => $formattedMessages,
-            'context' => $context,
-        ]));
-    
         // Return the formatted messages and context in JSON format
         return response()->json([
             'messages' => $formattedMessages,
