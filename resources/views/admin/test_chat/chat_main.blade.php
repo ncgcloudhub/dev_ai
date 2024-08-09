@@ -593,23 +593,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     const basePath = 'storage/';
                     const fullFilePath = `${basePath}${file_path}`;
 
-
-                    const messageHTML = `
-                        <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                            <div class="conversation-list">
-                                <div class="user-chat-content">
-                                    <div class="ctext-wrap">
-                                        <div class="ctext-wrap-content">
-                                            ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 20%; height: auto;">` : `<p class="mb-0 ctext-content">${formatContent(content)}</p>`}
-                                        </div>
-                                    </div>
-                                    <div class="conversation-name">
-                                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                    const messageHTML = `
+                    <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                        <div class="conversation-list">
+                            <div class="user-chat-content">
+                                <div class="ctext-wrap">
+                                    <div class="ctext-wrap-content">
+                                        ${content ? `<p class="mb-0 ctext-content">${formatContent(content)}</p>` : ''}
+                                        ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 100%; height: auto;">` : ''}
                                     </div>
                                 </div>
+                                <div class="conversation-name">
+                                    <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                                </div>
                             </div>
-                        </li>
-                    `;
+                        </div>
+                    </li>
+                `;
+
+
                     chatConversation.insertAdjacentHTML('beforeend', messageHTML);
                 });
 
