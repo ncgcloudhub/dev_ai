@@ -83,7 +83,7 @@
     
                         <div class="form-floating">
     
-                            <textarea type="text" name="sub_category_instruction" value="{{$subcategory->sub_category_instruction}}" class="form-control" id="sub_category_instruction" placeholder="Enter Instruction"></textarea>
+                            <textarea type="text" name="sub_category_instruction" value="{{$subcategory->sub_category_instruction}}" class="form-control" id="sub_category_instruction" placeholder="Enter Instruction">{{$subcategory->sub_category_instruction}}</textarea>
                             <label for="icon">Sub-Category Instruction</label>
                         </div>
     
