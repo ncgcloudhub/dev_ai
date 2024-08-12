@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </script>
     
 
-{{-- GET MESSAGES FROM SESSION --}}
+{{-- GET/LOAD MESSAGES FROM SESSION --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const sessionList = document.getElementById('session-list');
