@@ -97,11 +97,23 @@ class MainChat extends Controller
             $request->validate([
                 'file' => 'mimes:txt,pdf,doc,docx,jpg,jpeg,png|max:20480',
             ]);
-
-            $filePath = $file->store('uploads');
+        
+            // Get the original filename and extension
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
+        
+            // Determine the file path and save the file
+            if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                // Rename image file to include timestamp or any custom logic
+                $newFilename = $originalFilename . '_' . time() . '.' . $extension;
+                $filePath = $file->storeAs('uploads', $newFilename);
+            } else {
+                // Keep original name for other files
+                $filePath = $file->storeAs('uploads', $file->getClientOriginalName());
+            }
+        
             Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
-
+        
             $fileContent = '';
             if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
                 $fileContent = $this->readFileContent(storage_path('app/' . $filePath), $extension);
@@ -111,22 +123,22 @@ class MainChat extends Controller
                 $fileContent = $response['choices'][0]['message']['content'];
             }
             Log::info('File content: ', ['content' => $fileContent]);
-
+        
             // Update session variables and context
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
-
+        
             $context['file_content'] = $fileContent;
             session(['context' => $context]);
-
+        
             // Provide default message if userMessage is empty
             if (empty($userMessage)) {
                 $userMessage = 'Summarize this in 3 lines';
             }
-
+        
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
-        }
+        }        
 
         if ($file && in_array($file->getMimeType(), ['image/png', 'image/jpg', 'image/jpeg'])) {
             $filePath = $file->store('uploads', 'public');

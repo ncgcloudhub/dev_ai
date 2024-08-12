@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </script>
     
 
-{{-- GET MESSAGES FROM SESSION --}}
+{{-- GET/LOAD MESSAGES FROM SESSION --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const sessionList = document.getElementById('session-list');
@@ -579,54 +579,52 @@ document.addEventListener('DOMContentLoaded', function() {
         setActiveSession(sessionId);
 
         axios.get(`/chat/sessions/${sessionId}/messages`)
-            .then(response => {
-                const messages = response.data.messages;
-                const context = response.data.context;
+    .then(response => {
+        const messages = response.data.messages;
+        const context = response.data.context;
 
-                // Clear current chat
-                chatConversation.innerHTML = '';
+        // Clear current chat
+        chatConversation.innerHTML = '';
 
-                // Display fetched messages
-                messages.forEach(message => {
-                    const { content, role, created_at, file_path, is_image } = message;
+        // Display fetched messages
+        messages.forEach(message => {
+            const { content, role, created_at, file_path, is_image } = message;
 
-                    const basePath = 'storage/';
-                    const fullFilePath = `${basePath}${file_path}`;
-
-                                    const messageHTML = `
-                    <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                        <div class="conversation-list">
-                            <div class="user-chat-content">
-                                <div class="ctext-wrap">
-                                    <div class="ctext-wrap-content">
-                                        ${content ? `<p class="mb-0 ctext-content">${formatContent(content)}</p>` : ''}
-                                        ${is_image ? `<img src="${fullFilePath}" alt="Image" style="max-width: 100%; height: auto;">` : ''}
-                                    </div>
-                                </div>
-                                <div class="conversation-name">
-                                    <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+            let messageHTML = `
+                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                    <div class="conversation-list">
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content">
+                                    ${content ? `<p class="mb-0 ctext-content">${content}</p>` : ''}
+                                    ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 100%; height: auto;">` : ''}
+                                    ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
                                 </div>
                             </div>
+                            <div class="conversation-name">
+                                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                            </div>
                         </div>
-                    </li>
-                `;
+                    </div>
+                </li>
+            `;
 
+            chatConversation.insertAdjacentHTML('beforeend', messageHTML);
+        });
 
-                    chatConversation.insertAdjacentHTML('beforeend', messageHTML);
-                });
+        // Clear the session storage for the current session context
+        sessionStorage.removeItem('currentSessionContext');
 
-                // Clear the session storage for the current session context
-                sessionStorage.removeItem('currentSessionContext');
+        // Store context in session storage
+        sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
 
-                // Store context in session storage
-                sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
+        // Scroll to bottom of the chat
+        chatConversation.scrollTop = chatConversation.scrollHeight;
+    })
+    .catch(error => {
+        console.error('Error fetching messages:', error);
+    });
 
-                // Scroll to bottom of the chat
-                chatConversation.scrollTop = chatConversation.scrollHeight;
-            })
-            .catch(error => {
-                console.error(error);
-            });
     });
 
     // Function to set the active session
