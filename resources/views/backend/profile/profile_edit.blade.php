@@ -293,15 +293,10 @@
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="emailInput" class="form-label">Country</label>
-                                        <select name="country" class="form-control" id="country">
-                                            <option disabled>Select Country</option>
-                                            <option value="Bangladesh" {{ $user->country == 'Bangladesh' ? 'selected' : '' }}>Bangladesh</option>
-                                            <option value="USA" {{ $user->country == 'USA' ? 'selected' : '' }}>USA</option>
-                                            <option value="Germany" {{ $user->country == 'Germany' ? 'selected' : '' }}>Germany</option>
-                                            <option value="India" {{ $user->country == 'India' ? 'selected' : '' }}>India</option>
-                                            <option value="France" {{ $user->country == 'France' ? 'selected' : '' }}>France</option>
-                                        </select>
+                                        <label for="emailInput" class="form-label">Region/Country</label>
+                                        <input type="text" class="form-control" id="country" name="country"
+                                                placeholder="Region/Country" value="{{$user->country}}" disabled>
+                    
                                     </div>
                                 </div>
                                 

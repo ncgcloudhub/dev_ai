@@ -432,6 +432,10 @@ class TemplateController extends Controller
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
 
+         // Retrieve user's location based on IP address
+         $location = Location::get($ipAddress);
+         $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+
 
         // If the user doesn't exist, create a new user
         if (is_null($user)) {
@@ -445,6 +449,7 @@ class TemplateController extends Controller
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
                 'email_verified_at' => now(),
+                'country' => $regionAndCountry,
             ]);
 
             // Generate a referral link for the new user
@@ -503,6 +508,10 @@ class TemplateController extends Controller
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
 
+        // Retrieve user's location based on IP address
+        $location = Location::get($ipAddress);
+        $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+
 
         // If the user doesn't exist, create a new user
         if (is_null($user)) {
@@ -515,6 +524,7 @@ class TemplateController extends Controller
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
                 'ipaddress' => $ipAddress, // Store IP address
+                'country' => $regionAndCountry,
             ]);
 
             // Populate the NewsLetter model

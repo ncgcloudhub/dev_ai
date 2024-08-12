@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Stevebauman\Location\Facades\Location;
 
 class RegisteredUserController extends Controller
 {
@@ -43,6 +44,9 @@ class RegisteredUserController extends Controller
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
 
+        // Retrieve user's location based on IP address
+        $location = Location::get($ipAddress);
+        $regionAndCountry = $location->regionName . ', ' . $location->countryName;
 
         $user = User::create([
             'name' => $request->name,
@@ -53,7 +57,8 @@ class RegisteredUserController extends Controller
             'credits_left' => 100,
             'tokens_left' => 5000,
             'password' => Hash::make($request->password),
-            'ipaddress' => $ipAddress, // Store IP address
+            'ipaddress' => $ipAddress,
+            'country' => $regionAndCountry,
         ]);
 
         // Generate a referral link for the user
