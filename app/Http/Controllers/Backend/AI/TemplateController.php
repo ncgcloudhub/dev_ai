@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use OpenAI;
+use Stevebauman\Location\Facades\Location;
 
 class TemplateController extends Controller
 {
@@ -434,7 +435,13 @@ class TemplateController extends Controller
 
          // Retrieve user's location based on IP address
          $location = Location::get($ipAddress);
-         $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+         if ($location) {
+            // Safely access properties if location is successfully retrieved
+            $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+        } else {
+            // Handle the case where location retrieval failed
+            $regionAndCountry = 'Location not found';
+        }
 
 
         // If the user doesn't exist, create a new user
@@ -510,7 +517,14 @@ class TemplateController extends Controller
 
         // Retrieve user's location based on IP address
         $location = Location::get($ipAddress);
-        $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+
+        if ($location) {
+            // Safely access properties if location is successfully retrieved
+            $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+        } else {
+            // Handle the case where location retrieval failed
+            $regionAndCountry = 'Location not found';
+        }
 
 
         // If the user doesn't exist, create a new user
