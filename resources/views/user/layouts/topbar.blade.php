@@ -30,7 +30,9 @@
                     </span>
                 </button>
 
-                {{-- MODEL --}}
+              
+
+                <!-- MODEL -->
                 <div class="p-3"> 
                     @php
                     // Fetch the last package, AI models, and selected model
@@ -38,42 +40,39 @@
                     $lastPackage = $data['lastPackage'];
                     $aiModels = $data['aiModels'];
                     $selectedModel = $data['selectedModel'];
-                @endphp
+                    @endphp
                 
-                @if ($lastPackage)
-                    <form id="modelForm" action="{{ route('select-model') }}" method="POST">
-                        @csrf
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                @foreach ($aiModels as $model)
-                                    <li>
-                                        <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
-                                            {{ $model }} 
-                                            {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
-                    </form>
-                @else
-                    <select name="aiModel" id="aiModel" class="form-select">
-                        <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
-                            gpt-3.5-turbo-instruct
-                        </option>
-                    </select>
-                @endif
-
-                  
+                    @if ($lastPackage)
+                        <form id="modelForm" action="{{ route('select-model') }}" method="POST">
+                            @csrf
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @foreach ($aiModels as $model)
+                                        <li>
+                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
+                                                {{ $model }} 
+                                                {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
+                        </form>
+                    @else
+                        <select name="aiModel" id="aiModel" class="form-select">
+                            <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
+                                gpt-3.5-turbo-instruct
+                            </option>
+                        </select>
+                    @endif
                 </div>
-
-
-
             </div>
+
+            
 
             <div class="d-flex align-items-center">
                 <!-- Search Dropdown (Mobile) -->
@@ -106,7 +105,7 @@
                         <i class='bx bx-moon fs-22'></i>
                     </button>
                 </div>
-
+                @include('user.layouts.activity_log')
                 <!-- User Dropdown -->
                 <div class="dropdown ms-sm-3 header-item topbar-user">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -160,17 +159,23 @@
 </div><!-- /.modal -->
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var modelForm = document.getElementById('modelForm');
-        var dropdownItems = document.querySelectorAll('.dropdown-item');
+   document.addEventListener('DOMContentLoaded', function() {
+    var modelForm = document.getElementById('modelForm');
+    var dropdownItems = document.querySelectorAll('.dropdown-item[data-model]'); // Only select items with data-model attribute
 
-        dropdownItems.forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
-                var model = this.getAttribute('data-model');
-                document.getElementById('aiModelInput').value = model;
-                modelForm.submit();
-            });
+    dropdownItems.forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            event.stopPropagation(); // Prevent other click events from firing
+            
+            var model = this.getAttribute('data-model');
+            document.getElementById('aiModelInput').value = model;
+
+            console.log('Model selected:', model); // Debugging line
+
+            modelForm.submit(); // Submit the form
         });
     });
+});
+
 </script>
