@@ -140,7 +140,7 @@
                                             <div class="links-list-item"> 
                                             {{-- Attachement Icon --}}
                                             @if(auth()->user()->role == 'admin')
-                                            <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;"></i>
+                                            <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Maximum file size is 20MB"></i>
                                             @endif
                                             <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                                                 
@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="ctext-wrap">
                                 <div class="ctext-wrap-content">
                                     ${content ? `<p class="mb-0 ctext-content">${content}</p>` : ''}
-                                    ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 100%; height: auto;">` : ''}
+                                    ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
                                     ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
                                 </div>
                             </div>
