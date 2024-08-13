@@ -590,13 +590,16 @@ document.addEventListener('DOMContentLoaded', function() {
         messages.forEach(message => {
             const { content, role, created_at, file_path, is_image } = message;
 
+            // Format the message content
+            const formattedContent = formatContent(content);
+
             let messageHTML = `
                 <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
                     <div class="conversation-list">
                         <div class="user-chat-content">
                             <div class="ctext-wrap">
                                 <div class="ctext-wrap-content">
-                                    ${content ? `<p class="mb-0 ctext-content">${content}</p>` : ''}
+                                    ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
                                     ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 100%; height: auto;">` : ''}
                                     ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
                                 </div>
