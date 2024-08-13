@@ -32,34 +32,41 @@
 
                 {{-- MODEL --}}
                 <div class="p-3"> 
-                   @php
-                        // Fetch the last package, AI models, and selected model
-                        $data = getUserLastPackageAndModels();
-                        $lastPackage = $data['lastPackage'];
-                        $aiModels = $data['aiModels'];
-                        $selectedModel = $data['selectedModel'];
-                    @endphp
-
-                    @if ($lastPackage)
-                        <form id="modelForm" action="{{ route('select-model') }}" method="POST">
-                            @csrf
-                            <select name="aiModel" id="aiModel" class="form-select">
+                    @php
+                    // Fetch the last package, AI models, and selected model
+                    $data = getUserLastPackageAndModels();
+                    $lastPackage = $data['lastPackage'];
+                    $aiModels = $data['aiModels'];
+                    $selectedModel = $data['selectedModel'];
+                @endphp
+                
+                @if ($lastPackage)
+                    <form id="modelForm" action="{{ route('select-model') }}" method="POST">
+                        @csrf
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 @foreach ($aiModels as $model)
-                                <option value="{{ trim($model) }}" {{ trim($selectedModel) === trim($model) ? 'selected' : '' }}>
-                                    {{ $model }} 
-                                    {{ $selectedModel === $model ? '✅' : '' }}
-                                </option>
-                            @endforeach
-                            
-                            </select>
-                        </form>
-                    @else
-                        <select name="aiModel" id="aiModel" class="form-select">
-                            <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
-                                gpt-3.5-turbo-instruct
-                            </option>
-                        </select>
-                    @endif
+                                    <li>
+                                        <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
+                                            {{ $model }} 
+                                            {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
+                    </form>
+                @else
+                    <select name="aiModel" id="aiModel" class="form-select">
+                        <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
+                            gpt-3.5-turbo-instruct
+                        </option>
+                    </select>
+                @endif
 
                   
                 </div>
@@ -154,11 +161,16 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var aiModelSelect = document.getElementById('aiModel');
         var modelForm = document.getElementById('modelForm');
+        var dropdownItems = document.querySelectorAll('.dropdown-item');
 
-        aiModelSelect.addEventListener('change', function() {
-            modelForm.submit();
+        dropdownItems.forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                var model = this.getAttribute('data-model');
+                document.getElementById('aiModelInput').value = model;
+                modelForm.submit();
+            });
         });
     });
 </script>
