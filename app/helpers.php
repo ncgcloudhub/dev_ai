@@ -67,4 +67,31 @@ if (!function_exists('getUserLastPackageAndModels')) {
     }
 }
 
+// Activity LOG
+if (!function_exists('log_activity')) {
+    function log_activity($message)
+    {
+        $user_id = Auth::id(); // Get the authenticated user's ID
+
+        // Get the count of activity logs for the user
+        $activityLogCount = \App\Models\ActivityLog::where('user_id', $user_id)->count();
+
+        // If the user already has 10 activity logs, delete the oldest one
+        if ($activityLogCount >= 10) {
+            \App\Models\ActivityLog::where('user_id', $user_id)
+                ->orderBy('created_at', 'asc') // Oldest first
+                ->first() // Get the oldest record
+                ->delete(); // Delete it
+        }
+
+        // Create a new activity log entry
+        \App\Models\ActivityLog::create([
+            'user_id' => $user_id,
+            'message' => $message,
+        ]);
+    }
+}
+
+
+
 
