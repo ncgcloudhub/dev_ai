@@ -60,3 +60,6 @@ permission, role has permission, roles, model has roles, model has permission de
 -----------9/8/24------------------
 1 - file_path add in messages table type=text
 
+-----------14/8/24------------------
+1 - block add in USER table type=boolean deafult=false
+

@@ -55,7 +55,6 @@ class UserManageController extends Controller
         return redirect()->back()->with('success', 'User Stats updated Successfully');
     }
 
-
     // REFERRAL
     public function ManageReferral()
     {
@@ -65,4 +64,16 @@ class UserManageController extends Controller
 
         return view('backend.referral.manage_refferal', compact('referrals'));
     }
+
+    // Block User
+    public function blockUser(Request $request, User $user)
+    {
+        // Update the block status based on the value from the form
+        $user->block = $request->input('block') ? true : false;
+        $user->save();
+    
+        return redirect()->back()->with('success', 'User block status updated successfully.');
+    }
+    
+
 }
