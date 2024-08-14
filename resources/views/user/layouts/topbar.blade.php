@@ -38,6 +38,7 @@
                     // Fetch the last package, AI models, and selected model
                     $data = getUserLastPackageAndModels();
                     $lastPackage = $data['lastPackage'];
+                    $freePricingPlan = $data['freePricingPlan'];
                     $aiModels = $data['aiModels'];
                     $selectedModel = $data['selectedModel'];
                     @endphp
@@ -62,12 +63,26 @@
                             </div>
                             <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
                         </form>
-                    @else
-                        <select name="aiModel" id="aiModel" class="form-select">
-                            <option value="gpt-3.5-turbo-instruct" {{ trim($selectedModel) === 'gpt-3.5-turbo-instruct' ? 'selected' : '' }}>
-                                gpt-3.5-turbo-instruct
-                            </option>
-                        </select>
+                    @elseif ($freePricingPlan)
+                        <form id="modelForm" action="{{ route('select-model') }}" method="POST">
+                            @csrf
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @foreach ($aiModels as $model)
+                                        <li>
+                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
+                                                {{ $model }} 
+                                                {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
+                        </form>
                     @endif
                 </div>
             </div>
