@@ -165,6 +165,29 @@ class MainChat extends Controller
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
 
+            // Check if the message is a command to generate an image
+        if (strpos(strtolower($userMessage), 'generate image of') !== false) {
+            $imageDescription = str_replace('generate image of', '', strtolower($userMessage));
+            $imageURL = $this->generateImage($imageDescription);
+
+            // Add the generated image to the conversation history
+            $conversationHistory[] = ['role' => 'assistant', 'content' => '<img src="' . $imageURL . '" alt="Generated Image">'];
+            session(['conversation_history' => $conversationHistory]);
+
+            // Save AI response with image
+            Message::create([
+                'session_id' => $sessionId,
+                'user_id' => Auth::id(),
+                'message' => null,
+                'reply' => '<img src="' . $imageURL . '" alt="Generated Image">',
+            ]);
+
+            return response()->json([
+                'message' => '<img src="' . $imageURL . '" alt="Generated Image">',
+                'title' => $title,
+            ]);
+        }
+
             $context['latest_message'] = $userMessage;
             session(['context' => $context]);
             Log::info('Updated context with message: ', $context);
@@ -280,6 +303,27 @@ class MainChat extends Controller
             'message' => $messageContent,
             'title' => $title,
         ]);
+    }
+
+    private function generateImage($description)
+    {
+        $client = new Client();
+        $response = $client->post('https://api.openai.com/v1/images/generations', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'dall-e-3', // Use the appropriate model for image generation
+                'prompt' => $description,
+                'size' => '1024x1024', // Specify image size if needed
+            ],
+        ]);
+    
+        $data = json_decode($response->getBody(), true);
+        $imageUrl = $data['data'][0]['url']; // Adjust according to actual API response structure
+    
+        return $imageUrl;
     }
 
 
