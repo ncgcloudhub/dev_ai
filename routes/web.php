@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // Admin Middleware
-Route::middleware(['auth', 'roles:admin'])->group(function () {
+Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function () {
 
     // Admin Routes
     Route::get('/admin/dashboard', [AdminController::class, 'AdminDashboard'])->name('admin.dashboard');
@@ -133,6 +133,10 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
 
         Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
+
+        // Block User
+        Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
+
     });
 
     // REFERRAL MANAGE
@@ -324,7 +328,7 @@ Route::middleware(['auth', 'roles:admin'])->group(function () {
 
 
 // User Middleware
-Route::middleware(['auth', 'verified', 'roles:user', 'check.status'])->group(function () {
+Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.blocked.ip'])->group(function () {
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
@@ -530,6 +534,10 @@ Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.ema
 Route::get('/inactive', function () {
     return view('admin.error.auth-404-basic');
 })->name('inactive');
+
+Route::get('/ip-blocked', function () {
+    return view('admin.error.ip_block_error_page');
+})->name('blocked.page');
 
 
 // Frontend Job Apply

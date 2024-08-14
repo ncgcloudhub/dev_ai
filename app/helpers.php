@@ -44,6 +44,8 @@ if (!function_exists('getUserLastPackageAndModels')) {
             ->orderBy('created_at', 'desc')
             ->first();
 
+        $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+
         // Initialize the AI models array
         $aiModels = [];
 
@@ -58,12 +60,20 @@ if (!function_exists('getUserLastPackageAndModels')) {
                     $aiModels[] =  $model;
                 }
             }
+        } else {   
+            if ($freePricingPlan) {
+                // Extract AI models
+                $models = explode(',', $freePricingPlan->open_id_model);
+                foreach ($models as $index => $model) {
+                    $aiModels[] =  $model;
+                }
+            }
         }
 
         // Get the currently selected model
         $selectedModel = $user->selected_model;
 
-        return compact('lastPackage', 'aiModels', 'selectedModel');
+        return compact('lastPackage', 'aiModels', 'selectedModel', 'freePricingPlan');
     }
 }
 

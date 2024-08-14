@@ -14,6 +14,7 @@
                 <th scope="col">Credits Used</th>
                 <th scope="col">Tokens Used</th>
                 <th scope="col">Action</th>
+                <th scope="col">Block</th>
             </tr>
         </thead>
         <tbody>
@@ -97,6 +98,18 @@
                         </div>
                     </td>
                 @endif
+                <td>
+                    <form id="blockForm{{ $item->id }}" action="{{ route('admin.users.block', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="block" value="{{ $item->block ? 0 : 1 }}">
+                        <input type="checkbox" id="blockCheckbox{{ $item->id }}" {{ $item->block ? 'checked' : '' }} onchange="document.getElementById('blockForm{{ $item->id }}').submit();">
+                        {{-- <label for="blockCheckbox{{ $item->id }}">
+                            {{ $item->block ? 'Unblock' : 'Block' }}
+                        </label> --}}
+                    </form>
+                    
+                </td>
             </tr>
             @endforeach
         </tbody>
