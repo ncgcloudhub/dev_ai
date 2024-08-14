@@ -13,6 +13,7 @@
     <!-- App favicon -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}">
     @include('user.layouts.head-css')
+
 </head>
 
 @section('body')
