@@ -21,7 +21,7 @@ class CheckBlockedIP
     $ip = $request->ip();
 
     // Check if there is any user with this IP address that is blocked
-    $blockedUser = User::where('ip_address', $ip)
+    $blockedUser = User::where('ipaddress', $ip)
                                    ->where('block', true)
                                    ->first();
 
