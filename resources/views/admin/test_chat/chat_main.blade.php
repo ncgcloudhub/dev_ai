@@ -192,6 +192,7 @@
         </div>
     </div>
 </div>
+
 <!-- end chat-wrapper -->
 
 @endsection
@@ -227,289 +228,289 @@
         </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    document.addEventListener('DOMContentLoaded', function () {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    const messageInput = document.getElementById('user_message_input');
-    const sendMessageBtn = document.getElementById('main_send_message_btn');
-    const fileInput = document.getElementById('file_input');
-    const chatConversation = document.getElementById('users-conversation');
-    const chatContainer = document.getElementById('chat-conversation');
-    const fileNameDisplay = document.getElementById('file_name_display');
-    const newSessionBtn = document.getElementById('main_new_session_btn');
-    const imageDisplay = document.getElementById('image_display');
-    let pastedImageFile = null;
-    const sessionList = document.getElementById('session-list');
-    let isFirstMessage = true;
+        const messageInput = document.getElementById('user_message_input');
+        const sendMessageBtn = document.getElementById('main_send_message_btn');
+        const fileInput = document.getElementById('file_input');
+        const chatConversation = document.getElementById('users-conversation');
+        const chatContainer = document.getElementById('chat-conversation');
+        const fileNameDisplay = document.getElementById('file_name_display');
+        const newSessionBtn = document.getElementById('main_new_session_btn');
+        const imageDisplay = document.getElementById('image_display');
+        let pastedImageFile = null;
+        const sessionList = document.getElementById('session-list');
+        let isFirstMessage = true;
 
-    function scrollToBottom() {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
 
-    function summarizeMessage(message) {
-        return message.length > 20 ? message.substring(0, 20) + '...' : message;
-    }
+        function summarizeMessage(message) {
+            return message.length > 20 ? message.substring(0, 20) + '...' : message;
+        }
 
-    const checkUserSession = () => {
-        axios.get('/chat/check-session')
-            .then(response => {
-                if (!response.data.hasSession) {
-                    newSessionBtn.click();
-                }
-            })
-            .catch(error => {
-                console.error('Error checking user session:', error);
+        const checkUserSession = () => {
+            axios.get('/chat/check-session')
+                .then(response => {
+                    if (!response.data.hasSession) {
+                        newSessionBtn.click();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking user session:', error);
+                });
+        };
+
+        checkUserSession();
+
+        function setActiveSession(sessionId) {
+            const previousActive = sessionList.querySelector('li.active');
+            if (previousActive) {
+                previousActive.classList.remove('active');
+            }
+
+            const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
+            if (newActive) {
+                newActive.classList.add('active');
+            }
+        }
+
+        fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const imageUrl = URL.createObjectURL(file);
+
+            // Create image element
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = '100px'; // Adjust image size as needed
+
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => {
+                // Clear the file input and image display
+                fileInput.value = '';
+                imageDisplay.innerHTML = '';
             });
-    };
 
-    checkUserSession();
+            // Container for image and button
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            container.appendChild(img);
+            container.appendChild(removeBtn);
 
-    function setActiveSession(sessionId) {
-        const previousActive = sessionList.querySelector('li.active');
-        if (previousActive) {
-            previousActive.classList.remove('active');
+            // Display the image in image_display div
+            imageDisplay.innerHTML = ''; // Clear any previous image
+            imageDisplay.appendChild(container);
         }
-
-        const newActive = sessionList.querySelector(`li[data-session-id='${sessionId}']`);
-        if (newActive) {
-            newActive.classList.add('active');
-        }
-    }
-
-    fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-        const imageUrl = URL.createObjectURL(file);
-
-        // Create image element
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.style.maxWidth = '100px'; // Adjust image size as needed
-
-        // Create remove button
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = 'X';
-        removeBtn.classList.add('remove-btn');
-        removeBtn.addEventListener('click', () => {
-            // Clear the file input and image display
-            fileInput.value = '';
-            imageDisplay.innerHTML = '';
         });
 
-        // Container for image and button
-        const container = document.createElement('div');
-        container.classList.add('image-container');
-        container.appendChild(img);
-        container.appendChild(removeBtn);
 
-        // Display the image in image_display div
-        imageDisplay.innerHTML = ''; // Clear any previous image
-        imageDisplay.appendChild(container);
-    }
-    });
-
-
-    newSessionBtn.addEventListener('click', function () {
-        axios.post('/main/new-session')
-            .then(response => {
-                if (response.data.success) {
-                    const newSessionId = response.data.session_id;
-                    const li = document.createElement('li');
-                    li.id = `contact-id-${newSessionId}`;
-                    li.dataset.name = "direct-message";
-                    li.dataset.sessionId = newSessionId;
-                    li.classList.add('active');
-                    li.innerHTML = `
-                        <a href="javascript: void(0);">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <p class="text-truncate mb-0">New Chat</p>
+        newSessionBtn.addEventListener('click', function () {
+            axios.post('/main/new-session')
+                .then(response => {
+                    if (response.data.success) {
+                        const newSessionId = response.data.session_id;
+                        const li = document.createElement('li');
+                        li.id = `contact-id-${newSessionId}`;
+                        li.dataset.name = "direct-message";
+                        li.dataset.sessionId = newSessionId;
+                        li.classList.add('active');
+                        li.innerHTML = `
+                            <a href="javascript: void(0);">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-truncate mb-0">New Chat</p>
+                                    </div>
+                                    <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
+                                            <i class="ri-pencil-line"></i>
+                                    </button>
+                                    <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
+                                        <i class="ri-delete-bin-5-line"></i>
+                                    </button>
                                 </div>
-                                <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
-                                        <i class="ri-pencil-line"></i>
-                                </button>
-                                <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="${newSessionId}">
-                                    <i class="ri-delete-bin-5-line"></i>
-                                </button>
-                            </div>
-                        </a>
-                    `;
+                            </a>
+                        `;
 
-                    sessionList.appendChild(li);
-                    chatConversation.innerHTML = '';
-                    messageInput.value = '';
-                    fileInput.value = '';
-                    fileNameDisplay.textContent = '';
-                    scrollToBottom();
+                        sessionList.appendChild(li);
+                        chatConversation.innerHTML = '';
+                        messageInput.value = '';
+                        fileInput.value = '';
+                        fileNameDisplay.textContent = '';
+                        scrollToBottom();
 
-                    setActiveSession(newSessionId);
-                    isFirstMessage = true;
-                }
-            })
-            .catch(error => {
-                console.error('Failed to start a new session:', error);
-            });
-    });
+                        setActiveSession(newSessionId);
+                        isFirstMessage = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to start a new session:', error);
+                });
+        });
 
-    // Function to handle image paste
-    function handleImagePaste(event) {
-            const clipboardItems = event.clipboardData.items;
-            for (let i = 0; i < clipboardItems.length; i++) {
-                const item = clipboardItems[i];
-                if (item.type.indexOf("image") !== -1) {
-                    const blob = item.getAsFile();
-                    pastedImageFile = blob;
-                    const imageUrl = URL.createObjectURL(blob);
+        // Function to handle image paste
+        function handleImagePaste(event) {
+                const clipboardItems = event.clipboardData.items;
+                for (let i = 0; i < clipboardItems.length; i++) {
+                    const item = clipboardItems[i];
+                    if (item.type.indexOf("image") !== -1) {
+                        const blob = item.getAsFile();
+                        pastedImageFile = blob;
+                        const imageUrl = URL.createObjectURL(blob);
 
-                    // Create image element
-                    const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.style.maxWidth = '10%'; // Adjust image size as needed
+                        // Create image element
+                        const img = document.createElement('img');
+                        img.src = imageUrl;
+                        img.style.maxWidth = '10%'; // Adjust image size as needed
 
-                    // Create remove button
-                    const removeBtn = document.createElement('button');
-                    removeBtn.textContent = 'X';
-                    removeBtn.classList.add('remove-btn');
-                    removeBtn.addEventListener('click', () => {
-                        // Remove image and reset input
-                        imageDisplay.innerHTML = '';
-                        pastedImageFile = null; // Reset pastedImageFile
-                    });
+                        // Create remove button
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'X';
+                        removeBtn.classList.add('remove-btn');
+                        removeBtn.addEventListener('click', () => {
+                            // Remove image and reset input
+                            imageDisplay.innerHTML = '';
+                            pastedImageFile = null; // Reset pastedImageFile
+                        });
 
-                    // Container for image and button
-                    const container = document.createElement('div');
-                    container.classList.add('image-container');
-                    container.appendChild(img);
-                    container.appendChild(removeBtn);
+                        // Container for image and button
+                        const container = document.createElement('div');
+                        container.classList.add('image-container');
+                        container.appendChild(img);
+                        container.appendChild(removeBtn);
 
-                    // Display the pasted image in image_display div
-                    imageDisplay.innerHTML = ''; // Clear any previous image
-                    imageDisplay.appendChild(container);
+                        // Display the pasted image in image_display div
+                        imageDisplay.innerHTML = ''; // Clear any previous image
+                        imageDisplay.appendChild(container);
 
-                    // Stop further processing to prevent multiple image pastes
-                    event.preventDefault();
-                    break;
+                        // Stop further processing to prevent multiple image pastes
+                        event.preventDefault();
+                        break;
+                    }
                 }
             }
+
+            // Listen for paste events on messageInput
+            messageInput.addEventListener('paste', handleImagePaste);
+
+            function sendMessage() {
+        const message = messageInput.value.trim();
+        const file = fileInput.files[0];
+
+        if (!message && !file && !pastedImageFile) return;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append('message', message);
+
+        if (file) {
+            formData.append('file', file);
+        } else if (pastedImageFile) {
+            formData.append('file', pastedImageFile, 'pasted_image.png');
         }
-
-        // Listen for paste events on messageInput
-        messageInput.addEventListener('paste', handleImagePaste);
-
-        function sendMessage() {
-    const message = messageInput.value.trim();
-    const file = fileInput.files[0];
-
-    if (!message && !file && !pastedImageFile) return;
-
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const formData = new FormData();
-    formData.append('message', message);
-
-    if (file) {
-        formData.append('file', file);
-    } else if (pastedImageFile) {
-        formData.append('file', pastedImageFile, 'pasted_image.png');
-    }
-
-    if (isFirstMessage) {
-        const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-        formData.append('title', chatTitle);
-    }
-
-    sendMessageBtn.disabled = true;
-    sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
-
-    axios.post('/main/chat/send', formData, {
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-            'Content-Type': 'multipart/form-data',
-        },
-    })
-    .then(response => {
-        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let userMessageHTML = `<li class="chat-list right">
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
-
-        if (file || pastedImageFile) {
-            const fileType = (file || pastedImageFile).type.split('/')[0];
-            if (fileType === 'image') {
-                const imageUrl = URL.createObjectURL(file || pastedImageFile);
-                userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-            } else {
-                userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
-            }
-        }
-
-        userMessageHTML += `</div>
-                    </div>
-                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                </div>
-            </div>
-        </li>`;
-
-        const assistantMessage = response.data.message;
-        const formattedMessage = formatContent(assistantMessage);
-        const assistantMessageHTML = `<li class="chat-list left">
-            <div class="conversation-list">
-                <div class="chat-avatar">
-                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                </div>
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            ${formattedMessage}
-                        </div>
-                    </div>
-                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                </div>
-            </div>
-        </li>`;
-
-        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-        chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
-        scrollToBottom();
 
         if (isFirstMessage) {
             const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-            const activeSession = sessionList.querySelector('li.active');
-            if (activeSession) {
-                activeSession.querySelector('p').textContent = chatTitle;
-            }
-            isFirstMessage = false;
+            formData.append('title', chatTitle);
         }
 
-        messageInput.value = '';
-        fileInput.value = '';
-        fileNameDisplay.textContent = '';
-        imageDisplay.innerHTML = '';
-        pastedImageFile = null;
-    })
-    .catch(error => {
-        console.error(error);
-        const errorMessageHTML = `<li class="chat-list right">
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
+        sendMessageBtn.disabled = true;
+        sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
+
+        axios.post('/main/chat/send', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(response => {
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let userMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
+
+            if (file || pastedImageFile) {
+                const fileType = (file || pastedImageFile).type.split('/')[0];
+                if (fileType === 'image') {
+                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
+                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+                } else {
+                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
+                }
+            }
+
+            userMessageHTML += `</div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            const assistantMessage = response.data.message;
+            const formattedMessage = formatContent(assistantMessage);
+            const assistantMessageHTML = `<li class="chat-list left">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                ${formattedMessage}
+                            </div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+            scrollToBottom();
+
+            if (isFirstMessage) {
+                const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+                const activeSession = sessionList.querySelector('li.active');
+                if (activeSession) {
+                    activeSession.querySelector('p').textContent = chatTitle;
+                }
+                isFirstMessage = false;
+            }
+
+            messageInput.value = '';
+            fileInput.value = '';
+            fileNameDisplay.textContent = '';
+            imageDisplay.innerHTML = '';
+            pastedImageFile = null;
+        })
+        .catch(error => {
+            console.error(error);
+            const errorMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </li>`;
-        chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-        scrollToBottom();
-    })
-    .finally(() => {
-        sendMessageBtn.disabled = false;
-        sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
-    });
-}
+            </li>`;
+            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+            scrollToBottom();
+        })
+        .finally(() => {
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+        });
+    }
 
 
     sendMessageBtn.addEventListener('click', sendMessage);
@@ -519,13 +520,11 @@ document.addEventListener('DOMContentLoaded', function () {
             sendMessage();
         }
     });
-});
+    });
 
 </script>
 
 <script>
-
-
     // Add this script in your main script file or where you handle dynamic content
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('copy-button')) {
@@ -544,14 +543,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }
     });
-
-
-    </script>
+</script>
     
 
 {{-- GET/LOAD MESSAGES FROM SESSION --}}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const sessionList = document.getElementById('session-list');
     const chatConversation = document.getElementById('users-conversation');
     const userStatus = document.querySelector('.userStatus small');
@@ -675,9 +672,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (firstSession) {
         firstSession.click();
     }
-});
+    });
 
-function formatContent(content) {
+    function formatContent(content) {
     const lines = content.split('\n');
     let formattedContent = '';
 
@@ -722,7 +719,7 @@ function formatContent(content) {
     });
 
     return formattedContent;
-}
+    }
 
 
 </script>

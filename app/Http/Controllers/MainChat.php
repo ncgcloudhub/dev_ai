@@ -171,19 +171,52 @@ class MainChat extends Controller
             $imageURL = $this->generateImage($imageDescription);
 
             // Add the generated image to the conversation history
-            $conversationHistory[] = ['role' => 'assistant', 'content' => '<img src="' . $imageURL . '" alt="Generated Image">'];
+            $conversationHistory[] = [
+                'role' => 'assistant', 
+                'content' => '
+                    <div>
+                        <a href="' . $imageURL . '" target="_blank">
+                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                        </a>
+                        <br>
+                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                    </div>'
+                    
+            ];
             session(['conversation_history' => $conversationHistory]);
 
             // Save AI response with image
             Message::create([
                 'session_id' => $sessionId,
                 'user_id' => Auth::id(),
+                'message' => $userMessage,
+                'reply' => null,
+            ]);
+
+            // Save AI response with image
+            Message::create([
+                'session_id' => $sessionId,
+                'user_id' => Auth::id(),
                 'message' => null,
-                'reply' => '<img src="' . $imageURL . '" alt="Generated Image">',
+                'reply' => '
+                    <div>
+                        <a href="' . $imageURL . '" target="_blank">
+                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                        </a>
+                        <br>
+                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                    </div>'
             ]);
 
             return response()->json([
-                'message' => '<img src="' . $imageURL . '" alt="Generated Image">',
+                'message' => '
+                    <div>
+                        <a href="' . $imageURL . '" target="_blank">
+                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                        </a>
+                        <br>
+                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                    </div>',
                 'title' => $title,
             ]);
         }
