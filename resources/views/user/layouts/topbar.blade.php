@@ -59,6 +59,7 @@
                                             </a>
                                         </li>
                                     @endforeach
+                                    
                                 </ul>
                             </div>
                             <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
