@@ -23,28 +23,30 @@ var tour = new Shepherd.Tour({
     },
 });
 
-if (document.querySelector('#logo-tour'))
-    tour.addStep({
-        title: 'Welcome Back !',
-        text: 'This is Step 1',
-        attachTo: {
-            element: '#logo-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-            text: 'Next',
-            classes: 'btn btn-success',
-            action: tour.next
-        }]
-    });
-// end step 1
+// if (document.querySelector('#logo-tour'))
+//     tour.addStep({
+//         title: 'Welcome Back !',
+//         text: 'This is Step 1',
+//         attachTo: {
+//             element: '#logo-tour',
+//             on: 'bottom'
+//         },
+//         buttons: [{
+//             text: 'Next',
+//             classes: 'btn btn-success',
+//             action: tour.next
+//         }]
+//     });
+// // end step 1
 
-if (document.querySelector('#register-tour'))
+if (document.querySelector('#select-model-tour'))
+    console.log(document.querySelector('#select-model-tour')); // This should log the element if it exists
+
     tour.addStep({
-        title: 'Register your account',
-        text: 'Get your Free Velzon account now.',
+        title: 'Model',
+        text: 'Select your desired model.',
         attachTo: {
-            element: '#register-tour',
+            element: '#select-model-tour',
             on: 'bottom'
         },
         buttons: [{
@@ -61,12 +63,12 @@ if (document.querySelector('#register-tour'))
     });
 // end step 2
 
-if (document.querySelector('#login-tour'))
+if (document.querySelector('#ai-professional-tour'))
     tour.addStep({
-        title: 'Login your account',
-        text: 'Sign in to continue to Velzon.',
+        title: 'AI Professional Bot',
+        text: 'Our professional chat experts on different fields.',
         attachTo: {
-            element: '#login-tour',
+            element: '#ai-professional-tour',
             on: 'bottom'
         },
         buttons: [{
@@ -83,12 +85,33 @@ if (document.querySelector('#login-tour'))
     });
 
 // end step 3
-if (document.querySelector('#getproduct-tour'))
+if (document.querySelector('#new-chat-tour'))
     tour.addStep({
-        title: 'Get yout Product',
-        text: 'Sign in to continue to Velzon.',
+        title: 'New Chat',
+        text: 'Click to create new chat sessions.',
         attachTo: {
-            element: '#getproduct-tour',
+            element: '#new-chat-tour',
+            on: 'bottom'
+        },
+        buttons: [{
+                text: 'Back',
+                classes: 'btn btn-light',
+                action: tour.back
+            },
+            {
+                text: 'Next',
+                classes: 'btn btn-success',
+                action: tour.next
+            }
+        ]
+    });
+// end step 4
+if (document.querySelector('#type-message-tour'))
+    tour.addStep({
+        title: 'Message',
+        text: 'Ask anything.',
+        attachTo: {
+            element: '#type-message-tour',
             on: 'bottom'
         },
         buttons: [{
@@ -105,12 +128,13 @@ if (document.querySelector('#getproduct-tour'))
     });
 // end step 4
 
-if (document.querySelector('#thankyou-tour'))
+// end step 3
+if (document.querySelector('#send-tour'))
     tour.addStep({
-        title: 'Thank you !',
-        text: 'Sign in to continue to Velzon.',
+        title: 'Send Button',
+        text: 'Click to send the message.',
         attachTo: {
-            element: '#thankyou-tour',
+            element: '#send-tour',
             on: 'bottom'
         },
         buttons: [{
@@ -119,12 +143,12 @@ if (document.querySelector('#thankyou-tour'))
                 action: tour.back
             },
             {
-                text: 'Thank you !',
-                classes: 'btn btn-primary',
-                action: tour.complete
+                text: 'Thankyou !',
+                classes: 'btn btn-success',
+                action: tour.next
             }
         ]
     });
-// end step 5
+// end step 4
 
 tour.start();

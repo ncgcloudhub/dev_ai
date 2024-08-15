@@ -546,3 +546,6 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
+
+// Tour Status
+Route::post('/update-tour-status', [UserController::class, 'updateTourStatus'])->middleware('auth');

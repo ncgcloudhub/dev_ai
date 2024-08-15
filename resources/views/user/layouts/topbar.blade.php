@@ -33,7 +33,7 @@
               
 
                 <!-- MODEL -->
-                <div class="p-3"> 
+                <div class="p-3" id="select-model-tour"> 
                     @php
                     // Fetch the last package, AI models, and selected model
                     $data = getUserLastPackageAndModels();

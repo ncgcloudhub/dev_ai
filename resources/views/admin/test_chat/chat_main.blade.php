@@ -7,10 +7,23 @@
 @endsection
 @section('content')
 
+{{-- @if(session('showTour'))
+<script>
+    localStorage.setItem('showTour', 'true');
+</script>
+@endif --}}
+
+@if(session()->has('showTour'))
+    <p>Session variable showTour is set.</p>
+@else
+    <p>Session variable showTour is not set.</p>
+@endif
+
+
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border">
         <div class="px-4 pt-4 mb-4">
-            <div class="btn btn-primary d-grid mb-2" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))"><a class="text-white" href="{{route('chat')}}">AI Professional Bots</a></div>
+            <div id="ai-professional-tour" class="btn btn-primary d-grid mb-2" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))"><a class="text-white" href="{{route('chat')}}">AI Professional Bots</a></div>
             <div class="d-flex align-items-start">
                 <div class="flex-grow-1">
                     <h5 class="mb-0">New Chat</h5>
@@ -150,7 +163,7 @@
                                
 
 
-                                <div class="col">
+                                <div class="col" id="type-message-tour">
 
                                     <div class="chat-input-feedback">
                                         Please Enter a Message
@@ -160,7 +173,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">
-                                        <div class="links-list-item">
+                                        <div class="links-list-item" id="send-tour">
                                             <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
                                                 <i class="ri-send-plane-2-fill align-bottom"></i>
                                             </button>

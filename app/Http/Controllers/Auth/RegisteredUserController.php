@@ -46,7 +46,15 @@ class RegisteredUserController extends Controller
 
         // Retrieve user's location based on IP address
         $location = Location::get($ipAddress);
-        $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+        
+        // Check if location data is available
+        if ($location) {
+            $regionAndCountry = $location->regionName . ', ' . $location->countryName;
+        } else {
+            // Set to null or a default value if location data is not found
+            $regionAndCountry = null; // Or you could set a default value like 'Unknown Location'
+        }
+        
 
         $user = User::create([
             'name' => $request->name,
