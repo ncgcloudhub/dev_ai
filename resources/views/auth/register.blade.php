@@ -104,8 +104,14 @@
                                             <div class="mb-3 form-check">
                                                 <input type="checkbox" class="form-check-input" id="termsAgreement">
                                                 <label class="form-check-label" for="termsAgreement">
-                                                    By continuing, you agree to Clever Creator's Consumer Terms and Usage Policy, and acknowledge their Privacy Policy.
+                                                    By continuing, I agree to Clever Creator's
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Consumer Terms</a> 
+                                                    and 
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
                                                 </label>
+                                                
+                                               
+                                                
                                             </div>
                                         
                                             <button type="submit" class="btn btn-success w-100" id="signUpButton" disabled>Sign Up</button>
@@ -160,6 +166,139 @@
             <!-- end Footer -->
         </div>
         <!-- end auth-page-wrapper -->
+
+        @php
+            $termConditions = \App\Models\TermsConditions::all();
+            $latesttermConditions = \App\Models\TermsConditions::latest()->first();
+            $lastUpdateDate = $latesttermConditions ? $latesttermConditions->created_at->format('d M, Y') : 'Unknown';
+        @endphp
+         <!-- Terms and Conditions Modal -->
+         <div class="modal fade" id="termsModal" tabindex="-1" role="dialog" aria-labelledby="termsModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsModalTitle">Terms and Conditions</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <section class="section" id="contact">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-10">
+                                    <div class="card">
+                                        <div class="bg-primary-subtle position-relative">
+                                            <div class="card-body p-5">
+                                                <div class="text-center">
+                                                    <h3 class="fw-semibold">Term & Conditions</h3>
+                                                    <p class="mb-0 text-muted">Last update:  {{ $lastUpdateDate }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="shape">
+                                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="60" preserveAspectRatio="none" viewBox="0 0 1440 60">
+                                                    <g mask="url(&quot;#SvgjsMask1001&quot;)" fill="none">
+                                                        <path d="M 0,4 C 144,13 432,48 720,49 C 1008,50 1296,17 1440,9L1440 60L0 60z" style="fill: var(--vz-secondary-bg);"></path>
+                                                    </g>
+                                                    <defs>
+                                                        <mask id="SvgjsMask1001">
+                                                            <rect width="1440" height="60" fill="#ffffff"></rect>
+                                                        </mask>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                        </div>
+            
+                                        <div class="card-body p-4">
+                                            <div>
+                                                <h5>Welcome to {{ $siteSettings->title }}!</h5>
+                                              
+                                            </div>
+            
+                                            <div>
+                                                @foreach ($termConditions as $item)
+                                                    {!! $item->details !!}    
+                                                @endforeach
+                                                
+                                            </div>
+                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                            </div>
+                        </section>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        @php
+            $privacy_policy = \App\Models\PrivacyPolicy::orderBy('id', 'asc')->get();
+            $latestPrivacyPolicy = \App\Models\PrivacyPolicy::latest()->first();
+            $lastUpdateDate = $latestPrivacyPolicy ? $latestPrivacyPolicy->created_at->format('d M, Y') : 'Unknown';
+        @endphp
+        <!-- Privacy Policy Modal -->
+        <div class="modal fade" id="privacyModal" tabindex="-1" role="dialog" aria-labelledby="privacyModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="privacyModalTitle">Privacy Policy</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <section class="section" id="contact">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10">
+                                        <div class="card">
+                                            <div class="bg-primary-subtle position-relative">
+                                                <div class="card-body p-5">
+                                                    <div class="text-center">
+                                                        <h3 class="fw-semibold">Privacy Policy</h3>
+                                                        <p class="mb-0 text-muted">Last update: {{ $lastUpdateDate }}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="shape">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="60" preserveAspectRatio="none" viewBox="0 0 1440 60">
+                                                        <g mask="url(&quot;#SvgjsMask1001&quot;)" fill="none">
+                                                            <path d="M 0,4 C 144,13 432,48 720,49 C 1008,50 1296,17 1440,9L1440 60L0 60z" style="fill: var(--vz-secondary-bg);"></path>
+                                                        </g>
+                                                        <defs>
+                                                            <mask id="SvgjsMask1001">
+                                                                <rect width="1440" height="60" fill="#ffffff"></rect>
+                                                            </mask>
+                                                        </defs>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-4">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i data-feather="check-circle" class="text-success icon-dual-success icon-xs"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5>Privacy Policy for Clever Creator</h5>
+                                                        @foreach ($privacy_policy as $item)
+                                                            {!! $item->details !!}
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </section>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @endsection
         @section('script')
             <script src="{{ URL::asset('build/libs/particles.js/particles.js') }}"></script>
