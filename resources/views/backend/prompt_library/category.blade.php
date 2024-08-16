@@ -61,12 +61,12 @@
                         @csrf
     
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category">
+                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category" required>
                             <label for="category_name">Category</label>
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon" required>
+                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon">
                             <label for="icon">Enter Icon</label>
                         </div>
     
