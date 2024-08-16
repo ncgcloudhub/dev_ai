@@ -25,7 +25,7 @@
                         <tr>
                             <th>SR No.</th>
                             <th>Image</th>
-                            <th >Prompt</th>
+                            <th>Prompt</th>
                             <th>User ID/Name</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -44,7 +44,14 @@
                             </td>
                             
                             <td>{{ $item->prompt }}</td>
-                            <td>{{ $item->user->id }}/{{ $item->user->name }}</td>
+                            <td>
+                                @if ($item->user)
+                                    {{ $item->user->id }}/{{ $item->user->name }}
+                                @else
+                                    User Not Available
+                                @endif
+                            </td>
+                            
                             <td>{{ $item->status }}</td>
 
                             @if ($item->status == 'active')
