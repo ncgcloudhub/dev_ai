@@ -57,16 +57,16 @@
                 {{-- @include('admin.layouts.alerts') --}}
     
                 <div class="live-preview">
-                    <form  action="{{ route('prompt.category.store') }}" method="post" class="row g-3">
+                    <form action="{{ route('prompt.category.store') }}" method="post" class="row g-3">
                         @csrf
     
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category">
+                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category" required>
                             <label for="category_name">Category</label>
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon" required>
+                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon">
                             <label for="icon">Enter Icon</label>
                         </div>
     

@@ -56,6 +56,7 @@
             </div>
             
             <div class="card-body">
+                <div class="table-responsive">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -94,6 +95,7 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     </div>

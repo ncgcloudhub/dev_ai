@@ -33,7 +33,7 @@ class PromptLibraryController extends Controller
          // Validate input data
     $validator = Validator::make($request->all(), [
         'category_name' => 'required|string|max:255',
-        'category_icon' => 'required|string|max:255',
+        'category_icon' => 'nullable|string|max:255',
     ]);
 
     if ($validator->fails()) {

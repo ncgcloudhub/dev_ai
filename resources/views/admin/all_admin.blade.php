@@ -23,64 +23,56 @@
 
          
             <div class="card-body">
+                <div class="table-responsive">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
-                <tr>
-                <th scope="col">Sl.</th>
-                <th scope="col">Username</th>
-                <th scope="col">Email</th>
-                <th scope="col">Email Verified</th>
-                <th scope="col">Role</th>
-                <th scope="col">Credits Used</th>
-                <th scope="col">Tokens Used</th>
-                <th scope="col">Action</th>
-                </tr>
+                        <tr>
+                            <th scope="col">Sl.</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Email Verified</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Credits Used</th>
+                            <th scope="col">Tokens Used</th>
+                            <th scope="col">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach($alladmin as $key => $item)
                         <tr>
-                          <td>{{ $key+1 }}</td>
-                          <td>
-                            <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}({{$item->username}})</a>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0 me-2">
-                                    <img src="{{ $item->photo ? asset('backend/uploads/user/' . $item->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
+                            <td>{{ $key+1 }}</td>
+                            <td>
+                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}({{$item->username}})</a>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-2">
+                                        <img src="{{ $item->photo ? asset('backend/uploads/user/' . $item->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="" class="avatar-xs rounded-circle" />
+                                    </div>
+                                    <div class="flex-grow-1">{{$item->email}}</div>
                                 </div>
-                                <div class="flex-grow-1">{{$item->email}}</div>
-                            </div>
-                        </td>
+                            </td>
+                            <td>
+                                @if ($item->email_verified_at)
+                                {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
+                                @else
+                                    -- 
+                                    <form action="{{ route('user.send-verification-email', ['user' => $item->id]) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to send a verification email to this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Verification Email">
+                                            <i class="ri-mail-send-line"></i>
+                                        </button>
+                                    </form>
+                                @endif 
+                            </td>
         
-                        
-                                    <td>
-                                        @if ($item->email_verified_at)
-                                        {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
-        
-                                        @else
-                                            -- 
-                                            <form action="{{ route('user.send-verification-email', ['user' => $item->id]) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to send a verification email to this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Verification Email">
-                                                    <i class="ri-mail-send-line"></i>
-                                                </button>
-                                            </form>
-                                        @endif
-                                        
-                                    </td>
-        
-                                    @foreach($item->roles as $role)
-                                    <td>
-                                        <span class="badge badge-pill bg-danger">{{ $role->name }}</span>
-                                    </td>
-                                        @endforeach
-        
-                                    <td>{{ $item->credits_used }}</td>
-                                    <td>{{ $item->tokens_used }}</td>
+                            <td>{{ $item->role }}</td>
+                            <td>{{ $item->credits_used }}</td>
+                            <td>{{ $item->tokens_used }}</td>
                      
                       
         
-                        @if ($item->status == 'active')
+                            @if ($item->status == 'active')
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
                                     <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
@@ -98,7 +90,7 @@
                                     </form>
                                 </div>
                             </td>
-                        @else
+                            @else
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
                                     <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}">
@@ -114,11 +106,12 @@
                                     </form>
                                 </div>
                             </td>
-                        @endif
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     </div>
