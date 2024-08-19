@@ -1,3 +1,9 @@
+<style>
+    .gradient-button {
+    background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))
+}
+
+</style>
 <header id="page-topbar">
     <div class="layout-width">
         <div class="navbar-header">
