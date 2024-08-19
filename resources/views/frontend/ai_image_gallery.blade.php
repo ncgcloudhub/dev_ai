@@ -48,9 +48,30 @@
                                                     <div class="col">
                                                         <select class="form-select mb-3" name="style" aria-label="Filter By Style">
                                                             <option value="" selected>Filter By Style</option>
-                                                            <option value="1">One</option>
-                                                            <option value="2">Two</option>
-                                                            <option value="3">Three</option>
+                                                            <option value="natural">Natural</option>
+                                                            <option value="vivid">Vivid</option>
+                                                            <option value="none">NONE</option>
+                                                            <option value="cinematic">CINEMATIC</option>
+                                                            <option value="analog-film">ANALOG FILM</option>
+                                                            <option value="animation">ANIMATION</option>
+                                                            <option value="comic">COMIC</option>
+                                                            <option value="craft-clay">CRAFT CLAY</option>
+                                                            <option value="fantasy">FANTASY</option>
+                                                            <option value="line-art">LINE ART</option>
+                                                            <option value="cyberpunk">CYBERPUNK</option>
+                                                            <option value="pixel-art">PIXEL ART</option>
+                                                            <option value="photograph">PHOTOGRAPH</option>
+                                                            <option value="graffiti">GRAFFITI</option>
+                                                            <option value="game-gta">GAME GTA</option>
+                                                            <option value="3d-character">3D CHARACTER</option>
+                                                            <option value="baroque">BAROQUE</option>
+                                                            <option value="caricature">CARICATURE</option>
+                                                            <option value="colored-pencil">COLORED PENCIL</option>
+                                                            <option value="doddle-art">DODDLE ART</option>
+                                                            <option value="futurism">FUTURISM</option>
+                                                            <option value="sketch">SKETCH</option>
+                                                            <option value="surrealism">SURREALISM</option>
+                                                            <option value="sticker-designs">STICKER DESIGNS</option>
                                                         </select>
                                                     </div>
                                                     <div class="col">
