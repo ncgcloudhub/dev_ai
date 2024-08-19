@@ -61,7 +61,7 @@
                                     <div class="p-2 mt-2">
                                         <form method="POST" class="needs-validation" novalidate action="{{ route('register') }}" id="registrationForm">
                                             @csrf
-                                        
+                                    
                                             <div class="mb-3">
                                                 <label for="useremail" class="form-label">Email <span class="text-danger">*</span></label>
                                                 <input type="email" name="email" class="form-control" id="useremail" placeholder="Enter email address" required>
@@ -72,56 +72,142 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                        
+                                    
                                             <div id="otherFields" style="display: none;">
                                                 <div class="mb-3">
                                                     <label for="username" class="form-label">Name <span class="text-danger">*</span></label>
                                                     <input type="text" name="name" class="form-control" id="username" placeholder="Enter your name" required>
                                                     <div class="invalid-feedback">Please enter your name</div>
                                                 </div>
-                                        
+                                    
                                                 <div class="mb-3">
                                                     <label class="form-label" for="password-input">Password<span class="text-danger">*</span></label>
                                                     <div class="position-relative auth-pass-inputgroup">
-                                                        <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                        <input type="password" name="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" required>
                                                         <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                                        <div class="invalid-feedback">Please enter password</div>
+                                                        <div class="invalid-feedback" id="password-invalid-feedback">Please enter a valid password</div>
                                                     </div>
                                                 </div>
-                                        
+                                    
                                                 <div class="mb-3">
                                                     <label class="form-label" for="password-input-confirm">Confirm Password<span class="text-danger">*</span></label>
                                                     <div class="position-relative auth-pass-inputgroup">
-                                                        <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input-confirm" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                                        <input type="password" name="password_confirmation" class="form-control pe-5 password-input" onpaste="return false" placeholder="Confirm password" id="password-input-confirm" aria-describedby="passwordInput" required>
                                                         <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon-confirm"><i class="ri-eye-fill align-middle"></i></button>
-                                                        <div class="invalid-feedback">Please enter password</div>
+                                                        <div class="invalid-feedback" id="confirm-password-feedback">Passwords do not match.</div>
                                                     </div>
                                                 </div>
-                                        
+                                    
                                                 <input type="hidden" name="ref" value="{{ request()->query('ref') }}">
                                             </div>
-                                        
+                                    
                                             <div class="mb-3 form-check">
-                                                <input type="checkbox" class="form-check-input" id="termsAgreement">
+                                              
                                                 <label class="form-check-label" for="termsAgreement">
                                                     By continuing, I agree to Clever Creator's
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Consumer Terms</a> 
                                                     and 
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
                                                 </label>
-                                                
-                                               
-                                                
                                             </div>
-                                        
+                                    
+                                            <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                                <h5 class="fs-13">Password must contain:</h5>
+                                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                                <p id="pass-lower" class="invalid fs-12 mb-2">At <b>least one lowercase</b> letter (a-z)</p>
+                                                <p id="pass-upper" class="invalid fs-12 mb-2">At <b>least one uppercase</b> letter (A-Z)</p>
+                                                <p id="pass-number" class="invalid fs-12 mb-0">At <b>least one number</b> (0-9)</p>
+                                            </div>
+                                    
                                             <button type="submit" class="btn btn-success w-100" id="signUpButton" disabled>Sign Up</button>
                                         </form>
-                                        
+                                    
                                         <script>
+                                            const passwordInput = document.getElementById('password-input');
+                                            const confirmPasswordInput = document.getElementById('password-input-confirm');
+                                            const signUpButton = document.getElementById('signUpButton');
+                                            const passwordFeedback = document.getElementById('password-invalid-feedback');
+                                            const confirmPasswordFeedback = document.getElementById('confirm-password-feedback');
+                                    
+                                            const passLength = document.getElementById('pass-length');
+                                            const passLower = document.getElementById('pass-lower');
+                                            const passUpper = document.getElementById('pass-upper');
+                                            const passNumber = document.getElementById('pass-number');
+                                    
+                                            passwordInput.addEventListener('input', validatePassword);
+                                            confirmPasswordInput.addEventListener('input', validatePasswordsMatch);
+                                    
+                                            function validatePassword() {
+                                                const passwordValue = passwordInput.value;
+                                                let isValid = true;
+                                    
+                                                // Check password length
+                                                if (passwordValue.length >= 8) {
+                                                    passLength.classList.remove('invalid');
+                                                    passLength.classList.add('valid');
+                                                } else {
+                                                    passLength.classList.add('invalid');
+                                                    isValid = false;
+                                                }
+                                    
+                                                // Check for lowercase
+                                                if (/[a-z]/.test(passwordValue)) {
+                                                    passLower.classList.remove('invalid');
+                                                    passLower.classList.add('valid');
+                                                } else {
+                                                    passLower.classList.add('invalid');
+                                                    isValid = false;
+                                                }
+                                    
+                                                // Check for uppercase
+                                                if (/[A-Z]/.test(passwordValue)) {
+                                                    passUpper.classList.remove('invalid');
+                                                    passUpper.classList.add('valid');
+                                                } else {
+                                                    passUpper.classList.add('invalid');
+                                                    isValid = false;
+                                                }
+                                    
+                                                // Check for number
+                                                if (/[0-9]/.test(passwordValue)) {
+                                                    passNumber.classList.remove('invalid');
+                                                    passNumber.classList.add('valid');
+                                                } else {
+                                                    passNumber.classList.add('invalid');
+                                                    isValid = false;
+                                                }
+                                    
+                                                if (!isValid) {
+                                                    passwordFeedback.innerHTML = "Password does not meet requirements.";
+                                                    passwordFeedback.style.display = 'block';
+                                                    signUpButton.disabled = true;
+                                                } else {
+                                                    passwordFeedback.style.display = 'none';
+                                                    validatePasswordsMatch();
+                                                }
+                                            }
+                                    
+                                            function validatePasswordsMatch() {
+                                                const passwordValue = passwordInput.value;
+                                                const confirmPasswordValue = confirmPasswordInput.value;
+                                    
+                                                if (passwordValue !== confirmPasswordValue) {
+                                                    confirmPasswordFeedback.innerHTML = "Passwords do not match.";
+                                                    confirmPasswordFeedback.style.display = 'block';
+                                                    signUpButton.disabled = true;
+                                                } else {
+                                                    confirmPasswordFeedback.style.display = 'none';
+                                                    // Only enable the submit button if the password meets all requirements and the passwords match
+                                                    if (passwordFeedback.style.display === 'none' && confirmPasswordValue !== '') {
+                                                        signUpButton.disabled = false;
+                                                    }
+                                                }
+                                            }
+                                    
                                             document.getElementById('useremail').addEventListener('input', function() {
                                                 var email = this.value.trim();
                                                 var otherFields = document.getElementById('otherFields');
-                                        
+                                    
                                                 if (email !== '') {
                                                     otherFields.style.display = 'block';
                                                 } else {
@@ -129,9 +215,8 @@
                                                 }
                                             });
                                         </script>
-                                        
-
                                     </div>
+                                    
                                 </div>
                                 <!-- end card body -->
                             </div>
