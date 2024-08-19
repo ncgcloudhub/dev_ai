@@ -52,7 +52,7 @@ class RegisteredUserController extends Controller
             $regionAndCountry = $location->regionName . ', ' . $location->countryName;
         } else {
             // Set to null or a default value if location data is not found
-            $regionAndCountry = null; // Or you could set a default value like 'Unknown Location'
+            $regionAndCountry = null; // Or you could set a default value like 'Unknown Location' # Saiful
         }
         
 
