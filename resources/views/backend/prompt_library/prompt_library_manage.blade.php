@@ -16,8 +16,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Manage Prompt Library <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 ">Category</a> <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 ">Sub-Category</a></h4>
+            <div class="card-header align-items-center d-flex flex-column flex-md-row">
+                 <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
+                    Manage Prompt Library 
+                    <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Category</a> 
+                    <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Sub-Category</a>
+                </h4>
                 <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
                 <div class="flex-shrink-0 d-flex align-items-center">
                     <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
@@ -95,6 +99,7 @@
             </div>
             
             <div class="card-body">
+                <div class="table-responsive">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -146,6 +151,7 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     </div>
