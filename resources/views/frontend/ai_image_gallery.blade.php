@@ -36,8 +36,30 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <form id="search-form" action="{{ route('ai.image.gallery') }}" method="GET">
-                                                <input type="text" name="search" id="search" class="form-control" placeholder="Search by prompt" value="{{ request()->query('search') }}">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <select class="form-select mb-3" name="resolution" aria-label="Filter By Resolution">
+                                                            <option value="" selected>Filter By Resolution</option>
+                                                            <option value="1024x1024">1024x1024</option>
+                                                            <option value="256x256">256x256</option>
+                                                            <option value="512x512">512x512</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <select class="form-select mb-3" name="style" aria-label="Filter By Style">
+                                                            <option value="" selected>Filter By Style</option>
+                                                            <option value="1">One</option>
+                                                            <option value="2">Two</option>
+                                                            <option value="3">Three</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" name="search" id="search" class="form-control" placeholder="Search by prompt" value="{{ request()->query('search') }}">
+                                                    </div>
+                                                </div>
                                             </form>
+                                            
+                                         
                                             
                                             <br>
                                             <div class="row gallery-wrapper justify-content-center" id="image-container">
@@ -232,19 +254,27 @@
         }
     });
 
-    $('#search').on('input', function() {
-        var searchText = $(this).val().toLowerCase();
-        $.ajax({
-            url: '{{ route("ai.image.gallery") }}',
-            type: 'GET',
-            data: { search: searchText },
-            success: function(response) {
-                $('#image-container').html(response);
-                page = 1; // reset page number
-                hasMoreImages = true; // reset has more images flag
-            }
-        });
+    $('#search, select[name="resolution"], select[name="style"]').on('change input', function() {
+    var searchText = $('#search').val().toLowerCase();
+    var resolution = $('select[name="resolution"]').val();
+    var style = $('select[name="style"]').val();
+    
+    $.ajax({
+        url: '{{ route("ai.image.gallery") }}',
+        type: 'GET',
+        data: {
+            search: searchText,
+            resolution: resolution,
+            style: style
+        },
+        success: function(response) {
+            $('#image-container').html(response);
+            page = 1; // reset page number
+            hasMoreImages = true; // reset has more images flag
+        }
     });
+});
+
 
     // Initial load of images only if it's not an AJAX request
     if (!window.location.href.includes('?')) {

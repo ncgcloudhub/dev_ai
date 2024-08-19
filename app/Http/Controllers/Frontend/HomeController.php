@@ -26,27 +26,38 @@ class HomeController extends Controller
     public function AIImageGallery(Request $request)
     {
         $query = DalleImageGenerate::withCount(['likes', 'favorites']);
-
+    
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
         }
-
+    
+        if ($request->has('resolution') && !empty($request->input('resolution'))) {
+            $resolution = $request->input('resolution');
+            $query->where('resolution', $resolution);
+        }
+    
+        if ($request->has('style') && !empty($request->input('style'))) {
+            $style = $request->input('style');
+            $query->where('style', $style);
+        }
+    
         $images = $query->latest()->paginate(20);
-
+    
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
             $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
             $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
         }
-
+    
         if ($request->ajax()) {
             return view('frontend.image_gallery_partial', compact('images'))->render();
         }
-
+    
         return view('frontend.ai_image_gallery', compact('images'));
     }
+    
 
 
 
