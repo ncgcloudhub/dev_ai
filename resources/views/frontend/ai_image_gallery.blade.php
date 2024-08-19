@@ -84,6 +84,10 @@
   <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-fullscreen">
         <div class="modal-content border-0 overflow-hidden">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
             <div class="row g-0">
                 <!-- Image div updated to col-lg-8 -->
                 <div class="col-lg-8 d-flex align-items-center justify-content-center position-relative" style="background: #000;">
@@ -103,11 +107,6 @@
                         <span class="text-muted mb-4" id="resolution"></span>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer justify-content-end">
-                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
-                    <i class="ri-close-line me-1 align-middle"></i> Close
-                </a>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
