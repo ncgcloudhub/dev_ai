@@ -247,14 +247,21 @@
                         </ul>
                         <div class="d-flex">
                             @if ($item->slug === 'free_monthly' && $lastPackageId === null)
-                            <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
+                                <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
                             @elseif (intval($lastPackageId) === intval($item->id))
-                                <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
-                            @else 
-                                <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn"><i class="ri-shopping-cart-fill"></i> Buy Package</a>
+                                <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
+                            @else
+                                @if ($item->active === "active")
+                                    <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
+                                        <i class="ri-shopping-cart-fill"></i> Buy Package
+                                    </a>
+                                @else
+                                    <a href="#" class="btn btn-secondary w-100 me-2 buy-package-btn" disabled>
+                                        <i class="ri-shopping-cart-fill"></i> Inactive Package</a>
+                                @endif
                             @endif
-    
                         </div>
+                        
 
                     </div>
                 </div>
@@ -468,12 +475,20 @@
                     </ul>
                     <div class="d-flex">
                         @if (intval($lastPackageId) === intval($item->id))
-                        <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
+                            <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
                         @else
-                        <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn"><i class="ri-shopping-cart-fill"></i> Buy Package</a>
+                            @if ($item->active === "active")
+                                <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
+                                    <i class="ri-shopping-cart-fill"></i> Buy Package
+                                </a>
+                            @else
+                                <a href="#" class="btn btn-primary w-100 me-2 buy-package-btn" disabled>
+                                    <i class="ri-shopping-cart-fill"></i>Inactive Package
+                                </a>
+                            @endif
                         @endif
-                      
                     </div>
+                    
                 </div>
             </div>
         </div>
