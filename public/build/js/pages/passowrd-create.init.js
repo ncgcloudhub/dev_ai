@@ -7,8 +7,11 @@ File: Password addon Js File
 */
 
 // password addon
-Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(function (item) {
-    Array.from(item.querySelectorAll(".password-addon")).forEach(function (subitem) {
+Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(
+    function (item) {
+        Array.from(item.querySelectorAll(".password-addon")).forEach(function (
+            subitem
+        ) {
             subitem.addEventListener("click", function (event) {
                 var passwordInput = item.querySelector(".password-input");
                 if (passwordInput.type === "password") {
@@ -18,7 +21,8 @@ Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(func
                 }
             });
         });
-    });
+    }
+);
 
 // passowrd match
 var password = document.getElementById("password-input"),
@@ -35,7 +39,7 @@ function validatePassword() {
 //Password validation
 password.onchange = validatePassword;
 
-var myInput = document.getElementById("password-input");
+var myInput = document.getElementById("password-input-confirm");
 var letter = document.getElementById("pass-lower");
 var capital = document.getElementById("pass-upper");
 var number = document.getElementById("pass-number");
