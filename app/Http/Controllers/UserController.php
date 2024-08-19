@@ -114,6 +114,15 @@ class UserController extends Controller
         return response()->json(['status' => 'success']);
     }
 
+    public function saveSeenTourSteps(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+        $user->tour_progress = $request->input('seenTourSteps', []);
+        $user->save();
+        return response()->json(['success' => true]);
+    }
+
  
 
 

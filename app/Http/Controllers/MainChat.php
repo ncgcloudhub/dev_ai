@@ -30,7 +30,10 @@ class MainChat extends Controller
             ->where('user_id', $userId)
             ->get();
 
-        return view('admin.test_chat.chat_main', compact('sessions'));
+            return view('admin.test_chat.chat_main', [
+                'seenTourSteps' => $user->tour_progress ?? [],
+                'sessions' => $sessions,
+            ]);
     }
 
     // NEW SESSION

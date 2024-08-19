@@ -36,10 +36,7 @@
 {{-- CHAT STARt Scripts--}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-{{-- Tour --}}
-<script src="{{ URL::asset('build/libs/shepherd.js/js/shepherd.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/tour.init.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

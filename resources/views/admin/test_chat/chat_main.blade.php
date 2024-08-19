@@ -7,19 +7,6 @@
 @endsection
 @section('content')
 
-{{-- @if(session('showTour'))
-<script>
-    localStorage.setItem('showTour', 'true');
-</script>
-@endif --}}
-
-@if(session()->has('showTour'))
-    <p>Session variable showTour is set.</p>
-@else
-    <p>Session variable showTour is not set.</p>
-@endif
-
-
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border">
         <div class="px-4 pt-4 mb-4">
@@ -209,6 +196,17 @@
 
 @endsection
 @section('script')
+<script>
+    // Make sure the variable is available globally
+    window.seenTourSteps = {!! json_encode($seenTourSteps) !!};
+</script>
+
+    {{-- Tour --}}
+    <script src="{{ URL::asset('build/libs/shepherd.js/js/shepherd.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/tour.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
     <!-- fgEmojiPicker js -->

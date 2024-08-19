@@ -548,4 +548,6 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
 // Tour Status
-Route::post('/update-tour-status', [UserController::class, 'updateTourStatus'])->middleware('auth');
+// web.php (Routes file)
+Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
+
