@@ -57,7 +57,7 @@
                 {{-- @include('admin.layouts.alerts') --}}
     
                 <div class="live-preview">
-                    <form  action="{{ route('prompt.category.store') }}" method="post" class="row g-3">
+                    <form action="{{ route('prompt.category.store') }}" method="post" class="row g-3">
                         @csrf
     
                         <div class="form-floating">
