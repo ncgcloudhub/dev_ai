@@ -217,12 +217,13 @@
                                      </div>
                                  </div>
                              </div>
-                     <div class="col-12">
-                         <div class="text-end">
-                             <button class="btn btn-rounded btn-primary mb-5">Generate</button>
-                            
-                         </div>
-                     </div>
+
+                             <div class="col-12">
+                                <div class="text-end">
+                                    <button id="generateBtn" class="btn btn-rounded btn-primary mb-5">Generate</button>
+                                </div>
+                            </div>
+
                          </form>
 
                          <!-- Loading Spinner -->
@@ -308,57 +309,80 @@
                 // Retrieve and update the token count display on page load
                 let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
                 $('#tokenCount').text(remainingTokens); // Update token count display
-
+        
+                // Function to adjust the button based on token count
+                function adjustButton() {
+                    if (remainingTokens <= 10) {
+                        $('#generateBtn')
+                            .removeClass('btn-primary')
+                            .addClass('btn-success')
+                            .text('Sign Up for Free')
+                            .attr('onclick', "window.location.href='{{ route('register') }}';");
+                    } else {
+                        $('#generateBtn')
+                            .removeClass('btn-success')
+                            .addClass('btn-primary')
+                            .text('Generate')
+                            .removeAttr('onclick');
+                    }
+                }
+        
+                // Call adjustButton on page load to set the button appropriately
+                adjustButton();
+        
                 function adjustToNearestLower10(value) {
-            return Math.floor(value / 10) * 10;
-        }
-
+                    return Math.floor(value / 10) * 10;
+                }
+        
                 // Update number input when the range slider changes
                 $('#max_result_length').on('input', function() {
                     var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
-
+        
                     if (value > remainingTokens) {
                         alert('You have exceeded the available tokens.');
                         value = adjustToNearestLower10(remainingTokens);
                         $(this).val(value);
                     }
-
+        
                     $('#max_result_length_value').val(value);
                 });
-
+        
                 // Update range slider when the number input changes
                 $('#max_result_length_value').on('input', function() {
                     var value = parseFloat($(this).val()).toFixed(0); // Round to nearest integer
-
+        
                     if (value > remainingTokens) {
                         alert('You have exceeded the available tokens.');
                         value = adjustToNearestLower10(remainingTokens);
                         $(this).val(value);
                     }
-
+        
                     $('#max_result_length').val(value);
                 });
-
+        
                 // Submit form event handler
                 $('#generateForm').submit(function(event) {
                     event.preventDefault();
-
+        
                     // Show loading spinner
-
+        
                     $.ajax({
                         type: 'POST',
                         url: $(this).attr('action'),
                         data: $(this).serialize(),
                         success: function(response) {
                             // Hide loading spinner
-
+        
                             // Update remaining tokens
                             remainingTokens -= response.completionTokens;
                             localStorage.setItem('remainingTokens', remainingTokens);
-
+        
                             // Update token count display
                             $('#tokenCount').text(remainingTokens);
-
+        
+                            // Adjust the button based on the new token count
+                            adjustButton();
+        
                             // Update content and other details on the page
                         },
                         error: function(xhr, status, error) {
@@ -368,8 +392,6 @@
                         }
                     });
                 });
-
-               
             });
         </script>
 
