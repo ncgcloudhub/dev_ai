@@ -397,12 +397,24 @@ messages.forEach(message => {
 {{-- FRONTEND SINGLE IMAGE --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
- $(document).ready(function () {
+    $(document).ready(function () {
         $('#generateButton').click(function () {
-            // Show the loading spinner
-            $('#loadingSpinner').show();
-
             var prompt = $('#prompt').val();
+
+            // Check if the prompt textarea is empty
+            if (prompt.trim() === "") {
+                // Show the error message
+                $('#promptError').removeClass('d-none');
+                return; // Stop the function here
+            } else {
+                // Hide the error message if prompt is not empty
+                $('#promptError').addClass('d-none');
+            }
+
+            // Proceed with the generation process
+            $('#generateButton').attr('disabled', true);
+            $('#buttonText').text('Generating...');
+            $('#loadingSpinner').removeClass('d-none');
 
             $.ajax({
                 type: 'POST',
@@ -414,32 +426,34 @@ messages.forEach(message => {
                     prompt: prompt
                 },
                 success: function (response) {
-                    // Hide the loading spinner
-                    $('#loadingSpinner').hide();
+                    $('#loadingSpinner').addClass('d-none');
+                    $('#buttonText').text('Try again tomorrow');
 
                     if (response.message) {
-                        // Display the message if the user has already generated an image today
                         $('#generatedImageContainer').html('<p>' + response.message + '</p>');
                     } else {
-                        // Extract the URL of the generated image from the response
                         var imageUrl = response.data[0].url;
                         if (imageUrl) {
                             $('#generatedImageContainer').html('<img src="' + imageUrl + '" class="img-fluid" alt="Generated Image">');
                         } else {
                             $('#generatedImageContainer').html('<p>No image generated.</p>');
                         }
+
+                        $('#generatedImageContainer').append('<p class="mt-3 text-warning">You have generated your image for today. Please come back tomorrow to generate a new one.</p>');
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Hide the loading spinner
-                    $('#loadingSpinner').hide();
-
+                    $('#loadingSpinner').addClass('d-none');
+                    $('#generateButton').attr('disabled', false);
+                    $('#buttonText').text('Generate');
                     console.error(xhr.responseText);
                 }
             });
         });
     });
 </script>
+
+
 
 {{-- NEWSLETTER --}}
 <script>
