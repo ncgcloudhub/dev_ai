@@ -39,8 +39,9 @@ class HomeController extends Controller
     
         if ($request->has('style') && !empty($request->input('style'))) {
             $style = $request->input('style');
-            $query->where('style', $style);
+            $query->where('style', 'LIKE', '%' . $style . '%');
         }
+    
     
         $images = $query->latest()->paginate(20);
     

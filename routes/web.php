@@ -400,6 +400,9 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     // Dalle Manage Image
     Route::get('/favorite/image/manage', [GenerateImagesController::class, 'ManageFavoriteImage'])->name('manage.favourite.image');
 
+    // Image to Image
+    Route::post('/generate-image-variation', [GenerateImagesController::class, 'generateImageVariation']);
+
     Route::prefix('chat')->middleware(['check.status'])->group(function () {
 
         // CHAT
