@@ -20,6 +20,7 @@ use App\Providers\AppServiceProvider;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use OpenAI\Client as OpenAIClient;
 
 class GenerateImagesController extends Controller
 {
@@ -511,4 +512,76 @@ class GenerateImagesController extends Controller
         // Return response indicating success and the new favorite status
         return response()->json(['success' => true, 'favorited' => $favorited]);
     }
+
+    // Image to Image
+    public function generateImageVariation(Request $request)
+    {
+        $apiKey = config('app.openai_api_key');
+      
+        $imagePath = $request->file('image')->getPathname();
+        $imageName = $request->file('image')->getClientOriginalName();
+    
+        // Create a Guzzle client instance
+        $client = new Client();
+    
+        try {
+            // Make the request to OpenAI API to create a variation of the image
+            Log::info('inside try: ');
+    
+            $response = $client->post('https://api.openai.com/v1/images/variations', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                ],
+                'multipart' => [
+                    [
+                        'name'     => 'image',
+                        'contents' => fopen($imagePath, 'r'),
+                        'filename' => $imageName,
+                    ],
+                    [
+                        'name'     => 'model',
+                        'contents' => 'dall-e-2',
+                    ],
+                    [
+                        'name'     => 'n',
+                        'contents' => 1,
+                    ],
+                    [
+                        'name'     => 'size',
+                        'contents' => '1024x1024',
+                    ],
+                ],
+            ]);
+    
+          // Get the response body
+            $body = $response->getBody()->getContents();
+            Log::info("Response body: " . $body);
+
+            // Decode the JSON response to access the URL
+            $responseData = json_decode($body, true);
+
+            // Extract the URL from the response
+            $imageUrl = $responseData['data'][0]['url'] ?? null;
+
+            if ($imageUrl) {
+                // Return the image URL in a JSON response
+                return response()->json(['image_url' => $imageUrl], 200);
+            } else {
+                // Return an error response if the URL is not found
+                return response()->json(['error' => 'Image URL not found'], 500);
+            }
+    
+        } catch (\Exception $e) {
+            // Log and return error response
+            Log::error("Error generating image variation: " . $e->getMessage());
+            return response()->json(['message' => 'Error generating image variation'], 500);
+        }
+    }
+
+
+
+
+
+
+
 }

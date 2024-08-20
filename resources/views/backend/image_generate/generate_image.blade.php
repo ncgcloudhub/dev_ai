@@ -78,21 +78,27 @@
                         <div class="card-body">
                            
                             <!-- Nav tabs -->
-                            <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
+                            <ul class="nav nav-pills nav-justified col-md-4 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
                                             Dall-E 2
                                     </a>
                                 </li>
                                 <li class="nav-item waves-effect waves-light">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
+                                    <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
+                                    </a>
+                                </li>
+                                <li class="nav-item waves-effect waves-light">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-image-to-image" role="tab">
+                                        Image to Image
                                     </a>
                                 </li>
                               
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content text-muted">
+                                {{-- Dalle 2 --}}
                                 <div class="tab-pane" id="pill-justified-home-1" role="tabpanel">
 
 
@@ -210,9 +216,10 @@
                                     </form>
                                    
                                 </div>
-
+                                {{-- Dalle 2 END --}}
                          
-                                <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
+                                {{-- Dalle 3 Start --}}
+                                <div class="tab-pane " id="pill-justified-profile-1" role="tabpanel">
                                     <form  action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
                                     <input type="hidden" name="dall_e_3" value="dall_e_3">
@@ -321,7 +328,16 @@
                                     </div>
                                     </form>
                                 </div>
-                           
+                                {{-- Dalle 3 END --}}
+
+                                {{-- Image to Image START --}}
+                                <div class="tab-pane active" id="pill-justified-image-to-image" role="tabpanel">
+
+                                @include('backend.common.image_to_image')
+                                   
+                                </div>
+                                {{-- Image to Image END --}}
+
                             </div>
                         </div><!-- end card-body -->
                     </div><!-- end card -->
@@ -476,6 +492,30 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+   document.getElementById('image-upload-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    fetch('/generate-image-variation', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        let container = document.getElementById('generated-image-container');
+        container.innerHTML = `<img class="gallery-img img-fluid mx-auto" src="${data.image_url}" alt="Generated Image" />`;
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+</script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
