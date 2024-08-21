@@ -62,8 +62,8 @@ class ResetMonthlyUserTokens extends Command
     
                     // Add any leftover tokens from the free package
                     if ($freePricingPlan && $user->tokens_left > 0) {
-                        $tokens += $user->tokens_left;
-                        $credits += $user->credits_left;
+                        $tokens = $user->tokens_left;
+                        $credits = $user->credits_left;
                     }
                 } else {
 
