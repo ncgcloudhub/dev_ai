@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -30,46 +31,55 @@ class ResetMonthlyUserTokens extends Command
     {
         $now = Carbon::now();
         $users = User::all();
-
+    
         foreach ($users as $user) {
-            $monthsSinceRegistration = $user->created_at->diffInMonths($now);
-
-            if ($monthsSinceRegistration > 0 && $now->day == $user->created_at->day) {
-                // Get last package and free package details
-                $userPackageData = getUserLastPackageAndModels();
-
-                $lastPackage = $userPackageData['lastPackage'];
-                $freePricingPlan = $userPackageData['freePricingPlan'];
-
-                // Initialize tokens
+            // Retrieve the user's last package
+            $lastPackage = PackageHistory::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+    
+            // Retrieve the free pricing plan
+            $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+    
+            // Determine the renewal date based on the last package or registration date
+            $renewalDate = $lastPackage ? $lastPackage->created_at : $user->created_at;
+    
+            // Calculate the number of months since the last renewal date
+            $monthsSinceRenewal = $renewalDate->diffInMonths($now);
+    
+            // If it's been a full month and it's the same day of the month as the renewal date
+            if ($monthsSinceRenewal > 0 && $now->day == $renewalDate->day) {
                 $tokens = 0;
                 $credits = 0;
-
+    
                 if ($lastPackage) {
-                    // If the user has purchased a package, set tokens based on the package
+                    // Get the associated pricing plan
                     $pricingPlan = PricingPlan::find($lastPackage->package_id);
                     if ($pricingPlan) {
-                        $tokens = $pricingPlan->tokens; // Assuming tokens is a field in the PricingPlan model
-                        $credits = $pricingPlan->credits; // Assuming credits is a field in the PricingPlan model
+                        $tokens = $pricingPlan->tokens ?? 0;
+                        $credits = $pricingPlan->images ?? 0;
                     }
-
-                    // Add any remaining free package tokens
+    
+                    // Add any leftover tokens from the free package
                     if ($freePricingPlan && $user->tokens_left > 0) {
                         $tokens += $user->tokens_left;
+                        $credits += $user->credits_left;
                     }
                 } else {
-                    // If no package purchased, use the free package tokens
-                    $tokens = $freePricingPlan->tokens ?? 5000; // Default to 5000 if no free package tokens
-                    $credits = $freePricingPlan->credits ?? 100; // Default to 100 if no free package credits
-                }
 
+                    if ($freePricingPlan) {
+                        $tokens = $freePricingPlan->tokens;
+                        $credits = $freePricingPlan->images;
+                    }
+                }
+    
                 // Update user tokens and credits
                 $user->tokens_left = $tokens;
                 $user->credits_left = $credits;
                 $user->save();
             }
         }
-
+    
         $this->info('Monthly user tokens have been reset successfully.');
     }
 }
