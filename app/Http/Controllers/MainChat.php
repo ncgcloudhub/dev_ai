@@ -102,7 +102,7 @@ class MainChat extends Controller
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $extension = $file->getClientOriginalExtension();
         
-            // Determine the file path and save the file
+             // Determine the file path and save the file
             if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
                 // Rename image file to include timestamp or any custom logic
                 $newFilename = $originalFilename . '_' . time() . '.' . $extension;
@@ -122,12 +122,13 @@ class MainChat extends Controller
                 $response = $this->callOpenAIImageAPI($base64Image);
                 $fileContent = $response['choices'][0]['message']['content'];
             }
+
             Log::info('File content: ', ['content' => $fileContent]);
         
             // Update session variables and context
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
-        
+    
             $context['file_content'] = $fileContent;
             session(['context' => $context]);
         
@@ -135,24 +136,23 @@ class MainChat extends Controller
             if (empty($userMessage)) {
                 $userMessage = 'Summarize this in 3 lines';
             }
-        
+    
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
         }        
 
+        // Handle image processing for generated similar images
         if ($file && in_array($file->getMimeType(), ['image/png', 'image/jpg', 'image/jpeg'])) {
             $filePath = $file->store('uploads', 'public');
             $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
             $response = $this->callOpenAIImageAPI($base64Image);
             $imageContent = $response['choices'][0]['message']['content'];
 
-            // Update session variables and context
             $pastedImages[$filePath] = $imageContent;
             session(['pasted_images' => $pastedImages]);
             $context['pasted_image_content'] = $imageContent;
             session(['context' => $context]);
 
-            // Provide default message if userMessage is empty
             if (empty($userMessage)) {
                 $userMessage = 'Summarize this in 3 lines';
             }
@@ -164,62 +164,117 @@ class MainChat extends Controller
         if (!empty($userMessage)) {
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
             session(['conversation_history' => $conversationHistory]);
+    
+            // Check if the message is a command to generate an image similar to an attached image
+            if (strpos(strtolower($userMessage), 'generate image similar to') !== false) {
+                
+                $promptImage = array_key_last($pastedImages);
+                if ($promptImage) {
+                    $base64Image = $this->encodeImage(storage_path('app/public/' . $promptImage));
+                    $response = $this->callOpenAIImageAPI($base64Image);
+                    $generatedPrompt = $response['choices'][0]['message']['content'];
+    
+                    // Generate similar image based on the extracted prompt
+                    $imageURL = $this->generateImage($generatedPrompt);
+    
+                    // Add the generated image to the conversation history
+                    $conversationHistory[] = [
+                        'role' => 'assistant',
+                        'content' => '
+                            <div>
+                                <a href="' . $imageURL . '" target="_blank">
+                                    <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                                </a>
+                                <br>
+                                <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                            </div>'
+                    ];
+                    session(['conversation_history' => $conversationHistory]);
+    
+                    // Save AI response with image
+                    Message::create([
+                        'session_id' => $sessionId,
+                        'user_id' => Auth::id(),
+                        'message' => $userMessage,
+                        'reply' => '
+                            <div>
+                                <a href="' . $imageURL . '" target="_blank">
+                                    <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                                </a>
+                                <br>
+                                <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                            </div>'
+                    ]);
+    
+                    return response()->json([
+                        'message' => '
+                            <div>
+                                <a href="' . $imageURL . '" target="_blank">
+                                    <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                                </a>
+                                <br>
+                                <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                            </div>',
+                        'title' => $title,
+                    ]);
+                }
+            }
+    
+            // Check if the message is a command to generate an image based on description
+            if (strpos(strtolower($userMessage), 'generate image of') !== false) {
+                $imageDescription = str_replace('generate image of', '', strtolower($userMessage));
+                $imageURL = $this->generateImage($imageDescription);
+    
+                // Add the generated image to the conversation history
+                $conversationHistory[] = [
+                    'role' => 'assistant',
+                    'content' => '
+                        <div>
+                            <a href="' . $imageURL . '" target="_blank">
+                                <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                            </a>
+                            <br>
+                            <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                        </div>'
+                ];
+                session(['conversation_history' => $conversationHistory]);
+    
+                // Save AI response with image
+                Message::create([
+                    'session_id' => $sessionId,
+                    'user_id' => Auth::id(),
+                    'message' => $userMessage,
+                    'reply' => null,
+                ]);
 
-            // Check if the message is a command to generate an image
-        if (strpos(strtolower($userMessage), 'generate image of') !== false) {
-            $imageDescription = str_replace('generate image of', '', strtolower($userMessage));
-            $imageURL = $this->generateImage($imageDescription);
-
-            // Add the generated image to the conversation history
-            $conversationHistory[] = [
-                'role' => 'assistant', 
-                'content' => '
-                    <div>
-                        <a href="' . $imageURL . '" target="_blank">
-                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
-                        </a>
-                        <br>
-                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
-                    </div>'
-                    
-            ];
-            session(['conversation_history' => $conversationHistory]);
-
-            // Save AI response with image
-            Message::create([
-                'session_id' => $sessionId,
-                'user_id' => Auth::id(),
-                'message' => $userMessage,
-                'reply' => null,
-            ]);
-
-            // Save AI response with image
-            Message::create([
-                'session_id' => $sessionId,
-                'user_id' => Auth::id(),
-                'message' => null,
-                'reply' => '
-                    <div>
-                        <a href="' . $imageURL . '" target="_blank">
-                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
-                        </a>
-                        <br>
-                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
-                    </div>'
-            ]);
-
-            return response()->json([
-                'message' => '
-                    <div>
-                        <a href="' . $imageURL . '" target="_blank">
-                            <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
-                        </a>
-                        <br>
-                        <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
-                    </div>',
-                'title' => $title,
-            ]);
-        }
+                // Save AI response with image
+                Message::create([
+                    'session_id' => $sessionId,
+                    'user_id' => Auth::id(),
+                    'message' => null,
+                        'reply' => '
+                            <div>
+                                <a href="' . $imageURL . '" target="_blank">
+                                    <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                                </a>
+                                <br>
+                                <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                            </div>'
+                    ]);
+        
+                    return response()->json([
+                        'message' => '
+                            <div>
+                                <a href="' . $imageURL . '" target="_blank">
+                                    <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
+                                </a>
+                                <br>
+                                <a href="' . $imageURL . '" download="generated-image.png" class="btn btn-primary" style="margin-top: 10px;">Download Image</a>
+                            </div>',
+                        'title' => $title,
+                    ]);
+                }
+        
 
             $context['latest_message'] = $userMessage;
             session(['context' => $context]);
@@ -347,17 +402,18 @@ class MainChat extends Controller
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'model' => 'dall-e-3', // Use the appropriate model for image generation
+                'model' => 'dall-e-3', 
                 'prompt' => $description,
-                'size' => '1024x1024', // Specify image size if needed
+                'size' => '1024x1024', 
             ],
         ]);
-    
+
         $data = json_decode($response->getBody(), true);
         $imageUrl = $data['data'][0]['url']; // Adjust according to actual API response structure
-    
+
         return $imageUrl;
     }
+
 
 
     private function readFileContent($filePath, $extension)
@@ -416,9 +472,9 @@ class MainChat extends Controller
 
     private function encodeImage($filePath)
     {
-        $imageContent = file_get_contents($filePath);
-        return base64_encode($imageContent);
+        return base64_encode(file_get_contents($filePath));
     }
+
 
     private function callOpenAIImageAPI($base64Image)
     {
@@ -440,6 +496,7 @@ class MainChat extends Controller
 
         return $response;
     }
+
 
     // DELETE
     public function delete(Request $request)
