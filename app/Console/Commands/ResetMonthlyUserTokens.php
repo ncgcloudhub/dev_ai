@@ -56,15 +56,10 @@ class ResetMonthlyUserTokens extends Command
                     // Get the associated pricing plan
                     $pricingPlan = PricingPlan::find($lastPackage->package_id);
                     if ($pricingPlan) {
-                        $tokens = $pricingPlan->tokens ?? 0;
-                        $credits = $pricingPlan->images ?? 0;
+                        $tokens = $pricingPlan->tokens;
+                        $credits = $pricingPlan->images;
                     }
-    
-                    // Add any leftover tokens from the free package
-                    if ($freePricingPlan && $user->tokens_left > 0) {
-                        $tokens = $user->tokens_left;
-                        $credits = $user->credits_left;
-                    }
+ 
                 } else {
 
                     if ($freePricingPlan) {
