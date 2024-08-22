@@ -74,32 +74,43 @@ class GenerateImagesController extends Controller
 
         $response = null;
 
-        // Handle image-based generation
+       // Handle image-based generation
         $prompt = '';
         if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
             Log::info('Handling image-based prompt properly line 80');
-    
+
             // Get and encode the image
             $imageFile = $request->file('custom_image');
             Log::info('image file:' . $imageFile);
             $base64Image = base64_encode(file_get_contents($imageFile));
             Log::info('base64Image:' . $base64Image);
+
             // Extract prompt from the image
             $response = $this->callOpenAIImageAPI($base64Image);
-            Log::info('Response:' . $response);
-            
-            if (isset($response['choices'][0]['message']['content'])) {
-                $extractedPrompt = $response['choices'][0]['message']['content'];
-                $prompt = $extractedPrompt;  // Use the prompt extracted from the image
-            } else {
-                Log::error('Failed to extract prompt from image analysis response');
-                return response()->json(['error' => 'Failed to extract prompt'], 500);
-            }
+
+            // Decode or access the content as an array
+    $responseArray = json_decode(json_encode($response), true);
+
+    // Log the response in a way that PHP can handle
+    Log::info('Response as array: ' . json_encode($responseArray));
+
+          
+
+    if (isset($responseArray['choices'][0]['message']['content'])) {
+        $extractedPrompt = $responseArray['choices'][0]['message']['content'];
+        $prompt = $extractedPrompt;  // Use the prompt extracted from the image
+
+        Log::info('Extracted prompt: ' . $prompt);
+    } else {
+        Log::error('Failed to extract prompt from image analysis response');
+        return response()->json(['error' => 'Failed to extract prompt'], 500);
+    }
         } else {
             Log::info('No image detected in the request line 97');
             // Handle user text input
             $prompt = $request->prompt . ' and the style should be ' . $userStyleImplode;
         }
+
         
         if ($request->dall_e_2) {
 
