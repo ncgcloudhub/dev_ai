@@ -99,6 +99,10 @@
             </div>
             
             <div class="card-body">
+                
+                <button type="button" class="btn btn-outline-secondary mb-2">
+                    Total Results: <span class="badge bg-success ms-1" id="countDisplay">{{$count}}</span>
+                </button>
                 <div class="table-responsive">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
@@ -262,7 +266,11 @@ $(document).ready(function() {
             .then(data => {
                 var tableBody = document.querySelector('#alternative-pagination tbody');
                 tableBody.innerHTML = '';
-                data.forEach(function(item, index) {
+
+                var countDisplay = document.getElementById('countDisplay');
+                countDisplay.textContent = `${data.count}`;
+
+                data.data.forEach(function(item, index) {
                     var row = `<tr>
                         <td>${index + 1}</td>
                         <td><a href="/user/details/${item.id}" class="fw-medium link-primary">${item.prompt_name}</a></td>
