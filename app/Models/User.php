@@ -41,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'tour_progress' => 'array',
     ];
 
     public function hasRole($role)
@@ -115,6 +116,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(RatingTemplate::class);
     }
+
+    // TOUR
+    public function hasSeenStep($stepId)
+    {
+        return in_array($stepId, $this->tour_progress ?? []);
+    }
+
+    public function markStepAsSeen($stepId)
+    {
+        $progress = $this->tour_progress ?? [];
+        if (!in_array($stepId, $progress)) {
+            $progress[] = $stepId;
+            $this->tour_progress = $progress;
+            $this->save();
+        }
+    } 
     
 
    

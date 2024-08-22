@@ -63,3 +63,8 @@ permission, role has permission, roles, model has roles, model has permission de
 -----------14/8/24------------------
 1 - block add in USER table type=boolean deafult=false
 
+-----------15/8/24------------------
+1 - has_seen_tour add in USER table type=boolean deafult=false
+
+-------------19/8/24----------------
+1- remove 15/8/24 and add [tour_progress type=text default=empty]

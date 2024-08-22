@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -98,6 +99,30 @@ class UserController extends Controller
  
          return redirect()->back()->with('success', 'Model Updated Successfully');
      }
+
+    //  Tour Status
+    public function updateTourStatus(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+        $user->has_seen_tour = $request->has_seen_tour;
+        $user->save();
+
+        Log::info('Tour status updated for user:', ['user_id' => $user->id, 'status' => $request->has_seen_tour]);
+        
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function saveSeenTourSteps(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+        $user->tour_progress = $request->input('seenTourSteps', []);
+        $user->save();
+        return response()->json(['success' => true]);
+    }
+
  
 
 

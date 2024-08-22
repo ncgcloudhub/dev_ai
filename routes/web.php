@@ -549,3 +549,8 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
+
+// Tour Status
+// web.php (Routes file)
+Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
+

@@ -49,6 +49,9 @@
 
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')
+
+
+
 </body>
 
 </html>

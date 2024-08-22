@@ -1,130 +1,80 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: tour init js
-*/
+document.addEventListener('DOMContentLoaded', function() {
+    var seenSteps = JSON.parse(localStorage.getItem('seenTourSteps')) || [];
 
-var tour = new Shepherd.Tour({
-    defaultStepOptions: {
-        cancelIcon: {
+    // Function to save seen steps to the server
+    function saveSeenSteps() {
+        fetch('/save-seen-tour-steps', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ seenTourSteps: seenSteps })
+        });
+    }
+
+    // Function to mark a step as seen
+    function markStepAsSeen(stepId) {
+        if (!seenSteps.includes(stepId)) {
+            seenSteps.push(stepId);
+            localStorage.setItem('seenTourSteps', JSON.stringify(seenSteps));
+            saveSeenSteps();
+        }
+    }
+
+    // Initialize the tour
+    var tour = new Shepherd.Tour({
+        defaultStepOptions: {
+            cancelIcon: {
+                enabled: true
+            },
+            classes: 'shadow-md bg-purple-dark',
+            scrollTo: {
+                behavior: 'smooth',
+                block: 'center'
+            }
+        },
+        useModalOverlay: {
             enabled: true
         },
+    });
 
-        classes: 'shadow-md bg-purple-dark',
-        scrollTo: {
-            behavior: 'smooth',
-            block: 'center'
+    // Function to add a tour step if the element exists and the step hasn't been seen
+    function addTourStep(id, title, text, attachToSelector) {
+        if (document.querySelector(attachToSelector) && !seenSteps.includes(id)) {
+            tour.addStep({
+                id: id,
+                title: title,
+                text: text,
+                attachTo: {
+                    element: attachToSelector,
+                    on: 'bottom'
+                },
+                buttons: [{
+                    text: 'Back',
+                    classes: 'btn btn-light',
+                    action: tour.back
+                },
+                {
+                    text: 'Next',
+                    classes: 'btn btn-success',
+                    action: function() {
+                        markStepAsSeen(id);
+                        tour.next();
+                    }
+                }]
+            });
         }
-    },
-    useModalOverlay: {
-        enabled: true
-    },
+    }
+
+    // Define tour steps
+    addTourStep('logo-tour', 'Welcome Back !', 'This is Step 1', '#logo-tour');
+    addTourStep('select-model-tour', 'Model', 'Select your desired model.', '#select-model-tour');
+    addTourStep('ai-professional-tour', 'AI Professional Bot', 'Our professional chat experts on different fields.', '#ai-professional-tour');
+    addTourStep('new-chat-tour', 'New Chat', 'Click to create new chat sessions.', '#new-chat-tour');
+    addTourStep('type-message-tour', 'Message', 'Ask anything.', '#type-message-tour');
+    addTourStep('send-tour', 'Send Button', 'Click to send the message.', '#send-tour');
+
+    // Start the tour
+    tour.start();
 });
-
-if (document.querySelector('#logo-tour'))
-    tour.addStep({
-        title: 'Welcome Back !',
-        text: 'This is Step 1',
-        attachTo: {
-            element: '#logo-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-            text: 'Next',
-            classes: 'btn btn-success',
-            action: tour.next
-        }]
-    });
-// end step 1
-
-if (document.querySelector('#register-tour'))
-    tour.addStep({
-        title: 'Register your account',
-        text: 'Get your Free Velzon account now.',
-        attachTo: {
-            element: '#register-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-                text: 'Back',
-                classes: 'btn btn-light',
-                action: tour.back
-            },
-            {
-                text: 'Next',
-                classes: 'btn btn-success',
-                action: tour.next
-            }
-        ]
-    });
-// end step 2
-
-if (document.querySelector('#login-tour'))
-    tour.addStep({
-        title: 'Login your account',
-        text: 'Sign in to continue to Velzon.',
-        attachTo: {
-            element: '#login-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-                text: 'Back',
-                classes: 'btn btn-light',
-                action: tour.back
-            },
-            {
-                text: 'Next',
-                classes: 'btn btn-success',
-                action: tour.next
-            }
-        ]
-    });
-
-// end step 3
-if (document.querySelector('#getproduct-tour'))
-    tour.addStep({
-        title: 'Get yout Product',
-        text: 'Sign in to continue to Velzon.',
-        attachTo: {
-            element: '#getproduct-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-                text: 'Back',
-                classes: 'btn btn-light',
-                action: tour.back
-            },
-            {
-                text: 'Next',
-                classes: 'btn btn-success',
-                action: tour.next
-            }
-        ]
-    });
-// end step 4
-
-if (document.querySelector('#thankyou-tour'))
-    tour.addStep({
-        title: 'Thank you !',
-        text: 'Sign in to continue to Velzon.',
-        attachTo: {
-            element: '#thankyou-tour',
-            on: 'bottom'
-        },
-        buttons: [{
-                text: 'Back',
-                classes: 'btn btn-light',
-                action: tour.back
-            },
-            {
-                text: 'Thank you !',
-                classes: 'btn btn-primary',
-                action: tour.complete
-            }
-        ]
-    });
-// end step 5
-
-tour.start();

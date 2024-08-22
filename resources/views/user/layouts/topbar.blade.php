@@ -1,3 +1,9 @@
+<style>
+    .gradient-button {
+    background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))
+}
+
+</style>
 <header id="page-topbar">
     <div class="layout-width">
         <div class="navbar-header">
@@ -33,7 +39,7 @@
               
 
                 <!-- MODEL -->
-                <div class="p-3"> 
+                <div class="p-3" id="select-model-tour"> 
                     @php
                     // Fetch the last package, AI models, and selected model
                     $data = getUserLastPackageAndModels();
