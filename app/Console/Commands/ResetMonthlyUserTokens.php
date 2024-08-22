@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\PackageHistory;
+use App\Models\PricingPlan;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
@@ -27,24 +29,52 @@ class ResetMonthlyUserTokens extends Command
      */
     public function handle()
     {
-        // Get current date
         $now = Carbon::now();
-
-        // Get all users
         $users = User::all();
-
+    
         foreach ($users as $user) {
-            // Calculate the difference in months between now and the user's registration date
-            $monthsSinceRegistration = $user->created_at->diffInMonths($now);
+            // Retrieve the user's last package
+            $lastPackage = PackageHistory::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+    
+            // Retrieve the free pricing plan
+            $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+    
+            // Determine the renewal date based on the last package or registration date
+            $renewalDate = $lastPackage ? $lastPackage->created_at : $user->created_at;
+    
+            // Calculate the number of months since the last renewal date
+            $monthsSinceRenewal = $renewalDate->diffInMonths($now);
+    
+            // If it's been a full month and it's the same day of the month as the renewal date
+            if ($monthsSinceRenewal > 0 && $now->day == $renewalDate->day) {
+                $tokens = 0;
+                $credits = 0;
+    
+                if ($lastPackage) {
+                    // Get the associated pricing plan
+                    $pricingPlan = PricingPlan::find($lastPackage->package_id);
+                    if ($pricingPlan) {
+                        $tokens = $pricingPlan->tokens;
+                        $credits = $pricingPlan->images;
+                    }
+ 
+                } else {
 
-            // If it's been a whole number of months since registration (e.g., 1 month, 2 months, etc.)
-            if ($monthsSinceRegistration > 0 && $now->day == $user->created_at->day) {
-                $user->tokens_left = 5000;
-                $user->credits_left = 100;
+                    if ($freePricingPlan) {
+                        $tokens = $freePricingPlan->tokens;
+                        $credits = $freePricingPlan->images;
+                    }
+                }
+    
+                // Update user tokens and credits
+                $user->tokens_left = $tokens;
+                $user->credits_left = $credits;
                 $user->save();
             }
         }
-
+    
         $this->info('Monthly user tokens have been reset successfully.');
     }
 }
