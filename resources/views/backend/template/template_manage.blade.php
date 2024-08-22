@@ -30,13 +30,17 @@
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Templates</h5>
                    
+                   <button id="templateManageTourButton" class="btn gradient-button text-white">Template Tour</button>
+
+
+                   
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
                 <form>
                     <div class="row g-3 justify-content-center">
                         <div class="col-xxl-5 col-sm-6">
-                            <div class="search-box">
+                            <div class="search-box" id="search-tour">
                                 <input type="text" class="form-control search"
                                     placeholder="Search for order ID, customer, order status or something...">
                                 <i class="ri-search-line search-icon"></i>
@@ -46,7 +50,7 @@
                         
                         <div class="col-xxl-1 col-sm-4">
                             <div>
-                                <button type="button" class="btn btn-primary w-100"
+                                <button type="button" class="btn btn-primary w-100" id="enter-button"
                                     onclick="SearchData();"> <i
                                         class="ri-search-fill me-1 align-bottom"></i>
                                     Search
@@ -61,7 +65,7 @@
             <div class="card-body pt-0">
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
-                        <li class="nav-item">
+                        <li class="nav-item" id="category-tour">
                             <a class="nav-link active All py-3" data-bs-toggle="tab" id="All"
                                 href="#home1" role="tab" aria-selected="true">
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Templates
@@ -80,7 +84,8 @@
                     <div class="table-card m-1">
                         <div class="row template-row">
                             @foreach ($templates as $item)
-                            <div class="col-md-3 p-3 template-card" data-id="{{ $item->id }}" data-category="{{$item->category_id}}" data-search="{{ strtolower($item->template_name . ' ' . $item->description) }}">
+                            <div class="col-md-3 p-3 template-card" data-id="{{ $item->id }}" data-category="{{$item->category_id}}" data-search="{{ strtolower($item->template_name . ' ' . $item->description) }}" @if ($loop->first) id="category-details" @endif>
+                               
                                 <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                                     <a href="{{ route('template.view', ['slug' => $item->slug]) }}">
                                         <div class="card-body">
