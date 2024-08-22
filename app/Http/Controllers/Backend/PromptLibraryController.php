@@ -278,7 +278,8 @@ class PromptLibraryController extends Controller
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
         $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
         $categories = PromptLibraryCategory::latest()->get();
-        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories'));
+        $count = $prompt_library->count(); 
+        return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories','count'));
     }
 
     public function PromptView($slug)
@@ -446,8 +447,12 @@ class PromptLibraryController extends Controller
         }
 
         $prompt_library = $query->with(['category', 'subcategory'])->get();
+        $count = $query->count();
 
-        return response()->json($prompt_library);
+        return response()->json([
+                'data' => $prompt_library,
+                'count' => $count
+            ]);
     }
 
     // DELETE
