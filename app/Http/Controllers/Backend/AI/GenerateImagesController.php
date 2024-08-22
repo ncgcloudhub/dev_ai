@@ -75,16 +75,12 @@ class GenerateImagesController extends Controller
         $response = null;
 
        // Handle image-based generation
-        $prompt = '';
-        if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
-            Log::info('Handling image-based prompt properly line 80');
+        $prompt = null;
 
+        if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
             // Get and encode the image
             $imageFile = $request->file('custom_image');
-            Log::info('image file:' . $imageFile);
             $base64Image = base64_encode(file_get_contents($imageFile));
-            Log::info('base64Image:' . $base64Image);
-
             // Extract prompt from the image
             $response = $this->callOpenAIImageAPI($base64Image);
 
@@ -153,7 +149,7 @@ class GenerateImagesController extends Controller
         if ($request->dall_e_3) {
 
             Log::info($request->all());
-
+            Log::info('Inside Dalle 3 prompt: ' . $prompt);
             if ($request->quality) {
                 $quality = $request->quality;
             }
@@ -182,6 +178,8 @@ class GenerateImagesController extends Controller
                     'quality' => $quality,
                     'n' => $n,
                 ]);
+
+                Log::info('Response Dalle 3 prompt: ' . $response);
             } else {
                 return response()->json(['error' => 'Failed to generate image'], 500);
             }
