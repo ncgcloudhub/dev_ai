@@ -21,6 +21,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Client as OpenAIClient;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class GenerateImagesController extends Controller
 {
@@ -74,6 +75,31 @@ class GenerateImagesController extends Controller
 
         $response = null;
 
+        // Handle image-based generation
+        $prompt = '';
+        if ($request->hasFile('image1') && $request->file('image1')->isValid()) {
+            Log::info('Handling image-based prompt');
+    
+            // Get and encode the image
+            $imageFile = $request->file('image1');
+            $base64Image = base64_encode(file_get_contents($imageFile));
+            
+            // Extract prompt from the image
+            $response = $this->callOpenAIImageAPI($base64Image);
+            
+            if (isset($response['choices'][0]['message']['content'])) {
+                $extractedPrompt = $response['choices'][0]['message']['content'];
+                $prompt = $extractedPrompt;  // Use the prompt extracted from the image
+            } else {
+                Log::error('Failed to extract prompt from image analysis response');
+                return response()->json(['error' => 'Failed to extract prompt'], 500);
+            }
+        } else {
+            Log::info('No image detected in the request');
+            // Handle user text input
+            $prompt = $request->prompt . ' and the style should be ' . $userStyleImplode;
+        }
+        
         if ($request->dall_e_2) {
 
             if ($request->quality) {
@@ -136,7 +162,7 @@ class GenerateImagesController extends Controller
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
                     'model' => 'dall-e-3',
-                    'prompt' => $request->prompt . ' and the style should be ' . $request->userStyleImplode,
+                    'prompt' => $prompt, // Use the correct prompt based on the input type
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,
@@ -149,75 +175,86 @@ class GenerateImagesController extends Controller
         // DAll-e 3 End
 
 
-        if ($response !== null) {
-            if ($response->successful()) {
-                $responseData = $response->json();
-
-                foreach ($responseData['data'] as $imageData) {
-                    $imageDataBinary = file_get_contents($imageData['url']);
-
-                    // Create image from blob
-                    $sourceImage = imagecreatefromstring($imageDataBinary);
-
-                    // Get image dimensions
-                    $sourceWidth = imagesx($sourceImage);
-                    $sourceHeight = imagesy($sourceImage);
-
-                    // Calculate new dimensions
-                    $targetWidth = $sourceWidth;  // Keep original width
-                    $targetHeight = $sourceHeight; // Keep original height
-
-                    // Create new image with the new dimensions
-                    $targetImage = imagecreatetruecolor($targetWidth, $targetHeight);
-
-                    // Resize and compress the image
-                    imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
-                    ob_start(); // Turn on output buffering
-                    imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
-                    $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
-                    ob_end_clean(); // Turn off output buffering
-
-                    // Save the compressed image to Azure Blob Storage
-                    $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-
-                    $imageName = time() . '-' . uniqid() . '.jpg';
-                    $containerName = config('filesystems.disks.azure.container');
-                    $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
-
-                    $imagePath = $imageName;
-
-                    // Save image information to database
-                    $imageModel = new ModelsDalleImageGenerate;
-                    $imageModel->image = $imagePath;
-                    $imageModel->user_id = auth()->user()->id;
-                    $imageModel->status = 'inactive';
-                    $imageModel->prompt = $request->prompt;
-                    $imageModel->resolution = $size;
-                    $imageModel->style = $userStyleImplode;
-                    $imageModel->save();
-                }
-
-
-                $credits = calculateCredits($size, $quality);
-
-                // return $credits;
-
-                User::where('id', $id)->update([
-                    'credits_used' => DB::raw('credits_used + ' . $credits),
-                    'credits_left' => DB::raw('credits_left - ' . $credits),
-                    'images_generated' => DB::raw('images_generated + ' . $n),
-                ]);
-
-                $newCreditLeft = Auth::user()->credits_left - $credits;
-                $responseData['credit_left'] = $newCreditLeft;
-
-                return  $responseData;
-            } else {
-                return response()->json(['error' => 'Failed to generate image'], 500);
+        if ($response && $response->successful()) {
+            $responseData = $response->json();
+    
+            foreach ($responseData['data'] as $imageData) {
+                $imageDataBinary = file_get_contents($imageData['url']);
+    
+                // Create image from blob
+                $sourceImage = imagecreatefromstring($imageDataBinary);
+    
+                // Get image dimensions
+                $sourceWidth = imagesx($sourceImage);
+                $sourceHeight = imagesy($sourceImage);
+    
+                // Create new image with the new dimensions
+                $targetImage = imagecreatetruecolor($sourceWidth, $sourceHeight);
+    
+                // Resize and compress the image
+                imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $sourceWidth, $sourceHeight, $sourceWidth, $sourceHeight);
+    
+                ob_start(); // Turn on output buffering
+                imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
+                $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
+                ob_end_clean(); // Turn off output buffering
+    
+                // Save the compressed image to Azure Blob Storage
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+                $imageName = time() . '-' . uniqid() . '.jpg';
+                $containerName = config('filesystems.disks.azure.container');
+                $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
+    
+                $imagePath = $imageName;
+    
+                // Save image information to the database
+                $imageModel = new ModelsDalleImageGenerate;
+                $imageModel->image = $imagePath;
+                $imageModel->user_id = auth()->user()->id;
+                $imageModel->status = 'inactive';
+                $imageModel->prompt = $request->prompt;
+                $imageModel->resolution = $size;
+                $imageModel->style = $userStyleImplode;
+                $imageModel->save();
             }
+    
+            // Deduct credits and update the user information
+            $credits = $this->calculateCredits($size, $quality);
+            User::where('id', $id)->update([
+                'credits_used' => DB::raw('credits_used + ' . $credits),
+                'credits_left' => DB::raw('credits_left - ' . $credits),
+                'images_generated' => DB::raw('images_generated + ' . $n),
+            ]);
+    
+            $newCreditLeft = Auth::user()->credits_left - $credits;
+            $responseData['credit_left'] = $newCreditLeft;
+    
+            return $responseData;
         } else {
-            return response()->json(['error' => 'No condition met'], 500);
+            return response()->json(['error' => 'Failed to generate image'], 500);
         }
+    }
+    
+    // Call OpenAI to analyze the image and extract a prompt
+    private function callOpenAIImageAPI($base64Image)
+    {
+        $response = OpenAI::chat()->create([
+            'model' => 'gpt-4o',
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        ['type' => 'text', 'text' => 'What’s in this image?'],
+                        ['type' => 'image_url', 'image_url' => [
+                            'url' => 'data:image/jpeg;base64,' . $base64Image,
+                        ]],
+                    ],
+                ],
+            ],
+            'max_tokens' => 300,
+        ]);
+    
+        return $response;
     }
 
 
@@ -513,75 +550,5 @@ class GenerateImagesController extends Controller
         return response()->json(['success' => true, 'favorited' => $favorited]);
     }
 
-    // Image to Image
-    public function generateImageVariation(Request $request)
-    {
-        $apiKey = config('app.openai_api_key');
-      
-        $imagePath = $request->file('image')->getPathname();
-        $imageName = $request->file('image')->getClientOriginalName();
-    
-        // Create a Guzzle client instance
-        $client = new Client();
-    
-        try {
-            // Make the request to OpenAI API to create a variation of the image
-            Log::info('inside try: ');
-    
-            $response = $client->post('https://api.openai.com/v1/images/variations', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $apiKey,
-                ],
-                'multipart' => [
-                    [
-                        'name'     => 'image',
-                        'contents' => fopen($imagePath, 'r'),
-                        'filename' => $imageName,
-                    ],
-                    [
-                        'name'     => 'model',
-                        'contents' => 'dall-e-2',
-                    ],
-                    [
-                        'name'     => 'n',
-                        'contents' => 1,
-                    ],
-                    [
-                        'name'     => 'size',
-                        'contents' => '1024x1024',
-                    ],
-                ],
-            ]);
-    
-          // Get the response body
-            $body = $response->getBody()->getContents();
-            Log::info("Response body: " . $body);
-
-            // Decode the JSON response to access the URL
-            $responseData = json_decode($body, true);
-
-            // Extract the URL from the response
-            $imageUrl = $responseData['data'][0]['url'] ?? null;
-
-            if ($imageUrl) {
-                // Return the image URL in a JSON response
-                return response()->json(['image_url' => $imageUrl], 200);
-            } else {
-                // Return an error response if the URL is not found
-                return response()->json(['error' => 'Image URL not found'], 500);
-            }
-    
-        } catch (\Exception $e) {
-            // Log and return error response
-            Log::error("Error generating image variation: " . $e->getMessage());
-            return response()->json(['message' => 'Error generating image variation'], 500);
-        }
-    }
-
-
-
-
-
-
-
+   
 }
