@@ -224,7 +224,7 @@ class GenerateImagesController extends Controller
                 $imageModel->image = $imagePath;
                 $imageModel->user_id = auth()->user()->id;
                 $imageModel->status = 'inactive';
-                $imageModel->prompt = $request->prompt;
+                $imageModel->prompt = $prompt;
                 $imageModel->resolution = $size;
                 $imageModel->style = $userStyleImplode;
                 $imageModel->save();

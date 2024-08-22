@@ -311,7 +311,7 @@
                                                     <label class="form-check-label" for="image_to_image">Generate from Image</label>
                                                 </div>
 
-                                                <div class="form-group mt-2" id="image_upload">
+                                                <div style="display: none" class="form-group mt-2" id="image_upload">
                                                     <input type="file" name="custom_image">
                                                 </div>
                                             </div>
