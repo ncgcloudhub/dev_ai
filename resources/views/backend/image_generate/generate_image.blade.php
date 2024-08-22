@@ -214,10 +214,10 @@
                          
                                 {{-- Dalle 3 Start --}}
                                 <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
-                                    <form enctype="multipart/form-data" action="{{route('generate.image')}}" method="post" class="row g-3">
+                                    <form action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="dall_e_3" value="dall_e_3">
-
+                                    
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne">
@@ -311,8 +311,8 @@
                                                     <label class="form-check-label" for="image_to_image">Generate from Image</label>
                                                 </div>
 
-                                                <div style="display: none" class="form-group mt-2" id="image_upload">
-                                                    <input type="file" name="image1">
+                                                <div class="form-group mt-2" id="image_upload">
+                                                    <input type="file" name="custom_image">
                                                 </div>
                                             </div>
                                         </div>
@@ -591,19 +591,21 @@
             event.preventDefault(); // Prevent default form submission
             
             // Show loader
-        $('#loader').removeClass('d-none');
+            $('#loader').removeClass('d-none');
 
-            // Serialize form data
-            var formData = $(this).serialize();
-            
+            // Create a FormData object
+            var formData = new FormData(this);
+
             // Send AJAX request
             $.ajax({
                 type: 'POST',
                 url: '/generate/image',
                 data: formData,
+                processData: false, // Prevent jQuery from automatically processing the data
+                contentType: false,
                 success: function(response) {
 
-                    // console.log(response);
+                    console.log(response);
                     
                     $('#image-container').empty(); // Clear previous images if any
                     response.data.forEach(function(imageData) {

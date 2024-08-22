@@ -59,7 +59,6 @@ class GenerateImagesController extends Controller
 
     public function generateImage(Request $request)
     {
-
         $id = Auth::user()->id;
         $creditsLeft = Auth::user()->credits_left;
 
@@ -77,15 +76,17 @@ class GenerateImagesController extends Controller
 
         // Handle image-based generation
         $prompt = '';
-        if ($request->hasFile('image1') && $request->file('image1')->isValid()) {
-            Log::info('Handling image-based prompt');
+        if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
+            Log::info('Handling image-based prompt properly line 80');
     
             // Get and encode the image
-            $imageFile = $request->file('image1');
+            $imageFile = $request->file('custom_image');
+            Log::info('image file:' . $imageFile);
             $base64Image = base64_encode(file_get_contents($imageFile));
-            
+            Log::info('base64Image:' . $base64Image);
             // Extract prompt from the image
             $response = $this->callOpenAIImageAPI($base64Image);
+            Log::info('Response:' . $response);
             
             if (isset($response['choices'][0]['message']['content'])) {
                 $extractedPrompt = $response['choices'][0]['message']['content'];
@@ -95,7 +96,7 @@ class GenerateImagesController extends Controller
                 return response()->json(['error' => 'Failed to extract prompt'], 500);
             }
         } else {
-            Log::info('No image detected in the request');
+            Log::info('No image detected in the request line 97');
             // Handle user text input
             $prompt = $request->prompt . ' and the style should be ' . $userStyleImplode;
         }
@@ -139,6 +140,8 @@ class GenerateImagesController extends Controller
         // DAll-e 2 End
 
         if ($request->dall_e_3) {
+
+            Log::info($request->all());
 
             if ($request->quality) {
                 $quality = $request->quality;
@@ -219,7 +222,7 @@ class GenerateImagesController extends Controller
             }
     
             // Deduct credits and update the user information
-            $credits = $this->calculateCredits($size, $quality);
+            $credits = calculateCredits($size, $quality);
             User::where('id', $id)->update([
                 'credits_used' => DB::raw('credits_used + ' . $credits),
                 'credits_left' => DB::raw('credits_left - ' . $credits),
