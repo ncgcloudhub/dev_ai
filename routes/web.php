@@ -33,6 +33,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
+use App\Models\PromptLibrary;
 use App\Models\SeoSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
@@ -48,6 +49,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::whereIn('id', [36, 37, 38, 18, 43, 39, 13, 3])->orderBy('id', 'desc')->get();
+    $promptLibrary = PromptLibrary::whereIn('id', [480, 481, 482, 484, 487, 489, 490, 494])->orderBy('id', 'desc')->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
@@ -55,7 +57,7 @@ Route::get('/', function () {
     }
 
     $faqs = FAQ::latest()->get();
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo'));
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary'));
 })->name('home');
 
 
