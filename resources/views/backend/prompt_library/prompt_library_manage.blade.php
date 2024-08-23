@@ -21,6 +21,7 @@
                     Manage Prompt Library 
                     <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Category</a> 
                     <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Sub-Category</a>
+
                 </h4>
                 <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
                 <div class="flex-shrink-0 d-flex align-items-center">
