@@ -13,6 +13,7 @@ use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
 use App\Models\Template;
+use App\Models\TemplateCategory;
 use App\Models\TermsConditions;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,8 @@ class HomeController extends Controller
     public function FrontendFreeTemplate()
     {
         $templates = Template::orderby('id', 'asc')->get();
-        return view('frontend.template', compact('templates'));
+        $templatecategories = TemplateCategory::latest()->get();
+        return view('frontend.template', compact('templates','templatecategories'));
     }
 
     public function TemplateView($slug)
