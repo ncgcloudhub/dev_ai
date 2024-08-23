@@ -17,13 +17,13 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Manage Prompt Library</h5>
-                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Prompt Tags</button>
+                <h5 class="card-title mb-1">Manage Prompt Library  <button id="promptLibraryTourButton" class="btn gradient-button text-white">Tour</button></h5>
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" id="filter-by-tags-tour">Prompt Tags</button>
             </div>
 
             <div class="card-body border border-dashed border-end-0 border-start-0">
                 <form id="filterForm">
-                    <div class="row g-3">
+                    <div class="row g-3" id="advance-filter-tour">
                         <div class="col-xxl-5 col-sm-6">
                             <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
                                 <option disabled selected="">Select Category</option>
@@ -69,7 +69,7 @@
                     </thead>
                     <tbody>
                         @foreach ($prompt_library as $index => $item)
-                        <tr data-category="{{ $item->category->category_name }}">
+                        <tr id="{{ $index === 0 ? 'prompt-details-tour' : '' }}" data-category="{{ $item->category->category_name }}" >
                             <td>{{ $index + 1 }}</td>
                             <td>
                                 <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->prompt_name}}</a>

@@ -1,4 +1,4 @@
-// Initialize a tour with given steps
+// Function to initialize and start a tour with given steps
 function initializeTour(steps) {
     var tour = new Shepherd.Tour({
         defaultStepOptions: {
@@ -11,12 +11,10 @@ function initializeTour(steps) {
                 block: 'center'
             }
         },
-        useModalOverlay: {
-            enabled: true
-        },
+        useModalOverlay: true
     });
 
-    // Add steps
+    // Add steps to the tour
     steps.forEach(step => {
         tour.addStep({
             id: step.id,
@@ -26,16 +24,18 @@ function initializeTour(steps) {
                 element: step.attachTo,
                 on: 'bottom'
             },
-            buttons: [{
-                text: 'Back',
-                classes: 'btn btn-light',
-                action: tour.back
-            },
-            {
-                text: 'Next',
-                classes: 'btn btn-success',
-                action: tour.next
-            }]
+            buttons: [
+                {
+                    text: 'Back',
+                    classes: 'btn btn-light',
+                    action: tour.back
+                },
+                {
+                    text: 'Next',
+                    classes: 'btn btn-success',
+                    action: tour.next
+                }
+            ]
         });
     });
 
@@ -45,9 +45,12 @@ function initializeTour(steps) {
 
 // Function to handle button click and start the tour
 function setupTourButton(buttonId, steps) {
-    document.getElementById(buttonId).addEventListener('click', function() {
-        initializeTour(steps);
-    });
+    var button = document.getElementById(buttonId);
+    if (button) {
+        button.addEventListener('click', function() {
+            initializeTour(steps);
+        });
+    }
 }
 
 // Set up the tours for different pages
@@ -62,12 +65,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Define tour steps for the image generation page
     var imageGenerateSteps = [
-        { id: 'upload-image-tour', title: 'Upload Image', text: 'Upload your image here.', attachTo: '#upload-image-tour' },
-        { id: 'edit-image-tour', title: 'Edit Image', text: 'Edit your image settings.', attachTo: '#edit-image-tour' },
-        { id: 'generate-button-tour', title: 'Generate', text: 'Click to generate the image.', attachTo: '#generate-button-tour' }
+        { id: 'model-select-tour', title: 'Model', text: 'Select your model.', attachTo: '#model-select-tour' },
+        { id: 'advance-setting-tour', title: 'Advance Setting', text: 'Add resolution, style, quality to get custom images.', attachTo: '#advance-setting-tour' },
+        { id: 'image-to-image-tour', title: 'Similar Image', text: 'Toggle to create similar image after you upload yours.', attachTo: '#image-to-image-tour' },
+        { id: 'search-box-tour', title: 'Search Box', text: 'Type your imagination.', attachTo: '#search-box-tour' },
+        { id: 'generate-button-tour', title: 'Generate Button', text: 'Click to see your imagination coming to life.', attachTo: '#generate-button-tour' },
     ];
 
-    // Set up tour buttons
+    var promptLibrarySteps = [
+        { id: 'filter-by-tags-tour', title: 'Tags', text: 'Click on any tag to get filtered prompts.', attachTo: '#filter-by-tags-tour' },
+        { id: 'advance-filter-tour', title: 'Advance Filter', text: 'Select from wide range of categories to get filtered prompts.', attachTo: '#advance-filter-tour' },
+        { id: 'prompt-details-tour', title: 'Prompts', text: 'Click on respective prompt to generate contents.', attachTo: '#prompt-details-tour' },
+    ];
+
+    var promptLibraryDetailsSteps = [
+        { id: 'search-box-tour', title: 'Search Box', text: 'Replace Topic inside the brackets with your real topic.', attachTo: '#search-box-tour' },
+        { id: 'generate-button-tour', title: 'Ask Button', text: 'Click to genearte your contents.', attachTo: '#generate-button-tour' },
+        { id: 'copy-download-tour', title: 'Copy and Download', text: 'Click to copy and download generated contents.', attachTo: '#copy-download-tour' },
+    ];
+
+    // Set up the tour buttons if they exist
     setupTourButton('templateManageTourButton', templateSteps);
     setupTourButton('imageGenerateTourButton', imageGenerateSteps);
+    setupTourButton('promptLibraryTourButton', promptLibrarySteps);
+    setupTourButton('promptLibraryDetailsTourButton', promptLibraryDetailsSteps);
 });

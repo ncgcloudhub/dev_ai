@@ -41,7 +41,9 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4 class="card-title mb-0">Generate Image</h4>
+
         <div class="d-flex flex-column flex-sm-row">
+            <button id="imageGenerateTourButton" class="btn gradient-button text-white">Image Tour</button>
             <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="btn btn-warning btn-load mb-2 mb-sm-0 me-sm-2">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow" role="status">
@@ -84,7 +86,7 @@
                                             Dall-E 2
                                     </a>
                                 </li>
-                                <li class="nav-item waves-effect waves-light">
+                                <li class="nav-item waves-effect waves-light" id="model-select-tour">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
                                     </a>
@@ -219,7 +221,7 @@
                                         <input type="hidden" name="dall_e_3" value="dall_e_3">
                                     
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
-                                            <div class="accordion-item">
+                                            <div class="accordion-item" id="advance-setting-tour">
                                                 <h2 class="accordion-header" id="flush-headingOne">
                                                     <button class="accordion-button collapsed bg-secondary-subtle" type="button" data-bs-toggle="collapse"
                                                         data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -307,7 +309,7 @@
                                         <div class="row g-3 justify-content-center">
                                             <div class="col-xxl-5 col-sm-6">
                                                 <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="image_to_image" name="image_to_image">
+                                                    <input class="form-check-input" id="image-to-image-tour" type="checkbox" id="image_to_image" name="image_to_image">
                                                     <label class="form-check-label" for="image_to_image">Generate from Image</label>
                                                 </div>
 
@@ -320,7 +322,7 @@
 
                                         <div class="row g-3 justify-content-center">
                                             <div class="col-xxl-5 col-sm-6">
-                                                <div class="search-box">
+                                                <div class="search-box" id="search-box-tour">
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
                                                     <i class="ri-search-line search-icon"></i>
                                                 </div>
@@ -329,8 +331,8 @@
                                             <!--end col-->
                                             
                                             <div class="col-xxl-1 col-sm-4">
-                                                <div>
-                                                    <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                                <div >
+                                                    <button id="generate-button-tour" class="btn btn-rounded btn-primary mb-2">Generate</button>
                                                 </div>
                                             </div>
                                             <!--end col-->

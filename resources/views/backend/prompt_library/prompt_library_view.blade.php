@@ -26,8 +26,11 @@
 
 <div class="row">
     <div class="col-xxl-6">
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-button text-white">Tour</button>
+
         <div class="card">
             <div class="card-body"> 
+                
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Prompt Name</label>
@@ -187,12 +190,12 @@
                 <div class="live-preview">
                     <div class="row">
                         <label for="language" class="form-label">Ask AI</label>
-                        <div class="col-md-9 mb-3">
+                        <div class="col-md-9 mb-3" id="search-box-tour">
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="ask_ai" rows="1" placeholder="Type your message..." autocomplete="off">{{$prompt_library->actual_prompt}}</textarea>
                         </div>
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
 
-                        <div class="col-md-3">
+                        <div class="col-md-3" id="generate-button-tour">
                             <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
@@ -216,7 +219,7 @@
                         </div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12 text-end">
+                        <div class="col-md-12 text-end" id="copy-download-tour">
                             <button id="copyButton" class="btn btn-primary me-2">
                                 <i class="las la-copy"></i>
                             </button>
