@@ -78,23 +78,17 @@
                         <div class="card-body">
                            
                             <!-- Nav tabs -->
-                            <ul class="nav nav-pills nav-justified col-md-4 mb-3 m-auto" role="tablist">
+                            <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
                                 <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
                                             Dall-E 2
                                     </a>
                                 </li>
                                 <li class="nav-item waves-effect waves-light">
-                                    <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
                                     </a>
                                 </li>
-                                <li class="nav-item waves-effect waves-light">
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-image-to-image" role="tab">
-                                        Image to Image
-                                    </a>
-                                </li>
-                              
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content text-muted">
@@ -103,7 +97,7 @@
 
 
                                     <!-- Base Example -->
-                                    <form  action="{{route('generate.image')}}" method="post" class="row g-3">
+                                    <form action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
 
                                         <input type="hidden" name="dall_e_2"  value="dall_e_2">
@@ -219,124 +213,133 @@
                                 {{-- Dalle 2 END --}}
                          
                                 {{-- Dalle 3 Start --}}
-                                <div class="tab-pane " id="pill-justified-profile-1" role="tabpanel">
-                                    <form  action="{{route('generate.image')}}" method="post" class="row g-3">
+                                <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
+                                    <form action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
                                         @csrf
-                                    <input type="hidden" name="dall_e_3" value="dall_e_3">
+                                        <input type="hidden" name="dall_e_3" value="dall_e_3">
+                                    
+                                        <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="flush-headingOne">
+                                                    <button class="accordion-button collapsed bg-secondary-subtle" type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                        Advance Settings
+                                                    </button>
+                                                </h2>
+                                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                                                    data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
 
-                                    <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="flush-headingOne">
-                                                <button class="accordion-button collapsed bg-secondary-subtle" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                    Advance Settings
-                                                </button>
-                                            </h2>
-                                            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                                                data-bs-parent="#accordionFlushExample">
-                                                <div class="accordion-body">
 
-
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input1">Image Style</label>
-                                                            <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
-                                                               
-                                                                <option value="natural">Natural</option>
-                                                                <option value="vivid">Vivid</option>
-                                                                <option value="none">NONE</option>
-                                                                <option value="cinematic">CINEMATIC</option>
-                                                                <option value="analog-film">ANALOG FILM</option>
-                                                                <option value="animation">ANIMATION</option>
-                                                                <option value="comic">COMIC</option>
-                                                                <option value="craft-clay">CRAFT CLAY</option>
-                                                                <option value="fantasy">FANTASY</option>
-                                                                <option value="line-art">LINE ART</option>
-                                                                <option value="cyberpunk">CYBERPUNK</option>
-                                                                <option value="pixel-art">PIXEL ART</option>
-                                                                <option value="photograph">PHOTOGRAPH</option>
-                                                                <option value="graffiti">GRAFFITI</option>
-                                                                <option value="game-gta">GAME GTA</option>
-                                                                <option value="3d-character">3D CHARACTER</option>
-                                                                <option value="baroque">BAROQUE</option>
-                                                                <option value="caricature">CARICATURE</option>
-                                                                <option value="colored-pencil">COLORED PENCIL</option>
-                                                                <option value="doddle-art">DODDLE ART</option>
-                                                                <option value="futurism">FUTURISM</option>
-                                                                <option value="sketch">SKETCH</option>
-                                                                <option value="surrealism">SURREALISM</option>
-                                                                <option value="sticker-designs">STICKER DESIGNS</option>
-                                                            </select>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input2">Image Quality</label>
-                                                            <select name="quality" class="form-control" id="quality">
-                                                                <option disabled selected="">Enter Image Quality</option>
-                                                                <option value="standard">Standard</option>
-                                                                <option value="hd">HD</option>
-                                                            </select>
-                                                        </div>                                                        
-
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input3">Image Resolution</label>
-                                                            <select name="image_res" class="form-control upgrade_option" id="image_res">
-                                                                <option disabled selected="">Enter Image Resolution</option>
-                                                                <option value="1024x1024">1024x1024</option>
-                                                                @if ($lastPackageId)
-                                                                    <option value="1792x1024">1792x1024</option>
-                                                                    <option value="1024x1792">1024x1792</option>
-                                                                @else
-                                                                    <option value="upgrade">Upgrade to access more options</option>
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                        
-                                                        <div class="col-md-3 mb-3">
-                                                            <label for="input4">No. of Result</label>
-                                                            <select name="no_of_result" class="form-control" id="no_of_result">
-                                                                <option disabled selected="">Enter No. of Result</option>
-                                                                <option value="1">1</option>
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input1">Image Style</label>
+                                                                <select name="style[]" class="form-control" data-choices data-choices-removeItem multiple id="style">
                                                                 
-                                                            </select>
+                                                                    <option value="natural">Natural</option>
+                                                                    <option value="vivid">Vivid</option>
+                                                                    <option value="none">NONE</option>
+                                                                    <option value="cinematic">CINEMATIC</option>
+                                                                    <option value="analog-film">ANALOG FILM</option>
+                                                                    <option value="animation">ANIMATION</option>
+                                                                    <option value="comic">COMIC</option>
+                                                                    <option value="craft-clay">CRAFT CLAY</option>
+                                                                    <option value="fantasy">FANTASY</option>
+                                                                    <option value="line-art">LINE ART</option>
+                                                                    <option value="cyberpunk">CYBERPUNK</option>
+                                                                    <option value="pixel-art">PIXEL ART</option>
+                                                                    <option value="photograph">PHOTOGRAPH</option>
+                                                                    <option value="graffiti">GRAFFITI</option>
+                                                                    <option value="game-gta">GAME GTA</option>
+                                                                    <option value="3d-character">3D CHARACTER</option>
+                                                                    <option value="baroque">BAROQUE</option>
+                                                                    <option value="caricature">CARICATURE</option>
+                                                                    <option value="colored-pencil">COLORED PENCIL</option>
+                                                                    <option value="doddle-art">DODDLE ART</option>
+                                                                    <option value="futurism">FUTURISM</option>
+                                                                    <option value="sketch">SKETCH</option>
+                                                                    <option value="surrealism">SURREALISM</option>
+                                                                    <option value="sticker-designs">STICKER DESIGNS</option>
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input2">Image Quality</label>
+                                                                <select name="quality" class="form-control" id="quality">
+                                                                    <option disabled selected="">Enter Image Quality</option>
+                                                                    <option value="standard">Standard</option>
+                                                                    <option value="hd">HD</option>
+                                                                </select>
+                                                            </div>                                                        
+
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input3">Image Resolution</label>
+                                                                <select name="image_res" class="form-control upgrade_option" id="image_res">
+                                                                    <option disabled selected="">Enter Image Resolution</option>
+                                                                    <option value="1024x1024">1024x1024</option>
+                                                                    @if ($lastPackageId)
+                                                                        <option value="1792x1024">1792x1024</option>
+                                                                        <option value="1024x1792">1024x1792</option>
+                                                                    @else
+                                                                        <option value="upgrade">Upgrade to access more options</option>
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-3 mb-3">
+                                                                <label for="input4">No. of Result</label>
+                                                                <select name="no_of_result" class="form-control" id="no_of_result">
+                                                                    <option disabled selected="">Enter No. of Result</option>
+                                                                    <option value="1">1</option>
+                                                                    
+                                                                </select>
+                                                            </div>
+                                                    
                                                         </div>
-                                                  
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row g-3 justify-content-center">
-                                        <div class="col-xxl-5 col-sm-6">
-                                            <div class="search-box">
-                                                <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                                <i class="ri-search-line search-icon"></i>
+                                        <!-- Image Upload and Checkbox -->
+                                        <div class="row g-3 justify-content-center">
+                                            <div class="col-xxl-5 col-sm-6">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="image_to_image" name="image_to_image">
+                                                    <label class="form-check-label" for="image_to_image">Generate from Image</label>
+                                                </div>
+
+                                                <div style="display: none" class="form-group mt-2" id="image_upload">
+                                                    <input type="file" name="custom_image">
+                                                </div>
                                             </div>
                                         </div>
-                                        
-                                        <!--end col-->
-                                        
-                                        <div class="col-xxl-1 col-sm-4">
-                                            <div>
-                                                <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+
+
+                                        <div class="row g-3 justify-content-center">
+                                            <div class="col-xxl-5 col-sm-6">
+                                                <div class="search-box">
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <i class="ri-search-line search-icon"></i>
+                                                </div>
                                             </div>
+                                            
+                                            <!--end col-->
+                                            
+                                            <div class="col-xxl-1 col-sm-4">
+                                                <div>
+                                                    <button class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
                                         </div>
-                                        <!--end col-->
-                                    </div>
                                     </form>
                                 </div>
                                 {{-- Dalle 3 END --}}
 
-                                {{-- Image to Image START --}}
-                                <div class="tab-pane active" id="pill-justified-image-to-image" role="tabpanel">
 
-                                @include('backend.common.image_to_image')
-                                   
-                                </div>
-                                {{-- Image to Image END --}}
 
                             </div>
                         </div><!-- end card-body -->
@@ -494,28 +497,15 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-   document.getElementById('image-upload-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    let formData = new FormData(this);
-
-    fetch('/generate-image-variation', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    document.getElementById('image_to_image').addEventListener('change', function() {
+        const imageUpload = document.getElementById('image_upload');
+        if (this.checked) {
+            imageUpload.style.display = 'block';
+        } else {
+            imageUpload.style.display = 'none';
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        let container = document.getElementById('generated-image-container');
-        container.innerHTML = `<img class="gallery-img img-fluid mx-auto" src="${data.image_url}" alt="Generated Image" />`;
-    })
-    .catch(error => console.error('Error:', error));
-});
-
+    });
 </script>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -601,19 +591,21 @@
             event.preventDefault(); // Prevent default form submission
             
             // Show loader
-        $('#loader').removeClass('d-none');
+            $('#loader').removeClass('d-none');
 
-            // Serialize form data
-            var formData = $(this).serialize();
-            
+            // Create a FormData object
+            var formData = new FormData(this);
+
             // Send AJAX request
             $.ajax({
                 type: 'POST',
                 url: '/generate/image',
                 data: formData,
+                processData: false, // Prevent jQuery from automatically processing the data
+                contentType: false,
                 success: function(response) {
 
-                    // console.log(response);
+                    console.log(response);
                     
                     $('#image-container').empty(); // Clear previous images if any
                     response.data.forEach(function(imageData) {
