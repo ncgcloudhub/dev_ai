@@ -15,28 +15,40 @@ use Illuminate\Support\Str;
 class ProfileEditController extends Controller
 {
     
-    public function ProfileEdit(){
-
+    public function ProfileEdit()
+    {
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
         $packageHistory = $user->packageHistory()->with('package')->get();
-       
+        
         $freePricingPlan = null;
+        $daysUntilNextReset = null;
+        
         if ($packageHistory->isEmpty()) {
+            // Free plan case
             $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+            
+            // Calculate the next reset date for free plan
+            $now = Carbon::now();
+            $registrationDate = $user->created_at;
+            $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
+            $daysUntilNextReset = $now->diffInDays($nextResetDate);
+        } else {
+            // Paid plan case, handle only the first paid package
+            $firstPaidPackage = $packageHistory->first();
+            
+            if ($firstPaidPackage) {
+                // Calculate the next reset date for the first paid package
+                $now = Carbon::now();
+                $startDate = $firstPaidPackage->created_at;
+                $nextResetDate = $startDate->copy()->addMonths($startDate->diffInMonths($now) + 1);
+                $daysUntilNextReset = $now->diffInDays($nextResetDate);
+            }
         }
-       
-         // Calculate the next reset date
-        $now = Carbon::now();
-        $registrationDate = $user->created_at;
-        $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
-
-        // Calculate the remaining days until the next reset
-        $daysUntilNextReset = $now->diffInDays($nextResetDate);
-
-        return view('backend.profile.profile_edit', compact('user','packageHistory','freePricingPlan','daysUntilNextReset'));
     
+        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset'));
     }
+    
 
     public function ProfileUpdate (Request $request){
 
