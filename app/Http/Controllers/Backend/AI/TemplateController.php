@@ -203,6 +203,7 @@ class TemplateController extends Controller
         $template->prompt = $validatedData['prompt'];
         $template->blog_link = $request->blog_link;
         $template->video_link = $request->video_link;
+        $template->inFrontEnd = $request->inFrontEnd;
         $template->save();
 
         return redirect()->back()->with('success', 'Template updated successfully');
