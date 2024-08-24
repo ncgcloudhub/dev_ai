@@ -387,53 +387,86 @@
                       
                         {{-- Purchase History --}}
                         <div class="tab-pane" id="purchaseHistory" role="tabpanel">
-                                @if($packageHistory->isNotEmpty())
-                                    <h3>Package History:</h3>
-                                    <ul>
-                                        @foreach($packageHistory as $history)
-                                            <li>
-                                                <strong>Package Name:</strong> {{ $history->package->title }}<br>
-                                                <strong>Purchase Date:</strong> {{ $history->created_at }}<br>
-                                                <strong>Details:</strong> {{ $history->package->description }}<br>
-                                                <!-- Add other package details here -->
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                <div class="card bg-primary">
-                                    <div class="card-body p-0">
-                                        <div class="alert alert-success rounded-top alert-solid alert-label-icon border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
-                                            <i class="ri-error-warning-line label-icon"></i>
-                                            <div class="flex-grow-1 text-truncate">
-                                                Your free trial will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <a href="{{route('all.package')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
-                                            </div>
-                                        </div>
-    
-                                        <div class="row align-items-end">
-                                            <div class="col-sm-8">
-                                                <div class="p-3">
-                                                    <p class="fs-16 lh-base text-white">Upgrade your plan from a <span class="fw-semibold">{{$freePricingPlan->title}}
-                                                            trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
-                                                    <div class="mt-3">
-                                                        <a href="{{route('all.package')}}" class="btn btn-info">Upgrade
-                                                            Account!</a>
+                            @if($packageHistory->isNotEmpty())
+                            <div class="row">
+                                <div class="col-xxl-5">
+                                    <div class="card card-height-100">
+                                        <div class="card-header align-items-center d-flex">
+                                            <h4 class="card-title mb-0 flex-grow-1">Package History</h4>
+                                        </div><!-- end card header -->
+                                        <div class="card-body pt-0">
+                                            <ul class="list-group list-group-flush border-dashed">
+                                                @foreach($packageHistory as $history)
+                                                <li class="list-group-item ps-0">
+                                                    <div class="row align-items-center g-3">
+                                                        <div class="col-auto">
+                                                            <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                                                @php
+                                                                $day = $history->created_at->format('d');
+                                                                $monthYear = $history->created_at->format('M Y');
+                                                                @endphp
+                                                                <div class="text-center">
+                                                                    <h5 class="mb-0">{{ $day }}</h5>
+                                                                    <div class="text-muted">{{ $monthYear }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col">
+                                                            <h5 class="text-muted mt-0 mb-1 fs-13">{{ $history->package->title }}</h5>
+                                                            <a href="#" class="text-reset fs-14 mb-0">{{ $history->package->description }}</a>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <!-- end row -->
+                                                </li><!-- end -->
+                                                @endforeach
+                                            </ul><!-- end -->
+                                            
+                                            <!-- Display countdown for the first paid package -->
+                                            @if($daysUntilNextReset)
+                                            <div>
+                                                Your current plan will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="px-3">
-                                                    <img src="assets/images/user-illustarator-1.png" class="img-fluid" alt="">
+                                            @endif
+                                            
+                                        </div><!-- end card body -->
+                                    </div><!-- end card -->
+                                </div> <!-- end col-->
+                            </div>
+                            @else
+                            <div class="card bg-primary">
+                                <div class="card-body p-0">
+                                    <div class="alert alert-success rounded-top alert-solid alert-label-icon border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
+                                        <i class="ri-error-warning-line label-icon"></i>
+                                        <div class="flex-grow-1 text-truncate">
+                                            Your free trial will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <a href="{{route('all.package')}}" class="text-reset text-decoration-underline"><b>Upgrade</b></a>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="row align-items-end">
+                                        <div class="col-sm-8">
+                                            <div class="p-3">
+                                                <p class="fs-16 lh-base text-white">Upgrade your plan from a <span class="fw-semibold">{{$freePricingPlan->title}}
+                                                        trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
+                                                <div class="mt-3">
+                                                    <a href="{{route('all.package')}}" class="btn btn-info">Upgrade
+                                                        Account!</a>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> <!-- end card-body-->
-                                </div>
-                                  
-                                @endif
+                                        <div class="col-sm-4">
+                                            <div class="px-3">
+                                                <img src="assets/images/user-illustarator-1.png" class="img-fluid" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- end card-body-->
+                            </div>
+                            @endif
                         </div>
+                        
                         {{-- History END --}}
                     </div>
                 </div>
