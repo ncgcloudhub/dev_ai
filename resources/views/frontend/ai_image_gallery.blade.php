@@ -1,6 +1,6 @@
 @extends('admin.layouts.master-without-nav')
 @section('title')
-    @lang('translation.landing')
+   AI Imge Gallery
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
