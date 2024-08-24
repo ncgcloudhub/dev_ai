@@ -12,6 +12,7 @@
 @slot('li_1') Template @endslot
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
+<button id="templateDetailsTourButton" class="btn gradient-button text-white my-2">Template View Tour</button>
 
 <div class="row">
    
@@ -27,7 +28,7 @@
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
 
 
-                            <div class="col-md-12">
+                            <div class="col-md-12" id="select-language-tour">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
                                     <option disabled>Enter Language</option>
@@ -40,7 +41,7 @@
 
                             @isset($inputTypes)
                             @foreach($inputTypes as $key => $type)
-                                <div class="col-md-12">
+                                <div class="col-md-12" @if ($loop->first) id="content-tour" @endif>
                                      <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
                                 @if($type == 'text')
                                     <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}">
@@ -235,7 +236,7 @@
                               
                                
                             </div><!-- end card header -->
-                            <div class="card-body">
+                            <div class="card-body" id="generated-content">
                                 <textarea id="myeditorinstance" readonly></textarea>
                                 <div class="mt-2">
                                     <p><strong>Statistics:</strong></p>
