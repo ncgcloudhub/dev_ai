@@ -248,7 +248,7 @@
                                 </div>
                             </div><!-- end card-body -->
                         </div><!-- end card -->
-                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" class="link"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
+                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
                        
                     </div>
                     <!-- end col -->
