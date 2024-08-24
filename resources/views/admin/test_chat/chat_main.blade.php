@@ -7,80 +7,106 @@
 @endsection
 @section('content')
 
+<!-- Custom Styles -->
+<style>
+    .bg-light-grey {
+        background-color: rgba(var(--vz-primary-rgb),.15); /* Ash Grey Background */
+        border-right: 1px solid rgba(0, 0, 0, 0.1); /* Subtle Border */
+    }
+
+    .chat-leftsidebar .btn {
+        font-weight: 500;
+        border-radius: 6px; /* Rounded buttons */
+    }
+
+    .chat-leftsidebar .chat-list li {
+        padding: 8px 12px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .chat-leftsidebar .chat-list li.active {
+        background-color: rgba(0, 123, 255, 0.1); /* Light blue for active chat */
+    }
+
+    .chat-leftsidebar .chat-list li:hover {
+        background-color: rgba(0, 0, 0, 0.05); /* Soft hover effect */
+    }
+
+    .chat-leftsidebar .nav-tabs .nav-link.active {
+        background-color: transparent;
+        color: #007bff;
+        border-bottom: 2px solid #007bff; /* Blue active tab underline */
+    }
+
+    .chat-leftsidebar .shadow-sm {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    }
+</style>
+
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
-    <div class="chat-leftsidebar border">
+    <div class="chat-leftsidebar border bg-light-grey" style=" height: 100vh;">
         <div class="px-4 pt-4 mb-4">
-            <div id="ai-professional-tour" class="btn btn-primary d-grid mb-2" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))"><a class="text-white" href="{{route('chat')}}">AI Professional Bots</a></div>
-            <div class="d-flex align-items-start">
+            <!-- AI Professional Bots Button -->
+            <div id="ai-professional-tour" class="btn btn-primary d-grid mb-3" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137));">
+                <a class="text-white" href="{{route('chat')}}">AI Professional Bots</a>
+            </div>
+    
+            <!-- New Chat Section -->
+            <div class="d-flex align-items-start p-3 bg-white border rounded shadow-sm">
                 <div class="flex-grow-1">
-                    <h5 class="mb-0">New Chat</h5>
+                    <h5 class="mb-0 text-primary fw-bold">New Chat</h5>
                 </div>
                 <div class="flex-shrink-0">
                     <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Chat">
-
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-soft-primary btn-sm" id="main_new_session_btn">
+                        <button type="button" class="btn btn-primary btn-sm" id="main_new_session_btn">
                             <i class="ri-add-line align-bottom"></i>
                         </button>
                     </div>
                 </div>
             </div>
-           
-        </div> <!-- .p-4 -->
-
+        </div>
+    
+        <!-- Tabs Navigation -->
         <ul class="nav nav-tabs nav-tabs-custom nav-info nav-justified" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#chats" role="tab">
                     Chats
                 </a>
             </li>
-        
         </ul>
-
+    
+        <!-- Tab Content -->
         <div class="tab-content text-muted">
             <div class="tab-pane active" id="chats" role="tabpanel">
                 <div class="chat-room-list pt-0" data-simplebar>
-                    <div class="d-flex align-items-center px-4 mb-0">
-                      
-                      
-                    </div>
-
+                    <!-- Chat Room List -->
                     <div class="chat-message-list">
                         <ul class="list-unstyled chat-list chat-user-list" id="session-list">
                             @foreach ($sessions as $item)
-                            <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">
-                                <a href="javascript: void(0);">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-grow-1 overflow-hidden">
-                                            <p class="text-truncate mb-0">{{ $item->title }}</p>
+                                <li id="contact-id-{{ $item->session_token }}" data-name="direct-message" data-session-id="{{ $item->id }}" class="{{ $loop->first ? 'active' : '' }}">
+                                    <a href="javascript: void(0);">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-truncate mb-0">{{ $item->title }}</p>
+                                            </div>
+                                            <div class="d-flex">
+                                                <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light me-2" data-session-id="{{ $item->id }}">
+                                                    <i class="ri-pencil-line"></i>
+                                                </button>
+                                                <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
+                                                    <i class="ri-delete-bin-5-line"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                      
-                                        <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
-                                            <i class="ri-pencil-line"></i>
-                                        </button>
-                                        <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">
-                                            <i class="ri-delete-bin-5-line"></i>
-                                        </button>
-                                       
-                                    </div>
-                                </a>
-                            </li>
-                        @endforeach
-                        
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
-     
-                    </div>
-
-                </div>
-            </div>
-            <div class="tab-pane" id="contacts" role="tabpanel">
-                <div class="chat-room-list pt-3" data-simplebar style="max-height: calc(100vh - 305px);">
-                    <div class="sort-contact">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- end tab contact -->
     </div>
 
     <!-- end chat leftsidebar -->
