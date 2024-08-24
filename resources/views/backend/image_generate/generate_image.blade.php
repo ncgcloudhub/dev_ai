@@ -308,13 +308,18 @@
                                         <!-- Image Upload and Checkbox -->
                                         <div class="row g-3 justify-content-center">
                                             <div class="col-xxl-5 col-sm-6">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" id="image-to-image-tour" type="checkbox" id="image_to_image" name="image_to_image">
-                                                    <label class="form-check-label" for="image_to_image">Generate from Image</label>
+                                                <div class="form-check form-switch form-switch-md d-flex align-items-center mb-3" id="image-to-image-tour">
+                                                    <input class="form-check-input me-2" type="checkbox" id="image_to_image" name="image_to_image">
+                                                    <label class="form-check-label fw-bold" for="image_to_image">Generate from Image</label>
                                                 </div>
 
-                                                <div style="display: none" class="form-group mt-2" id="image_upload">
-                                                    <input type="file" name="custom_image">
+                                                <div style="display: none;" class="form-group mt-2" id="image_upload">
+                                                    <input type="file" class="form-control" name="custom_image" id="custom_image" aria-label="Upload image" onchange="previewImage(event)">
+                                                </div>
+
+                                                <!-- Image Preview Section -->
+                                                <div id="image_preview" style="display: none; margin-top: 10px;">
+                                                    <img id="preview_img" src="" alt="Image Preview" class="img-fluid rounded shadow-sm" style="max-width: 20%; height: auto;">
                                                 </div>
                                             </div>
                                         </div>
@@ -497,6 +502,26 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview_img');
+        const previewContainer = document.getElementById('image_preview');
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                previewContainer.style.display = 'block'; // Show the preview container
+            };
+            
+            reader.readAsDataURL(file); // Convert image to base64 URL
+        } else {
+            previewContainer.style.display = 'none'; // Hide the preview container if no image is selected
+        }
+    }
+</script>
 
 <script>
     document.getElementById('image_to_image').addEventListener('change', function() {
