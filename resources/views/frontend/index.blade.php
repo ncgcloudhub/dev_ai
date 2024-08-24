@@ -115,6 +115,14 @@ border: 1px solid rgba(255, 255, 255, 0.99);
     z-index: 2; /* Ensure the content is on top of the overlay */
 }
 
+.text-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limits the text to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 
 </style>
 
@@ -891,18 +899,17 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                     <div class="d-flex">
                                        
                                         <div class="ms-3 flex-grow-1">
-                                            <a href="#!">
+                                            <a href="{{ auth()->check() ? route('prompt.view', ['slug' => $item->slug]) : route('login') }}">
                                                 <h5>{{$item->prompt_name}}</h5>
                                             </a>
                                             <ul class="list-inline text-muted mb-3">
                                                 <li class="list-inline-item">
-                                                    <i class="ri-building-line align-bottom me-1"></i> {{$item->description}}
+                                                    <span class="text-description">{{$item->description}}</span>
                                                 </li>
-                                                
                                             </ul>
                                             <div class="hstack gap-2">
-                                                <span class="badge bg-success-subtle text-success">Category</span>
-                                                <span class="badge bg-primary-subtle text-primary">Sub Category</span>
+                                                <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
+                                                <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
                                             </div>
                                         </div>
                                        
