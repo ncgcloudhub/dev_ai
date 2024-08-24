@@ -68,3 +68,6 @@ permission, role has permission, roles, model has roles, model has permission de
 
 -------------19/8/24----------------
 1- remove 15/8/24 and add [tour_progress type=text default=empty]
+
+-------------24/8/24----------------
+in prompt_libraries, add inFrontEnd, character_varying{255}, default='no'::character varying

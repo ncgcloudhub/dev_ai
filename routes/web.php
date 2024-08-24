@@ -49,7 +49,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::whereIn('id', [36, 37, 38, 18, 43, 39, 13, 3])->orderBy('id', 'desc')->get();
-    $promptLibrary = PromptLibrary::whereIn('id', [480, 481, 482, 484, 487, 489, 490, 494])->orderBy('id', 'desc')->get();
+    $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {

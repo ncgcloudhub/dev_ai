@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') Prompt Edit  @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
@@ -58,6 +58,17 @@
                         <textarea name="actual_prompt" class="form-control" id="actual_prompt" rows="3" placeholder="Enter actual_prompt" >{{$category->actual_prompt}}</textarea>
                         <label for="actual_prompt">Actual Prompt</label>
                     </div>
+
+                     <!-- Checkbox for adding to frontend -->
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="inFrontEndCheckbox" id="inFrontEndCheckbox" {{ $category->inFrontEnd == 'yes' ? 'checked' : '' }}>
+        <label class="form-check-label" for="inFrontEndCheckbox">
+            Add to frontend
+        </label>
+    </div>
+
+    <!-- Hidden input field to store the value -->
+    <input type="hidden" name="inFrontEnd" id="inFrontEnd" value="{{ $category->inFrontEnd }}">
                
             </div>
         </div>
@@ -76,6 +87,13 @@
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+<script>
+    document.getElementById('inFrontEndCheckbox').addEventListener('change', function() {
+        // Update the hidden input value based on checkbox state
+        document.getElementById('inFrontEnd').value = this.checked ? 'yes' : 'no';
+    });
+</script>
 
 {{-- SUB CATEGORY PROMPT--}}
 <script>
