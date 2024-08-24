@@ -242,6 +242,7 @@ class PromptLibraryController extends Controller
             'sub_category_id' => $request->subcategory_id,
             'description' => $request->description,
             'actual_prompt' => $request->actual_prompt,
+            'inFrontEnd' => $request->inFrontEnd,
             'updated_at' => Carbon::now(),
 
         ]);
