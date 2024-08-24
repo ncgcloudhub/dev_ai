@@ -44,7 +44,7 @@
 </style>
 
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
-    <div class="chat-leftsidebar border bg-light-grey" style=" height: 100vh;">
+    <div class="chat-leftsidebar border bg-light-grey" >
         <div class="px-4 pt-4 mb-4">
             <!-- AI Professional Bots Button -->
             <div id="ai-professional-tour" class="btn btn-primary d-grid mb-3" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137));">
@@ -165,9 +165,9 @@
                                         <div class="chat-input-links me-2">
                                             <div class="links-list-item"> 
                                             {{-- Attachement Icon --}}
-                                            @if(auth()->user()->role == 'admin')
+                                            
                                             <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
-                                            @endif
+                                           
                                             <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                                                 
                                             </div>
