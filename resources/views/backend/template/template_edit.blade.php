@@ -139,6 +139,17 @@
         </div>
     </div>
 
+    <!-- Checkbox for adding to frontend -->
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="inFrontEndCheckbox" id="inFrontEndCheckbox" {{ $template->inFrontEnd == 'yes' ? 'checked' : '' }}>
+        <label class="form-check-label" for="inFrontEndCheckbox">
+            Add to frontend
+        </label>
+    </div>
+
+    <!-- Hidden input field to store the value -->
+    <input type="hidden" name="inFrontEnd" id="inFrontEnd" value="{{ $template->inFrontEnd }}">
+
     {{-- 4th Card End --}}
     <div class="col-12">
         <div class="text-end">
@@ -150,6 +161,13 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    document.getElementById('inFrontEndCheckbox').addEventListener('change', function() {
+        // Update the hidden input value based on checkbox state
+        document.getElementById('inFrontEnd').value = this.checked ? 'yes' : 'no';
+    });
+</script>
 
 <script>
     $(document).ready(function(){
