@@ -475,9 +475,6 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
     // Import Prompt
     Route::post('/import', [PromptLibraryController::class, 'Import'])->name('import.store');
-    // ASK AI PROMPT LIBRARY
-    Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
-
 
     // User Export
     Route::get('/all/user/export', [UserController::class, 'export'])->name('user.export');
@@ -552,6 +549,10 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
 Route::get('prompt/details/{slug}', [PromptLibraryController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
+
+ // ASK AI PROMPT LIBRARY
+ Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
+
 
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
