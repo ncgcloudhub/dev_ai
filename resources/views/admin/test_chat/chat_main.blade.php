@@ -737,6 +737,11 @@
         formattedContent += '</ul>';
     } else {
         lines.forEach(line => {
+            // Handle bold text marked with **
+            if (line.includes('**')) {
+                line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            }
+
             if (line.trim().startsWith('###')) {
                 formattedContent += `<p style="font-weight: bold; font-family: Calibri;">${line.trim().substring(3).trim()}</p>`;
             } else {
