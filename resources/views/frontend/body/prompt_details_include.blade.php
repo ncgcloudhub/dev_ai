@@ -14,6 +14,24 @@
 <section class="section pb-0 hero-section" id="hero">
     <div class="container">
 
+         <!-- Token Information -->
+         <div class="col-xxl-12 mb-3">
+            <div class="alert alert-info text-center">
+                <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}"><u>Sign up now for FREE</u></a></strong>
+                to unlock your creativity!
+                <br>
+            </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="col-xxl-12 mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active breadcrumb-title" aria-current="page"><u>{{$prompt_library->prompt_name}}</u></li>
+                </ol>
+            </nav>
+        </div>
+
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
@@ -237,6 +255,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+        let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 100;
+        $('#tokenCount').text(remainingTokens); // Update token count display
+
         // Function to copy text to clipboard
     window.copyText = function(element) {
         const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
@@ -271,9 +292,19 @@
     });
 
         $('#ask').click(function() {
+
         var message = $('#ask_ai').val();
         var sub_category_instruction = $('#sub_category_instruction').val();
         $('#loader').removeClass('d-none');
+
+        let userSignedIn = {{ Auth::check() ? 'true' : 'false' }};
+        let tokensUsedToday = parseInt(localStorage.getItem('tokensUsedToday')) || 0;
+
+        if (!userSignedIn && tokensUsedToday >= 100) {
+            $('#loader').addClass('d-none');
+            alert('You have reached the daily limit of 100 tokens. Please try again tomorrow.');
+            return;
+        }
 
         $.ajax({
             url: "{{ route('ask.ai.prompt') }}",
@@ -284,6 +315,13 @@
                 _token: "{{ csrf_token() }}"
             },
             success: function(response) {
+
+                remainingTokens -= response.completionTokens;
+                localStorage.setItem('remainingTokens', remainingTokens);
+
+                 // Update token count display
+                 $('#tokenCount').text(remainingTokens);
+                 
                 var strippedContent = response.message
                     .replace(/[#*]+/g, '')  // Remove # and * characters
                     .replace(/(!\[.*?\]\(.*?\))/g, ''); // Remove markdown images
@@ -293,12 +331,31 @@
                     simplemde.codemirror.refresh(); // Force update
                     $('#loader').addClass('d-none');
                 }, 100); // Add a delay before setting the content
+
+                if (!userSignedIn) {
+                    tokensUsedToday += response.completionTokens; // Adjust if response.completionTokens is provided
+                    localStorage.setItem('tokensUsedToday', tokensUsedToday);
+                }
             },
             error: function(xhr) {
+                // Hide the spinner
+                $('#loader').addClass('d-none');
                 console.error(xhr.responseText);
             }
         });
     });
+
+    // Reset the token count at midnight
+    function resetTokenCount() {
+        let now = new Date();
+        let millisTillMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0) - now;
+        setTimeout(function () {
+            localStorage.setItem('tokensUsedToday', '0');
+            resetTokenCount();
+        }, millisTillMidnight);
+    }
+
+    resetTokenCount();
 
 
     window.addExampleEditor = function() {
