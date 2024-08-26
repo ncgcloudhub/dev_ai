@@ -293,6 +293,17 @@ class PromptLibraryController extends Controller
         return view('backend.prompt_library.prompt_library_view', compact('prompt_library', 'prompt_library_examples'));
     }
 
+    // Frontend
+    public function PromptFrontendView($slug)
+    {
+        // Find the template by slug
+        $prompt_library = PromptLibrary::where('slug', $slug)->firstOrFail();
+        // Get the related examples
+        $prompt_library_examples = $prompt_library->examples;
+
+        return view('frontend.prompt_library_details_frontend', compact('prompt_library', 'prompt_library_examples'));
+    }
+
     // Catgeory Filter Prompt Library
     public function PromptCatgeoryView($id)
     {
