@@ -58,6 +58,12 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{route('main.chat.form')}}">
+                        <i class=" las la-user-circle"></i> <span >ChatterMate</span>
+                    </a>
+                </li>
+
                   {{-- Fixed Template --}}
 
                   <li class="nav-item">
@@ -85,40 +91,6 @@
                         </div>
                     </div>
                 </li>
-
-                {{-- Permission ROLE --}}
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="#role" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class=" lab la-blogger"></i> <span >Role & Permission</span>
-                    </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="role">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-
-                                    <li class="nav-item">
-                                        <a href="{{ route('all.permission') }}" class="nav-link" >All Permission</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('all.roles') }}" class="nav-link" >All Roles</a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
-                                      </li>
-
-                                    <li class="nav-item">
-                                    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
-                                    </li>
-                                    
-                                   
-                                </ul>
-                            </div>     
-                        </div>
-                    </div>
-                </li>
-
 
                 {{-- Custom Template --}}
 
@@ -272,6 +244,10 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.terms.condition')}}" class="nav-link">Manage Terms & Conditions</a>
                                     </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.pricing')}}" class="nav-link">Manage Pricing</a>
+                                    </li>
                
                                 </ul>
                             </div>
@@ -279,29 +255,65 @@
                         </div>
                     </div>
                 </li>
- 
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('manage.user')}}">
-                        <i class=" las la-user-circle"></i> <span >Manage User</span>
+
+
+                 {{-- Permission ROLE --}}
+                 {{-- <li class="nav-item">
+                    <a class="nav-link menu-link" href="#role" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class=" lab la-blogger"></i> <span >Role & Permission</span>
                     </a>
-                </li>
-               
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('all.admin')}}">
-                        <i class=" las la-user-circle"></i> <span >Manage Admin</span>
-                    </a>
-                </li>
-              
-                <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('main.chat.form')}}">
-                        <i class=" las la-user-circle"></i> <span >ChatterMate</span>
-                    </a>
-                </li>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="role">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('all.permission') }}" class="nav-link" >All Permission</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('all.roles') }}" class="nav-link" >All Roles</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
+                                      </li>
+
+                                    <li class="nav-item">
+                                    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
+                                    </li>
+                                    
+                                   
+                                </ul>
+                            </div>     
+                        </div>
+                    </div>
+                </li> --}}
+
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('manage.pricing')}}">
-                        <i class="  las la-dollar-sign"></i> <span >Manage Pricing</span>
+                    <a class="nav-link menu-link" href="#user_admin" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-user-circle"></i> <span >Manage User & Admin</span>
                     </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="user_admin">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.user')}}" class="nav-link" >Manage User</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a href="{{route('all.admin')}}" class="nav-link" >Manage Admin</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
                 </li>
 
                 <li class="nav-item">
