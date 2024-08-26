@@ -435,13 +435,17 @@ class PromptLibraryController extends Controller
         ]);
 
        
-
+      
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];
+        $completionTokens = $data['usage']['completion_tokens'] ?? 0;
+        $totalTokens = $data['usage']['total_tokens'] ?? 0;
 
         // Return the response
         return response()->json([
             'message' => $messageContent,
+            'completionTokens' => $completionTokens,
+            'totalTokens' => $totalTokens,
         ]);
     }
 
