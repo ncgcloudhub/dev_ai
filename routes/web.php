@@ -548,11 +548,11 @@ Route::get('/ip-blocked', function () {
 // Frontend Job Apply
 Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name('job.apply');
 
-
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
+Route::get('prompt/details/{slug}', [PromptLibraryController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
+
 // Tour Status
-// web.php (Routes file)
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
 
