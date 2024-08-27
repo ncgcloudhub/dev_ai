@@ -389,15 +389,16 @@
                         <div class="tab-pane" id="purchaseHistory" role="tabpanel">
                             @if($packageHistory->isNotEmpty())
                             <div class="row">
-                                <div class="col-xxl-5">
+                                <div class="col-xxl-8">
                                     <div class="card card-height-100">
                                         <div class="card-header align-items-center d-flex">
-                                            <h4 class="card-title mb-0 flex-grow-1">Package History</h4>
+                                            <h4 class="card-title mb-0 flex-grow-1">Recent Purchase</h4>
                                         </div><!-- end card header -->
                                         <div class="card-body pt-0">
                                             <ul class="list-group list-group-flush border-dashed">
                                                 @foreach($packageHistory as $history)
                                                 <li class="list-group-item ps-0">
+                                                    <div class="card {{ $loop->last ? 'card-light' : '' }}">
                                                     <div class="row align-items-center g-3">
                                                         <div class="col-auto">
                                                             <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
@@ -416,6 +417,7 @@
                                                             <a href="#" class="text-reset fs-14 mb-0">{{ $history->package->description }}</a>
                                                         </div>
                                                     </div>
+                                                </div>
                                                     <!-- end row -->
                                                 </li><!-- end -->
                                                 @endforeach
@@ -423,9 +425,16 @@
                                             
                                             <!-- Display countdown for the first paid package -->
                                             @if($daysUntilNextReset)
-                                            <div>
-                                                Your current plan will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
+                                            <div class="alert alert-info rounded-top alert-solid alert-label-icon border-0 rounded-0 m-0 d-flex align-items-center" role="alert">
+                                                <i class="ri-error-warning-line label-icon"></i>
+                                                <div class="flex-grow-1 text-truncate">
+                                                    Your package will be renewed in <b>{{ $daysUntilNextReset }}</b> days.
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <a href="{{route('all.package')}}" class="text-reset text-decoration-underline"><b>See more packages</b></a>
+                                                </div>
                                             </div>
+
                                             @endif
                                             
                                         </div><!-- end card body -->
