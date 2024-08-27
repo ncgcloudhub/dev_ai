@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Backend\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\PackageHistory;
 use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class UserManageController extends Controller
 {
@@ -73,6 +76,23 @@ class UserManageController extends Controller
         $user->save();
     
         return redirect()->back()->with('success', 'User block status updated successfully.');
+    }
+
+    public function packageHistory()
+    {
+        // $packageGroupedByUser = PackageHistory::with('user') // Assumes a 'user' relationship exists
+        //     ->select('user_id', DB::raw('COUNT(*) as package_count'))
+        //     ->groupBy('user_id')
+        //     ->get();
+
+            $packageGroupedByUser = PackageHistory::with(['user', 'package' => function($query) {
+                $query->orderBy('created_at', 'desc')->first();
+            }])
+            ->select('user_id', DB::raw('COUNT(*) as package_count'), DB::raw('MAX(created_at) as latest_package_date'))
+            ->groupBy('user_id')
+            ->get();
+
+        return view('backend.user.package_history_user', compact('packageGroupedByUser'));
     }
     
 

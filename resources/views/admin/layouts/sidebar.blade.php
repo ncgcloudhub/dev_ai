@@ -308,6 +308,10 @@
                                     <li class="nav-item">
                                         <a href="{{route('all.admin')}}" class="nav-link" >Manage Admin</a>
                                     </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.user.package.history')}}" class="nav-link" >Manage User Package</a>
+                                    </li>
 
                                 </ul>
                             </div>

@@ -139,6 +139,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
 
+        Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history');
+
     });
 
     // REFERRAL MANAGE
