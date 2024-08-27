@@ -2,6 +2,7 @@
 
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('calculateCredits')) {
@@ -101,6 +102,38 @@ if (!function_exists('log_activity')) {
         ]);
     }
 }
+
+// DEDUCT TOKENS
+if (!function_exists('deductUserTokensAndCredits')) {
+    function deductUserTokensAndCredits(int $tokens = 0, int $credits = 0)
+    {
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+
+        if ($user) {
+            // Check if the user has enough tokens or credits
+            if ($user->tokens_left < $tokens) {
+                return "no-tokens";
+            }
+
+            if ($user->credits_left < $credits) {
+                return "no-credits";
+            }
+
+            // Deduct the tokens and credits
+            $user->tokens_left = max(0, $user->tokens_left - $tokens);
+            $user->credits_left = max(0, $user->credits_left - $credits);
+
+            // Save the changes to the database
+            $user->save();
+
+            return "deducted-successfully";
+        }
+
+        return "User not found";
+    }
+}
+
 
 
 
