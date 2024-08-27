@@ -441,6 +441,8 @@ class PromptLibraryController extends Controller
         $completionTokens = $data['usage']['completion_tokens'] ?? 0;
         $totalTokens = $data['usage']['total_tokens'] ?? 0;
 
+        deductUserTokensAndCredits($totalTokens);
+
         // Return the response
         return response()->json([
             'message' => $messageContent,

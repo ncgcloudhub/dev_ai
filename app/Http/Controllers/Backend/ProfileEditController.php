@@ -34,8 +34,8 @@ class ProfileEditController extends Controller
             $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
             $daysUntilNextReset = $now->diffInDays($nextResetDate);
         } else {
-            // Paid plan case, handle only the first paid package
-            $firstPaidPackage = $packageHistory->first();
+            // Paid plan case, handle only the last paid package
+            $firstPaidPackage = $packageHistory->last();
             
             if ($firstPaidPackage) {
                 // Calculate the next reset date for the first paid package
