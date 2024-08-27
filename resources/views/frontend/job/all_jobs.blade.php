@@ -12,30 +12,30 @@
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
     @endsection
     @section('content')
-        <!-- Begin page -->
-        <div class="layout-wrapper landing">
-           @include('frontend.body.nav_frontend')
+    <!-- Begin page -->
+    <div class="layout-wrapper landing d-flex flex-column min-vh-100">
+        @include('frontend.body.nav_frontend')
 
-<br><br>
+        <!-- Content should grow to push the footer down -->
+        <div class="flex-grow-1 hero-section">
             <!-- start Jobs -->
-          @include('frontend.body.job_main')
+            @include('frontend.body.job_main')
             <!-- end Jobs -->
+        </div>
 
-     
+        <!-- Start footer -->
+        @include('frontend.body.footer_frontend')
+        <!-- end footer -->
 
-            <!-- Start footer -->
-            @include('frontend.body.footer_frontend')
-            <!-- end footer -->
-
-            <!--start back-to-top-->
+        <!--start back-to-top-->
         <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
             <i class="ri-arrow-up-line"></i>
         </button>
         <!--end back-to-top-->
+    </div>
+    <!-- end layout wrapper -->
+@endsection
 
-        </div>
-        <!-- end layout wrapper -->
-    @endsection
     @section('script')
 
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>

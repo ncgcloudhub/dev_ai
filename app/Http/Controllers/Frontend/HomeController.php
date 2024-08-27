@@ -12,6 +12,7 @@ use App\Models\LikedImagesDalle;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
+use App\Models\PromptLibrary;
 use App\Models\Template;
 use App\Models\TemplateCategory;
 use App\Models\TermsConditions;
@@ -165,6 +166,16 @@ class HomeController extends Controller
             'num_characters' => $num_characters,
             'completionTokens' => $completionTokens,
         ]);
+    }
+
+    //Template Front End Page
+    public function FrontendFreePromptLibrary()
+    {
+        $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->get();
+        // $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
+        // $categories = PromptLibraryCategory::latest()->get();
+        // $count = $prompt_library->count(); 
+        return view('frontend.prompt_library', compact('promptLibrary'));
     }
 
     //All Jobs Front End Page

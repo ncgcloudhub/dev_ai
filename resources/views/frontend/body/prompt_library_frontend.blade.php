@@ -39,7 +39,7 @@
             </div>
             @endforeach
                 <div class="mx-auto d-flex justify-content-center">
-                    <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-primary">Show More</a>
+                    <a href="{{ route('frontend.free.prompt.library')}}" class="btn btn-primary">Show More</a>
                 </div>
             
         </div>

@@ -38,6 +38,9 @@
                                 <a class="dropdown-item" href="{{ route('frontend.free.template') }}">Templates</a> <!-- Redirect to frontend.free.template -->
                             @endauth
                         </li>
+                        <li>
+                            <a class="dropdown-item" href="{{route('frontend.free.prompt.library')}}">Prompt Library</a>
+                        </li>
                     </ul>
                 </li>
                 

@@ -506,6 +506,11 @@ Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->n
 Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
 Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
 
+// Frontend Free Prompt Library Page
+Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
+// Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
+// Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+
 // Job Page Frontend
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
 // Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
