@@ -44,11 +44,25 @@
                                 <ul>
                                     @foreach($group->user->packageHistory as $history)
                                         <li>
-                                            {{ $history->package->name }} - Purchased on: {{ $history->created_at->format('d/M/Y') }}
+                                            {{ $history->package->title }} - Purchased on: {{ $history->created_at->format('d/M/Y') }}
                         
-                                            @if($loop->first) <!-- This checks if it's the first item in the loop -->
+                                            @if($loop->last) <!-- This checks if it's the first item in the loop -->
                                                 <br>
-                                                Days until renewal: {{ \Carbon\Carbon::now()->diffInDays($history->created_at->addDays(30)) }} days left
+                                                @php
+                                                $purchaseDate = \Carbon\Carbon::parse($history->created_at);
+                                                $now = \Carbon\Carbon::now();
+                                                
+                                                // Calculate the next renewal date
+                                                // Assuming renewal is based on the purchase date
+                                                $nextRenewalDate = $purchaseDate->copy();
+                                                while ($nextRenewalDate->lte($now)) {
+                                                    $nextRenewalDate->addMonth();
+                                                }
+                        
+                                                // Calculate days remaining until the next renewal date
+                                                $daysUntilRenewal = $now->diffInDays($nextRenewalDate);
+                                            @endphp
+                                            Days until renewal: {{ $daysUntilRenewal }} days left
                                             @endif
                                         </li>
                                     @endforeach
