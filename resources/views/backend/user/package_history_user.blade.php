@@ -15,71 +15,91 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
-                        <th>Package Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($packageGroupedByUser as $group)
-                        <tr data-bs-toggle="modal" data-bs-target="#userPackageModal{{ $group->user_id }}">
-                            <td>{{ $group->user_id }}</td>
-                            <td>{{ $group->user->name }}</td>
-                            <td>{{ $group->package_count }}</td>
+            <div class="card-body">
+                <table id="alternative-pagination" class="table table-striped table-hover table-bordered text-center align-middle" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>SL.</th>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>Package Count</th>
                         </tr>
-
-                        {{-- Modal for displaying package details --}}
-                <div class="modal fade" id="userPackageModal{{ $group->user_id }}" tabindex="-1" aria-labelledby="userPackageModalLabel{{ $group->user_id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="userPackageModalLabel{{ $group->user_id }}">Package Details for {{ $group->user ? $group->user->name : 'No User Found' }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                @if($group->user)
-                                <ul>
-                                    @foreach($group->user->packageHistory as $history)
-                                        <li>
-                                            {{ $history->package->title }} - Purchased on: {{ $history->created_at->format('d/M/Y') }}
-                        
-                                            @if($loop->last) <!-- This checks if it's the first item in the loop -->
-                                                <br>
-                                                @php
-                                                $purchaseDate = \Carbon\Carbon::parse($history->created_at);
-                                                $now = \Carbon\Carbon::now();
-                                                
-                                                // Calculate the next renewal date
-                                                // Assuming renewal is based on the purchase date
-                                                $nextRenewalDate = $purchaseDate->copy();
-                                                while ($nextRenewalDate->lte($now)) {
-                                                    $nextRenewalDate->addMonth();
-                                                }
-                        
-                                                // Calculate days remaining until the next renewal date
-                                                $daysUntilRenewal = $now->diffInDays($nextRenewalDate);
-                                            @endphp
-                                            Days until renewal: {{ $daysUntilRenewal }} days left
+                    </thead>
+                    <tbody>
+                        @php
+                            $sl = 1; // Initialize the variable outside the loop
+                        @endphp
+                        @foreach($packageGroupedByUser as $group)
+                            <tr>
+                                <td>{{ $sl++ }}</td>
+                                <td>{{ $group->user_id }}</td>
+                                <td>{{ $group->user->name }}</td>
+                                <td>
+                                    <a href="#" class="text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#userPackageModal{{ $group->user_id }}" style="text-decoration: underline; cursor: pointer;">
+                                        {{ $group->package_count }}
+                                    </a>
+                                </td>
+                            </tr>
+                
+                            {{-- Modal for displaying package details --}}
+                            <div class="modal fade" id="userPackageModal{{ $group->user_id }}" tabindex="-1" aria-labelledby="userPackageModalLabel{{ $group->user_id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="userPackageModalLabel{{ $group->user_id }}">
+                                                Package Details for {{ $group->user ? $group->user->name : 'No User Found' }}
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if($group->user)
+                                                <ul class="list-group">
+                                                    @foreach($group->user->packageHistory as $history)
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center mb-3">
+                                                            <span>
+                                                                <strong>{{ $history->package->title }}</strong> - Purchased on: {{ $history->created_at->format('d/M/Y') }}
+                                                            </span>
+                                                           
+                                                            @if($loop->last)
+                                                            <span class="badge bg-primary">
+                                                                Invoice Number: {{ $history->invoice }}
+                                                            </span>
+                                                                @php
+                                                                    $purchaseDate = \Carbon\Carbon::parse($history->created_at);
+                                                                    $now = \Carbon\Carbon::now();
+                
+                                                                    // Calculate the next renewal date
+                                                                    $nextRenewalDate = $purchaseDate->copy();
+                                                                    while ($nextRenewalDate->lte($now)) {
+                                                                        $nextRenewalDate->addMonth();
+                                                                    }
+                
+                                                                    // Calculate days remaining until the next renewal date
+                                                                    $daysUntilRenewal = $now->diffInDays($nextRenewalDate);
+                                                                @endphp
+                                                                <span class="badge bg-warning">
+                                                                    Renewal in: {{ $daysUntilRenewal }} days
+                                                                </span>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <p class="text-danger">No packages found for this user.</p>
                                             @endif
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <p>No packages found for this user.</p>
-                            @endif
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    @endforeach
-                </tbody>
-            </table>
+                        @endforeach
+                    </tbody>
+                </table>
+                
+                
+            </div>
            
         </div>
     </div>
