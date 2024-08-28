@@ -27,22 +27,12 @@
                 <div class="col-xxl-5 col-sm-6">
                     <div class="search-box" id="search-tour">
                         <input type="text" class="form-control search"
-                            placeholder="Search for order ID, customer, order status or something...">
+                            placeholder="Search for Templates">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
                 <!--end col-->
-                
-                <div class="col-xxl-2 col-sm-4">
-                    <div>
-                        <button type="button" class="btn btn-primary w-100" id="enter-button"
-                            onclick="SearchData();"> <i
-                                class="ri-search-fill me-1 align-bottom"></i>
-                            Search
-                        </button>
-                    </div>
-                </div>
-                <!--end col-->
+               
             </div>
             <!--end row-->
         </form>
@@ -50,14 +40,14 @@
 
     <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
         <li class="nav-item" id="category-tour">
-            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All"
+            <a class="nav-link n1 active All py-3" data-bs-toggle="tab" id="All"
                 href="#home1" role="tab" aria-selected="true">
                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Templates
             </a>
         </li>
         @foreach ($templatecategories as $item)
             <li class="nav-item">
-                <a class="nav-link py-3 {{$item->category_name}}" data-bs-toggle="tab" id="{{$item->id}}"
+                <a class="nav-link n1 py-3 {{$item->category_name}}" data-bs-toggle="tab" id="{{$item->id}}"
                     href="#{{$item->id}}" role="tab" aria-selected="false">
                     <i class="{{$item->category_icon}}"></i> {{$item->category_name}}
                 </a>
@@ -147,10 +137,10 @@
 
 <script>
     $(document).ready(function() {
-        $('.nav-link').on('click', function() {
+        $('.n1').on('click', function() {
 
             // Remove 'active' class from all nav links
-        $('.nav-link').removeClass('active');
+        $('.n1').removeClass('active');
         
         // Add 'active' class to the clicked nav link
         $(this).addClass('active');
