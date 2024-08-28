@@ -13,6 +13,7 @@ use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
 use App\Models\PromptLibrary;
+use App\Models\PromptLibraryCategory;
 use App\Models\Template;
 use App\Models\TemplateCategory;
 use App\Models\TermsConditions;
@@ -173,9 +174,9 @@ class HomeController extends Controller
     {
         $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->get();
         // $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
-        // $categories = PromptLibraryCategory::latest()->get();
+        $categories = PromptLibraryCategory::latest()->get();
         // $count = $prompt_library->count(); 
-        return view('frontend.prompt_library', compact('promptLibrary'));
+        return view('frontend.prompt_library', compact('promptLibrary', 'categories'));
     }
 
     //All Jobs Front End Page
