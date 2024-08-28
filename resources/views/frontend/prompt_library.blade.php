@@ -8,72 +8,108 @@
 @endsection
 @section('body')
 
-
-    <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-    @endsection
-    @section('content')
-        <!-- Begin page -->
-        <div class="layout-wrapper landing">
-           @include('frontend.body.nav_frontend')
+<body data-bs-spy="scroll" data-bs-target="#navbar-example">
+@endsection
+@section('content')
+    <!-- Begin page -->
+    <div class="layout-wrapper landing d-flex flex-column min-vh-100">
+        @include('frontend.body.nav_frontend')
           
-           <br><br><br>
+        <br><br><br>
 
-    
-<div class="container mt-5">
+        <div class="flex-grow-1">
+            <div class="container mt-5">
+                <div class="card-body border border-dashed border-end-0 border-start-0 mb-3">
+                    <form>
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-xxl-5 col-sm-6">
+                                <div class="search-box" id="search-tour">
+                                    <input type="text" class="form-control search"
+                                        placeholder="Search for Prompts">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
 
-    <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form>
-            <div class="row g-3 justify-content-center">
-                <div class="col-xxl-5 col-sm-6">
-                    <div class="search-box" id="search-tour">
-                        <input type="text" class="form-control search"
-                            placeholder="Search for Prompts">
-                        <i class="ri-search-line search-icon"></i>
-                    </div>
+                        </div>
+                        <!--end row-->
+                    </form>
                 </div>
-                <!--end col-->
 
-            </div>
-            <!--end row-->
-        </form>
-    </div>
+                <div class="card-body border border-dashed border-end-0 border-start-0">
+                    <form id="filterForm">
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-xxl-5 col-sm-6">
+                                <select class="form-select" name="category_id" id="category_id" aria-label="Select Category">
+                                    <option disabled selected>Select Category</option>
+                                    @foreach ($categories as $item)
+                                        <option value="{{$item->id}}">{{$item->category_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-6">
+                                <select class="form-select" name="subcategory_id" id="subcategory_id" aria-label="Select Subcategory">
+                                    <option disabled selected>Select Subcategory</option>
+                                </select>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-2 col-sm-4">
+                                <div>
+                                    <button type="submit" class="btn text-white badge-gradient-dark mx-2"> 
+                                        <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
+                </div>
+                
 
-    <div class="row template-row">
-        @foreach ($promptLibrary as $item)
-       
-        <div class="col-md-6 p-3 template-card" data-search="{{ strtolower($item->prompt_name . ' ' . $item->description) }}">
-            
-           
-            <div class="card shadow-lg h-100"> <!-- h-100 ensures the card fills the height -->
-                <div class="card-body d-flex flex-column"> <!-- flex-column makes the card body stack vertically -->
-                    <div class="d-flex mb-3">
-                        <div class="ms-3 flex-grow-1">
-                            <a href="{{ route('prompt.frontend.view', ['slug' => $item->slug]) }}">
-                                <h5>{{$item->prompt_name}}</h5>
-                            </a>
-                            <ul class="list-inline text-muted mb-3">
-                                <li class="list-inline-item">
-                                    <span class="text-description">{{$item->description}}</span>
-                                </li>
-                            </ul>
-                            <div class="mt-auto hstack gap-2"> <!-- mt-auto pushes this section to the bottom -->
-                                <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
-                                <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                <div class="row template-row">
+                    @foreach ($promptLibrary as $item)
+                
+                    <div class="col-md-6 p-3 template-card" 
+                data-search="{{ strtolower($item->prompt_name . ' ' . $item->description) }}"
+                data-category-id="{{ $item->category->id }}" 
+                data-subcategory-id="{{ $item->subcategory->id }}">
+                        
+                    
+                        <div class="card shadow-lg h-100"> <!-- h-100 ensures the card fills the height -->
+                            <div class="card-body d-flex flex-column"> <!-- flex-column makes the card body stack vertically -->
+                                <div class="d-flex mb-3">
+                                    <div class="ms-3 flex-grow-1">
+                                        <a href="{{ route('prompt.frontend.view', ['slug' => $item->slug]) }}">
+                                            <h5>{{$item->prompt_name}}</h5>
+                                        </a>
+                                        <ul class="list-inline text-muted mb-3">
+                                            <li class="list-inline-item">
+                                                <span class="text-description">{{$item->description}}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="mt-auto hstack gap-2"> <!-- mt-auto pushes this section to the bottom -->
+                                            <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
+                                            <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                
+                        </div>
+                    
+                        @endforeach
                 </div>
+                
+                <h2 class="noresult text-center" style="display: none;">No results found.</h2>
+
             </div>
-           
-       
-            </div>
-        
-            @endforeach
-    </div>
-</div>
+        </div>
 
             <!-- Start footer -->
-            @include('frontend.body.footer_frontend')
+        @include('frontend.body.footer_frontend')
             <!-- end footer -->
 
             <!--start back-to-top-->
@@ -84,8 +120,8 @@
 
         </div>
         <!-- end layout wrapper -->
-    @endsection
-    @section('script')
+@endsection
+@section('script')
 
 <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
 
@@ -155,5 +191,74 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle category change to update subcategories
+        document.getElementById('category_id').addEventListener('change', function() {
+            var categoryId = this.value;
+            fetch('/prompt/subcategories/' + categoryId)
+                .then(response => response.json())
+                .then(data => {
+                    var subcategorySelect = document.getElementById('subcategory_id');
+                    subcategorySelect.innerHTML = '<option disabled selected>Select Subcategory</option>';
+                    data.forEach(subcategory => {
+                        var option = document.createElement('option');
+                        option.value = subcategory.id;
+                        option.text = subcategory.sub_category_name;
+                        subcategorySelect.appendChild(option);
+                    });
+                });
+        });
+
+        // Handle filter form submission
+        document.getElementById('filterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var categoryId = document.getElementById('category_id').value;
+            var subcategoryId = document.getElementById('subcategory_id').value;
+
+            // Filter the prompt cards based on selected category and subcategory
+            var templateCards = document.querySelectorAll('.template-card');
+            templateCards.forEach(function(card) {
+                var cardCategoryId = card.dataset.categoryId;
+                var cardSubcategoryId = card.dataset.subcategoryId;
+
+                if ((categoryId === '' || cardCategoryId === categoryId) &&
+                    (subcategoryId === '' || cardSubcategoryId === subcategoryId)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle search functionality
+        const searchInput = document.querySelector('.search');
+        const templateCards = document.querySelectorAll('.template-card');
+        const noResultMessage = document.querySelector('.noresult');
+
+        searchInput.addEventListener('keyup', function(event) {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            let found = false;
+
+            templateCards.forEach(function(card) {
+                const searchContent = card.dataset.search.toLowerCase();
+                if (searchContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                noResultMessage.style.display = 'block';
+            } else {
+                noResultMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
+
        
-    @endsection
+@endsection
