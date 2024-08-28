@@ -27,22 +27,12 @@
                 <div class="col-xxl-5 col-sm-6">
                     <div class="search-box" id="search-tour">
                         <input type="text" class="form-control search"
-                            placeholder="Search for order ID, customer, order status or something...">
+                            placeholder="Search for Prompts">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
                 <!--end col-->
-                
-                <div class="col-xxl-2 col-sm-4">
-                    <div>
-                        <button type="button" class="btn btn-primary w-100" id="enter-button"
-                            onclick="SearchData();"> <i
-                                class="ri-search-fill me-1 align-bottom"></i>
-                            Search
-                        </button>
-                    </div>
-                </div>
-                <!--end col-->
+
             </div>
             <!--end row-->
         </form>
