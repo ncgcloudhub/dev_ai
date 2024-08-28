@@ -4,6 +4,8 @@ use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 if (!function_exists('calculateCredits')) {
     function calculateCredits($resolution, $quality)
@@ -131,6 +133,45 @@ if (!function_exists('deductUserTokensAndCredits')) {
         }
 
         return "User not found";
+    }
+}
+
+
+if (!function_exists('get_days_until_next_reset')) {
+    function get_days_until_next_reset($user_id = null)
+    {
+        if (!$user_id) {
+            $user_id = Auth::id();
+        }
+
+        $user = User::findOrFail($user_id);
+        $packageHistory = $user->packageHistory()->with('package')->get();
+
+        $daysUntilNextReset = null;
+
+        if ($packageHistory->isEmpty()) {
+            // Free plan case
+            $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+
+            // Calculate the next reset date for free plan
+            $now = Carbon::now();
+            $registrationDate = $user->created_at;
+            $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
+            $daysUntilNextReset = $now->diffInDays($nextResetDate);
+        } else {
+            // Paid plan case, handle only the last paid package
+            $firstPaidPackage = $packageHistory->last();
+
+            if ($firstPaidPackage) {
+                // Calculate the next reset date for the first paid package
+                $now = Carbon::now();
+                $startDate = $firstPaidPackage->created_at;
+                $nextResetDate = $startDate->copy()->addMonths($startDate->diffInMonths($now) + 1);
+                $daysUntilNextReset = $now->diffInDays($nextResetDate);
+            }
+        }
+
+        return $daysUntilNextReset;
     }
 }
 

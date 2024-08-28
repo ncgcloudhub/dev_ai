@@ -47,6 +47,7 @@
                     $freePricingPlan = $data['freePricingPlan'];
                     $aiModels = $data['aiModels'];
                     $selectedModel = $data['selectedModel'];
+                    $remainingDays = get_days_until_next_reset();
                     @endphp
                 
                     @if ($lastPackage)
@@ -95,6 +96,9 @@
             </div>
 
             <div class="d-flex align-items-center">
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <span class="badge badge-gradient-primary">Your next renew is in {{$remainingDays}} days</span>
+                </div>
 
                 <!-- Fullscreen Button -->
                 <div class="ms-1 header-item d-none d-sm-flex">
