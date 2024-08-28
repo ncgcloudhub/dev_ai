@@ -23,6 +23,7 @@ class ProfileEditController extends Controller
         
         $freePricingPlan = null;
         $daysUntilNextReset = null;
+        $renewalDate = null;
         
         if ($packageHistory->isEmpty()) {
             // Free plan case
@@ -33,6 +34,8 @@ class ProfileEditController extends Controller
             $registrationDate = $user->created_at;
             $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
             $daysUntilNextReset = $now->diffInDays($nextResetDate);
+            $renewalDate = $nextResetDate->format('d M Y'); // Calculate the renewal date
+
         } else {
             // Paid plan case, handle only the last paid package
             $firstPaidPackage = $packageHistory->last();
@@ -43,10 +46,11 @@ class ProfileEditController extends Controller
                 $startDate = $firstPaidPackage->created_at;
                 $nextResetDate = $startDate->copy()->addMonths($startDate->diffInMonths($now) + 1);
                 $daysUntilNextReset = $now->diffInDays($nextResetDate);
+                $renewalDate = $nextResetDate->format('d M Y'); // Calculate the renewal date
             }
         }
     
-        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset'));
+        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset','renewalDate'));
     }
     
 
