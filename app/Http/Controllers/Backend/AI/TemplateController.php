@@ -209,6 +209,28 @@ class TemplateController extends Controller
         return redirect()->back()->with('success', 'Template updated successfully');
     } // end method 
 
+    public function TemplateSEOUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'page_title' => 'nullable|string',          
+            'page_description' => 'nullable|string', 
+            'page_tagging' => 'nullable|string', 
+        ]);
+
+        $template = Template::findOrFail($id);
+      
+        $template->page_title = $validatedData['page_title'] ?? null;
+        $template->page_description = $validatedData['page_description'] ?? null;
+        $template->page_tagging = $validatedData['page_tagging'] ?? null;        
+        $template->save();
+
+        return redirect()->back()->with('success', 'Template SEO updated successfully');
+    } // end method 
+
+
     public function TemplateManage()
     {
         $templates = Template::orderby('id', 'asc')->get();
