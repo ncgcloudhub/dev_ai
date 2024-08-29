@@ -19,9 +19,22 @@
                         <div class="d-flex">
                            
                             <div class="ms-3 flex-grow-1">
+                                @auth
+                                @if(Auth::user()->role == 'admin')
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                    <h5>{{$item->prompt_name}}</h5>
+                                </a>
+                                @elseif(Auth::user()->role == 'user')
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                    <h5>{{$item->prompt_name}}</h5>
+                                </a>
+                                @endif
+                                @else
                                 <a href="{{ route('prompt.frontend.view', ['slug' => $item->slug]) }}">
                                     <h5>{{$item->prompt_name}}</h5>
                                 </a>
+                                @endauth
+
                                 <ul class="list-inline text-muted mb-3">
                                     <li class="list-inline-item">
                                         <span class="text-description">{{$item->description}}</span>
