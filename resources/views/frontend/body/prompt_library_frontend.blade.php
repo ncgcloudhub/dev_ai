@@ -38,9 +38,18 @@
                 </div>
             </div>
             @endforeach
-                <div class="mx-auto d-flex justify-content-center">
-                    <a href="{{ route('frontend.free.prompt.library')}}" class="btn btn-primary">Show More</a>
-                </div>
+            <div class="mx-auto d-flex justify-content-center">
+                @auth
+                    @if(Auth::user()->role == 'admin')
+                        <a href="{{ route('prompt.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to prompt.manage if user is admin -->
+                    @elseif(Auth::user()->role == 'user')
+                        <a href="{{ route('user.prompt.library') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                    @endif
+                @else
+                    <a href="{{ route('frontend.free.prompt.library') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                @endauth
+            </div>
+            
             
         </div>
     </div>
