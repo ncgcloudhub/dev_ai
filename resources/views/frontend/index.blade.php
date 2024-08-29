@@ -212,7 +212,17 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <a href="{{ auth()->check() ? route('prompt.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a>
+                                                    
+                                                    @auth
+                                                    @if(Auth::user()->role == 'admin')
+                                                        <a href="{{ route('prompt.manage') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to prompt.manage if user is admin -->
+                                                    @elseif(Auth::user()->role == 'user')
+                                                        <a href="{{ route('user.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                                                    @endif
+                                                    @else
+                                                    <a href="{{ route('frontend.free.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                                                    @endauth
+
                                                 </div>
                                             </div><!-- end col -->
                                         
@@ -322,7 +332,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                 @include('frontend.designs.how_it_works.design_3')
             @else
                 <!-- Fallback or default design if none is selected -->
-                @include('frontend.designs.how_it_works.default_design')
+                @include('frontend.designs.how_it_works.design_1')
             @endif
 
   
