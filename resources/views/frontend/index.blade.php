@@ -213,14 +213,10 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                         </div>
                                                     </div>
                                                     
-                                                    @auth
-                                                    @if(Auth::user()->role == 'admin')
-                                                        <a href="{{ route('prompt.manage') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to prompt.manage if user is admin -->
-                                                    @elseif(Auth::user()->role == 'user')
-                                                        <a href="{{ route('user.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to user.prompt.library if user is a normal user -->
-                                                    @endif
+                                                    @auth                                                 
+                                                        <a href="{{ route('prompt.manage') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> 
                                                     @else
-                                                    <a href="{{ route('frontend.free.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                                                        <a href="{{ route('frontend.free.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                                                     @endauth
 
                                                 </div>
