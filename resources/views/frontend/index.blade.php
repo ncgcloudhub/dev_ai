@@ -790,7 +790,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                 {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
                                                 <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                             </div>
-                                            <h3><a href="{{ auth()->check() ? route('template.view', ['slug' => $item->slug]) : route('login') }}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                            @auth
+                                                <h3><a href="{{route('template.view', ['slug' => $item->slug])}}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                            @else
+                                                <h3><a href="{{route('frontend.free.template.view', ['slug' => $item->slug])}}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
+                                            @endauth
                                             <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                         </div>
                                         <div>
@@ -805,7 +809,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                 @endforeach
                         </div>
                         <div class="mx-auto d-flex justify-content-center">
-                            <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-primary">Show More</a>
+                            @auth
+                                <a href="{{ route('template.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                            @else
+                                <a href="{{ route('frontend.free.template') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                            @endauth
                         </div>
                     </div>
                     <!-- end row -->
