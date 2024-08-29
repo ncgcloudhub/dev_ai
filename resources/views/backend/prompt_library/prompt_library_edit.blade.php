@@ -33,80 +33,93 @@
                         <div class="tab-content text-muted mt-3 mt-lg-0">
                             <div class="tab-pane fade active show" id="custom-v-pills-home" role="tabpanel" aria-labelledby="custom-v-pills-home-tab">
                                 <div class="d-flex mb-4">
-                                    <form method="POST" action="{{route('prompt.update')}}" class="row g-3">
+                                    <form method="POST" action="{{ route('prompt.update') }}" class="row g-3 w-100">
                                         @csrf
-                                        <input type="hidden" name="id" value="{{$category->id}}">  
-                                    <div class="card">
-                                        <div class="card-header align-items-center d-flex">
-                                            <h4 class="card-title mb-0 flex-grow-1">Prompt Library Edit</h4>
-                                        </div><!-- end card header -->
-                                
-                                        <div class="card-body">
-                                            <div class="live-preview">
-                                                
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" name="prompt_name" value="{{$category->prompt_name}}" class="form-control" id="prompt_name" placeholder="Enter Template Name">
-                                                        <label for="prompt_name" class="form-label">Prompt Name</label>
+                                        <input type="hidden" name="id" value="{{ $category->id }}">  
+                                        
+                                        <div class="card w-100">
+                                            <div class="card-header align-items-center d-flex">
+                                                <h4 class="card-title mb-0 flex-grow-1">Prompt Library Edit</h4>
+                                            </div>
+                                            
+                                            <div class="card-body">
+                                                <div class="live-preview">
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100">
+                                                            <input type="text" name="prompt_name" value="{{ $category->prompt_name }}" class="form-control w-100" id="prompt_name" placeholder="Enter Template Name">
+                                                            <label for="prompt_name" class="form-label">Prompt Name</label>
+                                                        </div>
                                                     </div>
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100">
+                                                            <input type="text" name="icon" value="{{ $category->icon }}" class="form-control w-100" id="icon" placeholder="Enter Icon">
+                                                            <label for="icon" class="form-label">Icon</label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100">
+                                                            <select class="form-select w-100" name="category_id" id="category_id" aria-label="Floating label select example">
+                                                                <option value="{{ $category->category_id }}" selected>{{ $category->category->category_name }}</option>
+                                                                @foreach ($categories as $item)
+                                                                <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <label for="category_id" class="form-label">Category</label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100">
+                                                            <select class="form-select w-100" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example">
+                                                                <option value="{{ $category->sub_category_id }}" selected>{{ $category->subcategory->sub_category_name }}</option>
+                                                            </select>
+                                                            <label for="subcategory_id" class="form-label">Subcategory</label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
+                                                            <textarea name="description" class="form-control w-100" id="description" rows="3" placeholder="Enter description">{{ $category->description }}</textarea>
+                                                            <label for="description">Description</label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-12">
+                                                        <div class="form-floating mb-3 w-100" data-bs-toggle="tooltip" data-bs-placement="right">
+                                                            <textarea name="actual_prompt" class="form-control w-100" id="actual_prompt" rows="3" placeholder="Enter actual_prompt">{{ $category->actual_prompt }}</textarea>
+                                                            <label for="actual_prompt">Actual Prompt</label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <!-- Checkbox for adding to frontend -->
+                                                    <div class="col-12">
+                                                        <div class="form-check w-100">
+                                                            <input class="form-check-input" type="checkbox" name="inFrontEndCheckbox" id="inFrontEndCheckbox" {{ $category->inFrontEnd == 'yes' ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="inFrontEndCheckbox">
+                                                                Add to frontend
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <!-- Hidden input field to store the value -->
+                                                    <input type="hidden" name="inFrontEnd" id="inFrontEnd" value="{{ $category->inFrontEnd }}">
                                                     
-                                                    <div class="form-floating mb-3">
-                                                        <input type="text" name="icon" value="{{$category->icon}}" class="form-control" id="icon" placeholder="Enter Icon">
-                                                        <label for="icon" class="form-label">Icon</label>
-                                                    </div>
-                                
-                                                    <div class="form-floating mb-3">
-                                                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                                                            <option value="{{$category->category_id}}" selected="">{{$category->category->category_name}}</option>
-                                                            @foreach ($categories as $item)
-                                                            <option value="{{$item->id}}">{{$item->category_name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <label for="category_id" class="form-label">Category</label>
-                                                    </div>
-                                
-                                                    <div class="form-floating mb-3">
-                                                    <select class="form-select" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example">
-                                                        <option value="{{$category->sub_category_id}}" selected>{{$category->subcategory->sub_category_name}}</option>
-                                                    </select>
-                                                    <label for="category_id" class="form-label">Subcategory</label>
-                                                    </div>
-                                                    
-                                                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
-                                                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description">{{$category->description}}</textarea>
-                                                        <label for="description">Description</label>
-                                                    </div>
-                                
-                                                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right">
-                                                        <textarea name="actual_prompt" class="form-control" id="actual_prompt" rows="3" placeholder="Enter actual_prompt" >{{$category->actual_prompt}}</textarea>
-                                                        <label for="actual_prompt">Actual Prompt</label>
-                                                    </div>
-                                
-                                                     <!-- Checkbox for adding to frontend -->
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="inFrontEndCheckbox" id="inFrontEndCheckbox" {{ $category->inFrontEnd == 'yes' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="inFrontEndCheckbox">
-                                            Add to frontend
-                                        </label>
-                                    </div>
-                                
-                                    <!-- Hidden input field to store the value -->
-                                    <input type="hidden" name="inFrontEnd" id="inFrontEnd" value="{{ $category->inFrontEnd }}">
-                                               
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                
-                                    <div class="col-12">
-                                        <div class="text-end">
-                                            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                                        
+                                        <div class="col-12">
+                                            <div class="text-end">
+                                                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
                                 </div>
-                               
-                            </div><!--end tab-pane-->
-    
-    
+                            </div>
+                            
                             <div class="tab-pane fade" id="custom-v-pills-profile" role="tabpanel" aria-labelledby="custom-v-pills-profile-tab">
                                 <div class="d-flex mb-4">
                                     <form method="POST" action="{{ route('prompt.seo.update') }}" class="row g-3">
