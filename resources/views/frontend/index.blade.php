@@ -432,7 +432,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start services -->
-            <section class="section bg-light py-5" id="services">
+            <section class="section bg-light py-5" id="features">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
@@ -640,7 +640,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <!-- end client section -->
 
             <!-- start features -->
-            <section class="section bg-light py-5" id="features">
+            <section class="section bg-light py-5">
                 <div class="container">
                     <div class="row align-items-center gy-4">
                         <div class="col-lg-6 col-sm-7 mx-10">
