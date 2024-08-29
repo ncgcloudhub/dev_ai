@@ -11,6 +11,7 @@ use App\Models\AISettings;
 use App\Models\NewsLetter;
 use App\Models\RatingTemplate;
 use App\Models\Referral;
+use App\Models\SectionDesign;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -22,6 +23,25 @@ use Stevebauman\Location\Facades\Location;
 
 class TemplateController extends Controller
 {
+
+    public function updateDesign(Request $request)
+    {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'how_it_works'],
+            ['selected_design' => $request->input('selected_design')]
+        );
+
+        return redirect()->back()->with('success', 'Design updated successfully.');
+    }
+
+    public function getDesign()
+    {
+        $sectionDesigns = SectionDesign::get()->keyBy('section_name');
+        return view('backend.designs.design_select_form', compact('sectionDesigns'));
+    }
+
+
+
     // Custom Template Category
     public function TemplateCategoryAdd()
     {

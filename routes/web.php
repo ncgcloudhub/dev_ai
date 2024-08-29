@@ -34,6 +34,7 @@ use App\Http\Controllers\MainChat;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
 use App\Models\PromptLibrary;
+use App\Models\SectionDesign;
 use App\Models\SeoSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
@@ -57,7 +58,11 @@ Route::get('/', function () {
     }
 
     $faqs = FAQ::latest()->get();
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary'));
+
+    // How it works SECTION Design
+    $selectedDesign = SectionDesign::where('section_name', 'how_it_works')->value('selected_design');
+
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','selectedDesign'));
 })->name('home');
 
 
@@ -168,6 +173,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/update', [TemplateController::class, 'TemplateUpdate'])->name('template.update');
         Route::post('/seo/update', [TemplateController::class, 'TemplateSEOUpdate'])->name('template.seo.update');
+
+        Route::get('/select/design', [TemplateController::class, 'getDesign'])->name('getDesign');
+
+        Route::post('/update-design', [TemplateController::class, 'updateDesign'])->name('user.update_design');
     });
 
     //  Permission

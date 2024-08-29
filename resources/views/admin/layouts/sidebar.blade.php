@@ -248,6 +248,10 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.pricing')}}" class="nav-link">Manage Pricing</a>
                                     </li>
+                                  
+                                    <li class="nav-item">
+                                        <a href="{{route('getDesign')}}" class="nav-link">Manage Design</a>
+                                    </li>
                
                                 </ul>
                             </div>
