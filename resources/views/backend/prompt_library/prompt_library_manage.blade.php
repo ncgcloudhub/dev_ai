@@ -16,53 +16,55 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header align-items-center d-flex flex-column flex-md-row">
-                 <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
-                    Manage Prompt Library 
-                    <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Category</a> 
-                    <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Sub-Category</a>
+            @if(auth()->user()->role == 'admin')
+                <div class="card-header align-items-center d-flex flex-column flex-md-row">
+                    <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
+                        Manage Prompt Library 
+                        <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Category</a> 
+                        <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Sub-Category</a>
 
-                </h4>
-                <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
-                <div class="flex-shrink-0 d-flex align-items-center">
-                    <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group mb-0 mx-2">
-                            <input type="file" name="import_file" class="form-control @error('import_file') is-invalid @enderror">
-                            @error('import_file')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn text-white badge-gradient-warning">Import</button>
-                    </form>
-                    
-                    @if(session('success'))
-                        <div class="alert alert-success mt-3">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    
-                    @if(session('error'))
-                        <div class="alert alert-danger mt-3">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    
-                    
-                    @if(session('success'))
-                        <div class="alert alert-success mt-3">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    
-                    @if(session('error'))
-                        <div class="alert alert-danger mt-3">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    
+                    </h4>
+                    <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
+                    <div class="flex-shrink-0 d-flex align-items-center">
+                        <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group mb-0 mx-2">
+                                <input type="file" name="import_file" class="form-control @error('import_file') is-invalid @enderror">
+                                @error('import_file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn text-white badge-gradient-warning">Import</button>
+                        </form>
+                        
+                        @if(session('success'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        
+                        @if(session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        
+                        
+                        @if(session('success'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        
+                        @if(session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        
+                    </div>
                 </div>
-            </div>
+            @endif
             
 
             <div class="card-body border border-dashed border-end-0 border-start-0">
@@ -113,7 +115,9 @@
                             <th scope="col">Description</th>
                             <th scope="col">Category</th>
                             <th scope="col">Sub Category</th>
+                            @if(auth()->user()->role == 'admin')
                             <th scope="col">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -128,6 +132,7 @@
                                     <div class="flex-grow-1">{{$item->description}}</div>
                                 </div>
                             </td>
+                            @if(auth()->user()->role == 'admin')
                             <td>
                                 <div class="d-flex align-items-center">
                                    <a href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">{{$item->category->category_name}}</a>
@@ -150,7 +155,18 @@
                                     </a>
                                 </li>
                             </td>
-                           
+                            @else
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {{$item->category->category_name}}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {{$item->subcategory->sub_category_name}}
+                                </div>
+                            </td>
+                           @endif
 
                         </tr>
                         @endforeach
@@ -258,44 +274,52 @@ $(document).ready(function() {
 
 <script>
     document.getElementById('filterForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        var categoryId = document.getElementById('category_id').value;
-        var subcategoryId = document.getElementById('subcategory_id').value;
-        
-        fetch(`/prompt/filter-prompts?category_id=${categoryId}&subcategory_id=${subcategoryId}`)
-            .then(response => response.json())
-            .then(data => {
-                var tableBody = document.querySelector('#alternative-pagination tbody');
-                tableBody.innerHTML = '';
+    event.preventDefault();
+    var categoryId = document.getElementById('category_id').value;
+    var subcategoryId = document.getElementById('subcategory_id').value;
 
-                var countDisplay = document.getElementById('countDisplay');
-                countDisplay.textContent = `${data.count}`;
+    fetch(`/prompt/filter-prompts?category_id=${categoryId}&subcategory_id=${subcategoryId}`)
+        .then(response => response.json())
+        .then(data => {
+            var tableBody = document.querySelector('#alternative-pagination tbody');
+            tableBody.innerHTML = '';
 
-                data.data.forEach(function(item, index) {
-                    var row = `<tr>
-                        <td>${index + 1}</td>
-                        <td><a href="/user/details/${item.id}" class="fw-medium link-primary">${item.prompt_name}</a></td>
-                        <td><div class="d-flex align-items-center"><div class="flex-grow-1">${item.description}</div></div></td>
-                        <td><div class="d-flex align-items-center"><a href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">${item.category.category_name}</a></div></td>
-                        <td><div class="d-flex align-items-center">${item.subcategory.sub_category_name}</div></td>
-                        <td>
-                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                <a href="/prompt/edit/${item.id}" class="text-primary d-inline-block edit-item-btn">
-                                    <i class="ri-pencil-fill fs-16"></i>
-                                </a>
-                            </li>
-                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                <a class="text-danger d-inline-block remove-item-btn" href="/prompt/delete/${item.id}" onclick="return confirm('Are you sure you want to delete this Prompt')">
-                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                </a>
-                            </li>
-                        </td>
-                    </tr>`;
-                    tableBody.insertAdjacentHTML('beforeend', row);
-                });
+            var countDisplay = document.getElementById('countDisplay');
+            countDisplay.textContent = `${data.count}`;
+
+            data.data.forEach(function(item, index) {
+                var row = `<tr>
+                    <td>${index + 1}</td>
+                    <td><a href="/prompt/view/${item.slug}" class="fw-medium link-primary">${item.prompt_name}</a></td>
+                    <td><div class="d-flex align-items-center"><div class="flex-grow-1">${item.description}</div></div></td>`;
+                
+                if ("{{ auth()->user()->role }}" === 'admin') {
+                    row += `<td><div class="d-flex align-items-center"><a href="/category/prompt/library/view/${item.category_id}">${item.category.category_name}</a></div></td>
+                            <td><div class="d-flex align-items-center"><a href="/sub/category/prompt/library/view/${item.subcategory_id}">${item.subcategory.sub_category_name}</a></div></td>
+                            <td>
+                                <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                    <a href="/prompt/edit/${item.id}" class="text-primary d-inline-block edit-item-btn">
+                                        <i class="ri-pencil-fill fs-16"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                    <a class="text-danger d-inline-block remove-item-btn" href="/prompt/delete/${item.id}" onclick="return confirm('Are you sure you want to delete this Prompt')">
+                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                    </a>
+                                </li>
+                            </td>`;
+                } else {
+                    row += `<td><div class="d-flex align-items-center">${item.category.category_name}</div></td>
+                            <td><div class="d-flex align-items-center">${item.subcategory.sub_category_name}</div></td>`;
+                }
+
+                row += `</tr>`;
+                tableBody.insertAdjacentHTML('beforeend', row);
             });
-    });
-    </script>
+        });
+});
+
+</script>
 
 
 @endsection

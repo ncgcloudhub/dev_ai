@@ -135,7 +135,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('user.prompt.library')}}" class="nav-link" >Manage Prompt</a>
+                                        <a href="{{route('prompt.manage')}}" class="nav-link" >Manage Prompt</a>
                                     </li>
                                 </ul>
                             </div>     
