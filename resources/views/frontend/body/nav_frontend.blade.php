@@ -22,9 +22,9 @@
                         Services
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li>
+                        {{-- <li>
                             <a class="dropdown-item" href="{{ route('home') }}#services">Services</a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="dropdown-item" href="{{ route('home') }}#features">Features</a>
                         </li>
@@ -39,7 +39,16 @@
                             @endauth
                         </li>
                         <li>
-                            <a class="dropdown-item" href="{{route('frontend.free.prompt.library')}}">Prompt Library</a>
+                            @auth
+                            @if(Auth::user()->role == 'admin')
+                                <a class="dropdown-item" href="{{ route('prompt.manage') }}">Prompt Library</a> <!-- Redirect to prompt.manage if user is admin -->
+                            @elseif(Auth::user()->role == 'user')
+                                <a class="dropdown-item" href="{{ route('user.prompt.library') }}">Prompt Library</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                            @endif
+                            @else
+                            <a class="dropdown-item" href="{{ route('frontend.free.prompt.library') }}">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                            @endauth                        
+                            
                         </li>
                     </ul>
                 </li>
