@@ -231,6 +231,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
 
+        Route::post('/seo/update', [PromptLibraryController::class, 'PromptSEOUpdate'])->name('prompt.seo.update');
+
         Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
 
         // Route for deleting an example
