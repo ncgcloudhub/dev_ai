@@ -5,8 +5,10 @@
     <meta charset="utf-8" />
     <title>@yield('title') | {{ $siteSettings->title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Clever Creator" name="description" />
-    <meta content="Clever Creator" name="keywords" />
+
+    <meta name="description" content="@yield('meta_description')" />
+    <meta name="keywords" content="@yield('meta_keywords')" />
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Canonical URL -->
