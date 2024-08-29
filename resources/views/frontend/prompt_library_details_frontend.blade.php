@@ -2,6 +2,14 @@
 @section('title')
    Career
 @endsection
+
+@section('meta_description')
+{{$prompt_library->page_description}}@endsection
+
+@section('meta_keywords')
+{{$prompt_library->page_tagging}}@endsection
+
+
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 
