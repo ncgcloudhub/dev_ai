@@ -258,6 +258,26 @@ class PromptLibraryController extends Controller
 
     } // end method 
 
+    public function PromptSEOUpdate(Request $request)
+    {
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'page_title' => 'nullable|string',          
+            'page_description' => 'nullable|string', 
+            'page_tagging' => 'nullable|string', 
+        ]);
+
+        $template = PromptLibrary::findOrFail($id);
+      
+        $template->page_title = $validatedData['page_title'] ?? null;
+        $template->page_description = $validatedData['page_description'] ?? null;
+        $template->page_tagging = $validatedData['page_tagging'] ?? null;        
+        $template->save();
+
+        return redirect()->back()->with('success', 'Prompt SEO updated successfully');
+    } // end method 
+
 
     public function PromptDelete($id)
     {
