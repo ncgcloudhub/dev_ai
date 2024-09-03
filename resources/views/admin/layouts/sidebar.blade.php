@@ -316,6 +316,10 @@
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.package.history')}}" class="nav-link" >Manage User Package</a>
                                     </li>
+                                
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link" >Manage Feedback Request</a>
+                                    </li>
 
                                 </ul>
                             </div>

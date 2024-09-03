@@ -71,6 +71,14 @@
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Templates
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link requeste py-3" data-bs-toggle="tab" id="requeste"
+                                href="#requested" role="tab" aria-selected="false">
+                                <i class="ri-store-2-fill me-1 align-bottom"></i> requested Templates
+                            </a>
+                        </li>
+
                         @foreach ($templatecategories as $item)
                             <li class="nav-item">
                                 <a class="nav-link n1 py-3 {{$item->category_name}}" data-bs-toggle="tab" id="{{$item->id}}"
@@ -137,6 +145,45 @@
                                     </lord-icon>
                                     <h5 class="mt-2">Sorry! No Templates Found</h5>
                                     <p class="text-muted">We've searched more than 71+ Templates. We did not find any templates matching your search.</p>
+
+                                    <form action="{{ route('template.module.feedback') }}" method="POST">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="feedbackText">Your Feedback</label>
+                                            <input type="text" class="form-control" id="feedbackText" name="text" placeholder="Enter your feedback" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                    </form>
+                                    
+                                </div>
+                            </div>
+
+
+
+                            <div class="requested" style="display: none">
+                                <div class="text-center">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Module</th>
+                                                    <th>Feedback</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($userRequestFeedbacks as $feedback)
+                                                    <tr>
+                                                        <td>{{ $feedback->module }}</td>
+                                                        <td>{{ $feedback->text }}</td>
+                                                        <td>{{ $feedback->status }}</td>
+                                                        <td>{{ $feedback->created_at->format('Y-m-d') }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    
                                 </div>
                             </div>
                             
@@ -223,9 +270,34 @@
             var category = $(this).attr('id');
             if (category === 'All') {
             $('.template-card').show(); // Show all templates
+            $('.requested').hide();
         } else {
             $('.template-card').hide(); // Hide all templates initially
-            $('.template-card[data-category="' + category + '"]').show(); // Show templates that match the selected category
+            $('.template-card[data-category="' + category + '"]').show(); 
+            $('.requested').hide();// Show templates that match the selected category
+        }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.requeste').on('click', function() {
+
+            // Remove 'active' class from all nav links
+        $('.n1').removeClass('active');
+        
+        // Add 'active' class to the clicked nav link
+        $(this).addClass('active');
+        
+            var requested = $(this).attr('id');
+            if (requested === 'requeste') {
+            $('.requested').show(); // Show all templates
+            $('.template-card').hide();
+        } else {
+            $('.template-card').hide(); // Hide all templates initially
+            $('.template-card[data-category="' + category + '"]').hide(); // Show templates that match the selected category
+            $('.requested').show();
         }
         });
     });

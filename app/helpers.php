@@ -2,6 +2,7 @@
 
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
+use App\Models\RequestModuleFeedback;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -174,6 +175,29 @@ if (!function_exists('get_days_until_next_reset')) {
         return $daysUntilNextReset;
     }
 }
+
+// Feedback Module Request
+if (!function_exists('saveModuleFeedback')) {
+    function saveModuleFeedback(string $module, string $text)
+    {
+        $user_id = Auth::user()->id;
+
+        // Create a new RequestModuleFeedback instance
+        $feedback = new RequestModuleFeedback();
+        $feedback->user_id = $user_id;
+        $feedback->module = $module;
+        $feedback->text = $text;
+        $feedback->status = "pending";
+
+        // Save the feedback to the database
+        if ($feedback->save()) {
+            return "feedback-saved-successfully";
+        }
+
+        return "failed-to-save-feedback";
+    }
+}
+
 
 
 
