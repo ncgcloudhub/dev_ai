@@ -35,153 +35,160 @@
 
 {{-- CHAT STARt Scripts--}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Function to auto-expand textarea
+        $('.auto-expand').on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
 
-
+    // Function to send message when Enter key is pressed
+    $('.auto-expand').on('keydown', function(e) {
+        if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
+            e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
+            sendMessage(); // Call the function to send the message
+        }
+    });
+    
+    </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        
+   document.addEventListener('DOMContentLoaded', function () {
     const messageInput = document.getElementById('user_message_input');
     const sendMessageBtn = document.getElementById('send_message_btn');
-    const fileInput = document.getElementById('file_input');
+    const fileInput = document.getElementById('file_input'); // File input
     const chatConversation = document.getElementById('users-conversation');
     const chatContainer = document.getElementById('chat-conversation');
-    const aiModelSelect = document.getElementById('ai_model_select');
-    const fileNameDisplay = document.getElementById('file_name_display');
-    const newSessionBtn = document.getElementById('new_session_btn');
-    const imageDisplay = document.getElementById('image_display');
-
-    let pastedImageFile = null;
 
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // CHECK SESSION
-    const checkUserSession = () => {
-    // Make an HTTP GET request to your Laravel backend
-    axios.get('/chat/check-session')
+    // Function to send message
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        const selectedModel = document.getElementById('ai_model_select').value; // Get the selected AI model
+        console.log(selectedModel);
+        document.getElementById('file_name_display').innerHTML = '';
+        const file = fileInput.files[0];
+
+        if (!message && !file) return; // Prevent sending empty message without file
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append('message', message);
+        if (file) {
+            formData.append('file', file);
+        }
+
+        // Include selected AI model in the payload
+        formData.append('ai_model', selectedModel);
+
+        sendMessageBtn.disabled = true;
+        sendMessageBtn.innerHTML = 'Sending...';
+
+        axios.post('/chat/send', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'multipart/form-data',
+            },
+        })
         .then(response => {
-            // Handle the response
-            if (response.data.hasSession) {
-              
-            } else {
-                newSessionBtn.click();
-              
-            }
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const newMessage = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message}</p>
+                            </div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            const assistantMessage = response.data.message;
+
+            const faviconUrl = "{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}";
+            const newReply = `<li class="chat-list left">
+                            <div class="conversation-list">
+                                <div class="chat-avatar">
+                                    <img src="${faviconUrl}" alt="">
+                                </div>
+                                <div class="user-chat-content">
+                                    <div class="ctext-wrap">
+                                        <div class="ctext-wrap-content">
+                                            <p class="mb-0 ctext-content">${assistantMessage}</p>
+                                        </div>
+                                        <div class="dropdown align-self-start message-box-drop">
+                                            <a class="dropdown-toggle" href="#" role="button"
+                                                data-bs-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                <i class="ri-more-2-fill"></i>
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#"><i
+                                                        class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small>
+                                        <span class="text-success check-message-icon"><i
+                                                class="ri-check-double-line align-bottom"></i></span></div>
+                                </div>
+                            </div>
+                        </li>`;
+
+            chatConversation.insertAdjacentHTML('beforeend', newMessage);
+            chatConversation.insertAdjacentHTML('beforeend', newReply);
+            scrollToBottom();
+
+            messageInput.value = ''; // Clear input field after sending message
+            fileInput.value = ''; // Clear file input after sending message
         })
         .catch(error => {
-            // Handle any errors
-            console.error('Error checking user session:', error);
+            console.error(error);
+            const errorMessage = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>`;
+            chatConversation.insertAdjacentHTML('beforeend', errorMessage);
+            scrollToBottom();
+        })
+        .finally(() => {
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = '<span class="d-none d-sm-inline-block me-2">Send</span> <i class="mdi mdi-send float-end"></i>';
         });
-    };
-
-
-    // NEW SESSION
-    newSessionBtn.addEventListener('click', function () {
-        axios.post('/chat/new-session')
-            .then(response => {
-                if (response.data.success) {
-                    // Clear the chat UI
-                    chatConversation.innerHTML = '';
-                    // Clear input fields
-                    messageInput.value = '';
-                    fileInput.value = '';
-                    fileNameDisplay.textContent = '';
-                    // Scroll to bottom
-                    scrollToBottom();
-                }
-            })
-            .catch(error => {
-                console.error('Failed to start a new session:', error);
-            });
-    });
-
-     // Call the function to check user session when needed
-    checkUserSession();
-     
-
-    // window.addEventListener('beforeunload', function () {
-    //     axios.post('/clear-session', {})
-    //         .then(response => {
-    //             console.log('Session cleared successfully');
-    //         })
-    //         .catch(error => {
-    //             console.error('Failed to clear session:', error);
-    //         });
-    // });
-
-    fileInput.addEventListener('change', function () {
-        const fileName = fileInput.files[0].name;
-        fileNameDisplay.textContent = `Selected file: ${fileName}`;
-    });
-
-  // Function to handle image paste
-  function handleImagePaste(event) {
-        const clipboardItems = event.clipboardData.items;
-        for (let i = 0; i < clipboardItems.length; i++) {
-            const item = clipboardItems[i];
-            if (item.type.indexOf("image") !== -1) {
-                const blob = item.getAsFile();
-                pastedImageFile = blob;
-                const imageUrl = URL.createObjectURL(blob);
-
-                // Display the pasted image in image_display div
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                img.style.maxWidth = '20%'; // Optional: Adjust image size
-                imageDisplay.innerHTML = ''; // Clear any previous image
-                imageDisplay.appendChild(img);
-
-                // Stop further processing to prevent multiple image pastes
-                event.preventDefault();
-                break;
-            }
-        }
     }
 
-    // Listen for paste events on messageInput
-    messageInput.addEventListener('paste', handleImagePaste);
-
-    sendMessageBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
+    // Event listener for Enter key press
+    messageInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent default behavior (adding a new line)
+            sendMessage(); // Call the sendMessage function
         }
     });
 
-
-    function formatContent(content) {
-        const lines = content.split('\n');
-        let formattedContent = '';
-
-        if (lines.length === 1) {
-            formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
-        } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
-            const codeContent = lines.slice(1, -1).join('\n');
-            formattedContent = `<pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace;">${codeContent}</pre>`;
-        } else if (lines.some(line => line.trim().startsWith('*'))) {
-            formattedContent += '<ul style="font-family: Calibri;">';
-            lines.forEach(line => {
-                if (line.trim().startsWith('*')) {
-                    formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                } else {
-                    formattedContent += '<p>' + line.trim() + '</p>';
-                }
-            });
-            formattedContent += '</ul>';
-        } else {
-            formattedContent = '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + lines.join('</p><p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">') + '</p>';
-        }
-
-        return formattedContent;
-    }
+    // Event listener for Send button click
+    sendMessageBtn.addEventListener('click', function () {
+        sendMessage(); // Call the sendMessage function
     });
+});
+</script>
 
 
 </script>
-
 {{-- CHAT END Scripts--}}
 
 
