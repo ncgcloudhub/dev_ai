@@ -146,6 +146,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
 
         Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history');
+     
+        Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request');
+
+        Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
+
 
     });
 

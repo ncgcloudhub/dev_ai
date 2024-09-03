@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\User;
 use App\Http\Controllers\Controller;
 use App\Models\PackageHistory;
 use App\Models\Referral;
+use App\Models\RequestModuleFeedback;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -94,6 +95,29 @@ class UserManageController extends Controller
 
         return view('backend.user.package_history_user', compact('packageGroupedByUser'));
     }
+
+
+    public function ModuleFeedbackRequest()
+    {
+        $feedbacks = RequestModuleFeedback::with('user')->orderby('id', 'asc')->get();
+
+        return view('backend.user.user_feedback_request', compact('feedbacks'));
+    }
+
+    public function updateStatus(Request $request)
+{
+    $request->validate([
+        'id' => 'required|integer|exists:request_module_feedback,id',
+        'status' => 'required|string'
+    ]);
+
+    $feedback = RequestModuleFeedback::find($request->id);
+    $feedback->status = $request->status;
+    $feedback->save();
+
+    return response()->json(['success' => true]);
+}
+
     
 
 }
