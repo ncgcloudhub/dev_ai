@@ -137,6 +137,16 @@
                                     </lord-icon>
                                     <h5 class="mt-2">Sorry! No Templates Found</h5>
                                     <p class="text-muted">We've searched more than 71+ Templates. We did not find any templates matching your search.</p>
+
+                                    <form action="{{ route('template.module.feedback') }}" method="POST">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="feedbackText">Your Feedback</label>
+                                            <input type="text" class="form-control" id="feedbackText" name="text" placeholder="Enter your feedback" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                    </form>
+                                    
                                 </div>
                             </div>
                             

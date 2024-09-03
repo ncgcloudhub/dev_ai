@@ -31,6 +31,7 @@ use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\MainChat;
+use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
 use App\Models\PromptLibrary;
@@ -345,6 +346,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 // User Middleware
 Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.blocked.ip'])->group(function () {
+
+    // Feedback Request
+    Route::post('/module/feedback', [RequestModuleFeedbackController::class, 'templateFeedback'])->name('template.module.feedback');
 
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');

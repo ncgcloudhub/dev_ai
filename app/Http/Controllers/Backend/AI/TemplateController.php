@@ -11,6 +11,7 @@ use App\Models\AISettings;
 use App\Models\NewsLetter;
 use App\Models\RatingTemplate;
 use App\Models\Referral;
+use App\Models\RequestModuleFeedback;
 use App\Models\SectionDesign;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -256,14 +257,20 @@ class TemplateController extends Controller
         $templates = Template::orderby('id', 'asc')->get();
         $templatecategories = TemplateCategory::latest()->get();
         $userRatings = [];
+        $userFeedbacks = [];
 
         if (auth()->check()) {
             $userRatings = RatingTemplate::where('user_id', auth()->id())
                 ->pluck('rating', 'template_id')
                 ->toArray();
+
+                // Fetch feedbacks related to the user
+                $userRequestFeedbacks = RequestModuleFeedback::where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
 
-        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings'));
+        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks'));
     }
 
     public function TemplateView($slug)
