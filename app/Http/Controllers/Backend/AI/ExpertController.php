@@ -151,4 +151,65 @@ class ExpertController extends Controller
             'expert_image' => $expertImage
         ]);
     }
+
+
+    public function ExpertEdit($id)
+    {
+        $expert = Expert::findOrFail($id);
+        return view('backend.expert.expert_edit', compact('expert'));
+    }
+
+    public function ExpertUpdate(Request $request, $id)
+    {
+        $expert = Expert::findOrFail($id);
+
+        $imageName = $expert->image;
+        if ($image = $request->file('image')) {
+            if (file_exists('backend/uploads/expert/' . $expert->image)) {
+                unlink('backend/uploads/expert/' . $expert->image); // Delete the old image
+            }
+            $imageName = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move('backend/uploads/expert', $imageName);
+        }
+
+        $slug = Str::slug($request->expert_name);
+
+        $expert->update([
+            'expert_name' => $request->expert_name,
+            'character_name' => $request->character_name,
+            'slug' => $slug,
+            'description' => $request->description,
+            'role' => $request->role,
+            'expertise' => $request->expertise,
+            'image' => $imageName,
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $notification = array(
+            'message' => 'Expert Updated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('chat')->with($notification);
+    }
+
+    public function ExpertDelete($id)
+    {
+        $expert = Expert::findOrFail($id);
+
+        if (file_exists('backend/uploads/expert/' . $expert->image)) {
+            unlink('backend/uploads/expert/' . $expert->image); // Delete the image
+        }
+
+        $expert->delete();
+
+        $notification = array(
+            'message' => 'Expert Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
+
 }

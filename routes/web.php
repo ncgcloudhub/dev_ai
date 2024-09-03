@@ -434,6 +434,10 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add');
         Route::post('/expert/store', [ExpertController::class, 'ExpertStore'])->name('expert.store');
 
+        Route::get('/expert/edit/{id}', [ExpertController::class, 'ExpertEdit'])->name('expert.edit');
+        Route::post('/expert/update/{id}', [ExpertController::class, 'ExpertUpdate'])->name('expert.update');
+        Route::get('/expert/delete/{id}', [ExpertController::class, 'ExpertDelete'])->name('expert.delete');
+
         // TEST CHAT
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
         Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
@@ -463,12 +467,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
     //Profile 
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
+
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
+
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
+
         Route::post('/update/photo', [ProfileEditController::class, 'ProfilePhotoUpdate'])->name('update.profile.photo');
     });
-
-
 
     //Fixed Templates 
     Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');

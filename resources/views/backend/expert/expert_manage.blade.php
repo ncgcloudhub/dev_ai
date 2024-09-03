@@ -24,6 +24,16 @@
                         <p class="text-muted mb-0">{{$item->role}}</p>
                     </div>
                 </a>
+                <!-- Add Edit and Delete icons -->
+                <div class="mt-3 d-flex justify-content-end gap-2">
+                    <a href="{{ route('expert.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                        <i class="ri-pencil-fill fs-16"></i>
+                    </a>
+                    <a href="{{ route('expert.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this expert?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                    </a>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -32,11 +42,13 @@
 
 
 
+
+
 @endsection
 
 @section('script')
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
     <!-- fgEmojiPicker js -->
     <script src="{{ URL::asset('build/libs/fg-emoji-picker/fg-emoji-picker.min.js') }}"></script>
