@@ -4,14 +4,25 @@
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
-
 @endsection
 @section('body')
 
+<body data-bs-spy="scroll" data-bs-target="#navbar-example">
+    <style>
+        .template-card:hover {
+         transform: scale(.95);
+         transition: transform 0.3s ease;
+         
+     } 
+     
+     .template-card:hover .card-body {
+         background-color: #d4e9f0; /* Light blue background color */
+     }
+     
+     </style>
+@endsection
 
-    <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-    @endsection
-    @section('content')
+@section('content')
         <!-- Begin page -->
         <div class="layout-wrapper landing">
            @include('frontend.body.nav_frontend')
