@@ -268,9 +268,13 @@ class TemplateController extends Controller
                 $userRequestFeedbacks = RequestModuleFeedback::where('user_id', auth()->id())
                 ->orderBy('created_at', 'desc')
                 ->get();
+
+                $hasPendingFeedback = RequestModuleFeedback::where('user_id', auth()->id())
+                ->where('status', 'Pending')
+                ->exists();
         }
 
-        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks'));
+        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks','hasPendingFeedback'));
     }
 
     public function TemplateView($slug)

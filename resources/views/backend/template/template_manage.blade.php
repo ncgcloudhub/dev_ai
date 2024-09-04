@@ -65,6 +65,14 @@
             <div class="card-body pt-0">
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
+                     
+                        <li class="nav-item">
+                            <a class="requeste py-3 btn <?= $hasPendingFeedback ? 'btn-outline-warning' : 'btn-outline-success' ?> waves-effect waves-light" data-bs-toggle="tab" id="requeste"
+                                href="#requested" role="tab" aria-selected="false">
+                                <i class="ri-store-2-fill me-1 align-bottom"></i> Requested Templates
+                            </a>
+                        </li>
+                     
                         <li class="nav-item" id="category-tour">
                             <a class="nav-link n1 active All py-3" data-bs-toggle="tab" id="All"
                                 href="#home1" role="tab" aria-selected="true">
@@ -72,12 +80,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link requeste py-3" data-bs-toggle="tab" id="requeste"
-                                href="#requested" role="tab" aria-selected="false">
-                                <i class="ri-store-2-fill me-1 align-bottom"></i> requested Templates
-                            </a>
-                        </li>
+                     
 
                         @foreach ($templatecategories as $item)
                             <li class="nav-item">
@@ -177,7 +180,14 @@
                                                     <tr>
                                                         <td>{{ $feedback->module }}</td>
                                                         <td>{{ $feedback->text }}</td>
-                                                        <td>{{ $feedback->status }}</td>
+                                                        <td>
+                                                            @if ($feedback->status == 'pending')
+                                                                <span class="badge bg-danger">{{$feedback->status}}</span>
+                                                            @else
+                                                                <span class="badge bg-success">{{$feedback->status}}</span>
+                                                            @endif
+                                                        </td>
+                                                        
                                                         <td>{{ $feedback->created_at->format('Y-m-d') }}</td>
                                                     </tr>
                                                 @endforeach
