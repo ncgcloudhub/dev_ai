@@ -165,8 +165,9 @@ class ExpertController extends Controller
 
         $imageName = $expert->image;
         if ($image = $request->file('image')) {
-            if (file_exists('backend/uploads/expert/' . $expert->image)) {
-                unlink('backend/uploads/expert/' . $expert->image); // Delete the old image
+            $oldImagePath = 'backend/uploads/expert/' . $expert->image;
+            if (!empty($expert->image) && file_exists($oldImagePath) && is_file($oldImagePath)) {
+                unlink($oldImagePath); // Delete the old image
             }
             $imageName = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move('backend/uploads/expert', $imageName);
