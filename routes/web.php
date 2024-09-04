@@ -358,9 +358,6 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
 
-    // Global Select Model
-    Route::post('/select-model', [UserController::class, 'selectModel'])->name('select-model');
-
     // Template Rating
     Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
 
@@ -395,6 +392,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
+
+
+     // Global Select Model
+     Route::post('/select-model', [UserController::class, 'selectModel'])->name('select-model');
+
 
     // Main Chat
     // Custom Templates
