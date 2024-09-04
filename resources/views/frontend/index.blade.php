@@ -124,6 +124,16 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 }
 
 
+   .template-card:hover {
+    transform: scale(.95);
+    transition: transform 0.3s ease;
+    
+} 
+
+.template-card:hover .card-body {
+    background-color: #d4e9f0; /* Light blue background color */
+}
+
 </style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
@@ -776,33 +786,30 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                        
                         <div class="row template-row">
                             @foreach ($templates as $item)
-                           
                             <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}">
-                                
                                 <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body d-flex flex-column justify-content-between" style="height: 250px;"> <!-- Fixed height for the card -->
-                                        <div class="mb-3">
-                                            <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
-                                                {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
-                                                <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
+                                    @auth
+                                        <a href="{{route('template.view', ['slug' => $item->slug])}}" class="text-decoration-none">
+                                    @else
+                                        <a href="{{route('frontend.free.template.view', ['slug' => $item->slug])}}" class="text-decoration-none">
+                                    @endauth
+                                        <div class="card-body d-flex flex-column justify-content-between" style="height: 250px;"> <!-- Fixed height for the card -->
+                                            <div class="mb-3">
+                                                <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
+                                                    <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
+                                                </div>
+                                                <h3 class="fw-medium link-primary">{{$item->template_name}}</h3>
+                                                <p style="height: 3em; overflow: hidden; color:black" class="card-text customer_name">{{$item->description}}</p>
                                             </div>
-                                            @auth
-                                                <h3><a href="{{route('template.view', ['slug' => $item->slug])}}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
-                                            @else
-                                                <h3><a href="{{route('frontend.free.template.view', ['slug' => $item->slug])}}" class="fw-medium link-primary">{{$item->template_name}}</a></h3>
-                                            @endauth
-                                            <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
+                                            <div>
+                                                <small class="text-muted">0 Words generated</small>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <small class="text-muted">0 Words generated</small>
-                                        </div>
-                                    </div>
+                                    </a>
                                 </div>
-                                
-                           
                             </div>
-                            
-                                @endforeach
+                        @endforeach
+                        
                         </div>
                         <div class="mx-auto d-flex justify-content-center">
                             @auth
