@@ -1,3 +1,15 @@
+<style>
+    .card-hover {
+    transition: background-color 0.3s ease;
+}
+
+.card-hover:hover {
+    background-color: #f0f8ff; /* Light color on hover */
+    cursor: pointer;
+}
+
+</style>
+
 <section class="section bg-light py-5">
     <div class="container">
         <div class="row justify-content-center">
@@ -13,44 +25,30 @@
 
         <div class="row align-items-center gy-4">
             @foreach ($promptLibrary as $item)
-            <div class="col-lg-6">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <div class="d-flex">
-                           
-                            <div class="ms-3 flex-grow-1">
-                                @auth
-                                @if(Auth::user()->role == 'admin')
-                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                    <h5>{{$item->prompt_name}}</h5>
-                                </a>
-                                @elseif(Auth::user()->role == 'user')
-                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                    <h5>{{$item->prompt_name}}</h5>
-                                </a>
-                                @endif
-                                @else
-                                <a href="{{ route('prompt.frontend.view', ['slug' => $item->slug]) }}">
-                                    <h5>{{$item->prompt_name}}</h5>
-                                </a>
-                                @endauth
-
-                                <ul class="list-inline text-muted mb-3">
-                                    <li class="list-inline-item">
-                                        <span class="text-description">{{$item->description}}</span>
-                                    </li>
-                                </ul>
-                                <div class="hstack gap-2">
-                                    <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
-                                    <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                <div class="col-lg-6">
+                    <a href="{{ Auth::check() && Auth::user()->role == 'admin' || Auth::check() && Auth::user()->role == 'user' ? route('prompt.view', ['slug' => $item->slug]) : route('prompt.frontend.view', ['slug' => $item->slug]) }}" class="text-decoration-none">
+                        <div class="card shadow-lg card-hover">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="ms-3 flex-grow-1">
+                                        <h5 class="text-dark">{{$item->prompt_name}}</h5>
+                                        <ul class="list-inline text-muted mb-3">
+                                            <li class="list-inline-item">
+                                                <span class="text-description">{{$item->description}}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="hstack gap-2">
+                                            <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
+                                            <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                           
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </div>
             @endforeach
+
             <div class="mx-auto d-flex justify-content-center">
                 @auth                  
                     <a href="{{ route('prompt.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to prompt.manage if user is admin -->
