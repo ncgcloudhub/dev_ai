@@ -51,24 +51,30 @@
                     <div class="chat-message-list">
 
                         <ul class="list-unstyled chat-list chat-user-list" id="userList">
-                            @foreach ($experts as $item) 
-                            <li class="{{ $expert_selected_id == $item->id ? 'active' : '' }}" data-name="direct-message" onclick="selectExpert('{{$item->id}}')">
+                            @foreach ($experts as $item)
+                            <li class="{{ $expert_selected_id == $item->id ? 'active' : '' }}" 
+                                data-name="direct-message" 
+                                data-role="{{ $item->role }}" 
+                                onclick="selectExpert('{{ $item->id }}')">  <!-- Use expert ID in onclick -->
                                 <a href="javascript: void(0);">
                                     <div class="d-flex align-items-center">
-                                      <div class="flex-shrink-0 chat-user-img online align-self-center me-2 ms-0">       
-                                         <div class="avatar-xxs">  
-                                         <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" class="rounded-circle img-fluid userprofile" alt=""><span class="user-status">
-                                            </span>                        
-                                        </div>                  
-                                      </div>                 
-                                         <div class="flex-grow-1 overflow-hidden">    
-                                            <p class="text-truncate mb-0">{{$item->expert_name}}</p> 
+                                        <div class="flex-shrink-0 chat-user-img online align-self-center me-2 ms-0">       
+                                            <div class="avatar-xxs">  
+                                                <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" 
+                                                     class="rounded-circle img-fluid userprofile" 
+                                                     alt="">
+                                                <span class="user-status"></span>                        
+                                            </div>                  
+                                        </div>                 
+                                        <div class="flex-grow-1 overflow-hidden">    
+                                            <p class="text-truncate mb-0">{{ $item->expert_name }}</p> 
                                         </div>
-                                     </div> 
-                                    </a>
-                                </li>
+                                    </div> 
+                                </a>
+                            </li>
                             @endforeach
                         </ul>
+                        
                         <input type="hidden" name="expert_id_selected" id="expert_id_selected" value="{{$expert_selected_id}}">
                     </div>
 
@@ -433,13 +439,31 @@ function sendMessage() {
 
 
 
-    function selectExpert(element) {
-        // Extract the expert name and log it to the console
-        var message = $('#expert_id_selected').val(element);
-         $('#users-conversation').empty();
-        //  console.log(element);
+function selectExpert(expertId) {
+    // Find the selected expert's list item based on the expert ID
+    var selectedExpert = $("li[data-name='direct-message'][onclick*='" + expertId + "']");
 
-    }
+    // Extract the expert's details from the list item
+    var expertName = selectedExpert.find(".text-truncate").text();
+    var expertImage = selectedExpert.find(".userprofile").attr("src");
+    var expertRole = selectedExpert.data('role');  // Assuming role is passed as data attribute
+
+    // Update the selected expert's name in the chat topbar
+    $(".user-chat-topbar .username").text(expertName);
+
+    // Update the selected expert's role in the chat topbar
+    $(".user-chat-topbar .userStatus").text(expertRole);
+
+    // Update the selected expert's image in the chat topbar
+    $(".user-chat-topbar .avatar-xs").attr("src", expertImage);
+
+    // Clear the conversation area for the selected expert
+    $('#users-conversation').empty();
+
+    // Store the selected expert's ID (if needed for other logic)
+    $('#expert_id_selected').val(expertId);
+}
+
 </script>
 
 @section('script')
