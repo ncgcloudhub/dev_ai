@@ -151,7 +151,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
            @include('frontend.body.nav_frontend')
 
             <!-- start hero section -->
-          @include('frontend.designs.banner_home.banner_parallex')
+          @include('frontend.designs.banner_home.banner_deafult')
             <!-- end hero section -->
 
 
