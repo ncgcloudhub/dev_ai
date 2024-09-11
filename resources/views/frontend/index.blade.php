@@ -867,32 +867,32 @@ border: 1px solid rgba(255, 255, 255, 0.99);
        
        {{-- Parallex --}}
        <script>
-          
-          window.addEventListener('scroll', function() {
-    let stones = document.getElementById("stones");
-    let footer = document.querySelector('.custom-footer'); // Ensure your footer has this class or ID
-
-    // Get the positions
-    let scrollTop = window.scrollY;
-    let stonesHeight = stones.offsetHeight;
-    let footerTop = footer.offsetTop;
-    let windowHeight = window.innerHeight;
-
-    // Calculate the bottom position of the stones image relative to the document
-    let stonesBottom = scrollTop + stonesHeight;
-
-    // Check if the stones image should stop at the footer
-    if (stonesBottom > footerTop) {
-        stones.style.top = (footerTop - stonesHeight) + 'px';
-    } else {
-        stones.style.top = scrollTop + 'px';
-    }
-});
-
-
-
-
-
-
+        window.addEventListener('scroll', function() {
+            let stones = document.getElementById("stones");
+            let footer = document.querySelector('.custom-footer'); // Ensure this matches your footer's class or ID
+        
+            // Get the positions
+            let scrollTop = window.scrollY;
+            let stonesHeight = stones.offsetHeight;
+            let stonesWidth = stones.offsetWidth;
+            let footerTop = footer.offsetTop;
+            let windowHeight = window.innerHeight;
+        
+            // Zoom effect parameters
+            let zoomFactor = 1 + (scrollTop / 1000); // Adjust zoom speed here
+            stones.style.transform = `scale(${zoomFactor})`;
+        
+            // Calculate the bottom position of the stones image relative to the document
+            let stonesBottom = scrollTop + stonesHeight * zoomFactor;
+        
+            // Check if the stones image should stop at the footer
+            if (stonesBottom > footerTop) {
+                // Calculate the adjusted top position considering zoom
+                stones.style.top = (footerTop - stonesHeight * zoomFactor) + 'px';
+            } else {
+                stones.style.top = scrollTop + 'px';
+            }
+        });
         </script>
+        
     @endsection
