@@ -61,9 +61,10 @@ Route::get('/', function () {
     $faqs = FAQ::latest()->get();
 
     // How it works SECTION Design
-    $selectedDesign = SectionDesign::where('section_name', 'how_it_works')->value('selected_design');
+    $how_it_works = SectionDesign::where('section_name', 'how_it_works')->value('selected_design');
+    $banner = SectionDesign::where('section_name', 'banner')->value('selected_design');
 
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','selectedDesign'));
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner'));
 })->name('home');
 
 
