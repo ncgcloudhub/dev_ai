@@ -171,8 +171,18 @@ border: 1px solid rgba(255, 255, 255, 0.99);
            <img src="{{ asset('frontend/parallex_images/stones.png') }}" id="stones">   
             
            
+            {{-- How it Works --}}
+            @if ($banner == 'design1')
+                @include('frontend.designs.banner_home.banner_deafult')
+            @elseif ($banner == 'design2')
+                @include('frontend.designs.banner_home.banner_parallex')
+            @else
+                <!-- Fallback or default design if none is selected -->
+                @include('frontend.designs.banner_home.banner_deafult')
+            @endif
+
            <!-- start hero section -->
-          @include('frontend.designs.banner_home.banner_parallex')
+        
             <!-- end hero section -->
 
 
@@ -240,11 +250,11 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
      {{-- How it Works --}}
-            @if ($selectedDesign == 'design1')
+            @if ($how_it_works == 'design1')
                 @include('frontend.designs.how_it_works.design_1')
-            @elseif ($selectedDesign == 'design2')
+            @elseif ($how_it_works == 'design2')
                 @include('frontend.designs.how_it_works.design_2')
-            @elseif ($selectedDesign == 'design3')
+            @elseif ($how_it_works == 'design3')
                 @include('frontend.designs.how_it_works.design_3')
             @else
                 <!-- Fallback or default design if none is selected -->

@@ -26,14 +26,26 @@ class TemplateController extends Controller
 {
 
     public function updateDesign(Request $request)
-    {
+{
+    // Update 'how_it_works' section if its form is submitted
+    if ($request->has('how_it_works')) {
         SectionDesign::updateOrCreate(
             ['section_name' => 'how_it_works'],
-            ['selected_design' => $request->input('selected_design')]
+            ['selected_design' => $request->input('how_it_works_design')]
         );
-
-        return redirect()->back()->with('success', 'Design updated successfully.');
     }
+
+    // Update 'banner' section if its form is submitted
+    if ($request->has('banner')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'banner'],
+            ['selected_design' => $request->input('banner_design')]
+        );
+    }
+
+    return redirect()->back()->with('success', 'Design updated successfully.');
+}
+
 
     public function getDesign()
     {

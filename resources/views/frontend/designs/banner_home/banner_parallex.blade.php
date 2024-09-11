@@ -1,10 +1,6 @@
-<style>
+<section class="pb-0" id="a">
 
-body
-{
-  background: #0a2a43;
-  min-height: 1500px;
-}
+<style>
 #a
 {
   position: relative;
@@ -59,13 +55,11 @@ body
 #astronaut{
     z-index: 4;
 }
-/* #stones{
-    z-index: 5;
-} */
+
 </style>
 
 
-<section class=" pb-0" id="a">
+
 
             <img src="{{ asset('frontend/parallex_images/background_moon.png') }}" id="bg">
             <img src="{{ asset('frontend/parallex_images/mountain.png') }}" id="mountain">
@@ -79,7 +73,7 @@ body
            
    
            
-</section>
+
 
 <script>
     let bg = document.getElementById("bg");
@@ -99,8 +93,7 @@ body
         text.style.transform = `scale(${zoomFactor})`;
 
 
-
-
-
     })
 </script>
+
+</section>
