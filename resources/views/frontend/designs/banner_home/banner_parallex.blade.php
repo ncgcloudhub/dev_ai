@@ -34,6 +34,7 @@ body
     z-index: 3;
     position: relative;
     display: inline-block;
+    text-shadow: 7px 7px 5px rgba(0, 0, 0, 0.7);
 }
 
 .clever {
@@ -88,6 +89,13 @@ body
         bg.style.top = value * 1.5 + 'px';
         // astronaut.style.top = value * 1.5 + 'px';
         mountain.style.top = value * 1.5 + 'px';
-        text.style.left = value * 2 + 'px';
+        // text.style.top = value * 2 + 'px';
+        let zoomFactor = 1 + (value * 0.002); // Adjust zoom speed as needed
+        text.style.transform = `scale(${zoomFactor})`;
+
+
+
+
+
     })
 </script>
