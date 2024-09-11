@@ -59,6 +59,9 @@ body
 #astronaut{
     z-index: 4;
 }
+/* #stones{
+    z-index: 5;
+} */
 </style>
 
 
@@ -73,6 +76,7 @@ body
           
           
             <img src="{{ asset('frontend/parallex_images/astronaut.png') }}" id="astronaut">     
+           
    
            
 </section>
@@ -81,6 +85,7 @@ body
     let bg = document.getElementById("bg");
     let astronaut = document.getElementById("astronaut");
     let mountain = document.getElementById("mountain");
+    // let stones = document.getElementById("stones");
     let text = document.getElementById("text");
     
     window.addEventListener('scroll', function(){
