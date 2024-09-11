@@ -7,6 +7,7 @@
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
     });
+    });
 
     // Function to send message when Enter key is pressed
     $('.auto-expand').on('keydown', function(e) {
@@ -15,16 +16,261 @@
             sendMessage(); // Call the function to send the message
         }
     });
-
-    // Attach click event to send button
-    $('#send-button').on('click', function() {
-        sendMessage();
-    });
-    });
-    
+        
 </script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        const messageInput = document.getElementById('message-input');
+        const sendMessageBtn = document.getElementById('send-button');
+        const fileInput = document.getElementById('file_input');
+        const chatConversation = document.getElementById('users-conversation');
+        const chatContainer = document.getElementById('chat-conversation');
+        const fileNameDisplay = document.getElementById('file_name_display');
+        const newSessionBtn = document.getElementById('main_new_session_btn');
+        const imageDisplay = document.getElementById('image_display');
+        let pastedImageFile = null;
+        const sessionList = document.getElementById('session-list');
+        let isFirstMessage = true;
+
+
+        fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const imageUrl = URL.createObjectURL(file);
+
+            // Create image element
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = '100px'; // Adjust image size as needed
+
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => {
+                // Clear the file input and image display
+                fileInput.value = '';
+                imageDisplay.innerHTML = '';
+            });
+
+            // Container for image and button
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+
+            // Display the image in image_display div
+            imageDisplay.innerHTML = ''; // Clear any previous image
+            imageDisplay.appendChild(container);
+        }
+        });
+
+
+        // Function to handle image paste
+        function handleImagePaste(event) {
+                const clipboardItems = event.clipboardData.items;
+                for (let i = 0; i < clipboardItems.length; i++) {
+                    const item = clipboardItems[i];
+                    if (item.type.indexOf("image") !== -1) {
+                        const blob = item.getAsFile();
+                        pastedImageFile = blob;
+                        const imageUrl = URL.createObjectURL(blob);
+
+                        // Create image element
+                        const img = document.createElement('img');
+                        img.src = imageUrl;
+                        img.style.maxWidth = '10%'; // Adjust image size as needed
+
+                        // Create remove button
+                        const removeBtn = document.createElement('button');
+                        removeBtn.textContent = 'X';
+                        removeBtn.classList.add('remove-btn');
+                        removeBtn.addEventListener('click', () => {
+                            // Remove image and reset input
+                            imageDisplay.innerHTML = '';
+                            pastedImageFile = null; // Reset pastedImageFile
+                        });
+
+                        // Container for image and button
+                        const container = document.createElement('div');
+                        container.classList.add('image-container');
+                        container.appendChild(img);
+                        container.appendChild(removeBtn);
+
+                        // Display the pasted image in image_display div
+                        imageDisplay.innerHTML = ''; // Clear any previous image
+                        imageDisplay.appendChild(container);
+
+                        // Stop further processing to prevent multiple image pastes
+                        event.preventDefault();
+                        break;
+                    }
+                }
+            }
+
+            // Listen for paste events on messageInput
+            messageInput.addEventListener('paste', handleImagePaste);
+
+            function sendMessage() {
+
+                console.log('sendMessage called'); // Debug log
+
+                var expert = $('#expert_id_selected').val();
+
+        const message = messageInput.value.trim();
+        const file = fileInput.files[0];
+
+        if (!message && !file && !pastedImageFile) return;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const formData = new FormData();
+        formData.append('message', message);
+        formData.append('expert', expert);
+
+
+        if (file) {
+            formData.append('file', file);
+        } else if (pastedImageFile) {
+            formData.append('file', pastedImageFile, 'pasted_image.png');
+        }
+
+        sendMessageBtn.disabled = true;
+        sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
+
+        axios.post('/chat/reply', formData, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(response => {
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let userMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
+
+            if (file || pastedImageFile) {
+                const fileType = (file || pastedImageFile).type.split('/')[0];
+                if (fileType === 'image') {
+                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
+                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
+                } else {
+                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
+                }
+            }
+
+            userMessageHTML += `</div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            const assistantMessage = response.data.content;
+            const formattedMessage = formatContent(assistantMessage);
+            const assistantMessageHTML = `<li class="chat-list left">
+                <div class="conversation-list">
+                    <div class="chat-avatar">
+                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                    </div>
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                ${formattedMessage}
+                            </div>
+                        </div>
+                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                    </div>
+                </div>
+            </li>`;
+
+            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+            
+            
+            // Scroll to the last message
+            let conversationList = document.getElementById('users-conversation');
+            let lastMessage = conversationList.lastElementChild;
+            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+            
+
+            messageInput.value = '';
+            fileInput.value = '';
+            fileNameDisplay.textContent = '';
+            imageDisplay.innerHTML = '';
+            pastedImageFile = null;
+        })
+        .catch(error => {
+            console.error(error);
+            const errorMessageHTML = `<li class="chat-list right">
+                <div class="conversation-list">
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>`;
+            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+            
+            // Scroll to the last message
+            let conversationList = document.getElementById('users-conversation');
+            let lastMessage = conversationList.lastElementChild;
+            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            
+        })
+        .finally(() => {
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+        });
+    }
+
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+    });
+
+</script>
+
+<script>
+    // Add this script in your main script file or where you handle dynamic content
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('copy-button')) {
+            const codeElement = event.target.previousElementSibling; // Assuming the button is placed after the <pre> element
+            const codeText = codeElement.innerText.trim(); // Use innerText to preserve line breaks
+            
+            navigator.clipboard.writeText(codeText)
+                .then(() => {
+                    event.target.textContent = 'Copied!';
+                    setTimeout(() => {
+                        event.target.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+        }
+    });
+</script>
+    
+
+{{-- GET/LOAD MESSAGES FROM SESSION --}}
+<script>
+   
     function formatContent(content) {
     const lines = content.split('\n');
     let formattedContent = '';
@@ -77,108 +323,15 @@
     return formattedContent;
     }
 
-    function displayMessage(message, reply, image) {
-    let formattedMessage = formatContent(message);
-    let formattedReply = formatContent(reply);
 
-    $('#users-conversation').append(`
-        <li class="chat-list right"> 
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content">${formattedMessage}</p>
-                        </div>
-                        <div class="dropdown align-self-start message-box-drop"> 
-                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i></a> 
-                            <div class="dropdown-menu"> 
-                             
-                                <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>
-                               
-                            </div>
-                        </div>
-                    </div>
-                    <div class="conversation-name">
-                        <span class="d-none name">Frank Thomas</span>
-                        <small class="text-muted time">09:08 am</small> 
-                        <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
-                    </div>
-                </div>    
-            </div>    
-        </li>
-        <li class="chat-list left">   
-            <div class="conversation-list">
-                <div class="chat-avatar">
-                    <img src="{{ URL::asset('backend/uploads/expert/') }}/${image}" alt="">
-                </div>
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content">${formattedReply}</p>
-                        </div>
-                        <div class="dropdown align-self-start message-box-drop">                
-                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ri-more-2-fill"></i></a>     
-                            <div class="dropdown-menu">
-                              
-                                <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>   
-                                
-                            </div>    
-                        </div>
-                    </div>
-                    <div class="conversation-name">
-                        <span class="d-none name">Lisa Parker</span>
-                        <small class="text-muted time">09:07 am</small> 
-                        <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span>
-                    </div>
-                </div>              
-            </div>           
-        </li>
-    `);
+</script>
 
-    // Scroll to the last message
-    let conversationList = document.getElementById('users-conversation');
-    let lastMessage = conversationList.lastElementChild;
-    lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  
 
-    function sendMessage() {
-    console.log('sendMessage called'); // Debug log
 
-    var message = $('#message-input').val();
-    if (!message.trim()) return; // Prevent empty messages
-
-    var expert = $('#expert_id_selected').val();
-    var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-    // Disable the send button to prevent multiple clicks
-    $('#send-button').prop('disabled', true);
-
-    $.ajax({
-        type: 'POST',
-        url: '/chat/reply',
-        data: { message: message, expert: expert },
-        headers: {
-            'X-CSRF-TOKEN': csrfToken
-        },
-        success: function (response) {
-            var reply = response.content;
-            var image = response.expert_image;
-
-            displayMessage(message, reply, image);
-
-            // Clear the input field
-            $('#message-input').val('');
-        },
-        error: function (error) {
-            console.error(error);
-        },
-        complete: function() {
-            // Re-enable the send button after the request completes
-            $('#send-button').prop('disabled', false);
-        }
-    });
-    }
-
+<script>
+   
     function selectExpert(expertId) {
     // Find the selected expert's list item based on the expert ID
     var selectedExpert = $("li[data-name='direct-message'][onclick*='" + expertId + "']");
