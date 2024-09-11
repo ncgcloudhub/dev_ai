@@ -21,6 +21,10 @@
 @section('body')
 
 <style>
+
+    body, html {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
     .banner{
 	background: url({{ asset('build/images/banner1.jpg') }}) no-repeat center top;
 	background-attachment:fixed;
@@ -134,6 +138,18 @@ border: 1px solid rgba(255, 255, 255, 0.99);
     background-color: #d4e9f0; /* Light blue background color */
 }
 
+/* parallex */
+#stones {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; /* Adjust width if needed */
+    height: auto; /* Maintain aspect ratio */
+    z-index: 5; /* Ensure it is behind other interactive elements */
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+
 </style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
@@ -150,7 +166,12 @@ border: 1px solid rgba(255, 255, 255, 0.99);
         <div class="layout-wrapper landing">
            @include('frontend.body.nav_frontend')
 
-            <!-- start hero section -->
+
+           {{-- Parallex --}}
+           <img src="{{ asset('frontend/parallex_images/stones.png') }}" id="stones">   
+            
+           
+           <!-- start hero section -->
           @include('frontend.designs.banner_home.banner_parallex')
             <!-- end hero section -->
 
@@ -832,4 +853,36 @@ border: 1px solid rgba(255, 255, 255, 0.99);
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/job-lading.init.js') }}"></script>
         <script src="{{ URL::asset('build/js/all.js') }}"></script>
+
+       
+       {{-- Parallex --}}
+       <script>
+          
+          window.addEventListener('scroll', function() {
+    let stones = document.getElementById("stones");
+    let footer = document.querySelector('.custom-footer'); // Ensure your footer has this class or ID
+
+    // Get the positions
+    let scrollTop = window.scrollY;
+    let stonesHeight = stones.offsetHeight;
+    let footerTop = footer.offsetTop;
+    let windowHeight = window.innerHeight;
+
+    // Calculate the bottom position of the stones image relative to the document
+    let stonesBottom = scrollTop + stonesHeight;
+
+    // Check if the stones image should stop at the footer
+    if (stonesBottom > footerTop) {
+        stones.style.top = (footerTop - stonesHeight) + 'px';
+    } else {
+        stones.style.top = scrollTop + 'px';
+    }
+});
+
+
+
+
+
+
+        </script>
     @endsection
