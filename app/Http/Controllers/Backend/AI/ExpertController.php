@@ -128,7 +128,11 @@ class ExpertController extends Controller
         $pastedImages = session('pasted_images', []);
         Log::info('Pasted images: ', $pastedImages);
 
-      
+        $conversationHistory = session('conversation_history', []);
+        Log::info('Conversation history: ', $conversationHistory);
+
+        $context = session('context', []);
+        Log::info('Context: ', $context);
 
         if ($file) {
             $request->validate([
@@ -167,11 +171,16 @@ class ExpertController extends Controller
             $uploadedFiles[$filePath] = $fileContent;
             session(['uploaded_files' => $uploadedFiles]);
     
+            $context['file_content'] = $fileContent;
+            session(['context' => $context]);
         
             // Provide default message if userMessage is empty
             if (empty($userInput)) {
                 $userInput = 'Summarize this in 3 lines';
             }
+    
+            $conversationHistory[] = ['role' => 'user', 'content' => $userInput];
+            session(['conversation_history' => $conversationHistory]);
         }
         
          // Handle image processing for generated similar images
@@ -189,13 +198,36 @@ class ExpertController extends Controller
             if (empty($userInput)) {
                 $userInput = 'Summarize this in 3 lines';
             }
-          
+
+            $conversationHistory[] = ['role' => 'user', 'content' => $userInput];
+            session(['conversation_history' => $conversationHistory]);
         }
-         
+
+
+        if (!empty($userInput)) {
+            $conversationHistory[] = ['role' => 'user', 'content' => $userInput];
+            session(['conversation_history' => $conversationHistory]);
+    
+            $context['latest_message'] = $userInput;
+            session(['context' => $context]);
+            Log::info('Updated context with message: ', $context);
+
+             // Check if $filePath is set and not empty
+            $filePath = !empty($filePath) ? $filePath : null;
+       
+            Log::info('File Path: ', ['pathss' => $filePath]);
+        } 
+
+          // Update session data
+          session([
+            'conversation_history' => $conversationHistory,
+            'context' => $context,
+        ]);
+
+
         // Define the messages array with the dynamic user input
         $messages = [
             ['role' => 'system', 'content' => $expertInstruction],
-            ['role' => 'user', 'content' => $userInput]
         ];
 
         // Add file content if available
@@ -208,12 +240,23 @@ class ExpertController extends Controller
             $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
         }
 
+        // Add all conversation history messages
+        foreach ($conversationHistory as $message) {
+            if (is_array($message) && isset($message['content']) && isset($message['role'])) {
+                if (!is_null($message['content'])) {
+                    $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+                }
+            } else {
+                Log::warning('Invalid message structure:', ['message' => $message]);
+            }
+        }
+
+
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
                 $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
             }
         });
-        
 
         Log::info('Messages to send to API: ', $messages);
 
@@ -224,6 +267,11 @@ class ExpertController extends Controller
         ])->post('https://api.openai.com/v1/chat/completions', [
             'model' =>  $openaiModel, // Use the appropriate model name
             'messages' => $messages,
+            'temperature' => 0,
+            'top_p' => 1,
+            'frequency_penalty' => 0,
+            'presence_penalty' => 0,
+
         ]);
 
         $data = json_decode($response->getBody(), true);

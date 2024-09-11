@@ -1,16 +1,11 @@
 <style>
 
-*
-{
-  margin: 0;
-  padding: 0;
-}
 body
 {
   background: #0a2a43;
   min-height: 1500px;
 }
-section
+#a
 {
   position: relative;
   width: 100%;
@@ -45,7 +40,7 @@ section
   mix-blend-mode: color;
 } */
 
-section img
+#a img
 {
   position: absolute;
   top: 0;
@@ -72,7 +67,7 @@ section img
 </style>
 
 
-<section class=" pb-0" id="">
+<section class=" pb-0" id="a">
 
   
             <img src="{{ asset('frontend/bg.png') }}" id="bg">
