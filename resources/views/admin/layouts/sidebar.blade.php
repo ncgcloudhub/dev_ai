@@ -327,6 +327,29 @@
                         </div>
                     </div>
                 </li>
+               
+                {{-- EDUCATION --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#education" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-user-circle"></i> <span >Education</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.grade.subject')}}" class="nav-link" >Manage Grade/Subject</a>
+                                    </li>
+                                   
+
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('newsletter.manage')}}">
