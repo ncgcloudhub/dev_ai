@@ -264,7 +264,7 @@
 <!--ecommerce-customer init js -->
 <script src="{{ URL::asset('build/js/pages/ecommerce-order.init.js') }}"></script>
  
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+{{-- <script src="{{ URL::asset('build/js/app.js') }}"></script> --}}
 
 
 <script>
