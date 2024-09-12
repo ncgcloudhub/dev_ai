@@ -248,8 +248,6 @@
 
     <!-- chat init js -->
     <script src="{{ URL::asset('build/js/pages/chat.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     @include('admin.layouts.chat_script')

@@ -87,7 +87,7 @@
         {{-- Tour --}}
         <script src="{{ URL::asset('build/libs/shepherd.js/js/shepherd.min.js') }}"></script>
         <script src="{{ URL::asset('build/js/pages/tour_custom.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/app.js') }}"></script>
+        {{-- <script src="{{ URL::asset('build/js/app.js') }}"></script> --}}
 </body>
 
 </html>

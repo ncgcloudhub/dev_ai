@@ -55,5 +55,4 @@
 
     <!-- chat init js -->
     <script src="{{ URL::asset('build/js/pages/chat.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection
