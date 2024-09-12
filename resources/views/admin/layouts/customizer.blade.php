@@ -13,12 +13,12 @@
 </div>
 
 <!--end back-to-top-->
-<div class="customizer-setting d-none d-md-block">
+{{-- <div class="customizer-setting d-none d-md-block">
     <div class="btn-primary rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvas"
         data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
         <i class='mdi mdi-spin mdi-cog-outline fs-22'></i>
     </div>
-</div>
+</div> --}}
 
 <!-- Theme Settings -->
 <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">

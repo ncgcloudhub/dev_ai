@@ -85,7 +85,7 @@
                             <img class="rounded-circle header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
                                 <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{Auth::user()->name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
+                              
                             </span>
                         </span>
                     </button>
@@ -93,7 +93,9 @@
                         <!-- item-->
                         <h6 class="dropdown-header">Welcome {{Auth::user()->name}}!</h6>
                         <a class="dropdown-item" href="{{ route('edit.profile') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
-                        <a class="dropdown-item" href="{{route('home')}}"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dashboard</span></a>
+                        <a class="dropdown-item" href="{{route('home')}}" target="_blank"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dashboard</span></a>
+                        <div data-bs-toggle="offcanvas"
+                        data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas" class="dropdown-item"><i class="mdi mdi-spin mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Theme Customizer</span></div>
                         
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Balance : <b>$5971.67</b></span></a>
@@ -138,13 +140,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const dropdownItems = document.querySelectorAll('.dropdown-item[data-model]');
     const aiModelInput = document.getElementById('aiModelInput');
     const modelForm = document.getElementById('adminModelForm');
 
     dropdownItems.forEach(function (item) {
         item.addEventListener('click', function (event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent the default link behavior
+            event.stopPropagation(); // Prevent other click events from firing
+
             const selectedModel = this.getAttribute('data-model');
             aiModelInput.value = selectedModel;
             modelForm.submit();
