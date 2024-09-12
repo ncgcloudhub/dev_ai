@@ -322,23 +322,35 @@
 
 <script>
     // Add this script in your main script file or where you handle dynamic content
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('copy-button')) {
-            const codeElement = event.target.previousElementSibling; // Assuming the button is placed after the <pre> element
-            const codeText = codeElement.innerText.trim(); // Use innerText to preserve line breaks
-            
-            navigator.clipboard.writeText(codeText)
-                .then(() => {
-                    event.target.textContent = 'Copied!';
-                    setTimeout(() => {
-                        event.target.textContent = 'Copy';
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy:', err);
-                });
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('copy-button')) {
+        // Find the nearest ancestor with class 'code-block'
+        const codeBlock = event.target.closest('.code-block');
+        if (codeBlock) {
+            // Find the <pre> element within the 'code-block' div
+            const codeElement = codeBlock.querySelector('pre');
+            if (codeElement) {
+                const codeText = codeElement.textContent; // Use textContent to preserve line breaks
+                
+                navigator.clipboard.writeText(codeText)
+                    .then(() => {
+                        event.target.textContent = 'Copied!';
+                        setTimeout(() => {
+                            event.target.textContent = 'Copy';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy:', err);
+                    });
+            } else {
+                console.error('No <pre> element found.');
+            }
+        } else {
+            console.error('No code-block ancestor found.');
         }
-    });
+    }
+});
+
 </script>
     
 
@@ -470,57 +482,47 @@
     });
 
     function formatContent(content) {
-    const lines = content.split('\n');
-    let formattedContent = '';
-
-    if (lines.length === 1) {
-        formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
-    } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
-        const codeContent = lines.slice(1, -1).join('\n');
-        formattedContent = `
-            <div class="code-block" style="position: relative;">
-                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${codeContent}</pre>
-                <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
-            </div>
-        `;
-    } else if (lines.some(line => line.trim().startsWith('*'))) {
-        formattedContent += '<ul style="font-family: Calibri;">';
-        lines.forEach(line => {
-            if (line.trim().startsWith('*')) {
-                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-            } else {
-                formattedContent += '<p>' + line.trim() + '</p>';
-            }
-        });
-        formattedContent += '</ul>';
-    } else {
-        lines.forEach(line => {
-            // Handle bold text marked with **
-            if (line.includes('**')) {
-                line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            }
-
-            if (line.trim().startsWith('###')) {
-                formattedContent += `<p style="font-weight: bold; font-family: Calibri;">${line.trim().substring(3).trim()}</p>`;
-            } else {
-                formattedContent += '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + line.trim() + '</p>';
-            }
-        });
+    function escapeHtml(html) {
+        return html.replace(/&/g, '&amp;')
+                   .replace(/</g, '&lt;')
+                   .replace(/>/g, '&gt;')
+                   .replace(/"/g, '&quot;')
+                   .replace(/'/g, '&#039;');
     }
 
-    // Replace code blocks with a styled pre element
-    formattedContent = formattedContent.replace(/```([\s\S]*?)```/g, (match, code) => {
-        return `
+    const codeBlockRegex = /```([\s\S]*?)```/g; // Adjust regex to match code blocks
+    let formattedContent = '';
+    let lastIndex = 0;
+    let match;
+
+    while ((match = codeBlockRegex.exec(content)) !== null) {
+        // Add the text before the code block
+        formattedContent += escapeHtml(content.substring(lastIndex, match.index));
+
+        // Add the formatted code block
+        formattedContent += `
             <div class="code-block" style="position: relative;">
-                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${code}</pre>
+                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; overflow-x: auto;">
+                    ${escapeHtml(match[1])}
+                </pre>
                 <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
             </div>
         `;
-    });
+
+        lastIndex = codeBlockRegex.lastIndex;
+    }
+
+    // Add any remaining text after the last code block
+    formattedContent += escapeHtml(content.substring(lastIndex));
+
+    // Process other content
+    formattedContent = formattedContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formattedContent = formattedContent.replace(/^### (.*?)$/gm, '<p style="font-weight: bold; font-family: Calibri;">$1</p>');
+    formattedContent = formattedContent.replace(/^\* (.*?)$/gm, '<ul><li>$1</li></ul>');
+    formattedContent = formattedContent.replace(/^(?!<\/?(ul|li|p|strong|pre|code|button)[\s>]).*$/gm, '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">$&</p>');
 
     return formattedContent;
-    }
-
+}
 
 </script>
 

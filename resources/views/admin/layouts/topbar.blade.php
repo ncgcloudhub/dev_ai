@@ -34,8 +34,8 @@
                 <div class="p-3" id="select-model-tour"> 
                     @php
                     // Static AI models for admin
-                    $staticModels = ['Model A', 'Model B', 'Model C']; // Replace with actual model names
-                    $selectedModel = Auth::user()->selected_model ?? 'Model A'; // Default selected model
+                    $staticModels = ['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo', 'gpt-4', 'gpt-3.5-turbo']; // Replace with actual model names
+                    $selectedModel = Auth::user()->selected_model ?? 'gpt-4o-mini'; // Default selected model
                 @endphp
                 
                 <form id="adminModelForm" action="{{ route('select-model') }}" method="POST">
