@@ -280,45 +280,8 @@
                         <!-- end col -->
 
                         <div class="col-lg-3">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="fs-14 text-primary mb-0"><i
-                                        class="ri-shopping-cart-fill align-middle me-2"></i> Your cart</h5>
-                                <span class="badge bg-primary rounded-pill">3</span>
-                            </div>
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item d-flex justify-content-between lh-sm">
-                                    <div>
-                                        <h6 class="my-0">Product name</h6>
-                                        <small class="text-muted">Brief description</small>
-                                    </div>
-                                    <span class="text-muted">$12</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between lh-sm">
-                                    <div>
-                                        <h6 class="my-0">Second product</h6>
-                                        <small class="text-muted">Brief description</small>
-                                    </div>
-                                    <span class="text-muted">$8</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between lh-sm">
-                                    <div>
-                                        <h6 class="my-0">Third item</h6>
-                                        <small class="text-muted">Brief description</small>
-                                    </div>
-                                    <span class="text-muted">$5</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between bg-light">
-                                    <div class="text-success">
-                                        <h6 class="my-0">Discount code</h6>
-                                        <small>−$5 Discount</small>
-                                    </div>
-                                    <span class="text-success">−$5</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <span>Total (USD)</span>
-                                    <strong>$20</strong>
-                                </li>
-                            </ul>
+                         
+                          
                         </div>
                     </div>
                     <!-- end row -->

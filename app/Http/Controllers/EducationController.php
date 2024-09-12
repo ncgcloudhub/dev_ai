@@ -10,10 +10,10 @@ class EducationController extends Controller
 {
     public function educationForm()
     {
-        $dynamicPage = DynamicPage::latest()->get(); // Fetch a specific dynamic page or however you retrieve it
+        $classes = GradeClass::with('subjects')->get();
 
-        return view('backend.dynamic_pages.all_dynamic_pages', [
-            'dynamicPage' => $dynamicPage,
+        return view('backend.education.create_content', [
+            'classes' => $classes,
         ]);
     }
 
