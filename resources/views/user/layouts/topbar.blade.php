@@ -132,6 +132,8 @@
                         <a class="dropdown-item" href="{{ route('user.dashboard') }}" target="_blank"><i class="mdi mdi-home text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dashboard</span></a>
                         <a class="dropdown-item" href="{{ route('home') }}" target="_blank"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Front-End</span></a>
                         <div class="dropdown-divider"></div>
+                        <a data-bs-toggle="offcanvas"
+                        data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas" class="dropdown-item"><i class="mdi mdi-spin mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Theme Customizer</span></a>
                         <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span>@lang('translation.logout')</span></a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
