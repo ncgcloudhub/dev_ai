@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\DynamicPageController;
+use App\Http\Controllers\EducationController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\SubscriptionController;
@@ -302,6 +303,15 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
 
+    // EDUCATION        
+    Route::prefix('education')->group(function () {
+
+        Route::get('/add/class/subject', [EducationController::class, 'manageGradeSubject'])->name('manage.grade.subject');
+
+        Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
+      
+    });
+
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
@@ -352,7 +362,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 // User Middleware
 Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.blocked.ip'])->group(function () {
-
+    
     // Feedback Request
     Route::post('/module/feedback', [RequestModuleFeedbackController::class, 'templateFeedback'])->name('template.module.feedback');
 
@@ -371,6 +381,15 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
     // User Prompt Library
     Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
+
+    // Education
+    Route::prefix('education')->group(function () {
+
+        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form');
+       
+    });
+
+
 }); //End User Middleware
 
 
