@@ -75,11 +75,11 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('education.form')}}">
                         <i class="lab la-blogger"></i> <span >Education</span>
                     </a>
-                </li>
+                </li> --}}
 
                 {{-- AI CHAT --}}
                 <li class="nav-item">
