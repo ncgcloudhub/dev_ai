@@ -309,6 +309,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/add/class/subject', [EducationController::class, 'manageGradeSubject'])->name('manage.grade.subject');
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
+
       
     });
 
@@ -387,6 +388,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form');
        
+        Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');
+        
     });
 
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class EducationController extends Controller
 {
+    // USER SECTION
     public function educationForm()
     {
         $classes = GradeClass::with('subjects')->get();
@@ -17,6 +18,21 @@ class EducationController extends Controller
         ]);
     }
 
+    public function educationContent(Request $request)
+    {
+        logger($request->all());
+        
+        return response()->json([
+            'message' => 'Your order is being processed!',
+            'details' => 'You will receive an email with your order details shortly.'
+        ]);
+    }
+
+
+
+
+
+    // ADMIN SECTION
     public function manageGradeSubject()
     {
         $classes = GradeClass::with('subjects')->get();
