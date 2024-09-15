@@ -390,6 +390,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
        
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');
         
+        Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
+
     });
 
 
