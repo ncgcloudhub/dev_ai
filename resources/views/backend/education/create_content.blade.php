@@ -65,11 +65,18 @@
 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Grade/Class</label>
-                                                    <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
+                                                    <select id="grade_id" class="form-select" name="grade_id" data-choices aria-label="Default select grade">
                                                         <option selected="">Select Grade/Class</option>
                                                         @foreach($classes as $item)
-                                                            <option value="{{$item->id}}">{{$item->grade}}</option>
+                                                            <option value="{{ $item->id }}">{{ $item->grade }}</option>
                                                         @endforeach
+                                                    </select>
+                                                    <div class="invalid-feedback">Please enter a first name</div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="form-label">Subject</label>
+                                                    <select id="subject_id" class="form-select" name="subject_id" data-choices aria-label="Default select subject">
+                                                        <option selected="">Select Subject</option>
                                                     </select>
                                                     <div class="invalid-feedback">Please enter a first name</div>
                                                 </div>
@@ -213,16 +220,17 @@
                                     <!-- end tab pane -->
                                     <div class="tab-pane fade" id="v-pills-finish" role="tabpanel"
                                         aria-labelledby="v-pills-finish-tab">
-                                        <div class="text-center pt-4 pb-2">
-
+                                        <div class="text-center pt-4 pb-2 center-content">
                                             <div class="mb-4">
-                                                <lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop"
-                                                    colors="primary:#25a0e2,secondary:#00bd9d"
-                                                    style="width:120px;height:120px"></lord-icon>
+                                                <lord-icon id="almost"
+                                                    src="https://cdn.lordicon.com/gzdzdtov.json"
+                                                    trigger="loop"
+                                                    state="loop-cycle"
+                                                    style="width:100px;height:100px">
+                                                </lord-icon>
                                             </div>
-                                            <h5>Your Order is Completed !</h5>
-                                            <p class="text-muted">You Will receive an order confirmation email with
-                                                details of your order.</p>
+                                            <h5>Almost there !</h5>
+                                            <p class="text-muted">Your content is almost ready.</p>
                                         </div>
                                     </div>
                                     <!-- end tab pane -->
@@ -244,6 +252,34 @@
 
 
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#grade_id').on('change', function() {
+                var gradeId = $(this).val();
+                
+                if (gradeId) {
+                    $.ajax({
+                        url: '/education/get-subjects/' + gradeId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#subject_id').empty(); // Clear the subjects dropdown
+                            $('#subject_id').append('<option selected>Select Subject</option>');
+                            
+                            // Populate subjects based on response
+                            $.each(data, function(key, subject) {
+                                $('#subject_id').append('<option value="' + subject.id + '">' + subject.name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#subject_id').empty(); // Clear the subjects dropdown if no grade selected
+                    $('#subject_id').append('<option selected>Select Subject</option>');
+                }
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -267,8 +303,23 @@
             const h5Element = finishTab.querySelector("h5");
             h5Element.textContent = data.message;
 
+            
+
+            // Remove the text-center class from the parent div
+            const parentDiv = document.querySelector('.center-content');
+            if (parentDiv) {
+                parentDiv.classList.remove('text-center');
+                parentDiv.classList.remove('pt-4');
+            }
+
+            // Use innerHTML to display the formatted question paper
             const pElement = finishTab.querySelector("p");
-            pElement.textContent = data.details;
+            pElement.innerHTML = data.details;
+            
+            const lordIconElement = document.getElementById('almost');
+            if (lordIconElement) {
+                lordIconElement.style.display = 'none';  // Hides the icon
+            }
 
             document.getElementById("v-pills-finish-tab").click();
         })
@@ -281,5 +332,6 @@
 });
 
     </script>
+
 
 @endsection
