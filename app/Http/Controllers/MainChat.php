@@ -353,30 +353,36 @@ class MainChat extends Controller
             'json' => [
                 'model' => $openaiModel,
                 'messages' => $messages,
-                'stream' => true, // Enable streaming from OpenAI API
+                'stream' => true,
             ],
-            'stream' => true, // Enable streaming in Guzzle
+            'stream' => true,
         ]);
         
-
         $user = Auth::user();
         $sessionId = session('session_id');
-
+        
+        // Log the full response for debugging purposes
+        Log::info('OpenAI API Streaming Response Started');
+        
         // Return a StreamedResponse to send data incrementally to the client
         return new StreamedResponse(function() use ($response, $user, $sessionId, $title) {
-            // Set headers for SSE (Server-Sent Events)
             header('Content-Type: text/event-stream');
             header('Cache-Control: no-cache');
             header('Connection: keep-alive');
-        
+            
             $body = $response->getBody();
             $messageContent = '';
+            $buffer = '';
         
             while (!$body->eof()) {
-                $chunk = $body->read(1024); // Read in chunks
-                $lines = explode("\n", $chunk);
+                $chunk = $body->read(1024);
+                $buffer .= $chunk;
+        
+                $lines = explode("\n", $buffer);
+                $buffer = array_pop($lines);
         
                 foreach ($lines as $line) {
+                    $line = trim($line);
                     if (strpos($line, 'data:') === 0) {
                         $data = trim(substr($line, strlen('data:')));
                         if ($data === '[DONE]') {
@@ -385,10 +391,9 @@ class MainChat extends Controller
                                 'session_id' => $sessionId,
                                 'user_id' => $user->id,
                                 'message' => null,
-                                'reply' => $messageContent,
+                                'reply' => $messageContent, // Encode newlines and special characters
                             ]);
         
-                            // Save the session title if provided
                             if ($title) {
                                 $session = ModelsSession::find($sessionId);
                                 if (empty($session->title)) {
@@ -397,22 +402,24 @@ class MainChat extends Controller
                                 }
                             }
         
-                            // Send a special event to indicate completion
                             echo "event: done\n";
                             echo "data: [DONE]\n\n";
                             ob_flush();
                             flush();
-                            break 2; // Exit both loops
+                            break 2;
                         } else {
-                            $parsedData = json_decode($data, true);
-                            if (isset($parsedData['choices'][0]['delta']['content'])) {
-                                $content = $parsedData['choices'][0]['delta']['content'];
-                                $messageContent .= $content;
+                            try {
+                                $parsedData = json_decode($data, true);
+                                if (isset($parsedData['choices'][0]['delta']['content'])) {
+                                    $content = $parsedData['choices'][0]['delta']['content'];
+                                    $messageContent .= $content;
         
-                                // Send the content to the client
-                                echo "data: " . json_encode($content) . "\n\n";
-                                ob_flush();
-                                flush();
+                                    echo "data: " . json_encode($content) . "\n\n";
+                                    ob_flush();
+                                    flush();
+                                }
+                            } catch (\Exception $e) {
+                                Log::error('Error parsing JSON data: ' . $e->getMessage());
                             }
                         }
                     }
@@ -423,9 +430,10 @@ class MainChat extends Controller
             'Cache-Control' => 'no-cache',
             'Connection' => 'keep-alive',
         ]);
-        
+             
 
     }
+
 
     private function generateImage($description)
     {
