@@ -61,6 +61,8 @@ class EducationController extends Controller
             "model" => 'gpt-4',
             'messages' => $messages,
         ]);
+       // Log the response from OpenAI
+       Log::info('OpenAI API Response:', ['response' => $response]);
  
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
@@ -75,6 +77,7 @@ class EducationController extends Controller
             'message' => 'Your question paper is ready!',
             'details' => $formattedContent
         ]);
+        
     }
 
     public function getSubjects($gradeId)   

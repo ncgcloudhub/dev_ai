@@ -20,6 +20,8 @@ use PhpOffice\PhpWord\Element\Text;
 use PhpOffice\PhpWord\Element\Title;
 use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\Element\ListItem;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class MainChat extends Controller
 {
@@ -351,49 +353,78 @@ class MainChat extends Controller
             'json' => [
                 'model' => $openaiModel,
                 'messages' => $messages,
+                'stream' => true, // Enable streaming from OpenAI API
             ],
+            'stream' => true, // Enable streaming in Guzzle
         ]);
+        
 
         $user = Auth::user();
-
-        Log::info('OpenAI API Response: ' . $response->getBody()->getContents());
-
-        $data = json_decode($response->getBody(), true);
-        $messageContent = $data['choices'][0]['message']['content'];
-        $totalTokens = $data['usage']['total_tokens'];
-
-        User::where('id', $user->id)->update([
-            'tokens_used' => DB::raw('tokens_used + ' . $totalTokens),
-            'tokens_left' => DB::raw('tokens_left - ' . $totalTokens),
-        ]);
-
-        Log::info('AI Response: ', ['content' => $messageContent]);
-
-        // Save AI response to conversation history
-        $conversationHistory[] = ['role' => 'assistant', 'content' => $messageContent];
-        session(['conversation_history' => $conversationHistory]);
-
         $sessionId = session('session_id');
 
-        Message::create([
-            'session_id' => $sessionId,
-            'user_id' => Auth::id(),
-            'message' => null,
-            'reply' => $messageContent,
-        ]);
-
-        if ($title) {
-            $session = ModelsSession::find($sessionId);
-            if (empty($session->title)) {
-                $session->title = $title;
-                $session->save();
+        // Return a StreamedResponse to send data incrementally to the client
+        return new StreamedResponse(function() use ($response, $user, $sessionId, $title) {
+            // Set headers for SSE (Server-Sent Events)
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+            header('Connection: keep-alive');
+        
+            $body = $response->getBody();
+            $messageContent = '';
+        
+            while (!$body->eof()) {
+                $chunk = $body->read(1024); // Read in chunks
+                $lines = explode("\n", $chunk);
+        
+                foreach ($lines as $line) {
+                    if (strpos($line, 'data:') === 0) {
+                        $data = trim(substr($line, strlen('data:')));
+                        if ($data === '[DONE]') {
+                            // Save the AI's reply to the database
+                            Message::create([
+                                'session_id' => $sessionId,
+                                'user_id' => $user->id,
+                                'message' => null,
+                                'reply' => $messageContent,
+                            ]);
+        
+                            // Save the session title if provided
+                            if ($title) {
+                                $session = ModelsSession::find($sessionId);
+                                if (empty($session->title)) {
+                                    $session->title = $title;
+                                    $session->save();
+                                }
+                            }
+        
+                            // Send a special event to indicate completion
+                            echo "event: done\n";
+                            echo "data: [DONE]\n\n";
+                            ob_flush();
+                            flush();
+                            break 2; // Exit both loops
+                        } else {
+                            $parsedData = json_decode($data, true);
+                            if (isset($parsedData['choices'][0]['delta']['content'])) {
+                                $content = $parsedData['choices'][0]['delta']['content'];
+                                $messageContent .= $content;
+        
+                                // Send the content to the client
+                                echo "data: " . json_encode($content) . "\n\n";
+                                ob_flush();
+                                flush();
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        return response()->json([
-            'message' => $messageContent,
-            'title' => $title,
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'Connection' => 'keep-alive',
         ]);
+        
+
     }
 
     private function generateImage($description)

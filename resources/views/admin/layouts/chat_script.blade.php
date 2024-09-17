@@ -184,120 +184,162 @@
             messageInput.addEventListener('paste', handleImagePaste);
 
             function sendMessage() {
-        const message = messageInput.value.trim();
-        const file = fileInput.files[0];
+    const message = messageInput.value.trim();
+    const file = fileInput.files[0];
 
-        if (!message && !file && !pastedImageFile) return;
+    if (!message && !file && !pastedImageFile) return;
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const formData = new FormData();
-        formData.append('message', message);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const formData = new FormData();
+    formData.append('message', message);
 
-        if (file) {
-            formData.append('file', file);
-        } else if (pastedImageFile) {
-            formData.append('file', pastedImageFile, 'pasted_image.png');
+    if (file) {
+        formData.append('file', file);
+    } else if (pastedImageFile) {
+        formData.append('file', pastedImageFile, 'pasted_image.png');
+    }
+
+    if (isFirstMessage) {
+        const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+        formData.append('title', chatTitle);
+    }
+
+    sendMessageBtn.disabled = true;
+    sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
+
+    fetch('/main/chat/send', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            // Do not set 'Content-Type'; let the browser set it with the boundary
+        },
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
         }
 
-        if (isFirstMessage) {
-            const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-            formData.append('title', chatTitle);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let receivedText = '';
+
+        // Insert the user message into the chat
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let userMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
+                        </div>
+                    </div>
+                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                </div>
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+
+        // Create a placeholder for the assistant's message
+        const assistantMessageId = `assistant-message-${Date.now()}`;
+        let assistantMessageHTML = `<li class="chat-list left">
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
+                        </div>
+                    </div>
+                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                </div>
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+        const assistantMessageElement = document.getElementById(assistantMessageId);
+
+        function read() {
+            reader.read().then(({ done, value }) => {
+                if (done) {
+                    console.log('Stream complete');
+                    sendMessageBtn.disabled = false;
+                    sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+                    return;
+                }
+
+                const chunk = decoder.decode(value, { stream: true });
+                receivedText += chunk;
+
+                // Process the received text
+                let lines = receivedText.split('\n');
+                receivedText = lines.pop(); // Save any incomplete line for next time
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.substring(6).trim();
+                        if (data === '[DONE]') {
+                            // Stream is complete
+                            return;
+                        }
+
+                        try {
+                            const content = JSON.parse(data);
+                            if (content) {
+                                // Append content to assistant message
+                                assistantMessageElement.textContent += content;
+
+                                // Scroll to the last message
+                                let conversationList = document.getElementById('users-conversation');
+                                let lastMessage = conversationList.lastElementChild;
+                                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+                                if (isFirstMessage) {
+                                    const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
+                                    const activeSession = sessionList.querySelector('li.active');
+                                    if (activeSession) {
+                                        activeSession.querySelector('p').textContent = chatTitle;
+                                    }
+                                    isFirstMessage = false;
+                                }
+
+                                messageInput.value = '';
+                                fileInput.value = '';
+                                fileNameDisplay.textContent = '';
+                                imageDisplay.innerHTML = '';
+                                pastedImageFile = null;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing data:', e);
+                        }
+                    }
+                }
+
+                // Continue reading
+                read();
+            });
         }
 
-        sendMessageBtn.disabled = true;
-        sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
-
-        axios.post('/main/chat/send', formData, {
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .then(response => {
-            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            let userMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
-
-            if (file || pastedImageFile) {
-                const fileType = (file || pastedImageFile).type.split('/')[0];
-                if (fileType === 'image') {
-                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
-                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-                } else {
-                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
-                }
-            }
-
-            userMessageHTML += `</div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
-                </div>
-            </li>`;
-
-            const assistantMessage = response.data.message;
-            const formattedMessage = formatContent(assistantMessage);
-            const assistantMessageHTML = `<li class="chat-list left">
-                <div class="conversation-list">
-                    <div class="chat-avatar">
-                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                    </div>
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                ${formattedMessage}
-                            </div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
-                </div>
-            </li>`;
-
-            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
-            
-            
-            // Scroll to the last message
-            let conversationList = document.getElementById('users-conversation');
-            let lastMessage = conversationList.lastElementChild;
-            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-            if (isFirstMessage) {
-                const chatTitle = summarizeMessage(message || file?.name || 'Pasted Image');
-                const activeSession = sessionList.querySelector('li.active');
-                if (activeSession) {
-                    activeSession.querySelector('p').textContent = chatTitle;
-                }
-                isFirstMessage = false;
-            }
-
-            messageInput.value = '';
-            fileInput.value = '';
-            fileNameDisplay.textContent = '';
-            imageDisplay.innerHTML = '';
-            pastedImageFile = null;
-        })
-        .catch(error => {
-            console.error(error);
-            const errorMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
-                            </div>
+        read();
+    })
+    .catch(error => {
+        console.error(error);
+        const errorMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
                         </div>
                     </div>
                 </div>
-            </li>`;
-            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-            
-            // Scroll to the last message
-            let conversationList = document.getElementById('users-conversation');
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+        
+        // Scroll to the last message
+        let conversationList = document.getElementById('users-conversation');
             let lastMessage = conversationList.lastElementChild;
             lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
             
@@ -307,6 +349,8 @@
             sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
         });
     }
+
+
 
 
     sendMessageBtn.addEventListener('click', sendMessage);
