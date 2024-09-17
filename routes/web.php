@@ -392,6 +392,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
 
+        Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
+
     });
 
 

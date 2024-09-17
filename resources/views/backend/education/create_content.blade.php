@@ -6,7 +6,7 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Education</h4>
+                <h4 class="card-title mb-0">Education</h4><a href="{{route('user_generated_education_content')}}">Content</a>
             </div><!-- end card header -->
             <div class="card-body form-steps">
                 <form class="vertical-navs-step" action="{{ route('education.content')}}" method="POST" enctype="multipart/form-data">
