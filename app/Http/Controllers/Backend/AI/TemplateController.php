@@ -320,7 +320,7 @@ class TemplateController extends Controller
         $template = Template::find($template_id);
         $user = Auth::user();
 
-
+        $points = 1;
         $language = 'English';
         $max_result_length_value = 100;
         $temperature_value = 0;
@@ -334,6 +334,10 @@ class TemplateController extends Controller
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
 
+
+        if ($input->points != NULL) {
+            $points = $input->points;
+        }
 
         if ($input->language != NULL) {
             $language = $input->language;
@@ -378,7 +382,7 @@ class TemplateController extends Controller
         } elseif (isset($input->style) && $input->style != "") {
             $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Do not write translations. ';
         } else {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations. ';
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' points about it. Do not write translations. ';
         }
 
 

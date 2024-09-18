@@ -168,7 +168,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
            {{-- Parallex --}}
-           <img src="{{ asset('frontend/parallex_images/stones.png') }}" id="stones">   
+           {{-- <img src="{{ asset('frontend/parallex_images/stones.png') }}" id="stones">    --}}
             
            
             {{-- How it Works --}}
