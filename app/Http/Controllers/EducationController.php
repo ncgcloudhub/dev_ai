@@ -8,6 +8,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
+use Parsedown;
 
 
 class EducationController extends Controller
@@ -44,9 +45,15 @@ class EducationController extends Controller
                     ->distinct();
             });
         }])->whereIn('id', $gradeIds)->get();
+
+        $contentss = EducationContent::latest()->get();
+        foreach ($contentss as $content) {
+            $content->generated_content = Parsedown::instance()->text($content->generated_content);
+        }
     
     return view('backend.education.user_generated_content', [
             'classes' => $classes,
+            'contentss' => $contentss,
         ]);
     }
 
@@ -61,6 +68,12 @@ class EducationController extends Controller
             ->where('subject_id', $subjectId)
             ->with('gradeClass', 'subject')
             ->get();
+        
+         // Parse the generated content using Parsedown
+        $parsedown = new Parsedown();
+        foreach ($contents as $content) {
+            $content->generated_content = $parsedown->text($content->generated_content);
+        }   
 
         return response()->json([
             'contents' => $contents,
