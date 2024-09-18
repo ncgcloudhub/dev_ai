@@ -6,7 +6,7 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title mb-0">Education</h4>
+                <h4 class="card-title mb-0">Education</h4><a href="{{route('user_generated_education_content')}}">Content</a>
             </div><!-- end card header -->
             <div class="card-body form-steps">
                 <form class="vertical-navs-step" action="{{ route('education.content')}}" method="POST" enctype="multipart/form-data">
@@ -98,7 +98,7 @@
                                                     <label class="form-label">Content Difficulty Level</label>
                                                     <select class="form-select" name="difficult_level" data-choices aria-label="Default select difficulty">
                                                         <option selected="">Select Level</option>
-                                                        <option value="4">Easy</option>
+                                                        <option value="Easy">Easy</option>
                                                         <option value="Medium">Medium</option>
                                                         <option value="Difficult">Difficult</option>
                                                         <option value="Exceptional">Exceptional</option>
@@ -122,10 +122,10 @@
                                                     <label for="lastName" class="form-label">Persona</label>
                                                     <select class="form-select" name="persona" data-choices aria-label="Default select persona">
                                                         <option selected="">Choose Persona</option>
-                                                        <option value="Kids">Very Simple</option>
-                                                        <option value="Adult">Step by Step guide</option>
-                                                        <option value="Adult">Simple</option>
-                                                        <option value="Adult">Somewhat Difficulty</option>
+                                                        <option value="Very Simple">Very Simple</option>
+                                                        <option value="Step by Step guide">Step by Step guide</option>
+                                                        <option value="Simple">Simple</option>
+                                                        <option value="Somewhat Difficulty">Somewhat Difficulty</option>
                                                      
                                                         
                                                     </select>
@@ -229,8 +229,8 @@
                                                     style="width:100px;height:100px">
                                                 </lord-icon>
                                             </div>
-                                            <h5>Almost there !</h5>
-                                            <p class="text-muted">Your content is almost ready.</p>
+                                            <h5 id="h55">Almost there !</h5>
+                                            <p class="text-muted chunkss" id="chunkss">Your content is almost ready.</p>
                                         </div>
                                     </div>
                                     <!-- end tab pane -->
@@ -249,6 +249,9 @@
     </div>
     <!-- end col -->
 </div>
+
+
+  
 
 
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>
@@ -282,53 +285,73 @@
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".vertical-navs-step");
     const finishTab = document.getElementById("v-pills-finish");
 
     const generateButton = document.querySelector(".generateButton");
-    generateButton.addEventListener("click", function () {
-        const formData = new FormData(form);
-        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+generateButton.addEventListener("click", function () {
+    const formData = new FormData(form);
+    fetch(form.getAttribute("action"), {
+        method: form.getAttribute("method"),
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+    .then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let content = "";  // Variable to store the entire content
 
-        fetch(form.getAttribute("action"), {
-            method: form.getAttribute("method"),
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: formData
+            const processStream = ({ done, value }) => {
+                if (done) {
+                    // Hide loading icon once done
+                    const lordIconElement = document.getElementById('almost');
+                    if (lordIconElement) {
+                        lordIconElement.style.display = 'none';
+                    }
+
+                    // Change h5 content to "Your content is ready"
+                    const h5Element = document.querySelector("#h55");
+                    if (h5Element) {
+                        h5Element.textContent = "Your content is ready!";
+                    }
+
+                    // Replace the p tag content with the full content
+                    const pElement = document.querySelector("#chunkss");
+                    if (pElement) {
+                        pElement.innerHTML = content;  // Replacing the entire content once streaming is done
+                    }
+                    
+                    console.log("Stream complete");
+                    return;
+                }
+
+                const parentDiv = document.querySelector('.center-content');
+                if (parentDiv) {
+                    parentDiv.classList.remove('text-center');
+                    parentDiv.classList.remove('pt-4');
+                }   
+                // Append new chunks to content
+                content += decoder.decode(value, { stream: true });
+
+                // Optionally: Show the content progressively while streaming (uncomment if you want to update it progressively)
+                document.querySelector("#chunkss").innerHTML = content;
+
+                // Continue reading more chunks
+                return reader.read().then(processStream);
+            };
+
+            return reader.read().then(processStream);
         })
-        .then(response => response.json())
-        .then(data => {
-            const h5Element = finishTab.querySelector("h5");
-            h5Element.textContent = data.message;
-
-            
-
-            // Remove the text-center class from the parent div
-            const parentDiv = document.querySelector('.center-content');
-            if (parentDiv) {
-                parentDiv.classList.remove('text-center');
-                parentDiv.classList.remove('pt-4');
-            }
-
-            // Use innerHTML to display the formatted question paper
-            const pElement = finishTab.querySelector("p");
-            pElement.innerHTML = data.details;
-            
-            const lordIconElement = document.getElementById('almost');
-            if (lordIconElement) {
-                lordIconElement.style.display = 'none';  // Hides the icon
-            }
-
-            document.getElementById("v-pills-finish-tab").click();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            const h5Element = finishTab.querySelector("h5");
-            h5Element.textContent = "There was an error processing your request.";
-        });
+    .catch(error => {
+        console.error('Error:', error);
+        const h5Element = finishTab.querySelector("h5");
+        h5Element.textContent = "There was an error processing your request.";
     });
+});
+
 });
 
     </script>
