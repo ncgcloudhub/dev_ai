@@ -67,18 +67,26 @@ class EducationController extends Controller
         $contents = EducationContent::where('user_id', $userId)
             ->where('subject_id', $subjectId)
             ->with('gradeClass', 'subject')
-            ->get();
-        
-         // Parse the generated content using Parsedown
-        $parsedown = new Parsedown();
-        foreach ($contents as $content) {
-            $content->generated_content = $parsedown->text($content->generated_content);
-        }   
+            ->get(['id', 'tone']);
 
         return response()->json([
             'contents' => $contents,
         ]);
     }
+
+    public function getContentById(Request $request)
+    {
+        $contentId = $request->input('content_id');
+        $content = EducationContent::findOrFail($contentId);
+
+        $parsedown = new Parsedown();
+        $content->generated_content = $parsedown->text($content->generated_content);
+
+        return response()->json([
+            'content' => $content,
+        ]);
+    }
+
 
     public function educationContent(Request $request)
     {
@@ -110,7 +118,7 @@ class EducationController extends Controller
     
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
-            "model" => 'gpt-4',
+            "model" => $openaiModel,
             'messages' => [
                 ['role' => 'system', 'content' => 'You are a helpful assistant.'],
                 ['role' => 'user', 'content' => $prompt],

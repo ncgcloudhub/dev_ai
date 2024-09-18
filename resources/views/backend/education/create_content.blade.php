@@ -98,7 +98,7 @@
                                                     <label class="form-label">Content Difficulty Level</label>
                                                     <select class="form-select" name="difficult_level" data-choices aria-label="Default select difficulty">
                                                         <option selected="">Select Level</option>
-                                                        <option value="4">Easy</option>
+                                                        <option value="Easy">Easy</option>
                                                         <option value="Medium">Medium</option>
                                                         <option value="Difficult">Difficult</option>
                                                         <option value="Exceptional">Exceptional</option>
@@ -122,10 +122,10 @@
                                                     <label for="lastName" class="form-label">Persona</label>
                                                     <select class="form-select" name="persona" data-choices aria-label="Default select persona">
                                                         <option selected="">Choose Persona</option>
-                                                        <option value="Kids">Very Simple</option>
-                                                        <option value="Adult">Step by Step guide</option>
-                                                        <option value="Adult">Simple</option>
-                                                        <option value="Adult">Somewhat Difficulty</option>
+                                                        <option value="Very Simple">Very Simple</option>
+                                                        <option value="Step by Step guide">Step by Step guide</option>
+                                                        <option value="Simple">Simple</option>
+                                                        <option value="Somewhat Difficulty">Somewhat Difficulty</option>
                                                      
                                                         
                                                     </select>
@@ -249,6 +249,9 @@
     </div>
     <!-- end col -->
 </div>
+
+
+  
 
 
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>

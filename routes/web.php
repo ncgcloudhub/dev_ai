@@ -396,6 +396,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
 
+        Route::post('/get-content-by-id', [EducationController::class, 'getContentById'])->name('education.getContentById');
+
     });
 
 
