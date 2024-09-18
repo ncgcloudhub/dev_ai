@@ -51,7 +51,8 @@
                                                     // Pick a random style from the array
                                                     $randomStyle = $buttonStyles[array_rand($buttonStyles)];
                                                 @endphp
-                                                <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
+                                                <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2" 
+                                                        data-subject-id="{{ $subject->id }}">
                                                     {{ $subject->name }}
                                                 </button>
                                             @endforeach
@@ -72,9 +73,51 @@
     
     
     {{-- Add Grade and Subject --}}
-    <div class="col-xxl-6">
+    <div class="col-xxl-6" id="content-display">
       
     </div><!--end col-->
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.subject-buttons button').forEach(button => {
+            button.addEventListener('click', function () {
+                const subjectId = this.getAttribute('data-subject-id');
+    
+                fetch('{{ route('education.getContentsBySubject') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ subject_id: subjectId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const contentDisplay = document.getElementById('content-display');
+                    contentDisplay.innerHTML = ''; // Clear previous content
+    
+                    if (data.contents.length > 0) {
+                        data.contents.forEach(content => {
+                            const contentElement = document.createElement('div');
+                            contentElement.classList.add('content-item');
+                            contentElement.innerHTML = `
+                                <h6>${content.subject.name}</h6>
+                                <p>${content.generated_content}</p>
+                            `;
+                            contentDisplay.appendChild(contentElement);
+                        });
+                    } else {
+                        contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+    </script>
+
+
 @endsection
 

@@ -394,6 +394,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
 
+        Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
+
     });
 
 

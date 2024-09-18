@@ -50,6 +50,23 @@ class EducationController extends Controller
         ]);
     }
 
+
+    public function getContentsBySubject(Request $request)
+    {
+        $subjectId = $request->input('subject_id');
+        $userId = auth()->id(); // Get the authenticated user's ID
+
+        // Retrieve contents for the selected subject
+        $contents = EducationContent::where('user_id', $userId)
+            ->where('subject_id', $subjectId)
+            ->with('gradeClass', 'subject')
+            ->get();
+
+        return response()->json([
+            'contents' => $contents,
+        ]);
+    }
+
     public function educationContent(Request $request)
     {
         $user = auth()->user();
