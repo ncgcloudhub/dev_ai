@@ -207,6 +207,8 @@
     sendMessageBtn.disabled = true;
     sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
 
+    let assistantMessageContent = ''; // Accumulate assistant's message content
+
     fetch('/main/chat/send', {
         method: 'POST',
         headers: {
@@ -256,18 +258,49 @@
         </li>`;
         chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
 
-        // Re-run syntax highlighting on the new content
-        chatConversation.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-        });
-
-
         const assistantMessageElement = document.getElementById(assistantMessageId);
+
+        let debounceTimer;
+        const DEBOUNCE_DELAY = 5; // Adjust delay as needed, decrease to generate faster and vice versa
+
+        function scheduleUpdate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                updateAssistantMessage();
+            }, DEBOUNCE_DELAY);
+        }
+
+        function updateAssistantMessage() {
+            try {
+                // Attempt to format the accumulated content
+                const formattedContent = formatContent(assistantMessageContent);
+
+                // Update the assistant message element
+                assistantMessageElement.innerHTML = formattedContent;
+
+                // Re-run syntax highlighting on the new content
+                assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                // Scroll to the latest message
+                let conversationList = document.getElementById('users-conversation');
+                let lastMessage = conversationList.lastElementChild;
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            } catch (e) {
+                // Parsing error due to incomplete content; skip updating
+                console.error('Error parsing Markdown:', e);
+            }
+        }
 
         function read() {
             reader.read().then(({ done, value }) => {
                 if (done) {
                     console.log('Stream complete');
+
+                    // Final update after streaming is complete
+                    updateAssistantMessage();
+
                     sendMessageBtn.disabled = false;
                     sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
                     return;
@@ -276,30 +309,24 @@
                 const chunk = decoder.decode(value, { stream: true });
                 receivedText += chunk;
 
-                console.log('Received chunk:', chunk);
-                console.log('Received text so far:', receivedText);
-
                 let lines = receivedText.split('\n');
-                receivedText = lines.pop(); 
+                receivedText = lines.pop(); // Retain incomplete line
 
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
                         const data = line.substring(6).trim();
                         if (data === '[DONE]') {
-                            return;
+                            continue;
                         }
 
                         try {
                             const content = JSON.parse(data);
                             if (content) {
-                                // Decode newlines
-                                const textContent = content.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
+                                // Accumulate content
+                                assistantMessageContent += content;
 
-                                // Log content before appending
-                                console.log('Content to append:', textContent);
-
-                                // Convert newlines to HTML line breaks
-                                assistantMessageElement.innerHTML += textContent.replace(/\n/g, '<br>');
+                                 // Schedule update
+                                 scheduleUpdate();
 
                                 let conversationList = document.getElementById('users-conversation');
                                 let lastMessage = conversationList.lastElementChild;
@@ -319,6 +346,8 @@
                                 fileNameDisplay.textContent = '';
                                 imageDisplay.innerHTML = '';
                                 pastedImageFile = null;
+
+                               
                             }
                         } catch (e) {
                             console.error('Error parsing data:', e);
@@ -446,22 +475,29 @@ document.addEventListener('click', function(event) {
              const formattedContent = formatContent(content);
 
             let messageHTML = `
-                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                    <div class="conversation-list">
-                        <div class="user-chat-content">
-                            <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
-                                    ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
-                                    ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
-                                    ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
-                                </div>
-                            </div>
-                            <div class="conversation-name">
-                                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+             <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                <div class="conversation-list">
+                    <!-- Conditionally include the chat avatar based on the role -->
+                    ${role !== 'user' ? `
+                        <div class="chat-avatar">
+                            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                        </div>
+                    ` : ''}
+
+                    <div class="user-chat-content">
+                        <div class="ctext-wrap">
+                            <div class="ctext-wrap-content">
+                                ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
+                                ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
+                                ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
                             </div>
                         </div>
+                        <div class="conversation-name">
+                            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                        </div>
                     </div>
-                </li>
+                </div>
+            </li>
             `;
 
             chatConversation.insertAdjacentHTML('beforeend', messageHTML);
@@ -529,27 +565,37 @@ document.addEventListener('click', function(event) {
     });
 
     function formatContent(content) {
+    // Preprocess content to replace triple backticks with code block tags
+    content = content.replace(/```(\w+)?([\s\S]*?)```/g, function(_, lang, code) {
+        // If a language is provided, use it, otherwise default to 'plaintext'
+        lang = lang ? lang.trim().toLowerCase() : 'plaintext';
+        // Sanitize code to prevent XSS
+        code = DOMPurify.sanitize(code);
+        return `<pre><code class="hljs ${lang}">${code}</code></pre>`;
+    });
+
     // Use marked.js to parse Markdown to HTML
     const renderer = new marked.Renderer();
 
     // Configure renderer to use highlight.js for code blocks
     renderer.code = function(code, language) {
-        // Validate the language to prevent errors
-        const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
-        // Highlight the code using highlight.js
-        const highlighted = hljs.highlight(validLanguage, code).value;
-        // Return the highlighted code block
-        return `<pre><code class="hljs ${validLanguage}">${highlighted}</code></pre>`;
+        console.log('Language detected:', language); // Debugging line
+        if (!language) {
+            language = 'plaintext';
+        } else {
+            language = language.trim().toLowerCase();
+            language = hljs.getLanguage(language) ? language : 'plaintext';
+        }
+        const highlighted = hljs.highlight(language, code).value;
+        return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
     };
 
-    // Set options for marked
     marked.setOptions({
         renderer: renderer,
         breaks: true, // Enable line breaks
         gfm: true,    // Enable GitHub Flavored Markdown
     });
 
-    // Parse the content using marked.js
     let formattedContent = marked.parse(content);
 
     // Sanitize the HTML to prevent XSS attacks
@@ -557,6 +603,7 @@ document.addEventListener('click', function(event) {
 
     return formattedContent;
 }
+
 
 
 </script>

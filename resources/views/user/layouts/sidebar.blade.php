@@ -71,7 +71,7 @@
                 {{-- Fixed Template --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('template.manage')}}">
-                        <i class="lab la-blogger"></i> <span >Template</span>
+                        <i class="lab la-blogger"></i> <span >AI Content Creator</span>
                     </a>
                 </li>
                 

@@ -233,8 +233,7 @@ class MainChat extends Controller
                 // Add the generated image to the conversation history
                 $conversationHistory[] = [
                     'role' => 'assistant',
-                    'content' => '
-                        <div>
+                    'content' => '<div>
                             <a href="' . $imageURL . '" target="_blank">
                                 <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
                             </a>
@@ -257,8 +256,7 @@ class MainChat extends Controller
                     'session_id' => $sessionId,
                     'user_id' => Auth::id(),
                     'message' => null,
-                        'reply' => '
-                            <div>
+                        'reply' => '<div>
                                 <a href="' . $imageURL . '" target="_blank">
                                     <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
                                 </a>
@@ -268,8 +266,7 @@ class MainChat extends Controller
                     ]);
         
                     return response()->json([
-                        'message' => '
-                            <div>
+                        'message' => '<div>
                                 <a href="' . $imageURL . '" target="_blank">
                                     <img src="' . $imageURL . '" alt="Generated Image" style="width: 200px; height: 200px; cursor: pointer;">
                                 </a>
@@ -361,8 +358,13 @@ class MainChat extends Controller
         $user = Auth::user();
         $sessionId = session('session_id');
         
-        // Log the full response for debugging purposes
-        Log::info('OpenAI API Streaming Response Started');
+       // Log the full response for debugging purposes
+        Log::info('OpenAI API Streaming Response Started', [
+            'session_id' => $sessionId,
+            'user_id' => $user->id,
+            'model' => $openaiModel,
+            'messages' => $messages,
+        ]);
         
         // Return a StreamedResponse to send data incrementally to the client
         return new StreamedResponse(function() use ($response, $user, $sessionId, $title) {
@@ -373,6 +375,10 @@ class MainChat extends Controller
             $body = $response->getBody();
             $messageContent = '';
             $buffer = '';
+
+            Log::info('Streaming Response Initialized', [
+                'session_id' => $sessionId,
+            ]);
         
             while (!$body->eof()) {
                 $chunk = $body->read(1024);
@@ -385,6 +391,7 @@ class MainChat extends Controller
                     $line = trim($line);
                     if (strpos($line, 'data:') === 0) {
                         $data = trim(substr($line, strlen('data:')));
+
                         if ($data === '[DONE]') {
                             // Save the AI's reply to the database
                             Message::create([
@@ -401,6 +408,11 @@ class MainChat extends Controller
                                     $session->save();
                                 }
                             }
+
+                            Log::info('Streaming Response Completed', [
+                                'session_id' => $sessionId,
+                                'final_reply' => $messageContent,
+                            ]);
         
                             echo "event: done\n";
                             echo "data: [DONE]\n\n";
