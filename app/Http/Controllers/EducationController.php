@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 use Parsedown;
-
+use PDF;
 
 class EducationController extends Controller
 {
@@ -97,6 +97,25 @@ class EducationController extends Controller
         $content->delete();
     
         return response()->json(['success' => 'Content deleted successfully']);
+    }
+
+    public function downloadPDF($id)
+    {
+        // Find the content
+        $content = educationContent::findOrFail($id);
+
+        if (!$content) {
+            return redirect()->back()->with('error', 'Content not found');
+        }
+
+        // Generate the HTML for the PDF
+        $pdfHtml = view('backend.education.education_pdf', ['content' => $content])->render();
+
+        // Generate and download the PDF
+        $pdf = PDF::loadHTML($pdfHtml);
+
+        // Download the generated PDF
+        return $pdf->download('content_' . $content->id . '.pdf');
     }
 
 

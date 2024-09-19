@@ -124,6 +124,8 @@
                 data.contents.forEach(content => {
                 const contentElement = document.createElement('div');
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
+
+                const downloadUrl = `{{ url('education/content/${content.id}/download') }}`;
                 
                 contentElement.innerHTML = `
                     <div class="card border-end">
@@ -131,11 +133,13 @@
                             <h5 class="mb-0">${content.topic}</h5>
                             <p class="text-muted">${content.subject.name}</p>
                             <div class="d-flex gap-2 justify-content-center mb-3">
+                                 <a href="${downloadUrl}">
                                  <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-download-line"></i>
                                     </span>
                                 </button>
+                                  </a>
                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-edit-line"></i>

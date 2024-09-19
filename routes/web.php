@@ -400,6 +400,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::delete('/deleteContent/{id}', [EducationController::class, 'deleteContent'])->name('education.deleteContent');
 
+        Route::get('/content/{id}/download', [EducationController::class, 'downloadPDF'])->name('education.content.download');
+
     });
 
 
