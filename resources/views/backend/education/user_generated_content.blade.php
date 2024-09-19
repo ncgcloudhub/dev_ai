@@ -77,9 +77,6 @@
     </div><!--end col-->
 </div>
 
-
-
-
 <div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -134,19 +131,24 @@
                             <h5 class="mb-0">${content.topic}</h5>
                             <p class="text-muted">${content.subject.name}</p>
                             <div class="d-flex gap-2 justify-content-center mb-3">
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Google">
+                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
                                     <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-google-line"></i>
+                                        <i class="ri-download-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Linkedin">
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-linkedin-line"></i>
+                                        <i class="ri-edit-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Dribbble">
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
                                     <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-dribbble-fill"></i>
+                                        <i class="ri-chat-forward-line"></i>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-delete-bin-4-line"></i>
                                     </span>
                                 </button>
                             </div>
