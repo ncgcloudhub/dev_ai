@@ -17,6 +17,6 @@ class GradeClass extends Model
     
     public function educationContents()
     {
-        return $this->hasMany(educationContent::class, 'grade_id');
+        return $this->hasMany(EducationContent::class, 'grade_id');
     }
 }
