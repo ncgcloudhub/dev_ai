@@ -130,7 +130,7 @@
                 const cardClass = content.status === 'completed' ? 'bg-success' : '';
                 
                 contentElement.innerHTML = `
-                    <div class="card border-end ${cardClass}"">
+                    <div class="card border-end ${cardClass}" data-id="${content.id}">
                         <div class="card-body text-center">
                             <h5 class="mb-0">${content.topic}</h5>
                             <p class="text-muted">${content.subject.name}</p>
@@ -147,10 +147,10 @@
                                         <i class="ri-edit-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-chat-forward-line"></i>
-                                    </span>
+                                <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                    <i class="ri-chat-forward-line"></i>
+                                                </span>
                                 </button>
 
 
@@ -237,11 +237,12 @@
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            // Update the UI
             const card = document.querySelector(`.card[data-id="${contentId}"]`);
             if (card) {
                 // Update the UI to show the content as completed
-                card.classList.add('bg-success', 'text-white');
-                card.querySelector('.mark-complete').style.display = 'none'; // Hide the completed button or change it
+                card.classList.add('bg-success', 'text-white'); // Change this based on your styling
+                card.querySelector('.mark-complete').style.display = 'none'; // Optionally hide the button
                 console.log('Content marked as completed');
             }
         } else {
@@ -250,6 +251,7 @@
     })
     .catch(error => console.error('Error:', error));
 }
+
 
    
     </script>
