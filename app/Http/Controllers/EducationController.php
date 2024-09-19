@@ -117,6 +117,29 @@ class EducationController extends Controller
         // Download the generated PDF
         return $pdf->download('content_' . $content->id . '.pdf');
     }
+    
+    public function markAsComplete(Request $request, $id)
+    {
+        Log::info('Received request to mark content as completed', ['id' => $id]);
+    
+        $content = educationContent::find($id);
+    
+        if (!$content) {
+            return response()->json(['error' => 'Content not found'], 404);
+        }
+    
+        if ($content->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    
+        $content->status = 'completed';
+        $content->save();
+    
+        return response()->json(['success' => 'Content marked as completed']);
+    }
+    
+    
+
 
 
     public function educationContent(Request $request)

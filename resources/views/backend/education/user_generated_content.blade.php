@@ -126,9 +126,11 @@
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
                 const downloadUrl = `{{ url('education/content/${content.id}/download') }}`;
+
+                const cardClass = content.status === 'completed' ? 'bg-success' : '';
                 
                 contentElement.innerHTML = `
-                    <div class="card border-end">
+                    <div class="card border-end ${cardClass}"">
                         <div class="card-body text-center">
                             <h5 class="mb-0">${content.topic}</h5>
                             <p class="text-muted">${content.subject.name}</p>
@@ -145,11 +147,13 @@
                                         <i class="ri-edit-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
+                                <button type="button" class="btn avatar-xs p-0" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-chat-forward-line"></i>
                                     </span>
                                 </button>
+
+
                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-delete-bin-4-line"></i>
@@ -220,7 +224,37 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+    function markAsComplete(contentId) {
+    fetch(`/education/content/${contentId}/complete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'completed' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const card = document.querySelector(`.card[data-id="${contentId}"]`);
+            if (card) {
+                // Update the UI to show the content as completed
+                card.classList.add('bg-success', 'text-white');
+                card.querySelector('.mark-complete').style.display = 'none'; // Hide the completed button or change it
+                console.log('Content marked as completed');
+            }
+        } else {
+            console.error('Failed to mark content as completed');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+   
     </script>
+
+
 
 
 @endsection

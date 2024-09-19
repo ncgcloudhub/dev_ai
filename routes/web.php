@@ -402,6 +402,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::get('/content/{id}/download', [EducationController::class, 'downloadPDF'])->name('education.content.download');
 
+        Route::post('/content/{id}/complete', [EducationController::class, 'markAsComplete'])->name('content.mark.complete');
+
+
     });
 
 
