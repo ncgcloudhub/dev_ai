@@ -398,6 +398,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::post('/get-content-by-id', [EducationController::class, 'getContentById'])->name('education.getContentById');
 
+        Route::delete('/deleteContent/{id}', [EducationController::class, 'deleteContent'])->name('education.deleteContent');
+
     });
 
 

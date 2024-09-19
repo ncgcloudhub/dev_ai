@@ -81,6 +81,24 @@ class EducationController extends Controller
         ]);
     }
 
+    public function deleteContent($id)
+    {
+        $content = educationContent::find($id);
+    
+        if (!$content) {
+            return response()->json(['error' => 'Content not found'], 404);
+        }
+    
+        // Ensure that the user has permission to delete the content
+        if ($content->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    
+        $content->delete();
+    
+        return response()->json(['success' => 'Content deleted successfully']);
+    }
+
 
     public function educationContent(Request $request)
     {

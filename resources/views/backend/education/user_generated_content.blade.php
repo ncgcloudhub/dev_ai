@@ -146,7 +146,7 @@
                                         <i class="ri-chat-forward-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-delete-bin-4-line"></i>
                                     </span>
@@ -170,6 +170,29 @@
             });
         });
     });
+
+    function deleteContent(contentId, element) {
+    if (confirm('Are you sure you want to delete this content?')) {
+        fetch(`/education/deleteContent/${contentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the content card from the DOM
+                const contentElement = element.closest('.col-12');
+                contentElement.remove();
+            } else {
+                console.error('Error:', data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
     
     function fetchContent(contentId) {
         fetch('{{ route('education.getContentById') }}', {
