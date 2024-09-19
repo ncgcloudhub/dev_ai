@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 use Parsedown;
-
+use PDF;
 
 class EducationController extends Controller
 {
@@ -45,15 +45,9 @@ class EducationController extends Controller
                     ->distinct();
             });
         }])->whereIn('id', $gradeIds)->get();
-
-        $contentss = EducationContent::latest()->get();
-        foreach ($contentss as $content) {
-            $content->generated_content = Parsedown::instance()->text($content->generated_content);
-        }
     
     return view('backend.education.user_generated_content', [
             'classes' => $classes,
-            'contentss' => $contentss,
         ]);
     }
 
@@ -64,10 +58,10 @@ class EducationController extends Controller
         $userId = auth()->id(); // Get the authenticated user's ID
 
         // Retrieve contents for the selected subject
-        $contents = EducationContent::where('user_id', $userId)
+        $contents = educationContent::where('user_id', $userId)
             ->where('subject_id', $subjectId)
             ->with('gradeClass', 'subject')
-            ->get(['id', 'tone']);
+            ->get();
 
         return response()->json([
             'contents' => $contents,
@@ -86,6 +80,66 @@ class EducationController extends Controller
             'content' => $content,
         ]);
     }
+
+    public function deleteContent($id)
+    {
+        $content = educationContent::find($id);
+    
+        if (!$content) {
+            return response()->json(['error' => 'Content not found'], 404);
+        }
+    
+        // Ensure that the user has permission to delete the content
+        if ($content->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    
+        $content->delete();
+    
+        return response()->json(['success' => 'Content deleted successfully']);
+    }
+
+    public function downloadPDF($id)
+    {
+        // Find the content
+        $content = educationContent::findOrFail($id);
+
+        if (!$content) {
+            return redirect()->back()->with('error', 'Content not found');
+        }
+
+        // Generate the HTML for the PDF
+        $pdfHtml = view('backend.education.education_pdf', ['content' => $content])->render();
+
+        // Generate and download the PDF
+        $pdf = PDF::loadHTML($pdfHtml);
+
+        // Download the generated PDF
+        return $pdf->download('content_' . $content->id . '.pdf');
+    }
+    
+    public function markAsComplete(Request $request, $id)
+    {
+        Log::info('Received request to mark content as completed', ['id' => $id]);
+    
+        $content = educationContent::find($id);
+    
+        if (!$content) {
+            return response()->json(['error' => 'Content not found'], 404);
+        }
+    
+        if ($content->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    
+        $content->status = 'completed';
+        $content->save();
+    
+        return response()->json(['success' => 'Content marked as completed']);
+    }
+    
+    
+
 
 
     public function educationContent(Request $request)

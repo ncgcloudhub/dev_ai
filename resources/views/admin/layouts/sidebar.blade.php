@@ -69,7 +69,7 @@
                   <li class="nav-item">
                     <a class="nav-link menu-link" href="#template" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class=" lab la-blogger"></i> <span >Template</span>
+                        <i class=" lab la-blogger"></i> <span >AI Content Creator</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="template">
                         <div class="row">
@@ -77,13 +77,13 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('template.category.add')}}" class="nav-link" >Categories</a>
+                                        <a href="{{route('template.category.add')}}" class="nav-link" >Content Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('template.add')}}" class="nav-link" >Add Template</a>
+                                        <a href="{{route('template.add')}}" class="nav-link" >Create New Content</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('template.manage')}}" class="nav-link" >Manage Template</a>
+                                        <a href="{{route('template.manage')}}" class="nav-link" >Manage Content</a>
                                     </li>
                                    
                                 </ul>

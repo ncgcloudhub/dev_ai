@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-xxl-6">
+    <div class="col-xxl-4">
         <h5 class="mb-3">Grade & Subject</h5>
         <div class="card">
             <div class="card-body">
@@ -68,172 +68,38 @@
             </div><!-- end card-body -->
         </div><!-- end card-->
     </div><!-- end col -->
-    
-    
-    
-    <div class="col-xxl-5">
-        <div class="card">
-            <div class="row g-0">
-                <div class="col-lg-6">
-                    <div class="card-body border-end">
-                        <div class="search-box">
-                            <input type="text" class="form-control bg-light border-light" autocomplete="off"
-                                id="searchList" placeholder="Search candidate...">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
-                        <div data-simplebar style="max-height: 190px" class="px-3 mx-n3">
-                            <ul class="list-unstyled mb-0 pt-2" id="candidate-list">
-                                <li>
-                                    <a href="javascript:void(0);" class="d-flex align-items-center py-2">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs">
-                                                <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
-                                                    class="img-fluid rounded-circle candidate-img">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-1 text-truncate"><span class="candidate-name">Anna
-                                                    Adame</span> <span class="text-muted fw-normal">@Anna</span></h5>
-                                            <div class="d-none candidate-position">Web Developer</div>
-                                        </div>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0);" class="d-flex align-items-center py-2">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs">
-                                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt=""
-                                                    class="img-fluid rounded-circle candidate-img">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-1 text-truncate"><span
-                                                    class="candidate-name">Patricia Cavin</span> <span
-                                                    class="text-muted fw-normal">@Patricia</span></h5>
-                                            <div class="d-none candidate-position">Web Developer</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" class="d-flex align-items-center py-2">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs">
-                                                <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt=""
-                                                    class="img-fluid rounded-circle candidate-img">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-1 text-truncate"><span class="candidate-name">Jason
-                                                    Tran</span> <span class="text-muted fw-normal">@Jason</span></h5>
-                                            <div class="d-none candidate-position">Magento Developer</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" class="d-flex align-items-center py-2">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs">
-                                                <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt=""
-                                                    class="img-fluid rounded-circle candidate-img">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-1 text-truncate"><span class="candidate-name">Cheryl
-                                                    Moore</span> <span class="text-muted fw-normal">@Cheryl</span>
-                                            </h5>
-                                            <div class="d-none candidate-position">Product Designer</div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" class="d-flex align-items-center py-2">
-                                        <div class="flex-shrink-0 me-2">
-                                            <div class="avatar-xs">
-                                                <img src="{{ URL::asset('build/images/users/avatar-5.jpg') }}" alt=""
-                                                    class="img-fluid rounded-circle candidate-img">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-1 text-truncate"><span
-                                                    class="candidate-name">Jennifer Bailey</span> <span
-                                                    class="text-muted fw-normal">@Jennifer</span></h5>
-                                            <div class="d-none candidate-position">Marketing Director</div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card-body text-center">
-                        <div class="avatar-md mb-3 mx-auto">
-                            <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt="" id="candidate-img"
-                                class="img-thumbnail rounded-circle shadow-none">
-                        </div>
-
-                        <h5 id="candidate-name" class="mb-0">Anna Adame</h5>
-                        <p id="candidate-position" class="text-muted">Web Developer</p>
-
-                        <div class="d-flex gap-2 justify-content-center mb-3">
-                            <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Google">
-                                <span class="avatar-title rounded-circle bg-light text-body">
-                                    <i class="ri-google-line"></i>
-                                </span>
-                            </button>
-
-                            <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Linkedin">
-                                <span class="avatar-title rounded-circle bg-light text-body">
-                                    <i class="ri-linkedin-line"></i>
-                                </span>
-                            </button>
-                            <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip"
-                                data-bs-placement="top" title="Dribbble">
-                                <span class="avatar-title rounded-circle bg-light text-body">
-                                    <i class="ri-dribbble-fill"></i>
-                                </span>
-                            </button>
-                        </div>
-
-                        <div>
-                            <button type="button" class="btn btn-success rounded-pill w-sm"><i
-                                    class="ri-add-fill me-1 align-bottom"></i> Follow</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end card -->
-    </div>
 
     
     {{-- Add Grade and Subject --}}
-    <div class="col-xxl-6" id="content-display">
+    <div class="col-xxl-8 d-flex" id="content-display">
        
     
     </div><!--end col-->
 </div>
 
-<!-- Modal for displaying content -->
-<div class="modal fade" id="contentModal" tabindex="-1" aria-labelledby="contentModalLabel" aria-hidden="true">
+<div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="contentModalLabel">Content Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-content-body">
-          <!-- Content will be loaded here via AJAX -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Content Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body" id="modal-content-body">
+             
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -255,16 +121,55 @@
                     contentDisplay.innerHTML = ''; // Clear previous content
     
                     if (data.contents.length > 0) {
-                        data.contents.forEach(content => {
-                            const contentElement = document.createElement('div');
-                            contentElement.classList.add('content-item');
-                            contentElement.innerHTML = `
-                                <button class="btn btn-outline-primary mb-2" onclick="fetchContent(${content.id})">
-                                    ${content.tone}
+                data.contents.forEach(content => {
+                const contentElement = document.createElement('div');
+                contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
+
+                const downloadUrl = `{{ url('education/content/${content.id}/download') }}`;
+
+                const cardClass = content.status === 'completed' ? 'bg-success' : '';
+                
+                contentElement.innerHTML = `
+                    <div class="card border-end ${cardClass}" data-id="${content.id}">
+                        <div class="card-body text-center">
+                            <h5 class="mb-0">${content.topic}</h5>
+                            <p class="text-muted">${content.subject.name}</p>
+                            <div class="d-flex gap-2 justify-content-center mb-3">
+                                 <a href="${downloadUrl}">
+                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-download-line"></i>
+                                    </span>
                                 </button>
-                            `;
-                            contentDisplay.appendChild(contentElement);
-                        });
+                                  </a>
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-edit-line"></i>
+                                    </span>
+                                </button>
+                                <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                    <i class="ri-chat-forward-line"></i>
+                                                </span>
+                                </button>
+
+
+                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-delete-bin-4-line"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-success rounded-pill w-sm" onclick="fetchContent(${content.id})">
+                                    <i class="ri-add-fill me-1 align-bottom"></i>Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                contentDisplay.appendChild(contentElement);
+            });
                     } else {
                         contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
                     }
@@ -273,6 +178,29 @@
             });
         });
     });
+
+    function deleteContent(contentId, element) {
+    if (confirm('Are you sure you want to delete this content?')) {
+        fetch(`/education/deleteContent/${contentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the content card from the DOM
+                const contentElement = element.closest('.col-12');
+                contentElement.remove();
+            } else {
+                console.error('Error:', data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+}
     
     function fetchContent(contentId) {
         fetch('{{ route('education.getContentById') }}', {
@@ -287,7 +215,7 @@
         .then(data => {
             // Load the content into the modal
             document.getElementById('modal-content-body').innerHTML = `
-                <h6>${data.content.tone}</h6>
+                <h6 class="fs-15">${data.content.tone}</h6>
                 ${data.content.generated_content}
             `;
             // Show the modal
@@ -296,7 +224,39 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+    function markAsComplete(contentId) {
+    fetch(`/education/content/${contentId}/complete`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ status: 'completed' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the UI
+            const card = document.querySelector(`.card[data-id="${contentId}"]`);
+            if (card) {
+                // Update the UI to show the content as completed
+                card.classList.add('bg-success', 'text-white'); // Change this based on your styling
+                card.querySelector('.mark-complete').style.display = 'none'; // Optionally hide the button
+                console.log('Content marked as completed');
+            }
+        } else {
+            console.error('Failed to mark content as completed');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+   
     </script>
+
+
 
 
 @endsection
