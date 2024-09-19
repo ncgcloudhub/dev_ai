@@ -124,7 +124,10 @@ class EducationController extends Controller
                 ['role' => 'user', 'content' => $prompt],
             ],
         ]);
-    
+
+
+ 
+        // Get the response content
         $content = $response['choices'][0]['message']['content'];
     
         // Save to the database

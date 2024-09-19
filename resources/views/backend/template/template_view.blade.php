@@ -28,7 +28,7 @@
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
 
 
-                            <div class="col-md-12" id="select-language-tour">
+                            <div class="col-md-6" id="select-language-tour">
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
                                     <option disabled>Enter Language</option>
@@ -56,6 +56,25 @@
 
                                 </select>
                                 <small class="form-text text-muted">English is selected by default</small>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="points" class="form-label">Select Points</label>
+                                <select class="form-select" name="points" id="points" aria-label="Floating label select example">
+                                    <option disabled>Enter Points</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+
+                                </select>
+                               
                             </div>
                             
 
