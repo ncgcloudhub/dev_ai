@@ -67,7 +67,7 @@ class EducationController extends Controller
         $contents = EducationContent::where('user_id', $userId)
             ->where('subject_id', $subjectId)
             ->with('gradeClass', 'subject')
-            ->get(['id', 'tone']);
+            ->get();
 
         return response()->json([
             'contents' => $contents,
