@@ -77,23 +77,32 @@
     </div><!--end col-->
 </div>
 
-<!-- Modal for displaying content -->
-<div class="modal fade" id="contentModal" tabindex="-1" aria-labelledby="contentModalLabel" aria-hidden="true">
+
+
+
+<div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="contentModalLabel">Content Details</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-content-body">
-          <!-- Content will be loaded here via AJAX -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Content Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body" id="modal-content-body">
+             
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -115,7 +124,7 @@
                     contentDisplay.innerHTML = ''; // Clear previous content
     
                     if (data.contents.length > 0) {
-            data.contents.forEach(content => {
+                data.contents.forEach(content => {
                 const contentElement = document.createElement('div');
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
                 
@@ -123,7 +132,7 @@
                     <div class="card border-end">
                         <div class="card-body text-center">
                             <h5 class="mb-0">${content.topic}</h5>
-                            <p class="text-muted">Web Developer</p>
+                            <p class="text-muted">${content.subject.name}</p>
                             <div class="d-flex gap-2 justify-content-center mb-3">
                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Google">
                                     <span class="avatar-title rounded-circle bg-light text-body">
@@ -173,7 +182,7 @@
         .then(data => {
             // Load the content into the modal
             document.getElementById('modal-content-body').innerHTML = `
-                <h6>${data.content.tone}</h6>
+                <h6 class="fs-15">${data.content.tone}</h6>
                 ${data.content.generated_content}
             `;
             // Show the modal

@@ -45,15 +45,9 @@ class EducationController extends Controller
                     ->distinct();
             });
         }])->whereIn('id', $gradeIds)->get();
-
-        $contentss = EducationContent::latest()->get();
-        foreach ($contentss as $content) {
-            $content->generated_content = Parsedown::instance()->text($content->generated_content);
-        }
     
     return view('backend.education.user_generated_content', [
             'classes' => $classes,
-            'contentss' => $contentss,
         ]);
     }
 
@@ -64,7 +58,7 @@ class EducationController extends Controller
         $userId = auth()->id(); // Get the authenticated user's ID
 
         // Retrieve contents for the selected subject
-        $contents = EducationContent::where('user_id', $userId)
+        $contents = educationContent::where('user_id', $userId)
             ->where('subject_id', $subjectId)
             ->with('gradeClass', 'subject')
             ->get();
