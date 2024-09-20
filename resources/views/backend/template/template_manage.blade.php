@@ -121,7 +121,7 @@
                                                         </a> --}}
                                                     </li>
                                                     <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                        <a href="{{route('template.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn">
+                                                        <a href="{{route('template.edit',$item->slug)}}" class="text-primary d-inline-block edit-item-btn">
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
                                                     </li>

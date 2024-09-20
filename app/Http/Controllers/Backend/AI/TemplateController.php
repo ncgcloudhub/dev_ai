@@ -184,10 +184,10 @@ class TemplateController extends Controller
     }
 
 
-    public function TemplateEdit($id)
+    public function TemplateEdit($slug)
     {
         $categories = TemplateCategory::orderBy('id', 'ASC')->get();
-        $template = Template::findOrFail($id);
+        $template = Template::where('slug', $slug)->firstOrFail();
 
         $templateInputs = json_decode($template->input_types, true);
         $inputNames = json_decode($template->input_names, true);
