@@ -6,7 +6,7 @@
 @section('keywords', $seo->keywords)
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Templates @endslot
+@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
 @slot('title') All Templates @endslot
 @endcomponent
 

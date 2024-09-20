@@ -9,7 +9,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Template @endslot
+@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
 <button id="templateDetailsTourButton" class="btn gradient-button text-white my-2">Template View Tour</button>
