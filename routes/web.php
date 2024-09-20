@@ -161,7 +161,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 
     // Templates
-    Route::prefix('template')->group(function () {
+    Route::prefix('ai-content-creator')->group(function () {
 
         Route::get('/category/add', [TemplateController::class, 'TemplateCategoryAdd'])->name('template.category.add');
 
@@ -414,7 +414,7 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 Route::middleware(['auth', 'check.status'])->group(function () {
 
     // Custom Templates
-    Route::prefix('custom/template')->group(function () {
+    Route::prefix('custom/ai-content-creator')->group(function () {
 
         Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add');
 
@@ -516,11 +516,11 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     });
 
     //Fixed Templates 
-    Route::get('template/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
+    Route::get('ai-content-creator/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
 
-    Route::get('template/view/{slug}', [TemplateController::class, 'TemplateView'])->name('template.view');
+    Route::get('ai-content-creator/view/{slug}', [TemplateController::class, 'TemplateView'])->name('template.view');
 
-    Route::post('template/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
+    Route::post('ai-content-creator/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
 
     //Fixed Prompt Library 
     Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage');
@@ -568,9 +568,9 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 
 // Frontend Free Template Page
-Route::get('/free/template', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
-Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
-Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
+Route::get('/free/ai-content-creator/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
+Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
 
 // Frontend Free Prompt Library Page
 Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
