@@ -20,7 +20,7 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Prompt Library @endslot
+@slot('li_1') <a href="{{route('prompt.manage')}}">Prompt Library</a> @endslot
 @slot('title') {{$prompt_library->prompt_name}} @endslot
 @endcomponent
 

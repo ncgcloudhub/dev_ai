@@ -177,7 +177,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
 
-        Route::get('/edit/{id}', [TemplateController::class, 'TemplateEdit'])->name('template.edit');
+        Route::get('/edit/{slug}', [TemplateController::class, 'TemplateEdit'])->name('template.edit');
 
         Route::post('/update', [TemplateController::class, 'TemplateUpdate'])->name('template.update');
         Route::post('/seo/update', [TemplateController::class, 'TemplateSEOUpdate'])->name('template.seo.update');
