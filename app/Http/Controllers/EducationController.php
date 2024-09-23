@@ -138,9 +138,6 @@ class EducationController extends Controller
         return response()->json(['success' => 'Content marked as completed']);
     }
     
-    
-
-
 
     public function educationContent(Request $request)
     {
@@ -169,6 +166,10 @@ class EducationController extends Controller
         if ($request->examples) {
             $prompt .= ', I am providing some examples for better understanding: ' . $request->examples;
         }
+
+        if ($request->negative_word) {
+            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_word;
+        }
     
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
@@ -178,8 +179,6 @@ class EducationController extends Controller
                 ['role' => 'user', 'content' => $prompt],
             ],
         ]);
-
-
  
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
@@ -215,16 +214,11 @@ class EducationController extends Controller
     }
     
     
-
     public function getSubjects($gradeId)   
     {
         $subjects = Subject::where('grade_id', $gradeId)->get();
         return response()->json($subjects);
     }
-
-
-
-
 
 
     // ADMIN SECTION
@@ -261,5 +255,4 @@ class EducationController extends Controller
         }
     }
     
-
 }
