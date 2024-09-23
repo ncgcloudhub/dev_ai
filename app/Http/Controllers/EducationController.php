@@ -132,10 +132,18 @@ class EducationController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     
-        $content->status = 'completed';
+       // Toggle the content status
+        if ($content->status === 'completed') {
+            $content->status = 'generated';
+            $message = 'Content marked as incomplete';
+        } else {
+            $content->status = 'completed';
+            $message = 'Content marked as completed';
+        }
+
         $content->save();
     
-        return response()->json(['success' => 'Content marked as completed']);
+        return response()->json(['success' => true, 'status' => $content->status, 'message' => $message]);
     }
     
 
