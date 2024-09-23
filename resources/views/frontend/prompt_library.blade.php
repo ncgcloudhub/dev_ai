@@ -152,27 +152,6 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 
-<script>
-    $(document).ready(function() {
-        $('.nav-link').on('click', function() {
-
-            // Remove 'active' class from all nav links
-        $('.nav-link').removeClass('active');
-        
-        // Add 'active' class to the clicked nav link
-        $(this).addClass('active');
-        
-            var category = $(this).attr('id');
-            if (category === 'All') {
-            $('.template-card').show(); // Show all templates
-        } else {
-            $('.template-card').hide(); // Hide all templates initially
-            $('.template-card[data-category="' + category + '"]').show(); // Show templates that match the selected category
-        }
-        });
-    });
-</script>
-
 {{-- SEARCH --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {

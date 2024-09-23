@@ -1,5 +1,11 @@
 @extends('admin.layouts.master')
 
+@section('title', $seo->title)
+
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
+
 @section('content')
 
 <div class="row">
@@ -71,7 +77,7 @@
 
     
     {{-- Add Grade and Subject --}}
-    <div class="col-xxl-8 d-flex" id="content-display">
+    <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
        
     
     </div><!--end col-->
@@ -89,16 +95,24 @@
              
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                  <!-- Placeholder for Mark as Complete button -->
+                  <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
+                    Mark as Complete
+                </button>                
+                <a id="download-link" href="#">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                        <i class="ri-download-line"></i> Download
+                    </button>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
+                    <i class="ri-close-line me-1 align-middle"></i> Close
+                </a>
             </div>
+            
+            
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
-
-
 
 
 <script>
@@ -125,7 +139,8 @@
                 const contentElement = document.createElement('div');
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
-                const downloadUrl = `{{ url('education/content/${content.id}/download') }}`;
+                const downloadUrl = '{{ url('education/content') }}/' + content.id + '/download';
+
 
                 const cardClass = content.status === 'completed' ? 'bg-success' : '';
                 
@@ -141,24 +156,26 @@
                                         <i class="ri-download-line"></i>
                                     </span>
                                 </button>
-                                  </a>
+                                </a>
+
                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-edit-line"></i>
                                     </span>
                                 </button>
-                                <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="Completed">
-                                                <span class="avatar-title rounded-circle bg-light text-body">
-                                                    <i class="ri-chat-forward-line"></i>
-                                                </span>
-                                </button>
 
+                                <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.status === 'completed' ? 'Unmark' : 'Completed'}">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-${content.status === 'completed' ? 'close-line' : 'chat-forward-line'}"></i>
+                                    </span>
+                                </button>
 
                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
                                     <span class="avatar-title rounded-circle bg-light text-body">
                                         <i class="ri-delete-bin-4-line"></i>
                                     </span>
                                 </button>
+                                
                             </div>
                             <div>
                                 <button type="button" class="btn btn-success rounded-pill w-sm" onclick="fetchContent(${content.id})">
@@ -200,7 +217,7 @@
         })
         .catch(error => console.error('Error:', error));
     }
-}
+    }
     
     function fetchContent(contentId) {
         fetch('{{ route('education.getContentById') }}', {
@@ -218,6 +235,16 @@
                 <h6 class="fs-15">${data.content.tone}</h6>
                 ${data.content.generated_content}
             `;
+
+            // Set the download link with the appropriate URL
+            const downloadLink = document.getElementById('download-link');
+            const downloadUrl = `{{ url('education/content') }}/${contentId}/download`; // Dynamic download URL
+            downloadLink.setAttribute('href', downloadUrl);
+
+            // Update the Mark as Complete button with the correct onclick event
+            const markCompleteButton = document.getElementById('mark-complete-btn');
+            markCompleteButton.setAttribute('onclick', `markAsComplete(${contentId})`);
+
             // Show the modal
             var contentModal = new bootstrap.Modal(document.getElementById('contentModal'));
             contentModal.show();
@@ -226,38 +253,43 @@
     }
 
     function markAsComplete(contentId) {
-    fetch(`/education/content/${contentId}/complete`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ status: 'completed' })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the UI
-            const card = document.querySelector(`.card[data-id="${contentId}"]`);
-            if (card) {
-                // Update the UI to show the content as completed
-                card.classList.add('bg-success', 'text-white'); // Change this based on your styling
-                card.querySelector('.mark-complete').style.display = 'none'; // Optionally hide the button
-                console.log('Content marked as completed');
+        fetch(`/education/content/${contentId}/complete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the UI based on the new status
+                const card = document.querySelector(`.card[data-id="${contentId}"]`);
+                const markCompleteButton = document.querySelector(`#mark-complete-btn`);
+                const markCompleteIcon = document.querySelector(`.mark-complete .avatar-title i`);
+
+                if (card) {
+                    if (data.status === 'completed') {
+                        // Content marked as completed
+                        card.classList.add('bg-success', 'text-white');
+                        markCompleteButton.textContent = 'Unmark as Complete';
+                    } else {
+                        // Content unmarked as completed
+                        card.classList.remove('bg-success', 'text-white');
+                        markCompleteButton.textContent = 'Mark as Complete';
+                    }
+                }
+
+                console.log(data.message);
+            } else {
+                console.error('Failed to update content status');
             }
-        } else {
-            console.error('Failed to mark content as completed');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-
-   
-    </script>
-
-
-
+</script>
 
 @endsection
 

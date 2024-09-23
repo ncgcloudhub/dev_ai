@@ -1,13 +1,21 @@
 @extends('admin.layouts.master')
+@section('title', $seo->title)
 
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
 @section('content')
 
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Education</h4><a href="{{route('user_generated_education_content')}}">Content</a>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">Education</h4>
+                <a href="{{ route('user_generated_education_content') }}" class="btn btn-warning fw-bold text-dark shadow">
+                    Show Generated Contents
+                </a>
             </div><!-- end card header -->
+            
             <div class="card-body form-steps">
                 <form class="vertical-navs-step" action="{{ route('education.content')}}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -29,7 +37,7 @@
                                     <span class="step-title me-2">
                                         <i class="ri-close-circle-fill step-icon me-2"></i> Step 2
                                     </span>
-                                    Additional Info
+                                    Class Materials Info
                                 </button>
                                 <button class="nav-link" id="v-pills-payment-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-payment" type="button" role="tab"
@@ -37,7 +45,7 @@
                                     <span class="step-title me-2">
                                         <i class="ri-close-circle-fill step-icon me-2"></i> Step 3
                                     </span>
-                                    Reference
+                                    Topic Reference
                                 </button>
                                 <button class="nav-link" id="v-pills-finish-tab" data-bs-toggle="pill"
                                     data-bs-target="#v-pills-finish" type="button" role="tab"
@@ -96,7 +104,7 @@
 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Content Difficulty Level</label>
-                                                    <select class="form-select" name="difficult_level" data-choices aria-label="Default select difficulty">
+                                                    <select class="form-select" name="difficulty_level" data-choices aria-label="Default select difficulty">
                                                         <option selected="">Select Level</option>
                                                         <option value="Easy">Easy</option>
                                                         <option value="Medium">Medium</option>
@@ -145,7 +153,7 @@
                                     <div class="tab-pane fade" id="v-pills-bill-address" role="tabpanel"
                                         aria-labelledby="v-pills-bill-address-tab">
                                         <div>
-                                            <h5>Additional Details</h5>
+                                            <h5>Class Materials Info</h5>
                                             <p class="text-muted">Fill all information below</p>
                                         </div>
 
@@ -154,21 +162,42 @@
                                                 <div class="col-12">
                                                     <label for="address" class="form-label">Topic</label>
                                                     <input type="text" class="form-control" id="topic" name="topic"
-                                                        placeholder="1234 Main St" required>
+                                                        placeholder="What is the Topic about" required>
                                                     <div class="invalid-feedback">What is the Content Topic about?</div>
                                                 </div>
 
                                                 <div class="col-12">
-                                                    <label for="address2" class="form-label">Additional Details Prompt<span
-                                                            class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="additional_details" name="additional_details"
-                                                        placeholder="More details about the topic" />
+                                                    <label for="additional_details" class="form-label">Additional Details Prompt
+                                                        <span class="text-muted">(Optional)</span>
+                                                    </label>
+                                                    <textarea class="form-control" id="additional_details" name="additional_details" rows="2" 
+                                                              placeholder="More details about the topic"></textarea>
+                                                </div>  
+                                                
+                                                <div class="col-12">
+                                                    <label for="negative_word" class="form-label">Negative Word <span class="text-muted">(Optional)</span></label>
+                                                    <input type="text" class="form-control" id="negative_word" name="negative_word"
+                                                        placeholder="Negative words that you don't want to include in your content" required>
+                                                    <div class="invalid-feedback">Which words you don't want to include in your content?</div>
                                                 </div>
-  
-                                            </div>
 
-                                           
+                                                <div class="col-12">
+                                                    <label for="question_type" class="form-label">Question Type <span class="text-muted">(Optional)</span></label>
+                                                    <input type="text" class="form-control" id="question_type" name="question_type"
+                                                        placeholder="What is the question type?" required>
+                                                    <div class="invalid-feedback">What is the question type?</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="points" class="form-label">How many Questions to Include? <span class="text-muted">(Optional)</span></label>
+                                                    <input type="text" class="form-control" id="points" name="points"
+                                                        placeholder="How many points to include?" required>
+                                                    <div class="invalid-feedback">How many points to include?</div>
+                                                </div>
+                                                
+                                              </div> 
                                         </div>
+
                                         <div class="d-flex align-items-start gap-3 mt-4">
                                             <button type="button" class="btn btn-light btn-label previestab"
                                                 data-previous="v-pills-bill-info-tab"><i
@@ -185,7 +214,7 @@
                                     <div class="tab-pane fade" id="v-pills-payment" role="tabpanel"
                                         aria-labelledby="v-pills-payment-tab">
                                         <div>
-                                            <h5>Reference</h5>
+                                            <h5>Topic Reference</h5>
                                             <p class="text-muted">Fill all information below</p>
                                         </div>
 
@@ -195,7 +224,7 @@
                                                 <div class="col-12">
                                                     <label for="address2" class="form-label">Examples</label>
                                                     <input type="text" class="form-control" id="examples" name="examples"
-                                                        placeholder="More details about the topic" />
+                                                        placeholder="Examples about the Topic" />
                                                 </div>
                                                 <div class="col-12">
                                                     <label for="address2" class="form-label">Reference</label>

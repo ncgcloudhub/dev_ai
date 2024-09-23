@@ -132,15 +132,20 @@ class EducationController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     
-        $content->status = 'completed';
+       // Toggle the content status
+        if ($content->status === 'completed') {
+            $content->status = 'generated';
+            $message = 'Content marked as incomplete';
+        } else {
+            $content->status = 'completed';
+            $message = 'Content marked as completed';
+        }
+
         $content->save();
     
-        return response()->json(['success' => 'Content marked as completed']);
+        return response()->json(['success' => true, 'status' => $content->status, 'message' => $message]);
     }
     
-    
-
-
 
     public function educationContent(Request $request)
     {
@@ -158,7 +163,7 @@ class EducationController extends Controller
         $subjectName = $subject->name;
     
         // Basic Info
-        $prompt = 'I need to create questions and answers for my students. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona;
+        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give the answer in different page so when I prnt the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona . '. Include ' . $request->points . ' questions.';
     
         $prompt .= ' The question topic is ' . $request->topic;
     
@@ -169,6 +174,10 @@ class EducationController extends Controller
         if ($request->examples) {
             $prompt .= ', I am providing some examples for better understanding: ' . $request->examples;
         }
+
+        if ($request->negative_word) {
+            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_word;
+        }
     
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
@@ -178,8 +187,6 @@ class EducationController extends Controller
                 ['role' => 'user', 'content' => $prompt],
             ],
         ]);
-
-
  
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
@@ -215,16 +222,11 @@ class EducationController extends Controller
     }
     
     
-
     public function getSubjects($gradeId)   
     {
         $subjects = Subject::where('grade_id', $gradeId)->get();
         return response()->json($subjects);
     }
-
-
-
-
 
 
     // ADMIN SECTION
@@ -261,5 +263,4 @@ class EducationController extends Controller
         }
     }
     
-
 }
