@@ -9,9 +9,13 @@
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title mb-0">Education</h4><a href="{{route('user_generated_education_content')}}">Content</a>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">Education</h4>
+                <a href="{{ route('user_generated_education_content') }}" class="btn btn-warning fw-bold text-dark shadow">
+                    Show Generated Contents
+                </a>
             </div><!-- end card header -->
+            
             <div class="card-body form-steps">
                 <form class="vertical-navs-step" action="{{ route('education.content')}}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -182,6 +186,13 @@
                                                     <input type="text" class="form-control" id="question_type" name="question_type"
                                                         placeholder="What is the question type?" required>
                                                     <div class="invalid-feedback">What is the question type?</div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="points" class="form-label">How many Questions to Include? <span class="text-muted">(Optional)</span></label>
+                                                    <input type="text" class="form-control" id="points" name="points"
+                                                        placeholder="How many points to include?" required>
+                                                    <div class="invalid-feedback">How many points to include?</div>
                                                 </div>
                                                 
                                               </div> 
