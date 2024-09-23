@@ -163,7 +163,7 @@ class EducationController extends Controller
         $subjectName = $subject->name;
     
         // Basic Info
-        $prompt = 'I need to create questions and answers for my students. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona;
+        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give theanswer in different page so when I prnt the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona;
     
         $prompt .= ' The question topic is ' . $request->topic;
     

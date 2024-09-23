@@ -176,6 +176,13 @@
                                                         placeholder="Negative words that you don't want to include in your content" required>
                                                     <div class="invalid-feedback">Which words you don't want to include in your content?</div>
                                                 </div>
+
+                                                <div class="col-12">
+                                                    <label for="question_type" class="form-label">Question Type <span class="text-muted">(Optional)</span></label>
+                                                    <input type="text" class="form-control" id="question_type" name="question_type"
+                                                        placeholder="What is the question type?" required>
+                                                    <div class="invalid-feedback">What is the question type?</div>
+                                                </div>
                                                 
                                               </div> 
                                         </div>
