@@ -77,7 +77,7 @@
 
     
     {{-- Add Grade and Subject --}}
-    <div class="col-xxl-8 d-flex" id="content-display">
+    <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
        
     
     </div><!--end col-->
@@ -113,11 +113,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-
-
-
 
 
 <script>
@@ -222,7 +217,7 @@
         })
         .catch(error => console.error('Error:', error));
     }
-}
+    }
     
     function fetchContent(contentId) {
         fetch('{{ route('education.getContentById') }}', {
@@ -294,7 +289,7 @@
         .catch(error => console.error('Error:', error));
     }
 
-    </script>
+</script>
 
 @endsection
 
