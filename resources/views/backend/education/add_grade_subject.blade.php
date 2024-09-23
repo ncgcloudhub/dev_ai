@@ -1,5 +1,9 @@
 @extends('admin.layouts.master')
+@section('title', $seo->title)
 
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
 @section('content')
 
 <div class="row">
