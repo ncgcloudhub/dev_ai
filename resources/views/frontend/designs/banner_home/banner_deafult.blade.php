@@ -25,7 +25,13 @@
                             @if (Auth::check())
                             
                             @else
-                            <a href="{{ route('register') }}" class="btn btn-soft-dark waves-effect waves-light">Sign Up for Free AI Services</a>
+                          
+                            {{-- <a href="{{ route('register') }}" class="btn gradient-button-2 waves-effect waves-light mb-3">Sign Up for Free AI Services</a>
+
+                            <a href="{{ route('register') }}" class="btn gradient-button-4 waves-effect waves-light mb-3">Sign Up for Free AI Services</a> --}}
+
+                            <a href="{{ route('register') }}" class="btn gradient-button-8 waves-effect waves-light">Sign Up for Free AI Services</a>
+
                                                   
                             @endif
 
