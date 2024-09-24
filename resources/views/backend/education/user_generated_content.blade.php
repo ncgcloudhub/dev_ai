@@ -140,8 +140,7 @@
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
                 const downloadUrl = '{{ url('education/content') }}/' + content.id + '/download';
-
-
+                const editUrl = '{{ url('education/content') }}/' + content.id + '/edit';
                 const cardClass = content.status === 'completed' ? 'bg-success' : '';
                 
                 contentElement.innerHTML = `
@@ -158,11 +157,13 @@
                                 </button>
                                 </a>
 
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-edit-line"></i>
-                                    </span>
-                                </button>
+                                <a href="${editUrl}">
+                                    <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <span class="avatar-title rounded-circle bg-light text-body">
+                                            <i class="ri-edit-line"></i>
+                                        </span>
+                                    </button>
+                                </a>
 
                                 <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.status === 'completed' ? 'Unmark' : 'Completed'}">
                                     <span class="avatar-title rounded-circle bg-light text-body">

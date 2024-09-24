@@ -72,3 +72,7 @@ permission, role has permission, roles, model has roles, model has permission de
 -------------24/8/24----------------
 in prompt_libraries, add inFrontEnd, character_varying{255}, default='no'::character varying
 in templates, add inFrontEnd, character_varying{255}, default='no'::character varying
+
+-------------24/8/24----------------
+in educationContent, add negative_words text
+in educationContent, add points, text
