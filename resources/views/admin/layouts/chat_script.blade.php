@@ -1,3 +1,10 @@
+<style>
+    .btn i {
+    pointer-events: none;  /* Prevents icon clicks from stopping the button's click */
+}
+
+</style>
+
 <script>
     $(document).ready(function() {
     // Function to auto-expand textarea
@@ -11,7 +18,7 @@
     $('.auto-expand').on('keydown', function(e) {
         if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
             e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
-            sendMessage(); // Call the function to send the message
+            // sendMessage(); // Call the function to send the message
         }
     });
         
@@ -182,10 +189,61 @@
 
             // Listen for paste events on messageInput
             messageInput.addEventListener('paste', handleImagePaste);
+            let abortController = null;  // To store the AbortController instance
 
-            function sendMessage() {
+            // Function to send or stop the message generation
+// Move the event listener outside the sendMessage function
+chatConversation.addEventListener('click', function(event) {
+    if (event.target.closest('.speech-btn')) {
+        const targetId = event.target.closest('.speech-btn').getAttribute('data-target');
+        readAloud(targetId); // Call the readAloud function or your desired function
+    }
+
+    if (event.target.closest('.copy-btn')) {
+        const targetId = event.target.closest('.copy-btn').getAttribute('data-target');
+        copyToClipboard(targetId); // Call the copyToClipboard function
+    }
+});
+
+
+function readAloud(targetId) {
+    const contentElement = document.getElementById(targetId);
+    const content = contentElement.textContent; // Get the content to read
+    const speech = new SpeechSynthesisUtterance(content);
+    window.speechSynthesis.speak(speech);
+}
+
+function copyToClipboard(targetId) {
+    const contentElement = document.getElementById(targetId);
+    if (!contentElement) {
+        console.error('Element not found:', targetId);
+        return;
+    }
+
+    const content = contentElement.innerText; // Get the content to copy
+    navigator.clipboard.writeText(content)
+        .then(() => {
+            alert('Content copied to clipboard!'); // Show success message
+        })
+        .catch(err => {
+            console.error('Error copying content: ', err);
+        });
+}
+
+
+function sendMessage() {
     const message = messageInput.value.trim();
     const file = fileInput.files[0];
+
+    // Check if already generating (toggle stop)
+    if (sendMessageBtn.dataset.state === 'generating') {
+        // Stop generation by aborting the request
+        if (abortController) {
+            abortController.abort();  // Stop the request
+        }
+        resetButton();  // Reset the button back to "Send"
+        return;  // Stop execution here
+    }
 
     if (!message && !file && !pastedImageFile) return;
 
@@ -204,8 +262,13 @@
         formData.append('title', chatTitle);
     }
 
-    sendMessageBtn.disabled = true;
-    sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
+    // Disable the button, change the text to "Stop", and store the generating state
+    sendMessageBtn.disabled = false;
+    sendMessageBtn.innerHTML = 'Stop';
+    sendMessageBtn.dataset.state = 'generating';
+
+    // Create an AbortController instance
+    abortController = new AbortController();
 
     let assistantMessageContent = ''; // Accumulate assistant's message content
 
@@ -215,6 +278,7 @@
             'X-CSRF-TOKEN': csrfToken,
         },
         body: formData,
+        signal: abortController.signal  // Attach the AbortController signal
     })
     .then(response => {
         if (!response.ok) {
@@ -241,27 +305,37 @@
         chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
 
         const assistantMessageId = `assistant-message-${Date.now()}`;
-        let assistantMessageHTML = `<li class="chat-list left">
-            <div class="conversation-list">
-                <div class="chat-avatar">
-                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                </div>
-                <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
-                        </div>
-                    </div>
-                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+        let assistantMessageHTML = `
+<li class="chat-list left">
+    <div class="conversation-list">
+        <div class="chat-avatar">
+            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+        </div>
+        <div class="user-chat-content">
+            <div class="ctext-wrap">
+                <div class="ctext-wrap-content">
+                    <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
+                    <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud">
+                        <i class="ri-volume-up-line"></i>
+                    </button>
+                    <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
+                        <i class="ri-file-copy-line"></i>
+                    </button>
                 </div>
             </div>
-        </li>`;
+            <div class="conversation-name">
+                <small class="text-muted time">${currentTime}</small>
+            </div>
+        </div>
+    </div>
+</li>`;
+
         chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
 
         const assistantMessageElement = document.getElementById(assistantMessageId);
 
         let debounceTimer;
-        const DEBOUNCE_DELAY = 5; // Adjust delay as needed, decrease to generate faster and vice versa
+        const DEBOUNCE_DELAY = 5;
 
         function scheduleUpdate() {
             clearTimeout(debounceTimer);
@@ -272,23 +346,17 @@
 
         function updateAssistantMessage() {
             try {
-                // Attempt to format the accumulated content
                 const formattedContent = formatContent(assistantMessageContent);
-
-                // Update the assistant message element
                 assistantMessageElement.innerHTML = formattedContent;
 
-                // Re-run syntax highlighting on the new content
                 assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block);
                 });
 
-                // Scroll to the latest message
                 let conversationList = document.getElementById('users-conversation');
                 let lastMessage = conversationList.lastElementChild;
                 lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
             } catch (e) {
-                // Parsing error due to incomplete content; skip updating
                 console.error('Error parsing Markdown:', e);
             }
         }
@@ -297,12 +365,8 @@
             reader.read().then(({ done, value }) => {
                 if (done) {
                     console.log('Stream complete');
-
-                    // Final update after streaming is complete
                     updateAssistantMessage();
-
-                    sendMessageBtn.disabled = false;
-                    sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+                    resetButton();  // Reset the button back to "Send"
                     return;
                 }
 
@@ -310,7 +374,7 @@
                 receivedText += chunk;
 
                 let lines = receivedText.split('\n');
-                receivedText = lines.pop(); // Retain incomplete line
+                receivedText = lines.pop();
 
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
@@ -322,11 +386,8 @@
                         try {
                             const content = JSON.parse(data);
                             if (content) {
-                                // Accumulate content
                                 assistantMessageContent += content;
-
-                                 // Schedule update
-                                 scheduleUpdate();
+                                scheduleUpdate();
 
                                 let conversationList = document.getElementById('users-conversation');
                                 let lastMessage = conversationList.lastElementChild;
@@ -346,8 +407,6 @@
                                 fileNameDisplay.textContent = '';
                                 imageDisplay.innerHTML = '';
                                 pastedImageFile = null;
-
-                               
                             }
                         } catch (e) {
                             console.error('Error parsing data:', e);
@@ -375,15 +434,18 @@
             </div>
         </li>`;
         chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-
-        let conversationList = document.getElementById('users-conversation');
-        let lastMessage = conversationList.lastElementChild;
-        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-        sendMessageBtn.disabled = false;
-        sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+        resetButton();  // Reset the button in case of error
     });
 }
+
+
+// Function to reset the send button back to its original state
+function resetButton() {
+    sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+    sendMessageBtn.dataset.state = 'idle';  // Reset state
+    abortController = null;  // Clear the AbortController
+}
+
 
     sendMessageBtn.addEventListener('click', sendMessage);
     messageInput.addEventListener('keydown', function (event) {
@@ -602,7 +664,7 @@ document.addEventListener('click', function(event) {
     formattedContent = DOMPurify.sanitize(formattedContent);
 
     return formattedContent;
-}
+    }
 
 
 
