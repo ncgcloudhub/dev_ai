@@ -1,3 +1,117 @@
 .gradient-button {
     background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))
 }
+
+
+/* Banner Signup Button in Homepage */
+.gradient-button-2 {
+    background: linear-gradient(45deg, #8a2be2, #ff69b4);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-button-2:hover {
+    background: linear-gradient(45deg, #6a0dad, #ff1493);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-button-2:active {
+    transform: scale(0.98);
+}
+
+
+
+/* Button 4 */
+.gradient-button-4 {
+    background: linear-gradient(45deg, #ff007f, #ff00ff);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 8px 15px rgba(255, 0, 255, 0.4);
+}
+
+.gradient-button-4:hover {
+    background: linear-gradient(45deg, #ff1493, #ff69b4);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+    transform: translateY(-3px);
+}
+
+.gradient-button-4:active {
+    transform: scale(0.98);
+}
+
+
+
+
+/* Button 8 - Glowing Purple */
+.gradient-button-8 {
+    background: linear-gradient(45deg, #9b00ff, #e900ff);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(97, 93, 97, 0.5), 0 0 30px rgba(37, 37, 37, 0.3);
+}
+
+.gradient-button-8:hover {
+    background: linear-gradient(45deg, #e900ff, #9b00ff);
+    box-shadow: 0 0 25px rgba(85, 82, 85, 0.7), 0 0 50px rgba(56, 49, 56, 0.5);
+    transform: scale(1.05);
+}
+
+.gradient-button-8:active {
+    transform: scale(0.98);
+}
+
+
+
+
+/* Button 1 - Gradient Glow; Sign Up Button in Homepage top right */ 
+.gradient-glow {
+    background: linear-gradient(45deg, #9b00ff, #e900ff); /* Purplish gradient */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(233, 0, 255, 0.4); /* Adjusted for purplish glow */
+}
+
+.gradient-glow:hover {
+    background: linear-gradient(45deg, #e900ff, #9b00ff); /* Reversed purplish gradient */
+    box-shadow: 0 5px 20px rgba(233, 0, 255, 0.6); /* Adjusted for hover effect */
+    transform: scale(1.05);
+}
+
+.gradient-glow:active {
+    transform: scale(0.98);
+}
+
+
+
+
+

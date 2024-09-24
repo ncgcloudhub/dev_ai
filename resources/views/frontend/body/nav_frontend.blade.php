@@ -70,7 +70,9 @@
                     @endif
                 @else
                     <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn btn-primary">Sign Up</a>
+                    <a href="{{ route('register') }}" class="btn gradient-glow">Sign Up</a>
+                  
+
                 @endif
             </div>
         </div>
