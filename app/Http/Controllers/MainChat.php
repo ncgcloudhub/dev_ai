@@ -92,7 +92,25 @@ class MainChat extends Controller
         $pastedImages = session('pasted_images', []);
         Log::info('Pasted images: ', $pastedImages);
 
-        $conversationHistory = session('conversation_history', []);
+       // Retrieve the session and its messages from the database
+$session = ModelsSession::with('messages')->find($sessionId);
+if (!$session) {
+    return response()->json(['error' => 'Session not found'], 404);
+}
+
+// Get conversation history from the database
+$messagesFromDb = $session->messages()->orderBy('created_at')->get();
+
+$conversationHistory = [];
+
+foreach ($messagesFromDb as $message) {
+    if ($message->message) {
+        $conversationHistory[] = ['role' => 'user', 'content' => $message->message];
+    }
+    if ($message->reply) {
+        $conversationHistory[] = ['role' => 'assistant', 'content' => $message->reply];
+    }
+}
         Log::info('Conversation history: ', $conversationHistory);
 
         $context = session('context', []);
@@ -322,15 +340,7 @@ class MainChat extends Controller
         }
 
         // Add all conversation history messages
-        foreach ($conversationHistory as $message) {
-            if (is_array($message) && isset($message['content']) && isset($message['role'])) {
-                if (!is_null($message['content'])) {
-                    $messages[] = ['role' => $message['role'], 'content' => $message['content']];
-                }
-            } else {
-                Log::warning('Invalid message structure:', ['message' => $message]);
-            }
-        }
+        $messages = array_merge($messages, $conversationHistory);
 
 
         array_walk_recursive($messages, function (&$item, $key) {
