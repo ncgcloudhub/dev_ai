@@ -190,7 +190,8 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $template->id }}">
                                 
-                                    <!-- Page Title -->
+                                  
+                                <!-- Page Title -->
                                     <div class="col-12">
                                         <label for="page_title" class="form-label">Page Title</label>
                                         <input type="text" class="form-control" id="page_title" name="page_title" value="{{ $template->page_title ?? '' }}" placeholder="Enter Page Title">
@@ -210,6 +211,8 @@
                                 
                                     <div class="col-12">
                                         <div class="text-end">
+                                            <button type="button" class="btn btn-rounded btn-info mb-5" id="populateBtn">AI Generate</button>
+                                    
                                             <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
                                         </div>
                                     </div>
@@ -326,6 +329,33 @@ function appendToPrompt(inputName) {
     }
     promptTextarea.val(promptText);
 }
+
+
+// SEO with AI
+$(document).ready(function() {
+    $('#populateBtn').on('click', function() {
+        let templateId = $('input[name="id"]').val(); // Get the template ID from the hidden input
+
+        $.ajax({
+            url: '/ai-content-creator/seo/fetch/' + templateId, // Adjust the URL if needed
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                // Populate the form fields with the data from the response
+                $('#page_title').val(response.seo_title);
+                $('#page_description').val(response.seo_description);
+                  $('#page_tagging').val(response.seo_tags);
+            } else {
+                alert(response.message);
+            }
+            },
+            error: function() {
+                alert('Error fetching the template details.');
+            }
+        });
+    });
+});
+
 </script>
 
 @endsection
