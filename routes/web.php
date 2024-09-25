@@ -406,7 +406,7 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
 
-        Route::put('/content/{id}', [EducationController::class, 'update'])->name('education.content.update');
+        Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
 
     });
 

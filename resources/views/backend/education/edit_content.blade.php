@@ -17,9 +17,9 @@
             </div><!-- end card header -->
             
             <div class="card-body form-steps">
-                <form class="vertical-navs-step" method="POST" action="{{ route('education.content.update', ['id' => $content->id]) }}">
+                <form class="vertical-navs-step" method="POST" action="{{ route('education.content.update') }}">
                     @csrf
-
+                    <input type="hidden" name="id" value="{{$content->id}}">
                     <div class="row gy-5">
                         <div class="col-lg-3">
                             <div class="nav flex-column custom-nav nav-pills" role="tablist"
@@ -175,7 +175,7 @@
                                                 
                                                 <div class="col-12">
                                                     <label for="negative_word" class="form-label">Negative Word <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="negative_word" name="negative_word"
+                                                    <input type="text" class="form-control" id="negative_words" name="negative_words"
                                                         placeholder="{{$content->negative_words}}" required>
                                                     <div class="invalid-feedback">Which words you don't want to include in your content?</div>
                                                 </div>
@@ -317,7 +317,7 @@
 generateButton.addEventListener("click", function () {
     const formData = new FormData(form);
     fetch(form.getAttribute("action"), {
-        method: 'PUT',
+        method: form.getAttribute("method"),
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },

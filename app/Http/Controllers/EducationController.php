@@ -89,10 +89,10 @@ class EducationController extends Controller
         return view('backend.education.edit_content', compact('content', 'classes'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
        
-        $educationContent = EducationContent::findOrFail($id);
+        $educationContent = EducationContent::findOrFail($request->id);
        
         if (!$educationContent) {
             return response()->json(['error' => 'Content not found'], 404);
@@ -103,22 +103,16 @@ class EducationController extends Controller
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
     
-        // Prepare Grade and Subject details
         $gradeId = $request->input('grade_id');
-        dd($gradeId);
         $grade = GradeClass::findOrFail($gradeId);
+        $gradeName = $grade->grade;
         
-
-        $gradeName = $grade->gradeClass->grade;
-
-       
-    
         $subjectId = $request->input('subject_id');
         $subject = Subject::findOrFail($subjectId);
-        // $subjectName = $subject->name;
+        $subjectName = $subject->name;
     
         // Create the updated prompt for OpenAI
-        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give the answer in different page so when I print the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . '' . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona . '. Include ' . $request->points . ' questions.';
+        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give the answer in different page so when I prnt the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona . '. Include ' . $request->points . ' questions.';
     
         $prompt .= ' The question topic is ' . $request->topic;
     
@@ -130,8 +124,8 @@ class EducationController extends Controller
             $prompt .= ', I am providing some examples for better understanding: ' . $request->examples;
         }
     
-        if ($request->negative_word) {
-            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_word;
+        if ($request->negative_words) {
+            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_words;
         }
     
         // Generate the content using OpenAI API
@@ -299,6 +293,8 @@ class EducationController extends Controller
             'tone' => $request->input('tone'),
             'persona' => $request->input('persona'),
             'topic' => $request->input('topic'),
+            'negative_words' => $request->input('negative_words'),
+            'points' => $request->input('points'),
             'additional_details' => $request->input('additional_details'),
             'example' => $request->input('examples'),
             'reference' => $request->input('reference'),
