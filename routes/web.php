@@ -181,6 +181,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/update', [TemplateController::class, 'TemplateUpdate'])->name('template.update');
         Route::post('/seo/update', [TemplateController::class, 'TemplateSEOUpdate'])->name('template.seo.update');
+        Route::get('/seo/fetch/{id}', [TemplateController::class, 'fetchTemplate'])->name('template.seo.fetch');
+
 
         Route::get('/select/design', [TemplateController::class, 'getDesign'])->name('getDesign');
 
