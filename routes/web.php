@@ -404,6 +404,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::post('/content/{id}/complete', [EducationController::class, 'markAsComplete'])->name('content.mark.complete');
 
+        Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
+
+        Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
 
     });
 
