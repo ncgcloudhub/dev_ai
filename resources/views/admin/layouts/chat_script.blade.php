@@ -6,13 +6,15 @@
 </style>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     // Function to auto-expand textarea
     $('.auto-expand').on('input', function () {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
+        this.style.height = 'auto'; // Reset height
+        this.style.height = Math.min(this.scrollHeight, 150) + 'px'; // Limit the height to max-height
     });
-    });
+});
+
+
 
     // Function to send message when Enter key is pressed
     $('.auto-expand').on('keydown', function(e) {
