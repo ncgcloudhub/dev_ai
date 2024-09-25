@@ -60,6 +60,7 @@ class EducationController extends Controller
         // Retrieve contents for the selected subject
         $contents = educationContent::where('user_id', $userId)
             ->where('subject_id', $subjectId)
+            ->orderBy('status', 'desc')
             ->with('gradeClass', 'subject')
             ->get();
 
