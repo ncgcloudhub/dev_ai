@@ -81,6 +81,104 @@ class EducationController extends Controller
         ]);
     }
 
+    public function edit($id)
+    {
+        $content = EducationContent::findOrFail($id);
+        $classes = GradeClass::all();
+
+        return view('backend.education.edit_content', compact('content', 'classes'));
+    }
+
+    public function update(Request $request, $id)
+    {
+       
+        $educationContent = EducationContent::findOrFail($id);
+       
+        if (!$educationContent) {
+            return response()->json(['error' => 'Content not found'], 404);
+        }
+
+        $user = auth()->user();
+        $openaiModel = $user->selected_model;
+        $apiKey = config('app.openai_api_key');
+        $client = OpenAI::client($apiKey);
+    
+        // Prepare Grade and Subject details
+        $gradeId = $request->input('grade_id');
+        dd($gradeId);
+        $grade = GradeClass::findOrFail($gradeId);
+        
+
+        $gradeName = $grade->gradeClass->grade;
+
+       
+    
+        $subjectId = $request->input('subject_id');
+        $subject = Subject::findOrFail($subjectId);
+        // $subjectName = $subject->name;
+    
+        // Create the updated prompt for OpenAI
+        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give the answer in different page so when I print the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . '' . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona . '. Include ' . $request->points . ' questions.';
+    
+        $prompt .= ' The question topic is ' . $request->topic;
+    
+        if ($request->additional_details) {
+            $prompt .= ', these are the additional points that should be included: ' . $request->additional_details;
+        }
+    
+        if ($request->examples) {
+            $prompt .= ', I am providing some examples for better understanding: ' . $request->examples;
+        }
+    
+        if ($request->negative_word) {
+            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_word;
+        }
+    
+        // Generate the content using OpenAI API
+        $response = $client->chat()->create([
+            "model" => $openaiModel,
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+        ]);
+    
+        // Get the response content
+        $content = $response['choices'][0]['message']['content'];
+    
+        // Update the existing content in the database
+        $educationContent->update([
+            'grade_id' => 1,
+            'subject_id' => $subjectId,
+            'age' => $request->input('age'),
+            'difficulty_level' => $request->input('difficulty_level'),
+            'tone' => $request->input('tone'),
+            'persona' => $request->input('persona'),
+            'topic' => $request->input('topic'),
+            'negative_words' => $request->input('negative_words'),
+            'points' => $request->input('points'),
+            'additional_details' => $request->input('additional_details'),
+            'example' => $request->input('examples'),
+            'reference' => $request->input('reference'),
+            'generated_content' => $content,
+            'prompt' => $prompt,
+            'status' => 'updated',
+        ]);
+    
+        // Stream the updated response
+        return response()->stream(function () use ($content) {
+            $chunks = explode("\n", $content);
+            foreach ($chunks as $chunk) {
+                echo $chunk . "<br/>";
+                ob_flush();
+                flush();
+                sleep(1); // Simulate delay between chunks
+            }
+        });
+    }
+
+
+
     public function deleteContent($id)
     {
         $content = educationContent::find($id);
@@ -220,6 +318,8 @@ class EducationController extends Controller
             }
         });
     }
+
+    
     
     
     public function getSubjects($gradeId)   
