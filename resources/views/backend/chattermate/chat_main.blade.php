@@ -41,7 +41,18 @@
     .chat-leftsidebar .shadow-sm {
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
     }
+
+    .auto-expand {
+    max-height: 150px; /* Set maximum height for the textarea */
+    
+    resize: none; /* Disable resizing */
+    position: absolute; /* Position the textarea absolutely */
+    bottom: 0; /* Align to the bottom of the parent */
+}
+
 </style>
+
+
 
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border bg-light-grey" >
@@ -161,47 +172,45 @@
                             <!-- end chat-conversation-list -->
                         </div>
                     </div>
+                    
                     <div class="chat-input-section p-3 p-lg-4">
-
-                            <div class="row g-0 align-items-center">
-                                {{-- File Selected Show --}}
-                                <div id="file_name_display"></div>
-
-                               
-                                    <div class="col-auto">
-                                        <div class="chat-input-links me-2">
-                                            <div class="links-list-item"> 
-                                            {{-- Attachement Icon --}}
-                                            
-                                            <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
-                                           
-                                            <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                               
-
-
-                                <div class="col" id="type-message-tour">
-
-                                    <div class="chat-input-feedback">
-                                        Please Enter a Message
-                                    </div>
-                                    <div id="image_display"></div>
-                                    <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="chat-input-links ms-2">
-                                        <div class="links-list-item" id="send-tour">
-                                            <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
-                                                <i class="ri-send-plane-2-fill align-bottom"></i>
-                                            </button>
-                                        </div>
+                        <div class="row g-0 align-items-center">
+                            <!-- File Selected Show -->
+                            <div id="file_name_display"></div>
+                    
+                            <div class="col-auto">
+                                <div class="chat-input-links me-2">
+                                    <div class="links-list-item">
+                                        <!-- Attachment Icon -->
+                                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
+                                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
+                    
+                            
+                            <!-- Input field with the send button on the right -->
+                            <div class="col" id="type-message-tour">
+
+                                <div class="chat-input-feedback">
+                                    Please Enter a Message
+                                </div>
+                                <div id="image_display"></div>
+                                <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
+                            </div>
+                            <div class="col-auto">
+                                <div class="chat-input-links ms-2">
+                                    <div class="links-list-item" id="send-tour">
+                                        <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                            <i class="ri-send-plane-2-fill align-bottom"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+                    
 
                     <div class="replyCard">
                         <div class="card mb-0">

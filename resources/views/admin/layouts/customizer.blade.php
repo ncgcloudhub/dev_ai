@@ -1,7 +1,8 @@
 <!--start back-to-top-->
-<button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+<button onclick="topFunction()" class="btn btn-danger btn-icon position-fixed bottom-0 end-0 m-3" id="back-to-top">
     <i class="ri-arrow-up-line"></i>
 </button>
+
 
 <!--preloader-->
 <div id="preloader">
