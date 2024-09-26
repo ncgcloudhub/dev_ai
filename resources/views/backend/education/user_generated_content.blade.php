@@ -7,81 +7,172 @@
 @section('keywords', $seo->keywords)
 
 @section('content')
+ <style>
+    body{
+        background: #dde1e7;
+    }
 
-<div class="row">
+    .ccard {
+        height: auto;
+        width: auto;
+        padding: 20px;
+        background: #dde1e7;
+        border-radius: 20px;
+        margin: 20px;
+        box-shadow: inset -5px -5px 9px rgba(255,255,255,0.45), inset 5px 5px 9px rgba(94,104,121,0.3);
+    }
+
+    .nav-tabs {
+            border-bottom: none;
+        }
+
+        .nav-tabs .nav-link {
+            background: #dde1e7;
+            border-radius: 15px;
+            margin-right: 5px;
+            box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6),
+                        inset 3px 3px 5px rgba(94, 104, 121, 0.2);
+        }
+
+        .nav-tabs .nav-link.active {
+            box-shadow: -5px -5px 9px rgba(255,255,255,0.45), 5px 5px 9px rgba(94,104,121,0.3);
+        }
+
+        .tab-content {
+            margin-top: 15px;
+        }
+
+        .tab-pane {
+            padding: 10px;
+            background-color: #dde1e7;
+            border-radius: 15px;
+            box-shadow: inset -5px -5px 9px rgba(255, 255, 255, 0.45), 
+                        inset 5px 5px 9px rgba(94, 104, 121, 0.3);
+        }
+
+        .subject-btn {
+        background: #dde1e7;
+        border-radius: 15px;
+        box-shadow: inset -3px -3px 5px rgba(255, 255, 255, 0.6),
+                    inset 3px 3px 5px rgba(94, 104, 121, 0.2);
+        padding: 10px 20px;
+        font-size: 14px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .subject-btn:hover {
+        box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.6),
+                    5px 5px 10px rgba(94, 104, 121, 0.3);
+    }
+
+    .subject-btn:active {
+        box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.6),
+                    inset 5px 5px 10px rgba(94, 104, 121, 0.3);
+    }
+
+    /* Dynamic Cards */
+    .neomorphic-card {
+        background: #dde1e7;
+        border-radius: 15px;
+        box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), 
+                    -8px -8px 15px rgba(255, 255, 255, 0.7);
+        padding: 20px;
+        margin-right: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .neomorphic-card:hover {
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15), 
+                    -10px -10px 20px rgba(255, 255, 255, 0.6);
+    }
+
+    .neomorphic-card .card-body {
+        text-align: center;
+    }
+
+    .neomorphic-avatar {
+        background: #dde1e7;
+        box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1), 
+                    inset -5px -5px 10px rgba(255, 255, 255, 0.6);
+        border-radius: 50%;
+    }
+
+    .neomorphic-avatar i {
+        color: #6c757d;
+    }
+
+    .btn-neomorphic {
+        background: #dde1e7;
+        box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.6),
+                    inset 5px 5px 10px rgba(94, 104, 121, 0.2);
+        border-radius: 25px;
+        padding: 10px 20px;
+        transition: box-shadow 0.2s;
+    }
+
+    .btn-neomorphic:hover {
+        box-shadow: -5px -5px 10px rgba(255, 255, 255, 0.6),
+                    5px 5px 10px rgba(94, 104, 121, 0.3);
+    }
+
+ </style>
+  <div class="row">
     <div class="col-xxl-4">
-        <h5 class="mb-3">Grade & Subject</h5>
-        <div class="card">
-            <div class="card-body">
-                <p class="text-muted">Select <code>Grade/Class</code> to see respective content.</p>
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="nav nav-pills flex-column nav-pills-tab custom-verti-nav-pills text-center" role="tablist" aria-orientation="vertical">
-                            @foreach ($classes as $index => $item)
-                                <a class="nav-link {{ $loop->first ? 'active show' : '' }}" 
-                                   id="custom-v-pills-{{ $item->id }}-tab" 
-                                   data-bs-toggle="pill" 
-                                   href="#custom-v-pills-{{ $item->id }}" 
-                                   role="tab" 
-                                   aria-controls="custom-v-pills-{{ $item->id }}" 
-                                   aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                    <i class="ri-home-4-line d-block fs-20 mb-1"></i>
-                                    {{ $item->grade }}
-                                </a>
+        <div class="ccard">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                @foreach ($classes as $index => $item)
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {{ $loop->first ? 'active show' : '' }}" 
+                            id="tab-{{ $item->id }}" 
+                            data-bs-toggle="tab" 
+                            data-bs-target="#tab-content-{{ $item->id }}" 
+                            type="button" 
+                            role="tab" 
+                            aria-controls="tab-content-{{ $item->id }}" 
+                            aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                        {{ $item->grade }} <!-- Tab label -->
+                    </button>
+                </li>
+            @endforeach
+            </ul>
+        
+            <!-- Tab content -->
+            <div class="tab-content" id="myTabContent">
+                @foreach ($classes as $index => $item)
+                <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" 
+                     id="tab-content-{{ $item->id }}" 
+                     role="tabpanel" 
+                     aria-labelledby="tab-{{ $item->id }}">
+                 
+        
+                    @if ($item->subjects->isNotEmpty())
+                        <div class="subject-buttons">
+                            @foreach ($item->subjects as $subject)
+                               
+                                <button type="button" class="btn subject-btn mb-2" 
+                                        data-subject-id="{{ $subject->id }}">
+                                    {{ $subject->name }}
+                                </button>
                             @endforeach
                         </div>
-                    </div> <!-- end col-->
-                    <div class="col-lg-9">
-                        <div class="tab-content text-muted mt-3 mt-lg-0">
-                            @foreach ($classes as $index => $item)
-                                <div class="tab-pane fade {{ $loop->first ? 'active show' : '' }}" 
-                                     id="custom-v-pills-{{ $item->id }}" 
-                                     role="tabpanel" 
-                                     aria-labelledby="custom-v-pills-{{ $item->id }}-tab">
-                                    @php
-                                        // Array of possible button styles
-                                        $buttonStyles = [
-                                            'btn-outline-primary',
-                                            'btn-outline-success',
-                                            'btn-outline-warning',
-                                            'btn-outline-info',
-                                            'btn-outline-secondary',
-                                            // Add more styles as needed
-                                        ];
-                                    @endphp
-                                    
-                                    @if ($item->subjects->isNotEmpty())
-                                        <div class="subject-buttons">
-                                            @foreach ($item->subjects as $subject)
-                                                @php
-                                                    // Pick a random style from the array
-                                                    $randomStyle = $buttonStyles[array_rand($buttonStyles)];
-                                                @endphp
-                                                <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2" 
-                                                        data-subject-id="{{ $subject->id }}">
-                                                    {{ $subject->name }}
-                                                </button>
-                                            @endforeach
-                                        </div>
-                                    @else
-                                        <p>No subjects allocated for this class.</p>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div> <!-- end col-->
-                </div> <!-- end row-->
-            </div><!-- end card-body -->
-        </div><!-- end card-->
-    </div><!-- end col -->
+                    @else
+                        <p>No subjects allocated for this class.</p>
+                    @endif
+                </div>
+            @endforeach
+            </div>
+        </div>
+    </div>
 
-    
-    {{-- Add Grade and Subject --}}
     <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
        
     
-    </div><!--end col-->
+    </div>
+
+
+
 </div>
+
 
 <div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -95,7 +186,6 @@
              
             </div>
             <div class="modal-footer">
-                  <!-- Placeholder for Mark as Complete button -->
                   <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
                     Mark as Complete
                 </button>                
@@ -110,9 +200,9 @@
             </div>
             
             
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+    </div>
+</div> 
 
 
 <script>
@@ -134,58 +224,60 @@
                     const contentDisplay = document.getElementById('content-display');
                     contentDisplay.innerHTML = ''; // Clear previous content
     
-                    if (data.contents.length > 0) {
+                if (data.contents.length > 0) {
                 data.contents.forEach(content => {
                 const contentElement = document.createElement('div');
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
                 const downloadUrl = '{{ url('education/content') }}/' + content.id + '/download';
                 const editUrl = '{{ url('education/content') }}/' + content.id + '/edit';
-                const cardClass = content.status === 'completed' ? 'bg-success' : '';
+                const cardClass = content.status === 'completed' ? 'ribbon-box' : '';
+                const ribbonClass = content.status === 'completed' ? 'ribbon-two ribbon-two-success' : '';
+                const ribbonText = content.status === 'completed' ? 'Completed' : ''; 
                 
                 contentElement.innerHTML = `
-                    <div class="card border-end ${cardClass}" data-id="${content.id}">
-                        <div class="card-body text-center">
-                            <h5 class="mb-0">${content.topic}</h5>
-                            <p class="text-muted">${content.subject.name}</p>
-                            <div class="d-flex gap-2 justify-content-center mb-3">
-                                 <a href="${downloadUrl}">
-                                 <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-download-line"></i>
-                                    </span>
-                                </button>
-                                </a>
+                                <div class="neomorphic-card ${cardClass}" data-id="${content.id}">
+                                    <div class="card-body">
+                                         <div class="${ribbonClass}"><span>${ribbonText}</span></div>
+                                        <h5 class="mb-0">${content.topic}</h5>
+                                        <p class="text-muted">${content.subject.name}</p>
+                                        <div class="d-flex gap-2 justify-content-center mb-3">
+                                            <a href="${downloadUrl}">
+                                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                                        <i class="ri-download-line"></i>
+                                                    </span>
+                                                </button>
+                                            </a>
 
-                                <a href="${editUrl}">
-                                    <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                        <span class="avatar-title rounded-circle bg-light text-body">
-                                            <i class="ri-edit-line"></i>
-                                        </span>
-                                    </button>
-                                </a>
+                                            <a href="${editUrl}">
+                                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                                        <i class="ri-edit-line"></i>
+                                                    </span>
+                                                </button>
+                                            </a>
 
-                                <button type="button" class="btn avatar-xs p-0 mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.status === 'completed' ? 'Unmark' : 'Completed'}">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-${content.status === 'completed' ? 'close-line' : 'chat-forward-line'}"></i>
-                                    </span>
-                                </button>
+                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar mark-complete" onclick="markAsComplete(${content.id})" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.status === 'completed' ? 'Unmark' : 'Completed'}">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                    <i class="ri-${content.status === 'completed' ? 'close-line' : 'chat-forward-line'}"></i>
+                                                </span>
+                                            </button>
 
-                                <button type="button" class="btn avatar-xs p-0" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
-                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                        <i class="ri-delete-bin-4-line"></i>
-                                    </span>
-                                </button>
-                                
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-success rounded-pill w-sm" onclick="fetchContent(${content.id})">
-                                    <i class="ri-add-fill me-1 align-bottom"></i>Details
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                    <i class="ri-delete-bin-4-line"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
+                                                <i class="ri-add-fill me-1 align-bottom"></i>Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                 contentDisplay.appendChild(contentElement);
             });
                     } else {
