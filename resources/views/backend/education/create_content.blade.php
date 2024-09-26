@@ -93,8 +93,8 @@
                                                 
 
                                                 <div class="col-sm-6">
-                                                    <label for="userInput" class="form-label">Age</label>
-                                                    <input class="form-select" list="ageOptions" id="userInput" name="age" placeholder="Choose or type your age" aria-label="Select or type age">
+                                                    <label for="age_group" class="form-label">Age</label>
+                                                    <input class="form-select" list="ageOptions" id="age_group" name="age" placeholder="Choose or type your age" aria-label="Select or type age">
                                                         <datalist id="ageOptions">
                                                             <option value="4">
                                                             <option value="5">
@@ -178,17 +178,53 @@
                                                 <div class="col-12">
                                                     <label for="address" class="form-label">Topic</label>
                                                     <input type="text" class="form-control" id="topic" name="topic"
-                                                        placeholder="What is the Topic about" required>
+                                                        placeholder="Briefly state the main topic" required>
                                                     <div class="invalid-feedback">What is the Content Topic about?</div>
                                                 </div>
 
                                                 <div class="col-12">
-                                                    <label for="additional_details" class="form-label">Additional Details Prompt
+                                                    <label for="additional_details" class="form-label">Topic Description
                                                         <span class="text-muted">(Optional)</span>
                                                     </label>
                                                     <textarea class="form-control" id="additional_details" name="additional_details" rows="2" 
-                                                              placeholder="More details about the topic"></textarea>
+                                                              placeholder="Provide a short description or key points to cover"></textarea>
                                                 </div>  
+
+                                                <div class="col-6">
+                                                    <label for="content_type" class="form-label">Content Type</label>
+                                                    <input class="form-select" list="contentOption" id="content_type" name="content_type" placeholder="Choose or type your age" aria-label="Select or type Content Type">
+                                                        <datalist id="contentOption">
+                                                            <option value="story">
+                                                            <option value="book">
+                                                            <option value="passage">
+                                                            <option value="poem">
+                                                            <option value="worksheet">
+                                                          
+                                                        </datalist>
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <label for="language_style" class="form-label">Language Syle</label>
+                                                    <input class="form-select" list="languageOption" id="language_style" name="language_style" placeholder="Choose or type your age" aria-label="Select or type Language Style">
+                                                        <datalist id="languageOption">
+                                                            <option value="Simple (suitable for young readers)">
+                                                            <option value="Conversational">
+                                                            <option value="Formal">
+                                                            <option value="Academic">                                                            
+                                                        
+                                                        </datalist>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <label for="desired_length" class="form-label">Dersired Length</label>
+                                                    <input class="form-select" list="lengthOption" id="desired_length" name="desired_length" placeholder="Choose or type your age" aria-label="Select or type your Desired Length">
+                                                        <datalist id="lengthOption">
+                                                            <option value="Short (1-2 pages)">
+                                                            <option value="Medium (3-5 pages)">
+                                                            <option value="Long (6+ pages)">
+                                                         
+                                                        </datalist>
+                                                </div>
                                                 
                                                 <div class="col-12">
                                                     <label for="negative_word" class="form-label">Negative Word <span class="text-muted">(Optional)</span></label>
@@ -197,20 +233,51 @@
                                                     <div class="invalid-feedback">Which words you don't want to include in your content?</div>
                                                 </div>
 
-                                                <div class="col-12">
-                                                    <label for="question_type" class="form-label">Question Type <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="question_type" name="question_type"
-                                                        placeholder="What is the question type?" required>
-                                                    <div class="invalid-feedback">What is the question type?</div>
+
+
+
+                                                <!-- Checkbox to toggle question generation -->
+                                                <div class="form-group">
+                                                    <label for="generate_questions">
+                                                        <input type="checkbox" id="generate_questions" name="generate_questions" value="1" onchange="toggleQuestionFields()"> 
+                                                        Generate Questions Based on Content
+                                                    </label>
                                                 </div>
 
-                                                <div class="col-12">
-                                                    <label for="points" class="form-label">How many Questions to Include? <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="points" name="points"
-                                                        placeholder="How many points to include?" required>
-                                                    <div class="invalid-feedback">How many points to include?</div>
+                                                <!-- Hidden fields for question generation, shown only if checkbox is checked -->
+                                                <div id="question_fields" style="display: none;">
+                                                    <!-- Number of Questions -->
+                                                    <div class="row g-3">
+                                                        <div class="col-4">
+                                                            <label for="number_of_questions">Number of Questions</label>
+                                                            <input type="number" id="number_of_questions" name="number_of_questions" class="form-control">
+                                                        </div>
+                                                        <!-- Type of Questions Dropdown and Manual Input -->
+                                                        <div class="col-4">
+                                                            <label for="question_type" class="form-label">Question Type</label>
+                                                            <input class="form-select" list="questionTypeOption" id="question_type" name="question_type" placeholder="Choose or type your age" aria-label="Select or type your Desired Length">
+                                                                <datalist id="questionTypeOption">
+                                                                    <option value="Multiple Choice">
+                                                                    <option value="True/False">
+                                                                    <option value="Short Answer">
+                                                                    <option value="Matching">
+                                                                    <option value="Fill-in-the-Blank">
+                                                                    <option value="Essay">
+                                                        
+                                                                </datalist>
+                                                        </div>
+                                                        <!-- Difficulty Level Dropdown -->
+                                                        <div class="col-4">
+                                                            <label for="question_difficulty_level">Difficulty Level</label>
+                                                            <select id="question_difficulty_level" name="question_difficulty_level" class="form-control">
+                                                                <option value="easy">Easy</option>
+                                                                <option value="medium">Medium</option>
+                                                                <option value="hard">Hard</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                
+
                                               </div> 
                                         </div>
 
@@ -303,6 +370,27 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        function toggleQuestionFields() {
+            var checkbox = document.getElementById('generate_questions');
+            var questionFields = document.getElementById('question_fields');
+            if (checkbox.checked) {
+                questionFields.style.display = 'block';
+            } else {
+                questionFields.style.display = 'none';
+            }
+        }
+    
+        function toggleCustomQuestionType(value) {
+            var customInput = document.getElementById('custom_type_input');
+            if (value === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
         $(document).ready(function() {
             // Mapping of grades to ages
             const gradeToAge = {
@@ -326,9 +414,9 @@
 
                 // Update the age input based on the selected grade
                 if (gradeToAge[gradeId]) {
-                    $('#userInput').val(gradeToAge[gradeId]); // Set the age input value
+                    $('#age_group').val(gradeToAge[gradeId]); // Set the age input value
                 } else {
-                    $('#userInput').val(''); // Clear the age input if grade not found
+                    $('#age_group').val(''); // Clear the age input if grade not found
                 }
 
                 // Existing code to populate subjects
