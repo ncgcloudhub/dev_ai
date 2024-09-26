@@ -84,10 +84,11 @@
                                                 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Subject</label>
-                                                    <select id="subject_id" class="form-select" name="subject_id" data-choices aria-label="Default select subject">
-                                                        <option selected="">Select Subject</option>
-                                                    </select>
-                                                    <div class="invalid-feedback">Please enter a first name</div>
+                                                    <input list="subjectOptions" id="subjectInput" class="form-select" name="subject_id" placeholder="Choose or type subject" aria-label="Default select subject">
+                                                    <datalist id="subjectOptions">
+                                                        
+                                                    </datalist>
+                                                    <div class="invalid-feedback">Please enter a subject</div>
                                                 </div>
                                                 
 
@@ -336,22 +337,24 @@
                         url: '/education/get-subjects/' + gradeId,
                         type: 'GET',
                         success: function(data) {
-                            $('#subject_id').empty(); // Clear the subjects dropdown
-                            $('#subject_id').append('<option selected>Select Subject</option>');
+                            $('#subjectOptions').empty(); // Clear the subjects datalist
+                           
                             
                             // Populate subjects based on response
                             $.each(data, function(key, subject) {
-                                $('#subject_id').append('<option value="' + subject.id + '">' + subject.name + '</option>');
+                                $('#subjectOptions').append('<option value="' + subject.name + '">');
                             });
                         }
                     });
                 } else {
-                    $('#subject_id').empty(); // Clear the subjects dropdown if no grade selected
-                    $('#subject_id').append('<option selected>Select Subject</option>');
+                    $('#subjectOptions').empty(); // Clear the subjects datalist if no grade selected
+                    $('#subjectOptions').append('<option value="Select Subject">'); // Default option
                 }
             });
+
         });
     </script>
+    
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {
