@@ -81,6 +81,7 @@
                                                     </select>
                                                     <div class="invalid-feedback">Please enter a first name</div>
                                                 </div>
+                                                
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Subject</label>
                                                     <select id="subject_id" class="form-select" name="subject_id" data-choices aria-label="Default select subject">
@@ -88,19 +89,33 @@
                                                     </select>
                                                     <div class="invalid-feedback">Please enter a first name</div>
                                                 </div>
+                                                
 
                                                 <div class="col-sm-6">
-                                                    <label for="lastName" class="form-label">Age</label>
-                                                    <select class="form-select" name="age" data-choices aria-label="Default select age">
-                                                        <option selected="">Choose Age</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                        <option value="8">8</option>
-                                                        
-                                                    </select>
+                                                    <label for="userInput" class="form-label">Age</label>
+                                                    <input class="form-select" list="ageOptions" id="userInput" name="age" placeholder="Choose or type your age" aria-label="Select or type age">
+                                                        <datalist id="ageOptions">
+                                                            <option value="4">
+                                                            <option value="5">
+                                                            <option value="6">
+                                                            <option value="7">
+                                                            <option value="8">
+                                                            <option value="9">
+                                                            <option value="10">
+                                                            <option value="11">
+                                                            <option value="12">
+                                                            <option value="13">
+                                                            <option value="14">
+                                                            <option value="15">
+                                                            <option value="16">
+                                                            <option value="17">
+                                                            <option value="18">
+                                                            <option value="19">
+                                                            <option value="20">
+                                                                
+                                                        </datalist>
                                                 </div>
+                                                
 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Content Difficulty Level</label>
@@ -288,9 +303,34 @@
 
     <script>
         $(document).ready(function() {
+            // Mapping of grades to ages
+            const gradeToAge = {
+                1: 5,
+                2: 6,
+                3: 7,
+                4: 8,
+                5: 9,
+                6: 10,
+                7: 11,
+                8: 12,
+                9: 13,
+                10: 14,
+                11: 15,
+                12: 16,
+                
+            };
+    
             $('#grade_id').on('change', function() {
                 var gradeId = $(this).val();
-                
+
+                // Update the age input based on the selected grade
+                if (gradeToAge[gradeId]) {
+                    $('#userInput').val(gradeToAge[gradeId]); // Set the age input value
+                } else {
+                    $('#userInput').val(''); // Clear the age input if grade not found
+                }
+
+                // Existing code to populate subjects
                 if (gradeId) {
                     $.ajax({
                         url: '/education/get-subjects/' + gradeId,
