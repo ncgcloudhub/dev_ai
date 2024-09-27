@@ -16,7 +16,7 @@ class EducationController extends Controller
     // USER SECTION
     public function educationForm()
     {
-        $classes = GradeClass::with('subjects')->get();
+        $classes = GradeClass::with('subjects')->orderBy('id', 'asc')->get();
 
         return view('backend.education.create_content', [
             'classes' => $classes,
