@@ -238,7 +238,7 @@
                 contentElement.innerHTML = `
                                 <div class="neomorphic-card ${cardClass}" data-id="${content.id}">
                                     <div class="card-body">
-                                         <div class="${ribbonClass}"><span>${ribbonText}</span></div>
+                                         <div class="r ${ribbonClass}"><span>${ribbonText}</span></div>
                                         <h5 class="mb-0">${content.topic}</h5>
                                         <p class="text-muted">${content.subject.name}</p>
                                         <div class="d-flex gap-2 justify-content-center mb-3">
@@ -357,22 +357,38 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update the UI based on the new status
-                const card = document.querySelector(`.card[data-id="${contentId}"]`);
+                const card = document.querySelector(`.neomorphic-card[data-id="${contentId}"]`);
+                let ribbon = card.querySelector('.r'); // Get the ribbon element
                 const markCompleteButton = document.querySelector(`#mark-complete-btn`);
-                const markCompleteIcon = document.querySelector(`.mark-complete .avatar-title i`);
 
-                if (card) {
-                    if (data.status === 'completed') {
-                        // Content marked as completed
-                        card.classList.add('bg-success', 'text-white');
-                        markCompleteButton.textContent = 'Unmark as Complete';
-                    } else {
-                        // Content unmarked as completed
-                        card.classList.remove('bg-success', 'text-white');
-                        markCompleteButton.textContent = 'Mark as Complete';
+        if (card) {
+            if (data.status === 'completed') {
+                // Mark the content as completed
+                card.classList.add('ribbon-box');
+                markCompleteButton.textContent = 'Unmark as Complete';
+
+                // Add the ribbon if it doesn't exist
+                if (!ribbon) {
+                    ribbon = document.createElement('div');
+                    ribbon.classList.add('r', 'ribbon-two', 'ribbon-two-success');
+                    ribbon.innerHTML = '<span>Completed</span>';
+                    card.prepend(ribbon); // Add the ribbon to the top of the card
+                } else {
+                    // If ribbon exists, just update the classes
+                    ribbon.classList.add('ribbon-two', 'ribbon-two-success');
+                    ribbon.innerHTML = '<span>Completed</span>';
+                }
+                } else {
+                    // Unmark the content as completed
+                    card.classList.remove('bg-success', 'text-white');
+                    markCompleteButton.textContent = 'Mark as Complete';
+
+                    // Remove the ribbon
+                    if (ribbon) {
+                        ribbon.remove();
                     }
                 }
+            }
 
                 console.log(data.message);
             } else {
