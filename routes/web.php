@@ -415,6 +415,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
 }); //End User Middleware
 
+Route::post('/generate-images', [EducationController::class, 'generateImages']);
+
+
 
 Route::middleware(['auth', 'check.status'])->group(function () {
 

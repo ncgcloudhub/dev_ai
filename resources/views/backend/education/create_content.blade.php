@@ -84,14 +84,15 @@
                                                 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Subject</label>
-                                                    <input list="subjectOptions" id="subjectInput" class="form-select" name="subject_id" placeholder="Choose or type subject" aria-label="Default select subject">
-                                                    <datalist id="subjectOptions">
-                                                        
-                                                    </datalist>
+                                                    <input list="subjectOptions" id="subjectInput" class="form-select" name="subject_name" placeholder="Choose or type subject" aria-label="Default select subject">
+                                                    <datalist id="subjectOptions"></datalist>
+                                                    
+                                                    <!-- Hidden input to store the selected subject ID -->
+                                                    <input type="hidden" id="subjectId" name="subject_id">
+                                                    
                                                     <div class="invalid-feedback">Please enter a subject</div>
                                                 </div>
                                                 
-
                                                 <div class="col-sm-6">
                                                     <label for="age_group" class="form-label">Age</label>
                                                     <input class="form-select" list="ageOptions" id="age_group" name="age" placeholder="Choose or type your age" aria-label="Select or type age">
@@ -115,8 +116,7 @@
                                                             <option value="20">
                                                                 
                                                         </datalist>
-                                                </div>
-                                                
+                                                </div>                                               
 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Content Difficulty Level</label>
@@ -136,8 +136,7 @@
                                                     <select class="form-select" name="tone" data-choices aria-label="Default select tone">
                                                         <option selected="">Choose Tone</option>
                                                         <option value="Kids">Kids</option>
-                                                        <option value="Adult">Adult</option>
-                                                     
+                                                        <option value="Adult">Adult</option>                  
                                                         
                                                     </select>
                                                 </div>
@@ -150,8 +149,7 @@
                                                         <option value="Step by Step guide">Step by Step guide</option>
                                                         <option value="Simple">Simple</option>
                                                         <option value="Somewhat Difficulty">Somewhat Difficulty</option>
-                                                     
-                                                        
+       
                                                     </select>
                                                 </div>
                                             </div>
@@ -233,9 +231,6 @@
                                                     <div class="invalid-feedback">Which words you don't want to include in your content?</div>
                                                 </div>
 
-
-
-
                                                 <!-- Checkbox to toggle question generation -->
                                                 <div class="form-group">
                                                     <label for="generate_questions">
@@ -288,9 +283,6 @@
                                                     </label>
                                                 </div>
                                                  {{-- Generate Answer Checkbox Ends --}}
-
-
-
 
 
                                                 <!-- Checkbox to toggle image generation -->
@@ -352,16 +344,10 @@
                                                                 </datalist>
                                                         </div>
 
-
                                                     </div>
                                                 </div>
 
-
-
-
-
                                                 {{-- Accordation Collapse --}}
-
                                                 <div class="accordion accordion-flush col-12 m-auto mt-2" id="accordionFlushExample">
                                                     <div class="accordion-item" id="advance-setting-tour">
                                                         <h2 class="accordion-header" id="flush-headingOne">
@@ -373,7 +359,6 @@
                                                         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
                                                             data-bs-parent="#accordionFlushExample">
                                                             <div class="accordion-body">
-        
         
                                                                 <div class="row g-3">
                                                                     
@@ -406,11 +391,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                                 {{-- Accordation Collapse End --}}
-
-
 
                                               </div> 
                                         </div>
@@ -554,18 +535,17 @@
                     $('#age_group').val(''); // Clear the age input if grade not found
                 }
 
-                // Existing code to populate subjects
+               // Existing code to populate subjects
                 if (gradeId) {
                     $.ajax({
                         url: '/education/get-subjects/' + gradeId,
                         type: 'GET',
                         success: function(data) {
                             $('#subjectOptions').empty(); // Clear the subjects datalist
-                           
-                            
+
                             // Populate subjects based on response
                             $.each(data, function(key, subject) {
-                                $('#subjectOptions').append('<option value="' + subject.name + '">');
+                                $('#subjectOptions').append('<option data-id="' + subject.id + '" value="' + subject.name + '">');
                             });
                         }
                     });
@@ -573,6 +553,18 @@
                     $('#subjectOptions').empty(); // Clear the subjects datalist if no grade selected
                     $('#subjectOptions').append('<option value="Select Subject">'); // Default option
                 }
+
+                // Detect when a subject is selected and update the hidden subject ID input
+                $('#subjectInput').on('input', function() {
+                    var inputValue = $(this).val();
+                    var selectedOption = $('#subjectOptions option').filter(function() {
+                        return $(this).val() === inputValue;
+                    });
+
+                    var selectedId = selectedOption.data('id'); // Get the subject ID from the selected option
+                    $('#subjectId').val(selectedId); // Set the hidden input value to the subject ID
+                });
+
             });
 
         });
@@ -580,21 +572,22 @@
     
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".vertical-navs-step");
-    const finishTab = document.getElementById("v-pills-finish");
-
     const generateButton = document.querySelector(".generateButton");
-generateButton.addEventListener("click", function () {
-    const formData = new FormData(form);
-    fetch(form.getAttribute("action"), {
-        method: form.getAttribute("method"),
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: formData
-    })
-    .then(response => {
+
+    generateButton.addEventListener("click", function () {
+        const formData = new FormData(form);
+
+        // Step 1: Fetch and display content stream
+        fetch(form.getAttribute("action"), {
+            method: form.getAttribute("method"),
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let content = "";  // Variable to store the entire content
@@ -618,8 +611,12 @@ generateButton.addEventListener("click", function () {
                     if (pElement) {
                         pElement.innerHTML = content;  // Replacing the entire content once streaming is done
                     }
-                    
+
                     console.log("Stream complete");
+
+                    // Step 2: Fetch and display images after content is streamed
+                    // fetchImages();
+
                     return;
                 }
 
@@ -627,11 +624,12 @@ generateButton.addEventListener("click", function () {
                 if (parentDiv) {
                     parentDiv.classList.remove('text-center');
                     parentDiv.classList.remove('pt-4');
-                }   
+                }
+
                 // Append new chunks to content
                 content += decoder.decode(value, { stream: true });
 
-                // Optionally: Show the content progressively while streaming (uncomment if you want to update it progressively)
+                // Optionally: Show the content progressively while streaming
                 document.querySelector("#chunkss").innerHTML = content;
 
                 // Continue reading more chunks
@@ -640,14 +638,15 @@ generateButton.addEventListener("click", function () {
 
             return reader.read().then(processStream);
         })
-    .catch(error => {
-        console.error('Error:', error);
-        const h5Element = finishTab.querySelector("h5");
-        h5Element.textContent = "There was an error processing your request.";
+        .catch(error => {
+            console.error('Error:', error);
+            const h5Element = document.querySelector("#h55");
+            h5Element.textContent = "There was an error processing your request.";
+        });
     });
-});
 
 });
+
 
     </script>
 
