@@ -182,6 +182,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
+            <div>
+                <img width="200px" height="200px" src="" alt="Generated Image" class="img-fluid" id="modal-image">
+            </div>
             <div class="modal-body" id="modal-content-body">
              
             </div>
@@ -325,9 +328,12 @@
         .then(data => {
             // Load the content into the modal
             document.getElementById('modal-content-body').innerHTML = `
-                <h6 class="fs-15">${data.content.tone}</h6>
+                <h6 class="fs-15">${data.content.topic}</h6>
                 ${data.content.generated_content}
             `;
+            const modalImage = document.getElementById('modal-image');
+            modalImage.src = data.content.image_url; // Set the correct image URL here
+            modalImage.alt = data.content.topic; // Optionally set an alt text
 
             // Set the download link with the appropriate URL
             const downloadLink = document.getElementById('download-link');

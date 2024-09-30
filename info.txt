@@ -76,3 +76,6 @@ in templates, add inFrontEnd, character_varying{255}, default='no'::character va
 -------------24/8/24----------------
 in educationContent, add negative_words text
 in educationContent, add points, text
+
+-------------30/9/24----------------
+in educationContent, add image_url text

@@ -389,6 +389,9 @@ class EducationController extends Controller
         $imageData = $response->json()['data'] ?? []; // Safely get the 'data' array
         $images = array_column($imageData, 'url');
 
+        // For one image
+        $imageData = $response->json()['data'] ?? [];
+        $firstImageUrl = $imageData[0]['url'] ?? null;
     }
     
         // Save to the database
@@ -408,18 +411,19 @@ class EducationController extends Controller
             'reference' => $request->input('reference'),
             'generated_content' => $content,
             'prompt' => $prompt,
+            'image_url' => $firstImageUrl,
             'status' => 'generated' // or any default status you want
         ]);
     
         // Stream the response
        return response()->stream(function () use ($content, $images) {
-    $chunks = explode("\n", $content);
-    foreach ($chunks as $chunk) {
-        echo $chunk . "<br/>";
-        ob_flush();
-        flush();
-        sleep(1); // Simulate delay between chunks
-    }
+        $chunks = explode("\n", $content);
+        foreach ($chunks as $chunk) {
+            echo $chunk . "<br/>";
+            ob_flush();
+            flush();
+            sleep(1); // Simulate delay between chunks
+        }
 
     // Display images after the content
     if (!empty($images)) {
