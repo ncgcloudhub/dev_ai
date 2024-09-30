@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Parsedown;
 use PDF;
+use Illuminate\Support\Facades\Http;
 
 class EducationController extends Controller
 {
@@ -371,30 +372,23 @@ class EducationController extends Controller
         $imagePlacement = $request->input('image_placement') ?? 'Throughout the content';
         $numberOfImages = $request->input('number_of_images') ?? 1;
 
-        // Generate the images using OpenAI image endpoint
-        $client = new Client();
-        $imageResponse = $client->post('https://api.openai.com/v1/images/generations', [
-            'json' => [
-                'prompt' => $imagePrompt,
-                'n' => (int) $numberOfImages,
-                'size' => '1024x1024', // You can adjust size based on requirements
-                'style' => $imageStyle,
-               
-            ],
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiKey,
-            ],
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ])->post('https://api.openai.com/v1/images/generations', [
+            'prompt' => $request->imagePrompt,
+            'size' => '1024x1024',
+            'style' => $imageStyle,
+            'quality' => 'standard',
+            'n' => (int) $numberOfImages,
         ]);
 
-        // Parse the response to get image URLs
-    $imageData = json_decode($imageResponse->getBody(), true);
-    if (isset($imageData['data']) && is_array($imageData['data'])) {
-        $images = array_map(function ($image) {
-            return $image['url'];
-        }, $imageData['data']);
-    } else {
-        $images = []; // If no images are returned
-    }
+        Log::info('API Response Body: ' . $response->body());
+
+        $imageData = $response->json()['data'] ?? []; // Safely get the 'data' array
+        $images = array_column($imageData, 'url');
+
     }
     
         // Save to the database
@@ -418,65 +412,25 @@ class EducationController extends Controller
         ]);
     
         // Stream the response
-        return response()->stream(function () use ($content) {
-            $chunks = explode("\n", $content);
-            foreach ($chunks as $chunk) {
-                echo $chunk . "<br/>";
-                ob_flush();
-                flush();
-                sleep(1); // Simulate delay between chunks
-            }
+       return response()->stream(function () use ($content, $images) {
+    $chunks = explode("\n", $content);
+    foreach ($chunks as $chunk) {
+        echo $chunk . "<br/>";
+        ob_flush();
+        flush();
+        sleep(1); // Simulate delay between chunks
+    }
 
-              // Display images after the content
-        if (!empty($images)) {
-            foreach ($images as $imageUrl) {
-                echo '<img src="' . $imageUrl . '" alt="Generated Image" style="max-width:100%; height:auto;"><br/>';
-            }
+    // Display images after the content
+    if (!empty($images)) {
+        foreach ($images as $imageUrl) {
+            echo '<img src="' . $imageUrl . '" alt="Generated Image" style="max-width:100%; height:auto;"><br/>';
         }
+    }
 
         });
     }
-
-    public function generateImages(Request $request)
-{
-    $prompt = $request->input('prompt');
-    $apiKey = config('openai.api_key');
-
-    try {
-        $client = new Client();
-        $imageResponse = $client->post('https://api.openai.com/v1/images/generations', [
-            'json' => [
-                'prompt' => $prompt,
-                'n' => 3, // Number of images
-                'size' => '1024x1024',
-            ],
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiKey,
-            ],
-        ]);
-
-        $imageData = json_decode($imageResponse->getBody(), true);
-        if (isset($imageData['data']) && is_array($imageData['data'])) {
-            $images = array_map(function ($image) {
-                return $image['url'];
-            }, $imageData['data']);
-        } else {
-            $images = [];
-        }
-
-        return response()->json([
-            'images' => $images,
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
-
-    
-    
+   
     
     public function getSubjects($gradeId)   
     {

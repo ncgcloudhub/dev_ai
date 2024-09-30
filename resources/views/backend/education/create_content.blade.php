@@ -615,7 +615,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log("Stream complete");
 
                     // Step 2: Fetch and display images after content is streamed
-                    fetchImages();
+                    // fetchImages();
 
                     return;
                 }
@@ -645,48 +645,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Function to fetch images after content is streamed
-    function fetchImages() {
-        // Add a loader or placeholder while images are being fetched
-        const imagesLoader = document.createElement('p');
-        imagesLoader.textContent = "Generating images...";
-        document.querySelector('.center-content').appendChild(imagesLoader);
-
-        // Make the request to fetch the generated images
-        fetch('/generate-images', { // Replace with the correct image generation route
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                // Include necessary data to generate the images, e.g., content or prompts
-                prompt: content // Pass the generated content as prompt for images
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Remove the loader
-            imagesLoader.remove();
-
-            // Check if images are available
-            if (data.images && Array.isArray(data.images)) {
-                data.images.forEach(imageUrl => {
-                    const img = document.createElement('img');
-                    img.src = imageUrl;
-                    img.alt = 'Generated Image';
-                    img.style = 'max-width:100%; height:auto; margin-top:20px;';
-                    document.querySelector('.center-content').appendChild(img);
-                });
-            } else {
-                const noImageText = document.createElement('p');
-                noImageText.textContent = 'No images were generated.';
-                document.querySelector('.center-content').appendChild(noImageText);
-            }
-        })
-        .catch(error => {
-            console.error('Error generating images:', error);
-        });
-    }
 });
 
 
