@@ -256,21 +256,91 @@ class EducationController extends Controller
         $subjectName = $subject->name;
     
         // Basic Info
-        $prompt = 'I need to create study contents for my students. The content type will be ' . $request->question_type . '. Give the answer in different page so when I prnt the questions, only the questions should be printed. It is for ' . $gradeName . ' and the subject is ' . $subjectName . ' for students of age ' . $request->age . '. The question difficulty is ' . $request->difficulty_level . ' with ' . $request->tone . ' tone and the persona is ' . $request->persona . '. Include ' . $request->points . ' questions.';
-    
-        $prompt .= ' The question topic is ' . $request->topic;
-    
-        if ($request->additional_details) {
-            $prompt .= ', these are the additional points that should be included: ' . $request->additional_details;
-        }
-    
-        if ($request->examples) {
-            $prompt .= ', I am providing some examples for better understanding: ' . $request->examples;
+        $prompt = 'I need to create educational content for my students. Here are the details: ';
+
+        // Add Grade/Class
+        if ($request->grade_id) {
+           
+            $prompt .= 'The content is for Grade/Class: ' . $gradeName . '. ';
         }
 
-        if ($request->negative_word) {
-            $prompt .= ', And also please do not include these words in the content: ' . $request->negative_word;
+        // Add Subject
+        if ($request->subject_id) {
+            // Assuming you have a way to retrieve the subject name based on subject_id
+            $subject = 'Subject: ' . $subjectName . '. ';
+            $prompt .= $subject;
         }
+
+        // Add Age Group
+        if ($request->age) {
+            $prompt .= 'Target age group: ' . $request->age . '. ';
+        }
+
+        // Add Difficulty Level
+        if ($request->difficulty_level) {
+            $prompt .= 'Content Difficulty Level: ' . $request->difficulty_level . '. ';
+        }
+
+        // Add Tone
+        if ($request->tone) {
+            $prompt .= 'Tone: ' . $request->tone . '. ';
+        }
+
+        // Add Persona
+        if ($request->persona) {
+            $prompt .= 'Persona: ' . $request->persona . '. ';
+        }
+
+        // Add Topic
+        if ($request->topic) {
+            $prompt .= 'Topic: ' . $request->topic . '. ';
+        }
+
+        // Add Topic Description
+        if ($request->additional_details) {
+            $prompt .= 'Description: ' . $request->additional_details . '. ';
+        }
+
+        // Add Content Type
+        if ($request->content_type) {
+            $prompt .= 'Content Type: ' . $request->content_type . '. ';
+        }
+
+        // Add Language Style
+        if ($request->language_style) {
+            $prompt .= 'Language Style: ' . $request->language_style . '. ';
+        }
+
+        // Add Desired Length
+        if ($request->desired_length) {
+            $prompt .= 'Desired Length: ' . $request->desired_length . '. ';
+        }
+
+        // Add Negative Words
+        if ($request->negative_word) {
+            $prompt .= 'Please avoid the following negative words: ' . $request->negative_word . '. ';
+        }
+
+        // Additional Instructions
+        if ($request->additional_instruction) {
+            $prompt .= 'Additional Instructions: ' . $request->additional_instruction . '. ';
+        }
+
+        // Add Generate Questions if checked
+        if ($request->generate_questions) {
+            $prompt .= 'Generate ' . $request->number_of_questions . ' questions of type ' . $request->question_type . ' with difficulty level ' . $request->question_difficulty_level . '. ';
+        }
+
+        // Add Generate Answer if checked
+        if ($request->generate_answer) {
+            $prompt .= 'Also, generate answers for the questions. ';
+        }
+
+        // Finalize prompt
+        $prompt .= 'Please provide comprehensive content based on these details.';
+
+        // Use the prompt to generate content
+
     
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
