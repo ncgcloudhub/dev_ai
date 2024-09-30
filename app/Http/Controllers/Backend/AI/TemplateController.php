@@ -286,7 +286,7 @@ class TemplateController extends Controller
                       'model' => $openaiModel,
                       'messages' => [  // Corrected here
                          ["role" => "system", "content" => "You are an SEO assistant."],
-                         ["role" => "user", "content" => "Generate an SEO title, description and relevant tags for $template_name and to describe it is $description"]
+                         ["role" => "user", "content" => "Generate an SEO title not more than 60 character, description not more than 160 character and relevant tags for $template_name and to describe it is $description"]
                     ],
                   ],
               ]);
