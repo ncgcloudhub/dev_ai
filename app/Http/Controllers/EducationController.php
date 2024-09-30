@@ -8,6 +8,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Parsedown;
 use PDF;
 
@@ -242,6 +243,9 @@ class EducationController extends Controller
 
     public function educationContent(Request $request)
     {
+
+        set_time_limit(0);
+
         $user = auth()->user();
         $openaiModel = $user->selected_model;
         $apiKey = config('app.openai_api_key');
@@ -353,6 +357,45 @@ class EducationController extends Controller
  
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
+
+        // Check if the teacher selected to generate images
+    $images = [];
+    if ($request->has('generate_images') || $request->input('generate_images') == 1)
+    {
+        // Generate image prompt
+        $imagePrompt = 'Generate images based on the following topic: ' . $request->topic;
+
+        // Prepare additional image parameters
+        $imageStyle = $request->input('image_style') ?? 'vivid';
+        $imageType = $request->input('image_type') ?? 'Illustrations';
+        $imagePlacement = $request->input('image_placement') ?? 'Throughout the content';
+        $numberOfImages = $request->input('number_of_images') ?? 1;
+
+        // Generate the images using OpenAI image endpoint
+        $client = new Client();
+        $imageResponse = $client->post('https://api.openai.com/v1/images/generations', [
+            'json' => [
+                'prompt' => $imagePrompt,
+                'n' => (int) $numberOfImages,
+                'size' => '1024x1024', // You can adjust size based on requirements
+                'style' => $imageStyle,
+               
+            ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+            ],
+        ]);
+
+        // Parse the response to get image URLs
+    $imageData = json_decode($imageResponse->getBody(), true);
+    if (isset($imageData['data']) && is_array($imageData['data'])) {
+        $images = array_map(function ($image) {
+            return $image['url'];
+        }, $imageData['data']);
+    } else {
+        $images = []; // If no images are returned
+    }
+    }
     
         // Save to the database
         $educationContent = EducationContent::create([
@@ -383,8 +426,54 @@ class EducationController extends Controller
                 flush();
                 sleep(1); // Simulate delay between chunks
             }
+
+              // Display images after the content
+        if (!empty($images)) {
+            foreach ($images as $imageUrl) {
+                echo '<img src="' . $imageUrl . '" alt="Generated Image" style="max-width:100%; height:auto;"><br/>';
+            }
+        }
+
         });
     }
+
+    public function generateImages(Request $request)
+{
+    $prompt = $request->input('prompt');
+    $apiKey = config('openai.api_key');
+
+    try {
+        $client = new Client();
+        $imageResponse = $client->post('https://api.openai.com/v1/images/generations', [
+            'json' => [
+                'prompt' => $prompt,
+                'n' => 3, // Number of images
+                'size' => '1024x1024',
+            ],
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+            ],
+        ]);
+
+        $imageData = json_decode($imageResponse->getBody(), true);
+        if (isset($imageData['data']) && is_array($imageData['data'])) {
+            $images = array_map(function ($image) {
+                return $image['url'];
+            }, $imageData['data']);
+        } else {
+            $images = [];
+        }
+
+        return response()->json([
+            'images' => $images,
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 
     
     

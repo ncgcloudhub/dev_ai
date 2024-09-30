@@ -572,21 +572,22 @@
     
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector(".vertical-navs-step");
-    const finishTab = document.getElementById("v-pills-finish");
-
     const generateButton = document.querySelector(".generateButton");
-generateButton.addEventListener("click", function () {
-    const formData = new FormData(form);
-    fetch(form.getAttribute("action"), {
-        method: form.getAttribute("method"),
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: formData
-    })
-    .then(response => {
+
+    generateButton.addEventListener("click", function () {
+        const formData = new FormData(form);
+
+        // Step 1: Fetch and display content stream
+        fetch(form.getAttribute("action"), {
+            method: form.getAttribute("method"),
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let content = "";  // Variable to store the entire content
@@ -610,8 +611,12 @@ generateButton.addEventListener("click", function () {
                     if (pElement) {
                         pElement.innerHTML = content;  // Replacing the entire content once streaming is done
                     }
-                    
+
                     console.log("Stream complete");
+
+                    // Step 2: Fetch and display images after content is streamed
+                    fetchImages();
+
                     return;
                 }
 
@@ -619,11 +624,12 @@ generateButton.addEventListener("click", function () {
                 if (parentDiv) {
                     parentDiv.classList.remove('text-center');
                     parentDiv.classList.remove('pt-4');
-                }   
+                }
+
                 // Append new chunks to content
                 content += decoder.decode(value, { stream: true });
 
-                // Optionally: Show the content progressively while streaming (uncomment if you want to update it progressively)
+                // Optionally: Show the content progressively while streaming
                 document.querySelector("#chunkss").innerHTML = content;
 
                 // Continue reading more chunks
@@ -632,14 +638,57 @@ generateButton.addEventListener("click", function () {
 
             return reader.read().then(processStream);
         })
-    .catch(error => {
-        console.error('Error:', error);
-        const h5Element = finishTab.querySelector("h5");
-        h5Element.textContent = "There was an error processing your request.";
+        .catch(error => {
+            console.error('Error:', error);
+            const h5Element = document.querySelector("#h55");
+            h5Element.textContent = "There was an error processing your request.";
+        });
     });
+
+    // Function to fetch images after content is streamed
+    function fetchImages() {
+        // Add a loader or placeholder while images are being fetched
+        const imagesLoader = document.createElement('p');
+        imagesLoader.textContent = "Generating images...";
+        document.querySelector('.center-content').appendChild(imagesLoader);
+
+        // Make the request to fetch the generated images
+        fetch('/generate-images', { // Replace with the correct image generation route
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                // Include necessary data to generate the images, e.g., content or prompts
+                prompt: content // Pass the generated content as prompt for images
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Remove the loader
+            imagesLoader.remove();
+
+            // Check if images are available
+            if (data.images && Array.isArray(data.images)) {
+                data.images.forEach(imageUrl => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = 'Generated Image';
+                    img.style = 'max-width:100%; height:auto; margin-top:20px;';
+                    document.querySelector('.center-content').appendChild(img);
+                });
+            } else {
+                const noImageText = document.createElement('p');
+                noImageText.textContent = 'No images were generated.';
+                document.querySelector('.center-content').appendChild(noImageText);
+            }
+        })
+        .catch(error => {
+            console.error('Error generating images:', error);
+        });
+    }
 });
 
-});
 
     </script>
 
