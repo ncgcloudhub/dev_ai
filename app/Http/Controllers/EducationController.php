@@ -377,7 +377,7 @@ class EducationController extends Controller
             'Authorization' => 'Bearer ' . $apiKey,
             'Content-Type' => 'application/json',
         ])->post('https://api.openai.com/v1/images/generations', [
-            'prompt' => $request->imagePrompt,
+            'prompt' => $imagePrompt,
             'size' => '1024x1024',
             'style' => $imageStyle,
             'quality' => 'standard',
