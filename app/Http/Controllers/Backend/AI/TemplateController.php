@@ -285,8 +285,14 @@ class TemplateController extends Controller
                   'json' => [
                       'model' => $openaiModel,
                       'messages' => [  // Corrected here
-                         ["role" => "system", "content" => "You are an SEO assistant."],
-                         ["role" => "user", "content" => "Generate an SEO title not more than 60 character, description not more than 160 character and relevant tags for $template_name and to describe it is $description"]
+                         [
+                            "role" => "system", 
+                            "content" => "You are an SEO assistant."
+                        ],
+                        [
+                            "role" => "user", 
+                            "content" => "Generate an SEO title not more than 60 characters, description not more than 160 characters and relevant 20 tags which are comma separated for $template_name and to describe it is $description. The header for the Title should be '**SEO Title:**', the header for Description should be '**SEO Description:**', and the header for the Tags should be '**Relevant Tags:**'"
+                        ]
                     ],
                   ],
               ]);
@@ -311,8 +317,8 @@ class TemplateController extends Controller
                 preg_match('/\*\*Relevant Tags:\*\*\s+(.*?)$/s', $assistantContent, $tagsMatches);
 
                 // Get the title, description, and tags if matches are found
-                $seoTitle = $titleMatches[1] ?? 'No title generated';
-                $seoDescription = $descriptionMatches[1] ?? 'No description generated';
+                $seoTitle = $titleMatches[0] ?? 'No title generated';
+                $seoDescription = $descriptionMatches[0] ?? 'No description generated';
 
                 // For tags, split the matched content into individual tags if available
                 $seoTags = isset($tagsMatches[1]) ? array_map('trim', explode("#", $tagsMatches[1])) : 'No tags generated';
