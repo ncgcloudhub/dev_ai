@@ -502,7 +502,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
     Route::post('/chat/send', [AIChatController::class, 'send']);
 
     // Calender
-    Route::get('/calender', [FAQController::class, 'calender'])->name('calender')->middleware('permission:add.prompt');
+    Route::get('/calender', [FAQController::class, 'calender'])->name('calender');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');

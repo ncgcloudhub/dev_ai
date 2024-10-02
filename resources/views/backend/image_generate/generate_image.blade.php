@@ -335,9 +335,15 @@
                                             
                                             <!--end col-->
                                             
-                                            <div class="col-xxl-1 col-sm-4">
-                                                <div >
-                                                    <button id="generate-button-tour" class="btn btn-rounded btn-primary mb-2">Generate</button>
+                                            <div class="col-xxl-1 col-sm-4 d-flex align-items-center">
+                                                <div>
+                                                    <!-- Disable the button initially and include the spinner inside -->
+                                                    <button id="generate-button-tour" class="btn btn-rounded btn-primary mb-2" disabled>
+                                                        <span id="generate-button-text">Generate</span>
+                                                        <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -502,6 +508,26 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<!-- JavaScript to control the generate button and spinner -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const generateButton = document.getElementById('generate-button-tour');
+        const spinner = document.getElementById('loading-spinner');
+        
+        generateButton.disabled = true; // Disable button initially
+        spinner.style.display = 'inline-block'; // Show spinner initially
+    });
+
+    window.addEventListener("load", function() {
+        const generateButton = document.getElementById('generate-button-tour');
+        const spinner = document.getElementById('loading-spinner');
+        
+        generateButton.disabled = false; // Enable button when page is fully loaded
+        spinner.style.display = 'none'; // Hide spinner when page is loaded
+    });
+</script>
 
 <script>
     function previewImage(event) {
