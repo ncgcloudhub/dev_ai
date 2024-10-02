@@ -320,6 +320,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.feedback.request')}}" class="nav-link" >Manage Feedback Request</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('send.email.form')}}" class="nav-link" >Send Email</a>
+                                    </li>
 
                                 </ul>
                             </div>
