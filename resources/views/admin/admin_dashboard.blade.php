@@ -3,12 +3,12 @@
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css')}}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 <!--datatable css-->
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
 <!--datatable responsive css-->
 <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
-
 
 @endsection
 @section('content')
@@ -496,7 +496,11 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            <img height="50px" width="50px" class="gallery-img img-fluid mx-auto" src="{{ $image->image_url }}" alt="{{ $image->prompt }}" />
+                                            <a class="image-popup" href="{{ asset($image->image_url) }}" title="">
+                                                <div class="d-flex align-items-center fw-medium">
+                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2">
+                                                </div>
+                                            </a>
                                         </td>
                                         <td>
                                             @if (strlen($image->prompt) > 40)
@@ -535,7 +539,11 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            <img height="50px" width="50px" class="gallery-img img-fluid mx-auto" src="{{ $image->image_url }}" alt="{{ $image->prompt }}" />
+                                            <a class="image-popup" href="{{ asset($image->image_url) }}" title="">
+                                                <div class="d-flex align-items-center fw-medium">
+                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2">
+                                                </div>
+                                            </a>
                                         </td>
                                         <td>
                                             @if (strlen($image->prompt) > 40)
@@ -692,6 +700,9 @@
 <!-- dashboard init -->
 <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
