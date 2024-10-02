@@ -178,7 +178,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myLargeModalLabel">Content Details</h5>
+                <h5 class="modal-title" id="myLargeModalLabel">Content Details <span id="created" class="badge bg-primary"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -191,7 +191,7 @@
             <div class="modal-footer">
                   <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
                     Mark as Complete
-                </button>                
+                </button>               
                 <a id="download-link" href="#">
                     <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
                         <i class="ri-download-line"></i> Download
@@ -232,6 +232,10 @@
                 const contentElement = document.createElement('div');
                 contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
 
+                // Format the date using JavaScript
+                const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
                 const downloadUrl = '{{ url('education/content') }}/' + content.id + '/download';
                 const editUrl = '{{ url('education/content') }}/' + content.id + '/edit';
                 const cardClass = content.status === 'completed' ? 'ribbon-box' : '';
@@ -244,6 +248,7 @@
                                          <div class="r ${ribbonClass}"><span>${ribbonText}</span></div>
                                         <h5 class="mb-0">${content.topic}</h5>
                                         <p class="text-muted">${content.subject.name}</p>
+                                       <p class="text-muted">${createdAt}</p>
                                         <div class="d-flex gap-2 justify-content-center mb-3">
                                             <a href="${downloadUrl}">
                                                 <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
@@ -331,9 +336,23 @@
                 <h6 class="fs-15">${data.content.topic}</h6>
                 ${data.content.generated_content}
             `;
+
+            const createdAt = new Date(data.content.created_at).toLocaleDateString('en-US', {
+            day: 'numeric', month: 'short', year: 'numeric'
+            });
+
+            document.getElementById('created').innerHTML = `
+            ${createdAt}
+            `;
+
             const modalImage = document.getElementById('modal-image');
-            modalImage.src = data.content.image_url; // Set the correct image URL here
-            modalImage.alt = data.content.topic; // Optionally set an alt text
+            if (data.content.image_url) {
+                modalImage.src = data.content.image_url; // Set the image URL
+                modalImage.alt = data.content.topic; // Optionally set the alt text
+                modalImage.classList.remove('d-none'); // Show the image
+            } else {
+                modalImage.classList.add('d-none'); // Hide the image if no URL is available
+            }
 
             // Set the download link with the appropriate URL
             const downloadLink = document.getElementById('download-link');
