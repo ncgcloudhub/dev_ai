@@ -9,6 +9,8 @@ use App\Models\RequestModuleFeedback;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserNotification;
 
 
 class UserManageController extends Controller
@@ -117,6 +119,38 @@ class UserManageController extends Controller
 
     return response()->json(['success' => true]);
 }
+
+
+    // SEND EMAIL
+    public function sendEmailForm()
+    {   $users = User::all();
+        return view('backend.user.send_email_form', compact('users'));
+    }
+
+    public function sendEmail(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'user_emails' => 'required|array', // Must be an array
+            'user_emails.*' => 'email', // Each element must be a valid email
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+        // Email details
+        $details = [
+            'subject' => $request->subject,
+            'body' => $request->body
+        ];
+
+        // Loop through each email and send the email
+        foreach ($request->user_emails as $email) {
+            Mail::to($email)->send(new UserNotification($details));
+        }
+
+        // Redirect back with a success message
+        return back()->with('success', 'Emails sent successfully!');
+    }
 
     
 

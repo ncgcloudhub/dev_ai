@@ -312,9 +312,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
 
-      
     });
-
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
@@ -325,8 +323,6 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // routes/web.php
     Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy');
 
-
-
     // JOB Admin
     Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');
     Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
@@ -335,17 +331,13 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
 
-
     // DYNAMIC PAGE
     Route::resource('dynamic-pages', DynamicPageController::class);
-
-
 
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
         ->name('add.page.seo');
     Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
-
 
     // Change User's Password by ADMIN
     Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
@@ -354,12 +346,16 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
         ->name('admin.users.updatePassword');
 
-
     // RESEND EMAIL VERIFICATION
     Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
 
     // Delete user from admin manage user table
     Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
+
+    // SEND EMAIL
+    Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form');
+    Route::post('/send-emails', [UserManageController::class, 'sendEmail'])->name('emails.send');
+
 }); //End Admin Middleware
 
 
