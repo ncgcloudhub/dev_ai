@@ -134,9 +134,17 @@ class EducationController extends Controller
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
             "model" => $openaiModel,
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-                ['role' => 'user', 'content' => $prompt],
+            'messages' => 
+            [
+                [
+                    'role' => 'system', 
+                    'content' => 'You are a helpful assistant.'
+                ],
+
+                [
+                    'role' => 'user', 
+                    'content' => $prompt
+                ],
             ],
         ]);
     
@@ -350,9 +358,17 @@ class EducationController extends Controller
         // Generate the content using OpenAI API
         $response = $client->chat()->create([
             "model" => $openaiModel,
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-                ['role' => 'user', 'content' => $prompt],
+            'messages' => 
+            [
+                [
+                    'role' => 'system', 
+                    'content' => 'You are a helpful assistant.'
+                ],
+
+                [
+                    'role' => 'user', 
+                    'content' => $prompt
+                ],
             ],
         ]);
  

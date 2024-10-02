@@ -447,9 +447,17 @@ class PromptLibraryController extends Controller
             ],
             'json' => [
                 'model' => $openaiModel, // Use the appropriate model name
-                'messages' => [
-                    ['role' => 'system', 'content' => $sub_category_instruction],
-                    ['role' => 'user', 'content' => $prompt],
+                'messages' => 
+                [
+                    [
+                        'role' => 'system', 
+                        'content' => $sub_category_instruction
+                    ],
+
+                    [
+                        'role' => 'user', 
+                        'content' => $prompt
+                    ],
                 ],
             ],
         ]);

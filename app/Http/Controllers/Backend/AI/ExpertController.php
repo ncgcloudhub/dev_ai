@@ -226,25 +226,41 @@ class ExpertController extends Controller
 
 
         // Define the messages array with the dynamic user input
-        $messages = [
-            ['role' => 'system', 'content' => $expertInstruction],
+        $messages = 
+        [
+            [
+                'role' => 'system', 
+                'content' => $expertInstruction
+            ],
         ];
 
         // Add file content if available
         if (!empty($context['file_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['file_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['file_content']
+            ];
         }
 
         // Add pasted image content if available
         if (!empty($context['pasted_image_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['pasted_image_content']
+            ];
         }
 
         // Add all conversation history messages
         foreach ($conversationHistory as $message) {
             if (is_array($message) && isset($message['content']) && isset($message['role'])) {
                 if (!is_null($message['content'])) {
-                    $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+                    $messages[] = 
+                    [
+                        'role' => $message['role'], 
+                        'content' => $message['content']
+                    ];
                 }
             } else {
                 Log::warning('Invalid message structure:', ['message' => $message]);
