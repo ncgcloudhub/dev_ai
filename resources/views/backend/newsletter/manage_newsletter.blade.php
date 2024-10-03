@@ -9,7 +9,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Newsletter @endslot
+@slot('li_1') <a href="{{route('newsletter.manage')}}">Newsletter</a> @endslot
 @slot('title')Manage @endslot
 @endcomponent
 

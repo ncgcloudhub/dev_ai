@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Starter  @endslot
+@slot('li_1') <a href="{{route('chat')}}">Expert</a> @endslot
+@slot('title') All Experts  @endslot
 @endcomponent
 
 <div class="row">

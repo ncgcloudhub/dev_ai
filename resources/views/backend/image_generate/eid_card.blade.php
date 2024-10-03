@@ -12,8 +12,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Image @endslot
-@slot('title') Eid Card  @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
+@slot('title') Greeting Card  @endslot
 @endcomponent
 
 

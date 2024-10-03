@@ -4,11 +4,9 @@
 @endsection
 @section('content')
     @component('admin.components.breadcrumb')
-        @slot('li_1')
-            Edit
-        @endslot
+    @slot('li_1') <a href="{{route('manage.pricing')}}">Pricing</a> @endslot
         @slot('title')
-            Pricing
+            Edit
         @endslot
     @endcomponent
  

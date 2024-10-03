@@ -6,8 +6,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Template @endslot
-@slot('title') Add @endslot
+@slot('li_1') <a href="{{route('prompt.manage')}}">Prompts</a> @endslot
+@slot('title') Edit | {{$category->prompt_name}} @endslot
 @endcomponent
 
 <div class="row">

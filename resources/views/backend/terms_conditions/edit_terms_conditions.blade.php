@@ -3,8 +3,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Privacy Policy @endslot
-@slot('title') Manage @endslot
+@slot('li_1') <a href="{{route('manage.terms.condition')}}">Terms & Conditions</a> @endslot
+@slot('title') Edit @endslot
 @endcomponent
 
 

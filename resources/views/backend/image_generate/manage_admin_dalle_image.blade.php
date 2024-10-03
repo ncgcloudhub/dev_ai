@@ -9,8 +9,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Dalle @endslot
-@slot('title')Manage @endslot
+@slot('li_1') <a href="{{route('generate.image.view')}}">Images</a> @endslot
+@slot('title') Manage @endslot
 @endcomponent
 
 <div class="row">

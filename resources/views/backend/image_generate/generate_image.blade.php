@@ -5,7 +5,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Image @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
 @slot('title') Generate Image  @endslot
 @endcomponent
 

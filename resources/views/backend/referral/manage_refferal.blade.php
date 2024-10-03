@@ -9,8 +9,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Referrals @endslot
-@slot('title')Manage Refferals @endslot
+@slot('li_1') <a href="{{route('manage.referral')}}">Referrals</a> @endslot
+@slot('title')Manage @endslot
 @endcomponent
 
 <div class="row">

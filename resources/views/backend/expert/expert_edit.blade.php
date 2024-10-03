@@ -9,8 +9,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Expert @endslot
-@slot('title') Edit @endslot
+@slot('li_1') <a href="{{route('chat')}}">Expert</a> @endslot
+@slot('title') Edit | {{$expert->expert_name}} @endslot
 @endcomponent
 
 <div class="col-xxl-6">

@@ -3,8 +3,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Page SEO @endslot
-@slot('title') Add @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
+@slot('title') Page SEO Add @endslot
 @endcomponent
 
 <div class="col-xxl-6">

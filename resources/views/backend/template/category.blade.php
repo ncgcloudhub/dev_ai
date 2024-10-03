@@ -2,8 +2,8 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Template @endslot
-@slot('title') Category  @endslot
+@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
+@slot('title') Category Add  @endslot
 @endcomponent
 
 <div class="row">

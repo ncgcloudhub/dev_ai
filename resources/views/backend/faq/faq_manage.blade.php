@@ -14,11 +14,11 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-    @slot('li_1')
-        Manage
-    @endslot
+  
+    @slot('li_1') <a href="{{route('manage.faq')}}">FAQ</a> @endslot
+   
     @slot('title')
-        FAQ
+        Manage FAQ
     @endslot
 @endcomponent
 
