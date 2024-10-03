@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 all_day: all_day,
                 location: event_location,
                 description: eventDescription,
-                _token: '{{ csrf_token() }}' // Laravel CSRF protection
+                _token: $('meta[name="csrf-token"]').attr('content') 
             };
     
             $.ajax({
