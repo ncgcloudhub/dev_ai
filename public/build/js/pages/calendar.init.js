@@ -30,196 +30,196 @@ document.addEventListener("DOMContentLoaded", function () {
     var y = date.getFullYear();
     var Draggable = FullCalendar.Draggable;
     var externalEventContainerEl = document.getElementById('external-events');
-    var defaultEvents = [{
-            id: 1,
-            title: "World Braille Day",
-            start: "2022-01-04",
-            className: "bg-info-subtle",
-            allDay: true
+    // var defaultEvents = [{
+    //         id: 1,
+    //         title: "World Braille Day",
+    //         start: "2022-01-04",
+    //         className: "bg-info-subtle",
+    //         allDay: true
 
-        },
-        {
-            id: 2,
-            title: "World Leprosy Day",
-            start: "2022-01-30",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     },
+    //     {
+    //         id: 2,
+    //         title: "World Leprosy Day",
+    //         start: "2022-01-30",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 3,
-            title: "International Mother Language Day",
-            start: "2022-02-21",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 3,
+    //         title: "International Mother Language Day",
+    //         start: "2022-02-21",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 4,
-            title: "International Women's Day",
-            start: "2022-03-08",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 4,
+    //         title: "International Women's Day",
+    //         start: "2022-03-08",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 5,
-            title: "World Thinking Day",
-            start: "2022-02-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 5,
+    //         title: "World Thinking Day",
+    //         start: "2022-02-22",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 6,
-            title: "International Mother Language Day",
-            start: "2022-03-21",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 6,
+    //         title: "International Mother Language Day",
+    //         start: "2022-03-21",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 7,
-            title: "World Water Day",
-            start: "2022-03-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 7,
+    //         title: "World Water Day",
+    //         start: "2022-03-22",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 8,
-            title: "World Health Day",
-            start: "2022-04-07",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 8,
+    //         title: "World Health Day",
+    //         start: "2022-04-07",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
 
-        {
-            id: 9,
-            title: "International Special Librarians Day",
-            start: "2022-04-16",
-            className: "bg-info-subtle",
-            allDay: true
-        },
+    //     {
+    //         id: 9,
+    //         title: "International Special Librarians Day",
+    //         start: "2022-04-16",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
 
-        {
-            id: 10,
-            title: "Earth Day",
-            start: "2022-04-22",
-            className: "bg-info-subtle",
-            allDay: true
-        },
-        {
-            id: 153,
-            title: 'All Day Event',
-            start: new Date(y, m, 1),
-            className: 'bg-primary-subtle',
-            location: 'San Francisco, US',
-            allDay: true,
-            extendedProps: {
-                department: 'All Day Event'
-            },
-            description: 'An all-day event is an event that lasts an entire day or longer'
-        },
-        {
-            id: 136,
-            title: 'Visit Online Course',
-            start: new Date(y, m, d - 5),
-            end: new Date(y, m, d - 2),
-            allDay: true,
-            className: 'bg-warning-subtle',
-            extendedProps: {
-                department: 'Long Event'
-            },
-            description: 'Long Term Event means an incident that last longer than 12 hours.'
-        },
-        {
-            id: 999,
-            title: 'Client Meeting with Alexis',
-            start: new Date(y, m, d + 22, 20, 0),
-            end: new Date(y, m, d + 24, 16, 0),
-            allDay: true,
-            className: 'bg-danger-subtle',
-            location: 'California, US',
-            extendedProps: {
-                department: 'Meeting with Alexis'
-            },
-            description: 'A meeting is a gathering of two or more people that has been convened for the purpose of achieving a common goal through verbal interaction, such as sharing information or reaching agreement.'
-        },
-        {
-            id: 991,
-            title: 'Repeating Event',
-            start: new Date(y, m, d + 4, 16, 0),
-            end: new Date(y, m, d + 9, 16, 0),
-            allDay: true,
-            className: 'bg-primary-subtle',
-            location: 'Las Vegas, US',
-            extendedProps: {
-                department: 'Repeating Event'
-            },
-            description: 'A recurring or repeating event is simply any event that you will occur more than once on your calendar. ',
-        },
-        {
-            id: 112,
-            title: 'Meeting With Designer',
-            start: new Date(y, m, d, 12, 30),
-            allDay: true,
-            className: 'bg-success-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Meeting'
-            },
-            description: 'Tell how to boost website traffic'
-        },
-        {
-            id: 113,
-            title: 'Weekly Strategy Planning',
-            start: new Date(y, m, d + 9),
-            end: new Date(y, m, d + 11),
-            allDay: true,
-            className: 'bg-danger-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Lunch'
-            },
-            description: 'Strategies for Creating Your Weekly Schedule'
-        },
-        {
-            id: 875,
-            title: 'Birthday Party',
-            start: new Date(y, m, d + 1, 19, 0),
-            allDay: true,
-            className: 'bg-success-subtle',
-            location: 'Los Angeles, US',
-            extendedProps: {
-                department: 'Birthday Party'
-            },
-            description: 'Family slumber party – Bring out the blankets and pillows and have a family slumber party! Play silly party games, share special snacks and wind down the fun with a special movie.'
-        },
-        {
-            id: 783,
-            title: 'Click for Google',
-            start: new Date(y, m, 28),
-            end: new Date(y, m, 29),
-            allDay: true,
-            url: 'http://google.com/',
-            className: 'bg-dark-subtle',
-        },
-        {
-            id: 456,
-            title: 'Velzon Project Discussion with Team',
-            start: new Date(y, m, d + 23, 20, 0),
-            end: new Date(y, m, d + 24, 16, 0),
-            allDay: true,
-            className: 'bg-info-subtle',
-            location: 'Head Office, US',
-            extendedProps: {
-                department: 'Discussion'
-            },
-            description: 'Tell how to boost website traffic'
-        },
-    ];
+    //     {
+    //         id: 10,
+    //         title: "Earth Day",
+    //         start: "2022-04-22",
+    //         className: "bg-info-subtle",
+    //         allDay: true
+    //     },
+    //     {
+    //         id: 153,
+    //         title: 'All Day Event',
+    //         start: new Date(y, m, 1),
+    //         className: 'bg-primary-subtle',
+    //         location: 'San Francisco, US',
+    //         allDay: true,
+    //         extendedProps: {
+    //             department: 'All Day Event'
+    //         },
+    //         description: 'An all-day event is an event that lasts an entire day or longer'
+    //     },
+    //     {
+    //         id: 136,
+    //         title: 'Visit Online Course',
+    //         start: new Date(y, m, d - 5),
+    //         end: new Date(y, m, d - 2),
+    //         allDay: true,
+    //         className: 'bg-warning-subtle',
+    //         extendedProps: {
+    //             department: 'Long Event'
+    //         },
+    //         description: 'Long Term Event means an incident that last longer than 12 hours.'
+    //     },
+    //     {
+    //         id: 999,
+    //         title: 'Client Meeting with Alexis',
+    //         start: new Date(y, m, d + 22, 20, 0),
+    //         end: new Date(y, m, d + 24, 16, 0),
+    //         allDay: true,
+    //         className: 'bg-danger-subtle',
+    //         location: 'California, US',
+    //         extendedProps: {
+    //             department: 'Meeting with Alexis'
+    //         },
+    //         description: 'A meeting is a gathering of two or more people that has been convened for the purpose of achieving a common goal through verbal interaction, such as sharing information or reaching agreement.'
+    //     },
+    //     {
+    //         id: 991,
+    //         title: 'Repeating Event',
+    //         start: new Date(y, m, d + 4, 16, 0),
+    //         end: new Date(y, m, d + 9, 16, 0),
+    //         allDay: true,
+    //         className: 'bg-primary-subtle',
+    //         location: 'Las Vegas, US',
+    //         extendedProps: {
+    //             department: 'Repeating Event'
+    //         },
+    //         description: 'A recurring or repeating event is simply any event that you will occur more than once on your calendar. ',
+    //     },
+    //     {
+    //         id: 112,
+    //         title: 'Meeting With Designer',
+    //         start: new Date(y, m, d, 12, 30),
+    //         allDay: true,
+    //         className: 'bg-success-subtle',
+    //         location: 'Head Office, US',
+    //         extendedProps: {
+    //             department: 'Meeting'
+    //         },
+    //         description: 'Tell how to boost website traffic'
+    //     },
+    //     {
+    //         id: 113,
+    //         title: 'Weekly Strategy Planning',
+    //         start: new Date(y, m, d + 9),
+    //         end: new Date(y, m, d + 11),
+    //         allDay: true,
+    //         className: 'bg-danger-subtle',
+    //         location: 'Head Office, US',
+    //         extendedProps: {
+    //             department: 'Lunch'
+    //         },
+    //         description: 'Strategies for Creating Your Weekly Schedule'
+    //     },
+    //     {
+    //         id: 875,
+    //         title: 'Birthday Party',
+    //         start: new Date(y, m, d + 1, 19, 0),
+    //         allDay: true,
+    //         className: 'bg-success-subtle',
+    //         location: 'Los Angeles, US',
+    //         extendedProps: {
+    //             department: 'Birthday Party'
+    //         },
+    //         description: 'Family slumber party – Bring out the blankets and pillows and have a family slumber party! Play silly party games, share special snacks and wind down the fun with a special movie.'
+    //     },
+    //     {
+    //         id: 783,
+    //         title: 'Click for Google',
+    //         start: new Date(y, m, 28),
+    //         end: new Date(y, m, 29),
+    //         allDay: true,
+    //         url: 'http://google.com/',
+    //         className: 'bg-dark-subtle',
+    //     },
+    //     {
+    //         id: 456,
+    //         title: 'Velzon Project Discussion with Team',
+    //         start: new Date(y, m, d + 23, 20, 0),
+    //         end: new Date(y, m, d + 24, 16, 0),
+    //         allDay: true,
+    //         className: 'bg-info-subtle',
+    //         location: 'Head Office, US',
+    //         extendedProps: {
+    //             department: 'Discussion'
+    //         },
+    //         description: 'Tell how to boost website traffic'
+    //     },
+    // ];
 
     // init draggable
     new Draggable(externalEventContainerEl, {
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 defaultEvents[indexOfSelectedEvent].description = (info.event._def.extendedProps.description) ? info.event._def.extendedProps.description : '';
                 defaultEvents[indexOfSelectedEvent].location = (info.event._def.extendedProps.location) ? info.event._def.extendedProps.location : '';
             }
-            upcomingEvent(defaultEvents);
+            // upcomingEvent(defaultEvents);
         },
         eventClick: function (info) {
             document.getElementById("edit-event-btn").removeAttribute("hidden");
@@ -414,7 +414,41 @@ document.addEventListener("DOMContentLoaded", function () {
         dateClick: function (info) {
             addNewEvent(info);
         },
-        events: defaultEvents,
+
+        events: function(fetchInfo, successCallback, failureCallback) {
+            // Fetch events from the server for the authenticated user
+            $.ajax({
+                url: '/events', // Adjust this to your actual route for fetching events
+                method: 'GET',
+                success: function(response) {
+                    var events = [];  // Define events array here
+                    if (Array.isArray(response)) {
+                        response.forEach(function(event) {
+                            events.push({
+                                id: event.id,
+                                title: event.title,
+                                start: event.start,
+                                end: event.end,
+                                allDay: event.all_day,
+                                className: event.category,
+                                description: event.description,
+                                location: event.location
+                            });
+                        });
+                        successCallback(events); // Pass the events to FullCalendar
+                    } else {
+                        console.error('Expected an array but got:', response);
+                    }
+                },
+                
+                
+                error: function(error) {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                }
+            });
+        },
+    
         eventReceive: function (info) {
             var newid = parseInt(info.event.id);
             var newEvent = {
@@ -425,7 +459,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 className: info.event.classNames[0]
             };
             defaultEvents.push(newEvent);
-            upcomingEvent(defaultEvents);
+            // upcomingEvent(defaultEvents);
         },
         eventDrop: function (info) {
             var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
@@ -440,91 +474,75 @@ document.addEventListener("DOMContentLoaded", function () {
                 defaultEvents[indexOfSelectedEvent].description = (info.event._def.extendedProps.description) ? info.event._def.extendedProps.description : '';
                 defaultEvents[indexOfSelectedEvent].location = (info.event._def.extendedProps.location) ? info.event._def.extendedProps.location : '';
             }
-            upcomingEvent(defaultEvents);
+            // upcomingEvent(defaultEvents);
         }
     });
 
     calendar.render();
 
-    upcomingEvent(defaultEvents);
+    // upcomingEvent(defaultEvents);
     /*Add new event*/
     // Form to add new event
     formEvent.addEventListener('submit', function (ev) {
         ev.preventDefault();
+        
         var updatedTitle = document.getElementById("event-title").value;
         var updatedCategory = document.getElementById('event-category').value;
         var start_date = (document.getElementById("event-start-date").value).split("to");
         var updateStartDate = new Date(start_date[0].trim());
-
         var newdate = new Date(start_date[1]);
         newdate.setDate(newdate.getDate() + 1);
-
         var updateEndDate = (start_date[1]) ? newdate : '';
-
-        var end_date = null;
+    
         var event_location = document.getElementById("event-location").value;
         var eventDescription = document.getElementById("event-description").value;
         var eventid = document.getElementById("eventid").value;
-        var all_day = false;
-        if (start_date.length > 1) {
-            var end_date = new Date(start_date[1]);
-            end_date.setDate(end_date.getDate() + 1);
-            start_date = new Date(start_date[0]);
-            all_day = true;
-        } else {
-            var e_date = start_date;
-            var start_time = (document.getElementById("timepicker1").value).trim();
-            var end_time = (document.getElementById("timepicker2").value).trim();
-            start_date = new Date(start_date + "T" + start_time);
-            end_date = new Date(e_date + "T" + end_time);
-        }
-        var e_id = defaultEvents.length + 1;
-
-        // validation
+        var all_day = (start_date.length > 1);
+    
         if (forms[0].checkValidity() === false) {
             forms[0].classList.add('was-validated');
         } else {
-            if (selectedEvent) {
-                selectedEvent.setProp("id", eventid);
-                selectedEvent.setProp("title", updatedTitle);
-                selectedEvent.setProp("classNames", [updatedCategory]);
-                selectedEvent.setStart(updateStartDate);
-                selectedEvent.setEnd(updateEndDate);
-                selectedEvent.setAllDay(all_day);
-                selectedEvent.setExtendedProp("description", eventDescription);
-                selectedEvent.setExtendedProp("location", event_location);
-                var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
-                    return x.id == selectedEvent.id
-                });
-                if (defaultEvents[indexOfSelectedEvent]) {
-                    defaultEvents[indexOfSelectedEvent].title = updatedTitle;
-                    defaultEvents[indexOfSelectedEvent].start = updateStartDate;
-                    defaultEvents[indexOfSelectedEvent].end = updateEndDate;
-                    defaultEvents[indexOfSelectedEvent].allDay = all_day;
-                    defaultEvents[indexOfSelectedEvent].className = updatedCategory;
-                    defaultEvents[indexOfSelectedEvent].description = eventDescription;
-                    defaultEvents[indexOfSelectedEvent].location = event_location;
+            var eventData = {
+                title: updatedTitle,
+                category: updatedCategory,
+                start: updateStartDate,
+                end: updateEndDate,
+                all_day: all_day,
+                location: event_location,
+                description: eventDescription,
+                _token: '{{ csrf_token() }}' // Laravel CSRF protection
+            };
+    
+            $.ajax({
+                url: '/events', // Your route to save events
+                method: 'POST',
+                data: eventData,
+                success: function(response) {
+                    console.log('Event saved successfully:', response);
+                    // Add event to calendar
+                    if (!selectedEvent) {
+                        var newEvent = {
+                            id: response.id, // get ID from the backend
+                            title: updatedTitle,
+                            start: updateStartDate,
+                            end: updateEndDate,
+                            allDay: all_day,
+                            className: updatedCategory,
+                            description: eventDescription,
+                            location: event_location
+                        };
+                        calendar.addEvent(newEvent);
+                    }
+                    addEvent.hide();
+                    // upcomingEvent(defaultEvents);
+                },
+                error: function(error) {
+                    console.error('Error saving event:', error);
                 }
-                calendar.render();
-                // default
-            } else {
-                var newEvent = {
-                    id: e_id,
-                    title: updatedTitle,
-                    start: start_date,
-                    end: end_date,
-                    allDay: all_day,
-                    className: updatedCategory,
-                    description: eventDescription,
-                    location: event_location
-                };
-                calendar.addEvent(newEvent);
-                defaultEvents.push(newEvent);
-            }
-            addEvent.hide();
-            upcomingEvent(defaultEvents);
+            });
         }
     });
+    
 
     document.getElementById("btn-delete-event").addEventListener("click", function (e) {
         if (selectedEvent) {

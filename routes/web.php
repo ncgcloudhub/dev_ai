@@ -31,6 +31,7 @@ use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\SubscriptionController;
@@ -633,4 +634,12 @@ Route::get('prompt/details/{slug}', [PromptLibraryController::class, 'PromptFron
 
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::get('/events', [EventController::class, 'index']);
+    Route::post('/events', [EventController::class, 'store']);
+    Route::put('/events/{id}', [EventController::class, 'update']);
+    Route::delete('/events/{id}', [EventController::class, 'destroy']);
+});
+
 
