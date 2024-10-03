@@ -112,9 +112,8 @@ class ExpertController extends Controller
         $expertInstruction = $expert->expertise;
 
 
-        // Fetch OpenAI settings
-        $setting = AISettings::find(1);
-        $openaiModel = $setting->openaimodel;
+        $openaiModel = Auth::user()->selected_model;
+        
 
         // Check if the expert instruction is empty
         if (empty($expertInstruction)) {
@@ -289,6 +288,7 @@ class ExpertController extends Controller
             'presence_penalty' => 0,
 
         ]);
+        Log::info('AI MODEL: ', ['MODEL' => $openaiModel]);
 
         $data = json_decode($response->getBody(), true);
         Log::info('Response: ', $data);
