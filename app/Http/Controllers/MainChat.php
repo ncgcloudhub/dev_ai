@@ -105,10 +105,18 @@ $conversationHistory = [];
 
 foreach ($messagesFromDb as $message) {
     if ($message->message) {
-        $conversationHistory[] = ['role' => 'user', 'content' => $message->message];
+        $conversationHistory[] = 
+        [
+            'role' => 'user', 
+            'content' => $message->message
+        ];
     }
     if ($message->reply) {
-        $conversationHistory[] = ['role' => 'assistant', 'content' => $message->reply];
+        $conversationHistory[] = 
+        [
+            'role' => 'assistant', 
+            'content' => $message->reply
+        ];
     }
 }
         Log::info('Conversation history: ', $conversationHistory);
@@ -325,18 +333,30 @@ foreach ($messagesFromDb as $message) {
             'context' => $context,
         ]);
 
-        $messages = [
-            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+        $messages = 
+        [
+            [
+                'role' => 'system', 
+                'content' => 'You are a helpful assistant.'
+            ],
         ];
 
         // Add file content if available
         if (!empty($context['file_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['file_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['file_content']
+            ];
         }
 
         // Add pasted image content if available
         if (!empty($context['pasted_image_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['pasted_image_content']
+            ];
         }
 
         // Add all conversation history messages

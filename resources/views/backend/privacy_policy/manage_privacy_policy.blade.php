@@ -3,7 +3,7 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Privacy Policy @endslot
+@slot('li_1') <a href="{{route('manage.privacy.policy')}}">Privacy Policy</a> @endslot
 @slot('title') Manage @endslot
 @endcomponent
 

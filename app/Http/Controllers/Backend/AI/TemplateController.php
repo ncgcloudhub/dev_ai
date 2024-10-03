@@ -496,9 +496,17 @@ class TemplateController extends Controller
         }
 
         // Prepare messages for chat completions endpoint
-        $messages = [
-            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
-            ['role' => 'user', 'content' => $prompt],
+        $messages = 
+        [
+            [
+                'role' => 'system', 
+                'content' => 'You are a helpful assistant.'
+            ],
+
+            [
+                'role' => 'user', 
+                'content' => $prompt
+            ],
         ];
 
         $result = $client->chat()->create([

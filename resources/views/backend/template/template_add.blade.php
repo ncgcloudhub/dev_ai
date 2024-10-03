@@ -6,8 +6,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  Template @endslot
-@slot('title') Add @endslot
+@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
+@slot('title') Add Template @endslot
 @endcomponent
 
 <div class="col-xxl-6">

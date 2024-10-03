@@ -9,8 +9,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Prompt Library @endslot
-@slot('title')Manage @endslot
+@slot('li_1') <a href="{{route('prompt.manage')}}">Prompts</a> @endslot
+@slot('title') All Prompts @endslot
 @endcomponent
 
 <div class="row">

@@ -4,9 +4,7 @@
 @endsection
 @section('content')
     @component('admin.components.breadcrumb')
-        @slot('li_1')
-            Subscription
-        @endslot
+    @slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
         @slot('title')
             Pricing
         @endslot

@@ -9,8 +9,8 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Settings @endslot
-@slot('title') Add Site Settings @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
+@slot('title') Site Settings @endslot
 @endcomponent
 
 <div class="col-xxl-6">

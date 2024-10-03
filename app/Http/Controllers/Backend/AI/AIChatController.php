@@ -141,19 +141,31 @@ class AIChatController extends Controller
 
         // Add file content if it exists
         if (!empty($context['file_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['file_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['file_content']
+            ];
         }
 
         // Add pasted image content if it exists
         if (!empty($context['pasted_image_content'])) {
-            $messages[] = ['role' => 'user', 'content' => $context['pasted_image_content']];
+            $messages[] = 
+            [
+                'role' => 'user', 
+                'content' => $context['pasted_image_content']
+            ];
         }
 
 
         // Add conversation history to messages array
         foreach ($conversationHistory as $message) {
             if (!is_null($message['content'])) {
-                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
+                $messages[] = 
+                [
+                    'role' => $message['role'],
+                    'content' => $message['content']
+                ];
             }
         }
 
