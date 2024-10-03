@@ -45,8 +45,8 @@ class AIChatController extends Controller
 
         // If no model is selected, use the default model from settings
         if (!$openaiModel) {
-            $setting = AISettings::find(1);
-            $openaiModel = $setting->openaimodel;
+           
+            $openaiModel = Auth::user()->selected_model;
         }
 
         // Initialize or retrieve uploaded files from session
