@@ -64,13 +64,13 @@
             <div class="">
                 @if (Auth::check())
                     @if (Auth::user()->role === 'admin')
-                        <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary">Dashboard</a>
+                        <a href="{{ url('/admin/dashboard') }}" class="btn gradient-btn-4">Dashboard</a>
                     @elseif (Auth::user()->role === 'user')
-                        <a href="{{ url('/user/dashboard') }}" class="btn btn-primary">Dashboard</a>
+                        <a href="{{ url('/user/dashboard') }}" class="btn gradient-btn-4">Dashboard</a>
                     @endif
                 @else
                     <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn gradient-glow">Sign Up</a>
+                    <a href="{{ route('register') }}" class="btn gradient-btn-4">Sign Up</a>
                   
 
                 @endif
