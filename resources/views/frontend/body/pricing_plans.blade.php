@@ -29,7 +29,7 @@
                                 <h5 class="mb-0 fw-semibold">Starter</h5>
                             </div>
                             <div class="ms-auto">
-                                <h2 class="month mb-0 text-success">Free</h2>
+                                <h2 class="month mb-0 text-success gradient-text-1">Free</h2>
                             </div>
                         </div>
     
@@ -37,7 +37,7 @@
                         <ul class="list-unstyled vstack gap-3">
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -47,7 +47,7 @@
                             </li>
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -57,7 +57,7 @@
                             </li>
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -67,7 +67,7 @@
                             </li>
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -77,7 +77,7 @@
                             </li>
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -88,7 +88,7 @@
                            
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -99,7 +99,7 @@
                          
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -109,7 +109,7 @@
                             </li>
                             <li>
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0 text-success me-1">
+                                    <div class="flex-shrink-0 gradient-text-2 me-1">
                                         <i class="ri-checkbox-circle-fill fs-15 align-middle"></i>
                                     </div>
                                     <div class="flex-grow-1">
@@ -123,13 +123,13 @@
                         @if (Auth::check())
 
                             <div class="mt-3 pt-2">
-                                <a href="javascript:void(0);" class="btn btn-success disabled w-100">Your Current Plan</a>
+                                <a href="javascript:void(0);" class="btn btn-success gradient-btn-4 disabled w-100">Your Current Plan</a>
                             </div>   
 
                         @else
 
                             <div class="mt-3 pt-2">
-                                <a href="{{route('register')}}" class="btn btn-success w-100">Sign Up for Free</a>
+                                <a href="{{route('register')}}" class="btn btn-success gradient-btn-5 w-100">Sign Up for Free</a>
                             </div>
                                               
                         @endif

@@ -14,10 +14,10 @@
                                     data-delay="200"
                                     data-delim=":"
                                     data-words="AI Image Generation:AI Assistant:AI Blog Generation: AI Article Generate"
-                                    data-colors="orange"
+                                    data-colors="purple"
                                 ></span>
                             </h2>
-                            <h1 style="color: orange; font-family: Shantell Sans, cursive;">Clever Creator</h1>
+                            <h1 style="color: #e900ff; font-family: Shantell Sans, cursive;">Clever Creator</h1>
                             <p style="color: white">
                                 Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                             </p>
@@ -26,16 +26,9 @@
                             
                             @else
                           
-                            {{-- <a href="{{ route('register') }}" class="btn gradient-button-2 waves-effect waves-light mb-3">Sign Up for Free AI Services</a>
-
-                            <a href="{{ route('register') }}" class="btn gradient-button-4 waves-effect waves-light mb-3">Sign Up for Free AI Services</a> --}}
-
-                            <a href="{{ route('register') }}" class="btn gradient-button-8 waves-effect waves-light">Sign Up for Free AI Services</a>
-
-                                                  
-                            @endif
-
-                           
+                            <a href="{{ route('register') }}" class="btn gradient-btn-3 waves-effect waves-light">Sign Up for Free AI Services</a>
+                                                 
+                            @endif                           
 
                             {{-- UI Card Start --}}
                             <div class="row row-cols-xxl-5 row-cols-lg-6 row-cols-1 justify-content-center py-5">
@@ -45,11 +38,11 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning">Dall-E 3</strong></p>
+                                                    <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning gradient-text-2">Dall-E 3</strong></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Images</a>
+                                        <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn waves-effect waves-light mt-auto gradient-btn-5">Generate Images</a>
                                     </div>
                                 </div><!-- end col -->
                             
@@ -58,11 +51,11 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning">GPT-4</strong></p>
+                                                    <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning gradient-text-2">GPT-4</strong></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Generate Contents</a>
+                                        <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Generate Contents</a>
                                     </div>
                                 </div><!-- end col -->
                             
@@ -71,15 +64,15 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning">Prompt Library</strong></p>
+                                                    <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning gradient-text-2">Prompt Library</strong></p>
                                                 </div>
                                             </div>
                                         </div>
                                         
                                         @auth                                                 
-                                            <a href="{{ route('prompt.manage') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> 
+                                            <a href="{{ route('prompt.manage') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Prompt Library</a> 
                                         @else
-                                            <a href="{{ route('frontend.free.prompt.library') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                                            <a href="{{ route('frontend.free.prompt.library') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Prompt Library</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                                         @endauth
 
                                     </div>
@@ -90,11 +83,11 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning">Latest GPT</strong></p>
+                                                    <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning gradient-text-2">Latest GPT</strong></p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ auth()->check() ? route('main.chat.form') : route('login') }}" class="btn btn-ghost-warning waves-effect waves-light mt-auto">Chat Bot</a>
+                                        <a href="{{ auth()->check() ? route('main.chat.form') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Chat Bot</a>
                                     </div>
                                 </div><!-- end col -->
                             

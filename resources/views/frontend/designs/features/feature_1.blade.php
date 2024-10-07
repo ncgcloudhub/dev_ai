@@ -26,8 +26,11 @@
                         <h5 class="fs-18">AI Chatbot Integration</h5>
                         <p class="text-muted my-3 ff-secondary">Engage and assist your website visitors with TrionxAI's advanced AI chatbot, providing seamless communication and support.</p>
                         <div>
-                            <a href="{{route('chat')}}" class="fs-13 fw-medium">Learn More <i
-                                    class="ri-arrow-right-s-line align-bottom"></i></a>
+                            <a href="{{route('chat')}}" class="fs-13 fw-medium" style="background: linear-gradient(45deg, #9b00ff, #e900ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                Learn More 
+                                <i class="ri-arrow-right-s-line align-bottom"></i>
+                            </a>
+                            
                         </div>
                     </div>
                 </div>

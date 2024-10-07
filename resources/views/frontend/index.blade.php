@@ -253,7 +253,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end features -->
 
             <!-- start client section -->
-            <div class="pt-5 mt-5">
+            <div style="background-image: linear-gradient(45deg, #9b00ff, #e900ff)">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -327,7 +327,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
+            <section class="py-5 position-relative" style="background-image: linear-gradient(45deg, #9b00ff, #e900ff)">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">
@@ -396,7 +396,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     </div>
                     <!-- end row -->
                     <div class="mx-auto d-flex justify-content-center">
-                        <a href="{{ route('ai.image.gallery') }}" class="btn btn-primary">Show More</a>
+                        <a href="{{ route('ai.image.gallery') }}" class="btn gradient-btn-1">Show More</a>
                     </div>
                     
                 </div>
@@ -425,7 +425,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                                 <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
                                                     <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                                 </div>
-                                                <h3 class="fw-medium link-primary">{{$item->template_name}}</h3>
+                                                <h3 class="fw-medium link-primary gradient-text-1">{{$item->template_name}}</h3>
                                                 <p style="height: 3em; overflow: hidden; color:black" class="card-text customer_name">{{$item->description}}</p>
                                             </div>
                                             <div>
@@ -440,9 +440,9 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         </div>
                         <div class="mx-auto d-flex justify-content-center">
                             @auth
-                                <a href="{{ route('template.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                                <a href="{{ route('template.manage') }}" class="btn gradient-btn-3">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
                             @else
-                                <a href="{{ route('frontend.free.template') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                                <a href="{{ route('frontend.free.template') }}" class="btn gradient-btn-3">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                             @endauth
                         </div>
                     </div>
@@ -459,7 +459,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
              <!-- start cta -->
-             <section class="py-5 bg-primary position-relative">
+             <section class="py-5 position-relative" style="background-image: linear-gradient(45deg, #ff007f, #ff00ff)">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <form method="post" action="{{ route('newsletter.store') }}">
@@ -504,7 +504,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end contact -->
 
             <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
+            <section class="py-5 position-relative" style="background-image: linear-gradient(45deg, #ff007f, #ff00ff)">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">

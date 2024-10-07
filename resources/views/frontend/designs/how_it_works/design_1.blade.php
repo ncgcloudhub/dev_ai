@@ -3,7 +3,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="text-center mb-5">
-                        <h1 class="mb-3 fw-semibold lh-base">How <span class="text-primary">it works</span> </h1>
+                        <h1 class="mb-3 fw-semibold lh-base">How 
+                            <span class="text-primary gradient-text-2">
+                              it works
+                            </span>
+                          </h1>
+                          
                         <p class="text-muted">Experience our streamlined process: Register an account, select a template, input your brand details, and leverage advanced options to generate tailored content effortlessly.</p>
                     </div>
                 </div>
@@ -18,7 +23,7 @@
                 
                 <div class="card shadow-lg h-100">
                     <div class="card-body p-4">
-                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success gradient-text-1 position-relative">
                             <div class="job-icon-effect"></div>
                             <span>1</span>
                         </h1>
@@ -33,7 +38,7 @@
                 <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
                 <div class="card shadow-lg h-100">
                     <div class="card-body p-4">
-                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success gradient-text-1 position-relative">
                             <div class="job-icon-effect"></div>
                             <span>2</span>
                         </h1>
@@ -49,7 +54,7 @@
                 <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
                 <div class="card shadow-lg h-100">
                     <div class="card-body p-4">
-                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success gradient-text-1 position-relative">
                             <div class="job-icon-effect"></div>
                             <span>3</span>
                         </h1>
@@ -66,7 +71,7 @@
                 <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
                 <div class="card shadow-lg h-100">
                     <div class="card-body p-4">
-                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success position-relative">
+                        <h1 class="fw-bold display-5 ff-secondary mb-4 text-success gradient-text-1 position-relative">
                             <div class="job-icon-effect"></div>
                             <span>4</span>
                         </h1>
