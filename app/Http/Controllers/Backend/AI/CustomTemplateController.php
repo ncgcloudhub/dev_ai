@@ -131,8 +131,7 @@ class CustomTemplateController extends Controller
     public function customtemplategenerate(Request $input)
     {
 
-        $setting = AISettings::find(1);
-
+        $openaiModel = Auth::user()->selected_model;
 
         $language = 'English';
         $max_result_length_value = 100;
@@ -203,7 +202,7 @@ class CustomTemplateController extends Controller
         }
 
         $result = $client->completions()->create([
-            "model" => $setting->openaimodel,
+            "model" => $openaiModel,
             "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),

@@ -15,6 +15,7 @@ use App\Models\PromptLibrary;
 use App\Models\PromptLibrarySubCategory;
 use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 
@@ -427,8 +428,8 @@ class PromptLibraryController extends Controller
     public function AskAiPromptLibrary(Request $request)
     {
        
-        $setting = AISettings::find(1);
-        $openaiModel = $setting->openaimodel;
+        
+        $openaiModel = Auth::user()->selected_model;
 
         if ($request->input('sub_category_instruction')) {
             $sub_category_instruction = $request->input('sub_category_instruction');
