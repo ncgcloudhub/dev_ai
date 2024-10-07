@@ -124,9 +124,11 @@ class EventController extends Controller
 
     public function destroy(Event $event)
     {
-        $this->authorize('delete', $event);
+
         $event->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Event deleted successfully.'], 200);
     }
+
+
 }

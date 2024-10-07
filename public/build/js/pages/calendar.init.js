@@ -30,196 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var y = date.getFullYear();
     var Draggable = FullCalendar.Draggable;
     var externalEventContainerEl = document.getElementById('external-events');
-    // var defaultEvents = [{
-    //         id: 1,
-    //         title: "World Braille Day",
-    //         start: "2022-01-04",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "World Leprosy Day",
-    //         start: "2022-01-30",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 3,
-    //         title: "International Mother Language Day",
-    //         start: "2022-02-21",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 4,
-    //         title: "International Women's Day",
-    //         start: "2022-03-08",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 5,
-    //         title: "World Thinking Day",
-    //         start: "2022-02-22",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 6,
-    //         title: "International Mother Language Day",
-    //         start: "2022-03-21",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 7,
-    //         title: "World Water Day",
-    //         start: "2022-03-22",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 8,
-    //         title: "World Health Day",
-    //         start: "2022-04-07",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-
-    //     {
-    //         id: 9,
-    //         title: "International Special Librarians Day",
-    //         start: "2022-04-16",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-
-    //     {
-    //         id: 10,
-    //         title: "Earth Day",
-    //         start: "2022-04-22",
-    //         className: "bg-info-subtle",
-    //         allDay: true
-    //     },
-    //     {
-    //         id: 153,
-    //         title: 'All Day Event',
-    //         start: new Date(y, m, 1),
-    //         className: 'bg-primary-subtle',
-    //         location: 'San Francisco, US',
-    //         allDay: true,
-    //         extendedProps: {
-    //             department: 'All Day Event'
-    //         },
-    //         description: 'An all-day event is an event that lasts an entire day or longer'
-    //     },
-    //     {
-    //         id: 136,
-    //         title: 'Visit Online Course',
-    //         start: new Date(y, m, d - 5),
-    //         end: new Date(y, m, d - 2),
-    //         allDay: true,
-    //         className: 'bg-warning-subtle',
-    //         extendedProps: {
-    //             department: 'Long Event'
-    //         },
-    //         description: 'Long Term Event means an incident that last longer than 12 hours.'
-    //     },
-    //     {
-    //         id: 999,
-    //         title: 'Client Meeting with Alexis',
-    //         start: new Date(y, m, d + 22, 20, 0),
-    //         end: new Date(y, m, d + 24, 16, 0),
-    //         allDay: true,
-    //         className: 'bg-danger-subtle',
-    //         location: 'California, US',
-    //         extendedProps: {
-    //             department: 'Meeting with Alexis'
-    //         },
-    //         description: 'A meeting is a gathering of two or more people that has been convened for the purpose of achieving a common goal through verbal interaction, such as sharing information or reaching agreement.'
-    //     },
-    //     {
-    //         id: 991,
-    //         title: 'Repeating Event',
-    //         start: new Date(y, m, d + 4, 16, 0),
-    //         end: new Date(y, m, d + 9, 16, 0),
-    //         allDay: true,
-    //         className: 'bg-primary-subtle',
-    //         location: 'Las Vegas, US',
-    //         extendedProps: {
-    //             department: 'Repeating Event'
-    //         },
-    //         description: 'A recurring or repeating event is simply any event that you will occur more than once on your calendar. ',
-    //     },
-    //     {
-    //         id: 112,
-    //         title: 'Meeting With Designer',
-    //         start: new Date(y, m, d, 12, 30),
-    //         allDay: true,
-    //         className: 'bg-success-subtle',
-    //         location: 'Head Office, US',
-    //         extendedProps: {
-    //             department: 'Meeting'
-    //         },
-    //         description: 'Tell how to boost website traffic'
-    //     },
-    //     {
-    //         id: 113,
-    //         title: 'Weekly Strategy Planning',
-    //         start: new Date(y, m, d + 9),
-    //         end: new Date(y, m, d + 11),
-    //         allDay: true,
-    //         className: 'bg-danger-subtle',
-    //         location: 'Head Office, US',
-    //         extendedProps: {
-    //             department: 'Lunch'
-    //         },
-    //         description: 'Strategies for Creating Your Weekly Schedule'
-    //     },
-    //     {
-    //         id: 875,
-    //         title: 'Birthday Party',
-    //         start: new Date(y, m, d + 1, 19, 0),
-    //         allDay: true,
-    //         className: 'bg-success-subtle',
-    //         location: 'Los Angeles, US',
-    //         extendedProps: {
-    //             department: 'Birthday Party'
-    //         },
-    //         description: 'Family slumber party – Bring out the blankets and pillows and have a family slumber party! Play silly party games, share special snacks and wind down the fun with a special movie.'
-    //     },
-    //     {
-    //         id: 783,
-    //         title: 'Click for Google',
-    //         start: new Date(y, m, 28),
-    //         end: new Date(y, m, 29),
-    //         allDay: true,
-    //         url: 'http://google.com/',
-    //         className: 'bg-dark-subtle',
-    //     },
-    //     {
-    //         id: 456,
-    //         title: 'Velzon Project Discussion with Team',
-    //         start: new Date(y, m, d + 23, 20, 0),
-    //         end: new Date(y, m, d + 24, 16, 0),
-    //         allDay: true,
-    //         className: 'bg-info-subtle',
-    //         location: 'Head Office, US',
-    //         extendedProps: {
-    //             department: 'Discussion'
-    //         },
-    //         description: 'Tell how to boost website traffic'
-    //     },
-    // ];
+    var defaultEvents = [];
 
     // init draggable
     new Draggable(externalEventContainerEl, {
@@ -564,20 +375,42 @@ document.addEventListener("DOMContentLoaded", function () {
     
     
 
-    document.getElementById("btn-delete-event").addEventListener("click", function (e) {
-        if (selectedEvent) {
-            for (var i = 0; i < defaultEvents.length; i++) {
-                if (defaultEvents[i].id == selectedEvent.id) {
-                    defaultEvents.splice(i, 1);
-                    i--;
-                }
+    // Define defaultEvents in a higher scope
+var defaultEvents = []; // Initialize as needed
+
+// Your existing code here...
+
+document.getElementById("btn-delete-event").addEventListener("click", function (e) {
+    if (selectedEvent) {
+        // Make AJAX request to delete the event from the database
+        $.ajax({
+            url: '/events/' + selectedEvent.id, // Your delete route
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
+            },
+            success: function(response) {
+                console.log('Event deleted successfully:', response);
+                
+                // Remove the event from the calendar
+                selectedEvent.remove();
+
+                // Remove the event from your default events array
+                defaultEvents = defaultEvents.filter(event => event.id !== selectedEvent.id);
+                upcomingEvent(defaultEvents);
+
+                // Reset selectedEvent variable
+                selectedEvent = null;
+                addEvent.hide();
+            },
+            error: function(error) {
+                console.error('Error deleting event:', error);
             }
-            upcomingEvent(defaultEvents);
-            selectedEvent.remove();
-            selectedEvent = null;
-            addEvent.hide();
-        }
-    });
+        });
+    }
+});
+
+    
     document.getElementById("btn-new-event").addEventListener("click", function (e) {
         flatpicekrValueClear();
         flatPickrInit();

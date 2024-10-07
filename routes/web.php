@@ -639,7 +639,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/events', [EventController::class, 'index']);
     Route::post('/events', [EventController::class, 'store']);
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::delete('/events/{id}', [EventController::class, 'destroy']);
+    Route::delete('/events/{event}', [EventController::class, 'destroy']);
+
+
 });
 
 
