@@ -638,7 +638,7 @@ Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps'
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/events', [EventController::class, 'index']);
     Route::post('/events', [EventController::class, 'store']);
-    Route::put('/events/{id}', [EventController::class, 'update']);
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
 });
 

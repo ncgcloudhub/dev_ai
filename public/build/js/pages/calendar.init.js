@@ -493,10 +493,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var newdate = new Date(start_date[1]);
         newdate.setDate(newdate.getDate() + 1);
         var updateEndDate = (start_date[1]) ? newdate : '';
-    
+        
         var event_location = document.getElementById("event-location").value;
         var eventDescription = document.getElementById("event-description").value;
-        var eventid = document.getElementById("eventid").value;
+        var eventid = document.getElementById("eventid").value; // Ensure this is set correctly
         var all_day = (start_date.length > 1);
     
         if (forms[0].checkValidity() === false) {
@@ -513,14 +513,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 _token: $('meta[name="csrf-token"]').attr('content') 
             };
     
+            var requestType = selectedEvent ? 'PUT' : 'POST'; // Use PUT for updates
+            var requestUrl = selectedEvent ? '/events/' + eventid : '/events'; // Adjust URL for updates
+    
             $.ajax({
-                url: '/events', // Your route to save events
-                method: 'POST',
+                url: requestUrl, // Your route to save events
+                method: requestType,
                 data: eventData,
                 success: function(response) {
                     console.log('Event saved successfully:', response);
-                    // Add event to calendar
-                    if (!selectedEvent) {
+                    
+                    if (selectedEvent) {
+                        // If updating, retrieve the existing event using its ID
+                        var existingEvent = calendar.getEventById(eventid);
+                        if (existingEvent) {
+                            // Update the properties of the existing event
+                            existingEvent.setProp('title', updatedTitle);
+                            existingEvent.setStart(updateStartDate);
+                            existingEvent.setEnd(updateEndDate);
+                            existingEvent.setProp('allDay', all_day);
+                            existingEvent.setProp('classNames', [updatedCategory]);
+                            existingEvent.setExtendedProp('description', eventDescription);
+                            existingEvent.setExtendedProp('location', event_location);
+                        }
+                    } else {
+                        // If adding new, create a new event
                         var newEvent = {
                             id: response.id, // get ID from the backend
                             title: updatedTitle,
@@ -533,6 +550,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         };
                         calendar.addEvent(newEvent);
                     }
+                    
                     addEvent.hide();
                     // upcomingEvent(defaultEvents);
                 },
@@ -542,6 +560,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
+    
+    
     
 
     document.getElementById("btn-delete-event").addEventListener("click", function (e) {

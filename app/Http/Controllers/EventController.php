@@ -72,23 +72,45 @@ class EventController extends Controller
     
     
     public function update(Request $request, Event $event)
-    {
-        $this->authorize('update', $event);
+{
+    // Get the start date string from the request
+    $startDateString = $request->input('start');
 
-        $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'start' => 'required|date',
-            'end' => 'nullable|date',
-            'category' => 'required|string',
-            'location' => 'nullable|string',
-            'description' => 'nullable|string',
-            'all_day' => 'required|boolean',
-        ]);
+    // Clean the date string by removing timezone information
+    $cleanedStartDateString = preg_replace('/ GMT.*$/', '', $startDateString);
 
-        $event->update($data);
+    // Convert the cleaned start date string to a DateTime object
+    $startDate = \DateTime::createFromFormat('D M d Y H:i:s', $cleanedStartDateString);
 
-        return response()->json($event);
+    // Check if parsing was successful
+    if (!$startDate) {
+        Log::error('Failed to parse start date:', ['start' => $startDateString]);
+        return response()->json(['error' => 'Invalid start date format'], 422);
     }
+
+    // Merge the cleaned-up date into the request
+    $request->merge([
+        'start' => $startDate->format('Y-m-d H:i:s'), // Format the date for storage
+        'all_day' => filter_var($request->input('all_day'), FILTER_VALIDATE_BOOLEAN)
+    ]);
+
+    // Validate the request
+    $data = $request->validate([
+        'title' => 'required|string|max:255',
+        'start' => 'required|date',
+        'end' => 'nullable|date',
+        'category' => 'required|string',
+        'location' => 'nullable|string',
+        'description' => 'nullable|string',
+        'all_day' => 'required|boolean',
+    ]);
+
+    // Update the event
+    $event->update($data);
+
+    return response()->json($event);
+}
+
 
     public function destroy(Event $event)
     {
