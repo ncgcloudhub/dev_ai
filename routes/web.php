@@ -65,8 +65,11 @@ Route::get('/', function () {
     // How it works SECTION Design
     $how_it_works = SectionDesign::where('section_name', 'how_it_works')->value('selected_design');
     $banner = SectionDesign::where('section_name', 'banner')->value('selected_design');
+    $features = SectionDesign::where('section_name', 'features')->value('selected_design');
+    $services = SectionDesign::where('section_name', 'services')->value('selected_design');
+    $image_generate = SectionDesign::where('section_name', 'image_generate')->value('selected_design');
 
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner'));
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate'));
 })->name('home');
 
 
