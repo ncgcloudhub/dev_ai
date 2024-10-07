@@ -60,6 +60,14 @@ class TemplateController extends Controller
         );
     }
 
+     // Update 'image_generate' section if its form is submitted
+     if ($request->has('image_generate')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'image_generate'],
+            ['selected_design' => $request->input('image_generate_design')]
+        );
+    }
+
     return redirect()->back()->with('success', 'Design updated successfully.');
 }
 

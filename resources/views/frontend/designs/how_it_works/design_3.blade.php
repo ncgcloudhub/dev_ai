@@ -1,4 +1,4 @@
-<section class="section py-5" style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20210906/pngtree-ai-artificial-intelligence-starry-sky-portrait-blue-technology-banner-image_804237.jpg'); background-size: cover; background-position: center;">
+<section class="section" style="background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20210906/pngtree-ai-artificial-intelligence-starry-sky-portrait-blue-technology-banner-image_804237.jpg'); background-size: cover; background-position: center;">
     <div class="container">  
         <div class="row justify-content-center">
             <div class="col-lg-8">
