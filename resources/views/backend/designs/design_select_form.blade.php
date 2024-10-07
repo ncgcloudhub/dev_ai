@@ -24,7 +24,12 @@
                             <a class="nav-link" id="custom-v-pills-features-tab" data-bs-toggle="pill" href="#custom-v-pills-features" role="tab" aria-controls="custom-v-pills-features"
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
-                            Awesome Features</a>
+                            Features</a>
+
+                            <a class="nav-link" id="custom-v-pills-services-tab" data-bs-toggle="pill" href="#custom-v-pills-services" role="tab" aria-controls="custom-v-pills-services"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Services</a>
                          
                         </div>
 
@@ -117,6 +122,35 @@
                                             <input type="radio" name="features_design" value="design2" id="feature2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
                                             <label for="feature2">
                                                 @include('frontend.designs.features.feature_2') <!-- Include design 2 preview -->
+                                            </label>
+                                        </div>
+                                    
+                                        <button class="btn btn-primary" type="submit">Save Design</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Services Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-services" role="tabpanel" aria-labelledby="custom-v-pills-services-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="services" name="services">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['services']) ? $sectionDesigns['services']->selected_design : '';
+                                        @endphp
+                                    
+                                        <div class="design-preview">
+                                            <input type="radio" name="services_design" value="design1" id="service1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                            <label for="service1">
+                                                @include('frontend.designs.services.services_1') <!-- Include design 1 preview -->
+                                            </label>
+                                        </div>
+                                    
+                                        <div class="design-preview">
+                                            <input type="radio" name="services_design" value="design2" id="service2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                            <label for="service2">
+                                                @include('frontend.designs.services.services_2') <!-- Include design 2 preview -->
                                             </label>
                                         </div>
                                     
