@@ -467,6 +467,10 @@
                         </div>
                         <!-- end col -->
 
+                        <div class="col-3">
+                            <img src="{{ asset('build/images/edu_info.png') }}" width="100%" alt="">
+                        </div>
+
                     </div>
                     <!-- end row -->
                 </form>
