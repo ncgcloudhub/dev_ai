@@ -156,15 +156,15 @@ border: 1px solid rgba(255, 255, 255, 0.99);
     @endsection
       
     
-    @section('content')
-    @if(session('success'))
-    <div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
-        <!-- Begin page -->
-        <div class="layout-wrapper landing">
-           @include('frontend.body.nav_frontend')
+            @section('content')
+            @if(session('success'))
+                <div id="successAlert" class="alert alert-success alert-dismissible" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <!-- Begin page -->
+            <div class="layout-wrapper landing">
+            @include('frontend.body.nav_frontend')
 
 
            {{-- Parallex --}}
@@ -244,12 +244,10 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     </div><!-- end card-body -->
                 </div><!-- end card -->
             </div><!--end col-->
-            
-
-     {{-- SINGLE DALLE IMAGE GENERATE END--}}
+            {{-- SINGLE DALLE IMAGE GENERATE END--}}
 
 
-     {{-- How it Works --}}
+            {{-- How it Works --}}
             @if ($how_it_works == 'design1')
                 @include('frontend.designs.how_it_works.design_1')
             @elseif ($how_it_works == 'design2')
