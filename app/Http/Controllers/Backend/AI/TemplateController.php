@@ -44,6 +44,14 @@ class TemplateController extends Controller
         );
     }
 
+     // Update 'features' section if its form is submitted
+     if ($request->has('features')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'features'],
+            ['selected_design' => $request->input('features_design')]
+        );
+    }
+
     return redirect()->back()->with('success', 'Design updated successfully.');
 }
 
