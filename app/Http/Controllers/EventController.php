@@ -26,29 +26,39 @@ class EventController extends Controller
         $endDateString = $request->input('end');
     
         // Clean the date strings by removing timezone information
-        // This handles different possible formats
         $cleanedStartDateString = preg_replace('/ GMT.*$/', '', $startDateString);
-        $cleanedEndDateString = preg_replace('/ GMT.*$/', '', $endDateString);
-    
-        // Convert the cleaned start and end date strings to DateTime objects
+        
+        // Convert the cleaned start date string to DateTime object
         $startDate = \DateTime::createFromFormat('D M d Y H:i:s', $cleanedStartDateString);
-        $endDate = \DateTime::createFromFormat('D M d Y H:i:s', $cleanedEndDateString);
     
-        // Check if parsing was successful for both dates
+        // Check if parsing was successful for the start date
         if (!$startDate) {
             Log::error('Failed to parse start date:', ['start' => $startDateString]);
             return response()->json(['error' => 'Invalid start date format'], 422);
         }
     
-        if (!$endDate) {
-            Log::error('Failed to parse end date:', ['end' => $endDateString]);
-            return response()->json(['error' => 'Invalid end date format'], 422);
+        // Handle cases where the end date might be null
+        if ($endDateString) {
+            $cleanedEndDateString = preg_replace('/ GMT.*$/', '', $endDateString);
+            $endDate = \DateTime::createFromFormat('D M d Y H:i:s', $cleanedEndDateString);
+    
+            // If end date parsing fails, log the error and return a response
+            if (!$endDate) {
+                Log::error('Failed to parse end date:', ['end' => $endDateString]);
+                return response()->json(['error' => 'Invalid end date format'], 422);
+            }
+    
+            // Format the end date for storage
+            $formattedEndDate = $endDate->format('Y-m-d H:i:s');
+        } else {
+            // Set end date to null if not provided
+            $formattedEndDate = null;
         }
     
         // Merge the cleaned-up dates into the request
         $request->merge([
-            'start' => $startDate->format('Y-m-d H:i:s'), // Format the date for storage
-            'end' => $endDate->format('Y-m-d H:i:s'), // Format the end date for storage
+            'start' => $startDate->format('Y-m-d H:i:s'), // Format the start date for storage
+            'end' => $formattedEndDate, // Use formatted end date or null
             'all_day' => filter_var($request->input('all_day'), FILTER_VALIDATE_BOOLEAN)
         ]);
     
@@ -56,7 +66,7 @@ class EventController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'start' => 'required|date',
-            'end' => 'nullable|date|after_or_equal:start', // Ensure end date is after start date
+            'end' => 'nullable|date|after_or_equal:start', // Ensure end date is after or equal to the start date
             'category' => 'required|string',
             'location' => 'nullable|string',
             'description' => 'nullable|string',
@@ -77,6 +87,7 @@ class EventController extends Controller
     
         return response()->json($event, 201);
     }
+    
     
     
     
