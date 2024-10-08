@@ -68,6 +68,14 @@ class TemplateController extends Controller
         );
     }
 
+    // Update 'image_slider' section if its form is submitted
+    if ($request->has('image_slider')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'image_slider'],
+            ['selected_design' => $request->input('image_slider_design')]
+        );
+    }
+
     return redirect()->back()->with('success', 'Design updated successfully.');
 }
 

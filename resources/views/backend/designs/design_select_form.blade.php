@@ -34,6 +34,11 @@
                                 How It Works
                             </a>
 
+                            <a class="nav-link" id="custom-v-pills-image_slider-tab" data-bs-toggle="pill" href="#custom-v-pills-image_slider" role="tab" aria-controls="custom-v-pills-image_slider"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Image Gallery Slider</a>
+
                             <a class="nav-link" id="custom-v-pills-features-tab" data-bs-toggle="pill" href="#custom-v-pills-features" role="tab" aria-controls="custom-v-pills-features"
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
@@ -47,6 +52,7 @@
                         </div>
 
                     </div> <!-- end col-->
+
                     <div class="col-lg-10">
                         <div class="tab-content text-muted mt-3 mt-lg-0">
                             <!-- How It Works Tab -->
@@ -201,6 +207,42 @@
                                             <button class="btn btn-primary" type="submit">Save Design</button>
                                             
                                         </div>
+                                    
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+
+                            <!-- Image Gallery Slider Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-image_slider" role="tabpanel" aria-labelledby="custom-v-pills-image_slider-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="image_slider" name="image_slider">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['image_slider']) ? $sectionDesigns['image_slider']->selected_design : '';
+                                        @endphp
+                                    
+                                      
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_slider_design" value="design1" id="image_slider1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="image_slider1">
+                                                    @include('frontend.designs.ai_image_gallery_slider.image_slider_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_slider_design" value="design2" id="image_slider2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="image_slider2">
+                                                    @include('frontend.designs.ai_image_gallery_slider.image_slider_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+                                            
+                                       
                                     
                                         
                                     </form>
