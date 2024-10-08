@@ -92,6 +92,14 @@ class TemplateController extends Controller
         );
     }
 
+    // Update 'prompt_library' section if its form is submitted
+    if ($request->has('prompt_library')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'prompt_library'],
+            ['selected_design' => $request->input('prompt_library_design')]
+        );
+    }
+
     return redirect()->back()->with('success', 'Design updated successfully.');
 }
 

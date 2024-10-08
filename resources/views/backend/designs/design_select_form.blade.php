@@ -17,6 +17,7 @@
     }
 
     $templates = App\Models\Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
+    $promptLibrary = App\Models\PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
 
 @endphp
 
@@ -68,6 +69,11 @@
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                             AI Content Creator</a>
+
+                            <a class="nav-link" id="custom-v-pills-prompt_library-tab" data-bs-toggle="pill" href="#custom-v-pills-prompt_library" role="tab" aria-controls="custom-v-pills-content_creator"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Prompt Library</a>
                          
                         </div>
 
@@ -322,6 +328,36 @@
                                                 <input type="radio" name="content_creator_design" value="design2" id="content_creator2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
                                                 <label for="content_creator2">
                                                     @include('frontend.designs.ai_content_creator.content_creator_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                             <!-- Prompt Library Tab -->
+                             <div class="tab-pane fade" id="custom-v-pills-prompt_library" role="tabpanel" aria-labelledby="custom-v-pills-prompt_library-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="prompt_library" name="prompt_library">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['prompt_library']) ? $sectionDesigns['prompt_library']->selected_design : '';
+                                        @endphp
+                                    
+                                            <div class="design-preview">
+                                                <input type="radio" name="prompt_library_design" value="design1" id="prompt_library1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="prompt_library1">
+                                                    @include('frontend.designs.prompt_library.prompt_library_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="prompt_library_design" value="design2" id="prompt_library2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="prompt_library2">
+                                                    @include('frontend.designs.prompt_library.prompt_library_2') <!-- Include design 2 preview -->
                                                 </label>
                                             </div>
 

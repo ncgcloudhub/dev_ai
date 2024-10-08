@@ -360,13 +360,21 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             @endif
             <!-- end features -->
 
+
             {{-- Prompt library --}}
-            @include('frontend.body.prompt_library_frontend')
+            @if ($prompt_library == 'design1')
+                @include('frontend.designs.prompt_library.prompt_library_1')
+            @elseif ($prompt_library == 'design2')
+                @include('frontend.designs.prompt_library.prompt_library_2')
+            @else
+                <!-- Fallback or default design if none is selected -->
+                @include('frontend.designs.prompt_library.prompt_library_1')
+            @endif
             {{-- Prompt library end --}}
 
 
-             <!-- start cta -->
-             <section class="py-5 bg-primary position-relative">
+            <!-- start cta -->
+            <section class="py-5 bg-primary position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <form method="post" action="{{ route('newsletter.store') }}">

@@ -16,7 +16,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-7">
                 <div class="text-center mb-5">
-                    <h1 class="mb-3 ff-secondary fw-semibold text-capitalize lh-base">Find Your Best <span class="text-primary gradient-text-1">Prompt</span> Library</h1>
+                    <h1 class="mb-3 ff-secondary fw-semibold text-capitalize lh-base">Find Your Best <span class="text-primary gradient-text-1">Prompts</span> Library</h1>
                     <p class="text-muted">Get the best Prompt Library to Make Your Work Faster</p>
                 </div>
             </div>

@@ -71,8 +71,9 @@ Route::get('/', function () {
     $image_slider = SectionDesign::where('section_name', 'image_slider')->value('selected_design');
     $image_gallery = SectionDesign::where('section_name', 'image_gallery')->value('selected_design');
     $content_creator = SectionDesign::where('section_name', 'content_creator')->value('selected_design');
+    $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
 
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator'));
+    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
 })->name('home');
 
 
