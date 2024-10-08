@@ -8,6 +8,16 @@
     foreach ($images_slider as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
     }
+
+
+    $images = App\Models\DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
+
+    foreach ($images as $image) {
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+    }
+
+    $templates = App\Models\Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
+
 @endphp
 
 <div class="row">
@@ -34,6 +44,11 @@
                                 How It Works
                             </a>
 
+                            <a class="nav-link" id="custom-v-pills-image_slider-tab" data-bs-toggle="pill" href="#custom-v-pills-image_slider" role="tab" aria-controls="custom-v-pills-image_slider"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Image Gallery Slider</a>
+
                             <a class="nav-link" id="custom-v-pills-features-tab" data-bs-toggle="pill" href="#custom-v-pills-features" role="tab" aria-controls="custom-v-pills-features"
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
@@ -43,10 +58,21 @@
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                             Services</a>
+
+                            <a class="nav-link" id="custom-v-pills-image_gallery-tab" data-bs-toggle="pill" href="#custom-v-pills-image_gallery" role="tab" aria-controls="custom-v-pills-image_gallery"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Image Gallery</a>
+
+                            <a class="nav-link" id="custom-v-pills-content_creator-tab" data-bs-toggle="pill" href="#custom-v-pills-content_creator" role="tab" aria-controls="custom-v-pills-content_creator"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            AI Content Creator</a>
                          
                         </div>
 
                     </div> <!-- end col-->
+
                     <div class="col-lg-10">
                         <div class="tab-content text-muted mt-3 mt-lg-0">
                             <!-- How It Works Tab -->
@@ -114,8 +140,8 @@
                                 </div>
                             </div><!--end tab-pane-->
 
-                             <!-- Features Tab -->
-                             <div class="tab-pane fade" id="custom-v-pills-features" role="tabpanel" aria-labelledby="custom-v-pills-features-tab">
+                            <!-- Features Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-features" role="tabpanel" aria-labelledby="custom-v-pills-features-tab">
                                 <div class="d-flex mb-4">
                                     <form action="{{ route('user.update_design') }}" method="POST">
                                         @csrf
@@ -172,8 +198,8 @@
                                 </div>
                             </div>
 
-                             <!-- Image Generate Tab -->
-                             <div class="tab-pane fade" id="custom-v-pills-image_generate" role="tabpanel" aria-labelledby="custom-v-pills-image_generate-tab">
+                            <!-- Image Generate Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-image_generate" role="tabpanel" aria-labelledby="custom-v-pills-image_generate-tab">
                                 <div class="d-flex mb-4">
                                     <form action="{{ route('user.update_design') }}" method="POST">
                                         @csrf
@@ -203,6 +229,104 @@
                                         </div>
                                     
                                         
+                                    </form>
+                                </div>
+                            </div>
+
+
+                            <!-- Image Gallery Slider Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-image_slider" role="tabpanel" aria-labelledby="custom-v-pills-image_slider-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="image_slider" name="image_slider">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['image_slider']) ? $sectionDesigns['image_slider']->selected_design : '';
+                                        @endphp
+                                    
+                                      
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_slider_design" value="design1" id="image_slider1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="image_slider1">
+                                                    @include('frontend.designs.ai_image_gallery_slider.image_slider_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_slider_design" value="design2" id="image_slider2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="image_slider2">
+                                                    @include('frontend.designs.ai_image_gallery_slider.image_slider_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+                                            
+                                       
+                                    
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Image Gallery Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-image_gallery" role="tabpanel" aria-labelledby="custom-v-pills-image_gallery-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="image_gallery" name="image_gallery">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['image_gallery']) ? $sectionDesigns['image_gallery']->selected_design : '';
+                                        @endphp
+                                    
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_gallery_design" value="design1" id="image_gallery1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="image_gallery1">
+                                                    @include('frontend.designs.ai_image_gallery.gallery_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_gallery_design" value="design2" id="image_gallery2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="image_gallery2">
+                                                    @include('frontend.designs.ai_image_gallery.gallery_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+         
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+
+                            <!-- AI Content Creator Tab -->
+                            <div class="tab-pane fade" id="custom-v-pills-content_creator" role="tabpanel" aria-labelledby="custom-v-pills-content_creator-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="content_creator" name="content_creator">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['content_creator']) ? $sectionDesigns['content_creator']->selected_design : '';
+                                        @endphp
+                                    
+                                            <div class="design-preview">
+                                                <input type="radio" name="content_creator_design" value="design1" id="content_creator1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="content_creator1">
+                                                    @include('frontend.designs.ai_content_creator.content_creator_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="content_creator_design" value="design2" id="content_creator2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="content_creator2">
+                                                    @include('frontend.designs.ai_content_creator.content_creator_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+
                                     </form>
                                 </div>
                             </div>
