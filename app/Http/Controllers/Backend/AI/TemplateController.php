@@ -76,11 +76,19 @@ class TemplateController extends Controller
         );
     }
 
-    // Update 'image_slider' section if its form is submitted
+    // Update 'image_gallery' section if its form is submitted
     if ($request->has('image_gallery')) {
         SectionDesign::updateOrCreate(
             ['section_name' => 'image_gallery'],
             ['selected_design' => $request->input('image_gallery_design')]
+        );
+    }
+
+    // Update 'content_creator' section if its form is submitted
+    if ($request->has('content_creator')) {
+        SectionDesign::updateOrCreate(
+            ['section_name' => 'content_creator'],
+            ['selected_design' => $request->input('content_creator_design')]
         );
     }
 
