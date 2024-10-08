@@ -8,6 +8,14 @@
     foreach ($images_slider as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
     }
+
+
+    $images = App\Models\DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
+
+    foreach ($images as $image) {
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+    }
+
 @endphp
 
 <div class="row">
@@ -48,6 +56,11 @@
                             aria-selected="true">
                             <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                             Services</a>
+
+                            <a class="nav-link" id="custom-v-pills-image_gallery-tab" data-bs-toggle="pill" href="#custom-v-pills-image_gallery" role="tab" aria-controls="custom-v-pills-image_gallery"
+                            aria-selected="true">
+                            <i class="ri-home-4-line d-block fs-20 mb-1"></i>
+                            Image Gallery</a>
                          
                         </div>
 
@@ -244,6 +257,37 @@
                                             
                                        
                                     
+                                        
+                                    </form>
+                                </div>
+                            </div>
+
+                             <!-- Image Gallery Tab -->
+                             <div class="tab-pane fade" id="custom-v-pills-image_gallery" role="tabpanel" aria-labelledby="custom-v-pills-image_gallery-tab">
+                                <div class="d-flex mb-4">
+                                    <form action="{{ route('user.update_design') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" value="image_gallery" name="image_gallery">
+                                        @php
+                                            $selectedDesign = isset($sectionDesigns['image_gallery']) ? $sectionDesigns['image_gallery']->selected_design : '';
+                                        @endphp
+                                    
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_gallery_design" value="design1" id="image_gallery1" {{ $selectedDesign == 'design1' ? 'checked' : '' }}>
+                                                <label for="image_gallery1">
+                                                    @include('frontend.designs.ai_image_gallery.gallery_1') <!-- Include design 1 preview -->
+                                                </label>
+                                            </div>
+
+                                            <div class="design-preview">
+                                                <input type="radio" name="image_gallery_design" value="design2" id="image_gallery2" {{ $selectedDesign == 'design2' ? 'checked' : '' }}>
+                                                <label for="image_gallery2">
+                                                    @include('frontend.designs.ai_image_gallery.gallery_2') <!-- Include design 2 preview -->
+                                                </label>
+                                            </div>
+
+                                            <button class="btn btn-primary" type="submit">Save Design</button>
+         
                                         
                                     </form>
                                 </div>
