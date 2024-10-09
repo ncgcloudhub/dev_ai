@@ -49,7 +49,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#favorite" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Favorites</span>
+                        <i class="las la-star"></i> <span >Favorites</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="favorite">
                         <div class="row">
@@ -71,20 +71,20 @@
                 {{-- Fixed Template --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('template.manage')}}">
-                        <i class="lab la-blogger"></i> <span >AI Content Creator</span>
+                        <i class="las la-file-alt"></i> <span >AI Content Creator</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('education.form')}}">
-                        <i class="lab la-blogger"></i> <span >Education</span>
+                        <i class="las la-school"></i> <span >Education</span>
                     </a>
                 </li>
 
                 {{-- AI CHAT --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ route('main.chat.form') }}">
-                        <i class="las la-user-circle"></i> 
+                        <i class="lab la-rocketchat"></i> 
                         <span>ChatterMate</span>
                         <span class="badge bg-danger ms-2">New</span>
                     </a>
@@ -95,7 +95,7 @@
                
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
-                        <i class=" las la-atom"></i> <span >Greeting Card</span>
+                        <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>
                 
@@ -178,7 +178,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Generate Image</span>
+                        <i class="las la-image"></i> <span >Generate Image</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
                         <div class="row">
@@ -204,7 +204,7 @@
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="#subscription" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="subscription">
-                        <i class="l las la-sms"></i> <span >Subscription</span>
+                        <i class="ri-price-tag-3-line"></i> <span >Subscription</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="subscription">
                         <div class="row">
