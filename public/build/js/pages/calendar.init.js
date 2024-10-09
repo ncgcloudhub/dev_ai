@@ -272,21 +272,37 @@ document.addEventListener("DOMContentLoaded", function () {
             defaultEvents.push(newEvent);
             // upcomingEvent(defaultEvents);
         },
-        eventDrop: function (info) {
-            var indexOfSelectedEvent = defaultEvents.findIndex(function (x) {
-                return x.id == info.event.id
+        eventDrop: function(info) {
+            console.log('Event dropped:', info); // Check if triggered
+            
+            // Prepare the event data for the AJAX request
+            var eventData = {
+                id: info.event.id,
+                title: info.event.title,
+                start: info.event.start.toISOString(), // Format start date
+                end: info.event.end ? info.event.end.toISOString() : null, // Format end date if exists
+                all_day: info.event.allDay,
+                category: info.event.classNames[0] || '', // Get the category from classNames
+                location: info.event.extendedProps.location || '', // Get location from extendedProps
+                description: info.event.extendedProps.description || '', // Get description from extendedProps
+                _token: $('meta[name="csrf-token"]').attr('content') // CSRF token for security
+            };
+        
+            console.log('Sending AJAX request with data:', eventData); // Log data for verification
+        
+            $.ajax({
+                url: '/events/drag/' + info.event.id, // Correct URL for updating the event
+                method: 'PUT', // Use PUT for updating
+                data: eventData,
+                success: function(response) {
+                    console.log('Event updated successfully:', response);
+                },
+                error: function(error) {
+                    console.error('Error updating event:', error);
+                }
             });
-            if (defaultEvents[indexOfSelectedEvent]) {
-                defaultEvents[indexOfSelectedEvent].title = info.event.title;
-                defaultEvents[indexOfSelectedEvent].start = info.event.start;
-                defaultEvents[indexOfSelectedEvent].end = (info.event.end) ? info.event.end : null;
-                defaultEvents[indexOfSelectedEvent].allDay = info.event.allDay;
-                defaultEvents[indexOfSelectedEvent].className = info.event.classNames[0];
-                defaultEvents[indexOfSelectedEvent].description = (info.event._def.extendedProps.description) ? info.event._def.extendedProps.description : '';
-                defaultEvents[indexOfSelectedEvent].location = (info.event._def.extendedProps.location) ? info.event._def.extendedProps.location : '';
-            }
-            // upcomingEvent(defaultEvents);
         }
+        
     });
 
     calendar.render();
