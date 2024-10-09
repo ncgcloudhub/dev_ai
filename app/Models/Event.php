@@ -10,7 +10,7 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'title', 'location', 'description', 'category', 'all_day', 'start', 'end'
+        'user_id', 'title', 'location', 'description', 'category', 'all_day', 'start', 'end', 's_time', 'e_time'
     ];
 
     public function user()
