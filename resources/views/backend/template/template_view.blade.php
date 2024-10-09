@@ -486,29 +486,21 @@
         });
 
         function formatContent(content) {
-            // Use marked.js to parse Markdown to HTML
-            const renderer = new marked.Renderer();
+        // Set options for marked.js
+        marked.setOptions({
+            breaks: true,  // Enable line breaks
+            gfm: true      // Enable GitHub Flavored Markdown
+        });
 
-            // Customize heading rendering to make them bold
-            renderer.heading = function(text, level) {
-                return `<strong>${text}</strong>`;
-            };
+        // Parse Markdown to HTML without a custom renderer
+        let formattedContent = marked.parse(content);
 
-            // Set options for marked.js
-            marked.setOptions({
-                renderer: renderer,
-                breaks: true,  // Enable line breaks
-                gfm: true      // Enable GitHub Flavored Markdown
-            });
+        // Sanitize the HTML to prevent XSS
+        formattedContent = DOMPurify.sanitize(formattedContent);
 
-            // Parse Markdown to HTML
-            let formattedContent = marked.parse(content);
+        return formattedContent;
+    }
 
-            // Sanitize the HTML to prevent XSS
-            formattedContent = DOMPurify.sanitize(formattedContent);
-
-            return formattedContent;
-        }
 
         // Copy button click event
         $('#copyButton').click(function () {
