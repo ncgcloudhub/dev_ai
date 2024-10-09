@@ -333,24 +333,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 data: eventData,
                 success: function(response) {
                     console.log('Event saved successfully:', response);
-                    
+            
                     if (selectedEvent) {
                         // If updating, retrieve the existing event using its ID
                         var existingEvent = calendar.getEventById(eventid);
                         if (existingEvent) {
-                            // Update the properties of the existing event
-                            existingEvent.setProp('title', updatedTitle);
-                            existingEvent.setStart(updateStartDate);
-                            existingEvent.setEnd(updateEndDate);
-                            existingEvent.setProp('allDay', all_day);
-                            existingEvent.setProp('classNames', [updatedCategory]);
-                            existingEvent.setExtendedProp('description', eventDescription);
-                            existingEvent.setExtendedProp('location', event_location);
+                            // Remove old event first
+                            existingEvent.remove();
                         }
+            
+                        // Re-add the event with updated properties
+                        var updatedEvent = {
+                            id: response.id,  // Get the ID from the backend response
+                            title: updatedTitle,
+                            start: updateStartDate,
+                            end: updateEndDate,
+                            allDay: all_day,
+                            className: updatedCategory,
+                            description: eventDescription,
+                            location: event_location
+                        };
+                        calendar.addEvent(updatedEvent);  // Add the updated event to the calendar
                     } else {
                         // If adding new, create a new event
                         var newEvent = {
-                            id: response.id, // get ID from the backend
+                            id: response.id,  // Get ID from the backend
                             title: updatedTitle,
                             start: updateStartDate,
                             end: updateEndDate,
@@ -361,14 +368,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         };
                         calendar.addEvent(newEvent);
                     }
-                    
-                    addEvent.hide();
-                    // upcomingEvent(defaultEvents);
+            
+                    addEvent.hide();  // Close the modal
                 },
                 error: function(error) {
                     console.error('Error saving event:', error);
                 }
             });
+            
         }
     });
     
