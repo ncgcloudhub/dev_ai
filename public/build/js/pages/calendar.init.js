@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 defaultEvents[indexOfSelectedEvent].allDay = info.event.allDay;
                 defaultEvents[indexOfSelectedEvent].className = info.event.classNames[0];
                 defaultEvents[indexOfSelectedEvent].description = (info.event._def.extendedProps.description) ? info.event._def.extendedProps.description : '';
+                defaultEvents[indexOfSelectedEvent].s_time = (info.event._def.extendedProps.s_time) ? info.event._def.extendedProps.s_time : '';
+                defaultEvents[indexOfSelectedEvent].e_time = (info.event._def.extendedProps.e_time) ? info.event._def.extendedProps.e_time : '';
                 defaultEvents[indexOfSelectedEvent].location = (info.event._def.extendedProps.location) ? info.event._def.extendedProps.location : '';
             }
             // upcomingEvent(defaultEvents);
@@ -183,8 +185,8 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             document.getElementById("event-start-date-tag").innerHTML = r_date;
 
-            var gt_time = getTime(selectedEvent.start);
-            var ed_time = getTime(selectedEvent.end);
+            var gt_time = selectedEvent.extendedProps.s_time || ''; 
+            var ed_time = selectedEvent.extendedProps.e_time || '';
 
             if (gt_time == ed_time) {
                 document.getElementById('event-time').setAttribute("hidden", true);
@@ -213,8 +215,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     dateFormat: "H:i",
                     defaultDate: ed_time
                 });
-                document.getElementById("event-timepicker1-tag").innerHTML = tConvert(gt_time);
-                document.getElementById("event-timepicker2-tag").innerHTML = tConvert(ed_time);
+                document.getElementById("event-timepicker1-tag").innerHTML = gt_time;
+                document.getElementById("event-timepicker2-tag").innerHTML = ed_time;
             }
             newEventData = null;
             modalTitle.innerText = selectedEvent.title;
@@ -240,6 +242,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 title: event.title,
                                 start: event.start,
                                 end: event.end,
+                                s_time: event.s_time,
+                                e_time: event.e_time,
                                 allDay: event.all_day,
                                 className: event.category,
                                 description: event.description,
@@ -315,6 +319,9 @@ document.addEventListener("DOMContentLoaded", function () {
         
         var updatedTitle = document.getElementById("event-title").value;
         var updatedCategory = document.getElementById('event-category').value;
+        var timepicker1 = document.getElementById('timepicker1').value;
+        var timepicker2 = document.getElementById('timepicker2').value;
+        var updatedCategory = document.getElementById('event-category').value;
         var start_date = (document.getElementById("event-start-date").value).split("to");
         var updateStartDate = new Date(start_date[0].trim());
         var newdate = new Date(start_date[1]);
@@ -335,6 +342,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 start: updateStartDate,
                 end: updateEndDate,
                 all_day: all_day,
+                timepicker1: timepicker1,
+                timepicker2: timepicker2,
                 location: event_location,
                 description: eventDescription,
                 _token: $('meta[name="csrf-token"]').attr('content') 
@@ -365,6 +374,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             start: updateStartDate,
                             end: updateEndDate,
                             allDay: all_day,
+                            timepicker1: timepicker1,
+                            timepicker2: timepicker2,
                             className: updatedCategory,
                             description: eventDescription,
                             location: event_location
@@ -378,6 +389,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             start: updateStartDate,
                             end: updateEndDate,
                             allDay: all_day,
+                            timepicker1: timepicker1,
+                            timepicker2: timepicker2,
                             className: updatedCategory,
                             description: eventDescription,
                             location: event_location

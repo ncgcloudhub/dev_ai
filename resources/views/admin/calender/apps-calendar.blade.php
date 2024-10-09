@@ -179,7 +179,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label">Start Time</label>
                                                     <div class="input-group d-none">
-                                                        <input id="timepicker1" type="text"
+                                                        <input id="timepicker1" type="text" name="s_time"
                                                             class="form-control flatpickr flatpickr-input"
                                                             placeholder="Select start time" readonly>
                                                         <span class="input-group-text"><i class="ri-time-line"></i></span>
@@ -190,7 +190,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label">End Time</label>
                                                     <div class="input-group d-none">
-                                                        <input id="timepicker2" type="text"
+                                                        <input id="timepicker2" type="text" name="e_time"
                                                             class="form-control flatpickr flatpickr-input"
                                                             placeholder="Select end time" readonly>
                                                         <span class="input-group-text"><i class="ri-time-line"></i></span>

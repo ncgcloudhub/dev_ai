@@ -19,9 +19,13 @@ class EventController extends Controller
 
     public function store(Request $request)
     {    
+        Log::error('Request', $request->all());
+    
         // Get the start and end date strings from the request
         $startDateString = $request->input('start');
         $endDateString = $request->input('end');
+        $s_time = $request->input('timepicker1');
+        $e_time = $request->input('timepicker2');
     
         // Clean the date strings by removing timezone information
         $cleanedStartDateString = preg_replace('/ GMT.*$/', '', $startDateString);
@@ -40,7 +44,6 @@ class EventController extends Controller
             $cleanedEndDateString = preg_replace('/ GMT.*$/', '', $endDateString);
             $endDate = \DateTime::createFromFormat('D M d Y H:i:s', $cleanedEndDateString);
     
-            // If end date parsing fails, log the error and return a response
             if (!$endDate) {
                 Log::error('Failed to parse end date:', ['end' => $endDateString]);
                 return response()->json(['error' => 'Invalid end date format'], 422);
@@ -49,7 +52,6 @@ class EventController extends Controller
             // Format the end date for storage
             $formattedEndDate = $endDate->format('Y-m-d H:i:s');
         } else {
-            // Set end date to null if not provided
             $formattedEndDate = null;
         }
     
@@ -64,11 +66,13 @@ class EventController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'start' => 'required|date',
-            'end' => 'nullable|date|after_or_equal:start', // Ensure end date is after or equal to the start date
+            'end' => 'nullable|date|after_or_equal:start',
             'category' => 'required|string',
             'location' => 'nullable|string',
             'description' => 'nullable|string',
             'all_day' => 'required|boolean',
+            'timepicker1' => 'required|string', // Validate the timepicker1 input
+            'timepicker2' => 'required|string', // Validate the timepicker2 input
         ]);
     
         // Create the event
@@ -81,10 +85,14 @@ class EventController extends Controller
             'location' => $data['location'],
             'description' => $data['description'],
             'all_day' => $data['all_day'],
+            's_time' => $s_time, // Store the s_time
+            'e_time' => $e_time, // Store the e_time
         ]);
     
         return response()->json($event, 201);
     }
+    
+
     
     public function update(Request $request, Event $event)
 {
