@@ -272,11 +272,16 @@
                                 <h4 class="card-title mb-0">Generated Content <button type="button" class="btn btn-outline-secondary">                            
                                     Tokens Left: <span class="badge bg-success ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
                             </button></h4>
-                              
-                               
+                        
                             </div><!-- end card header -->
+
                             <div class="card-body" id="generated-content">
-                                <textarea id="myeditorinstance" readonly></textarea>
+                                <!-- Rendered content for display -->
+                                <div id="formattedContentDisplay" class="mt-3"></div>
+
+                                 <!-- Separator (horizontal line or margin) -->
+                                <hr class="my-4"> <!-- You can replace this with margin if you prefer -->
+                            
                                 <div class="mt-2">
                                     <p><strong>Statistics:</strong></p>
                                     <ul>
@@ -285,7 +290,9 @@
                                         <li>Number of Characters: <span id="numCharacters"></span></li>
                                     </ul>
                                 </div>
-                            </div><!-- end card-body -->
+                            </div><!-- end card-body -->  
+                            
+                            
                         </div><!-- end card -->
                         <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
                        
@@ -433,36 +440,36 @@
 <!-- Include FileSaver.js for saving files -->
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
+<!-- Include Marked.js for parsing markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- Include DOMPurify for sanitizing HTML -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Initialize SimpleMDE
-        var simplemde = new SimpleMDE({ 
-            element: document.getElementById("myeditorinstance"),
-            spellChecker: false,
-            toolbar: false,
-            status: false,
-            readOnly: true
-        });
 
         $('#generateForm').submit(function (event) {
             event.preventDefault();
-       
+
             // Show loader
             $('#loader').removeClass('d-none');
-    
+
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 success: function (response) {
                     if (response == 0) {
-                        // Display alert for error message
                         alert('Please Upgrade Plan');
                         return;
                     }
 
-                    // Update editor content
-                    simplemde.value(response.content);
+                    // Use marked.js to convert Markdown to HTML
+                    let formattedContent = formatContent(response.content);
+
+                    // Display formatted content as HTML
+                    document.getElementById('formattedContentDisplay').innerHTML = formattedContent;
 
                     // Update statistics
                     $('#numTokens').text(response.completionTokens);
@@ -478,9 +485,34 @@
             });
         });
 
+        function formatContent(content) {
+            // Use marked.js to parse Markdown to HTML
+            const renderer = new marked.Renderer();
+
+            // Customize heading rendering to make them bold
+            renderer.heading = function(text, level) {
+                return `<strong>${text}</strong>`;
+            };
+
+            // Set options for marked.js
+            marked.setOptions({
+                renderer: renderer,
+                breaks: true,  // Enable line breaks
+                gfm: true      // Enable GitHub Flavored Markdown
+            });
+
+            // Parse Markdown to HTML
+            let formattedContent = marked.parse(content);
+
+            // Sanitize the HTML to prevent XSS
+            formattedContent = DOMPurify.sanitize(formattedContent);
+
+            return formattedContent;
+        }
+
         // Copy button click event
         $('#copyButton').click(function () {
-            const editorContent = simplemde.value();
+            const editorContent = document.getElementById('formattedContentDisplay').innerText;
             const textArea = document.createElement('textarea');
             textArea.value = editorContent;
             document.body.appendChild(textArea);
@@ -492,7 +524,7 @@
 
         // Download button click event using FileSaver.js
         $('#downloadButton').click(function () {
-            const editorContent = simplemde.value();
+            const editorContent = document.getElementById('formattedContentDisplay').innerText;
 
             // Create a new Blob with the content
             const blob = new Blob([editorContent], { type: 'application/msword' });
@@ -502,5 +534,7 @@
         });
     });
 </script>
+
+
 
 @endsection
