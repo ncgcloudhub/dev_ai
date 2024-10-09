@@ -402,6 +402,16 @@
                                         <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
                                             <i data-feather="download"></i>
                                         </a>
+                        
+                                        <!-- Like Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
+                                        </button>
+                        
+                                        <!-- Favorite Button -->
+                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -696,5 +706,67 @@
         });
     });
 </script>
+
+{{-- LIKE & FAVORITE FUNCTIONALITY --}}
+<script>
+    $(document).ready(function() {
+        // Like button functionality
+        $(document).off('click', '.like-button').on('click', '.like-button', function() {
+            var imageId = $(this).data('image-id');
+            var likeButton = $(this);
+            var likeCountBadge = likeButton.find('.badge');
+            $.ajax({
+                url: '/like',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { image_id: imageId },
+                success: function(response) {
+                    // Update UI to reflect the new like status
+                    if (response.liked) {
+                        likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
+                        likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
+                    } else {
+                        likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
+                        likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
+                    }
+                },
+                error: function(xhr) {
+                    // Handle errors
+                }
+            });
+        });
+
+        // Favorite button functionality
+        $(document).off('click', '.favorite-button').on('click', '.favorite-button', function() {
+            var imageId = $(this).data('image-id');
+            var favoriteButton = $(this);
+            var favoriteCountBadge = favoriteButton.find('.badge');
+            $.ajax({
+                url: '/favorite',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { image_id: imageId },
+                success: function(response) {
+                    // Update UI to reflect the new favorite status
+                    if (response.favorited) {
+                        favoriteButton.removeClass('ri-heart-2-line').addClass('ri-heart-2-fill');
+                        favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) + 1);
+                    } else {
+                        favoriteButton.removeClass('ri-heart-2-fill').addClass('ri-heart-2-line');
+                        favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) - 1);
+                    }
+                },
+                error: function(xhr) {
+                    // Handle errors
+                }
+            });
+        });
+    });
+</script>
+
 
 @endsection
