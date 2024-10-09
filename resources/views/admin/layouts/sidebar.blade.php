@@ -35,7 +35,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('admin.dashboard')}}">
-                        <i data-feather="home" class="icon-dual"></i> <span >Dashboard</span>
+                        <i data-feather="home" class="las la-home"></i> <span >Dashboard</span>
                     </a>
                 </li>
 
@@ -43,7 +43,7 @@
 
                   <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('eid.card')}}">
-                        <i class=" las la-atom"></i> <span >Greeting Card</span>
+                        <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>
                
@@ -51,7 +51,7 @@
                
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('calender')}}">
-                        <i class=" las la-atom"></i> <span >Calender</span>
+                        <i class="las la-calendar"></i> <span >Calender</span>
                     </a>
                 </li>
               
@@ -60,7 +60,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('main.chat.form')}}">
-                        <i class=" las la-user-circle"></i> <span >ChatterMate</span>
+                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span>
                     </a>
                 </li>
 
@@ -155,17 +155,17 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarExpert">
-                        <i class="l las la-sms"></i> <span >Chat</span>
+                        <i class="l las la-sms"></i> <span >Clever Experts</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarExpert">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('expert.add')}}" class="nav-link" >Expert</a>
+                                        <a href="{{route('expert.add')}}" class="nav-link" >Expert Creator</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >AI Professional Bots</a>
+                                        <a href="{{route('chat')}}" class="nav-link" >AI Experts</a>
                                     </li>
                                   
                                 </ul>
@@ -179,7 +179,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Generate Image</span>
+                        <i class="las la-image"></i> <span >Clever Image Creator</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
                         <div class="row">
@@ -335,7 +335,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="#education" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-user-circle"></i> <span >Education</span>
+                        <i class="las la-book-open"></i> <span >Education</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
                         <div class="row">
@@ -356,19 +356,19 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{route('newsletter.manage')}}">
-                        <i class="  las la-dollar-sign"></i> <span >Manage Newsletter</span>
+                        <i class="las la-newspaper"></i> <span >Manage Newsletter</span>
                     </a>
                 </li>
            
             {{-- REFERRAL --}}
             <li class="nav-item">
                 <a class="nav-link menu-link" href="{{route('manage.referral')}}">
-                    <i class=" las la-user-circle"></i> <span >Manage Refferal</span>
+                    <i class="las la-share-square"></i> <span >Manage Refferal</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link menu-link" href="{{ route('dynamic-pages.index') }}">
-                    <i class=" las la-user-circle"></i> <span >Manage Page</span>
+                    <i class="lab la-wpforms"></i> <span >Manage Page</span>
                 </a>
             </li>
              

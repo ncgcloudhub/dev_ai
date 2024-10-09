@@ -28,9 +28,14 @@ class GenerateImagesController extends Controller
     public function AIGenerateImageView()
     {
         $user_id = Auth::user()->id;
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        
+        // Fetch images along with like and favorite counts
+        $images = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
+                    ->where('user_id', $user_id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+        
         $prompt_library = PromptLibrary::orderby('id', 'asc')->limit(50)->get();
-
         $check_user = Auth::user()->role;
 
         if ($check_user == 'admin') {
@@ -41,18 +46,22 @@ class GenerateImagesController extends Controller
             $images_count = $get_user->images_generated;
         }
 
-        // Generate Azure Blob Storage URL for each image with SAS token
+        // Generate Azure Blob Storage URL for each image with SAS token and check like/favorite status
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            
+            // Check if the image is liked or favorited by the current user
+            $image->liked_by_user = LikedImagesDalle::where('user_id', $user_id)->where('image_id', $image->id)->exists();
+            $image->favorited_by_user = FavoriteImageDalle::where('user_id', $user_id)->where('image_id', $image->id)->exists();
         }
 
         // Get the last package bought by the user
         $lastPackageHistory = PackageHistory::where('user_id', $user_id)
-        ->latest()
-        ->first();
+                                ->latest()
+                                ->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
 
-        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library','lastPackageId'));
+        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId'));
     }
 
 
