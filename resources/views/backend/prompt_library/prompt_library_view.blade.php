@@ -213,11 +213,24 @@
                         </div>
                         {{-- Loader END --}}
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <textarea id="myeditorinstance" readonly></textarea>
+                            <!-- Rendered content for display -->
+                            <div id="formattedContentDisplay" class="p-3 border rounded" style="min-height: 200px;">
+                                <!-- Content will be injected here -->
+                            </div>
+                            
+                            <!-- Optional Separator -->
+                            <hr class="my-4">
+                            
+                            <!-- Example of statistics or other content below -->
+                            <div id="additionalContent">
+                                <!-- Add any additional content or statistics here -->
+                            </div>
                         </div>
                     </div>
+                    
                     <div class="row mt-3">
                         <div class="col-md-12 text-end" id="copy-download-tour">
                             <button id="copyButton" class="btn btn-primary me-2">
@@ -242,8 +255,10 @@
 
 @section('script')
 
-<!-- Include SimpleMDE JS -->
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<!-- Include Marked.js for parsing markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- Include DOMPurify for sanitizing HTML -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
 <!-- Include FileSaver.js for saving files -->
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
@@ -251,131 +266,153 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         // Function to copy text to clipboard
-    window.copyText = function(element) {
-        const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
-        const tempInput = document.createElement("textarea");
-        tempInput.style = "position: absolute; left: -9999px";
-        tempInput.value = textToCopy;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        alert("Text copied to clipboard");
-    };
+        window.copyText = function(element) {
+            const textToCopy = element.parentElement.innerText.replace('📋', '').trim();
+            const tempInput = document.createElement("textarea");
+            tempInput.style = "position: absolute; left: -9999px";
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Text copied to clipboard");
+        };
 
-    var simplemde = new SimpleMDE({ 
-        element: document.getElementById("myeditorinstance"),
-        spellChecker: false,
-        toolbar: false,
-        status: false,
-        readOnly: true
-    });
+        // Remove SimpleMDE initialization since we're using a div now
 
-    function autoExpand(textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = (textarea.scrollHeight) + 'px';
-    }
+        // Function to auto-expand textareas (if still needed for other textareas)
+        function autoExpand(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
 
-    document.querySelectorAll('.auto-expand').forEach(function(textarea) {
-        textarea.addEventListener('input', function() {
+        document.querySelectorAll('.auto-expand').forEach(function(textarea) {
+            textarea.addEventListener('input', function() {
+                autoExpand(textarea);
+            });
             autoExpand(textarea);
         });
-        autoExpand(textarea);
-    });
 
         $('#ask').click(function() {
-        var message = $('#ask_ai').val();
-        var sub_category_instruction = $('#sub_category_instruction').val();
-        $('#loader').removeClass('d-none');
+            var message = $('#ask_ai').val();
+            var sub_category_instruction = $('#sub_category_instruction').val();
+            $('#loader').removeClass('d-none');
 
-        $.ajax({
-            url: "{{ route('ask.ai.prompt') }}",
-            type: "POST",
-            data: {
-                message: message,
-                sub_category_instruction: sub_category_instruction,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                var strippedContent = response.message
-                    .replace(/[#*]+/g, '')  // Remove # and * characters
-                    .replace(/(!\[.*?\]\(.*?\))/g, ''); // Remove markdown images
+            $.ajax({
+                url: "{{ route('ask.ai.prompt') }}",
+                type: "POST",
+                data: {
+                    message: message,
+                    sub_category_instruction: sub_category_instruction,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response == 0) {
+                        alert('Please Upgrade Plan');
+                        $('#loader').addClass('d-none');
+                        return;
+                    }
 
-                setTimeout(function() {
-                    simplemde.value(strippedContent);
-                    simplemde.codemirror.refresh(); // Force update
+                    // Use marked.js to convert Markdown to HTML
+                    let formattedContent = formatContent(response.message);
+
+                    // Set the HTML content in the div
+                    document.getElementById('formattedContentDisplay').innerHTML = formattedContent;
+
+                    // Optionally, handle additional content or statistics here
+                    // Example:
+                    // $('#additionalContent').html('<p>Some additional information</p>');
+
+                    // Hide loader
                     $('#loader').addClass('d-none');
-                }, 100); // Add a delay before setting the content
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
-
-
-    window.addExampleEditor = function() {
-        const container = document.getElementById('examples-container');
-        const exampleEditor = document.createElement('div');
-        exampleEditor.className = 'form-group mt-3';
-        exampleEditor.innerHTML = `
-            <div class="snow-editor" style="height: 200px;"></div>
-            <input type="hidden" name="examples[]">
-            <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
-                <i class="la la-minus"></i>
-            </button>
-
-        `;
-        container.appendChild(exampleEditor);
-
-         // Initialize Quill editor with default configuration
-         const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'font': [] }, { 'size': [] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'color': [] }, { 'background': [] }],
-                    [{ 'script': 'sub'}, { 'script': 'super' }],
-                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-                    [{ 'direction': 'rtl' }, { 'align': [] }],
-                    ['link', 'image', 'video'],
-                    ['clean']
-                ]
-            }
-        });
-        // Sync Quill content to the hidden input field
-        quill.on('text-change', function() {
-            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
-            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                    $('#loader').addClass('d-none');
+                }
+            });
         });
 
-        window.removeExampleEditor = function(button) {
-        button.parentElement.remove();
-    };
-    };
-    
+        function formatContent(content) {
+        // Set options for marked.js
+        marked.setOptions({
+            breaks: true,  // Enable line breaks
+            gfm: true      // Enable GitHub Flavored Markdown
+        });
 
-    $('#copyButton').click(function () {
-        const editorContent = simplemde.value();
-        const textArea = document.createElement('textarea');
-        textArea.value = editorContent;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert('Content copied to clipboard!');
+        // Parse Markdown to HTML without a custom renderer
+        let formattedContent = marked.parse(content);
+
+        // Sanitize the HTML to prevent XSS
+        formattedContent = DOMPurify.sanitize(formattedContent);
+
+        return formattedContent;
+    }
+
+        // Copy button click event
+        $('#copyButton').click(function () {
+            const editorContent = document.getElementById('formattedContentDisplay').innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = editorContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Content copied to clipboard!');
+        });
+
+        // Download button click event using FileSaver.js
+        $('#downloadButton').click(function () {
+            const editorContent = document.getElementById('formattedContentDisplay').innerText;
+            const blob = new Blob([editorContent], { type: 'application/msword' });
+            saveAs(blob, 'generated_content.doc');
+        });
+
+        // Function to add example editors with Quill (unchanged)
+        window.addExampleEditor = function() {
+            const container = document.getElementById('examples-container');
+            const exampleEditor = document.createElement('div');
+            exampleEditor.className = 'form-group mt-3';
+            exampleEditor.innerHTML = `
+                <div class="snow-editor" style="height: 200px;"></div>
+                <input type="hidden" name="examples[]">
+                <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
+                    <i class="la la-minus"></i>
+                </button>
+            `;
+            container.appendChild(exampleEditor);
+
+             // Initialize Quill editor with default configuration
+             const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'font': [] }, { 'size': [] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }, { 'align': [] }],
+                        ['link', 'image', 'video'],
+                        ['clean']
+                    ]
+                }
+            });
+            // Sync Quill content to the hidden input field
+            quill.on('text-change', function() {
+                const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
+                exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+            });
+
+            window.removeExampleEditor = function(button) {
+                button.parentElement.remove();
+            };
+        };
+
     });
-
-    $('#downloadButton').click(function () {
-        const editorContent = simplemde.value();
-        const blob = new Blob([editorContent], { type: 'application/msword' });
-        saveAs(blob, 'generated_content.doc');
-    });
-});
-
 </script>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
