@@ -193,44 +193,89 @@ $(document).ready(function() {
             messageInput.addEventListener('paste', handleImagePaste);
             let abortController = null;  // To store the AbortController instance
 
-            // Function to send or stop the message generation
-// Move the event listener outside the sendMessage function
-chatConversation.addEventListener('click', function(event) {
-    if (event.target.closest('.speech-btn')) {
-        const targetId = event.target.closest('.speech-btn').getAttribute('data-target');
-        readAloud(targetId); // Call the readAloud function or your desired function
-    }
+           // Listen for click events on buttons
+            chatConversation.addEventListener('click', function(event) {
+                const speechButton = event.target.closest('.speech-btn');
+                if (speechButton) {
+                    const targetId = speechButton.getAttribute('data-target');
+                    toggleReadAloud(speechButton, targetId); // Toggle read/stop on button click
+                }
 
-    if (event.target.closest('.copy-btn')) {
-        const targetId = event.target.closest('.copy-btn').getAttribute('data-target');
-        copyToClipboard(targetId); // Call the copyToClipboard function
-    }
-});
+                if (event.target.closest('.copy-btn')) {
+                    const targetId = event.target.closest('.copy-btn').getAttribute('data-target');
+                    copyToClipboard(targetId); // Call the copyToClipboard function
+                }
+            });
 
 
-function readAloud(targetId) {
-    const contentElement = document.getElementById(targetId);
-    const content = contentElement.textContent; // Get the content to read
-    const speech = new SpeechSynthesisUtterance(content);
-    window.speechSynthesis.speak(speech);
-}
+            let currentSpeech = null;  // Global variable to store the current SpeechSynthesisUtterance
+            let isReading = false;     // Flag to track if speech is ongoing
 
-function copyToClipboard(targetId) {
-    const contentElement = document.getElementById(targetId);
-    if (!contentElement) {
-        console.error('Element not found:', targetId);
-        return;
-    }
+            // Function to toggle reading aloud and stopping
+            function toggleReadAloud(button, targetId) {
+                if (isReading) {
+                    // If currently reading, stop the speech
+                    stopSpeech(button);
+                } else {
+                    // If not reading, start reading aloud
+                    readAloud(button, targetId);
+                }
+            }
 
-    const content = contentElement.innerText; // Get the content to copy
-    navigator.clipboard.writeText(content)
-        .then(() => {
-            alert('Content copied to clipboard!'); // Show success message
-        })
-        .catch(err => {
-            console.error('Error copying content: ', err);
-        });
-}
+            // Function to read aloud the content
+            function readAloud(button, targetId) {
+                const contentElement = document.getElementById(targetId);
+                const content = contentElement.textContent; // Get the content to read
+
+                // Stop any ongoing speech before starting a new one
+                window.speechSynthesis.cancel();
+
+                // Create a new speech object
+                currentSpeech = new SpeechSynthesisUtterance(content);
+                window.speechSynthesis.speak(currentSpeech);
+
+                // Update the button state
+                button.innerHTML = '<i class="ri-stop-line"></i>'; // Change to stop icon
+                button.style.backgroundColor = 'red';                  // Change background color to red
+                button.style.borderColor = 'red';                      // Change border color to red
+                isReading = true; // Set reading state to true
+
+                // Handle the event when the speech ends
+                currentSpeech.onend = function() {
+                    stopSpeech(button);
+                };
+            }
+
+            // Function to stop the ongoing speech
+            function stopSpeech(button) {
+                if (currentSpeech) {
+                    window.speechSynthesis.cancel();  // Stop the speech
+                    currentSpeech = null;  // Reset the speech object
+                }
+
+                // Update the button state back to 'read' mode
+                button.innerHTML = '<i class="ri-volume-up-line"></i>'; // Change to read icon
+                button.style.backgroundColor = '';                      // Reset background color
+                button.style.borderColor = '';                          // Reset border color
+                isReading = false; // Set reading state to false
+            }
+
+            function copyToClipboard(targetId) {
+                const contentElement = document.getElementById(targetId);
+                if (!contentElement) {
+                    console.error('Element not found:', targetId);
+                    return;
+                }
+
+                const content = contentElement.innerText; // Get the content to copy
+                navigator.clipboard.writeText(content)
+                    .then(() => {
+                        alert('Content copied to clipboard!'); // Show success message
+                    })
+                    .catch(err => {
+                        console.error('Error copying content: ', err);
+                    });
+            }
 
 
 function sendMessage() {
@@ -308,29 +353,30 @@ function sendMessage() {
 
         const assistantMessageId = `assistant-message-${Date.now()}`;
         let assistantMessageHTML = `
-<li class="chat-list left">
-    <div class="conversation-list">
-        <div class="chat-avatar">
-            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-        </div>
-        <div class="user-chat-content">
-            <div class="ctext-wrap">
-                <div class="ctext-wrap-content">
-                    <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
-                    <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud">
-                        <i class="ri-volume-up-line"></i>
-                    </button>
-                    <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
-                        <i class="ri-file-copy-line"></i>
-                    </button>
+        <li class="chat-list left">
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
+                            <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud or stop">
+                                <i class="ri-volume-up-line"></i> <!-- Initially a 'read' icon -->
+                            </button>
+                            <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
+                                <i class="ri-file-copy-line"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <small class="text-muted time">${currentTime}</small>
+                    </div>
                 </div>
             </div>
-            <div class="conversation-name">
-                <small class="text-muted time">${currentTime}</small>
-            </div>
-        </div>
-    </div>
-</li>`;
+        </li>`;
 
         chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
 

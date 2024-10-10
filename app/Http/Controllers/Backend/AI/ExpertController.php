@@ -10,18 +10,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use App\Models\AiChat;
 use App\Models\AiChatMessage;
-use App\Models\AISettings;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-
-use App\Models\Message;
-use App\Models\Session;
-
-use App\Models\Session as ModelsSession;
-use App\Models\User;
-
-use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use GuzzleHttp\Client;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -275,56 +267,111 @@ class ExpertController extends Controller
 
         Log::info('Messages to send to API: ', $messages);
 
-        // Make API request to OpenAI
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
+        // Initialize HTTP client
+    $client = new Client();
+
+    // Make a request to the OpenAI API with streaming enabled
+    $response = $client->post('https://api.openai.com/v1/chat/completions', [
+        'headers' => [
             'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-        ])->post('https://api.openai.com/v1/chat/completions', [
-            'model' =>  $openaiModel, // Use the appropriate model name
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'model' => $openaiModel, // Use the appropriate model name
             'messages' => $messages,
             'temperature' => 0,
             'top_p' => 1,
             'frequency_penalty' => 0,
             'presence_penalty' => 0,
+            'stream' => true,
+        ],
+        'stream' => true,
+    ]);
 
+    // Log the start of streaming
+    Log::info('Expert Chat Streaming Response Started', [
+        'model' => $openaiModel,
+        'messages' => $messages,
+        'expert_id' => $expertId,
+    ]);
+
+    // Return a StreamedResponse to send data incrementally to the client
+    return new StreamedResponse(function() use ($response, $expertId, $userInput, $expertInstruction, $expertImage) {
+        header('Content-Type: text/event-stream');
+        header('Cache-Control: no-cache');
+        header('Connection: keep-alive');
+
+        $body = $response->getBody();
+        $messageContent = '';
+        $buffer = '';
+
+        Log::info('Streaming Response Initialized for Expert Chat', [
+            'expert_id' => $expertId,
         ]);
-        Log::info('AI MODEL: ', ['MODEL' => $openaiModel]);
 
-        $data = json_decode($response->getBody(), true);
-        Log::info('Response: ', $data);
+        // Stream the response chunk by chunk
+        while (!$body->eof()) {
+            $chunk = $body->read(1024);
+            $buffer .= $chunk;
 
-        // Extract completion from API response
-        // $content = $response->json('choices.0.text');
-        if (isset($response['choices'][0]['message']['content'])) {
-            $messageContent = $response['choices'][0]['message']['content'];
-        } else {
-            $messageContent = 'Error in response';
+            $lines = explode("\n", $buffer);
+            $buffer = array_pop($lines);
+
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if (strpos($line, 'data:') === 0) {
+                    $data = trim(substr($line, strlen('data:')));
+
+                    if ($data === '[DONE]') {
+                        // Save the AI chat data to the database
+                        $aiChat = new AiChat();
+                        $aiChat->user_id = Auth::id(); // Assuming you are using authentication
+                        $aiChat->expert_id = $expertId;
+                        $aiChat->title = $userInput;
+                        $aiChat->total_words = str_word_count($userInput);
+                        $aiChat->save();
+
+                        $aiChatMessage = new AiChatMessage();
+                        $aiChatMessage->ai_chat_id = $aiChat->id;
+                        $aiChatMessage->user_id = Auth::id();
+                        $aiChatMessage->prompt = $expertInstruction;
+                        $aiChatMessage->response = $messageContent;
+                        $aiChatMessage->words = str_word_count($messageContent);
+                        $aiChatMessage->save();
+
+                        Log::info('Expert Chat Streaming Completed', [
+                            'expert_id' => $expertId,
+                            'final_reply' => $messageContent,
+                        ]);
+
+                        echo "event: done\n";
+                        echo "data: [DONE]\n\n";
+                        ob_flush();
+                        flush();
+                        break 2;
+                    } else {
+                        try {
+                            $parsedData = json_decode($data, true);
+                            if (isset($parsedData['choices'][0]['delta']['content'])) {
+                                $content = $parsedData['choices'][0]['delta']['content'];
+                                $messageContent .= $content;
+
+                                echo "data: " . json_encode($content) . "\n\n";
+                                ob_flush();
+                                flush();
+                            }
+                        } catch (\Exception $e) {
+                            Log::error('Error parsing JSON data: ' . $e->getMessage());
+                        }
+                    }
+                }
+            }
         }
-
-        // TEST SAVE CHAT
-        // Save chat data to the database
-        $aiChat = new AiChat();
-        $aiChat->user_id = Auth::id(); // Assuming you are using authentication
-        $aiChat->expert_id = $expertId;
-        $aiChat->title = $userInput; // You may want to change this
-        $aiChat->total_words = str_word_count($userInput);
-        $aiChat->save();
-
-        $aiChatMessage = new AiChatMessage();
-        $aiChatMessage->ai_chat_id = $aiChat->id;
-        $aiChatMessage->user_id = Auth::id(); // Assuming you are using authentication
-        $aiChatMessage->prompt = $expertInstruction;
-        $aiChatMessage->response = $messageContent;
-        $aiChatMessage->words = str_word_count($messageContent);
-        $aiChatMessage->save();
-        // TEST SAVE CHAT END
-
-        // Return response to the client
-        return response()->json([
-            'prompt' => $expertInstruction,
-            'content' => $messageContent,
-            'expert_image' => $expertImage
-        ]);
+    }, 200, [
+        'Content-Type' => 'text/event-stream',
+        'Cache-Control' => 'no-cache',
+        'Connection' => 'keep-alive',
+    ]);
     }
 
     private function readFileContent($filePath, $extension)

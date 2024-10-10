@@ -113,126 +113,253 @@
 
             // Listen for paste events on messageInput
             messageInput.addEventListener('paste', handleImagePaste);
+            let abortController = null;  // To store the AbortController instance
 
-            function sendMessage() {
+            // Function to send or stop the message generation
+// Move the event listener outside the sendMessage function
+chatConversation.addEventListener('click', function(event) {
+    if (event.target.closest('.speech-btn')) {
+        const targetId = event.target.closest('.speech-btn').getAttribute('data-target');
+        readAloud(targetId); // Call the readAloud function or your desired function
+    }
 
-                console.log('sendMessage called'); // Debug log
-
-                var expert = $('#expert_id_selected').val();
-
-        const message = messageInput.value.trim();
-        const file = fileInput.files[0];
-
-        if (!message && !file && !pastedImageFile) return;
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const formData = new FormData();
-        formData.append('message', message);
-        formData.append('expert', expert);
+    if (event.target.closest('.copy-btn')) {
+        const targetId = event.target.closest('.copy-btn').getAttribute('data-target');
+        copyToClipboard(targetId); // Call the copyToClipboard function
+    }
+});
 
 
-        if (file) {
-            formData.append('file', file);
-        } else if (pastedImageFile) {
-            formData.append('file', pastedImageFile, 'pasted_image.png');
+function readAloud(targetId) {
+    const contentElement = document.getElementById(targetId);
+    const content = contentElement.textContent; // Get the content to read
+    const speech = new SpeechSynthesisUtterance(content);
+    window.speechSynthesis.speak(speech);
+}
+
+function copyToClipboard(targetId) {
+    const contentElement = document.getElementById(targetId);
+    if (!contentElement) {
+        console.error('Element not found:', targetId);
+        return;
+    }
+
+    const content = contentElement.innerText; // Get the content to copy
+    navigator.clipboard.writeText(content)
+        .then(() => {
+            alert('Content copied to clipboard!'); // Show success message
+        })
+        .catch(err => {
+            console.error('Error copying content: ', err);
+        });
+}
+
+
+function sendMessage() {
+
+    console.log('sendMessage called'); // Debug log
+
+    const expert = $('#expert_id_selected').val();
+    const message = messageInput.value.trim();
+    const file = fileInput.files[0];
+
+    // Check if already generating (toggle stop)
+    if (sendMessageBtn.dataset.state === 'generating') {
+        if (abortController) {
+            abortController.abort();  // Stop the request
+        }
+        resetButton();  // Reset the button back to "Send"
+        return;
+    }
+
+    if (!message && !file && !pastedImageFile) return;
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const formData = new FormData();
+    formData.append('message', message);
+    formData.append('expert', expert);
+
+    if (file) {
+        formData.append('file', file);
+    } else if (pastedImageFile) {
+        formData.append('file', pastedImageFile, 'pasted_image.png');
+    }
+
+    // Disable the button, change the text to "Stop", and store the generating state
+    sendMessageBtn.disabled = false;
+    sendMessageBtn.innerHTML = 'Stop';
+    sendMessageBtn.dataset.state = 'generating';
+
+    // Create an AbortController instance
+    abortController = new AbortController();
+
+    let assistantMessageContent = ''; // Accumulate assistant's message content
+
+    fetch('/chat/reply', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        body: formData,
+        signal: abortController.signal  // Attach the AbortController signal
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
         }
 
-        sendMessageBtn.disabled = true;
-        sendMessageBtn.innerHTML = '<i class="mdi mdi-spin mdi-loading"></i>';
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let receivedText = '';
 
-        axios.post('/chat/reply', formData, {
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-        .then(response => {
-            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            let userMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>`;
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let userMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
+                        </div>
+                    </div>
+                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
+                </div>
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
 
-            if (file || pastedImageFile) {
-                const fileType = (file || pastedImageFile).type.split('/')[0];
-                if (fileType === 'image') {
-                    const imageUrl = URL.createObjectURL(file || pastedImageFile);
-                    userMessageHTML += `<img style="width: 50px;" src="${imageUrl}" alt="Attached Image" class="attached-image">`;
-                } else {
-                    userMessageHTML += `<i class=" ri-file-2-fill">${file?.name || 'Pasted Image'}</i>`;
-                }
+        const assistantMessageId = `assistant-message-${Date.now()}`;
+        let assistantMessageHTML = `
+        <li class="chat-list left">
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
+                            <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud">
+                                <i class="ri-volume-up-line"></i>
+                            </button>
+                            <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
+                                <i class="ri-file-copy-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <small class="text-muted time">${currentTime}</small>
+                    </div>
+                </div>
+            </div>
+        </li>`;
+
+        chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
+
+        const assistantMessageElement = document.getElementById(assistantMessageId);
+
+        let debounceTimer;
+        const DEBOUNCE_DELAY = 5;
+
+        function scheduleUpdate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                updateAssistantMessage();
+            }, DEBOUNCE_DELAY);
+        }
+
+        function updateAssistantMessage() {
+            try {
+                const formattedContent = formatContent(assistantMessageContent);
+                assistantMessageElement.innerHTML = formattedContent;
+
+                assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                let conversationList = document.getElementById('users-conversation');
+                let lastMessage = conversationList.lastElementChild;
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            } catch (e) {
+                console.error('Error parsing Markdown:', e);
             }
+        }
 
-            userMessageHTML += `</div>
+        function read() {
+            reader.read().then(({ done, value }) => {
+                if (done) {
+                    console.log('Stream complete');
+                    updateAssistantMessage();
+                    resetButton();
+                    return;
+                }
+
+                const chunk = decoder.decode(value, { stream: true });
+                receivedText += chunk;
+
+                let lines = receivedText.split('\n');
+                receivedText = lines.pop();
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.substring(6).trim();
+                        if (data === '[DONE]') {
+                            continue;
+                        }
+
+                        try {
+                            const content = JSON.parse(data);
+                            if (content) {
+                                assistantMessageContent += content;
+                                scheduleUpdate();
+
+                                let conversationList = document.getElementById('users-conversation');
+                                let lastMessage = conversationList.lastElementChild;
+                                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+                                messageInput.value = '';
+                                fileInput.value = '';
+                                fileNameDisplay.textContent = '';
+                                imageDisplay.innerHTML = '';
+                                pastedImageFile = null;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing data:', e);
+                        }
+                    }
+                }
+
+                read();
+            });
+        }
+
+        read();
+    })
+    .catch(error => {
+        console.error(error);
+        const errorMessageHTML = `<li class="chat-list right">
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
                         </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
                     </div>
                 </div>
-            </li>`;
+            </div>
+        </li>`;
+        chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
+        resetButton();
+    });
+}
 
-            const assistantMessage = response.data.content;
-            const formattedMessage = formatContent(assistantMessage);
-            const assistantMessageHTML = `<li class="chat-list left">
-                <div class="conversation-list">
-                    <div class="chat-avatar">
-                        <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                    </div>
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                ${formattedMessage}
-                            </div>
-                        </div>
-                        <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                    </div>
-                </div>
-            </li>`;
 
-            chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-            chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
-            
-            
-            // Scroll to the last message
-            let conversationList = document.getElementById('users-conversation');
-            let lastMessage = conversationList.lastElementChild;
-            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-            
-
-            messageInput.value = '';
-            fileInput.value = '';
-            fileNameDisplay.textContent = '';
-            imageDisplay.innerHTML = '';
-            pastedImageFile = null;
-        })
-        .catch(error => {
-            console.error(error);
-            const errorMessageHTML = `<li class="chat-list right">
-                <div class="conversation-list">
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                <p class="mb-0 ctext-content text-danger">Failed to send message. Please try again.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>`;
-            chatConversation.insertAdjacentHTML('beforeend', errorMessageHTML);
-            
-            // Scroll to the last message
-            let conversationList = document.getElementById('users-conversation');
-            let lastMessage = conversationList.lastElementChild;
-            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            
-        })
-        .finally(() => {
-            sendMessageBtn.disabled = false;
-            sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
-        });
-    }
+// Function to reset the send button back to its original state
+function resetButton() {
+    sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
+    sendMessageBtn.dataset.state = 'idle';  // Reset state
+    abortController = null;  // Clear the AbortController
+}
 
 
     sendMessageBtn.addEventListener('click', sendMessage);
@@ -271,54 +398,42 @@
 {{-- GET/LOAD MESSAGES FROM SESSION --}}
 <script>
    
-    function formatContent(content) {
-    const lines = content.split('\n');
-    let formattedContent = '';
-
-    if (lines.length === 1) {
-        formattedContent = `<p style="font-family: Calibri;">${lines[0]}</p>`;
-    } else if (lines[0].includes('```') && lines[lines.length - 1].includes('```')) {
-        const codeContent = lines.slice(1, -1).join('\n');
-        formattedContent = `
-            <div class="code-block" style="position: relative;">
-                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${codeContent}</pre>
-                <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
-            </div>
-        `;
-    } else if (lines.some(line => line.trim().startsWith('*'))) {
-        formattedContent += '<ul style="font-family: Calibri;">';
-        lines.forEach(line => {
-            if (line.trim().startsWith('*')) {
-                formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-            } else {
-                formattedContent += '<p>' + line.trim() + '</p>';
-            }
-        });
-        formattedContent += '</ul>';
-    } else {
-        lines.forEach(line => {
-            // Handle bold text marked with **
-            if (line.includes('**')) {
-                line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            }
-
-            if (line.trim().startsWith('###')) {
-                formattedContent += `<p style="font-weight: bold; font-family: Calibri;">${line.trim().substring(3).trim()}</p>`;
-            } else {
-                formattedContent += '<p style="font-family: Calibri; white-space: pre-wrap; word-wrap: break-word;">' + line.trim() + '</p>';
-            }
-        });
-    }
-
-    // Replace code blocks with a styled pre element
-    formattedContent = formattedContent.replace(/```([\s\S]*?)```/g, (match, code) => {
-        return `
-            <div class="code-block" style="position: relative;">
-                <pre style="background-color: #272822; color: #f8f8f2; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre;">${code}</pre>
-                <button class="copy-button" style="position: absolute; top: 5px; right: 10px; background-color: #555; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Copy</button>
-            </div>
-        `;
+   function formatContent(content) {
+    // Preprocess content to replace triple backticks with code block tags
+    content = content.replace(/```(\w+)?([\s\S]*?)```/g, function(_, lang, code) {
+        // If a language is provided, use it, otherwise default to 'plaintext'
+        lang = lang ? lang.trim().toLowerCase() : 'plaintext';
+        // Sanitize code to prevent XSS
+        code = DOMPurify.sanitize(code);
+        return `<pre><code class="hljs ${lang}">${code}</code></pre>`;
     });
+
+    // Use marked.js to parse Markdown to HTML
+    const renderer = new marked.Renderer();
+
+    // Configure renderer to use highlight.js for code blocks
+    renderer.code = function(code, language) {
+        console.log('Language detected:', language); // Debugging line
+        if (!language) {
+            language = 'plaintext';
+        } else {
+            language = language.trim().toLowerCase();
+            language = hljs.getLanguage(language) ? language : 'plaintext';
+        }
+        const highlighted = hljs.highlight(language, code).value;
+        return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+    };
+
+    marked.setOptions({
+        renderer: renderer,
+        breaks: true, // Enable line breaks
+        gfm: true,    // Enable GitHub Flavored Markdown
+    });
+
+    let formattedContent = marked.parse(content);
+
+    // Sanitize the HTML to prevent XSS attacks
+    formattedContent = DOMPurify.sanitize(formattedContent);
 
     return formattedContent;
     }
