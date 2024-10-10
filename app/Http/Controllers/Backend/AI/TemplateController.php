@@ -13,6 +13,7 @@ use App\Models\RatingTemplate;
 use App\Models\Referral;
 use App\Models\RequestModuleFeedback;
 use App\Models\SectionDesign;
+use App\Models\TemplateGeneratedContent;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -457,6 +458,7 @@ class TemplateController extends Controller
 
         $points = 1;
         $language = 'English';
+
         $max_result_length_value = 100;
         $temperature_value = 0;
         $top_p_value = 1;
@@ -597,6 +599,23 @@ class TemplateController extends Controller
             Template::where('id', $template->id)->update([
                 'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
             ]);
+
+            $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)->count();
+
+    if ($userGeneratedContentsCount >= 3) {
+        // Delete the oldest entry
+        TemplateGeneratedContent::where('user_id', $user->id)
+            ->orderBy('created_at', 'asc')
+            ->first()
+            ->delete();
+    }
+
+    // Save the new entry
+    TemplateGeneratedContent::create([
+        'user_id' => $user->id, // User ID
+        'prompt' => $prompt, // Prompt
+        'generated_content' => $content, // Generated content
+    ]);
 
             // Return content along with statistics
             return response()->json([
