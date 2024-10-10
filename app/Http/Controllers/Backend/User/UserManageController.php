@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserNotification;
-
+use App\Models\EmailSend;
+use Illuminate\Support\Facades\Log;
 
 class UserManageController extends Controller
 {
@@ -127,30 +128,59 @@ class UserManageController extends Controller
         return view('backend.user.send_email_form', compact('users'));
     }
 
-    public function sendEmail(Request $request)
+    public function manageSendEmail()
     {
-        // Validate the request
-        $request->validate([
-            'user_emails' => 'required|array', // Must be an array
-            'user_emails.*' => 'email', // Each element must be a valid email
-            'subject' => 'required|string|max:255',
-            'body' => 'required|string',
-        ]);
-
-        // Email details
-        $details = [
-            'subject' => $request->subject,
-            'body' => $request->body
-        ];
-
-        // Loop through each email and send the email
-        foreach ($request->user_emails as $email) {
-            Mail::to($email)->send(new UserNotification($details));
-        }
-
-        // Redirect back with a success message
-        return back()->with('success', 'Emails sent successfully!');
+        // Retrieve all users
+        $users = User::all();
+    
+        // Retrieve all sent emails (or you can limit the retrieval to a certain number or filter)
+        $sentEmails = EmailSend::with('user') // If you have a relationship set up
+            ->orderBy('created_at', 'desc') // Get the latest sent emails first
+            ->get();
+    
+        // Pass both users and sent emails to the view
+        return view('backend.user.manage_send_email', compact('users', 'sentEmails'));
     }
+    
+
+    public function sendEmail(Request $request)
+{
+    Log::info($request->all());
+
+    // Validate the request
+    $request->validate([
+        'user_id' => 'required|array', // Ensure user_id is validated as an array
+        'user_id.*' => 'required|exists:users,id', // Ensure user IDs exist in the users table
+        'subject' => 'required|string|max:255',
+        'body' => 'required|string',
+    ]);
+
+    // Retrieve emails based on user IDs
+    $userEmails = User::whereIn('id', $request->user_id)->pluck('email');
+
+    // Email details
+    $details = [
+        'subject' => $request->subject,
+        'body' => $request->body
+    ];
+
+    // Send the email to all selected users
+    foreach ($userEmails as $email) {
+        Mail::to($email)->send(new UserNotification($details));
+    }
+
+    // Save a single record with all emails and user IDs
+    EmailSend::create([
+        'user_emails' => json_encode($userEmails), // Store emails as JSON
+        'user_ids' => json_encode($request->user_id), // Store user IDs as JSON
+        'subject' => $request->subject,
+        'body' => $request->body,
+    ]);
+
+    return back()->with('success', 'Emails sent and logged successfully!');
+}
+
+
 
     
 

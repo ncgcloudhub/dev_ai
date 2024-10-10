@@ -82,3 +82,6 @@ in educationContent, add image_url text
 
 -------------09/10/24----------------
 in calender, add s_time, e_time text
+
+-------------10/10/24----------------
+in email_sends, add user_id, subject, body text
