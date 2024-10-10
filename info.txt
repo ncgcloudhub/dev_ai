@@ -81,4 +81,4 @@ in educationContent, add points, text
 in educationContent, add image_url text
 
 -------------09/10/24----------------
-in calender, add s_time, e_time text
+in events, add s_time, e_time text
