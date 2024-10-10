@@ -59,9 +59,9 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="points" class="form-label">Select Points</label>
+                                <label for="points" class="form-label">Number of Variations</label>
                                 <select class="form-select" name="points" id="points" aria-label="Floating label select example">
-                                    <option disabled>Enter Points</option>
+                                    <option disabled>Enter Variations</option>
                                     <option value="1" selected>1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
