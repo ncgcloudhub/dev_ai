@@ -308,29 +308,29 @@ function sendMessage() {
 
         const assistantMessageId = `assistant-message-${Date.now()}`;
         let assistantMessageHTML = `
-<li class="chat-list left">
-    <div class="conversation-list">
-        <div class="chat-avatar">
-            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-        </div>
-        <div class="user-chat-content">
-            <div class="ctext-wrap">
-                <div class="ctext-wrap-content">
-                    <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
-                    <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud">
-                        <i class="ri-volume-up-line"></i>
-                    </button>
-                    <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
-                        <i class="ri-file-copy-line"></i>
-                    </button>
+        <li class="chat-list left">
+            <div class="conversation-list">
+                <div class="chat-avatar">
+                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                </div>
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p id="${assistantMessageId}" class="mb-0 ctext-content"></p>
+                            <button class="btn btn-success btn-sm speech-btn" data-target="${assistantMessageId}" title="Read aloud">
+                                <i class="ri-volume-up-line"></i>
+                            </button>
+                            <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
+                                <i class="ri-file-copy-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <small class="text-muted time">${currentTime}</small>
+                    </div>
                 </div>
             </div>
-            <div class="conversation-name">
-                <small class="text-muted time">${currentTime}</small>
-            </div>
-        </div>
-    </div>
-</li>`;
+        </li>`;
 
         chatConversation.insertAdjacentHTML('beforeend', assistantMessageHTML);
 
