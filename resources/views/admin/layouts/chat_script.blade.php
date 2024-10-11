@@ -383,7 +383,7 @@ function sendMessage() {
         const assistantMessageElement = document.getElementById(assistantMessageId);
 
         let debounceTimer;
-        const DEBOUNCE_DELAY = 5;
+        const DEBOUNCE_DELAY = 100;
 
         function scheduleUpdate() {
             clearTimeout(debounceTimer);
