@@ -90,5 +90,7 @@ in email_sends, add
 2 - user_emails (json), 
 3 - subject (text),
 4 - body (text)
-=======
 
+-------------11/10/24----------------
+in templateGeneratedContent 
+add template_id bigint
