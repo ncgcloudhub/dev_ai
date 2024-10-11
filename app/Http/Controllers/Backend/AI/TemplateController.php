@@ -600,22 +600,27 @@ class TemplateController extends Controller
                 'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
             ]);
 
-            $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)->count();
+            // Limit the saved generated contents per template
+                $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)
+                ->where('template_id', $template_id)
+                ->count();
 
-    if ($userGeneratedContentsCount >= 3) {
-        // Delete the oldest entry
-        TemplateGeneratedContent::where('user_id', $user->id)
-            ->orderBy('created_at', 'asc')
-            ->first()
-            ->delete();
-    }
+            if ($userGeneratedContentsCount >= 3) {
+                // Delete the oldest entry for the specific template
+                TemplateGeneratedContent::where('user_id', $user->id)
+                    ->where('template_id', $template_id)
+                    ->orderBy('created_at', 'asc')
+                    ->first()
+                    ->delete();
+            }
 
-    // Save the new entry
-    TemplateGeneratedContent::create([
-        'user_id' => $user->id, // User ID
-        'prompt' => $prompt, // Prompt
-        'generated_content' => $content, // Generated content
-    ]);
+            // Save the new entry
+            TemplateGeneratedContent::create([
+                'user_id' => $user->id,
+                'template_id' => $template_id, // Include the template ID
+                'prompt' => $prompt,
+                'generated_content' => $content,
+            ]);
 
             // Return content along with statistics
             return response()->json([
