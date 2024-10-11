@@ -144,41 +144,43 @@ class UserManageController extends Controller
     
 
     public function sendEmail(Request $request)
-{
-    Log::info($request->all());
-
-    // Validate the request
-    $request->validate([
-        'user_id' => 'required|array', // Ensure user_id is validated as an array
-        'user_id.*' => 'required|exists:users,id', // Ensure user IDs exist in the users table
-        'subject' => 'required|string|max:255',
-        'body' => 'required|string',
-    ]);
-
-    // Retrieve emails based on user IDs
-    $userEmails = User::whereIn('id', $request->user_id)->pluck('email');
-
-    // Email details
-    $details = [
-        'subject' => $request->subject,
-        'body' => $request->body
-    ];
-
-    // Send the email to all selected users
-    foreach ($userEmails as $email) {
-        Mail::to($email)->send(new UserNotification($details));
+    {
+        Log::info($request->all());
+    
+        // Validate the request
+        $request->validate([
+            'user_id' => 'required|array', // Ensure user_id is validated as an array
+            'user_id.*' => 'required|exists:users,id', // Ensure user IDs exist in the users table
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+    
+        // Retrieve users' names and emails based on user IDs
+        $users = User::whereIn('id', $request->user_id)->get(['name', 'email']);
+    
+        // Email details
+        $details = [
+            'subject' => $request->subject,
+            'body' => $request->body
+        ];
+    
+        // Send the email to all selected users
+        foreach ($users as $user) {
+            $details['body'] = "Hello {$user->name},<br><br>" . $request->body;
+            Mail::to($user->email)->send(new UserNotification($details));
+        }
+    
+        // Save a single record with all emails and user IDs
+        EmailSend::create([
+            'user_emails' => json_encode($users->pluck('email')->toArray()), // Store emails as JSON
+            'user_ids' => json_encode($request->user_id), // Store user IDs as JSON
+            'subject' => $request->subject,
+            'body' => $request->body,
+        ]);
+    
+        return back()->with('success', 'Emails sent and logged successfully!');
     }
-
-    // Save a single record with all emails and user IDs
-    EmailSend::create([
-        'user_emails' => json_encode($userEmails), // Store emails as JSON
-        'user_ids' => json_encode($request->user_id), // Store user IDs as JSON
-        'subject' => $request->subject,
-        'body' => $request->body,
-    ]);
-
-    return back()->with('success', 'Emails sent and logged successfully!');
-}
+    
 
 
 
