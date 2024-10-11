@@ -35,7 +35,10 @@
                             </td>
                             
                             <td>{{ $email->subject }}</td>
-                            <td>{!! $email->body !!}</td>
+                            <td>  <a href="#" class="email-body-link" data-bs-toggle="modal" data-bs-target="#emailBodyModal" 
+                                data-body="{{ htmlspecialchars($email->body, ENT_QUOTES) }}">
+                                {{ Str::limit(strip_tags($email->body), 50) }}
+                             </a></td>
                             <td>{{ $email->created_at->format('d M Y \a\t g A') }}</td>
 
                         </tr>
@@ -44,6 +47,24 @@
             </table>
             
 
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="emailBodyModal" tabindex="-1" aria-labelledby="emailBodyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailBodyModalLabel">Email Body</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Body content will be injected here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
@@ -121,6 +142,35 @@ $(document).ready(function() {
 });
 
 </script>
+
+{{-- For Modal Email Body --}}
+@section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var emailLinks = document.querySelectorAll('.email-body-link');
+
+        emailLinks.forEach(function (link) {
+            link.addEventListener('click', function () {
+                // Retrieve the raw HTML content from the data attribute
+                var emailBody = this.getAttribute('data-body');
+
+                // Create a temporary element to parse the HTML
+                var tempElement = document.createElement('div');
+                tempElement.innerHTML = emailBody;
+
+                // Replace <p>, <br>, and other block tags with line breaks and remove other tags
+                var plainText = tempElement.innerText || tempElement.textContent;
+
+                // Set the plain text to the modal
+                document.getElementById('modalBodyContent').textContent = plainText;
+            });
+        });
+    });
+</script>
+@endsection
+
+
+
 
 
 @endsection
