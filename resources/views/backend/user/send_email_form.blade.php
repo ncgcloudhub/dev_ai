@@ -10,6 +10,19 @@
 @slot('title')Email @endslot
 @endcomponent
 
+<style>
+    /* Ensure the dropdown appears above the TinyMCE editor */
+.choices__list--dropdown {
+    z-index: 1050; /* Adjust the z-index to a higher value */
+}
+
+/* Adjust z-index for TinyMCE toolbar */
+.tox-tinymce {
+    z-index: 1;
+}
+
+</style>
+
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -42,9 +55,6 @@
                     <button type="submit" class="btn btn-primary">Send Email</button>
                 </form>
             </div>
-            
-            
-            
             
 
         </div>
