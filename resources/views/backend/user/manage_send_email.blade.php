@@ -35,10 +35,13 @@
                             </td>
                             
                             <td>{{ $email->subject }}</td>
-                            <td>  <a href="#" class="email-body-link" data-bs-toggle="modal" data-bs-target="#emailBodyModal" 
-                                data-body="{{ htmlspecialchars($email->body, ENT_QUOTES) }}">
-                                {{ Str::limit(strip_tags($email->body), 50) }}
-                             </a></td>
+                            <td>  
+                                <a href="#" class="email-body-link" data-bs-toggle="modal" data-bs-target="#emailBodyModal" 
+                                   data-body="{{ $email->body }}">
+                                   {{ Str::limit(html_entity_decode(strip_tags($email->body)), 50) }}
+                                </a>
+                            </td>
+                            
                             <td>{{ $email->created_at->format('d M Y \a\t g A') }}</td>
 
                         </tr>
@@ -70,6 +73,8 @@
 </div>
 
 @endsection
+
+
 @section('script')
 
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
@@ -144,33 +149,20 @@ $(document).ready(function() {
 </script>
 
 {{-- For Modal Email Body --}}
-@section('script')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var emailLinks = document.querySelectorAll('.email-body-link');
+document.addEventListener('DOMContentLoaded', function () {
+    var emailLinks = document.querySelectorAll('.email-body-link');
 
-        emailLinks.forEach(function (link) {
-            link.addEventListener('click', function () {
-                // Retrieve the raw HTML content from the data attribute
-                var emailBody = this.getAttribute('data-body');
+    emailLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            // Retrieve the raw HTML content from the data attribute
+            var emailBody = this.getAttribute('data-body');
 
-                // Create a temporary element to parse the HTML
-                var tempElement = document.createElement('div');
-                tempElement.innerHTML = emailBody;
-
-                // Replace <p>, <br>, and other block tags with line breaks and remove other tags
-                var plainText = tempElement.innerText || tempElement.textContent;
-
-                // Set the plain text to the modal
-                document.getElementById('modalBodyContent').textContent = plainText;
-            });
+            // Directly set the raw HTML as innerHTML for proper formatting in the modal
+            document.getElementById('modalBodyContent').innerHTML = emailBody;
         });
     });
+});
 </script>
-@endsection
-
-
-
-
 
 @endsection
