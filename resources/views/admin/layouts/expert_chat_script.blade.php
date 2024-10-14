@@ -493,35 +493,72 @@ function resetButton() {
 
 <script>
    
-    function selectExpert(expertId) {
+   function selectExpert(expertId) {
     // Find the selected expert's list item based on the expert ID
     var selectedExpert = $("li[data-name='direct-message'][onclick*='" + expertId + "']");
 
     // Extract the expert's details from the list item
     var expertName = selectedExpert.find(".text-truncate").text();
     var expertImage = selectedExpert.find(".userprofile").attr("src");
-    var expertRole = selectedExpert.data('role');  // Assuming role is passed as data attribute
-    var expertSlug = selectedExpert.data('slug');  // Assuming slug is passed as data attribute
+    var expertRole = selectedExpert.data('role');  
+    var expertSlug = selectedExpert.data('slug');
 
-    // Update the selected expert's name in the chat topbar
+    // Update the selected expert's name, role, and image in the chat topbar
     $(".user-chat-topbar .username").text(expertName);
-
-    // Update the selected expert's role in the chat topbar
     $(".user-chat-topbar .userStatus").text(expertRole);
-
-    // Update the selected expert's image in the chat topbar
     $(".user-chat-topbar .avatar-xs").attr("src", expertImage);
 
-    // Clear the conversation area for the selected expert
+    // Clear the conversation area
     $('#users-conversation').empty();
 
-    // Store the selected expert's ID (if needed for other logic)
+    // Store the selected expert's ID
     $('#expert_id_selected').val(expertId);
+
+    // Fetch the conversation from the backend
+    $.ajax({
+        url: `/chat/conversation/${expertId}`,  // Assuming you have a route like this
+        method: 'GET',
+        success: function(response) {
+            // Assuming response contains an array of messages
+            response.messages.forEach(function(message) {
+    let messageHtml = `
+        <li class="chat-list ${message.role === 'user' ? 'right' : 'left'}">
+            <div class="conversation-list">
+                <!-- Conditionally include the chat avatar based on the role -->
+                ${message.role === 'expert' ? `
+                    <div class="chat-avatar">
+                        <img src="{{ asset('backend/uploads/expert/' . $expert_selected->image) }}" alt="Expert Avatar" class="rounded-circle">
+                    </div>
+                ` : ''}
+
+                <div class="user-chat-content">
+                    <div class="ctext-wrap">
+                        <div class="ctext-wrap-content">
+                            <p class="mb-0 ctext-content">${message.message}</p>
+                        </div>
+                    </div>
+                    <div class="conversation-name">
+                        <small class="text-muted time">${new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                    </div>
+                </div>
+            </div>
+        </li>
+    `;
+    $('#users-conversation').append(messageHtml);
+});
+
+
+        },
+        error: function() {
+            console.error('Failed to load conversation');
+        }
+    });
 
     // Update the URL to include the expert's slug
     var newUrl = `/chat/expert/${expertSlug}`;
-    window.history.pushState({path: newUrl}, '', newUrl);
-    }
+    window.history.pushState({ path: newUrl }, '', newUrl);
+}
+
 
 
 </script>
