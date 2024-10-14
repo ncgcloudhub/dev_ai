@@ -730,7 +730,11 @@ document.addEventListener('click', function(event) {
             const deleteButton = event.target.closest('.delete-session-btn');
             if (deleteButton) {
                 const sessionId = deleteButton.getAttribute('data-session-id');
-                deleteSession(sessionId);
+                
+                // Show confirmation dialog before deletion
+                if (confirm("Are you sure you want to delete this session?")) {
+                    deleteSession(sessionId);
+                }
             }
 
             const editButton = event.target.closest('.edit-session-btn');
@@ -759,6 +763,7 @@ document.addEventListener('click', function(event) {
                 console.error('Error deleting session:', error);
             });
         }
+
 
         function editSession(sessionId) {
             // Get the current session item and title
