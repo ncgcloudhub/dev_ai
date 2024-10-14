@@ -375,6 +375,7 @@ class ExpertController extends Controller
 
     public function getConversation($expertId)
     {
+        session()->forget(['conversation_history', 'context', 'uploaded_files', 'pasted_images']);
         $messages = ExpertConversation::where('expert_id', $expertId)->get();
         return response()->json(['messages' => $messages]);
     }
