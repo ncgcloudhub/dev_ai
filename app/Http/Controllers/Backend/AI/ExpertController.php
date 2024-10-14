@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use App\Models\AiChat;
 use App\Models\AiChatMessage;
+use App\Models\ExpertConversation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -323,25 +324,22 @@ class ExpertController extends Controller
                     $data = trim(substr($line, strlen('data:')));
 
                     if ($data === '[DONE]') {
-                        // Save the AI chat data to the database
-                        $aiChat = new AiChat();
-                        $aiChat->user_id = Auth::id(); // Assuming you are using authentication
-                        $aiChat->expert_id = $expertId;
-                        $aiChat->title = $userInput;
-                        $aiChat->total_words = str_word_count($userInput);
-                        $aiChat->save();
-
-                        $aiChatMessage = new AiChatMessage();
-                        $aiChatMessage->ai_chat_id = $aiChat->id;
-                        $aiChatMessage->user_id = Auth::id();
-                        $aiChatMessage->prompt = $expertInstruction;
-                        $aiChatMessage->response = $messageContent;
-                        $aiChatMessage->words = str_word_count($messageContent);
-                        $aiChatMessage->save();
-
-                        Log::info('Expert Chat Streaming Completed', [
+                        ExpertConversation::create([
+                            'user_id' => Auth::id(),
                             'expert_id' => $expertId,
-                            'final_reply' => $messageContent,
+                            'role' => 'user',
+                            'message' => $userInput,
+                            'file_path' => $filePath ?? null,
+                        ]);
+                    
+                        // After receiving the expert's reply, save it
+                        Log::info('Final expert reply:', ['reply' => $messageContent]);  // Log the final reply
+                    
+                        ExpertConversation::create([
+                            'user_id' => Auth::id(),
+                            'expert_id' => $expertId,
+                            'role' => 'expert',
+                            'message' => $messageContent,  // Save the reply
                         ]);
 
                         echo "event: done\n";
@@ -349,6 +347,7 @@ class ExpertController extends Controller
                         ob_flush();
                         flush();
                         break 2;
+
                     } else {
                         try {
                             $parsedData = json_decode($data, true);
@@ -373,6 +372,13 @@ class ExpertController extends Controller
         'Connection' => 'keep-alive',
     ]);
     }
+
+    public function getConversation($expertId)
+    {
+        $messages = ExpertConversation::where('expert_id', $expertId)->get();
+        return response()->json(['messages' => $messages]);
+    }
+
 
     private function readFileContent($filePath, $extension)
     {
