@@ -387,7 +387,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                             </div>
                             <div class="col-sm-auto d-flex justify-content-end align-items-center">
                                 <!-- Input with Placeholder -->
-                                <div class="me-3 col-12 form-group">
+                                <div class="me-3 col-md-12 form-group">
                                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-Mail">
                                 </div>
                                 <div class="form-group">
