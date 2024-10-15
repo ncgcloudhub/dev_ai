@@ -44,11 +44,48 @@
 
     .auto-expand {
     max-height: 150px; /* Set maximum height for the textarea */
-    
     resize: none; /* Disable resizing */
-    position: absolute; /* Position the textarea absolutely */
-    bottom: 0; /* Align to the bottom of the parent */
-}
+    overflow-y: auto; /* Allow scrolling when content exceeds max height */
+    line-height: 1.5; /* Improve line spacing */
+    width: 100%; /* Ensure full width of the textarea */
+    padding: 10px; /* Padding for better spacing */
+    }
+
+    .chat-input-section .row.g-0 {
+        display: flex;
+        align-items: flex-start; /* Align items to the top */
+    }
+
+    .chat-input-section .col-auto {
+        display: flex;
+        align-items: center;
+    }
+
+    .chat-input-section .col {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    textarea.form-control {
+        height: auto; /* Allow height to adjust as needed */
+        max-height: 150px; /* Limit the max height to avoid page expansion */
+        width: 100%; /* Full width of the parent container */
+        overflow-y: auto; /* Scroll when content exceeds the max height */
+    }
+
+    textarea.form-control:focus {
+        outline: none; /* Optional: Remove the default focus outline */
+    }
+
+    textarea.form-control::-webkit-scrollbar {
+        width: 6px; /* Custom scrollbar width */
+    }
+
+    textarea.form-control::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2); /* Custom scrollbar color */
+        border-radius: 10px;
+    }
 
 </style>
 
@@ -174,42 +211,36 @@
                     </div>
                     
                     <div class="chat-input-section p-3 p-lg-4">
-                        <div class="row g-0 align-items-center">
-                            <!-- File Selected Show -->
-                            <div id="file_name_display"></div>
+                        <div class="row g-0 align-items-start">
+                            <!-- File Selected Show (Now above the textarea) -->
+                            <div id="file_name_display" class="col-12 mb-2"></div>
                     
+                            <!-- Attachment Icon -->
                             <div class="col-auto">
                                 <div class="chat-input-links me-2">
-                                    <div class="links-list-item">
-                                        <!-- Attachment Icon -->
-                                        <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
-                                        <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
-                                    </div>
+                                    <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
+                                    <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
                                 </div>
                             </div>
                     
-                            
                             <!-- Input field with the send button on the right -->
                             <div class="col" id="type-message-tour">
-
-                                <div class="chat-input-feedback">
-                                    Please Enter a Message
-                                </div>
+                                <div class="chat-input-feedback">Please Enter a Message</div>
                                 <div id="image_display"></div>
                                 <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                             </div>
+                    
+                            <!-- Send Button -->
                             <div class="col-auto">
                                 <div class="chat-input-links ms-2">
-                                    <div class="links-list-item" id="send-tour">
-                                        <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
-                                            <i class="ri-send-plane-2-fill align-bottom"></i>
-                                        </button>
-                                    </div>
+                                    <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                        <i class="ri-send-plane-2-fill align-bottom"></i>
+                                    </button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+                    
                     
 
                     <div class="replyCard">
