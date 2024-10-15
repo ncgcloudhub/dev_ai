@@ -83,12 +83,12 @@ class UserController extends Controller
          $user = User::findOrFail($user_id);
         
          if ($user->tokens_left < 5000) {
-            $user->selected_model = '4o-mini';
+            $user->selected_model = 'gpt-4o-mini';
             $user->save();
 
-            log_activity('Model Changed to 4o-mini.');
+            log_activity('Model Changed to gpt-4o-mini.');
             
-            return redirect()->back()->with('error', 'You do not have enough tokens to select this model. The model has been set to 4o-mini.');
+            return redirect()->back()->with('error', 'You do not have enough tokens to select this model. The model has been set to gpt-4o-mini.');
         } else {
             // Otherwise, save the model selected by the user
             $user->selected_model = trim($request->input('aiModel'));
