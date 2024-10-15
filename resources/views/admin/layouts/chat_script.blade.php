@@ -310,7 +310,7 @@ function sendMessage() {
     }
 
     // Disable the button, change the text to "Stop", and store the generating state
-    sendMessageBtn.disabled = false;
+    sendMessageBtn.disabled = false; // Disable send button to prevent double sending
     sendMessageBtn.innerHTML = 'Stop';
     sendMessageBtn.dataset.state = 'generating';
 
@@ -449,12 +449,6 @@ function sendMessage() {
                                     }
                                     isFirstMessage = false;
                                 }
-
-                                messageInput.value = '';
-                                fileInput.value = '';
-                                fileNameDisplay.textContent = '';
-                                imageDisplay.innerHTML = '';
-                                pastedImageFile = null;
                             }
                         } catch (e) {
                             console.error('Error parsing data:', e);
@@ -467,6 +461,14 @@ function sendMessage() {
         }
 
         read();
+
+        // Clear the input after sending
+        messageInput.value = ''; 
+        fileInput.value = ''; 
+        fileNameDisplay.textContent = ''; 
+        imageDisplay.innerHTML = ''; 
+        pastedImageFile = null;
+
     })
     .catch(error => {
         console.error(error);
@@ -485,6 +487,7 @@ function sendMessage() {
         resetButton();  // Reset the button in case of error
     });
 }
+
 
 
 // Function to reset the send button back to its original state
