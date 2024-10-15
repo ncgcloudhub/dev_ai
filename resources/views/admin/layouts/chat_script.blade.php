@@ -160,7 +160,7 @@ $(document).ready(function() {
                         // Create image element
                         const img = document.createElement('img');
                         img.src = imageUrl;
-                        img.style.maxWidth = '10%'; // Adjust image size as needed
+                        img.style.maxWidth = '100px'; // Adjust image size as needed
 
                         // Create remove button
                         const removeBtn = document.createElement('button');
