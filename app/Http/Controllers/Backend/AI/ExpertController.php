@@ -463,9 +463,9 @@ class ExpertController extends Controller
     }
 
 
-    public function ExpertEdit($id)
+    public function ExpertEdit($slug)
     {
-        $expert = Expert::findOrFail($id);
+        $expert = Expert::where('slug', $slug)->firstOrFail();
         return view('backend.expert.expert_edit', compact('expert'));
     }
 

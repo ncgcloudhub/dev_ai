@@ -487,7 +487,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add');
         Route::post('/expert/store', [ExpertController::class, 'ExpertStore'])->name('expert.store');
 
-        Route::get('/expert/edit/{id}', [ExpertController::class, 'ExpertEdit'])->name('expert.edit');
+        Route::get('/expert/edit/{slug}', [ExpertController::class, 'ExpertEdit'])->name('expert.edit');
         Route::post('/expert/update/{id}', [ExpertController::class, 'ExpertUpdate'])->name('expert.update');
         Route::get('/expert/delete/{id}', [ExpertController::class, 'ExpertDelete'])->name('expert.delete');
 
