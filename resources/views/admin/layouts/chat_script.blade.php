@@ -74,8 +74,14 @@ $(document).ready(function() {
         }
 
         fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
+    const file = event.target.files[0];
+
+    if (file) {
+        // Display the file name
+        fileNameDisplay.textContent = "Selected File: " + file.name;
+
+        // If the file is an image
+        if (file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
 
             // Create image element
@@ -88,9 +94,10 @@ $(document).ready(function() {
             removeBtn.textContent = 'X';
             removeBtn.classList.add('remove-btn');
             removeBtn.addEventListener('click', () => {
-                // Clear the file input and image display
+                // Clear the file input, image display, and file name display
                 fileInput.value = '';
                 imageDisplay.innerHTML = '';
+                fileNameDisplay.textContent = '';
             });
 
             // Container for image and button
@@ -102,8 +109,26 @@ $(document).ready(function() {
             // Display the image in image_display div
             imageDisplay.innerHTML = ''; // Clear any previous image
             imageDisplay.appendChild(container);
+
+        } else {
+            // For non-image files, just display the file name and a remove button
+            fileNameDisplay.textContent = "Selected File: " + file.name;
+
+            // Create remove button for file
+            const removeFileBtn = document.createElement('button');
+            removeFileBtn.textContent = 'X';
+            removeFileBtn.classList.add('remove-btn');
+            removeFileBtn.addEventListener('click', () => {
+                // Clear the file input and file name display
+                fileInput.value = '';
+                fileNameDisplay.textContent = '';
+            });
+
+            // Append the remove button next to the file name display
+            fileNameDisplay.appendChild(removeFileBtn);
         }
-        });
+    }
+});
 
 
         newSessionBtn.addEventListener('click', function () {
@@ -148,46 +173,45 @@ $(document).ready(function() {
         });
 
         // Function to handle image paste
-        function handleImagePaste(event) {
-                const clipboardItems = event.clipboardData.items;
-                for (let i = 0; i < clipboardItems.length; i++) {
-                    const item = clipboardItems[i];
-                    if (item.type.indexOf("image") !== -1) {
-                        const blob = item.getAsFile();
-                        pastedImageFile = blob;
-                        const imageUrl = URL.createObjectURL(blob);
+function handleImagePaste(event) {
+    const clipboardItems = event.clipboardData.items;
+    for (let i = 0; i < clipboardItems.length; i++) {
+        const item = clipboardItems[i];
+        if (item.type.indexOf("image") !== -1) {
+            const blob = item.getAsFile();
+            pastedImageFile = blob;
+            const imageUrl = URL.createObjectURL(blob);
 
-                        // Create image element
-                        const img = document.createElement('img');
-                        img.src = imageUrl;
-                        img.style.maxWidth = '100px'; // Adjust image size as needed
+            // Create image element
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = '100px'; // Adjust image size as needed
 
-                        // Create remove button
-                        const removeBtn = document.createElement('button');
-                        removeBtn.textContent = 'X';
-                        removeBtn.classList.add('remove-btn');
-                        removeBtn.addEventListener('click', () => {
-                            // Remove image and reset input
-                            imageDisplay.innerHTML = '';
-                            pastedImageFile = null; // Reset pastedImageFile
-                        });
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => {
+                // Clear the image display
+                imageDisplay.innerHTML = '';
+                pastedImageFile = null; // Reset pastedImageFile
+            });
 
-                        // Container for image and button
-                        const container = document.createElement('div');
-                        container.classList.add('image-container');
-                        container.appendChild(img);
-                        container.appendChild(removeBtn);
+            // Container for image and button
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            container.appendChild(img);
+            container.appendChild(removeBtn);
 
-                        // Display the pasted image in image_display div
-                        imageDisplay.innerHTML = ''; // Clear any previous image
-                        imageDisplay.appendChild(container);
+            // Display the pasted image in image_display div
+            imageDisplay.innerHTML = ''; // Clear any previous image
+            imageDisplay.appendChild(container);
 
-                        // Stop further processing to prevent multiple image pastes
-                        event.preventDefault();
-                        break;
-                    }
-                }
-            }
+            event.preventDefault(); // Stop further processing to prevent multiple image pastes
+            break;
+        }
+    }
+}
 
             // Listen for paste events on messageInput
             messageInput.addEventListener('paste', handleImagePaste);
