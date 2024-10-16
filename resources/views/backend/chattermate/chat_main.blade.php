@@ -87,6 +87,27 @@
         border-radius: 10px;
     }
 
+    .image-container {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.image-container img {
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.remove-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+
 </style>
 
 
@@ -212,9 +233,9 @@
                     
                     <div class="chat-input-section p-3 p-lg-4">
                         <div class="row g-0 align-items-start">
-                            <!-- File Selected Show (Now above the textarea) -->
-                            <div id="file_name_display" class="col-12 mb-2"></div>
-                    
+                              <!-- File Selected Show (Now above the textarea) -->
+                              <div id="file_name_display" class="col-12 mb-2"></div>
+                              
                             <!-- Attachment Icon -->
                             <div class="col-auto">
                                 <div class="chat-input-links me-2">
@@ -223,10 +244,9 @@
                                 </div>
                             </div>
                     
-                            <!-- Input field with the send button on the right -->
+                            <!-- Input field (textarea) with the send button on the right -->
                             <div class="col" id="type-message-tour">
                                 <div class="chat-input-feedback">Please Enter a Message</div>
-                                <div id="image_display"></div>
                                 <textarea class="form-control chat-input bg-light border-light auto-expand" id="user_message_input" rows="1" placeholder="Type your message..." autocomplete="off"></textarea>
                             </div>
                     
@@ -239,7 +259,13 @@
                                 </div>
                             </div>
                         </div>
+                    
+                        <!-- Image display should be placed below the row -->
+                        
+                                <div id="image_display" class="mt-2"></div>
+                           
                     </div>
+                    
                     
                     
 
