@@ -375,42 +375,43 @@ class EducationController extends Controller
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
 
+        // Initialize $firstImageUrl as null by default
+        $firstImageUrl = null;
+
         // Check if the teacher selected to generate images
-    $images = [];
-    if ($request->has('generate_images') || $request->input('generate_images') == 1)
-    {
-        // Generate image prompt
-        $imagePrompt = 'Generate images based on the following topic: ' . $request->topic;
+        $images = [];
+        if ($request->has('generate_images') && $request->input('generate_images') == 1)
+        {
+            // Generate image prompt
+            $imagePrompt = 'Generate images based on the following topic: ' . $request->topic;
 
-        // Prepare additional image parameters
-        $imageStyle = $request->input('image_style') ?? 'vivid';
-        $imageType = $request->input('image_type') ?? 'Illustrations';
-        $imagePlacement = $request->input('image_placement') ?? 'Throughout the content';
-        $numberOfImages = $request->input('number_of_images') ?? 1;
+            // Prepare additional image parameters
+            $imageStyle = $request->input('image_style') ?? 'vivid';
+            $imageType = $request->input('image_type') ?? 'Illustrations';
+            $imagePlacement = $request->input('image_placement') ?? 'Throughout the content';
+            $numberOfImages = $request->input('number_of_images') ?? 1;
 
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Content-Type' => 'application/json',
+            ])->post('https://api.openai.com/v1/images/generations', [
+                'prompt' => $imagePrompt,
+                'size' => '1024x1024',
+                'style' => $imageStyle,
+                'quality' => 'standard',
+                'n' => (int) $numberOfImages,
+            ]);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $apiKey,
-            'Content-Type' => 'application/json',
-        ])->post('https://api.openai.com/v1/images/generations', [
-            'prompt' => $imagePrompt,
-            'size' => '1024x1024',
-            'style' => $imageStyle,
-            'quality' => 'standard',
-            'n' => (int) $numberOfImages,
-        ]);
+            Log::info('API Response Body: ' . $response->body());
 
-        Log::info('API Response Body: ' . $response->body());
+            $imageData = $response->json()['data'] ?? []; // Safely get the 'data' array
+            $images = array_column($imageData, 'url');
 
-        $imageData = $response->json()['data'] ?? []; // Safely get the 'data' array
-        $images = array_column($imageData, 'url');
+            // For one image
+            $firstImageUrl = $imageData[0]['url'] ?? null;
+        }
 
-        // For one image
-        $imageData = $response->json()['data'] ?? [];
-        $firstImageUrl = $imageData[0]['url'] ?? null;
-    }
-    
-        // Save to the database
+        // Save to the database, even if no image is generated
         $educationContent = EducationContent::create([
             'grade_id' => $gradeId,
             'subject_id' => $subjectId,
@@ -427,28 +428,29 @@ class EducationController extends Controller
             'reference' => $request->input('reference'),
             'generated_content' => $content,
             'prompt' => $prompt,
-            'image_url' => $firstImageUrl,
+            'image_url' => $firstImageUrl, // This will be null if no image is generated
             'status' => 'generated' // or any default status you want
         ]);
-    
-        // Stream the response
-       return response()->stream(function () use ($content, $images) {
-        $chunks = explode("\n", $content);
-        foreach ($chunks as $chunk) {
-            echo $chunk . "<br/>";
-            ob_flush();
-            flush();
-            sleep(1); // Simulate delay between chunks
+
+        
+            // Stream the response
+        return response()->stream(function () use ($content, $images) {
+            $chunks = explode("\n", $content);
+            foreach ($chunks as $chunk) {
+                echo $chunk . "<br/>";
+                ob_flush();
+                flush();
+                sleep(1); // Simulate delay between chunks
+            }
+
+        // Display images after the content
+        if (!empty($images)) {
+            foreach ($images as $imageUrl) {
+                echo '<img src="' . $imageUrl . '" alt="Generated Image" style="max-width:100%; height:auto;"><br/>';
+            }
         }
 
-    // Display images after the content
-    if (!empty($images)) {
-        foreach ($images as $imageUrl) {
-            echo '<img src="' . $imageUrl . '" alt="Generated Image" style="max-width:100%; height:auto;"><br/>';
-        }
-    }
-
-        });
+            });
     }
    
     
