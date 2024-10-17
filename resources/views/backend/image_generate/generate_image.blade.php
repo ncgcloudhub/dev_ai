@@ -44,7 +44,7 @@
 
         <div class="d-flex flex-column flex-sm-row">
             <button id="imageGenerateTourButton" class="btn gradient-button text-white">Image Tour</button>
-            <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="btn btn-warning btn-load mb-2 mb-sm-0 me-sm-2">
+            <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2 mb-sm-0 me-sm-2">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -54,7 +54,7 @@
                     </span>
                 </span>
             </a>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+            <button type="button" class="btn gradient-btn-5" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
                 Prompt Library
             </button>
         </div>
@@ -74,7 +74,7 @@
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
-                        <button disabled type="button" class="btn btn-block waves-effect waves-light col-md-2 m-2 @if($get_user->credits_left <= 0) btn-danger @else btn-primary @endif">
+                        <button disabled type="button" class="btn gradient-btn-5 waves-effect waves-light col-md-2 m-2 @if($get_user->credits_left <= 0) btn-danger @else btn-primary @endif">
                             Credits Left <span class="credit-left badge ms-1 @if($get_user->credits_left <= 0) bg-dark @else bg-danger @endif">{{ $get_user->credits_left }}</span>
                         </button>
                         <div class="card-body">

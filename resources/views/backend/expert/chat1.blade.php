@@ -180,7 +180,7 @@
                                 <div class="col-auto">
                                     <div class="chat-input-links ms-2">
                                         <div class="links-list-item">
-                                            <button type="button" id="send-button" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                            <button type="button" id="send-button" class="btn gradient-btn-5 chat-send waves-effect waves-light fs-13">
                                                 <i class="ri-send-plane-2-fill align-bottom"></i>
                                             </button>
                                         </div>
