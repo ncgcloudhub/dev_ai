@@ -233,14 +233,14 @@
                     
                     <div class="chat-input-section p-3 p-lg-4">
                         <div class="row g-0 align-items-start">
-                              <!-- File Selected Show (Now above the textarea) -->
-                              <div id="file_name_display" class="col-12 mb-2"></div>
-                              
+                            <!-- File Selected Show (Now above the textarea) -->
+                            <div id="file_name_display" class="col-12 mb-2"></div>
+                            
                             <!-- Attachment Icon -->
                             <div class="col-auto">
                                 <div class="chat-input-links me-2">
                                     <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
-                                    <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                    <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png" multiple>
                                 </div>
                             </div>
                     
@@ -260,13 +260,9 @@
                             </div>
                         </div>
                     
-                        <!-- Image display should be placed below the row -->
-                        
-                                <div id="image_display" class="mt-2"></div>
-                           
+                        <!-- Image display for multiple images -->
+                        <div id="image_display" class="mt-2"></div>
                     </div>
-                    
-                    
                     
 
                     <div class="replyCard">

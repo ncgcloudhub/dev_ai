@@ -73,43 +73,49 @@ $(document).ready(function() {
             }
         }
 
-        fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
+        let selectedFiles = [];  // Store both attached and pasted images
 
-    if (file) {
+// Function to display images
+function displayImages() {
+    imageDisplay.innerHTML = '';  // Clear current display
+    fileNameDisplay.innerHTML = '';  // Clear file names
+
+    selectedFiles.forEach((file, index) => {
         // Display the file name
-        fileNameDisplay.textContent = "Selected File: " + file.name;
+        const fileNameDiv = document.createElement('div');
+        fileNameDiv.textContent = "Selected File: " + file.name;
+        fileNameDisplay.appendChild(fileNameDiv);
 
-        // If the file is an image
+        // If the file is an image, display it
         if (file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
 
             // Create image element
             const img = document.createElement('img');
             img.src = imageUrl;
-            img.style.maxWidth = '100px'; // Adjust image size as needed
+            img.style.maxWidth = '100px';  // Adjust image size
 
             // Create remove button
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'X';
             removeBtn.classList.add('remove-btn');
             removeBtn.addEventListener('click', () => {
-                // Clear the file input, image display, and file name display
-                fileInput.value = '';
-                imageDisplay.innerHTML = '';
-                fileNameDisplay.textContent = '';
+                // Remove the image from selectedFiles and refresh display
+                selectedFiles.splice(index, 1);
+                displayImages();
+                if (selectedFiles.length === 0) {
+                    fileInput.value = ''; // Clear the file input if no more images
+                }
             });
 
-            // Container for image and button
+            // Container for image and remove button
             const container = document.createElement('div');
             container.classList.add('image-container');
             container.appendChild(img);
             container.appendChild(removeBtn);
 
-            // Display the image in image_display div
-            imageDisplay.innerHTML = ''; // Clear any previous image
+            // Append the image container to the display
             imageDisplay.appendChild(container);
-
         } else {
             // For non-image files, just display the file name and a remove button
             fileNameDisplay.textContent = "Selected File: " + file.name;
@@ -127,7 +133,28 @@ $(document).ready(function() {
             // Append the remove button next to the file name display
             fileNameDisplay.appendChild(removeFileBtn);
         }
+    });
+}
+
+// File input event handler
+fileInput.addEventListener('change', function(event) {
+    const files = event.target.files;
+    const remainingSlots = 3 - selectedFiles.length;
+
+    if (files.length > remainingSlots) {
+        alert(`You can only attach ${remainingSlots} more images.`);
+        return;
     }
+
+    // Add selected files to the selectedFiles array
+    Array.from(files).forEach(file => {
+        if (selectedFiles.length < 3) {
+            selectedFiles.push(file);
+        }
+    });
+
+    // Update display
+    displayImages();
 });
 
 
@@ -172,46 +199,31 @@ $(document).ready(function() {
                 });
         });
 
-        // Function to handle image paste
+        // Handle image paste event
 function handleImagePaste(event) {
     const clipboardItems = event.clipboardData.items;
+    const remainingSlots = 3 - selectedFiles.length;
+
+    let pastedCount = 0;
+
     for (let i = 0; i < clipboardItems.length; i++) {
         const item = clipboardItems[i];
-        if (item.type.indexOf("image") !== -1) {
+
+        if (item.type.indexOf("image") !== -1 && pastedCount < remainingSlots) {
             const blob = item.getAsFile();
-            pastedImageFile = blob;
-            const imageUrl = URL.createObjectURL(blob);
+            pastedCount++;
 
-            // Create image element
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.style.maxWidth = '100px'; // Adjust image size as needed
-
-            // Create remove button
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'X';
-            removeBtn.classList.add('remove-btn');
-            removeBtn.addEventListener('click', () => {
-                // Clear the image display
-                imageDisplay.innerHTML = '';
-                pastedImageFile = null; // Reset pastedImageFile
-            });
-
-            // Container for image and button
-            const container = document.createElement('div');
-            container.classList.add('image-container');
-            container.appendChild(img);
-            container.appendChild(removeBtn);
-
-            // Display the pasted image in image_display div
-            imageDisplay.innerHTML = ''; // Clear any previous image
-            imageDisplay.appendChild(container);
-
-            event.preventDefault(); // Stop further processing to prevent multiple image pastes
-            break;
+            // Add the pasted image to selectedFiles
+            selectedFiles.push(blob);
         }
     }
+
+    if (pastedCount > 0) {
+        displayImages();  // Update display after pasting images
+        event.preventDefault();  // Prevent multiple pastes
+    }
 }
+
 
             // Listen for paste events on messageInput
             messageInput.addEventListener('paste', handleImagePaste);
