@@ -129,6 +129,30 @@
     transform: scale(0.98);
 }
 
+
+
+/* Button 6 */
+.gradient-btn-6 {
+    background: linear-gradient(45deg, #ff007f, #ff00ff);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 8px 15px rgba(255, 0, 255, 0.4);
+}
+
+.gradient-btn-6:hover {
+    background: linear-gradient(45deg, #ff1493, #ff69b4);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+    transform: translateY(-3px);
+}
+
+.gradient-btn-6:active {
+    transform: scale(0.98);
+}
+
+
+
 /* Text Gradient */
 .gradient-text-1 {
     background: linear-gradient(45deg, #9b00ff, #e900ff);
@@ -145,4 +169,8 @@
 }
 
 
+.background-clr-1{
+    background-color: rgb(239 174 223 / 99%);
+    color: black;
+}
 

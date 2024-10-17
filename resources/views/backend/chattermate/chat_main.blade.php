@@ -116,7 +116,7 @@
     <div class="chat-leftsidebar border bg-light-grey" >
         <div class="px-4 pt-4 mb-4">
             <!-- AI Professional Bots Button -->
-            <div id="ai-professional-tour" class="btn btn-primary d-grid mb-3" style="background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137));">
+            <div id="ai-professional-tour" class="btn gradient-btn-6 d-grid mb-3" >
                 <a class="text-white" href="{{route('chat')}}">AI Professional Bots</a>
             </div>
     
@@ -128,7 +128,7 @@
                 <div class="flex-shrink-0">
                     <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Chat">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" id="main_new_session_btn">
+                        <button type="button" class="btn gradient-btn-5 btn-sm" id="main_new_session_btn">
                             <i class="ri-add-line align-bottom"></i>
                         </button>
                     </div>
@@ -253,7 +253,7 @@
                             <!-- Send Button -->
                             <div class="col-auto">
                                 <div class="chat-input-links ms-2">
-                                    <button type="button" id="main_send_message_btn" class="btn btn-success chat-send waves-effect waves-light fs-13">
+                                    <button type="button" id="main_send_message_btn" class="btn gradient-btn-5 chat-send waves-effect waves-light fs-13">
                                         <i class="ri-send-plane-2-fill align-bottom"></i>
                                     </button>
                                 </div>

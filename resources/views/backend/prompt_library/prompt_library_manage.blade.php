@@ -20,11 +20,11 @@
                 <div class="card-header align-items-center d-flex flex-column flex-md-row">
                     <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
                         Manage Prompt Library 
-                        <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Category</a> 
-                        <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white badge-gradient-primary mx-1 my-1 my-md-0">Sub-Category</a>
+                        <a href="{{ route('prompt.category.add') }}" class="btn text-white gradient-btn-5 mx-1 my-1 my-md-0">Category</a> 
+                        <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white gradient-btn-5 mx-1 my-1 my-md-0">Sub-Category</a>
 
                     </h4>
-                    <a href="{{ route('prompt.export') }}" class="btn text-white badge-gradient-dark mx-2 ">Export</a>
+                    <a href="{{ route('prompt.export') }}" class="btn text-white gradient-btn-2 mx-2 ">Export</a>
                     <div class="flex-shrink-0 d-flex align-items-center">
                         <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
                             @csrf
@@ -34,7 +34,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn text-white badge-gradient-warning">Import</button>
+                            <button type="submit" class="btn text-white gradient-btn-3">Import</button>
                         </form>
                         
                         @if(session('success'))
@@ -125,7 +125,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary">{{$item->prompt_name}}</a>
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}" class="fw-medium link-primary gradient-text-2">{{$item->prompt_name}}</a>
                             </td>
                              <td>
                                 <div class="d-flex align-items-center">
