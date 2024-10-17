@@ -12,16 +12,25 @@
 @slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
-<button id="templateDetailsTourButton" class="btn gradient-button text-white my-2">Template View Tour</button>
+
+<button type="button" class="btn gradient-btn-5" onclick="history.back()">
+    <i class="las la-arrow-left"></i>
+</button>
+
+<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2">Template View Tour</button>
 
 <div class="row">
    
            <div class="col-xxl-6">
             <div class="card">
                
-        
                 <div class="card-body">
-                  
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn gradient-btn-5" id="clearInputsButton">
+                            <i class="las la-undo-alt"></i> Clear Inputs
+                        </button>
+                    </div>
+                    
                     <div class="live-preview ">
                         <form id="generateForm"  action="{{route ('template.generate')}}" method="post" class="row g-3">
                             @csrf
@@ -240,7 +249,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button class="btn btn-rounded text-white badge-gradient-primary mx-1 mb-4">Generate</button>
+                            <button class="btn btn-rounded text-white gradient-btn-6 mx-1 mb-4">Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
@@ -257,10 +266,10 @@
 
            <div class="col">
                 <!-- Add the Download Content button -->
-                <button id="copyButton" class="btn text-white badge-gradient-primary mx-1">
+                <button id="copyButton" class="btn text-white gradient-btn-5 mx-1">
                     <i class="las la-copy"></i>
                 </button>
-                <button id="downloadButton" class="btn text-white badge-gradient-primary mx-1">
+                <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1">
                     <i class="las la-download"></i>
                 </button>
                 
@@ -294,7 +303,7 @@
                             
                             
                         </div><!-- end card -->
-                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
+                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link gradient-text-2"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
                        
                     </div>
                     <!-- end col -->
@@ -322,6 +331,19 @@
 
 {{-- Submit Form Editor --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.getElementById('clearInputsButton').addEventListener('click', function() {
+        // Reset the form (clear inputs)
+        document.getElementById('generateForm').reset();
+
+        // Optionally reset select inputs to default options
+        document.getElementById('language').value = 'English'; // Default language
+        document.getElementById('points').value = '1'; // Default variations
+
+        // For additional input types, clear manually if needed
+    });
+</script>
 
 <script>
     function disableInputs() {
