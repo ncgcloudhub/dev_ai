@@ -2,6 +2,8 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
+
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -371,6 +373,8 @@
                             </span>
                         </span>
                     </button>
+                     <!-- Container for the Lottie animation -->
+                    <div id="lottie-animation" style="width: 100px; height: 100px;"></div>
                 </div>
         
                 <div id="image-container" class="d-flex justify-content-center">      
@@ -519,6 +523,16 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script>
+    // Load the Lottie animation
+    var animation = lottie.loadAnimation({
+        container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
+        path: '/build/json/lottie.json', // the path to the animation json
+        renderer: 'svg', // 'svg' or 'canvas' or 'html'
+        loop: true, // loop the animation
+        autoplay: true, // start playing the animation
+    });
+</script>
 
 <!-- JavaScript to control the generate button and spinner -->
 <script>
