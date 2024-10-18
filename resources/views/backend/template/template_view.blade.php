@@ -470,51 +470,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('#generateForm');
+    const loader = document.getElementById('loader');
+    const formattedContentDisplay = document.getElementById('formattedContentDisplay');
 
-        $('#generateForm').submit(function (event) {
-            event.preventDefault();
-
-            // Show loader
-            $('#loader').removeClass('d-none');
-
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function (response) {
-                    if (response == 0) {
-                        alert('Please Upgrade Plan');
-                        return;
-                    }
-
-                    // Use marked.js to convert Markdown to HTML
-                    let formattedContent = formatContent(response.content);
-
-                    // Display formatted content as HTML
-                    document.getElementById('formattedContentDisplay').innerHTML = formattedContent;
-
-                    // Update statistics
-                    $('#numTokens').text(response.completionTokens);
-                    $('#numWords').text(response.num_words);
-                    $('#numCharacters').text(response.num_characters);
-
-                    // Hide loader
-                    $('#loader').addClass('d-none');
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-        function formatContent(content) {
+    // Format content using marked.js and DOMPurify
+    function formatContent(content) {
         // Set options for marked.js
         marked.setOptions({
             breaks: true,  // Enable line breaks
             gfm: true      // Enable GitHub Flavored Markdown
         });
 
-        // Parse Markdown to HTML without a custom renderer
+        // Parse Markdown to HTML
         let formattedContent = marked.parse(content);
 
         // Sanitize the HTML to prevent XSS
@@ -523,32 +491,90 @@
         return formattedContent;
     }
 
+    // Copy button click event
+    document.getElementById('copyButton').addEventListener('click', function () {
+        const editorContent = formattedContentDisplay.innerText;
+        const textArea = document.createElement('textarea');
+        textArea.value = editorContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('Content copied to clipboard!');
+    });
 
-        // Copy button click event
-        $('#copyButton').click(function () {
-            const editorContent = document.getElementById('formattedContentDisplay').innerText;
-            const textArea = document.createElement('textarea');
-            textArea.value = editorContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
-        });
+    // Download button click event using FileSaver.js
+    document.getElementById('downloadButton').addEventListener('click', function () {
+        const editorContent = formattedContentDisplay.innerText;
 
-        // Download button click event using FileSaver.js
-        $('#downloadButton').click(function () {
-            const editorContent = document.getElementById('formattedContentDisplay').innerText;
+        // Create a new Blob with the content
+        const blob = new Blob([editorContent], { type: 'application/msword' });
 
-            // Create a new Blob with the content
-            const blob = new Blob([editorContent], { type: 'application/msword' });
+        // Use FileSaver.js to save the blob as a file
+        saveAs(blob, 'generated_content.doc');
+    });
 
-            // Use FileSaver.js to save the blob as a file
-            saveAs(blob, 'generated_content.doc');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Show loader
+        loader.classList.remove('d-none');
+
+        const formData = new FormData(form);
+        fetch(form.getAttribute('action'), {
+            method: form.getAttribute('method'),
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let content = ''; // Variable to store streamed content
+            let stats = {};   // Variable to store stats
+
+            const processStream = ({ done, value }) => {
+                if (done) {
+                    // Hide loader after streaming is complete
+                    loader.classList.add('d-none');
+
+                    // Display the stats in the spans
+                    document.getElementById('numTokens').innerText = stats.num_tokens;
+                    document.getElementById('numWords').innerText = stats.num_words;
+                    document.getElementById('numCharacters').innerText = stats.num_characters;
+
+                    return;
+                }
+
+                // Decode the chunk
+                const chunk = decoder.decode(value, { stream: true });
+
+                // Check if it's JSON (indicating stats) or regular content
+                if (chunk.startsWith('{') && chunk.endsWith('}')) {
+                    try {
+                        stats = JSON.parse(chunk); // Parse statistics
+                    } catch (e) {
+                        console.error('Error parsing stats:', e);
+                    }
+                } else {
+                    // If it's not JSON, assume it's part of the content
+                    content += chunk;
+                    formattedContentDisplay.innerHTML = formatContent(content); // Format the streamed content
+                }
+
+                return reader.read().then(processStream); // Continue reading chunks
+            };
+
+            return reader.read().then(processStream);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loader.classList.add('d-none');
         });
     });
+});
+
 </script>
-
-
 
 @endsection
