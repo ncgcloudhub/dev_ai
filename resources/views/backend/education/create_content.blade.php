@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="card-title mb-0">Education</h4>
-                <a href="{{ route('user_generated_education_content') }}" class="btn btn-warning fw-bold text-dark shadow">
+                <a href="{{ route('user_generated_education_content') }}" class="btn gradient-btn-12 fw-bold text-dark shadow">
                     Show Generated Contents
                 </a>
             </div><!-- end card header -->
@@ -157,7 +157,7 @@
 
                                         <div class="d-flex align-items-start gap-3 mt-4">
                                             <button type="button"
-                                                class="btn btn-success btn-label right ms-auto nexttab"
+                                                class="btn gradient-btn-11 btn-label right ms-auto nexttab"
                                                 data-nexttab="v-pills-bill-address-tab"><i
                                                     class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go
                                                 to Additional Info</button>
@@ -397,12 +397,12 @@
                                         </div>
 
                                         <div class="d-flex align-items-start gap-3 mt-4">
-                                            <button type="button" class="btn btn-light btn-label previestab"
+                                            <button type="button" class="btn gradient-btn-9 btn-label previestab"
                                                 data-previous="v-pills-bill-info-tab"><i
                                                     class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
                                                 Back to Basic Info</button>
                                             <button type="button"
-                                                class="btn btn-success btn-label right ms-auto nexttab"
+                                                class="btn gradient-btn-11 btn-label right ms-auto nexttab"
                                                 data-nexttab="v-pills-payment-tab"><i
                                                     class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go
                                                 to Reference</button>
@@ -433,12 +433,12 @@
                                         </div>
 
                                         <div class="d-flex align-items-start gap-3 mt-4">
-                                            <button type="button" class="btn btn-light btn-label previestab"
+                                            <button type="button" class="btn gradient-btn-9 btn-label previestab"
                                                 data-previous="v-pills-bill-address-tab"><i
                                                     class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>
                                                 Back to Reference</button>
                                             <button type="button"
-                                                class="btn btn-success btn-label right ms-auto nexttab generateButton"
+                                                class="btn gradient-btn-11 btn-label right ms-auto nexttab generateButton"
                                                 data-nexttab="v-pills-finish-tab"><i
                                                     class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>
                                                 Generate Content</button>
