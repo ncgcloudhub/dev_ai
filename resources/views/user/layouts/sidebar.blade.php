@@ -227,7 +227,7 @@
 
               <!-- Help Button -->
               <div class="text-center mt-4">
-                <a href="{{route('contact.us')}}" class="btn btn-primary btn-block">
+                <a href="{{route('contact.us')}}" class="btn gradient-btn-5 btn-block">
                     <i class="ri-question-fill"></i> Help
                 </a>
             </div>

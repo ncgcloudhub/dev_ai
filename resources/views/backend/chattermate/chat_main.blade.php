@@ -123,7 +123,7 @@
             <!-- New Chat Section -->
             <div class="d-flex align-items-start p-3 bg-white border rounded shadow-sm">
                 <div class="flex-grow-1">
-                    <h5 class="mb-0 text-primary fw-bold">New Chat</h5>
+                    <h5 class="mb-0 gradient-text-1 fw-bold">New Chat</h5>
                 </div>
                 <div class="flex-shrink-0">
                     <div data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" title="New Chat">

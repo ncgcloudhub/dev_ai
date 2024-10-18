@@ -18,8 +18,9 @@
 } 
 
 .template-card:hover .card-body {
-    background-color: #d4e9f0; /* Light blue background color */
+    background: linear-gradient(45deg, #ffffff, #f2e6f7);
 }
+
 
 </style>
 
@@ -30,7 +31,7 @@
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Templates</h5>
                    
-                   <button id="templateManageTourButton" class="btn gradient-button text-white">Template Tour</button>
+                   <button id="templateManageTourButton" class="btn gradient-btn-7 text-white">Template Tour</button>
 
 
                    
@@ -111,7 +112,7 @@
                                                     $userRating = $userRatings[$item->id] ?? null;
                                                 @endphp
                                                 <div id="rater-onhover-{{$item->id}}" class="align-middle" data-user-rating="{{ $userRating }}"></div>
-                                                <span class="ratingnum badge bg-info align-middle ms-2">{{ number_format($item->averageRating(), 1) }} stars</span>
+                                                <span class="ratingnum badge gradient-btn-6 align-middle ms-2">{{ number_format($item->averageRating(), 1) }} stars</span>
                                             </div>
                                             @if(auth()->user()->role == 'admin')
                                                 <ul class="list-inline hstack gap-2 mb-0">

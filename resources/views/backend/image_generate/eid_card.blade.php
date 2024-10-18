@@ -30,7 +30,7 @@
     <div style="background-image: url('https://media.istockphoto.com/id/1371499009/vector/islamic-wallpaper-for-eid-card.jpg?s=612x612&w=0&k=20&c=p1qU0b5JBJ8uXtyXnb7dmj96FjpLAFWXmnXbEYGHbfM=')" class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Popular Holiday Card</h4>
-             <button type="button" class="btn waves-effect waves-light @if($get_user->credits_left == 0) btn-danger @else btn-primary @endif">
+             <button type="button" class="btn waves-effect waves-light @if($get_user->credits_left == 0) btn-danger @else gradient-btn-10 @endif">
             Credits Left <span class="credit-left badge ms-1 @if($get_user->credits_left == 0) bg-dark @else bg-danger @endif">{{ $get_user->credits_left }}</span>
             </button>
         </div><!-- end card header -->
@@ -175,7 +175,7 @@
                                 
                                 
                                 <div class="col-md-6 mb-3 d-flex align-items-end">
-                                    <button class="btn btn-rounded btn-primary mb-2">Create Card</button>
+                                    <button class="btn gradient-btn-6 mb-2">Create Card</button>
                                 </div>
                             </div><!-- end row -->
                             <div id="error-msg" style="color: red;"></div>

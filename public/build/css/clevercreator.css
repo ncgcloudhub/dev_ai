@@ -151,11 +151,137 @@
     transform: scale(0.98);
 }
 
+/* Button 7 */
+.gradient-btn-7 {
+    background: linear-gradient(45deg, #8a2be2, #ff69b4);
+    color: white;
+    border: none;
+   
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-7:hover {
+    background: linear-gradient(45deg, #6a0dad, #ff1493);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-7:active {
+    transform: scale(0.98);
+}
+
+/* Button 8 */
+.gradient-btn-8 {
+    background: linear-gradient(45deg, #74068f, #f753a5);
+    color: white;
+    border: none;
+   
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-8:hover {
+    background: linear-gradient(45deg, #cf54c9, #7e0646);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-8:active {
+    transform: scale(0.98);
+}
+
+/* Button 9 */
+.gradient-btn-9 {
+    background: linear-gradient(45deg, #6b0fbb, #d873ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-9:hover {
+    background: linear-gradient(45deg, #9348e5, #b824e3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-9:active {
+    transform: scale(0.98);
+}
+
+/* Button 10 */
+.gradient-btn-10 {
+    background: linear-gradient(45deg, #501874, #9f54e8);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-10:hover {
+    background: linear-gradient(45deg, #702c95, #a465e0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-10:active {
+    transform: scale(0.98);
+}
+
+/* Button 11 */
+.gradient-btn-11 {
+    background: linear-gradient(45deg, #720f91, #e06eff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-11:hover {
+    background: linear-gradient(45deg, #9c33bb, #ce4ee0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-11:active {
+    transform: scale(0.98);
+}
+
+
+/* Button 12 */
+.gradient-btn-12 {
+    background: linear-gradient(45deg, #e652de, #c712df);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-12:hover {
+    background: linear-gradient(45deg, #d624cd, #c96acc);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-12:active {
+    transform: scale(0.98);
+}
+
+
 
 
 /* Text Gradient */
 .gradient-text-1 {
-    background: linear-gradient(45deg, #9b00ff, #e900ff);
+    background: linear-gradient(45deg, #9c0690, #dd52d2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -169,8 +295,11 @@
 }
 
 
-.background-clr-1{
-    background-color: rgb(239 174 223 / 99%);
-    color: black;
+.gradient-background-1{
+    background: linear-gradient(45deg, #ff1493, #ff69b4);
+    
 }
 
+.gradient-background-2{
+    background: linear-gradient(45deg, #9b00ff, #e900ff);
+}

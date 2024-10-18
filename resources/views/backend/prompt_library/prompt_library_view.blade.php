@@ -26,7 +26,7 @@
 
 <div class="row">
     <div class="col-xxl-6">
-        <button id="promptLibraryDetailsTourButton" class="btn gradient-button text-white">Tour</button>
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white">Tour</button>
 
         <div class="card">
             <div class="card-body"> 
@@ -34,7 +34,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Prompt Name</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->prompt_name}}</p>
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->prompt_name}}</p>
                     </div>
                 </div>
             </div> 
@@ -44,7 +44,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">System Instruction</label>
-                        <p class="fw-medium link-primary">
+                        <p class="fw-medium link-primary gradient-text-2">
                             @if (is_null($prompt_library->sub_category_id))
                                 --
                             @else
@@ -59,7 +59,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Category / Sub-Category Name</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->category->category_name}} /@if (is_null($prompt_library->sub_category_id))
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->category->category_name}} /@if (is_null($prompt_library->sub_category_id))
                             --</p>
                         @else
                         {{$prompt_library->subcategory->sub_category_name}}</p>
@@ -73,7 +73,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Prompt Description</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->description}}</p>
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->description}}</p>
                     </div>
                 </div>
             </div> 
@@ -83,7 +83,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Actual Prompt</label>
-                        <p class="fw-medium link-primary" style="position: relative;">
+                        <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
                             {{$prompt_library->actual_prompt}}
                             <span class="copy-icon" onclick="copyText(this)">📋</span>
                         </p>
@@ -196,7 +196,7 @@
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
 
                         <div class="col-md-3" id="generate-button-tour">
-                            <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            <button type="button" id="ask" class="btn gradient-btn-6"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">
