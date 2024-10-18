@@ -97,7 +97,7 @@
 
             <div class="d-flex align-items-center">
                 <div class="ms-1 header-item d-none d-sm-flex">
-                    <span class="badge background-clr-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
+                    <span class="badge gradient-background-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
                 </div>
                 
                 <!-- Fullscreen Button -->

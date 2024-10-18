@@ -213,11 +213,11 @@
 }
 
 
-.background-clr-1{
+.gradient-background-1{
     background: linear-gradient(45deg, #ff1493, #ff69b4);
     
 }
 
-.background-clr-2{
+.gradient-background-2{
     background: linear-gradient(45deg, #9b00ff, #e900ff);
 }
