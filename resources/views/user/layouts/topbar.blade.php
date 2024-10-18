@@ -54,7 +54,7 @@
                         <form id="modelForm" action="{{ route('select-model') }}" method="POST">
                             @csrf
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle gradient-button text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn dropdown-toggle gradient-btn-8 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -97,7 +97,7 @@
 
             <div class="d-flex align-items-center">
                 <div class="ms-1 header-item d-none d-sm-flex">
-                    <span class="badge badge-gradient-primary" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
+                    <span class="badge background-clr-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
                 </div>
                 
                 <!-- Fullscreen Button -->
