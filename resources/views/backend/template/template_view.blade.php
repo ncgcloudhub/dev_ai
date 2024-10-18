@@ -279,7 +279,7 @@
                         <div class="card border border-primary">
                             <div class="card-header">
                                 <h4 class="card-title mb-0">Generated Content <button type="button" class="btn btn-outline-secondary">                            
-                                    Tokens Left: <span class="badge bg-success ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
+                                    Tokens Left: <span class="badge gradient-background-2 ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
                             </button></h4>
                         
                             </div><!-- end card header -->
@@ -313,7 +313,7 @@
                 <div class="text-end">
                     @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
                         <!-- Add the Generate Image button -->
-                        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Now</a>
+                        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn gradient-btn-6">Generate Image Now</a>
                     @endif
                 </div>
 
