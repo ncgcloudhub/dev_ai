@@ -35,9 +35,9 @@
             </div>
             <div class="mx-auto d-flex justify-content-center">
                 @auth
-                    <a href="{{ route('template.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                    <a href="{{ route('template.manage') }}" class="btn gradient-btn-5">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
                 @else
-                    <a href="{{ route('frontend.free.template') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                    <a href="{{ route('frontend.free.template') }}" class="btn gradient-btn-5">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                 @endauth
             </div>
         </div>
