@@ -567,71 +567,82 @@ class TemplateController extends Controller
             ],
         ];
 
-        $result = $client->chat()->create([
-            "model" => $openaiModel,
-            "temperature" => floatval($temperature_value),
-            "top_p" => floatval($top_p_value),
-            "frequency_penalty" => floatval($frequency_penalty_value),
-            "presence_penalty" => floatval($presence_penalty_value),
-            'max_tokens' => $maxTokens,
-            'messages' => $messages,
+        // Initialize the OpenAI client and request parameters
+    $result = $client->chat()->create([
+        "model" => $openaiModel,
+        "temperature" => floatval($temperature_value),
+        "top_p" => floatval($top_p_value),
+        "frequency_penalty" => floatval($frequency_penalty_value),
+        "presence_penalty" => floatval($presence_penalty_value),
+        'max_tokens' => $maxTokens,
+        'messages' => $messages,
+    ]);
+
+    $completionTokens = $result->usage->completionTokens;
+
+    // Process the response
+    $content = trim($result['choices'][0]['message']['content']);
+    $char_count = strlen($content);
+    $num_tokens = ceil($char_count / 4);
+    $num_words = str_word_count($content);
+    $num_characters = strlen($content);
+
+    if ($user->tokens_left <= 0) {
+        return response()->json(0);
+    } else {
+        // Update user token usage
+        User::where('id', $user->id)->update([
+            'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
+            'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
+            'words_generated' => DB::raw('words_generated + ' . $num_words),
         ]);
 
-        $completionTokens = $result->usage->completionTokens;
+        Template::where('id', $template->id)->update([
+            'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
+        ]);
 
-        $content = trim($result['choices'][0]['message']['content']);
-        $char_count = strlen($content); // Get the character count of the content
-        $num_tokens = ceil($char_count / 4); // Estimate the number of tokens
-        $num_words = str_word_count($content);
-        $num_characters = strlen($content);
+        // Limit the saved generated contents per template
+        $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)
+            ->where('template_id', $template_id)
+            ->count();
 
-        if ($user->tokens_left <= 0) {
-            $data = 0;
-            return $data;
-        } else {
-            // Words Increment
-            User::where('id', $user->id)->update([
-                'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
-                'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
-                'words_generated' => DB::raw('words_generated + ' . $num_words),
-            ]);
-
-            Template::where('id', $template->id)->update([
-                'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
-            ]);
-
-            // Limit the saved generated contents per template
-                $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)
+        if ($userGeneratedContentsCount >= 3) {
+            TemplateGeneratedContent::where('user_id', $user->id)
                 ->where('template_id', $template_id)
-                ->count();
+                ->orderBy('created_at', 'asc')
+                ->first()
+                ->delete();
+        }
 
-            if ($userGeneratedContentsCount >= 3) {
-                // Delete the oldest entry for the specific template
-                TemplateGeneratedContent::where('user_id', $user->id)
-                    ->where('template_id', $template_id)
-                    ->orderBy('created_at', 'asc')
-                    ->first()
-                    ->delete();
+        // Save the new entry
+        TemplateGeneratedContent::create([
+            'user_id' => $user->id,
+            'template_id' => $template_id,
+            'prompt' => $prompt,
+            'generated_content' => $content,
+        ]);
+
+        // Stream the response
+        return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens) {
+            $chunks = explode("\n", $content); // Split the content into chunks
+            
+            // Stream each chunk
+            foreach ($chunks as $chunk) {
+                echo $chunk . "<br/>";
+                ob_flush(); // Flush the output buffer
+                flush();     // Flush the system output buffer
+                sleep(1);    // Simulate delay between chunks (optional)
             }
 
-            // Save the new entry
-            TemplateGeneratedContent::create([
-                'user_id' => $user->id,
-                'template_id' => $template_id, // Include the template ID
-                'prompt' => $prompt,
-                'generated_content' => $content,
-            ]);
-
-            // Return content along with statistics
-            return response()->json([
-                'content' => $content,
+            // Send the stats after content
+            echo json_encode([
                 'num_tokens' => $num_tokens,
                 'num_words' => $num_words,
                 'num_characters' => $num_characters,
                 'completionTokens' => $completionTokens,
-
             ]);
-        }
+        });
+    }
     }
 
 

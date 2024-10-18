@@ -15,7 +15,7 @@
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 mb-3"> <!-- Adjust column widths for mobile and larger screens -->
         <div class="card">
             <div class="card-body">
-                <a class="d-flex align-items-center" href="{{ route('expert.chat', $item->slug) }}" role="button">
+                <a class="d-flex align-items-center" href="{{ route('expert.chat', ['id' => $item->id, 'slug' => $item->slug]) }}" role="button">
                     <div class="flex-shrink-0">
                         <img src="{{ URL::asset('backend/uploads/expert/' . $item->image) }}" alt="" class="avatar-xs rounded-circle">
                     </div>

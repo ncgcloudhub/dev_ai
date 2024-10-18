@@ -56,6 +56,7 @@
                                 data-name="direct-message" 
                                 data-role="{{ $item->role }}"  
                                 data-slug="{{ $item->slug }}"  
+                                data-id="{{ $item->id }}"  
                                 onclick="selectExpert('{{ $item->id }}')">  <!-- Use expert ID in onclick -->
                                 <a href="javascript: void(0);">
                                     <div class="d-flex align-items-center">

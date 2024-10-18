@@ -377,8 +377,7 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
 
-    // Template Rating
-    Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
+   
 
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
@@ -444,6 +443,9 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
 
+    // Template Rating
+    Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
+
 
      // Global Select Model
      Route::post('/select-model', [UserController::class, 'selectModel'])->name('select-model');
@@ -493,7 +495,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         // TEST CHAT
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
-        Route::get('/expert/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
+        Route::get('/expert/{slug}/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [ExpertController::class, 'SendMessages']);
         Route::get('/conversation/{expertId}', [ExpertController::class, 'getConversation']);
 
