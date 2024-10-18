@@ -80,7 +80,7 @@ class ExpertController extends Controller
         return view('backend.expert.expert_manage', compact('experts'));
     }
 
-    public function ExpertChat($id, $slug)
+    public function ExpertChat($slug, $id)
     {
         $expert_selected = Expert::where('id', $id)->where('slug', $slug)->firstOrFail();
         $expert_selected_id = $expert_selected->id;

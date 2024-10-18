@@ -495,7 +495,7 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         // TEST CHAT
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
-        Route::get('/expert/{id}/{slug}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
+        Route::get('/expert/{slug}/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [ExpertController::class, 'SendMessages']);
         Route::get('/conversation/{expertId}', [ExpertController::class, 'getConversation']);
 

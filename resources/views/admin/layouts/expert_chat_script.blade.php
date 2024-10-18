@@ -502,6 +502,7 @@ function resetButton() {
     var expertImage = selectedExpert.find(".userprofile").attr("src");
     var expertRole = selectedExpert.data('role');  
     var expertSlug = selectedExpert.data('slug');
+    var expertId = selectedExpert.data('id');
 
     // Update the selected expert's name, role, and image in the chat topbar
     $(".user-chat-topbar .username").text(expertName);
@@ -555,7 +556,7 @@ function resetButton() {
     });
 
     // Update the URL to include the expert's slug
-    var newUrl = `/chat/expert/${expertSlug}`;
+    var newUrl = `/chat/expert/${expertSlug}/${expertId}`;
     window.history.pushState({ path: newUrl }, '', newUrl);
 }
 
