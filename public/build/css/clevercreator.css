@@ -195,6 +195,88 @@
     transform: scale(0.98);
 }
 
+/* Button 9 */
+.gradient-btn-9 {
+    background: linear-gradient(45deg, #6b0fbb, #d873ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-9:hover {
+    background: linear-gradient(45deg, #9348e5, #b824e3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-9:active {
+    transform: scale(0.98);
+}
+
+/* Button 10 */
+.gradient-btn-10 {
+    background: linear-gradient(45deg, #501874, #9f54e8);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-10:hover {
+    background: linear-gradient(45deg, #702c95, #a465e0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-10:active {
+    transform: scale(0.98);
+}
+
+/* Button 11 */
+.gradient-btn-11 {
+    background: linear-gradient(45deg, #720f91, #e06eff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-11:hover {
+    background: linear-gradient(45deg, #9c33bb, #ce4ee0);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-11:active {
+    transform: scale(0.98);
+}
+
+
+/* Button 12 */
+.gradient-btn-12 {
+    background: linear-gradient(45deg, #e652de, #c712df);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-12:hover {
+    background: linear-gradient(45deg, #d624cd, #c96acc);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-12:active {
+    transform: scale(0.98);
+}
+
+
 
 
 /* Text Gradient */
