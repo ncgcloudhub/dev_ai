@@ -40,7 +40,7 @@
         </div>
         <!-- end row -->
         <div class="mx-auto d-flex justify-content-center">
-            <a href="{{ route('ai.image.gallery') }}" class="btn btn-primary">Show More</a>
+            <a href="{{ route('ai.image.gallery') }}" class="btn gradient-btn-5">Show More</a>
         </div>
         
     </div>

@@ -69,7 +69,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-end">
-                                <button type="submit" id="submit" name="send" class="submitBnt btn btn-primary">Send Message</button>
+                                <button type="submit" id="submit" name="send" class="submitBnt btn gradient-btn-5">Send Message</button>
                             </div>
                         </div>
                     </form>
@@ -88,7 +88,7 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
-                        <button class="btn btn-primary" type="submit">Subscribe</button>
+                        <button class="btn gradient-btn-6" type="submit">Subscribe</button>
                     </div>
                 </form>
             </div>

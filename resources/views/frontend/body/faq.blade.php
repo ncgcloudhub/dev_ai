@@ -9,7 +9,7 @@
                         always contact us or email us. We will answer you shortly!</p>
 
                     <div class="hstack gap-2 justify-content-center">
-                        <button type="button" class="btn btn-primary btn-label rounded-pill">
+                        <button type="button" class="btn gradient-btn-5 btn-label rounded-pill">
                             <a href="mailto:clevercreatorai@gmail.com" class="text-white text-decoration-none">
                                 <i class="ri-mail-line label-icon align-middle rounded-pill fs-16 me-2"></i> Email Us
                             </a>

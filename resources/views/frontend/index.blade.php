@@ -311,7 +311,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
+            <section class="py-5 gradient-background-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">
@@ -374,7 +374,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
+            <section class="py-5 gradient-background-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <form method="post" action="{{ route('newsletter.store') }}">
@@ -419,7 +419,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end contact -->
 
             <!-- start cta -->
-            <section class="py-5 bg-primary position-relative">
+            <section class="py-5 gradient-background-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">
