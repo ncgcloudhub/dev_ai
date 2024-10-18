@@ -199,6 +199,7 @@
                                         <select data-choices data-choices-removeItem multiple id="style" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="open_id_model[]">
                                             {{-- <option selected>Open AI Model</option> --}}
                                             <option value="gpt-4o" {{ in_array('gpt-4o', $selectedModels) ? 'selected' : '' }}>gpt-4o</option>
+                                            <option value="gpt-4o-mini" {{ in_array('gpt-4o-mini', $selectedModels) ? 'selected' : '' }}>gpt-4o-mini</option>
                                             <option value="gpt-4-turbo" {{ in_array('gpt-4-turbo', $selectedModels) ? 'selected' : '' }}>gpt-4-turbo</option>
                                             <option value="gpt-4" {{ in_array('gpt-4', $selectedModels) ? 'selected' : '' }}>gpt-4</option>
                                             <option value="gpt-3.5-turbo" {{ in_array('gpt-3.5-turbo', $selectedModels) ? 'selected' : '' }}>gpt-3.5-turbo</option>
