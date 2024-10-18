@@ -151,11 +151,55 @@
     transform: scale(0.98);
 }
 
+/* Button 7 */
+.gradient-btn-7 {
+    background: linear-gradient(45deg, #8a2be2, #ff69b4);
+    color: white;
+    border: none;
+   
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-7:hover {
+    background: linear-gradient(45deg, #6a0dad, #ff1493);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-7:active {
+    transform: scale(0.98);
+}
+
+/* Button 8 */
+.gradient-btn-8 {
+    background: linear-gradient(45deg, #74068f, #f753a5);
+    color: white;
+    border: none;
+   
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.gradient-btn-8:hover {
+    background: linear-gradient(45deg, #cf54c9, #7e0646);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.gradient-btn-8:active {
+    transform: scale(0.98);
+}
+
 
 
 /* Text Gradient */
 .gradient-text-1 {
-    background: linear-gradient(45deg, #9b00ff, #e900ff);
+    background: linear-gradient(45deg, #60069c, #d447e0);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -170,7 +214,10 @@
 
 
 .background-clr-1{
-    background-color: rgb(239 174 223 / 99%);
-    color: black;
+    background: linear-gradient(45deg, #ff1493, #ff69b4);
+    
 }
 
+.background-clr-2{
+    background: linear-gradient(45deg, #9b00ff, #e900ff);
+}
