@@ -156,15 +156,14 @@
     background: linear-gradient(45deg, #8a2be2, #ff69b4);
     color: white;
     border: none;
-   
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .gradient-btn-7:hover {
     background: linear-gradient(45deg, #6a0dad, #ff1493);
+    color: white;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     transform: scale(1.05);
 }
@@ -302,4 +301,12 @@
 
 .gradient-background-2{
     background: linear-gradient(45deg, #9b00ff, #e900ff);
+}
+
+.sidebar-hover:hover {
+    color: #831cc7 !important; /* Text color on hover */
+}
+
+.sidebar-hover:focus {
+    color: #831cc7 !important; /* Text color on hover */
 }
