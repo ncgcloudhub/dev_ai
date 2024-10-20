@@ -105,13 +105,13 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.category.add')}}" class="nav-link" >Categories</a>
+                                        <a href="{{route('custom.template.category.add')}}" class="nav-link sidebar-hover" >Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.add')}}" class="nav-link" >Add Template</a>
+                                        <a href="{{route('custom.template.add')}}" class="nav-link sidebar-hover" >Add Template</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.manage')}}" class="nav-link" >Manage Template</a>
+                                        <a href="{{route('custom.template.manage')}}" class="nav-link sidebar-hover" >Manage Template</a>
                                     </li>
                                    
                                 </ul>
@@ -133,16 +133,16 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.category.add')}}" class="nav-link" >Prompt Categories</a>
+                                        <a href="{{route('prompt.category.add')}}" class="nav-link sidebar-hover" >Prompt Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.subcategory.add')}}" class="nav-link" >Prompt Sub-Categories</a>
+                                        <a href="{{route('prompt.subcategory.add')}}" class="nav-link sidebar-hover" >Prompt Sub-Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.add')}}" class="nav-link" >Add Prompt</a>
+                                        <a href="{{route('prompt.add')}}" class="nav-link sidebar-hover" >Add Prompt</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.manage')}}" class="nav-link" >Manage prompt</a>
+                                        <a href="{{route('prompt.manage')}}" class="nav-link sidebar-hover" >Manage prompt</a>
                                     </li>
                                    
                                 </ul>
@@ -162,10 +162,10 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('expert.add')}}" class="nav-link" >Expert Creator</a>
+                                        <a href="{{route('expert.add')}}" class="nav-link sidebar-hover" >Expert Creator</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >AI Experts</a>
+                                        <a href="{{route('chat')}}" class="nav-link sidebar-hover" >AI Experts</a>
                                     </li>
                                   
                                 </ul>
@@ -187,14 +187,14 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate Image Using Dall-E</a>
+                                        <a href="{{route('generate.image.view')}}" class="nav-link sidebar-hover" >Generate Image Using Dall-E</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('manage.dalle.image.admin')}}" class="nav-link" >Manage Image</a>
+                                        <a href="{{route('manage.dalle.image.admin')}}" class="nav-link sidebar-hover" >Manage Image</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.favourite.image')}}" class="nav-link" >Manage Favorite Image</a>
+                                        <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover" >Manage Favorite Image</a>
                                     </li>
                                    
                                 </ul>
@@ -218,39 +218,39 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('add.page.seo')}}" class="nav-link" >Page SEO Add</a>
+                                        <a href="{{route('add.page.seo')}}" class="nav-link sidebar-hover" >Page SEO Add</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('ai.settings.add')}}" class="nav-link" >AI Settings</a>
+                                        <a href="{{route('ai.settings.add')}}" class="nav-link sidebar-hover" >AI Settings</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('site.settings.add')}}" class="nav-link" >Site Settings</a>
+                                        <a href="{{route('site.settings.add')}}" class="nav-link sidebar-hover" >Site Settings</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('seo.settings.add')}}" class="nav-link" >SEO Settings</a>
+                                        <a href="{{route('seo.settings.add')}}" class="nav-link sidebar-hover" >SEO Settings</a>
                                     </li>
                                     
                                     <li class="nav-item">
-                                        <a href="{{route('manage.faq')}}" class="nav-link">Manage FAQ</a>
+                                        <a href="{{route('manage.faq')}}" class="nav-link sidebar-hover">Manage FAQ</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.privacy.policy')}}" class="nav-link">Manage Privacy Policy</a>
+                                        <a href="{{route('manage.privacy.policy')}}" class="nav-link sidebar-hover">Manage Privacy Policy</a>
                                     </li>
                                     
                                     <li class="nav-item">
-                                        <a href="{{route('manage.terms.condition')}}" class="nav-link">Manage Terms & Conditions</a>
+                                        <a href="{{route('manage.terms.condition')}}" class="nav-link sidebar-hover">Manage Terms & Conditions</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.pricing')}}" class="nav-link">Manage Pricing</a>
+                                        <a href="{{route('manage.pricing')}}" class="nav-link sidebar-hover">Manage Pricing</a>
                                     </li>
                                   
                                     <li class="nav-item">
-                                        <a href="{{route('getDesign')}}" class="nav-link">Manage Design</a>
+                                        <a href="{{route('getDesign')}}" class="nav-link sidebar-hover">Manage Design</a>
                                     </li>
                
                                 </ul>
@@ -306,22 +306,22 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.user')}}" class="nav-link" >Manage User</a>
+                                        <a href="{{route('manage.user')}}" class="nav-link sidebar-hover" >Manage User</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a href="{{route('all.admin')}}" class="nav-link" >Manage Admin</a>
+                                        <a href="{{route('all.admin')}}" class="nav-link sidebar-hover" >Manage Admin</a>
                                     </li>
                                     
                                     <li class="nav-item">
-                                        <a href="{{route('admin.user.package.history')}}" class="nav-link" >Manage User Package</a>
+                                        <a href="{{route('admin.user.package.history')}}" class="nav-link sidebar-hover" >Manage User Package</a>
                                     </li>
                                 
                                     <li class="nav-item">
-                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link" >Manage Feedback Request</a>
+                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover" >Manage Feedback Request</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('send.email.form')}}" class="nav-link" >Send Email</a>
+                                        <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover" >Send Email</a>
                                     </li>
 
                                 </ul>
@@ -343,7 +343,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.grade.subject')}}" class="nav-link" >Manage Grade/Subject</a>
+                                        <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
                                     </li>
                                    
 
@@ -386,13 +386,13 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('add.job')}}" class="nav-link" >Add Job</a>
+                                        <a href="{{route('add.job')}}" class="nav-link sidebar-hover" >Add Job</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('manage.job')}}" class="nav-link" >Manage Job</a>
+                                        <a href="{{route('manage.job')}}" class="nav-link sidebar-hover" >Manage Job</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('manage.job.applications')}}" class="nav-link" >Manage Job Application</a>
+                                        <a href="{{route('manage.job.applications')}}" class="nav-link sidebar-hover" >Manage Job Application</a>
                                     </li>
                                    
                                 </ul>
