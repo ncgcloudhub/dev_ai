@@ -88,7 +88,7 @@
                     @csrf
                     <div class="input-group mb-3">
                         <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
-                        <button class="btn gradient-btn-6" type="submit">Subscribe</button>
+                        <button class="btn gradient-btn-5" type="submit">Subscribe</button>
                     </div>
                 </form>
             </div>
