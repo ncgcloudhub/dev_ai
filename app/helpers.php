@@ -48,7 +48,7 @@ if (!function_exists('getUserLastPackageAndModels')) {
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+        $freePricingPlan = PricingPlan::where('slug', 'free_monthly')->first();
 
         // Initialize the AI models array
         $aiModels = [];
