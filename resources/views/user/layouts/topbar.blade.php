@@ -48,6 +48,7 @@
                     $aiModels = $data['aiModels'];
                     $selectedModel = $data['selectedModel'];
                     $remainingDays = get_days_until_next_reset();
+                    $user = Auth::user();
                     @endphp
                 
                     @if ($lastPackage)
