@@ -99,6 +99,13 @@
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <span class="badge gradient-background-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
                 </div>
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    @if (!$user->phone || !$user->address)
+                    <span class="badge gradient-background-1" style="font-size: 0.8rem;">Your profile is incomplete. <a href="{{ route('edit.profile') }}">Complete it now</a>.</span>
+                                          
+                    @endif
+                   
+                </div>
                 
                 <!-- Fullscreen Button -->
                 <div class="ms-1 header-item d-none d-sm-flex">
