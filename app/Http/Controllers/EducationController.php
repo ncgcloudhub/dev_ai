@@ -20,8 +20,16 @@ class EducationController extends Controller
     {
         $classes = GradeClass::with('subjects')->orderBy('id', 'asc')->get();
 
+        $userId = auth()->id(); // Get the authenticated user's ID
+
+        $educationContents = EducationContent::where('user_id', $userId)
+        ->orderBy('created_at', 'desc') // Order by the latest entries
+        ->limit(5) // Limit to the last 5 records
+        ->get();
+
         return view('backend.education.create_content', [
-            'classes' => $classes,
+        'classes' => $classes,
+        'educationContents' => $educationContents, // Pass the contents to the view
         ]);
     }
 

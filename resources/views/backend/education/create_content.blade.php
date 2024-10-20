@@ -162,6 +162,14 @@
                                                     class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Go
                                                 to Additional Info</button>
                                         </div>
+
+                                        {{-- USER LAST 5 GENERATED CONTENT --}}
+                                        @foreach ($educationContents as $item)
+                                            <p>{{$item->topic}}</p>
+                                            
+                                        @endforeach
+
+
                                     </div>
                                     <!-- end tab pane -->
                                     <div class="tab-pane fade" id="v-pills-bill-address" role="tabpanel"
