@@ -9,7 +9,7 @@
 @slot('li_1') <a href="{{route('template.manage')}}">Education</a> @endslot
 @slot('title') Manage Tools @endslot
 @endcomponent
-
+<a href="{{route('add.education.tools')}}">add</a>
 <div class="col-xxl-6">
     @foreach ($tools as $item)
         <li>{{$item->name}}</li>
