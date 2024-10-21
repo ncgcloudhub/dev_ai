@@ -320,6 +320,12 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
 
+        Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools');
+
+        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+
+        Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
+
     });
 
     // FAQ
@@ -413,6 +419,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
 
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
+
+        Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
 
     });
 

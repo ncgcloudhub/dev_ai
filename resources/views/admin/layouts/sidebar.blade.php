@@ -345,6 +345,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
+                                    </li>
                                    
 
                                 </ul>
