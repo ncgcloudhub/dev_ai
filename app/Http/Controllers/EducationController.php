@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\educationContent;
+use App\Models\EducationTools;
 use App\Models\GradeClass;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use GuzzleHttp\Client;
 use Parsedown;
 use PDF;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class EducationController extends Controller
 {
@@ -468,6 +470,18 @@ class EducationController extends Controller
         return response()->json($subjects);
     }
 
+    public function manageToolsUser()
+    {   
+        $tools = EducationTools::get();
+        return view('backend.education.education_tools_manage_user', compact('tools'));
+    }
+
+
+
+
+
+
+
 
     // ADMIN SECTION
     public function manageGradeSubject()
@@ -502,5 +516,66 @@ class EducationController extends Controller
             return redirect()->back()->with('success', 'Subject added successfully.');
         }
     }
+
+    // CREATE TOOLS
+    public function manageTools()
+    {   
+        $tools = EducationTools::get();
+        return view('backend.education.education_tools_manage', compact('tools'));
+    }
+    
+
+    public function AddTools()
+    {
+        return view('backend.education.education_tools_add');
+    }
+
+    public function StoreTools(Request $request)
+{
+    // dd($request);
+    // Validate the incoming request
+    $validatedData = $request->validate([
+        'name' => 'required|string',
+        'icon' => 'nullable|string',
+        'description' => 'nullable|string',
+        'input_types' => 'required|array',
+        'input_names' => 'required|array',
+        'input_labels' => 'required|array',
+        'input_placeholders' => 'required|array',
+        'prompt' => 'nullable|string',
+        'popular' => 'nullable|string',
+    ]);
+
+    // Create slug from the template name
+    $slug = Str::slug($validatedData['name']);
+
+    // Create new Tool instance
+    $tool = new EducationTools();
+    $tool->name = $validatedData['name'];
+    $tool->slug = $slug;
+    $tool->icon = $validatedData['icon'];
+    $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+    $tool->description = $validatedData['description'];
+
+    // Save input fields as JSON arrays
+    $tool->input_types = json_encode($validatedData['input_types']);
+    $tool->input_names = json_encode($validatedData['input_names']);
+    $tool->input_labels = json_encode($validatedData['input_labels']);
+    $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
+    
+    // Save the prompt
+    $tool->prompt = $validatedData['prompt'];
+
+    // Save the Tool instance
+    $tool->save();
+
+    // Success notification
+    $notification = array(
+        'message' => 'Tool Added Successfully',
+        'alert-type' => 'success'
+    );
+
+    return redirect()->back()->with($notification);
+}
     
 }

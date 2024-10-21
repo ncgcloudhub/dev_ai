@@ -68,6 +68,35 @@
                     </div>
                 </li>
 
+                {{-- EDUCATION --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-star"></i> <span >Education</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+
+                                    <li class="nav-item">
+                                        <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Educator Tools</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('education.wizard.creator')}}" class="nav-link sidebar-hover" >Wizard Creator</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link sidebar-hover" >Library</a>
+                                    </li>
+                                  
+                                   
+                                </ul>
+                            </div>
+       
+                        </div>
+                    </div>
+                </li>
+
                 {{-- Fixed Template --}}
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('template.manage')}}">
@@ -75,11 +104,6 @@
                     </a>
                 </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('education.form')}}">
-                        <i class="las la-school"></i> <span >Education</span>
-                    </a>
-                </li>
 
                 {{-- AI CHAT --}}
                 <li class="nav-item">
