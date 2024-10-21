@@ -320,7 +320,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
 
-        Route::get('/add/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+        Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools');
+
+        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+
+        Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
 
     });
 
