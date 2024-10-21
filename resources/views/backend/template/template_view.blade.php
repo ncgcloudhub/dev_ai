@@ -249,7 +249,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button class="btn btn-rounded text-white gradient-btn-6 mx-1 mb-4">Generate</button>
+                            <button class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4">Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
