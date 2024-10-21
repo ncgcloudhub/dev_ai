@@ -320,6 +320,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
 
+        Route::get('/add/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+
     });
 
     // FAQ
