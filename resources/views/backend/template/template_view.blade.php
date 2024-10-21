@@ -540,7 +540,7 @@
                     loader.classList.add('d-none');
 
                     // Display the stats in the spans
-                    document.getElementById('numTokens').innerText = stats.num_tokens;
+                    document.getElementById('numTokens').innerText = stats.completionTokens;
                     document.getElementById('numWords').innerText = stats.num_words;
                     document.getElementById('numCharacters').innerText = stats.num_characters;
 
