@@ -165,7 +165,7 @@ foreach ($messagesFromDb as $message) {
         
             // Provide default message if userMessage is empty
             if (empty($userMessage)) {
-                $userMessage = 'Summarize this in 3 lines';
+                $userMessage = 'Summarize this Document in User friendly format';
             }
     
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
@@ -185,7 +185,7 @@ foreach ($messagesFromDb as $message) {
             session(['context' => $context]);
 
             if (empty($userMessage)) {
-                $userMessage = 'Summarize this in 3 lines';
+                $userMessage = 'Describe the Image';
             }
 
             $conversationHistory[] = ['role' => 'user', 'content' => $userMessage];
