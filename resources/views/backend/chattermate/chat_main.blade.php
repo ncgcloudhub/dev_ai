@@ -160,7 +160,7 @@
                                                 <p class="text-truncate mb-0">{{ $item->title }}</p>
                                             </div>
                                             <div class="d-flex">
-                                                <button class="edit-session-btn btn btn-sm btn-info btn-icon waves-effect waves-light me-2" data-session-id="{{ $item->id }}">
+                                                <button class="edit-session-btn btn btn-sm gradient-btn-7 btn-icon waves-effect waves-light me-2" data-session-id="{{ $item->id }}">
                                                     <i class="ri-pencil-line"></i>
                                                 </button>
                                                 <button class="delete-session-btn btn btn-sm btn-danger btn-icon waves-effect waves-light" data-session-id="{{ $item->id }}">

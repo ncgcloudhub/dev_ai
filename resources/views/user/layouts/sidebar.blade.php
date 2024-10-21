@@ -34,8 +34,8 @@
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('user.dashboard')}}">
-                        <i data-feather="home" class="icon-dual"></i> <span >Dashboard</span>
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('user.dashboard')}}">
+                        <i class="las la-home"></i> <span >Dashboard</span>
                     </a>
                 </li>
 
@@ -47,7 +47,7 @@
 
                 {{-- Favorites --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#favorite" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#favorite" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-star"></i> <span >Favorites</span>
                     </a>
@@ -57,7 +57,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.favourite.image')}}" class="nav-link" >Manage Favorite Image</a>
+                                        <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover" >Manage Favorite Image</a>
                                     </li>
                                   
                                    
@@ -70,20 +70,20 @@
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('template.manage')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('template.manage')}}">
                         <i class="las la-file-alt"></i> <span >AI Content Creator</span>
                     </a>
                 </li>
                 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('education.form')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('education.form')}}">
                         <i class="las la-school"></i> <span >Education</span>
                     </a>
                 </li>
 
                 {{-- AI CHAT --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{ route('main.chat.form') }}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{ route('main.chat.form') }}">
                         <i class="lab la-rocketchat"></i> 
                         <span>ChatterMate</span>
                         <span class="badge bg-danger ms-2">New</span>
@@ -94,7 +94,7 @@
                  {{-- Eid Card --}}
                
                  <li class="nav-item">
-                    <a class="nav-link menu-link" href="{{route('eid.card')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('eid.card')}}">
                         <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>
@@ -102,7 +102,7 @@
 
                 {{-- Custom Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#AITools" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#AITools" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-pencil-ruler"></i> <span >Custom Template</span>
                     </a>
@@ -111,13 +111,13 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.category.add')}}" class="nav-link" >Categories</a>
+                                        <a href="{{route('custom.template.category.add')}}" class="nav-link sidebar-hover" >Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.add')}}" class="nav-link" >Add Template</a>
+                                        <a href="{{route('custom.template.add')}}" class="nav-link sidebar-hover" >Add Template</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.manage')}}" class="nav-link" >Manage Template</a>
+                                        <a href="{{route('custom.template.manage')}}" class="nav-link sidebar-hover" >Manage Template</a>
                                     </li>
                                    
                                 </ul>
@@ -131,7 +131,7 @@
                 {{-- Prompt Library --}}
                
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#prompt" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#prompt" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-pen"></i> <span >Prompt Library</span>
                     </a>
@@ -141,7 +141,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.manage')}}" class="nav-link" >Manage Prompt</a>
+                                        <a href="{{route('prompt.manage')}}" class="nav-link sidebar-hover" >Manage Prompt</a>
                                     </li>
                                 </ul>
                             </div>     
@@ -152,7 +152,7 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarExpert">
                         <i class="l las la-sms"></i> <span >AI Chat</span>
                     </a>
@@ -162,7 +162,7 @@
                                 <ul class="nav nav-sm flex-column">
                                     
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link" >AI Professional Bots</a>
+                                        <a href="{{route('chat')}}" class="nav-link sidebar-hover" >AI Professional Bots</a>
                                     </li>
                                   
                                 </ul>
@@ -176,7 +176,7 @@
             
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#generateImage" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-image"></i> <span >Generate Image</span>
                     </a>
@@ -186,7 +186,7 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link" >Generate with Dall-E</a>
+                                        <a href="{{route('generate.image.view')}}" class="nav-link sidebar-hover" >Generate with Dall-E</a>
                                     </li>
                                   
                                    
@@ -202,7 +202,7 @@
 
                  {{-- Subscription --}}
                  <li class="nav-item">
-                    <a class="nav-link menu-link" href="#subscription" data-bs-toggle="collapse" role="button"
+                    <a class="nav-link menu-link sidebar-hover" href="#subscription" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="subscription">
                         <i class="ri-price-tag-3-line"></i> <span >Subscription</span>
                     </a>
@@ -211,7 +211,7 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('all.package')}}" class="nav-link" >Buy Package</a>
+                                        <a href="{{route('all.package')}}" class="nav-link sidebar-hover" >Buy Package</a>
                                     </li>
                                   
                                 </ul>
