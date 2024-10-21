@@ -205,7 +205,7 @@
                                                 
                                             <div class="col-xxl-1 col-sm-4">
                                                     <div>
-                                                        <button class="btn btn-rounded gradient-btn-6 mb-2">Generate</button>
+                                                        <button class="btn btn-rounded gradient-btn-5 mb-2">Generate</button>
                                                     </div>
                                             </div>
                                                 <!--end col-->
@@ -340,7 +340,7 @@
                                             <div class="col-xxl-1 col-sm-4 d-flex align-items-center">
                                                 <div>
                                                     <!-- Disable the button initially and include the spinner inside -->
-                                                    <button id="generate-button-tour" class="btn btn-rounded gradient-btn-6 mb-2" disabled>
+                                                    <button id="generate-button-tour" class="btn btn-rounded gradient-btn-5 mb-2" disabled>
                                                         <span id="generate-button-text">Generate</span>
                                                         <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
                                                             <span class="visually-hidden">Loading...</span>

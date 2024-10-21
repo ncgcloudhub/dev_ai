@@ -249,7 +249,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button class="btn btn-rounded text-white gradient-btn-6 mx-1 mb-4">Generate</button>
+                            <button class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4">Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
@@ -540,7 +540,7 @@
                     loader.classList.add('d-none');
 
                     // Display the stats in the spans
-                    document.getElementById('numTokens').innerText = stats.num_tokens;
+                    document.getElementById('numTokens').innerText = stats.completionTokens;
                     document.getElementById('numWords').innerText = stats.num_words;
                     document.getElementById('numCharacters').innerText = stats.num_characters;
 

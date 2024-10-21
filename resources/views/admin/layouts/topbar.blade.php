@@ -41,7 +41,7 @@
                 <form id="adminModelForm" action="{{ route('select-model') }}" method="POST">
                     @csrf
                     <div class="dropdown">
-                        <button class="btn dropdown-toggle gradient-btn-5 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn dropdown-toggle gradient-btn-8 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">

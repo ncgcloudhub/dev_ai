@@ -175,7 +175,7 @@
                                 
                                 
                                 <div class="col-md-6 mb-3 d-flex align-items-end">
-                                    <button class="btn gradient-btn-6 mb-2">Create Card</button>
+                                    <button class="btn gradient-btn-5 mb-2">Create Card</button>
                                 </div>
                             </div><!-- end row -->
                             <div id="error-msg" style="color: red;"></div>

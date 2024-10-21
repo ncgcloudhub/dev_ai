@@ -196,7 +196,7 @@
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
 
                         <div class="col-md-3" id="generate-button-tour">
-                            <button type="button" id="ask" class="btn gradient-btn-6"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            <button type="button" id="ask" class="btn gradient-btn-5"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">
