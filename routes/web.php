@@ -420,6 +420,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
 
+        Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
+
     });
 
 

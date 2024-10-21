@@ -470,6 +470,18 @@ class EducationController extends Controller
         return response()->json($subjects);
     }
 
+    public function manageToolsUser()
+    {   
+        $tools = EducationTools::get();
+        return view('backend.education.education_tools_manage_user', compact('tools'));
+    }
+
+
+
+
+
+
+
 
     // ADMIN SECTION
     public function manageGradeSubject()
@@ -507,9 +519,11 @@ class EducationController extends Controller
 
     // CREATE TOOLS
     public function manageTools()
-    {
-        return view('backend.education.education_tools_add');
+    {   
+        $tools = EducationTools::get();
+        return view('backend.education.education_tools_manage', compact('tools'));
     }
+    
 
     public function AddTools()
     {
