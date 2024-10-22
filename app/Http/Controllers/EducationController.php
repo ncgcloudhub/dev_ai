@@ -477,6 +477,48 @@ class EducationController extends Controller
     }
 
 
+    public function ToolsGenerateContent(Request $request)
+{
+    set_time_limit(0);
+
+    $user = auth()->user();
+    $openaiModel = $user->selected_model;
+    $apiKey = config('app.openai_api_key');
+    $client = OpenAI::client($apiKey);
+
+    // Construct the prompt based on input fields
+    $prompt = 'Create educational content with the following details: ';
+    foreach ($request->all() as $key => $value) {
+        if (!empty($value) && !in_array($key, ['_token'])) {
+            $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $value. ";
+        }
+    }
+
+    // Generate content using OpenAI API
+    $response = $client->chat()->create([
+        "model" => $openaiModel,
+        'messages' => [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ],
+    ]);
+
+    $content = $response['choices'][0]['message']['content'];
+
+    // Stream the response
+    return response()->stream(function () use ($content) {
+        $chunks = explode("\n", $content);
+        foreach ($chunks as $chunk) {
+            echo $chunk . "<br/>";
+            ob_flush();
+            flush();
+            sleep(1); // Simulate delay between chunks
+        }
+    });
+}
+
+
+
 
 
 

@@ -328,6 +328,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
 
+        Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
+
+
 
     });
 

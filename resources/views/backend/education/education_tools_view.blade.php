@@ -12,7 +12,7 @@
 
 <div class="row">
     <div class="col-lg-8">
-        <form action="" method="POST">
+        <form action="" method="POST" id="generate-content-form">
             @csrf
             <h1>Generate for {{ $tool->name }}</h1>
 
@@ -43,6 +43,9 @@
                 <i class="ri-auction-fill align-bottom me-1"></i>Generate
             </button>
         </form>
+
+
+        <div id="stream-output"></div>
 </div>
 
 
@@ -52,6 +55,35 @@
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
+<script>
+    $(document).ready(function () {
+    $('form').on('submit', function (e) {
+        e.preventDefault(); // Prevent the form from submitting the traditional way
+
+        let formData = $(this).serialize(); // Collect the form data
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("tools.generate.content") }}', // Update with your route
+            data: formData,
+            xhrFields: {
+                onprogress: function (event) {
+                    const contentChunk = event.currentTarget.responseText;
+                    $('#stream-output').html(contentChunk); // Update the stream output div
+                }
+            },
+            success: function (response) {
+                console.log('Content generation completed.');
+            },
+            error: function (error) {
+                console.error('Error during content generation:', error);
+            }
+        });
+    });
+});
+
+</script>
+
 @endsection
