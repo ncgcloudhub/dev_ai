@@ -521,7 +521,9 @@ class EducationController extends Controller
     public function manageTools()
     {   
         $tools = EducationTools::get();
-        return view('backend.education.education_tools_manage', compact('tools'));
+        $categories = $tools->pluck('category')->unique();
+
+        return view('backend.education.education_tools_manage', compact('tools', 'categories'));
     }
     
 
@@ -536,7 +538,8 @@ class EducationController extends Controller
     // Validate the incoming request
     $validatedData = $request->validate([
         'name' => 'required|string',
-        'icon' => 'nullable|string',
+        'category' => 'required|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'description' => 'nullable|string',
         'input_types' => 'required|array',
         'input_names' => 'required|array',
@@ -553,7 +556,14 @@ class EducationController extends Controller
     $tool = new EducationTools();
     $tool->name = $validatedData['name'];
     $tool->slug = $slug;
-    $tool->icon = $validatedData['icon'];
+    $tool->category = $validatedData['category']; // Add category
+
+    // Handle image upload if provided
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('uploads/tools', 'public'); // Store image
+        $tool->image = $imagePath; // Save image path in the database
+    }
+
     $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
     $tool->description = $validatedData['description'];
 
