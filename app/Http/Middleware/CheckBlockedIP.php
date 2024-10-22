@@ -26,7 +26,7 @@ class CheckBlockedIP
         $country = $location->regionName . ', ' . $location->countryName;
     } else {
         // Set to null or a default value if location data is not found
-        $country = null; // Or you could set a default value like 'Unknown Location' # Saiful
+        $country = 'Unknown Location'; // Or you could set a default value like 'Unknown Location' # Saiful
     }
     
     // Check if there is any user with this IP address that is blocked

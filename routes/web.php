@@ -431,7 +431,7 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 
 
 
-Route::middleware(['auth', 'check.status'])->group(function () {
+Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
