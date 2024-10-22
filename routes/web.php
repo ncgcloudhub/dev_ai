@@ -427,6 +427,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
         Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
 
+        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents');
+
     });
 
 

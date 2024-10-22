@@ -35,6 +35,19 @@ class EducationController extends Controller
         ]);
     }
 
+    public function toolsLibrary()
+    {
+        $userId = auth()->id(); // Get the authenticated user's ID
+
+        $educationContents = EducationContent::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return view('backend.education.education_tools_content_user', [
+        'educationContents' => $educationContents, // Pass the contents to the view
+        ]);
+    }
+
     public function getUserContents()
     {
         $userId = auth()->id(); // Get the authenticated user's ID
