@@ -331,7 +331,6 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
 
 
-
     });
 
     // FAQ

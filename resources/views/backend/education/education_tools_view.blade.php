@@ -12,10 +12,12 @@
 
 <div class="row">
     <div class="col-lg-8">
+        
+        <h1>Generate for {{ $tool->name }}</h1>
+
         <form action="" method="POST" id="generate-content-form">
             @csrf
-            <h1>Generate for {{ $tool->name }}</h1>
-
+            <input type="hidden" name="tool_id" value="{{ $tool->id }}">
             <div class="form-group mb-3">
             <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
                 <option selected="">Select Grade/Class</option>

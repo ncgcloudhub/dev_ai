@@ -481,13 +481,23 @@ class EducationController extends Controller
 {
     set_time_limit(0);
 
+    $toolId = $request->input('tool_id');
+    $tool = EducationTools::find($toolId);  // Assuming 'Tool' is your model
+
+    if (!$tool) {
+        return response()->json(['error' => 'Tool not found'], 404);
+    }
+
     $user = auth()->user();
     $openaiModel = $user->selected_model;
     $apiKey = config('app.openai_api_key');
     $client = OpenAI::client($apiKey);
 
-    // Construct the prompt based on input fields
-    $prompt = 'Create educational content with the following details: ';
+    $savedPrompt = $tool->prompt;
+
+    // Start building the final prompt by appending the saved prompt from the tool
+    $prompt = $savedPrompt . " "; 
+
     foreach ($request->all() as $key => $value) {
         if (!empty($value) && !in_array($key, ['_token'])) {
             $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $value. ";
