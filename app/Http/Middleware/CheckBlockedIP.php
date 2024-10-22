@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Stevebauman\Location\Facades\Location;
 
 class CheckBlockedIP
 {
@@ -19,11 +20,19 @@ class CheckBlockedIP
     {
          // Get the IP address of the incoming request
     $ip = $request->ip();
+    $location = Location::get($ip);
 
+    if ($location) {
+        $country = $location->regionName . ', ' . $location->countryName;
+    } else {
+        // Set to null or a default value if location data is not found
+        $country = null; // Or you could set a default value like 'Unknown Location' # Saiful
+    }
+    
     // Check if there is any user with this IP address that is blocked
-    $blockedUser = User::where('ipaddress', $ip)
-                                   ->where('block', true)
-                                   ->first();
+    $blockedUser = User::where('country', $country)
+                        ->where('block', true)
+                        ->first();
 
     // If the user's IP is blocked, log out the user and redirect
     if ($blockedUser) {
