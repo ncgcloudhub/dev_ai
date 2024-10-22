@@ -326,6 +326,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
 
+        Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
+
+
     });
 
     // FAQ

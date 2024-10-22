@@ -525,6 +525,17 @@ class EducationController extends Controller
 
         return view('backend.education.education_tools_manage', compact('tools', 'categories'));
     }
+
+    public function showTool($id)
+    {
+        // Retrieve the tool by ID
+        $tool = EducationTools::findOrFail($id);
+        $classes = GradeClass::with('subjects')->get();
+
+        // Pass the tool to the view
+        return view('backend.education.education_tools_view', compact('tool','classes'));
+    }
+
     
 
     public function AddTools()
