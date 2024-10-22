@@ -265,7 +265,7 @@
 
 /* Text Gradient */
 .gradient-text-1 {
-    background: linear-gradient(45deg, #9c0690, #dd52d2);
+    background: linear-gradient(45deg, #590361, #be06af);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -273,7 +273,7 @@
 
 /* Text Gradient */
 .gradient-text-2 {
-    background: rgb(214, 11, 214);
+    background: linear-gradient(45deg, #4014bb, #df56d3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -287,6 +287,12 @@
 .gradient-background-2{
     background: linear-gradient(45deg, #9b00ff, #e900ff);
 }
+
+.gradient-background-3{
+    background: linear-gradient(45deg, #aee0f0, #d596f0);
+}
+
+
 
 .sidebar-hover:hover {
     color: #831cc7 !important; /* Text color on hover */

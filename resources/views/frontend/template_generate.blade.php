@@ -37,7 +37,7 @@
 
              <!-- Token Information -->
              <div class="col-xxl-12 mb-3">
-                <div class="alert alert-info text-center">
+                <div class="alert gradient-background-3 text-center">
                     <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}"><u>Sign up now for FREE</u></a></strong>
                     to unlock your creativity!
                     <br>
@@ -223,7 +223,7 @@
 
                              <div class="col-12">
                                 <div class="text-end">
-                                    <button id="generateBtn" class="btn btn-rounded btn-primary mb-5">Generate</button>
+                                    <button id="generateBtn" class="btn btn-rounded gradient-btn-5 mb-5">Generate</button>
                                 </div>
                             </div>
 
@@ -244,8 +244,13 @@
             <div class="col">
  
                  <!-- Add the Download Content button -->
-                 <button id="downloadButton" class="btn btn-success">Download Content</button>
-                 <button id="copyButton" class="btn btn-primary">Copy Content</button> <!-- Added button -->
+                
+                 <button id="copyButton" class="btn text-white gradient-btn-9 mx-1">
+                    <i class="las la-copy"></i>
+                </button>
+                <button id="downloadButton" class="btn text-white gradient-btn-9 mx-1">
+                    <i class="las la-download"></i>
+                </button>
                 
                  <div class="row mt-2">
                      <div class="col-lg-12">
