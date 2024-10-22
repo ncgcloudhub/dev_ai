@@ -35,6 +35,19 @@ class EducationController extends Controller
         ]);
     }
 
+    public function toolsLibrary()
+    {
+        $userId = auth()->id(); // Get the authenticated user's ID
+
+        $educationContents = EducationContent::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return view('backend.education.education_tools_content_user', [
+        'educationContents' => $educationContents, // Pass the contents to the view
+        ]);
+    }
+
     public function getUserContents()
     {
         $userId = auth()->id(); // Get the authenticated user's ID
@@ -475,6 +488,58 @@ class EducationController extends Controller
         $tools = EducationTools::get();
         return view('backend.education.education_tools_manage_user', compact('tools'));
     }
+
+
+    public function ToolsGenerateContent(Request $request)
+{
+    set_time_limit(0);
+
+    $toolId = $request->input('tool_id');
+    $tool = EducationTools::find($toolId);  // Assuming 'Tool' is your model
+
+    if (!$tool) {
+        return response()->json(['error' => 'Tool not found'], 404);
+    }
+
+    $user = auth()->user();
+    $openaiModel = $user->selected_model;
+    $apiKey = config('app.openai_api_key');
+    $client = OpenAI::client($apiKey);
+
+    $savedPrompt = $tool->prompt;
+
+    // Start building the final prompt by appending the saved prompt from the tool
+    $prompt = $savedPrompt . " "; 
+
+    foreach ($request->all() as $key => $value) {
+        if (!empty($value) && !in_array($key, ['_token'])) {
+            $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $value. ";
+        }
+    }
+
+    // Generate content using OpenAI API
+    $response = $client->chat()->create([
+        "model" => $openaiModel,
+        'messages' => [
+            ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+            ['role' => 'user', 'content' => $prompt],
+        ],
+    ]);
+
+    $content = $response['choices'][0]['message']['content'];
+
+    // Stream the response
+    return response()->stream(function () use ($content) {
+        $chunks = explode("\n", $content);
+        foreach ($chunks as $chunk) {
+            echo $chunk . "<br/>";
+            ob_flush();
+            flush();
+            sleep(1); // Simulate delay between chunks
+        }
+    });
+}
+
 
 
 

@@ -328,6 +328,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
 
+        Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
+
 
     });
 
@@ -424,6 +426,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
 
         Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
+
+        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents');
 
     });
 
