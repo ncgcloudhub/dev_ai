@@ -94,3 +94,9 @@ in email_sends, add
 -------------11/10/24----------------
 in templateGeneratedContent 
 add template_id bigint
+
+-------------11/10/24----------------
+in education_tools table 
+add category text
+add image text
+remove icon

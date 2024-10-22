@@ -12,7 +12,7 @@
 
 <div class="col-xxl-6"> 
     <a href="{{route('manage.education.tools')}}">manage</a>
-    <form method="POST" action="{{route('store.education.tools')}}" class="row g-3">
+    <form method="POST" action="{{route('store.education.tools')}}" class="row g-3" enctype="multipart/form-data">
         @csrf
     <div class="card">
         <div class="card-header align-items-center d-flex">
@@ -26,14 +26,25 @@
                         <input type="text" name="name" class="form-control" id="name" placeholder="Enter Template Name">
                         <label for="name" class="form-label">Tools Name</label>
                     </div>
-                    <div class="form-floating mb-3">
-                        <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
-                        <label for="icon" class="form-label">Icon</label>
-                    </div>
-                   
+
+                    <select class="form-select mb-3" name="category" id="category" aria-label="Floating label select example">
+                        <option disabled selected="">Select Category</option>
+                        <option value="Category 1">Category 1</option>
+                        <option value="Category 2">Category 2</option>
+                        <option value="Category 3">Category 3</option>
+                        <option value="Category 4">Category 4</option>
+                        <option value="Category 5">Category 5</option>
+                       
+                    </select>
+  
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
                         <label for="description">Description</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Upload Image</label>
+                        <input type="file" name="image" class="form-control" id="image" accept="image/*">
                     </div>
                
             </div>
