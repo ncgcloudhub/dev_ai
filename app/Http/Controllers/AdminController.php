@@ -98,6 +98,27 @@ class AdminController extends Controller
         return redirect()->route('manage.user')->with('success', 'User deleted successfully.');
     }
 
+    // BULK DELETE
+    public function bulkDelete(Request $request) {
+    User::whereIn('id', $request->user_ids)->delete();
+    return redirect()->back()->with('success', 'Selected users deleted successfully.');
+}
+
+public function bulkBlock(Request $request) {
+    $users = User::whereIn('id', $request->user_ids)->get();
+    foreach ($users as $user) {
+        $user->block = !$user->block; // Toggle block status
+        $user->save();
+    }
+    return redirect()->back()->with('success', 'Block status updated for selected users.');
+}
+
+public function bulkStatusChange(Request $request) {
+    User::whereIn('id', $request->user_ids)->update(['status' => 'inactive']); // Example: Set to 'inactive'
+    return redirect()->back()->with('success', 'Status changed for selected users.');
+}
+
+
     // Add Admin
     public function AllAdmin()
     {
