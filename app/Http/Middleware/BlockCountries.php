@@ -19,7 +19,7 @@ class BlockCountries
 
         $location = Location::get($request->ip());
         
-        if ($location && in_array($location->countryCode, ['NL','NL-NH','BD'])) {
+        if ($location && in_array($location->countryCode, ['NL','NL-NH'])) {
             // Replace with the country codes you want to block
             abort(403, 'Access from your country is blocked.');
         }
