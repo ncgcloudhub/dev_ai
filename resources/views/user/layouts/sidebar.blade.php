@@ -40,9 +40,6 @@
                 </li>
 
 
-             
-
-
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
                 {{-- Favorites --}}
@@ -82,12 +79,12 @@
                                     <li class="nav-item">
                                         <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Educator Tools</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a href="{{route('education.wizard.creator')}}" class="nav-link sidebar-hover" >Wizard Creator</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{route('education.tools.contents')}}" class="nav-link sidebar-hover" >Library</a>
-                                    </li>
+                                    </li> --}}
                                   
                                    
                                 </ul>
