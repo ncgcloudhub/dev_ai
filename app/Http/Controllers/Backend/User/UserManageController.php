@@ -82,6 +82,36 @@ class UserManageController extends Controller
         return redirect()->back()->with('success', 'User block status updated successfully.');
     }
 
+    public function bulkBlock(Request $request) {
+        $users = User::whereIn('id', $request->user_ids)->get();
+        foreach ($users as $user) {
+            $user->block = !$user->block; // Toggle block status
+            $user->save();
+        }
+        return redirect()->back()->with('success', 'Block status updated for selected users.');
+    }
+
+    public function bulkStatusChange(Request $request)
+    {
+        // Ensure the request contains selected user IDs
+        if ($request->has('user_ids')) {
+            $userIds = $request->input('user_ids');
+    
+            // Loop through each selected user and toggle the status
+            User::whereIn('id', $userIds)->get()->each(function ($user) {
+                $user->status = ($user->status === 'active') ? 'inactive' : 'active';
+                $user->save();
+            });
+    
+            // Redirect with a success message
+            return redirect()->back()->with('success', 'Status changed for selected users.');
+        }
+    
+        // If no users are selected, return with an error message
+        return redirect()->back()->with('error', 'No users selected for status change.');
+    }
+    
+
     public function packageHistory()
     {
         // $packageGroupedByUser = PackageHistory::with('user') // Assumes a 'user' relationship exists
