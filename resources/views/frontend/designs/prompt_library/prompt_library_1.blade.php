@@ -4,7 +4,7 @@
     }
 
     .card-hover:hover {
-        background-color: #fdccff; /* Light color on hover */
+        background: linear-gradient(45deg, #ffffff, #e0c0ee); /* Light color on hover */
         transform: translateY(-5px); /* Slight lift effect on hover */
         cursor: pointer;
     }
@@ -39,8 +39,8 @@
                                             </li>
                                         </ul>
                                         <div class="hstack gap-2">
-                                            <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
-                                            <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                                            <span class="badge bg-success-subtle gradient-text-1">{{$item->category->category_name}}</span>
+                                            <span class="badge bg-primary-subtle gradient-text-2">{{$item->subcategory->sub_category_name}}</span>
                                         </div>
                                     </div>
                                 </div>

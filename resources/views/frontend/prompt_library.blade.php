@@ -16,7 +16,7 @@
         }
 
         .card-hover:hover {
-            background-color: #f0f8ff; /* Light color on hover */
+            background: linear-gradient(45deg, #ffffff, #eedef5); /* Light color on hover */
             transform: translateY(-5px); /* Slight lift effect on hover */
             cursor: pointer;
         }
@@ -70,7 +70,7 @@
                             <!--end col-->
                             <div class="col-xxl-2 col-sm-4">
                                 <div>
-                                    <button type="submit" class="btn text-white badge-gradient-dark mx-2"> 
+                                    <button type="submit" class="btn text-white gradient-btn-3 mx-2"> 
                                         <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
                                     </button>
                                 </div>
@@ -92,7 +92,7 @@
                             <a href="{{ route('prompt.frontend.view', ['slug' => $item->slug]) }}" class="text-decoration-none">
                                 <div class="card shadow-lg h-100 card-hover"> <!-- h-100 ensures the card fills the height -->
                                     <div class="card-body d-flex flex-column"> <!-- flex-column makes the card body stack vertically -->
-                                        <div class="d-flex mb-3">
+                                        <div class="d-flex">
                                             <div class="ms-3 flex-grow-1">
                                                 <h5 class="text-dark">{{$item->prompt_name}}</h5>
                                                 <ul class="list-inline text-muted mb-3">
@@ -101,8 +101,8 @@
                                                     </li>
                                                 </ul>
                                                 <div class="mt-auto hstack gap-2"> <!-- mt-auto pushes this section to the bottom -->
-                                                    <span class="badge bg-success-subtle text-success">{{$item->category->category_name}}</span>
-                                                    <span class="badge bg-primary-subtle text-primary">{{$item->subcategory->sub_category_name}}</span>
+                                                    <span class="badge bg-success-subtle gradient-text-1">{{$item->category->category_name}}</span>
+                                                    <span class="badge bg-primary-subtle gradient-text-2">{{$item->subcategory->sub_category_name}}</span>
                                                 </div>
                                             </div>
                                         </div>

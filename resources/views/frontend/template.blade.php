@@ -8,6 +8,7 @@
 @section('body')
 
 <body data-bs-spy="scroll" data-bs-target="#navbar-example">
+   
     <style>
         .template-card:hover {
          transform: scale(.95);
@@ -16,10 +17,12 @@
      } 
      
      .template-card:hover .card-body {
-         background-color: #d4e9f0; /* Light blue background color */
+         background: linear-gradient(45deg, #ffffff, #f2e6f7);
      }
      
+     
      </style>
+
 @endsection
 
 @section('content')
@@ -79,10 +82,10 @@
                             {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
                             <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                         </div>
-                        <h3 class="fw-medium link-primary">{{$item->template_name}}</h3>
+                        <h3 class="fw-medium link-primary gradient-text-1">{{$item->template_name}}</h3>
                         <p style="height: 3em; overflow: hidden; color:black;" class="card-text customer_name">{{$item->description}}</p>
                 
-                        <a href="{{ route('frontend.free.template.view', ['slug' => $item->slug]) }}" class="btn btn-primary btn-sm">Generate</a>
+                        <a href="{{ route('frontend.free.template.view', ['slug' => $item->slug]) }}" class="btn gradient-btn-9 btn-sm">Generate</a>
                 
                 
                         <ul class="list-inline hstack gap-2 mb-0">

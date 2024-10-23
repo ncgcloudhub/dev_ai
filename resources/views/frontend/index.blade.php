@@ -244,7 +244,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
                             <div class="text-center mt-5">
                                 <h5 class="fs-20">Trusted <span
-                                        class="text-primary text-decoration-underline">by</span> the world's best</h5>
+                                        class="gradient-text-1 text-decoration-underline">by</span> the world's best</h5>
 
                                 <!-- Swiper -->
                                 <div class="swiper trusted-client-slider mt-sm-5 mt-4 mb-sm-5 mb-4" dir="ltr">
@@ -324,8 +324,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         <div class="col-sm-auto">
                             <div>
                                 <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" target="_blank"
-                                    class="btn bg-gradient btn-danger"><i
-                                        class=" align-middle me-1"></i> Create Content</a>
+                                    class="btn gradient-btn-10"><i
+                                        class="align-middle me-1"></i> Create Content</a>
                             </div>
                         </div>
                         <!-- end col -->
@@ -391,7 +391,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-Mail">
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn bg-gradient btn-danger">
+                                    <button type="submit" class="btn gradient-btn-10">
                                         <i class="align-middle me-1"></i>Submit
                                     </button>
                                 </div>
@@ -432,7 +432,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         <div class="col-sm-auto">
                             <div>
                                 <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
-                                    class="btn bg-gradient btn-danger"><i
+                                    class="btn gradient-btn-10"><i
                                         class="align-middle me-1"></i> Generate Image</a>
                             </div>
                         </div>

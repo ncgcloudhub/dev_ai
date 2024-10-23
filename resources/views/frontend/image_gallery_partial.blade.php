@@ -21,7 +21,7 @@
             <i class="ri-download-line"></i>
         </a>
 
-        <button type="button" class="btn btn-info btn-sm share-button" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}">
+        <button type="button" class="btn gradient-btn-9 btn-sm share-button" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}">
             <i class="ri-share-forward-fill"></i>
         </button>
     </div>

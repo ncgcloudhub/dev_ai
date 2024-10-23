@@ -21,7 +21,7 @@
                     <!--end col-->
                     <div class="col-xxl-1 col-sm-4">
                         <div>
-                            <button type="button" id="generateButton" class="btn btn-rounded btn-primary mb-2 gradient-btn-2">
+                            <button type="button" id="generateButton" class="btn btn-rounded mb-2 gradient-btn-5">
                                 <span id="buttonText">Generate</span>
                                 <span id="loadingSpinner" class="spinner-border spinner-border-sm text-light ms-2 d-none" role="status"></span>
                             </button>

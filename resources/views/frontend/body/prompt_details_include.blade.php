@@ -16,7 +16,7 @@
 
          <!-- Token Information -->
          <div class="col-xxl-12 mb-3">
-            <div class="alert alert-info text-center">
+            <div class="alert gradient-background-3 text-center">
                 <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}"><u>Sign up now for FREE</u></a></strong>
                 to unlock your creativity!
                 <br>
@@ -40,7 +40,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Prompt Name</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->prompt_name}}</p>
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->prompt_name}}</p>
                     </div>
                 </div>
             </div> 
@@ -50,7 +50,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">System Instruction</label>
-                        <p class="fw-medium link-primary">
+                        <p class="fw-medium link-primary gradient-text-2">
                             @if (is_null($prompt_library->sub_category_id))
                                 --
                             @else
@@ -65,7 +65,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Category / Sub-Category Name</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->category->category_name}} /@if (is_null($prompt_library->sub_category_id))
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->category->category_name}} /@if (is_null($prompt_library->sub_category_id))
                             --</p>
                         @else
                         {{$prompt_library->subcategory->sub_category_name}}</p>
@@ -79,7 +79,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Prompt Description</label>
-                        <p class="fw-medium link-primary">{{$prompt_library->description}}</p>
+                        <p class="fw-medium link-primary gradient-text-2">{{$prompt_library->description}}</p>
                     </div>
                 </div>
             </div> 
@@ -89,7 +89,7 @@
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Actual Prompt</label>
-                        <p class="fw-medium link-primary" style="position: relative;">
+                        <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
                             {{$prompt_library->actual_prompt}}
                             <span class="copy-icon" onclick="copyText(this)">📋</span>
                         </p>
@@ -202,7 +202,7 @@
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
 
                         <div class="col-md-3">
-                            <button type="button" id="ask" class="btn btn-primary"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            <button type="button" id="ask" class="btn gradient-btn-5"><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">
@@ -226,10 +226,10 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 text-end" id="copy-download-tour">
-                            <button id="copyButton" class="btn btn-primary me-2">
+                            <button id="copyButton" class="btn gradient-btn-9 me-2">
                                 <i class="las la-copy"></i>
                             </button>
-                            <button id="downloadButton" class="btn btn-success">
+                            <button id="downloadButton" class="btn gradient-btn-9">
                                 <i class="las la-download"></i>
                             </button>
                         </div>
