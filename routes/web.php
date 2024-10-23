@@ -74,7 +74,7 @@ Route::get('/', function () {
     $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
 
     return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
-})->name('home');
+})->middleware('block.countries')->name('home');
 
 
 Route::get('/dashboard', function () {
