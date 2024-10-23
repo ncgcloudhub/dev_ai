@@ -89,7 +89,7 @@ Route::get('/dashboard', function () {
 
     // Redirect to the appropriate dashboard route based on user role
     return Redirect::to($url);
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'block.countries'])->name('dashboard');
 
 
 
