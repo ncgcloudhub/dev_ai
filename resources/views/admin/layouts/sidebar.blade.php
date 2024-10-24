@@ -252,6 +252,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('getDesign')}}" class="nav-link sidebar-hover">Manage Design</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.block')}}" class="nav-link sidebar-hover">Manage Block</a>
+                                    </li>
                
                                 </ul>
                             </div>

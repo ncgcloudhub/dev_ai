@@ -155,6 +155,12 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
         Route::post('/users/bulk-block', [UserManageController::class, 'bulkBlock'])->name('admin.users.bulkBlock');
+        Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block');
+        Route::post('/block/store', [UserManageController::class, 'storeBlock'])->name('country.block.store');
+        Route::post('/countries/update-country/{id}', [UserManageController::class, 'updateCountry'])->name('countries.updateCountry');
+        Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete');
+
+
         Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange');
 
         Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history');
