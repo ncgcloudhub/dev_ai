@@ -65,10 +65,17 @@
 
         <!-- Bulk Action Buttons -->
         <div class="bulk-actions mt-3">
-            <button type="button" id="bulkBlock" class="btn btn-warning">Block/Unblock Selected</button>
-            <button type="button" id="bulkStatusChange" class="btn btn-info">Change Status of Selected</button>
-            <button type="button" id="bulkDelete" class="btn btn-danger">Delete Selected</button>
+            <button type="button" id="bulkBlock" class="btn btn-warning" title="Block">
+                <i class="la la-lock"></i>
+            </button>
+            <button type="button" id="bulkStatusChange" class="btn btn-info" title="Status Change">
+                <i class="la la-exchange-alt"></i>
+            </button>
+            <button type="button" id="bulkDelete" class="btn btn-danger" title="Delete">
+                <i class="la la-trash"></i>
+            </button>
         </div>
+        
     </form>
 </div>
 

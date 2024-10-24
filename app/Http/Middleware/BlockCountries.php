@@ -20,6 +20,7 @@ class BlockCountries
 
         $location = Location::get($request->ip());
         
+
         if ($location) {
             // Fetch the blocked country codes dynamically from the blockCountry table
             $blockedCountryCodes = blockCountry::pluck('country_code')->toArray();
@@ -28,6 +29,7 @@ class BlockCountries
             if (in_array($location->countryCode, $blockedCountryCodes)) {
                 abort(403, 'Access from your country is blocked.');
             }
+
         }
         return $next($request);
     }
