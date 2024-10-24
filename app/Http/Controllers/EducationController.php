@@ -489,7 +489,15 @@ class EducationController extends Controller
 
     public function manageToolsUser()
     {   
-        $tools = EducationTools::get();
+        $user = auth()->user();
+        $tools = EducationTools::with('favorites')->get();
+    
+        // Map the tools to include is_favorited
+        $tools = $tools->map(function($tool) use ($user) {
+            $tool->is_favorited = $tool->favorites->where('user_id', $user->id)->isNotEmpty();
+            return $tool;
+        });
+
         return view('backend.education.education_tools_manage_user', compact('tools'));
     }
 

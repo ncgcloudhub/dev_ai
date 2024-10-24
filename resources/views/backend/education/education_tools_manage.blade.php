@@ -81,7 +81,7 @@
                     <div class="card-body">
                         <p class="fw-medium mb-0 float-end favorite-wrapper">
                             <button class="favorite-button" data-id="{{ $tool->id }}" style="border: none; background: none; cursor: pointer;">
-                                <i class="mdi mdi-heart-outline text-danger align-middle"></i> <!-- Use an outline icon initially -->
+                                <i class="{{ $tool->is_favorited ? 'mdi mdi-heart' : 'mdi mdi-heart-outline' }} text-danger align-middle"></i>
                             </button>
                             19.29k <!-- This can be dynamically generated if needed -->
                         </p>
