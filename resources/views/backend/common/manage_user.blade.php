@@ -16,6 +16,9 @@
                     <th scope="col">Email</th>
                     <th scope="col">Email Verified</th>
                     <th scope="col">Role</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Block</th>
                     <th scope="col">Credits Used</th>
                     <th scope="col">Tokens Used</th>
                     <th scope="col">Change Password</th>
@@ -33,7 +36,20 @@
                     </td>
                     <td>{{ $item->email }}</td>
                     <td>{{ $item->email_verified_at ? \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') : '--' }}</td>
-                    <td>{{ $item->role == 'admin' ? '<span class="badge border border-danger text-danger">Admin</span>' : $item->role }}</td>
+                    <td>
+                        {!! $item->role == 'admin' 
+                            ? '<span class="badge border border-danger text-danger">Admin</span>' 
+                            : e($item->role) !!}
+                    </td>
+                    <td>{{ $item->country }}</td>
+                    <td>{{ $item->ipaddress }}</td>
+                    <td>
+                        @if($item->block)
+                            <span class="badge border border-danger text-danger">Blocked</span>
+                        @else
+                            <span class="badge border border-success text-success">Active</span>
+                        @endif
+                    </td>
                     <td>{{ $item->credits_used }}</td>
                     <td>{{ $item->tokens_used }}</td>
                     <td>
