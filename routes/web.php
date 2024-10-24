@@ -347,6 +347,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         // Route to delete a specific tool (destroy)
         Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy');
 
+        Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
+
     });
 
     // FAQ

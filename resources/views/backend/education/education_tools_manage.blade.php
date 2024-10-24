@@ -79,7 +79,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> {{ rand(10, 50) }}k</p>
+                        <button class="favorite-button" data-id="{{ $tool->id }}">
+                            <i class="mdi mdi-heart-outline"></i> <!-- Use an outline icon initially -->
+                        </button>
+                        
                         <h5 class="mb-1 fs-16"><a href="apps-nft-item-details" class="text-body">{{ $tool->name }}</a></h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>
@@ -111,6 +114,39 @@
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
 
-    <script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
+<script>
+    $(document).ready(function() {
+    $('.favorite-button').on('click', function() {
+        let button = $(this);
+        let icon = button.find('i');
+        let toolsId = button.data('id'); // Get the tools ID
+        let isFavorited = icon.hasClass('mdi-heart'); // Check if already favorited
+        
+        $.ajax({
+            url: '{{ route('toggle.favorite') }}', // Use the named route for the URL
+            method: 'POST',
+            data: {
+                tools_id: toolsId, // The ID of the tool being favorited
+                _token: '{{ csrf_token() }}' // CSRF token for security
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Toggle heart icon based on action
+                    if (response.action === 'added') {
+                        icon.removeClass('mdi-heart-outline').addClass('mdi-heart'); // Filled heart
+                    } else {
+                        icon.removeClass('mdi-heart').addClass('mdi-heart-outline'); // Hollow heart
+                    }
+                }
+            },
+            error: function() {
+                alert('Failed to toggle favorite. Please try again.');
+            }
+        });
+    });
+});
+
+</script>
 @endsection
