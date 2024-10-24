@@ -74,7 +74,7 @@ Route::get('/', function () {
     $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
 
     return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
-})->middleware('block.countries')->name('home');
+})->name('home');
 
 
 Route::get('/dashboard', function () {
@@ -89,7 +89,7 @@ Route::get('/dashboard', function () {
 
     // Redirect to the appropriate dashboard route based on user role
     return Redirect::to($url);
-})->middleware(['auth', 'block.countries'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 
 
