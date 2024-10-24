@@ -21,7 +21,7 @@ class BlockCountries
         
         if ($location && in_array($location->countryCode, ['NL','NL-NH'])) {
             // Replace with the country codes you want to block
-            abort(403, 'Access from your country is blocked.');
+            abort(403, 'Website is not Reachable.');
         }
 
         return $next($request);
