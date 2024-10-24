@@ -14,6 +14,8 @@ use Parsedown;
 use PDF;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 
 class EducationController extends Controller
 {
@@ -663,5 +665,79 @@ class EducationController extends Controller
 
     return redirect()->back()->with($notification);
 }
+
+
+public function editTools($id)
+{
+    $tool = EducationTools::findOrFail($id); // Fetch the tool
+    return view('backend.education.education_tools_edit', compact('tool')); // Return edit view
+}
+
+
+public function updateTools(Request $request, $id)
+{
+    $tool = EducationTools::findOrFail($id);
+
+    // Validate the incoming request
+    $validatedData = $request->validate([
+        'name' => 'required|string',
+        'category' => 'required|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'description' => 'nullable|string',
+        'input_types' => 'required|array',
+        'input_names' => 'required|array',
+        'input_labels' => 'required|array',
+        'input_placeholders' => 'required|array',
+        'prompt' => 'nullable|string',
+        'popular' => 'nullable|string',
+    ]);
+
+    // Update the tool's properties
+    $tool->name = $validatedData['name'];
+    $tool->slug = Str::slug($validatedData['name']);
+    $tool->category = $validatedData['category'];
+
+    // Handle image upload if provided
+    if ($request->hasFile('image')) {
+        // Optionally delete the old image here
+        $imagePath = $request->file('image')->store('uploads/tools', 'public');
+        $tool->image = $imagePath;
+    }
+
+    $tool->description = $validatedData['description'];
+    $tool->input_types = json_encode($validatedData['input_types']);
+    $tool->input_names = json_encode($validatedData['input_names']);
+    $tool->input_labels = json_encode($validatedData['input_labels']);
+    $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
+    $tool->prompt = $validatedData['prompt'];
+    $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+
+    // Save the Tool instance
+    $tool->save();
+
+    // Success notification
+    $notification = [
+        'message' => 'Tool Updated Successfully',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->route('manage.education.tools')->with($notification);
+}
+
+public function destroyTools($id)
+{
+    $tool = EducationTools::findOrFail($id);
+    $tool->delete();
+
+    // Success notification
+    $notification = [
+        'message' => 'Tool Deleted Successfully',
+        'alert-type' => 'success'
+    ];
+
+    return redirect()->route('manage.education.tools')->with($notification);
+}
+
+
     
 }

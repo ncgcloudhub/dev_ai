@@ -338,6 +338,14 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
 
+        // Route to show the form for editing a specific tool (edit)
+        Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit');
+
+        // Route to update a specific tool (update)
+        Route::put('/tools/{id}', [EducationController::class, 'updateTools'])->name('tools.update');
+
+        // Route to delete a specific tool (destroy)
+        Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy');
 
     });
 

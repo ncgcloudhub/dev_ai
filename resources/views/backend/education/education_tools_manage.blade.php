@@ -20,17 +20,13 @@
                     <h4 class="text-white mb-0 fw-semibold">Create Your Contents with our Pre-defined Tools</h4>
                 </div>
             </div>
-            <!-- end col -->
-           
-            <!-- end col -->
+
         </div>
-        <!-- end row -->
+
     </div>
-    <!-- end container -->
+
 </section>
 
-
-<!-- start marketplace -->
 <section class="section bg-light" id="marketplace">
     <div class="container">
         <div class="row justify-content-center">
@@ -39,7 +35,7 @@
                     <h2 class="mb-3 fw-bold lh-base">Explore Products</h2>
                     <p class="text-muted mb-4">Collection widgets specialize in displaying many elements of the same type, such as a collection of pictures from a collection of articles.</p>
                     
-                    <!-- Dynamic Categories -->
+                 
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-medium active" type="button" data-filter="all">All Items</button>
@@ -51,54 +47,64 @@
                         @endforeach
                     </ul>
                 </div>
-            </div><!-- end col -->
-        </div><!-- end row -->
+            </div>
+        </div><
 
         <div class="row">
-            <!-- Dynamic Product Items -->
             @foreach($tools as $tool)
-                <div class="col-lg-4 product-item {{ Str::slug($tool->category) }}">
-                    <div class="card explore-box card-animate">
-                        <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                            <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">
-                                <i class="mdi mdi-cards-heart fs-16"></i>
-                            </button>
+            <div class="col-lg-4 product-item {{ Str::slug($tool->category) }}">
+                <div class="card explore-box card-animate">
+                    <div class="bookmark-icon position-absolute top-0 end-0 p-2">
+                        <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">
+                            <i class="mdi mdi-cards-heart fs-16"></i>
+                        </button>
+                    </div>
+                    <div class="explore-place-bid-img">
+                        <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
+                        <div class="bg-overlay"></div>
+                        <div class="place-bid-btn">
+                            <a href="{{ route('tool.show', $tool->id) }}" class="btn btn-primary">
+                                <i class="ri-auction-fill align-bottom me-1"></i>Explore
+                            </a>
+                            <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
+                                <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
+                            </a>
+                            <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                    <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
+                                </button>
+                            </form>
                         </div>
-                        <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="{{ route('tool.show', $tool->id) }}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Explore</a>
+                    </div>
+                    <div class="card-body">
+                        <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> {{ rand(10, 50) }}k</p>
+                        <h5 class="mb-1 fs-16"><a href="apps-nft-item-details" class="text-body">{{ $tool->name }}</a></h5>
+                        <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
+                    </div>
+                    <div class="card-footer border-top border-top-dashed">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-grow-1 fs-14">
+                                <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest: <span class="fw-medium">{{ rand(10, 500) }}ETH</span>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> {{ rand(10, 50) }}k</p>
-                            <h5 class="mb-1 fs-16"><a href="apps-nft-item-details" class="text-body">{{ $tool->name }}</a></h5>
-                            <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
-                        </div>
-                        <div class="card-footer border-top border-top-dashed">
-                            <div class="d-flex align-items-center">
-                                <div class="flex-grow-1 fs-14">
-                                    <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest: <span class="fw-medium">{{ rand(10, 500) }}ETH</span>
-                                </div>
-                                <h5 class="flex-shrink-0 fs-14 text-primary mb-0">{{ rand(5, 450) }} ETH</h5>
-                            </div>
+                            <h5 class="flex-shrink-0 fs-14 text-primary mb-0">{{ rand(5, 450) }} ETH</h5>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
+        
+        
         </div>
-    </div><!-- end container -->
+    </div>
 </section>
 
-<!-- end marketplace -->
 
-
-<!--start back-to-top-->
 <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
     <i class="ri-arrow-up-line"></i>
 </button>
-<!--end back-to-top-->
+
 
 @endsection
 
