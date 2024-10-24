@@ -11,8 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserNotification;
+use App\Models\blockCountry;
 use App\Models\EmailSend;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserManageController extends Controller
 {
@@ -20,6 +22,66 @@ class UserManageController extends Controller
     {
         return view('backend.user.manage_user');
     }
+  
+    public function manageBlock()
+    {
+        $countries = blockCountry::latest()->get();
+        return view('backend.user.block_manage_admin', compact('countries'));
+    }
+
+    public function storeBlock(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $validatedData = $request->validate([
+            'country_code' => 'required|string',
+        ]);
+
+        $code = blockCountry::create([
+            'country_code' => $validatedData['country_code'],
+            'user_id' => $user_id,
+        ]);
+
+
+        return redirect()->route('manage.block');
+    }
+
+    public function updateCountry(Request $request, $id)
+    {
+        // Log the ID of the country being updated
+        Log::info('Updating country with ID', ['id' => $id]);
+    
+        // Validate the request data
+        $validatedData = $request->validate([
+            'country_code' => 'required|string',
+        ]);
+    
+        // Log the incoming validated data before updating
+        Log::info('Updating country code with the following data', ['country_code' => $validatedData['country_code']]);
+    
+        // Find the country by ID and update it
+        $country = blockCountry::findOrFail($id);
+        $country->update([
+            'country_code' => $validatedData['country_code'],
+        ]);
+    
+        // Log a success message after the update
+        Log::info('Country updated successfully', ['id' => $id, 'country_code' => $validatedData['country_code']]);
+    
+        // Return a JSON response
+        return response()->json(['success' => true, 'message' => 'Country updated successfully']);
+    }
+    
+
+
+    public function countryDestroy($id)
+    {
+        $country = blockCountry::findOrFail($id);
+        $country->delete();
+
+        return redirect()->route('manage.block')->with('success', 'Country deleted successfully');
+    }
+
+
 
     public function UpdateUserStatus(Request $request)
     {
@@ -42,6 +104,8 @@ class UserManageController extends Controller
             return response()->json(['success' => false, 'message' => 'User not found'], 404);
         }
     }
+
+    
 
     public function UserDetails($id)
     {
