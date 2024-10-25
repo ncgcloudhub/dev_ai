@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\educationContent;
 use App\Models\EducationTools;
+use App\Models\EducationToolsFavorite;
 use App\Models\GradeClass;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ use PDF;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class EducationController extends Controller
@@ -487,7 +489,15 @@ class EducationController extends Controller
 
     public function manageToolsUser()
     {   
-        $tools = EducationTools::get();
+        $user = auth()->user();
+        $tools = EducationTools::with('favorites')->get();
+    
+        // Map the tools to include is_favorited
+        $tools = $tools->map(function($tool) use ($user) {
+            $tool->is_favorited = $tool->favorites->where('user_id', $user->id)->isNotEmpty();
+            return $tool;
+        });
+
         return view('backend.education.education_tools_manage_user', compact('tools'));
     }
 
@@ -542,6 +552,31 @@ class EducationController extends Controller
     });
 }
 
+
+public function toggleFavorite(Request $request)
+{
+    $user = Auth::user(); // Get the authenticated user
+    $toolsId = $request->input('tools_id'); // ID of the tool being favorited
+
+    // Check if the tool is already favorited by the user
+    $alreadyFavorited = EducationToolsFavorite::where('user_id', $user->id)
+                                 ->where('tools_id', $toolsId)
+                                 ->exists();
+
+    if ($alreadyFavorited) {
+        EducationToolsFavorite::where('user_id', $user->id)
+                ->where('tools_id', $toolsId)
+                ->delete();
+        return response()->json(['success' => true, 'action' => 'removed']);
+    } else {
+       
+        EducationToolsFavorite::create([
+            'user_id' => $user->id,
+            'tools_id' => $toolsId,
+        ]);
+        return response()->json(['success' => true, 'action' => 'added']);
+    }
+}
 
 
 
