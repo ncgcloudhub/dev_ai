@@ -611,31 +611,31 @@ document.addEventListener('click', function(event) {
              // Format the message content
              const formattedContent = formatContent(content);
 
-            let messageHTML = `
-             <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-                <div class="conversation-list">
-                    <!-- Conditionally include the chat avatar based on the role -->
-                    ${role !== 'user' ? `
-                        <div class="chat-avatar">
-                            <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                        </div>
-                    ` : ''}
+             let messageHTML = `
+                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                    <div class="conversation-list">
+                        ${role !== 'user' ? `
+                            <div class="chat-avatar">
+                                <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                            </div>
+                        ` : ''}
 
-                    <div class="user-chat-content">
-                        <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
-                                ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
-                                ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content">
+                                    ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
+                                    ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
+                                    ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="conversation-name">
+                                <small class="text-muted time">${new Date(created_at + "Z").toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
                             </div>
                         </div>
-                        <div class="conversation-name">
-                            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
             `;
+
 
             chatConversation.insertAdjacentHTML('beforeend', messageHTML);
         });
