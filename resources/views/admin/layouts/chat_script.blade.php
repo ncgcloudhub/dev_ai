@@ -364,11 +364,11 @@ function sendMessage() {
         let userMessageHTML = `<li class="chat-list right">
             <div class="conversation-list">
                 <div class="user-chat-content">
-                    <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
-                        </div>
-                    </div>
+                  <div class="ctext-wrap-content">
+                    <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
+                    ${file ? `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px;">` : 'file'}
+                    ${pastedImageFile ? `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px;">` : 'pasted'}
+                  </div>
                     <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
                 </div>
             </div>
@@ -409,12 +409,12 @@ function sendMessage() {
         let debounceTimer;
         const DEBOUNCE_DELAY = 100;
 
-        function scheduleUpdate() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                updateAssistantMessage();
-            }, DEBOUNCE_DELAY);
-        }
+    function scheduleUpdate() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            updateAssistantMessage();
+        }, DEBOUNCE_DELAY);
+    }
 
         function updateAssistantMessage() {
             try {
