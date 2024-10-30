@@ -30,6 +30,7 @@ class MainChat extends Controller
         $userId = auth()->id(); // Get the authenticated user's ID
         $sessions = Session::with('messages') // Eager load the related messages
             ->where('user_id', $userId)
+            ->orderBy('id', 'desc')
             ->get();
 
             return view('backend.chattermate.chat_main', [
