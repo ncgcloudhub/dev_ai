@@ -1,13 +1,12 @@
 @extends('admin.layouts.master-without-nav')
 @section('title')
-   Career
+{{$prompt_library->prompt_name}}
 @endsection
 
-@section('meta_description')
-{{$prompt_library->page_description}}@endsection
+@section('description')
+{{$prompt_library->description}}@endsection
 
-@section('meta_keywords')
-{{$prompt_library->page_tagging}}@endsection
+
 
 
 @section('css')
