@@ -531,6 +531,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
         Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
         Route::get('/expert/{slug}/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [ExpertController::class, 'SendMessages']);
+        Route::post('/expert/delete-conversation', [ExpertController::class, 'deleteConversation']);
         Route::get('/conversation/{expertId}', [ExpertController::class, 'getConversation']);
 
 
