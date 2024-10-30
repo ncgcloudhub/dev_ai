@@ -85,7 +85,8 @@ class ExpertController extends Controller
         $expert_selected = Expert::where('id', $id)->where('slug', $slug)->firstOrFail();
         $expert_selected_id = $expert_selected->id;
         $experts = Expert::latest()->get();
-        return view('backend.expert.chat1', compact('experts', 'expert_selected_id', 'expert_selected'));
+        $user = Auth::user();
+        return view('backend.expert.chat1', compact('experts', 'expert_selected_id', 'expert_selected','user'));
     }
 
 
@@ -120,8 +121,17 @@ class ExpertController extends Controller
         $pastedImages = session('pasted_images', []);
         Log::info('Pasted images: ', $pastedImages);
 
-        $conversationHistory = session('conversation_history', []);
-        Log::info('Conversation history: ', $conversationHistory);
+           // Retrieve previous conversation history for the selected expert from the database
+        $conversationHistory = ExpertConversation::where('user_id', Auth::id())
+        ->where('expert_id', $expertId)
+        ->orderBy('created_at', 'asc')
+        ->get(['role', 'message'])
+        ->toArray();
+
+        // Store the conversation history in the session for quick access during this session
+        session(['conversation_history' => $conversationHistory]);
+
+        Log::info('Conversation history 133: ', $conversationHistory);
 
         $context = session('context', []);
         Log::info('Context: ', $context);
@@ -246,14 +256,8 @@ class ExpertController extends Controller
 
         // Add all conversation history messages
         foreach ($conversationHistory as $message) {
-            if (is_array($message) && isset($message['content']) && isset($message['role'])) {
-                if (!is_null($message['content'])) {
-                    $messages[] = 
-                    [
-                        'role' => $message['role'], 
-                        'content' => $message['content']
-                    ];
-                }
+            if (isset($message['role'], $message['content'])) {
+                $messages[] = ['role' => $message['role'], 'content' => $message['content']];
             } else {
                 Log::warning('Invalid message structure:', ['message' => $message]);
             }
@@ -372,6 +376,23 @@ class ExpertController extends Controller
         'Connection' => 'keep-alive',
     ]);
     }
+
+    public function deleteConversation(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'expert_id' => 'required|exists:experts,id',
+        ]);
+
+        // Logic to delete the conversation from the database
+        // Assuming you have a Conversation model
+        ExpertConversation::where('user_id', $request->user_id)
+                    ->where('expert_id', $request->expert_id)
+                    ->delete();
+
+        return response()->json(['success' => true]);
+    }
+
 
     public function getConversation($expertId)
     {

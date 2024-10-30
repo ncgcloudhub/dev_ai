@@ -122,6 +122,24 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-8 col-4">
+                                    <ul class="list-inline user-chat-nav text-end mb-0">
+                             
+                                        <li class="list-inline-item d-none d-lg-inline-block m-0">
+                                            <button type="button" class="btn btn-ghost-secondary btn-icon" onclick="deleteConversation({{ $user->id }}, {{ $expert_selected_id }})">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 icon-sm">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6l-2 14H7L5 6"></path>
+                                                    <path d="M10 6v12"></path>
+                                                    <path d="M14 6v12"></path>
+                                                </svg>
+                                            </button>
+                                        </li>
+                                        
+
+                                    
+                                    </ul>
+                                </div>
                              
                             </div>
 

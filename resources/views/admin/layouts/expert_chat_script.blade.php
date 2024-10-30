@@ -560,6 +560,36 @@ function resetButton() {
     window.history.pushState({ path: newUrl }, '', newUrl);
 }
 
+function deleteConversation(userId, expertId) {
+    // Confirm deletion
+    if (confirm("Are you sure you want to delete this conversation?")) {
+        // Send AJAX request to the server
+        $.ajax({
+            url: '/chat/expert/delete-conversation', // Update with your endpoint
+            type: 'POST',
+            data: {
+                user_id: userId,
+                expert_id: expertId,
+                _token: '{{ csrf_token() }}' // Add CSRF token for Laravel
+            },
+            success: function(response) {
+                // Check if deletion was successful
+                if (response.success) {
+                    // Clear the conversation UI
+                    $('#users-conversation').empty();
+                    alert("Conversation deleted successfully.");
+                } else {
+                    alert("Failed to delete conversation. Please try again.");
+                }
+            },
+            error: function() {
+                alert("An error occurred while deleting the conversation.");
+            }
+        });
+    }
+}
+
+
 
 
 </script>
