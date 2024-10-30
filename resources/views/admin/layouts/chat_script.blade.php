@@ -611,6 +611,7 @@ document.addEventListener('click', function(event) {
              // Format the message content
              const formattedContent = formatContent(content);
 
+
             let messageHTML = `
              <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
                 <div class="conversation-list">
@@ -632,12 +633,14 @@ document.addEventListener('click', function(event) {
                     </div>
                         </div>
                         <div class="conversation-name">
-                            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>       
+                         </div>
+
                         </div>
                     </div>
-                </div>
-            </li>
+                </li>
             `;
+
 
             chatConversation.insertAdjacentHTML('beforeend', messageHTML);
         });

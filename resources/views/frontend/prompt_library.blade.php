@@ -1,6 +1,6 @@
 @extends('admin.layouts.master-without-nav')
 @section('title')
-   Templates
+   Prompt Library
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
