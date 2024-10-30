@@ -623,11 +623,13 @@ document.addEventListener('click', function(event) {
 
                     <div class="user-chat-content">
                         <div class="ctext-wrap">
-                            <div class="ctext-wrap-content">
-                                ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
-                                ${is_image ? `<img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">` : ''}
-                                ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
-                            </div>
+                           <div class="ctext-wrap-content">
+                        ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
+                        ${is_image ? `<a href="/storage/${file_path}" target="_blank">
+                            <img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">
+                        </a>` : ''}
+                        ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                    </div>
                         </div>
                         <div class="conversation-name">
                             <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
