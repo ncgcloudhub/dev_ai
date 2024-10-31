@@ -622,14 +622,18 @@ document.addEventListener('click', function(event) {
                         </div>
                     ` : ''}
 
-                    <div class="user-chat-content">
+                   <div class="user-chat-content">
                         <div class="ctext-wrap">
-                           <div class="ctext-wrap-content">
-                        ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
-                        ${is_image ? `<a href="/storage/${file_path}" target="_blank">
-                            <img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">
-                        </a>` : ''}
-                        ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                            <div class="ctext-wrap-content">
+                                ${content ? `<p class="mb-0 ctext-content">${formattedContent}</p>` : ''}
+                               ${is_image ? `
+                                <a href="javascript:void(0);" onclick="showImageModal('/storage/${file_path}')">
+                                    <img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">
+                                </a>
+                            ` : ''}
+                                ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                            </div>
+                        </div>
                     </div>
                         </div>
                         <div class="conversation-name">
@@ -658,6 +662,7 @@ document.addEventListener('click', function(event) {
     });
 
     });
+
 
     // Function to set the active session
     function setActiveSession(sessionId) {

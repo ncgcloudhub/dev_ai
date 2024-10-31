@@ -293,6 +293,23 @@
 
 <!-- end chat-wrapper -->
 
+<!-- Image Modal -->
+<div id="success-Payment" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="text-end">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="mt-2">
+                    <img id="modalImage" src="" alt="Image" style="width:100%; height:auto; max-width: 500px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 @section('script')
 <script>
@@ -328,9 +345,17 @@
     <script>
         // Initialize highlight.js
         hljs.highlightAll();
+
+        function showImageModal(imageUrl) {
+    document.getElementById('modalImage').src = imageUrl;
+    var myModal = new bootstrap.Modal(document.getElementById('success-Payment'));
+    myModal.show();
+}
+
     </script>
 
     
     @include('admin.layouts.chat_script')
 
+    
 @endsection
