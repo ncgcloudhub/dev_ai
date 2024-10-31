@@ -27,7 +27,7 @@ class BlockCountries
             
             // Check if the user's country code is in the blocked country list
             if (in_array($location->countryCode, $blockedCountryCodes)) {
-                abort(403, 'Access from your country is blocked.');
+                return response()->view('frontend.maintenance', [], 403);
             }
 
         }

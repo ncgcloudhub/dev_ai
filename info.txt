@@ -100,3 +100,7 @@ in education_tools table
 add category text
 add image text
 remove icon
+
+-------------31/10/24----------------
+in education_contents table 
+add_to_library boolean 

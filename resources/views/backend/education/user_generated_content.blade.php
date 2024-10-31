@@ -277,6 +277,15 @@
                                                     <i class="ri-delete-bin-4-line"></i>
                                                 </span>
                                             </button>
+
+                                         @if($lastPackage)
+                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.add_to_library ? 'Remove from Library' : 'Add to Library'}" onclick="addToLibrary(${content.id}, this)">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                      <i class="${content.add_to_library ? 'ri-file-reduce-line' : 'ri-file-add-line'}"></i>
+                                                </span>
+                                            </button>
+                                        @endif
+
                                         </div>
                                         <div>
                                             <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
@@ -422,6 +431,41 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+
+    function addToLibrary(contentId, buttonElement) {
+    fetch(`/education/content/${contentId}/add-to-library`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.status === 'added') {
+                // Update button to indicate it has been added to the library
+                buttonElement.classList.add('btn-success');
+                buttonElement.setAttribute('title', 'Remove from Library');
+                buttonElement.querySelector('i').classList.replace('ri-file-add-line', 'ri-file-reduce-line');
+            } else {
+                // Update button to indicate it can be added to the library
+                buttonElement.classList.remove('btn-success');
+                buttonElement.setAttribute('title', 'Add to Library');
+                buttonElement.querySelector('i').classList.replace('ri-file-reduce-line', 'ri-file-add-line');
+            }
+
+            console.log(data.message);
+        } else {
+            console.error('Failed to update library status');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
 
 </script>
 
