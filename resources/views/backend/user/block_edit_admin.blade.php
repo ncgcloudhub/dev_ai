@@ -60,8 +60,9 @@
 </div>
 
 <div class="col-xxl-6">
-    <form method="POST" action="{{route('country.block.store')}}" class="row g-3">
+    <form method="POST" action="{{route('block.countries.update')}}" class="row g-3">
         @csrf
+        <input type="hidden" name="id" value="{{$country->id}}">  
     <div class="card">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Block Country</h4>
@@ -72,7 +73,7 @@
                 
                     <div class="col-md-12">
                         <label for="country_code" class="form-label">Country Code</label>
-                        <input type="text" name="country_code" class="form-control mb-3" id="country_code" placeholder="Enter Country Code" required>
+                        <input type="text" name="country_code" value="{{$country->country_code}}" class="form-control mb-3" id="country_code" placeholder="Enter Country Code" required>
                     </div>
 
                   
@@ -82,7 +83,7 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
         </div>
     </div>
 </form>
