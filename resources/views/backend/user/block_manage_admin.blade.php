@@ -9,22 +9,54 @@
 @endcomponent
 
 <div class="row">
+
+
 <div class="col-xxl-6">
-   @foreach ($countries as $item)
-    <p id="country-{{ $item->id }}">{{ $item->country_code }}</p>
+    <div class="card">
 
-    <!-- Edit Button to open modal -->
-    <button type="button" class="btn btn-warning" onclick="openEditModal({{ $item->id }}, '{{ $item->country_code }}')">Edit</button>
+            <div class="card-body">
+                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl.</th>
+                            <th scope="col">Country Code</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $sl = 1; // Initialize the variable outside the loop
+                        @endphp
+                        @foreach ($countries as $item)
+                        <tr>
+                            <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
+                              
+                            <td>{{ $item->country_code }}</td>    
+                            
+                            <td>
+                                <div class="form-check form-switch form-switch-md" dir="ltr">
 
-    <!-- Delete Button -->
-    <form action="{{ route('block.countries.delete', $item->id) }}" method="POST" style="display:inline-block;">
-        @csrf
-        @method('DELETE')
-        <button type="submit" onclick="return confirm('Are you sure you want to delete this country?')">Delete</button>
-    </form>
-@endforeach
+                                    <a href="{{route('template.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+    
+                                    <form action="{{ route('block.countries.delete', $item->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this Category?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" style="background:none; border:none; padding:0; cursor:pointer;">
+                                            <i class="ri-delete-bin-5-fill fs-16"></i>
+                                        </button>
+                                    </form>
+                                    
+
+                                </div>
+                            </td>    
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
 
+    </div>
 </div>
 
 <div class="col-xxl-6">
