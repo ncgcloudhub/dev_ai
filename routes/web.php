@@ -431,6 +431,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
 
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
+       
+        Route::post('/get-contents/subject/library', [EducationController::class, 'getContentsBySubjectLibrary'])->name('education.getContentsBySubject.library');
 
         Route::post('/get-content-by-id', [EducationController::class, 'getContentById'])->name('education.getContentById');
 
@@ -439,6 +441,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::get('/content/{id}/download', [EducationController::class, 'downloadPDF'])->name('education.content.download');
 
         Route::post('/content/{id}/complete', [EducationController::class, 'markAsComplete'])->name('content.mark.complete');
+        
+        Route::post('/content/{id}/add-to-library', [EducationController::class, 'addToLibrary'])->name('content.add.library');
 
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
 

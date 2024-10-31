@@ -42,22 +42,35 @@ class EducationController extends Controller
 
     public function toolsLibrary()
     {
-        $userId = auth()->id(); // Get the authenticated user's ID
+        $userId = auth()->id(); 
 
-        $educationContents = EducationContent::where('user_id', $userId)
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-        return view('backend.education.education_tools_content_user', [
-        'educationContents' => $educationContents, // Pass the contents to the view
+        $educationContents = EducationContent::where('add_to_library', true)
+            ->with('gradeClass', 'subject')
+            ->get();
+    
+        // Group by grade and get related subjects
+        $grades = $educationContents->groupBy('grade_id');
+        $gradeIds = $grades->keys(); // Get grade IDs
+    
+        // Get classes with subjects related to those grades
+        $classes = GradeClass::with(['subjects' => function ($query) use ($gradeIds) {
+            $query->whereIn('id', function ($subQuery) use ($gradeIds) {
+                $subQuery->select('subject_id')
+                    ->from('education_contents')
+                    ->whereIn('grade_id', $gradeIds)
+                    ->distinct();
+            });
+        }])->whereIn('id', $gradeIds)->get();
+    
+    return view('backend.education.education_tools_content_user', [
+            'classes' => $classes,
         ]);
     }
 
     public function getUserContents()
     {
-        $userId = auth()->id(); // Get the authenticated user's ID
+        $userId = auth()->id(); 
 
-        // Retrieve all unique grades and related subjects for the user
         $educationContents = EducationContent::where('user_id', $userId)
             ->with('gradeClass', 'subject')
             ->get();
@@ -99,6 +112,23 @@ class EducationController extends Controller
         ]);
     }
 
+    public function getContentsBySubjectLibrary(Request $request)
+    {
+        $subjectId = $request->input('subject_id');
+        $userId = auth()->id(); // Get the authenticated user's ID
+
+        // Retrieve contents for the selected subject
+        $contents = educationContent::where('add_to_library', true)
+            ->where('subject_id', $subjectId)
+            ->orderBy('status', 'desc')
+            ->with('gradeClass', 'subject')
+            ->get();
+
+        return response()->json([
+            'contents' => $contents,
+        ]);
+    }
+
     public function getContentById(Request $request)
     {
         $contentId = $request->input('content_id');
@@ -122,12 +152,13 @@ class EducationController extends Controller
 
     public function update(Request $request)
     {
-       
+
         $educationContent = EducationContent::findOrFail($request->id);
        
         if (!$educationContent) {
             return response()->json(['error' => 'Content not found'], 404);
         }
+
 
         $user = auth()->user();
         $openaiModel = $user->selected_model;
@@ -276,12 +307,53 @@ class EducationController extends Controller
     
         return response()->json(['success' => true, 'status' => $content->status, 'message' => $message]);
     }
+
+    public function addToLibrary(Request $request, $id)
+{
+    Log::info('Received request to add content to library', ['id' => $id]);
+
+    $content = educationContent::find($id);
+
+    if (!$content) {
+        return response()->json(['error' => 'Content not found'], 404);
+    }
+
+    if ($content->user_id !== auth()->id()) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
+    // Toggle the add_to_library field
+    if ($content->add_to_library) {
+        // If it's already in the library, mark it as not in the library
+        $content->add_to_library = false;
+        $message = 'Content removed from library';
+        $status = 'removed';
+    } else {
+        // If it's not in the library, mark it as in the library
+        $content->add_to_library = true;
+        $message = 'Content added to library';
+        $status = 'added';
+    }
+
+    $content->save();
+
+    return response()->json(['success' => true, 'status' => $status, 'message' => $message]);
+}
     
 
     public function educationContent(Request $request)
     {
 
         set_time_limit(0);
+
+        $data = getUserLastPackageAndModels();
+        $lastPackage = $data['lastPackage'];
+
+        $add_to_library = true;
+        
+        if($lastPackage){
+            $add_to_library = false;
+        }
 
         $user = auth()->user();
         $openaiModel = $user->selected_model;
@@ -456,6 +528,7 @@ class EducationController extends Controller
             'reference' => $request->input('reference'),
             'generated_content' => $content,
             'prompt' => $prompt,
+            'add_to_library' => $add_to_library,
             'image_url' => $firstImageUrl, // This will be null if no image is generated
             'status' => 'generated' // or any default status you want
         ]);
