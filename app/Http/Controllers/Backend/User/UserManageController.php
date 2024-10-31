@@ -15,6 +15,7 @@ use App\Models\blockCountry;
 use App\Models\EmailSend;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class UserManageController extends Controller
 {
@@ -45,31 +46,35 @@ class UserManageController extends Controller
         return redirect()->route('manage.block');
     }
 
-    public function updateCountry(Request $request, $id)
+    public function editCountry($id)
     {
-        // Log the ID of the country being updated
-        Log::info('Updating country with ID', ['id' => $id]);
-    
-        // Validate the request data
-        $validatedData = $request->validate([
-            'country_code' => 'required|string',
-        ]);
-    
-        // Log the incoming validated data before updating
-        Log::info('Updating country code with the following data', ['country_code' => $validatedData['country_code']]);
-    
-        // Find the country by ID and update it
+        $countries = blockCountry::latest()->get();
         $country = blockCountry::findOrFail($id);
-        $country->update([
-            'country_code' => $validatedData['country_code'],
-        ]);
-    
-        // Log a success message after the update
-        Log::info('Country updated successfully', ['id' => $id, 'country_code' => $validatedData['country_code']]);
-    
-        // Return a JSON response
-        return response()->json(['success' => true, 'message' => 'Country updated successfully']);
+        return view('backend.user.block_edit_admin', compact('countries', 'country'));
     }
+
+
+    public function updateCountry(Request $request)
+    {
+
+        $id = $request->id;
+
+        blockCountry::findOrFail($id)->update([
+            'country_code' => $request->country_code,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Country Block Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
     
 
 

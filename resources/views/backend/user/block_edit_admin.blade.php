@@ -1,7 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
-
-
+@section('title') Block Country @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="{{route('manage.block')}}">Country</a> @endslot
@@ -10,10 +8,9 @@
 
 <div class="row">
 
-
-<div class="col-xxl-6">
-    <div class="card">
-
+    <div class="col-xxl-6">
+        <div class="card">
+            
             <div class="card-body">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
@@ -30,7 +27,7 @@
                         @foreach ($countries as $item)
                         <tr>
                             <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
-                              
+                            
                             <td>{{ $item->country_code }}</td>    
                             
                             <td>
@@ -45,8 +42,6 @@
                                             <i class="ri-delete-bin-5-fill fs-16"></i>
                                         </button>
                                     </form>
-                                    
-
                                 </div>
                             </td>    
                         </tr>
@@ -54,39 +49,35 @@
                     </tbody>
                 </table>
             </div>
-
-
+        </div>
     </div>
-</div>
 
-<div class="col-xxl-6">
-    <form method="POST" action="{{route('country.block.store')}}" class="row g-3">
-        @csrf
-    <div class="card">
-        <div class="card-header align-items-center d-flex">
-            <h4 class="card-title mb-0 flex-grow-1">Block Country</h4>
-        </div><!-- end card header -->
+    <div class="col-xxl-6">
+        <form method="POST" action="{{route('block.countries.update')}}" class="row g-3">
+            @csrf
+            <input type="hidden" name="id" value="{{$country->id}}">  
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Block Country</h4>
+                </div><!-- end card header -->
 
-        <div class="card-body">
-            <div class="live-preview">
-                
-                    <div class="col-md-12">
-                        <label for="country_code" class="form-label">Country Code</label>
-                        <input type="text" name="country_code" class="form-control mb-3" id="country_code" placeholder="Enter Country Code" required>
+                <div class="card-body">
+                    <div class="live-preview">
+                            <div class="col-md-12">
+                                <label for="country_code" class="form-label">Country Code</label>
+                                <input type="text" name="country_code" value="{{$country->country_code}}" class="form-control mb-3" id="country_code" placeholder="Enter Country Code" required>
+                            </div>
                     </div>
-
-                  
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div class="col-12">
-        <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
-        </div>
+            <div class="col-12">
+                <div class="text-end">
+                    <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                </div>
+            </div>
+        </form>
     </div>
-</form>
-</div>
 </div>
 
 @endsection
