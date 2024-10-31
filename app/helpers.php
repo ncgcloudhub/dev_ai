@@ -125,6 +125,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
             // Deduct the tokens and credits
             $user->tokens_left = max(0, $user->tokens_left - $tokens);
+            $user->tokens_used = max(0, $user->tokens_used + $tokens);
             $user->credits_left = max(0, $user->credits_left - $credits);
 
             // Save the changes to the database
