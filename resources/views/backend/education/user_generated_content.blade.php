@@ -279,12 +279,12 @@
                                             </button>
 
                                          @if($lastPackage)
-                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Add to library" onclick="addToLibrary(${content.id}, this)">
+                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.add_to_library ? 'Remove from Library' : 'Add to Library'}" onclick="addToLibrary(${content.id}, this)">
                                                 <span class="avatar-title rounded-circle bg-light text-body">
-                                                    <i class=" ri-file-add-line"></i>
+                                                      <i class="${content.add_to_library ? 'ri-file-reduce-line' : 'ri-file-add-line'}"></i>
                                                 </span>
                                             </button>
-                                         @endif
+                                        @endif
 
                                         </div>
                                         <div>
