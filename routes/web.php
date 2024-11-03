@@ -338,6 +338,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
 
+        Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
+        Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
+
         // Route to show the form for editing a specific tool (edit)
         Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit');
 

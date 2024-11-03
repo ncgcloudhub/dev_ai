@@ -139,6 +139,7 @@
                                         <th scope="col">Tool</th>
                                         <th scope="col">Prompt</th>
                                         <th scope="col">Content</th>
+                                        <th scope="col">Action</th>
                                       
                                     </tr>
                                 </thead>
@@ -157,6 +158,12 @@
                                         </th>
                                         <td>{{ $content->prompt }}</td>
                                         <td>{{ $content->content }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="openToolContentEditorModal({{ $content->id }})">
+                                                Edit
+                                            </button>
+                                        </td>
+                                        
                                        
                                     </tr>
                                     @endforeach
@@ -212,6 +219,32 @@
     <!--end col-->
 </div>
 <!--end row-->
+<div class="modal fade" id="editToolContentModal" tabindex="-1" aria-labelledby="editToolContentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editToolContentModalLabel">Edit Tool Content</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editToolContentForm">
+                    @csrf
+                
+                    <div class="mb-3">
+                        <label for="editContent" class="form-label">Content</label>
+                        <textarea class="form-control" id="editContent" name="content" rows="8" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedToolContent()">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
 <div class="modal fade" id="inviteMembersModal" tabindex="-1" aria-labelledby="inviteMembersModalLabel"
     aria-hidden="true">
@@ -424,6 +457,55 @@
         });
     });
 });
+
+
+
+// Open modal and populate with content data
+function openToolContentEditorModal(contentId) {
+    fetch(`/education/toolContent/${contentId}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            document.getElementById('editContent').value = data.content;
+            document.getElementById('editToolContentModal').setAttribute('data-content-id', contentId);
+
+            // Show the modal
+            var editModal = new bootstrap.Modal(document.getElementById('editToolContentModal'));
+            editModal.show();
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+// Save edited content via AJAX
+function saveEditedToolContent() {
+    const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
+    const updatedContent = {
+        content: document.getElementById('editContent').value
+    };
+
+    fetch(`/education/toolContent/${contentId}/update`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(updatedContent)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Content updated successfully!');
+            var editModal = bootstrap.Modal.getInstance(document.getElementById('editToolContentModal'));
+            editModal.hide();
+            // Optionally, update the UI with the new content
+        } else {
+            alert('Failed to update content.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 
 </script>
 

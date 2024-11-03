@@ -867,6 +867,22 @@ public function updateTools(Request $request, $id)
     return redirect()->route('manage.education.tools')->with($notification);
 }
 
+public function getToolContent($id)
+{
+    $content = ToolGeneratedContent::findOrFail($id);
+    return response()->json(['content' => $content->content]); // Ensure 'content' matches
+}
+
+
+public function updateToolContent(Request $request, $id)
+{
+    $content = ToolGeneratedContent::findOrFail($id);
+    $content->content = $request->input('content');
+    $content->save();
+
+    return response()->json(['success' => true]);
+}
+
 public function destroyTools($id)
 {
     $tool = EducationTools::findOrFail($id);
