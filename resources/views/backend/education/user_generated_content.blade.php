@@ -207,8 +207,75 @@
     </div>
 </div> 
 
+<!-- Edit Content Modal -->
+<div class="modal fade" id="editContentModal" tabindex="-1" aria-labelledby="editContentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editContentModalLabel">Edit Content</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="contentEditor" class="form-control" rows="10"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveEditedContent()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script>
+
+    // Open the editor modal and populate it with content data
+function openEditorModal(contentId) {
+    // Fetch the content details for editing
+    fetch(`/education/content/${contentId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the text editor with the current content
+            document.getElementById('contentEditor').value = data.content;
+            document.getElementById('editContentModal').setAttribute('data-content-id', contentId);
+            
+            // Open the modal
+            var editModal = new bootstrap.Modal(document.getElementById('editContentModal'));
+            editModal.show();
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Save the edited content
+function saveEditedContent() {
+    const contentId = document.getElementById('editContentModal').getAttribute('data-content-id');
+    const updatedContent = document.getElementById('contentEditor').value;
+
+    fetch(`/education/content/${contentId}/update`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ content: updatedContent })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Content updated successfully!');
+            // Optionally refresh content display or update UI here
+            var editModal = bootstrap.Modal.getInstance(document.getElementById('editContentModal'));
+            editModal.hide();
+        } else {
+            alert('Failed to update content.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.subject-buttons button').forEach(button => {
             button.addEventListener('click', function () {
@@ -291,6 +358,11 @@
                                             <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
                                                 <i class="ri-add-fill me-1 align-bottom"></i>Details
                                             </button>
+
+                                            <button type="button" class="btn btn-neomorphic" onclick="openEditorModal(${content.id})">
+                                                <i class="ri-edit-2-fill me-1 align-bottom"></i>Edit in Editor
+                                            </button>
+
                                         </div>
                                     </div>
                                 </div>

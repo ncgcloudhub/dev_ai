@@ -112,6 +112,21 @@ class EducationController extends Controller
         ]);
     }
 
+    public function getContent($id)
+{
+    $content = educationContent::findOrFail($id);
+    return response()->json(['content' => $content->generated_content]); // Adjust according to your content field name
+}
+
+public function updateContent(Request $request, $id)
+{
+    $content = educationContent::findOrFail($id);
+    $content->generated_content = $request->input('content'); // Adjust field name as needed
+    $content->save();
+
+    return response()->json(['success' => true]);
+}
+
     public function getContentsBySubjectLibrary(Request $request)
     {
         $subjectId = $request->input('subject_id');

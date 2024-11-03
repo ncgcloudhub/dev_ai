@@ -431,6 +431,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
 
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
+
+        Route::get('/content/{id}', [EducationController::class, 'getContent']);
+        Route::post('/content/{id}/update', [EducationController::class, 'updateContent']);
        
         Route::post('/get-contents/subject/library', [EducationController::class, 'getContentsBySubjectLibrary'])->name('education.getContentsBySubject.library');
 
