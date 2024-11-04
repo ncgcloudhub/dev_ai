@@ -511,6 +511,12 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+
+
+    <x-jokes_common />
+
+
+
 @endsection
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
@@ -667,9 +673,10 @@
         $('form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
             
-            // Show loader
-            $('#loader').removeClass('d-none');
+             // Show the magic ball
+             showMagicBall('image');
 
+        
             // Create a FormData object
             var formData = new FormData(this);
 
@@ -681,6 +688,8 @@
                 processData: false, // Prevent jQuery from automatically processing the data
                 contentType: false,
                 success: function(response) {
+                   // Hide the magic ball after content loads
+                   hideMagicBall();
 
                     console.log(response);
                     
@@ -712,7 +721,8 @@
                 },
                 error: function(xhr, status, error) {
                     // Handle error response
-                    // You may display an error message or perform any other actions here
+                     // Hide the magic ball after content loads
+                    hideMagicBall();
                     console.error(xhr.responseText);
                     $('#loader').addClass('d-none');
                 }

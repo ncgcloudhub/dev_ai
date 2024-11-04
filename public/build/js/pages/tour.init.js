@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var seenSteps = JSON.parse(localStorage.getItem('seenTourSteps')) || [];
+    var seenSteps = window.seenTourSteps || [];
 
-    // Function to save seen steps to the server
+    // Function to save seen steps to the server and update the database
     function saveSeenSteps() {
         fetch('/save-seen-tour-steps', {
             method: 'POST',
@@ -13,56 +13,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to mark a step as seen
     function markStepAsSeen(stepId) {
         if (!seenSteps.includes(stepId)) {
             seenSteps.push(stepId);
-            localStorage.setItem('seenTourSteps', JSON.stringify(seenSteps));
-            saveSeenSteps();
+            saveSeenSteps(); // Updates the database
         }
     }
 
-    // Initialize the tour
     var tour = new Shepherd.Tour({
         defaultStepOptions: {
-            cancelIcon: {
-                enabled: true
-            },
+            cancelIcon: { enabled: true },
             classes: 'shadow-md bg-purple-dark',
-            scrollTo: {
-                behavior: 'smooth',
-                block: 'center'
-            }
+            scrollTo: { behavior: 'smooth', block: 'center' }
         },
-        useModalOverlay: {
-            enabled: true
-        },
+        useModalOverlay: { enabled: true }
     });
 
-    // Function to add a tour step if the element exists and the step hasn't been seen
     function addTourStep(id, title, text, attachToSelector) {
         if (document.querySelector(attachToSelector) && !seenSteps.includes(id)) {
             tour.addStep({
                 id: id,
                 title: title,
                 text: text,
-                attachTo: {
-                    element: attachToSelector,
-                    on: 'bottom'
-                },
-                buttons: [{
-                    text: 'Back',
-                    classes: 'btn btn-light',
-                    action: tour.back
-                },
-                {
-                    text: 'Next',
-                    classes: 'btn btn-success',
-                    action: function() {
-                        markStepAsSeen(id);
-                        tour.next();
+                attachTo: { element: attachToSelector, on: 'bottom' },
+                buttons: [
+                    { text: 'Back', classes: 'btn btn-light', action: tour.back },
+                    {
+                        text: 'Next', classes: 'btn btn-success', 
+                        action: function() {
+                            markStepAsSeen(id);
+                            tour.next();
+                        }
                     }
-                }]
+                ]
             });
         }
     }

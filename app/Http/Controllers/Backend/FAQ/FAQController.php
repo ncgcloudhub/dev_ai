@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\FAQ;
 
 use App\Http\Controllers\Controller;
 use App\Models\FAQ;
+use App\Models\Jokes;
 use App\Models\PricingPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,10 +17,13 @@ class FAQController extends Controller
         return view('backend.faq.faq_manage', compact('faqs'));
     }
 
-    // public function AddFAQ()
-    // {
-    //     return view('backend.pricing.add_pricing_plan');
-    // }
+    // In your controller
+        public function fetchRandomJoke($category) {
+            $joke = Jokes::where('category', $category)->inRandomOrder()->first();
+            return response()->json(['joke' => $joke->content ?? 'No jokes available in this category.']);
+        }
+
+    
 
     public function StoreFAQ(Request $request)
     {
