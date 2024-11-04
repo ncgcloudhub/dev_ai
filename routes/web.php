@@ -512,7 +512,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     });
 
     Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
-
+    Route::post('/save-seen-tour-steps', [MainChat::class, 'saveSeenSteps'])->middleware('auth');
 
 
 

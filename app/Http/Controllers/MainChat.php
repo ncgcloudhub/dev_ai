@@ -26,18 +26,35 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class MainChat extends Controller
 {
     public function MainChatForm()
-    {
-        $userId = auth()->id(); // Get the authenticated user's ID
-        $sessions = Session::with('messages') // Eager load the related messages
-            ->where('user_id', $userId)
-            ->orderBy('id', 'desc')
-            ->get();
+{
+    $userId = auth()->id(); // Get the authenticated user's ID
+    $sessions = Session::with('messages') // Eager load the related messages
+        ->where('user_id', $userId)
+        ->orderBy('id', 'desc')
+        ->get();
 
-            return view('backend.chattermate.chat_main', [
-                'seenTourSteps' => $user->tour_progress ?? [],
-                'sessions' => $sessions,
-            ]);
+    $user = auth()->user();
+
+    // Decode only if `tour_progress` is a JSON string and ensure it results in an array
+    $seenTourSteps = is_string($user->tour_progress) 
+        ? json_decode($user->tour_progress, true) 
+        : (is_array($user->tour_progress) ? $user->tour_progress : []);
+
+    return view('backend.chattermate.chat_main', [
+        'seenTourSteps' => $seenTourSteps, // Use the decoded array
+        'sessions' => $sessions,
+    ]);
+}
+
+
+    public function saveSeenSteps(Request $request) {
+        $user_id = Auth::user()->id;
+        $user = User::findOrFail($user_id);
+        $user->tour_progress = json_encode($request->input('seenTourSteps'));
+        $user->save();
+        return response()->json(['status' => 'success']);
     }
+    
 
     // NEW SESSION
     public function MainNewSession(Request $request)
