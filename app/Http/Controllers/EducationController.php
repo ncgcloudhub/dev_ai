@@ -112,6 +112,21 @@ class EducationController extends Controller
         ]);
     }
 
+    public function getContent($id)
+{
+    $content = educationContent::findOrFail($id);
+    return response()->json(['content' => $content->generated_content]); // Adjust according to your content field name
+}
+
+public function updateContent(Request $request, $id)
+{
+    $content = educationContent::findOrFail($id);
+    $content->generated_content = $request->input('content'); // Adjust field name as needed
+    $content->save();
+
+    return response()->json(['success' => true]);
+}
+
     public function getContentsBySubjectLibrary(Request $request)
     {
         $subjectId = $request->input('subject_id');
@@ -850,6 +865,22 @@ public function updateTools(Request $request, $id)
     ];
 
     return redirect()->route('manage.education.tools')->with($notification);
+}
+
+public function getToolContent($id)
+{
+    $content = ToolGeneratedContent::findOrFail($id);
+    return response()->json(['content' => $content->content]); // Ensure 'content' matches
+}
+
+
+public function updateToolContent(Request $request, $id)
+{
+    $content = ToolGeneratedContent::findOrFail($id);
+    $content->content = $request->input('content');
+    $content->save();
+
+    return response()->json(['success' => true]);
 }
 
 public function destroyTools($id)

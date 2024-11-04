@@ -339,6 +339,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
 
+        Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
+        Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
+
         // Route to show the form for editing a specific tool (edit)
         Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit');
 
@@ -432,6 +435,9 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
 
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
+
+        Route::get('/content/{id}', [EducationController::class, 'getContent']);
+        Route::post('/content/{id}/update', [EducationController::class, 'updateContent']);
        
         Route::post('/get-contents/subject/library', [EducationController::class, 'getContentsBySubjectLibrary'])->name('education.getContentsBySubject.library');
 
