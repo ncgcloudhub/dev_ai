@@ -562,6 +562,8 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
     // Calender
     Route::get('/calender', [FAQController::class, 'calender'])->name('calender');
+    
+    Route::get('/fetch-joke/{category}', [FAQController::class, 'fetchRandomJoke'])->name('jokes');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
