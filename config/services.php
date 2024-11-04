@@ -44,4 +44,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stable_diffusion' => [
+        'api_key' => env('STABLE_DIFFUSION_API_KEY'),
+        'api_url' => env('STABLE_DIFFUSION_API_URL'),
+    ],
+
+
 ];

@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\AI\TemplateController;
 use App\Http\Controllers\Backend\AI\AIChatController;
 use App\Http\Controllers\Backend\AI\ExpertController;
 use App\Http\Controllers\Backend\AI\GenerateImagesController;
+use App\Http\Controllers\Backend\AI\StableDifussionController;
 use App\Http\Controllers\Backend\FAQ\FAQController;
 use App\Http\Controllers\Backend\Job\JobController;
 use App\Http\Controllers\Backend\Pricing\PricingController;
@@ -697,4 +698,5 @@ Route::group(['middleware' => ['auth']], function() {
 
 });
 
-
+Route::get('/stable-form', [StableDifussionController::class, 'index']);
+Route::post('/stable-image', [StableDifussionController::class, 'generate'])->name('stable.image');
