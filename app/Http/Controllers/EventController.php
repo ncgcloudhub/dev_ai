@@ -71,8 +71,8 @@ class EventController extends Controller
             'location' => 'nullable|string',
             'description' => 'nullable|string',
             'all_day' => 'required|boolean',
-            'timepicker1' => 'required|string', // Validate the timepicker1 input
-            'timepicker2' => 'required|string', // Validate the timepicker2 input
+            'timepicker1' => 'nullable|string', // Validate the timepicker1 input
+            'timepicker2' => 'nullable|string', // Validate the timepicker2 input
         ]);
     
         // Create the event
