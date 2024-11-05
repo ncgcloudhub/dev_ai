@@ -42,11 +42,12 @@
 
         if (result.image_base64) {
             resultDiv.innerHTML = `<img src="data:image/png;base64,${result.image_base64}" alt="Generated Image">`;
+        } else if (result.image_url) {
+            resultDiv.innerHTML = `<img src="${result.image_url}" alt="Generated Image">`;
         } else if (result.error) {
             resultDiv.innerHTML = `<p>Error: ${result.error}</p>`;
         }
     });
 </script>
-
 
 </html>
