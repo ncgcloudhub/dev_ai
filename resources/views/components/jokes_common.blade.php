@@ -1,13 +1,3 @@
-<!-- resources/views/components/magic-ball.blade.php -->
-<div id="magic-ball" class="magic-ball-overlay d-none">
-    <div class="magic-ball-content">
-        <img src="{{ asset('backend/giphy.gif') }}" alt="Loading..." class="magic-ball-gif">
-        <p id="joke-text">Fetching a joke...</p>
-    </div>
-</div>
-
-<!-- Magic Ball Styles -->
-@push('styles')
 <style>
     .magic-ball-overlay {
         position: fixed;
@@ -35,9 +25,17 @@
         display: none;
     }
 </style>
-@endpush
 
-@push('scripts')
+<!-- resources/views/components/magic-ball.blade.php -->
+<div id="magic-ball" class="magic-ball-overlay d-none">
+    <div class="magic-ball-content">
+        <img src="{{ asset('backend/giphy.gif') }}" alt="Loading..." class="magic-ball-gif">
+        <p id="joke-text">Fetching a joke...</p>
+    </div>
+</div>
+
+<!-- Magic Ball Styles -->
+
 <script>
     function fetchJoke(category) {
         $.ajax({
@@ -58,4 +56,4 @@
         $('#magic-ball').addClass('d-none'); // Hide overlay
     }
 </script>
-@endpush
+
