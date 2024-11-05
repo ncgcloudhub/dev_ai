@@ -376,6 +376,8 @@
                      <!-- Container for the Lottie animation -->
                     <div id="lottie-animation" style="width: 100px; height: 100px;"></div>
                 </div>
+
+                <x-jokes_common />
         
                 <div id="image-container" class="d-flex justify-content-center">      
                 
@@ -513,7 +515,7 @@
 
 
 
-    <x-jokes_common />
+   
 
 
 
