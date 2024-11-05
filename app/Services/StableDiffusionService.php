@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\StableDiffusionGeneratedImage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -17,53 +18,53 @@ class StableDiffusionService
         $this->apiUrl = config('services.stable_diffusion.api_url');
     }
 
-    public function generateImage($prompt, $width = 512, $height = 512, $steps = 20, $samples = 1)
+    public function generateImage($prompt)
 {
-    // Prepare the payload according to the API requirements
-    $payload = [
-        'key' => $this->apiKey,
-        'prompt' => $prompt,
-        'negative_prompt' => null,
-        'width' => (string) $width,
-        'height' => (string) $height,
-        'samples' => (string) $samples,
-        'num_inference_steps' => (string) $steps,
-        'seed' => null,
-        'guidance_scale' => 7.5,
-        'safety_checker' => 'yes',
-        'multi_lingual' => 'no',
-        'panorama' => 'no',
-        'self_attention' => 'no',
-        'upscale' => 'no',
-        'embeddings_model' => null,
-        'webhook' => null,
-        'track_id' => null,
-    ];
-
-    Log::info('Stable Diffusion Payload:', $payload);
-
-    // Send the request to the Stable Diffusion API
-    $response = Http::asMultipart()->withHeaders([
+    // Set up headers and payload similar to your Python request
+    $headers = [
         'Authorization' => 'Bearer ' . $this->apiKey,
         'Accept' => 'image/*'
-    ])->post($this->apiUrl, $payload);
+    ];
 
-    Log::info('API Response Status:', ['status' => $response->status()]);
-    Log::info('API Response Body:', ['body' => $response->body()]);
+    $data = [
+        'prompt' => $prompt,
+        'output_format' => 'jpeg',
+    ];
 
-    if ($response->successful()) {
-        // Save image to local storage
-        Storage::put('public/lighthouse.jpeg', $response->body());
+    // Send the request
+    $response = Http::withHeaders($headers)
+        ->asMultipart() // Use multipart to handle image data properly
+        ->post($this->apiUrl, $data);
 
-        return response()->json([
-            'message' => 'Image generated successfully!',
-            'path' => asset('storage/lighthouse.jpeg'),
+        Log::info('Stable Diffusion API Response:', [
+            'status' => $response->status(),
+            'response_preview' => substr($response->body(), 0, 100) // Log the first 100 characters only
         ]);
-    } else {
-        return response()->json([
-            'error' => $response->json(),
-        ], $response->status());
-    }
+
+        if ($response->status() == 200) {
+            // Save the binary content as an image
+            $imageName = 'user_' . auth()->id() . '_image_' . time() . '.jpeg';
+            Storage::put('public/' . $imageName, $response->body());
+
+            // Save the image data to the database
+            StableDiffusionGeneratedImage::create([
+                'user_id' => auth()->id(),
+                'prompt' => $prompt,
+                'status' => 'generated', // Set the status as needed
+                'in_frontend' => false, // Set to true if you want to show in frontend
+                'image_url' => asset('storage/' . $imageName),
+            ]);
+        
+            return [
+                'image_url' => asset('storage/' . $imageName), // Return the generated image URL
+            ];
+        } else {
+            return response()->json([
+                'error' => $response->json() ?? 'An error occurred during image generation.'
+            ], $response->status());
+        }
+        
+
 }
 
 
