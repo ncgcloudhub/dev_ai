@@ -12,7 +12,7 @@ class EventController extends Controller
     public function index()
     {
         // Fetch events for the authenticated user
-        $events = Event::where('user_id', auth()->id())->get();
+        $events = Event::get();
         // Log::info('Fetched events:', ['events' => $events]);
         return response()->json($events);
     }
