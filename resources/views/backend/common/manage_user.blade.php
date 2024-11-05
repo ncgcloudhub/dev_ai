@@ -35,7 +35,21 @@
                         <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{ $item->name }}({{ $item->username }})</a>
                     </td>
                     <td>{{ $item->email }}</td>
-                    <td>{{ $item->email_verified_at ? \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') : '--' }}</td>
+                    <td>
+                        @if ($item->email_verified_at)
+                        {{ \Carbon\Carbon::parse($item->email_verified_at)->format('F j, Y, g:i a') }}
+
+                        @else
+                            -- 
+                            <form action="{{ route('user.send-verification-email', ['user' => $item->id]) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to send a verification email to this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Verification Email">
+                                    <i class="ri-mail-send-line"></i>
+                                </button>
+                            </form>
+                        @endif
+                        
+                    </td>
                     <td>
                         {!! $item->role == 'admin' 
                             ? '<span class="badge border border-danger text-danger">Admin</span>' 
