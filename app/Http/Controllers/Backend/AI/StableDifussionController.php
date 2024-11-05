@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
+use App\Models\StableDiffusionGeneratedImage;
 use App\Services\StableDiffusionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -18,8 +19,8 @@ class StableDifussionController extends Controller
 
     public function index()
     {
-       
-        return view('backend.image_generate.stable_form');
+       $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
+        return view('backend.image_generate.stable_diffusion', compact('images'));
     }
 
     // public function generate(Request $request)
