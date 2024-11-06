@@ -77,7 +77,7 @@
                 <div class="d-flex flex-wrap justify-content-between">
                     <!-- Image Box 1 -->
                     <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 1')">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Watercolor')">
                             <img src="https://via.placeholder.com/100" alt="style1" class="img-fluid mb-2">
                             <p>Style 1</p>
                         </div>
@@ -85,7 +85,7 @@
             
                     <!-- Image Box 2 -->
                     <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 2')">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('sketch')">
                             <img src="https://via.placeholder.com/100" alt="style2" class="img-fluid mb-2">
                             <p>Style 2</p>
                         </div>
