@@ -25,18 +25,19 @@
                         <div class="col-lg-6">
                             <form id="imageForm" action="{{ route('stable.image') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="hiddenStyle" id="hiddenStyle">
+                                <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
+                                <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
                             <div class="row g-2">
                                 <div class="col">
                                     <div class="position-relative mb-3">
                                         <input type="text" class="form-control form-control-lg bg-light border-light"
                                             placeholder="Search here.." name="prompt" id="prompt">
-                                        {{-- <a class="btn btn-link link-success btn-lg position-absolute end-0 top-0"
-                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                                            aria-controls="offcanvasExample"><i class="ri-mic-fill"></i></a> --}}
+                                       
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary btn-lg waves-effect waves-light"><i
+                                    <button onclick="syncOffcanvasInput()" type="submit" class="btn btn-primary btn-lg waves-effect waves-light"><i
                                         class="mdi mdi-magnify me-1"></i> Generate</button>
                                 </div>
                             </div>
@@ -53,22 +54,112 @@
                     </div>
                     <!--end row-->
 
-                    <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasExample"
-                        aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-body">
-                            <button type="button" class="btn-close text-reset float-end" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                            <div class="d-flex flex-column h-100 justify-content-center align-items-center">
-                                <div class="search-voice">
-                                    <i class="ri-mic-fill align-middle"></i>
-                                    <span class="voice-wave"></span>
-                                    <span class="voice-wave"></span>
-                                    <span class="voice-wave"></span>
-                                </div>
-                                <h4>Talk to me, what can I do for you?</h4>
-                            </div>
+                  
+
+ <!-- top offcanvas -->
+ <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel" style="min-height:46vh;">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasTopLabel">Advance Setting</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="row gallery-light">
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <label for="imageFormat" class="form-label">Select Image Format</label>
+                <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
+                    <option value="jpeg">JPEG</option>
+                    <option value="png">PNG</option>
+                    <option value="webp">WEBP</option>
+                </select>
+            </div>
+            <!--end col-->
+            <div class="col-xl-6 col-lg-4 col-sm-6">
+                <div class="d-flex flex-wrap justify-content-between">
+                    <!-- Image Box 1 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 1')">
+                            <img src="https://via.placeholder.com/100" alt="style1" class="img-fluid mb-2">
+                            <p>Style 1</p>
                         </div>
                     </div>
+            
+                    <!-- Image Box 2 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 2')">
+                            <img src="https://via.placeholder.com/100" alt="style2" class="img-fluid mb-2">
+                            <p>Style 2</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 3 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 3')">
+                            <img src="https://via.placeholder.com/100" alt="style3" class="img-fluid mb-2">
+                            <p>Style 3</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 4 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 4')">
+                            <img src="https://via.placeholder.com/100" alt="style4" class="img-fluid mb-2">
+                            <p>Style 4</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 5 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 5')">
+                            <img src="https://via.placeholder.com/100" alt="style5" class="img-fluid mb-2">
+                            <p>Style 5</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 6 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 6')">
+                            <img src="https://via.placeholder.com/100" alt="style6" class="img-fluid mb-2">
+                            <p>Style 6</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 7 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 7')">
+                            <img src="https://via.placeholder.com/100" alt="style7" class="img-fluid mb-2">
+                            <p>Style 7</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 8 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 8')">
+                            <img src="https://via.placeholder.com/100" alt="style8" class="img-fluid mb-2">
+                            <p>Style 8</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end col-->
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <label for="modelVersion" class="form-label">Select Model Version</label>
+                <select name="modelVersion" id="modelVersion" class="form-select" onchange="syncModelVersion()">
+                    <option value="sd3-medium">sd3-medium</option>
+                    <option value="sd3-large-turbo">sd3-large-turbo</option>
+                    <option value="sd3-large">sd3-large</option>
+                    <option value="sd3.5-medium">sd3.5-medium</option>
+                    <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
+                    <option value="sd3.5-large">sd3.5-large</option>
+                </select>
+            </div>
+            <!--end col-->
+        </div>
+        <!--end row-->
+    </div>
+</div>
+
+
+
                 </div>
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
@@ -100,7 +191,8 @@
                                     <i class="ri-settings-4-line align-middle me-1"></i> Settings
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#">Advanced Search</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Advanced Settings</a></li>
+
                                 </ul>
                             </div>
                         </li>
@@ -119,7 +211,7 @@
                            
                             <div class="gallery-light">
                                 <div class="row">
-                                    @foreach($images as $item)
+                                    {{-- @foreach($images as $item)
                                         <div class="col-xl-3 col-lg-4 col-sm-6">
                                         <div class="gallery-box card">
                                             <div class="gallery-container">
@@ -155,7 +247,7 @@
                                             </div>
                                         </div>
                                         </div>
-                                    @endforeach
+                                    @endforeach --}}
                                 </div>
                                 <!--end row-->
                                 <div class="mt-4">
@@ -746,5 +838,46 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<script>
+    function selectStyle(styleName) {
+    // Set the selected style value in the hidden input field
+    document.getElementById('hiddenStyle').value = styleName;
+    console.log('Selected Style: ' + styleName); // You can log it to see the selected style
+    }
+
+    function syncImageFormat() {
+    // Get the selected image format from the dropdown
+    const imageFormat = document.getElementById('imageFormat').value;
+
+    // Set this value in the hidden input field 'hiddenType'
+    document.getElementById('hiddenImageFormat').value = imageFormat;
+
+    console.log('Selected Image Format: ' + imageFormat);  // For debugging
+}
+
+function syncModelVersion() {
+    // Get the selected image format from the dropdown
+    const modelVersion = document.getElementById('modelVersion').value;
+
+    // Set this value in the hidden input field 'hiddenType'
+    document.getElementById('hiddenModelVersion').value = modelVersion;
+
+    console.log('Selected Model Version: ' + modelVersion);  // For debugging
+}
+
+    function syncOffcanvasInput() {
+        // Get the value from the offcanvas input
+        const selectedStyle = document.getElementById('hiddenStyle').value;
+        const selectedImageFormat = document.getElementById('hiddenImageFormat').value;
+        const selectedModelVersion = document.getElementById('hiddenModelVersion').value;
+        
+        // Set this value in the hidden input field in the form
+        document.getElementById('hiddenStyle').value = selectedStyle;
+        document.getElementById('hiddenImageFormat').value = selectedImageFormat;
+        document.getElementById('hiddenModelVersion').value = selectedModelVersion;
+    }
+</script>
+
 
 @endsection

@@ -19,7 +19,7 @@ class StableDifussionController extends Controller
 
     public function index()
     {
-       $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
+        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
         return view('backend.image_generate.stable_diffusion', compact('images'));
     }
 
@@ -52,19 +52,17 @@ class StableDifussionController extends Controller
 
     public function generate(Request $request)
 {
+
+    Log::info('Request Data:', $request->all());
+   
     $request->validate([
         'prompt' => 'required|string',
-        'width' => 'nullable|integer',
-        'height' => 'nullable|integer',
-        'steps' => 'nullable|integer',
-        'samples' => 'nullable|integer',
+        'hiddenStyle' => 'nullable|integer',
+        'hiddenImageFormat' => 'nullable|integer',
+        'hiddenModelVersion' => 'nullable|integer',
     ]);
 
     $prompt = $request->input('prompt');
-    $width = $request->input('width', 512);
-    $height = $request->input('height', 512);
-    $steps = $request->input('steps', 20);
-    $samples = $request->input('samples', 1);
 
     // Call the service to generate the image
     $result = $this->stableDiffusionService->generateImage($prompt);
