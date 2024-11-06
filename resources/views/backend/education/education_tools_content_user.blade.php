@@ -207,6 +207,11 @@
     </div>
 </div> 
 
+@endsection
+
+@section('script')
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
