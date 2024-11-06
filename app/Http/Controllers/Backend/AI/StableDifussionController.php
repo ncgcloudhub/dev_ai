@@ -19,7 +19,7 @@ class StableDifussionController extends Controller
 
     public function index()
     {
-       $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
+        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
         return view('backend.image_generate.stable_diffusion', compact('images'));
     }
 
@@ -52,22 +52,27 @@ class StableDifussionController extends Controller
 
     public function generate(Request $request)
 {
+
+    Log::info('Request Data:', $request->all());
+   
     $request->validate([
         'prompt' => 'required|string',
-        'width' => 'nullable|integer',
-        'height' => 'nullable|integer',
-        'steps' => 'nullable|integer',
-        'samples' => 'nullable|integer',
+        'hiddenStyle' => 'nullable|string',
+        'hiddenImageFormat' => 'nullable|string',
+        'hiddenModelVersion' => 'nullable|string',
     ]);
 
     $prompt = $request->input('prompt');
-    $width = $request->input('width', 512);
-    $height = $request->input('height', 512);
-    $steps = $request->input('steps', 20);
-    $samples = $request->input('samples', 1);
+    $style = $request->input('hiddenStyle');
+    $imageFormat = $request->input('hiddenImageFormat', 'jpeg');  // Default to jpeg if not provided
+    $modelVersion = $request->input('hiddenModelVersion');
+    
+    if ($style) {
+        $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
+    }
 
     // Call the service to generate the image
-    $result = $this->stableDiffusionService->generateImage($prompt);
+    $result = $this->stableDiffusionService->generateImage($prompt, $imageFormat, $modelVersion);
 
     // Return the response as JSON
     return response()->json([

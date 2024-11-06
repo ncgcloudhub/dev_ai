@@ -18,7 +18,7 @@ class StableDiffusionService
         $this->apiUrl = config('services.stable_diffusion.api_url');
     }
 
-    public function generateImage($prompt)
+    public function generateImage($prompt, $imageFormat, $modelVersion)
 {
     // Set up headers and payload similar to your Python request
     $headers = [
@@ -28,7 +28,8 @@ class StableDiffusionService
 
     $data = [
         'prompt' => $prompt,
-        'output_format' => 'jpeg',
+        'output_format' => $imageFormat, 
+        'model' => $modelVersion,
     ];
 
     // Send the request
