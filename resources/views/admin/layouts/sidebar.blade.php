@@ -190,6 +190,9 @@
                                         <a href="{{route('generate.image.view')}}" class="nav-link sidebar-hover" >Generate Image Using Dall-E</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{{route('stable.form')}}" class="nav-link sidebar-hover" >Generate Image Using Stable Diffusion</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link sidebar-hover" >Manage Image</a>
                                     </li>
 

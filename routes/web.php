@@ -706,5 +706,5 @@ Route::group(['middleware' => ['auth']], function() {
 
 });
 
-Route::get('/stable-form', [StableDifussionController::class, 'index']);
+Route::get('/stable-form', [StableDifussionController::class, 'index'])->name('stable.form');
 Route::post('/stable-image', [StableDifussionController::class, 'generate'])->name('stable.image');
