@@ -676,7 +676,7 @@
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('image');
+             showMagicBall('Image');
 
         
             // Create a FormData object

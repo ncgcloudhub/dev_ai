@@ -488,12 +488,12 @@
     </div>
     <!-- end col -->
 </div>
+@endsection
 
-
-  
-
+@section('script')
 
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>

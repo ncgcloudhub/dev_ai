@@ -77,10 +77,10 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Educator Tools</a>
+                                        <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Education Wizard</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('education.wizard.creator')}}" class="nav-link sidebar-hover" >Wizard Creator</a>
+                                        <a href="{{route('education.wizard.creator')}}" class="nav-link sidebar-hover" >Education Tools</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{route('education.tools.contents')}}" class="nav-link sidebar-hover" >Library</a>
