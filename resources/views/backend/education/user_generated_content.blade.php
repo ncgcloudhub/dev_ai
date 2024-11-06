@@ -198,7 +198,7 @@
                     </button>
                 </a>
                 <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
-                    <i class="ri-close-line me-1 align-middle"></i> Close
+                    <i class="ri-close-line me-1 align-middle"></i> Closes
                 </a>
             </div>
             
@@ -209,14 +209,14 @@
 
 <!-- Edit Content Modal -->
 <div class="modal fade" id="editContentModal" tabindex="-1" aria-labelledby="editContentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editContentModalLabel">Edit Content</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <textarea id="contentEditor" class="form-control" rows="10"></textarea>
+                <textarea id="contentEditor" class="form-control" rows="20"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -230,14 +230,23 @@
 
 <script>
 
-    // Open the editor modal and populate it with content data
+// Function to remove Markdown headers (#, ##, ###) and bold markers (**) from content
+function removeMarkdownSyntax(content) {
+    return content
+        .replace(/^#+\s+/gm, '') // Removes # headers at the start of each line
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Removes ** for bold
+        .replace(/_(.*?)_/g, '$1'); // Removes _ for italics
+}
+
+// Open the editor modal and populate it with content data
 function openEditorModal(contentId) {
     // Fetch the content details for editing
     fetch(`/education/content/${contentId}`)
         .then(response => response.json())
         .then(data => {
-            // Populate the text editor with the current content
-            document.getElementById('contentEditor').value = data.content;
+            // Remove Markdown syntax from the content before displaying it
+            const formattedContent = removeMarkdownSyntax(data.content);
+            document.getElementById('contentEditor').value = formattedContent;
             document.getElementById('editContentModal').setAttribute('data-content-id', contentId);
             
             // Open the modal
@@ -246,6 +255,7 @@ function openEditorModal(contentId) {
         })
         .catch(error => console.error('Error:', error));
 }
+
 
 // Save the edited content
 function saveEditedContent() {
@@ -355,7 +365,7 @@ function saveEditedContent() {
 
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
+                                            <button type="button" class="btn btn-neomorphic mb-2" onclick="fetchContent(${content.id})">
                                                 <i class="ri-add-fill me-1 align-bottom"></i>Details
                                             </button>
 
