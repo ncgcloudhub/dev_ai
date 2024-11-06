@@ -32,7 +32,7 @@
                                 <div class="col">
                                     <div class="position-relative mb-3">
                                         <input type="text" class="form-control form-control-lg bg-light border-light"
-                                            placeholder="Search here.." name="prompt" id="prompt">
+                                            placeholder="Enter your Prompt" name="prompt" id="prompt">
                                        
                                     </div>
                                 </div>
