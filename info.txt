@@ -104,3 +104,6 @@ remove icon
 -------------31/10/24----------------
 in education_contents table 
 add_to_library boolean 
+
+------------06/11/2024---------------
+seed character_varying in stable_diffusion_generated_image
