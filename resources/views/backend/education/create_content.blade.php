@@ -476,7 +476,7 @@
                         <!-- end col -->
 
                         <div class="col-3">
-                            <img src="{{ asset('build/images/edu_info.png') }}" width="100%" alt="">
+                            <img src="{{ asset('build/images/edu_info.jpg') }}" width="100%" alt="">
                         </div>
 
                     </div>
