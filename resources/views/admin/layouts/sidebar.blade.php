@@ -187,11 +187,9 @@
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link sidebar-hover" >Generate Image Using Dall-E</a>
+                                        <a href="#" class="nav-link sidebar-hover" data-bs-toggle="modal" data-bs-target="#loginModals">Generate Image</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('stable.form')}}" class="nav-link sidebar-hover" >Generate Image Using Stable Diffusion</a>
-                                    </li>
+                                   
                                     <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link sidebar-hover" >Manage Image</a>
                                     </li>
@@ -206,6 +204,10 @@
                         </div>
                     </div>
                 </li>
+
+
+
+
 
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>

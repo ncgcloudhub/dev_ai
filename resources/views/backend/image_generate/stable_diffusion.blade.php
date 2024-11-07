@@ -44,12 +44,102 @@
                         </form>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-12" id="promptContainer" style="display: none;">
+                        <div class="col-lg-12" id="promptContainer" style="">
                             <h5 class="fs-16 fw-semibold text-center mb-0">
                                 Showing results for "<span id="promptDisplay" class="text-primary fw-medium fst-italic">Prompt</span>"
                             </h5>
                             <div id="responseMessage"></div> <!-- For displaying success/error messages -->
                         </div>
+
+                     
+                            <div class="col-xl-3 col-lg-4 col-sm-6">
+                                <label for="imageFormat" class="form-label">Select Image Format</label>
+                                <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
+                                    <option value="jpeg">JPEG</option>
+                                    <option value="png">PNG</option>
+                                    <option value="webp">WEBP</option>
+                                </select>
+                                <label for="modelVersion" class="form-label">Select Model Version</label>
+                                <select name="modelVersion" id="modelVersion" class="form-select" onchange="syncModelVersion()">
+                                    <option value="sd3-medium">sd3-medium</option>
+                                    <option value="sd3-large-turbo">sd3-large-turbo</option>
+                                    <option value="sd3-large">sd3-large</option>
+                                    <option value="sd3.5-medium">sd3.5-medium</option>
+                                    <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
+                                    <option value="sd3.5-large">sd3.5-large</option>
+                                </select>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xl-6 col-lg-4 col-sm-6">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <!-- Image Box 1 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Watercolor')">
+                                            <img src="https://via.placeholder.com/100" alt="style1" class="img-fluid mb-2">
+                                            <p>Style 1</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 2 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('sketch')">
+                                            <img src="https://via.placeholder.com/100" alt="style2" class="img-fluid mb-2">
+                                            <p>Style 2</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 3 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 3')">
+                                            <img src="https://via.placeholder.com/100" alt="style3" class="img-fluid mb-2">
+                                            <p>Style 3</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 4 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 4')">
+                                            <img src="https://via.placeholder.com/100" alt="style4" class="img-fluid mb-2">
+                                            <p>Style 4</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 5 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 5')">
+                                            <img src="https://via.placeholder.com/100" alt="style5" class="img-fluid mb-2">
+                                            <p>Style 5</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 6 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 6')">
+                                            <img src="https://via.placeholder.com/100" alt="style6" class="img-fluid mb-2">
+                                            <p>Style 6</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 7 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 7')">
+                                            <img src="https://via.placeholder.com/100" alt="style7" class="img-fluid mb-2">
+                                            <p>Style 7</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Image Box 8 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 8')">
+                                            <img src="https://via.placeholder.com/100" alt="style8" class="img-fluid mb-2">
+                                            <p>Style 8</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col-->
+                           
+                       
                     
                     </div>
                     <!--end row-->
