@@ -6,6 +6,7 @@ use App\Models\RequestModuleFeedback;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 if (!function_exists('calculateCredits')) {
@@ -197,6 +198,50 @@ if (!function_exists('saveModuleFeedback')) {
 
         return "failed-to-save-feedback";
     }
+
+
+    if (!function_exists('rephrasePrompt')) {
+        function rephrasePrompt($prompt)
+        {
+            // Initialize the OpenAI Client
+            $user = auth()->user();
+            $apiKey = config('app.openai_api_key');
+            $client = OpenAI::client($apiKey);
+            $openaiModel = $user->selected_model;
+    
+            try {
+                // Send the request to OpenAI
+                $response = $client->chat()->create([
+                    'model' => $openaiModel,
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a helpful assistant. Rephrase the following prompt for    clarity and conciseness.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $prompt
+                        ],
+                    ],
+                ]);
+    
+                $rephrasedPrompt = $response['choices'][0]['message']['content'];
+
+            // Log the original and rephrased prompts
+            Log::info('Original Prompt:', ['prompt' => $prompt]);
+            Log::info('Rephrased Prompt:', ['rephrased' => $rephrasedPrompt]);
+
+            // Return the rephrased prompt
+            return $rephrasedPrompt;
+
+            } catch (Exception $e) {
+                // Handle any errors
+                Log::error("Error with OpenAI API: " . $e->getMessage());
+                return "Error: Unable to rephrase the prompt at this time.";
+            }
+        }
+}
+
 }
 
 

@@ -71,8 +71,10 @@ class StableDifussionController extends Controller
         $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
     }
 
+    $rephrasedPrompt = rephrasePrompt($prompt);
+
     // Call the service to generate the image
-    $result = $this->stableDiffusionService->generateImage($prompt, $imageFormat, $modelVersion);
+    $result = $this->stableDiffusionService->generateImage($rephrasedPrompt, $imageFormat, $modelVersion);
 
     // Return the response as JSON
     return response()->json([
