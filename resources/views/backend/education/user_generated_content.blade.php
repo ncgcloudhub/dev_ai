@@ -234,23 +234,15 @@
 
 <script>
 
-// Function to remove Markdown headers (#, ##, ###) and bold markers (**) from content
-function removeMarkdownSyntax(content) {
-    return content
-        .replace(/^#+\s+/gm, '') // Removes # headers at the start of each line
-        .replace(/\*\*(.*?)\*\*/g, '$1') // Removes ** for bold
-        .replace(/_(.*?)_/g, '$1'); // Removes _ for italics
-}
-
 // Open the editor modal and populate it with content data
 function openEditorModal(contentId) {
     // Fetch the content details for editing
     fetch(`/education/content/${contentId}`)
         .then(response => response.json())
         .then(data => {
-            // Remove Markdown syntax from the content before displaying it
-            const formattedContent = removeMarkdownSyntax(data.content);
-            document.getElementById('contentEditor').value = formattedContent;
+            // Populate the text editor with the current content
+            document.getElementById('contentEditor').value = data.content;
+          
             document.getElementById('editContentModal').setAttribute('data-content-id', contentId);
             
             // Open the modal
