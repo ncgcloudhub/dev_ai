@@ -111,7 +111,7 @@
                                                 @php
                                                     $userRating = $userRatings[$item->id] ?? null;
                                                 @endphp
-                                                <div id="rater-onhover-{{$item->id}}" class="align-middle" data-user-rating="{{ $userRating }}"></div>
+                                                <div id="rater-onhover-{{$item->id}}" class="align-middle" data-user-rating="{{ $userRating ?? 5 }}"></div>
                                                 <span class="ratingnum badge gradient-btn-6 align-middle ms-2">{{ number_format($item->averageRating(), 1) }} stars</span>
                                             </div>
                                             @if(auth()->user()->role == 'admin')
