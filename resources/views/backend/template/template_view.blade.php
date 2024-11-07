@@ -17,7 +17,7 @@
     <i class="las la-arrow-left"></i>
 </button>
 
-<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2">Template View Tour</button>
+<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Template View Tour</button>
 
 <div class="row">
    
@@ -26,7 +26,7 @@
                
                 <div class="card-body">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn gradient-btn-5" id="clearInputsButton">
+                        <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i> Clear Inputs
                         </button>
                     </div>
@@ -107,7 +107,7 @@
                             <!-- Use Emoji -->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" name="emoji" value="1" id="SwitchCheck1">
-                                <label class="form-check-label" for="SwitchCheck1">Use Emoji</label>
+                                <label class="form-check-label" for="SwitchCheck1" title="">Use Emoji</label>
                             </div>
                             {{-- End Use Emoji --}}
 
@@ -266,10 +266,10 @@
 
            <div class="col">
                 <!-- Add the Download Content button -->
-                <button id="copyButton" class="btn text-white gradient-btn-5 mx-1">
+                <button id="copyButton" class="btn text-white gradient-btn-5 mx-1" title="Copy the generated Content">
                     <i class="las la-copy"></i>
                 </button>
-                <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1">
+                <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1" title="Download the generated Content">
                     <i class="las la-download"></i>
                 </button>
                 
