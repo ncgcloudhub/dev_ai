@@ -163,11 +163,53 @@
                                                 to Additional Info</button>
                                         </div>
 
-                                        {{-- USER LAST 5 GENERATED CONTENT --}}
-                                        @foreach ($educationContents as $item)
-                                            <p>{{$item->topic}}</p>
-                                            
-                                        @endforeach
+                                        <br>
+                                       
+                                        <div class="col">
+                                            <div class="card card-height-100 border card-border-info">
+                                                <div class="card-header align-items-center d-flex">
+                                                    <h4 class="card-title mb-0 flex-grow-1">Last <span class="badge bg-danger align-middle fs-10">5</span> content</h4>
+                                                    <div class="flex-shrink-0">
+                                                        <div class="dropdown card-header-dropdown">
+                                                            <a class="text-reset dropdown-btn" href="{{route('user_generated_education_content')}}" aria-haspopup="true" aria-expanded="false">
+                                                                <span class="text-muted"><i class="ri-settings-4-line align-middle me-1 fs-15"></i>All</span>
+                                                            </a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div><!-- end card header -->
+                                                <div class="card-body pt-0">
+                                                    <ul class="list-group list-group-flush border-dashed">
+                                                        @foreach ($educationContents as $item)
+                                                        <a href="{{route('user_generated_education_content')}}" class="text-decoration-none">
+                                                        <li class="list-group-item ps-0">
+
+                                                            <div class="row align-items-center g-3">
+                                                                <div class="col-auto">
+                                                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
+                                                                        <div class="text-center">
+                                                                            <h5 class="mb-0">{{ $item->created_at->format('d') }}</h5>
+                                                                            <div class="text-muted">{{ $item->created_at->format('D') }}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <h5 class="text-muted mt-0 mb-1 fs-13">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
+                                                                    <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
+                                                                </div>
+                                                                
+                                                            </div>
+                                                            <!-- end row -->
+                                                        </li><!-- end -->
+                                                    </a>  
+                                                        @endforeach
+
+                                                    </ul><!-- end -->
+                                                   
+                                                </div><!-- end card body -->
+                                            </div><!-- end card -->
+                                        </div>
+
 
 
                                     </div>
@@ -658,6 +700,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+// modal script
+document.addEventListener('DOMContentLoaded', function () {
+    const contentItems = document.querySelectorAll('.content-item');
+
+    contentItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const title = item.getAttribute('data-title');
+            const content = item.getAttribute('data-content');
+
+            document.getElementById('contentModalLabel').textContent = title;
+            document.getElementById('modalContent').textContent = content;
+        });
+    });
+});
+
 
 
     </script>
