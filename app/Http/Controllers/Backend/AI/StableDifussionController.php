@@ -64,9 +64,9 @@ class StableDifussionController extends Controller
 
     $prompt = $request->input('prompt');
     $style = $request->input('hiddenStyle');
-    $imageFormat = $request->input('hiddenImageFormat', 'jpeg');  // Default to jpeg if not provided
-    $modelVersion = $request->input('hiddenModelVersion');
-    
+    $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
+    $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
+
     if ($style) {
         $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
     }

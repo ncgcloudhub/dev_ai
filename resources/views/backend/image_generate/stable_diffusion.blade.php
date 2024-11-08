@@ -55,12 +55,14 @@
                             <div class="col-xl-3 col-lg-4 col-sm-6">
                                 <label for="imageFormat" class="form-label">Select Image Format</label>
                                 <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
+                                    <option value="" disabled selected>Select format</option>
                                     <option value="jpeg">JPEG</option>
                                     <option value="png">PNG</option>
                                     <option value="webp">WEBP</option>
                                 </select>
                                 <label for="modelVersion" class="form-label">Select Model Version</label>
                                 <select name="modelVersion" id="modelVersion" class="form-select" onchange="syncModelVersion()">
+                                    <option value="" disabled selected>Select Model</option>
                                     <option value="sd3-medium">sd3-medium</option>
                                     <option value="sd3-large-turbo">sd3-large-turbo</option>
                                     <option value="sd3-large">sd3-large</option>
@@ -74,69 +76,70 @@
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Watercolor')">
-                                            <img src="https://via.placeholder.com/100" alt="style1" class="img-fluid mb-2">
-                                            <p>Style 1</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Animation</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 2 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('sketch')">
-                                            <img src="https://via.placeholder.com/100" alt="style2" class="img-fluid mb-2">
-                                            <p>Style 2</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Cinematic</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 3 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 3')">
-                                            <img src="https://via.placeholder.com/100" alt="style3" class="img-fluid mb-2">
-                                            <p>Style 3</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Comic</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 4 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 4')">
-                                            <img src="https://via.placeholder.com/100" alt="style4" class="img-fluid mb-2">
-                                            <p>Style 4</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Cyberpunk</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 5 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 5')">
-                                            <img src="https://via.placeholder.com/100" alt="style5" class="img-fluid mb-2">
-                                            <p>Style 5</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Futurism</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 6 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 6')">
-                                            <img src="https://via.placeholder.com/100" alt="style6" class="img-fluid mb-2">
-                                            <p>Style 6</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Doodle Art</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 7 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 7')">
-                                            <img src="https://via.placeholder.com/100" alt="style7" class="img-fluid mb-2">
-                                            <p>Style 7</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Graffiti</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 8 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 8')">
-                                            <img src="https://via.placeholder.com/100" alt="style8" class="img-fluid mb-2">
-                                            <p>Style 8</p>
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch')" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0">Sketch</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                             <!--end col-->
                            
                        

@@ -216,7 +216,7 @@ if (!function_exists('saveModuleFeedback')) {
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a helpful assistant. Rephrase the following prompt for    clarity and conciseness.'
+                            'content' => 'You are a helpful assistant. Rephrase the following prompt for clarity and conciseness.'
                         ],
                         [
                             'role' => 'user',
