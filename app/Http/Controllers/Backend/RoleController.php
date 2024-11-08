@@ -13,7 +13,7 @@ class RoleController extends Controller
 {
     public function AllPermission(){
 
-        $permissions = Permission::all();
+        $permissions = Permission::latest()->get();
         return view('backend.permission.all_permission',compact('permissions'));
 
     } // End Method 
@@ -85,7 +85,7 @@ class RoleController extends Controller
     // -----------------------ROLES----------------------------
     public function AllRoles(){
 
-        $roles = Role::all();
+        $roles = Role::latest()->get();
         return view('backend.roles.all_role',compact('roles'));
 
     }// End Method 
@@ -114,7 +114,7 @@ class RoleController extends Controller
     public function EditRoles($id){
 
         $roles = Role::findOrFail($id);
-        return view('backend.pages.roles.edit_roles',compact('roles'));
+        return view('backend.roles.edit_role',compact('roles'));
     }// End Method 
 
 

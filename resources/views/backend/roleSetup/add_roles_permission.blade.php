@@ -24,64 +24,58 @@
 			<h6 class="card-title">Add Roles in Permission   </h6>
 
       <form id="myForm" method="POST" action="{{ route('role.permission.store') }}" class="forms-sample">
-           @csrf
-   
+        @csrf
    
            <div class="form-group mb-3">
-    <label for="exampleInputEmail1" class="form-label">Roles Name   </label>
-      <select name="role_id" class="form-select" id="exampleFormControlSelect1">
-                   <option selected="" disabled="">Select Group</option>
+            <label for="exampleInputEmail1" class="form-label">Roles Name   </label>
+              <select name="role_id" class="form-select" id="exampleFormControlSelect1">
+                   <option selected="" disabled="">Select Role</option>
                    @foreach($roles as $role)
                    <option value="{{ $role->id }}">{{ $role->name }}</option>
                    @endforeach
                </select>
-   
            </div>
    
-   
-       <div class="form-check mb-2">
-                  <input type="checkbox" class="form-check-input" id="checkDefaultmain">
-                  <label class="form-check-label" for="checkDefaultmain">
-                      Permission All 
-                     </label>
-                   </div>
-                   <hr>
+            <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="checkDefaultmain">
+                <label class="form-check-label" for="checkDefaultmain">
+                    Permission All 
+                </label>
+            </div>
+            <hr>
 
-                   @foreach($permission_groups as $group)
-                        <div class="row">
-                          <div class="col-3">
-                  
-                  
-                            <div class="form-check mb-2">
-                                    <input type="checkbox" class="form-check-input" id="checkDefault">
-                                    <label class="form-check-label" for="checkDefault">
-                                     {{ $group->group_name }}
-                                    </label>
-                                  </div>
-                  
-                  
-                          </div>
-                  
-                  
-                           <div class="col-9">
-                            @php
-                            $permissions = App\Models\User::getpermissionByGroupName($group->group_name)
-                            @endphp
-                  
-                  @foreach($permissions as $permission)
-                            <div class="form-check mb-2">
-                              <input type="checkbox" class="form-check-input" name="permission[]" id="checkDefault{{ $permission->id }}" value="{{ $permission->id }}">
+            @foreach($permission_groups as $group)
+              <div class="row">
+                  <div class="col-3">
+          
+                    <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" id="checkDefault">
+                            <label class="form-check-label" for="checkDefault">
+                              {{ $group->group_name }}
+                            </label>
+                    </div>
+          
+                  </div>
+        
+                  <div class="col-9">
+                    @php
+                        $permissions = App\Models\User::getpermissionByGroupName($group->group_name)
+                    @endphp
+          
+                    @foreach($permissions as $permission)
+                    <div class="form-check mb-2">
+                      <input type="checkbox" class="form-check-input" name="permission[]" id="checkDefault{{ $permission->id }}" value="{{ $permission->id }}">
 
-                              <label class="form-check-label" for="checkDefault{{ $permission->id }}">
-                                             {{ $permission->name }}
-                                    </label>
-                                  </div>
-                                  @endforeach
-                                  <br>
-                          </div>
-                  
-                        </div> <!-- // End Row  -->
-                        @endforeach 
+                      <label class="form-check-label" for="checkDefault{{ $permission->id }}">
+                                      {{ $permission->name }}
+                            </label>
+                    </div>
+                    @endforeach
+                          <br>
+                  </div>
+        
+              </div> <!-- // End Row  -->
+            @endforeach 
    
    
       <button type="submit" class="btn btn-primary me-2">Save Changes </button>
