@@ -67,7 +67,7 @@
 
 
                 {{-- Fixed Template --}}
-                @can('template.menu')
+               
                     <li class="nav-item">
                         <a class="nav-link menu-link sidebar-hover" href="#template" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="AITools">
@@ -77,33 +77,31 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <ul class="nav nav-sm flex-column">
-                                        @can('template.category')
+                                        
                                         <li class="nav-item">
                                             <a href="{{route('template.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
                                         </li>
-                                        @endcan
-                                        @can('template.add')
+                                        
                                         <li class="nav-item">
                                             <a href="{{route('template.add')}}" class="nav-link sidebar-hover">Create New Content</a>
                                         </li>
-                                        @endcan
-                                        @can('template.manage')
+                                      
                                         <li class="nav-item">
                                             <a href="{{route('template.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
                                         </li>
-                                        @endcan
+                                      
                                     </ul>
                                 </div>     
                             </div>
                         </div>
                     </li>
-                @endcan
+               
 
 
 
 
                 {{-- Custom Template --}}
-                @can('customtemplate.menu')
+               
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#AITools" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -113,28 +111,24 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-                                    @can('customtemplate.category')
+                                   
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.category.add')}}" class="nav-link sidebar-hover" >Categories</a>
                                     </li>
-                                    @endcan
-                                    @can('customtemplate.add')
+                                   
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.add')}}" class="nav-link sidebar-hover" >Add Template</a>
                                     </li>
-                                    @endcan
-                                    @can('customtemplate.manage')
+                                   
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.manage')}}" class="nav-link sidebar-hover" >Manage Template</a>
                                     </li>
-                                    @endcan
-                                   
+                                  
                                 </ul>
                             </div> 
                         </div>
                     </div>
                 </li>
-                @endcan
 
                   {{-- Prompt Library --}}
 

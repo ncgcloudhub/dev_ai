@@ -107,3 +107,4 @@ add_to_library boolean
 
 ------------06/11/2024---------------
 seed character_varying in stable_diffusion_generated_image
+change prompt to text in stable_diffusion_generated_image
