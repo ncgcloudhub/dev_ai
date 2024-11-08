@@ -19,29 +19,28 @@
 
 
 				<div class="form-group mb-3">
- <label for="exampleInputEmail1" class="form-label">Permission Name   </label>
-	 <input type="text" name="name" class="form-control" >
-
+                    <label for="exampleInputEmail1" class="form-label">Permission Name   </label>
+                        <input type="text" name="name" class="form-control" >
 				</div>
 
-                    <div class="form-group mb-3">
- <label for="exampleInputEmail1" class="form-label">Group Name   </label>
-               <select name="group_name" class="form-select" id="exampleFormControlSelect1">
-                <option selected="" disabled="">Select Group</option>
-                <option value="template">Template</option>
-                <option value="custom_template">Custom Template</option> 
-                <option value="prompt_library">Prompt Library</option> 
-                <option value="chat">Chat</option> 
-                <option value="image">Image</option> 
-                <option value="settings">Settings</option> 
-                <option value="user">User</option> 
-                <option value="pricing">Pricing</option> 
-                <option value="newsletter">Newsletter</option> 
-                <option value="refferal">Refferal</option> 
-                <option value="page">Page</option> 
-                <option value="job">Job</option> 
-                <option value="role">Role & Permission </option>  
-            </select>
+                <div class="form-group mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Group Name   </label>
+                    <select name="group_name" class="form-select" id="exampleFormControlSelect1">
+                        <option selected="" disabled="">Select Group</option>
+                        <option value="template">Template</option>
+                        <option value="custom_template">Custom Template</option> 
+                        <option value="prompt_library">Prompt Library</option> 
+                        <option value="chat">Chat</option> 
+                        <option value="image">Image</option> 
+                        <option value="settings">Settings</option> 
+                        <option value="user">User</option> 
+                        <option value="pricing">Pricing</option> 
+                        <option value="newsletter">Newsletter</option> 
+                        <option value="refferal">Refferal</option> 
+                        <option value="page">Page</option> 
+                        <option value="job">Job</option> 
+                        <option value="role">Role & Permission </option>  
+                    </select>
 
                 </div> 
 

@@ -66,7 +66,12 @@
                                 @endif 
                             </td>
         
-                            <td>{{ $item->role }}</td>
+                            <td>
+                                @foreach ($item->roles as $role)
+                                    <span class="badge badge-pill bg-danger">{{ $role->name }}</span>
+                                @endforeach   
+                               
+                               </td>  
                             <td>{{ $item->credits_used }}</td>
                             <td>{{ $item->tokens_used }}</td>
                      

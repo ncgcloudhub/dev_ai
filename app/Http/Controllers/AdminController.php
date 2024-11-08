@@ -95,7 +95,7 @@ class AdminController extends Controller
         $user->delete();
 
         // Optionally, you can redirect the user to a specific page after deletion
-        return redirect()->route('manage.user')->with('success', 'User deleted successfully.');
+        return redirect()->route('all.admin')->with('success', 'User deleted successfully.');
     }
 
     // BULK DELETE
@@ -153,6 +153,11 @@ public function bulkStatusChange(Request $request) {
             $role = Role::findById($request->roles);
             if ($role) {
                 $user->assignRole($role);
+
+                // Automatically assign permissions from the role to the user
+                // Spatie Permission will automatically sync the permissions
+                $user->syncPermissions($role->permissions); // Sync permissions based on the assigned role
+                
             }
         }
 
@@ -191,6 +196,8 @@ public function bulkStatusChange(Request $request) {
             $role = Role::findById($request->roles);
             if ($role) {
                 $user->assignRole($role);
+
+                $user->syncPermissions($role->permissions); // Sync permissions based on the assigned role
             }
         }
 
