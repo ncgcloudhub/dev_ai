@@ -216,7 +216,7 @@ if (!function_exists('saveModuleFeedback')) {
                     'messages' => [
                         [
                             'role' => 'system',
-                            'content' => 'You are a helpful assistant. Rephrase the following prompt for clarity and conciseness.'
+                            'content' => 'You are a helpful assistant. Please rephrase the following image generation prompt to enhance its creativity and captivation while maintaining the core theme and details provided by the user. Ensure the rewritten prompt with a high level of creativity and a professional tone.'
                         ],
                         [
                             'role' => 'user',
