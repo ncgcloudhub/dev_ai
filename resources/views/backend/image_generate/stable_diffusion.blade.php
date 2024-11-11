@@ -18,8 +18,7 @@
     @endcomponent
     <div class="row">
         <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header border-0">
+           
                     <div class="row justify-content-center mb-4">
                         
                         <div class="col-lg-6">
@@ -46,17 +45,18 @@
                         <!--end col-->
                     </div>
 
-                    <div class="row justify-content-center">
-                            <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="row justify-content-center p-3" style="background: linear-gradient(45deg, #f3c5c5, #59047e); border-radius: 12px; padding: 3px;">
+                        <div class="col-xl-3 col-lg-4 col-sm-6" style="background: white; border-radius: 12px; padding: 15px;">
                                 <label for="imageFormat" class="form-label">Select Image Format</label>
-                                <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
+                                <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
                                     <option value="" disabled selected>Select format</option>
                                     <option value="jpeg">JPEG</option>
                                     <option value="png">PNG</option>
                                     <option value="webp">WEBP</option>
                                 </select>
+                                
                                 <label for="modelVersion" class="form-label">Select Model Version</label>
-                                <select name="modelVersion" id="modelVersion" class="form-select" onchange="syncModelVersion()">
+                                <select name="modelVersion" id="modelVersion" class="form-select" data-choices onchange="syncModelVersion()">
                                     <option value="" disabled selected>Select Model</option>
                                     <option value="sd3-medium">sd3-medium</option>
                                     <option value="sd3-large-turbo">sd3-large-turbo</option>
@@ -65,6 +65,7 @@
                                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                                     <option value="sd3.5-large">sd3.5-large</option>
                                 </select>
+                                
                             </div>
                             <!--end col-->
                             <div class="col-xl-6 col-lg-4 col-sm-6">
@@ -134,26 +135,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                    </div>
                             <!--end col-->
                            
-                       
-                    
-                    </div>
-                    <!--end row-->
-
-
-
-
-                </div>
+                   
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom justify-content-center" role="tablist">
-                        <li class="nav-item">
+                        <li class="nav-item" id="result-li">
                             <a class="nav-link" data-bs-toggle="tab" href="#all" role="tab" aria-selected="false">
                                 <i class="ri-search-2-line text-muted align-bottom me-1"></i>Result
                             </a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item active" id="image-li">
                             <a class="nav-link" data-bs-toggle="tab" id="images-tab" href="#images" role="tab"
                                 aria-selected="false">
                                 <i class="ri-image-fill text-muted align-bottom me-1"></i> Images
@@ -779,13 +772,19 @@
 $(document).ready(function() {
     $('#imageForm').on('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission
-        
+                    $('#result-li').addClass('active');
+                    $('#image-li').removeClass('active');
+
+                    // Show the images tab content and hide the result content
+                    $('#all').addClass('active').removeClass('fade');
+                    $('#images').removeClass('active').addClass('fade');
+
         $.ajax({
             url: $(this).attr('action'), // Use the form's action URL
             type: 'POST',
             data: $(this).serialize(), // Serialize form data
             success: function(response) {
-               
+
                 var promptValue = $('#prompt').val();
                 $('#promptDisplay').text(promptValue); 
 
@@ -799,9 +798,19 @@ $(document).ready(function() {
                 // Display the image based on image_url or image_base64
                 if (response.image_url) {
                     $('#imageContainer').html('<img src="' + response.image_url + '" alt="Generated Image" style="max-width:100%;">');
+                     // Set the Images tab as active and Result tab as inactive
+                  
+
                 } else if (response.image_base64) {
                     $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');
-                }
+
+                    $('#result-li').addClass('active');
+                    $('#image-li').removeClass('active');
+
+                    // Show the images tab content and hide the result content
+                    $('#all').addClass('active').removeClass('fade');
+                    $('#images').removeClass('active').addClass('fade');
+                                }
             },
 
             error: function(xhr) {
