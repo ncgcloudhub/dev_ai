@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
 @slot('title') Edit | {{$template->template_name}} @endslot
 @endcomponent
 
@@ -33,7 +33,7 @@
                     <div class="tab-content text-muted mt-3 mt-lg-0">
                         <div class="tab-pane fade active show" id="custom-v-pills-home" role="tabpanel" aria-labelledby="custom-v-pills-home-tab">
                             <div class="d-flex mb-4">
-                                <form method="POST" action="{{route('template.update')}}" class="row g-3">
+                                <form method="POST" action="{{route('aicontentcreator.update')}}" class="row g-3">
                                     @csrf
                                     <input type="hidden" name="id" value="{{$template->id}}">  
                                 <div class="card">
@@ -186,7 +186,7 @@
 
                         <div class="tab-pane fade" id="custom-v-pills-profile" role="tabpanel" aria-labelledby="custom-v-pills-profile-tab">
                             <div class="d-flex mb-4">
-                                <form method="POST" action="{{ route('template.seo.update') }}" class="row g-3">
+                                <form method="POST" action="{{ route('aicontentcreator.seo.update') }}" class="row g-3">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $template->id }}">
                                 

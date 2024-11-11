@@ -61,7 +61,7 @@
                  <div class="card-body">
                    
                      <div class="live-preview">
-                         <form id="generateForm"  action="{{route ('frontend.free.template.generate')}}" method="post" class="row g-3">
+                         <form id="generateForm"  action="{{route ('frontend.free.aicontentcreator.generate')}}" method="post" class="row g-3">
                              @csrf
                              <input type="hidden" name="template_id" value="{{ $Template->id }}">
                              <div class="col-md-12">

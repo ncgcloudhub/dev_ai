@@ -25,9 +25,9 @@
                         <li><a class="dropdown-item" href="{{ route('home') }}#features">Features</a></li>
                         <li><a class="dropdown-item" href="{{ route('home') }}#plans">Plans</a></li>
                         @auth
-                            <li><a class="dropdown-item" href="{{ route('template.manage') }}">AI Content Creator</a></li>
+                            <li><a class="dropdown-item" href="{{ route('aicontentcreator.manage') }}">AI Content Creator</a></li>
                         @else
-                            <li><a class="dropdown-item" href="{{ route('frontend.free.template') }}">AI Content Creator</a></li>
+                            <li><a class="dropdown-item" href="{{ route('frontend.free.aicontentcreator') }}">AI Content Creator</a></li>
                         @endauth
                         @auth
                             @if (Auth::user()->role == 'admin')

@@ -34,7 +34,7 @@
                         <div class="text-muted mt-3">
                             <ul class="list-unstyled ff-secondary footer-list fs-14">
                                 <li><a href="{{route('generate.image.view')}}">Image generate</a></li>
-                                <li><a href="{{route('template.manage')}}">Generate Content</a></li>
+                                <li><a href="{{route('aicontentcreator.manage')}}">Generate Content</a></li>
                                 <li><a href="{{route('chat')}}">Chat</a></li>
                                 
                             </ul>

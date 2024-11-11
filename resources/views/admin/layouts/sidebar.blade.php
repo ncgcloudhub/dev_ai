@@ -79,15 +79,15 @@
                                     <ul class="nav nav-sm flex-column">
                                         
                                         <li class="nav-item">
-                                            <a href="{{route('template.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
+                                            <a href="{{route('aicontentcreator.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
                                         </li>
                                         
                                         <li class="nav-item">
-                                            <a href="{{route('template.add')}}" class="nav-link sidebar-hover">Create New Content</a>
+                                            <a href="{{route('aicontentcreator.add')}}" class="nav-link sidebar-hover">Create New Content</a>
                                         </li>
                                       
                                         <li class="nav-item">
-                                            <a href="{{route('template.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
+                                            <a href="{{route('aicontentcreator.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
                                         </li>
                                       
                                     </ul>

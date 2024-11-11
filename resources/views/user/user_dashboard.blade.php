@@ -80,7 +80,7 @@
                             </div>
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
-                                <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="text-decoration-underline text-white-50">  <h4 class="fs-22 fw-semibold ff-secondary mb-4 text-white">Image Prompt Ideas</h4></a>
+                                <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="text-decoration-underline text-white-50">  <h4 class="fs-22 fw-semibold ff-secondary mb-4 text-white">Image Prompt Ideas</h4></a>
                                 </div>
                               
                             </div>
@@ -165,7 +165,7 @@
                                     @if($user->tokens_left == 0)
                                     <a href="{{ route('all.package') }}" class="link-secondary text-decoration-underline">Upgrade Plan</a>
                                 @else
-                                    <a href="{{ route('template.manage') }}" class="link-secondary text-decoration-underline">Manage Template</a>
+                                    <a href="{{ route('aicontentcreator.manage') }}" class="link-secondary text-decoration-underline">Manage Template</a>
                                 @endif
                                    
                                 </div>
@@ -198,7 +198,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                    
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br> templates
+                                    <a href="{{route('aicontentcreator.manage')}}" class="link-secondary text-decoration-underline">View all <br> templates
                                         </a>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -357,7 +357,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                     
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br>
+                                    <a href="{{route('aicontentcreator.manage')}}" class="link-secondary text-decoration-underline">View all <br>
                                         templates</a>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -389,7 +389,7 @@
                             <div class="d-flex align-items-end justify-content-between mt-4">
                                 <div>
                                    
-                                    <a href="{{route('template.manage')}}" class="link-secondary text-decoration-underline">View all <br>
+                                    <a href="{{route('aicontentcreator.manage')}}" class="link-secondary text-decoration-underline">View all <br>
                                         templates</a>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -562,7 +562,7 @@
                                                     </div>
                                                     
                                                     <div>
-                                                        <h5 class="fs-14 my-1"><a href="{{ route('template.view', ['slug' => $item->slug]) }}" class="text-reset">{{$item->template_name}}</a></h5>
+                                                        <h5 class="fs-14 my-1"><a href="{{ route('aicontentcreator.view', ['slug' => $item->slug]) }}" class="text-reset">{{$item->template_name}}</a></h5>
                                                         <span class="text-muted">{{ date('d M, Y', strtotime($item->created_at)) }}
                                                         </span>
                                                     </div>

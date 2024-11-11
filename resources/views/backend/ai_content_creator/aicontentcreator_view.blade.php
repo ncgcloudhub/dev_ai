@@ -9,7 +9,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
 
@@ -32,7 +32,7 @@
                     </div>
                     
                     <div class="live-preview ">
-                        <form id="generateForm"  action="{{route ('template.generate')}}" method="post" class="row g-3">
+                        <form id="generateForm"  action="{{route ('aicontentcreator.generate')}}" method="post" class="row g-3">
                             @csrf
                             <input type="hidden" name="template_id" value="{{ $Template->id }}">
 

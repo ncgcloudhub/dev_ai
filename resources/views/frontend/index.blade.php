@@ -323,7 +323,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" target="_blank"
+                                <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}" target="_blank"
                                     class="btn gradient-btn-10"><i
                                         class="align-middle me-1"></i> Create Content</a>
                             </div>

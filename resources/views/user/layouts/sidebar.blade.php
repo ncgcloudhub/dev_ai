@@ -95,7 +95,7 @@
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('template.manage')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('aicontentcreator.manage')}}">
                         <i class="las la-file-alt"></i> <span >AI Content Creator</span>
                     </a>
                 </li>
