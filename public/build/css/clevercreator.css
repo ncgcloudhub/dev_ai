@@ -270,6 +270,12 @@
     -webkit-text-fill-color: transparent;
 }
 
+.gradient-text-1-bold {
+    background: linear-gradient(45deg, #590361, #be06af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+}
 
 /* Text Gradient */
 .gradient-text-2 {

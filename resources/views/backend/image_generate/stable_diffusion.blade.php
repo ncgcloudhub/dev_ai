@@ -76,65 +76,65 @@
                                 <div class="d-flex flex-wrap justify-content-between">
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Animation</p>
+                                            <p class="mb-0 gradient-text-1-bold">Animation</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 2 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Cinematic</p>
+                                            <p class="mb-0 gradient-text-1-bold">Cinematic</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 3 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Comic</p>
+                                            <p class="mb-0 gradient-text-1-bold">Comic</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 4 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Cyberpunk</p>
+                                            <p class="mb-0 gradient-text-1-bold">Cyberpunk</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 5 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Futurism</p>
+                                            <p class="mb-0 gradient-text-1-bold">Futurism</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 6 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Doodle Art</p>
+                                            <p class="mb-0 gradient-text-1-bold">Doodle Art</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 7 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Graffiti</p>
+                                            <p class="mb-0 gradient-text-1-bold">Graffiti</p>
                                         </div>
                                     </div>
                             
                                     <!-- Image Box 8 -->
                                     <div class="col-3 mb-3">
-                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch')" style="height: 150px;">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch', this)" style="height: 150px;">
                                             <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
-                                            <p class="mb-0">Sketch</p>
+                                            <p class="mb-0 gradient-text-1-bold">Sketch</p>
                                         </div>
                                     </div>
                                 </div>
@@ -147,123 +147,20 @@
                     </div>
                     <!--end row-->
 
-                  
-
- <!-- top offcanvas -->
- <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel" style="min-height:46vh;">
-    <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="offcanvasTopLabel">Advance Setting</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="row gallery-light">
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <label for="imageFormat" class="form-label">Select Image Format</label>
-                <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
-                    <option value="jpeg">JPEG</option>
-                    <option value="png">PNG</option>
-                    <option value="webp">WEBP</option>
-                </select>
-            </div>
-            <!--end col-->
-            <div class="col-xl-6 col-lg-4 col-sm-6">
-                <div class="d-flex flex-wrap justify-content-between">
-                    <!-- Image Box 1 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Watercolor')">
-                            <img src="https://via.placeholder.com/100" alt="style1" class="img-fluid mb-2">
-                            <p>Style 1</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 2 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('sketch')">
-                            <img src="https://via.placeholder.com/100" alt="style2" class="img-fluid mb-2">
-                            <p>Style 2</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 3 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 3')">
-                            <img src="https://via.placeholder.com/100" alt="style3" class="img-fluid mb-2">
-                            <p>Style 3</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 4 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 4')">
-                            <img src="https://via.placeholder.com/100" alt="style4" class="img-fluid mb-2">
-                            <p>Style 4</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 5 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 5')">
-                            <img src="https://via.placeholder.com/100" alt="style5" class="img-fluid mb-2">
-                            <p>Style 5</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 6 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 6')">
-                            <img src="https://via.placeholder.com/100" alt="style6" class="img-fluid mb-2">
-                            <p>Style 6</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 7 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 7')">
-                            <img src="https://via.placeholder.com/100" alt="style7" class="img-fluid mb-2">
-                            <p>Style 7</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 8 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center" onclick="selectStyle('Style 8')">
-                            <img src="https://via.placeholder.com/100" alt="style8" class="img-fluid mb-2">
-                            <p>Style 8</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end col-->
-            <div class="col-xl-3 col-lg-4 col-sm-6">
-                <label for="modelVersion" class="form-label">Select Model Version</label>
-                <select name="modelVersion" id="modelVersion" class="form-select" onchange="syncModelVersion()">
-                    <option value="sd3-medium">sd3-medium</option>
-                    <option value="sd3-large-turbo">sd3-large-turbo</option>
-                    <option value="sd3-large">sd3-large</option>
-                    <option value="sd3.5-medium">sd3.5-medium</option>
-                    <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
-                    <option value="sd3.5-large">sd3.5-large</option>
-                </select>
-            </div>
-            <!--end col-->
-        </div>
-        <!--end row-->
-    </div>
-</div>
 
 
 
                 </div>
                 <div>
-                    <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+                    <ul class="nav nav-tabs nav-tabs-custom justify-content-center" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#all" role="tab" aria-selected="false">
+                            <a class="nav-link" data-bs-toggle="tab" href="#all" role="tab" aria-selected="false">
                                 <i class="ri-search-2-line text-muted align-bottom me-1"></i>Result
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" data-bs-toggle="tab" id="images-tab" href="#images" role="tab"
-                                aria-selected="true">
+                                aria-selected="false">
                                 <i class="ri-image-fill text-muted align-bottom me-1"></i> Images
                             </a>
                         </li>
@@ -277,34 +174,23 @@
                                 <i class="ri-video-line text-muted align-bottom me-1"></i> Videos
                             </a>
                         </li>
-                        <li class="nav-item ms-auto">
-                            <div class="dropdown">
-                                <a class="nav-link fw-medium text-reset mb-n1" href="#" role="button" id="dropdownMenuLink1"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ri-settings-4-line align-middle me-1"></i> Settings
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">Advanced Settings</a></li>
-
-                                </ul>
-                            </div>
-                        </li>
+                        
                     </ul>
                 </div>
                 <div class="card-body p-4">
                     <div class="tab-content text-muted">
-                        <div class="tab-pane active" id="all" role="tabpanel">
+                        <div class="tab-pane" id="all" role="tabpanel">
                             <div id="imageContainer" class="pb-3">
                                 
                             </div>
 
                         </div>
 
-                        <div class="tab-pane" id="images" role="tabpanel">
+                        <div class="tab-pane active" id="images" role="tabpanel">
                            
                             <div class="gallery-light">
                                 <div class="row">
-                                    {{-- @foreach($images as $item)
+                                    @foreach($images as $item)
                                         <div class="col-xl-3 col-lg-4 col-sm-6">
                                         <div class="gallery-box card">
                                             <div class="gallery-container">
@@ -340,7 +226,7 @@
                                             </div>
                                         </div>
                                         </div>
-                                    @endforeach --}}
+                                    @endforeach
                                 </div>
                                 <!--end row-->
                                 <div class="mt-4">
@@ -933,10 +819,17 @@ $(document).ready(function() {
 </script>
 
 <script>
-    function selectStyle(styleName) {
+    function selectStyle(styleName, element) {
     // Set the selected style value in the hidden input field
     document.getElementById('hiddenStyle').value = styleName;
     console.log('Selected Style: ' + styleName); // You can log it to see the selected style
+    
+    // Remove 'selected-border' class from all image boxes
+    const imageBoxes = document.querySelectorAll('.image-box');
+    imageBoxes.forEach(box => box.classList.remove('border-primary'));
+    
+    // Add 'selected-border' class to the clicked element only
+    element.classList.add('border-primary');
     }
 
     function syncImageFormat() {
