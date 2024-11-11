@@ -66,13 +66,19 @@ class StableDifussionController extends Controller
     $style = $request->input('hiddenStyle');
     $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
     $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
+    $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
 
     if ($style) {
         $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
     }
 
-    $rephrasedPrompt = rephrasePrompt($prompt);
-
+    if($optimizePrompt == '1'){
+        $rephrasedPrompt = rephrasePrompt($prompt);
+    }else {
+        // If not optimized, use the original prompt
+        $rephrasedPrompt = $prompt;
+    }
+ 
     // Call the service to generate the image
     $result = $this->stableDiffusionService->generateImage($rephrasedPrompt, $imageFormat, $modelVersion);
 
