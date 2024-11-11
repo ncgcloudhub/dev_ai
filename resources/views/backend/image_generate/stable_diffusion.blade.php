@@ -27,6 +27,7 @@
                                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                                 <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
                                 <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
+                                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
                             <div class="row g-2">
                                 <div class="col">
                                     <div class="position-relative mb-3">
@@ -65,6 +66,16 @@
                                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                                     <option value="sd3.5-large">sd3.5-large</option>
                                 </select>
+
+
+                       <!-- Optimize my prompt checkbox -->
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" value="1" id="optimizePrompt" onchange="syncPromptOptimize()">
+                            <label class="form-check-label" for="optimizePrompt">
+                                Optimize my prompt
+                            </label>
+                        </div>
+
                                 
                             </div>
                             <!--end col-->
@@ -186,7 +197,7 @@
                                                     <img class="gallery-img img-fluid mx-auto"
                                                         src="{{ $item->image_url }}" alt="" />
                                                     <div class="gallery-overlay">
-                                                        <h5 class="overlay-caption">Glasses and laptop from above</h5>
+                                                        <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                                                     </div>
                                                 </a>
                                             </div>
@@ -854,6 +865,16 @@ function syncModelVersion() {
     document.getElementById('hiddenModelVersion').value = modelVersion;
 
     console.log('Selected Model Version: ' + modelVersion);  // For debugging
+}
+
+function syncPromptOptimize() {
+    // Get the checkbox element
+    const promptOptimizeChecked = document.getElementById('optimizePrompt').checked;
+
+    // Set the value of hiddenPromptOptimize based on whether the checkbox is checked
+    document.getElementById('hiddenPromptOptimize').value = promptOptimizeChecked ? '1' : '0';
+
+    console.log('Optimize my prompt: ' + (promptOptimizeChecked ? 'Yes' : 'No'));  // For debugging
 }
 
     function syncOffcanvasInput() {
