@@ -37,21 +37,16 @@
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <button onclick="syncOffcanvasInput()" type="submit" class="btn btn-primary btn-lg waves-effect waves-light"><i
+                                    <button onclick="syncOffcanvasInput()" type="submit" class="btn gradient-btn-7 btn-lg waves-effect waves-light"><i
                                         class="mdi mdi-magnify me-1"></i> Generate</button>
                                 </div>
                             </div>
                         </form>
                         </div>
                         <!--end col-->
-                        <div class="col-lg-12" id="promptContainer" style="">
-                            <h5 class="fs-16 fw-semibold text-center mb-0">
-                                Showing results for "<span id="promptDisplay" class="text-primary fw-medium fst-italic">Prompt</span>"
-                            </h5>
-                            <div id="responseMessage"></div> <!-- For displaying success/error messages -->
-                        </div>
+                    </div>
 
-                     
+                    <div class="row justify-content-center">
                             <div class="col-xl-3 col-lg-4 col-sm-6">
                                 <label for="imageFormat" class="form-label">Select Image Format</label>
                                 <select name="imageFormat" id="imageFormat" class="form-select" onchange="syncImageFormat()">
@@ -139,7 +134,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                        </div>
                             <!--end col-->
                            
                        
