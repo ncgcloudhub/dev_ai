@@ -11,9 +11,9 @@
                 <div class="col-md-3 p-3 template-card" data-category="{{$item->category_id}}">
                     <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                         @auth
-                            <a href="{{route('template.view', ['slug' => $item->slug])}}" class="text-decoration-none">
+                            <a href="{{route('aicontentcreator.view', ['slug' => $item->slug])}}" class="text-decoration-none">
                         @else
-                            <a href="{{route('frontend.free.template.view', ['slug' => $item->slug])}}" class="text-decoration-none">
+                            <a href="{{route('frontend.free.aicontentcreator.view', ['slug' => $item->slug])}}" class="text-decoration-none">
                         @endauth
                             <div class="card-body d-flex flex-column justify-content-between" style="height: 250px;"> <!-- Fixed height for the card -->
                                 <div class="mb-3">
@@ -35,9 +35,9 @@
             </div>
             <div class="mx-auto d-flex justify-content-center">
                 @auth
-                    <a href="{{ route('template.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                    <a href="{{ route('aicontentcreator.manage') }}" class="btn btn-primary">Show More</a> <!-- Redirect to user.prompt.library if user is a normal user -->
                 @else
-                    <a href="{{ route('frontend.free.template') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                    <a href="{{ route('frontend.free.aicontentcreator') }}" class="btn btn-primary">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                 @endauth
             </div>
         </div>

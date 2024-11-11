@@ -27,7 +27,7 @@
                                     data-bs-target="#v-pills-bill-info" type="button" role="tab"
                                     aria-controls="v-pills-bill-info" aria-selected="true">
                                     <span class="step-title me-2">
-                                        <i class="ri-close-circle-fill step-icon me-2"></i> Step 1
+                                        <i class="ri-pencil-fill step-icon me-2"></i> Step 1
                                     </span>
                                     Basic Info
                                 </button>
@@ -35,7 +35,7 @@
                                     data-bs-target="#v-pills-bill-address" type="button" role="tab"
                                     aria-controls="v-pills-bill-address" aria-selected="false">
                                     <span class="step-title me-2">
-                                        <i class="ri-close-circle-fill step-icon me-2"></i> Step 2
+                                        <i class="ri-pencil-fill step-icon me-2"></i> Step 2
                                     </span>
                                     Class Materials Info
                                 </button>
@@ -43,7 +43,7 @@
                                     data-bs-target="#v-pills-payment" type="button" role="tab"
                                     aria-controls="v-pills-payment" aria-selected="false">
                                     <span class="step-title me-2">
-                                        <i class="ri-close-circle-fill step-icon me-2"></i> Step 3
+                                        <i class="ri-lightbulb-fill step-icon me-2"></i> Step 3
                                     </span>
                                     Topic Reference
                                 </button>
@@ -72,7 +72,7 @@
                                             <div class="row g-3">
 
                                                 <div class="col-sm-6">
-                                                    <label class="form-label">Grade/Class</label>
+                                                    <label class="form-label" title="Select the Grade/Class you want to Generate Content For?">Grade/Class</label>
                                                     <select id="grade_id" class="form-select" name="grade_id" data-choices aria-label="Default select grade">
                                                         <option selected="">Select Grade/Class</option>
                                                         @foreach($classes as $item)
@@ -83,7 +83,7 @@
                                                 </div>
                                                 
                                                 <div class="col-sm-6">
-                                                    <label class="form-label">Subject</label>
+                                                    <label class="form-label" title="Select the Subject">Subject</label>
                                                     <input list="subjectOptions" id="subjectInput" class="form-select" name="subject_name" placeholder="Choose or type subject" aria-label="Default select subject">
                                                     <datalist id="subjectOptions"></datalist>
                                                     
@@ -94,7 +94,7 @@
                                                 </div>
                                                 
                                                 <div class="col-sm-6">
-                                                    <label for="age_group" class="form-label">Age</label>
+                                                    <label for="age_group" class="form-label" title="Select The age of the student">Age</label>
                                                     <input class="form-select" list="ageOptions" id="age_group" name="age" placeholder="Choose or type your age" aria-label="Select or type age">
                                                         <datalist id="ageOptions">
                                                             <option value="4">
@@ -119,7 +119,7 @@
                                                 </div>                                               
 
                                                 <div class="col-sm-6">
-                                                    <label class="form-label">Content Difficulty Level</label>
+                                                    <label class="form-label" title="Difficulty level of the content">Content Difficulty Level</label>
                                                     <select class="form-select" name="difficulty_level" data-choices aria-label="Default select difficulty">
                                                         <option selected="">Select Level</option>
                                                         <option value="Easy">Easy</option>
@@ -132,7 +132,7 @@
                                                 </div>
 
                                                 <div class="col-sm-6">
-                                                    <label for="lastName" class="form-label">Tone</label>
+                                                    <label for="lastName" class="form-label" title="Tone of the Content">Tone</label>
                                                     <select class="form-select" name="tone" data-choices aria-label="Default select tone">
                                                         <option selected="">Choose Tone</option>
                                                         <option value="Kids">Kids</option>
@@ -142,7 +142,7 @@
                                                 </div>
 
                                                 <div class="col-sm-6">
-                                                    <label for="lastName" class="form-label">Persona</label>
+                                                    <label for="lastName" class="form-label" title="Simplicity of the Content">Persona</label>
                                                     <select class="form-select" name="persona" data-choices aria-label="Default select persona">
                                                         <option selected="">Choose Persona</option>
                                                         <option value="Very Simple">Very Simple</option>
@@ -224,14 +224,14 @@
                                         <div>
                                             <div class="row g-3">
                                                 <div class="col-12">
-                                                    <label for="address" class="form-label">Topic</label>
+                                                    <label for="address" class="form-label" title="What is the Topic of the Content">Topic</label>
                                                     <input type="text" class="form-control" id="topic" name="topic"
                                                         placeholder="Briefly state the main topic" required>
                                                     <div class="invalid-feedback">What is the Content Topic about?</div>
                                                 </div>
 
                                                 <div class="col-12">
-                                                    <label for="additional_details" class="form-label">Topic Description
+                                                    <label for="additional_details" class="form-label" title="Give a little more brief about the Topic">Topic Description
                                                         <span class="text-muted">(Optional)</span>
                                                     </label>
                                                     <textarea class="form-control" id="additional_details" name="additional_details" rows="2" 
@@ -239,7 +239,7 @@
                                                 </div>  
 
                                                 <div class="col-6">
-                                                    <label for="content_type" class="form-label">Content Type</label>
+                                                    <label for="content_type" class="form-label" title="What is the tye of the Content?">Content Type</label>
                                                     <input class="form-select" list="contentOption" id="content_type" name="content_type" placeholder="Select Content Type" aria-label="Select or type Content Type">
                                                         <datalist id="contentOption">
                                                             <option value="story">
@@ -252,7 +252,7 @@
                                                 </div>
 
                                                 <div class="col-6">
-                                                    <label for="language_style" class="form-label">Language Syle</label>
+                                                    <label for="language_style" class="form-label" title="What is the Language Style">Language Syle</label>
                                                     <input class="form-select" list="languageOption" id="language_style" name="language_style" placeholder="Select Language Style" aria-label="Select or type Language Style">
                                                         <datalist id="languageOption">
                                                             <option value="Simple (suitable for young readers)">
@@ -264,7 +264,7 @@
                                                 </div>
 
                                                 <div class="col-12">
-                                                    <label for="desired_length" class="form-label">Dersired Length</label>
+                                                    <label for="desired_length" class="form-label" title="What is the desired length of the Content">Dersired Length</label>
                                                     <input class="form-select" list="lengthOption" id="desired_length" name="desired_length" placeholder="Choose your desired length for the content" aria-label="Select or type your Desired Length">
                                                         <datalist id="lengthOption">
                                                             <option value="Short (1-2 pages)">
@@ -275,7 +275,7 @@
                                                 </div>
                                                 
                                                 <div class="col-12">
-                                                    <label for="negative_word" class="form-label">Negative Word <span class="text-muted">(Optional)</span></label>
+                                                    <label for="negative_word" class="form-label" title="IF there are any negative words to include, type them here">Negative Word <span class="text-muted">(Optional)</span></label>
                                                     <input type="text" class="form-control" id="negative_word" name="negative_word"
                                                         placeholder="Negative words that you don't want to include in your content" required>
                                                     <div class="invalid-feedback">Which words you don't want to include in your content?</div>
@@ -295,12 +295,12 @@
                                                     <div class="row g-3">
                                                          <!-- Number of Questions -->
                                                         <div class="col-4">
-                                                            <label for="number_of_questions">Number of Questions</label>
+                                                            <label for="number_of_questions" title="How many question you want to Include">Number of Questions</label>
                                                             <input type="number" id="number_of_questions" name="number_of_questions" class="form-control">
                                                         </div>
                                                         <!-- Type of Questions Dropdown and Manual Input -->
                                                         <div class="col-4">
-                                                            <label for="question_type" class="form-label">Question Type</label>
+                                                            <label for="question_type" class="form-label" title="What should be the Question Type">Question Type</label>
                                                             <input class="form-select" list="questionTypeOption" id="question_type" name="question_type" placeholder="Choose question Type" aria-label="Choose question Type">
                                                                 <datalist id="questionTypeOption">
                                                                     <option value="Multiple Choice">
@@ -314,7 +314,7 @@
                                                         </div>
                                                         <!-- Difficulty Level Dropdown -->
                                                         <div class="col-4">
-                                                            <label for="question_difficulty_level">Difficulty Level</label>
+                                                            <label for="question_difficulty_level" title="What Should be the difficulty level of the questions">Difficulty Level</label>
                                                             <select id="question_difficulty_level" name="question_difficulty_level" class="form-control">
                                                                 <option value="easy">Easy</option>
                                                                 <option value="medium">Medium</option>
@@ -350,7 +350,7 @@
                                                       
                                                         <!-- Type of Image Dropdown and Manual Input -->
                                                         <div class="col-4">
-                                                            <label for="image_type" class="form-label">Type of Image</label>
+                                                            <label for="image_type" class="form-label" title="What type of Image you want to Generate">Type of Image</label>
                                                             <input class="form-select" list="imageTypeOption" id="image_type" name="image_type" placeholder="Select Image Type" aria-label="Select Image Type">
                                                                 <datalist id="imageTypeOption">
                                                                     <option value="Illustrations related to the story or topic">
@@ -364,13 +364,13 @@
 
                                                         {{-- Number of Image --}}
                                                         <div class="col-2">
-                                                            <label for="number_of_images">Number of Images</label>
+                                                            <label for="number_of_images" title="How many Images you want to Generate">Number of Images</label>
                                                             <input type="number" id="number_of_images" name="number_of_images" class="form-control">
                                                         </div>
 
                                                         <!-- Image Placement -->
                                                         <div class="col-3">
-                                                            <label for="image_placement" class="form-label">Type of Image</label>
+                                                            <label for="image_placement" class="form-label" title="What place you want to include the Image">Placement of Image</label>
                                                             <input class="form-select" list="imagePlacementOption" id="image_placement" name="image_placement" placeholder="Select Image Placement" aria-label="Select Image Placement">
                                                                 <datalist id="imagePlacementOption">
                                                                     <option value="Beginning of the content">
@@ -383,7 +383,7 @@
 
                                                          <!-- Image Style -->
                                                          <div class="col-3">
-                                                            <label for="image_style" class="form-label">Image Style</label>
+                                                            <label for="image_style" class="form-label" title="What should be the Style of the Image">Image Style</label>
                                                             <input class="form-select" list="imageStyleOption" id="image_style" name="image_style" placeholder="Select Image Style" aria-label="Select Image Style">
                                                                 <datalist id="imageStyleOption">
                                                                     <option value="Cartoon / Animated">

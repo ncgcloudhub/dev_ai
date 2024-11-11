@@ -6,12 +6,12 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
 @slot('title') Add Template @endslot
 @endcomponent
 
 <div class="col-xxl-6">
-    <form method="POST" action="{{route('template.store')}}" class="row g-3">
+    <form method="POST" action="{{route('aicontentcreator.store')}}" class="row g-3">
         @csrf
     <div class="card">
         <div class="card-header align-items-center d-flex">

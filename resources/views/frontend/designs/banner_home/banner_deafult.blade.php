@@ -55,7 +55,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ auth()->check() ? route('template.manage') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Generate Contents</a>
+                                        <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Generate Contents</a>
                                     </div>
                                 </div><!-- end col -->
                             

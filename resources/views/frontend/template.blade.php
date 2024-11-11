@@ -76,7 +76,7 @@
             
            
                 <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    <a href="{{ route('frontend.free.template.view', ['slug' => $item->slug]) }}">
+                    <a href="{{ route('frontend.free.aicontentcreator.view', ['slug' => $item->slug]) }}">
                     <div class="card-body">
                         <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
                             {{-- <i style="font-size: 24px; color: #333;" class="{{$item->icon}}"></i> --}}
@@ -85,7 +85,7 @@
                         <h3 class="fw-medium link-primary gradient-text-1">{{$item->template_name}}</h3>
                         <p style="height: 3em; overflow: hidden; color:black;" class="card-text customer_name">{{$item->description}}</p>
                 
-                        <a href="{{ route('frontend.free.template.view', ['slug' => $item->slug]) }}" class="btn gradient-btn-9 btn-sm">Generate</a>
+                        <a href="{{ route('frontend.free.aicontentcreator.view', ['slug' => $item->slug]) }}" class="btn gradient-btn-9 btn-sm">Generate</a>
                 
                 
                         <ul class="list-inline hstack gap-2 mb-0">

@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\AI\CustomTemplateController;
 use App\Http\Controllers\Backend\AI\TemplateController;
 use App\Http\Controllers\Backend\AI\AIChatController;
+use App\Http\Controllers\Backend\AI\AIContentCreatorController;
 use App\Http\Controllers\Backend\AI\ExpertController;
 use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use App\Http\Controllers\Backend\AI\StableDifussionController;
@@ -181,30 +182,30 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Templates
     Route::prefix('ai-content-creator')->group(function () {
 
-        Route::get('/category/add', [TemplateController::class, 'TemplateCategoryAdd'])->name('template.category.add');
+        Route::get('/category/add', [AIContentCreatorController::class, 'AIContentCreatorCategoryAdd'])->name('aicontentcreator.category.add');
 
-        Route::post('/category/store', [TemplateController::class, 'TemplateCategoryStore'])->name('template.category.store');
+        Route::post('/category/store', [AIContentCreatorController::class, 'AIContentCreatorCategoryStore'])->name('aicontentcreator.category.store');
 
-        Route::get('/category/edit/{id}', [TemplateController::class, 'TemplateCategoryEdit'])->name('template.category.edit');
+        Route::get('/category/edit/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryEdit'])->name('aicontentcreator.category.edit');
 
-        Route::post('/category/update', [TemplateController::class, 'TemplateCategoryUpdate'])->name('template.category.update');
+        Route::post('/category/update', [AIContentCreatorController::class, 'AIContentCreatorCategoryUpdate'])->name('aicontentcreator.category.update');
 
-        Route::get('/category/delete/{id}', [TemplateController::class, 'TemplateCategoryDelete'])->name('template.category.delete');
+        Route::get('/category/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryDelete'])->name('aicontentcreator.category.delete');
 
-        Route::get('/add', [TemplateController::class, 'TemplateAdd'])->name('template.add');
+        Route::get('/add', [AIContentCreatorController::class, 'AIContentCreatorAdd'])->name('aicontentcreator.add');
 
-        Route::post('store', [TemplateController::class, 'TemplateStore'])->name('template.store');
+        Route::post('store', [AIContentCreatorController::class, 'AIContentCreatorStore'])->name('aicontentcreator.store');
 
-        Route::get('/edit/{slug}', [TemplateController::class, 'TemplateEdit'])->name('template.edit');
+        Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit');
 
-        Route::post('/update', [TemplateController::class, 'TemplateUpdate'])->name('template.update');
-        Route::post('/seo/update', [TemplateController::class, 'TemplateSEOUpdate'])->name('template.seo.update');
-        Route::get('/seo/fetch/{id}', [TemplateController::class, 'fetchTemplate'])->name('template.seo.fetch');
+        Route::post('/update', [AIContentCreatorController::class, 'AIContentCreatorUpdate'])->name('aicontentcreator.update');
+        Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
+        Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
 
-        Route::get('/select/design', [TemplateController::class, 'getDesign'])->name('getDesign');
+        Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign');
 
-        Route::post('/update-design', [TemplateController::class, 'updateDesign'])->name('user.update_design');
+        Route::post('/update-design', [AIContentCreatorController::class, 'updateDesign'])->name('user.update_design');
     });
 
     //  Permission
@@ -582,11 +583,11 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     });
 
     //Fixed Templates 
-    Route::get('ai-content-creator/manage', [TemplateController::class, 'TemplateManage'])->name('template.manage');
+    Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage');
 
-    Route::get('ai-content-creator/view/{slug}', [TemplateController::class, 'TemplateView'])->name('template.view');
+    Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
 
-    Route::post('ai-content-creator/generate', [TemplateController::class, 'templategenerate'])->name('template.generate');
+    Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');
 
     //Fixed Prompt Library 
     Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage');
@@ -634,9 +635,9 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 
 // Frontend Free Template Page
-Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.template');
-Route::get('/free/ai-content-creator/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
-Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.aicontentcreator');
+Route::get('/free/ai-content-creator/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.aicontentcreator.view');
+Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.aicontentcreator.generate');
 
 // Frontend Free Prompt Library Page
 Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
@@ -660,13 +661,13 @@ Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->na
 Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage');
 
 // GOOGLE SOCIALITE
-Route::get('google/login', [TemplateController::class, 'provider'])->name('google.login');
-Route::get('google/callback', [TemplateController::class, 'callbackHandel'])->name('google.login.callback');
+Route::get('google/login', [AIContentCreatorController::class, 'provider'])->name('google.login');
+Route::get('google/callback', [AIContentCreatorController::class, 'callbackHandel'])->name('google.login.callback');
 
 
 // GITHUB SOCIALITE
-Route::get('github/login', [TemplateController::class, 'githubprovider'])->name('github.login');
-Route::get('github/callback', [TemplateController::class, 'githubcallbackHandel'])->name('github.login.callback');
+Route::get('github/login', [AIContentCreatorController::class, 'githubprovider'])->name('github.login');
+Route::get('github/callback', [AIContentCreatorController::class, 'githubcallbackHandel'])->name('github.login.callback');
 
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');

@@ -69,7 +69,7 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-star"></i> <span >Education</span>
+                        <i class="las la-graduation-cap"></i> <span >Education</span>
                     </a>
                     <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
                         <div class="row">
@@ -95,7 +95,7 @@
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('template.manage')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('aicontentcreator.manage')}}">
                         <i class="las la-file-alt"></i> <span >AI Content Creator</span>
                     </a>
                 </li>

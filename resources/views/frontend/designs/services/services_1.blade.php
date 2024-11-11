@@ -82,7 +82,7 @@
                         <img src="{{URL::asset('build/images/nft/ai2.jpg')}}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{route('template.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Free AI Templates</a>
+                            <a href="{{route('aicontentcreator.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Free AI Templates</a>
                         </div>
                     </div>
                    

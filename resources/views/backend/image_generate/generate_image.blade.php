@@ -46,7 +46,7 @@
 
         <div class="d-flex flex-column flex-sm-row">
             <button id="imageGenerateTourButton" class="btn gradient-btn-8 text-white">Image Tour</button>
-            <a href="{{ route('template.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2 mb-sm-0 me-sm-2">
+            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2 mb-sm-0 me-sm-2">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>

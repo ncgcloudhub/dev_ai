@@ -28,7 +28,7 @@
             </div>
             
             <div class="col-lg-3 col-md-6">
-                <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}">
                     <div class="card shadow-lg h-100" style="background: rgba(255, 255, 255, 0.5); border: none;">
                         <div class="card-body p-4">
                             <h1 class="fw-bold display-5 ff-secondary mb-4 text-primary position-relative">
@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}">
                     <div class="card shadow-lg h-100" style="background: rgba(255, 255, 255, 0.5); border: none;">
                         <div class="card-body p-4">
                             <h1 class="fw-bold display-5 ff-secondary mb-4 text-primary position-relative">
@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <a href="{{ auth()->check() ? route('template.manage') : route('login') }}">
+                <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}">
                     <div class="card shadow-lg h-100" style="background: rgba(255, 255, 255, 0.5); border: none;">
                         <div class="card-body p-4">
                             <h1 class="fw-bold display-5 ff-secondary mb-4 text-primary position-relative">

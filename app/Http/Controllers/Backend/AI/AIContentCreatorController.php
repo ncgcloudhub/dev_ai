@@ -24,7 +24,7 @@ use OpenAI;
 use Stevebauman\Location\Facades\Location;
 use GuzzleHttp\Client;
 
-class TemplateController extends Controller
+class AIContentCreatorController extends Controller
 {
 
     public function updateDesign(Request $request)
@@ -114,13 +114,13 @@ class TemplateController extends Controller
 
 
     // Custom Template Category
-    public function TemplateCategoryAdd()
+    public function AIContentCreatorCategoryAdd()
     {
         $categories = TemplateCategory::orderBy('id', 'ASC')->get();
-        return view('backend.template.category', compact('categories'));
+        return view('backend.ai_content_creator.category', compact('categories'));
     }
 
-    public function TemplateCategoryStore(Request $request)
+    public function AIContentCreatorCategoryStore(Request $request)
     {
 
         flash()->success('Operation completed successfully.');
@@ -136,15 +136,15 @@ class TemplateController extends Controller
         return redirect()->back()->with('success', 'Template Saved Successfully');
     }
 
-    public function TemplateCategoryEdit($id)
+    public function AIContentCreatorCategoryEdit($id)
     {
         $categories = TemplateCategory::orderBy('id', 'ASC')->get();
         $category = TemplateCategory::findOrFail($id);
-        return view('backend.template.category_edit', compact('category', 'categories'));
+        return view('backend.ai_content_creator.category_edit', compact('category', 'categories'));
     }
 
 
-    public function TemplateCategoryUpdate(Request $request)
+    public function AIContentCreatorCategoryUpdate(Request $request)
     {
 
         $id = $request->id;
@@ -168,7 +168,7 @@ class TemplateController extends Controller
     } // end method 
 
 
-    public function TemplateCategoryDelete($id)
+    public function AIContentCreatorCategoryDelete($id)
     {
         $category = TemplateCategory::findOrFail($id);
 
@@ -179,24 +179,19 @@ class TemplateController extends Controller
             'alert-type' => 'info'
         );
 
-        return redirect()->route('template.category.add')->with($notification);
+        return redirect()->route('aicontentcreator.category.add')->with($notification);
     } // end method
-
-
-
-
-
 
 
     // Custom Template
 
-    public function TemplateAdd()
+    public function AIContentCreatorAdd()
     {
         $categories = TemplateCategory::latest()->get();
-        return view('backend.template.template_add', compact('categories'));
+        return view('backend.ai_content_creator.aicontentcreator_add', compact('categories'));
     }
 
-    public function TemplateStore(Request $request)
+    public function AIContentCreatorStore(Request $request)
     {
 
         // Validate the incoming request
@@ -242,7 +237,7 @@ class TemplateController extends Controller
     }
 
 
-    public function TemplateEdit($slug)
+    public function AIContentCreatorEdit($slug)
     {
         $categories = TemplateCategory::orderBy('id', 'ASC')->get();
         $template = Template::where('slug', $slug)->firstOrFail();
@@ -261,11 +256,11 @@ class TemplateController extends Controller
                 'placeholder' => $inputPlaceholders[$index] ?? '',
             ];
         }
-        return view('backend.template.template_edit', compact('template', 'categories', 'templateInputsArray'));
+        return view('backend.ai_content_creator.aicontentcreator_edit', compact('template', 'categories', 'templateInputsArray'));
     }
 
 
-    public function TemplateUpdate(Request $request)
+    public function AIContentCreatorUpdate(Request $request)
     {
 
         $id = $request->id;
@@ -300,7 +295,7 @@ class TemplateController extends Controller
         return redirect()->back()->with('success', 'Template updated successfully');
     } // end method 
 
-    public function TemplateSEOUpdate(Request $request)
+    public function AIContentCreatorSEOUpdate(Request $request)
     {
 
         $id = $request->id;
@@ -394,13 +389,10 @@ class TemplateController extends Controller
                     'seo_description' => $seoDescription,
                     'seo_tags' => $seoTags,
                 ]);
-
-
     }
 
 
-
-    public function TemplateManage()
+    public function AIContentCreatorManage()
     {
         $templates = Template::orderby('id', 'asc')->get();
         $templatecategories = TemplateCategory::latest()->get();
@@ -422,10 +414,10 @@ class TemplateController extends Controller
                 ->exists();
         }
 
-        return view('backend.template.template_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks','hasPendingFeedback'));
+        return view('backend.ai_content_creator.aicontentcreator_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks','hasPendingFeedback'));
     }
 
-    public function TemplateView($slug)
+    public function AIContentCreatorView($slug)
     {
         // Find the template by slug
         $Template = Template::where('slug', $slug)->firstOrFail();
@@ -438,14 +430,12 @@ class TemplateController extends Controller
 
         $content = '';
 
-        return view('backend.template.template_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
+        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
 
-
-
     // Generate Using Open AI
-    public function templategenerate(Request $input)
+    public function AIContentCreatorgenerate(Request $input)
     {
         $template_id = $input->template_id;
         // Get the currently authenticated user
@@ -646,7 +636,6 @@ class TemplateController extends Controller
     }
 
 
-
     // GOOGLE SOCIALITE
     public function provider()
     {
@@ -741,8 +730,6 @@ class TemplateController extends Controller
         // Redirect to dashboard or any other page
         return redirect('/chat');
     }
-
-
 
 
     //   GITHUB

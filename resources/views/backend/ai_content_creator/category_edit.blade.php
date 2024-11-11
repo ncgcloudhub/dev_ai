@@ -2,9 +2,12 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('template.manage')}}">Templates</a> @endslot
-@slot('title') Category Add  @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
+@slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
+
+<a href="{{ route('aicontentcreator.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category
+</a>
 
 <div class="row">
 
@@ -27,15 +30,13 @@
                             @foreach ($categories as $item)
                             <tr>
                                 <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
-                                  
-                                <td><i class="{{ $item->category_icon }}"></i>  {{ $item->category_name }}</td>    
-                                
+                                <td>{{ $item->category_name }}</td>    
                                 <td>
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
-                                        <a href="{{route('template.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                        <a href="{{route('aicontentcreator.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill fs-16"></i></a>
     
-                                        <a href="{{route('template.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
+                                        <a href="{{route('aicontentcreator.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-5-fill fs-16"></i></a>
     
                                     </div>
                                 </td>    
@@ -61,22 +62,22 @@
                 {{-- @include('admin.layouts.alerts') --}}
     
                 <div class="live-preview">
-                    <form  action="{{ route('template.category.store') }}" method="post" class="row g-3">
+                    <form  action="{{ route('aicontentcreator.category.update') }}" method="post" class="row g-3">
                         @csrf
-    
+                        <input type="hidden" name="id" value="{{$category->id}}">  
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category">
+                            <input type="text" name="category_name" value="{{$category->category_name}}" class="form-control" id="category_name" placeholder="Enter Category">
                             <label for="category_name">Category</label>
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="category_icon" class="form-control" id="category_icon" placeholder="Enter Icon">
+                            <input type="text" name="category_icon" value="{{$category->category_icon}}" class="form-control" id="category_icon" placeholder="Enter Icon">
                             <label for="icon">Enter Icon</label>
                         </div>
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Save</button>
+                                <button class="btn btn-rounded btn-primary mb-2">Update</button>
                             </div>
                         </div>
                     </form>
