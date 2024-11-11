@@ -78,35 +78,23 @@
     </div>
     <!-- END layout-wrapper -->
 <!-- Generate Image Modal -->
-<div id="loginModals" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+<div id="loginModals" class="modal fade" tabindex="-1" aria-hidden="true" style="display:none">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 overflow-hidden">
-            <div class="modal-body login-modal p-5">
-                <div class="card card-body">
-                    <div class="d-flex mb-4 align-items-center">
-                     
-                        <div class="flex-grow-1 ms-2">
-                            <h5 class="card-title mb-1">Stable Diffusion</h5>
-                       
-                        </div>
-                    </div>
+            
+            <!-- Stable Diffusion Card with Background Image -->
+            <a href="{{ route('stable.form') }}" class="modal-body login-modal p-5" style="background-image: url('https://cdn.analyticsvidhya.com/wp-content/uploads/2024/07/Dalle-3--scaled.jpg'); background-size: cover; background-position: center; height: 220px;">
+                
+            </a>
 
-                    <a href="{{ route('stable.form') }}" class="btn btn-primary btn-sm">Proceed</a>
-                </div>
-            </div>
-            <div class="modal-body p-5">
-                <div class="card card-body">
-                    <div class="d-flex mb-4 align-items-center">
-                        <div class="flex-grow-1 ms-2">
-                            <h5 class="card-title mb-1">Dalle E</h5>
-                        </div>
-                    </div>
-                    <a href="{{ route('generate.image.view') }}" class="btn btn-primary btn-sm">Proceed</a>
-                </div>
-            </div>
+            <!-- DALL-E Card with Background Image -->
+            <a href="{{ route('generate.image.view') }}" class="modal-body p-5" style="background-image: url('https://cdn.arstechnica.net/wp-content/uploads/2024/02/sd3.jpg'); background-size: cover; background-position: center; height: 220px;">
+
+            </a>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
     @include('admin.layouts.customizer')
 
     <!-- JAVASCRIPT -->
