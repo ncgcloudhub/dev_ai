@@ -83,12 +83,12 @@
         <div class="modal-content border-0 overflow-hidden">
             
             <!-- Stable Diffusion Card with Background Image -->
-            <a href="{{ route('stable.form') }}" class="modal-body login-modal p-5" style="background-image: url('https://cdn.analyticsvidhya.com/wp-content/uploads/2024/07/Dalle-3--scaled.jpg'); background-size: cover; background-position: center; height: 220px;">
+            <a href="{{ route('generate.image.view') }}" class="modal-body login-modal p-5" style="background-image: url('https://cdn.analyticsvidhya.com/wp-content/uploads/2024/07/Dalle-3--scaled.jpg'); background-size: cover; background-position: center; height: 220px;">
                 
             </a>
 
             <!-- DALL-E Card with Background Image -->
-            <a href="{{ route('generate.image.view') }}" class="modal-body p-5" style="background-image: url('https://cdn.arstechnica.net/wp-content/uploads/2024/02/sd3.jpg'); background-size: cover; background-position: center; height: 220px;">
+            <a href="{{ route('stable.form') }}" class="modal-body p-5" style="background-image: url('https://cdn.arstechnica.net/wp-content/uploads/2024/02/sd3.jpg'); background-size: cover; background-position: center; height: 220px;">
 
             </a>
         </div><!-- /.modal-content -->

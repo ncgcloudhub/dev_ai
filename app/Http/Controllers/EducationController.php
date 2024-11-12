@@ -291,8 +291,13 @@ public function updateContent(Request $request, $id)
         // Generate and download the PDF
         $pdf = PDF::loadHTML($pdfHtml);
 
+        // Format the filename using the topic, created_at, and subject fields
+        $formattedDate = $content->created_at->format('Y_m_d'); // Format date as YYYY_MM_DD
+        $subjectName = $content->subject->name ?? 'UnknownSubject'; // Get subject name or fallback to 'UnknownSubject' if null
+        $fileName = $content->topic . '_' . $formattedDate . '(' . $subjectName . ').pdf';
+
         // Download the generated PDF
-        return $pdf->download('content_' . $content->id . '.pdf');
+        return $pdf->download($fileName);
     }
     
     public function markAsComplete(Request $request, $id)

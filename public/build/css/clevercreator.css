@@ -31,12 +31,6 @@
     background-clip: content-box, border-box; /* Ensures the content area stays unaffected by the gradient */
 }
 
-/* Card content area */
-.card-body {
-    padding: 20px;
-    background-color: white; /* Solid background for the content */
-}
-
 
 
 /* Button 2 */
