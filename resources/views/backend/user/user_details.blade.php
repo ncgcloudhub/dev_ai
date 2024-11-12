@@ -265,6 +265,12 @@ Profile | {{$user->name}}
                             Personal Details
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#images" role="tab">
+                            <i class="fas fa-home"></i>
+                            Images Generated
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body p-4">
@@ -330,6 +336,20 @@ Profile | {{$user->name}}
                             </div>
                             <!--end row-->
                         </form>
+                    </div>
+                    <!--end tab-pane-->
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane" id="images" role="tabpanel">
+                        @foreach ($images as $item)
+                        <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
+                           <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                           <div class="gallery-overlay">
+                              <h5 class="overlay-caption">{{ $item->prompt }}</h5>
+                           </div>
+                        </a>
+                        @endforeach
                     </div>
                     <!--end tab-pane-->
                 </div>

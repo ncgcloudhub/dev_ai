@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserNotification;
+use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
 use Illuminate\Support\Facades\Log;
@@ -115,7 +116,15 @@ class UserManageController extends Controller
     public function UserDetails($id)
     {
         $user = User::findOrFail($id);
-        return view('backend.user.user_details', compact('user'));
+        $images = ModelsDalleImageGenerate::where('user_id', $id)->get();
+
+
+        // Generate Azure Blob Storage URL for each image with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+        return view('backend.user.user_details', compact('user','images'));
     }
 
     public function UpdateUserStats(Request $request)
