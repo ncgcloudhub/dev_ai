@@ -39,7 +39,7 @@
 
                                 <div class="card-body p-4">
                                     <div class="text-center mt-2">
-                                        <h5 class="text-primary">Create New Account</h5>
+                                        <h5 class="gradient-text-2">Create New Account</h5>
                                         <p class="text-muted">Get started with Clever Creator</p>
                                     </div>
                                     <div class="mt-2">
@@ -55,7 +55,7 @@
                                     </div>
 
                                     <div class="signin-other-title mt-4 text-center">
-                                        <h3 class="fs-13 title">Or Sign Up With</h3>
+                                        <h3 class="fs-13 title gradient-text-1">Or Sign Up With</h3>
                                     </div>
 
                                     <div class="p-2 mt-2">
@@ -102,12 +102,12 @@
                                             </div>
                                     
                                             <div class="mb-3 form-check">
-                                              
+                                                <input type="checkbox" class="form-check-input" id="termsAgreement" required>
                                                 <label class="form-check-label" for="termsAgreement">
                                                     By continuing, I agree to Clever Creator's
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Consumer Terms</a> 
+                                                    <a href="#" class="gradient-text-1" data-bs-toggle="modal" data-bs-target="#termsModal">Consumer Terms</a> 
                                                     and 
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
+                                                    <a href="#" class="gradient-text-1" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
                                                 </label>
                                             </div>
                                     
@@ -119,7 +119,7 @@
                                                 <p id="pass-number" class="invalid fs-12 mb-0">At <b>least one number</b> (0-9)</p>
                                             </div>
                                     
-                                            <button type="submit" class="btn btn-success w-100" id="signUpButton" disabled>Sign Up</button>
+                                            <button type="submit" class="btn gradient-btn-8 w-100" id="signUpButton" disabled>Sign Up</button>
                                         </form>
                                     
                                         <script>
@@ -225,7 +225,7 @@
                             <div class="mt-4 text-center">
                                 
                          @include('admin.layouts.alerts')
-                                <p class="mb-0">Already have an account ? <a href="{{ route('login') }}" class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+                                <p class="mb-0">Already have an account ? <a href="{{ route('login') }}" class="fw-semibold gradient-text-2 text-decoration-underline"> Signin </a> </p>
                             </div>
 
                         </div>
