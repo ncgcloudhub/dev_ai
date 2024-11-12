@@ -160,6 +160,26 @@ class UserManageController extends Controller
         return redirect()->back()->with('success', 'Block status updated for selected users.');
     }
 
+    public function bulkVerifyEmail(Request $request)
+    {
+        $userIds = $request->input('user_ids'); // Get the selected user IDs from the form
+
+        // Get the users that need email verification
+        $users = User::whereIn('id', $userIds)->get();
+
+        foreach ($users as $user) {
+            // Only send a verification email if the user hasn't verified their email already
+            if (!$user->email_verified_at) {
+                // You can use Laravel's built-in notification system for email verification
+                $user->sendEmailVerificationNotification(); // Assuming you're using Laravel's built-in notification for email verification
+            }
+        }
+
+        // You may want to add a success message or redirect the user to a specific page
+        return redirect()->back()->with('success', 'Email Verification sent to selected users.');
+    }
+
+
     public function bulkStatusChange(Request $request)
     {
         // Ensure the request contains selected user IDs

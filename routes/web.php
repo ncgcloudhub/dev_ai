@@ -157,6 +157,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
         Route::post('/users/bulk-block', [UserManageController::class, 'bulkBlock'])->name('admin.users.bulkBlock');
+        // Route for bulk email verification
+        Route::post('/bulk-verify-email', [UserManageController::class, 'bulkVerifyEmail'])->name('admin.users.bulkVerifyEmail');
+
         Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block');
         Route::post('/block/store', [UserManageController::class, 'storeBlock'])->name('country.block.store');
         Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit');

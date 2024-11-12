@@ -41,12 +41,12 @@
 
                         @else
                             -- 
-                            <form action="{{ route('user.send-verification-email', ['user' => $item->id]) }}" method="POST">
+                            {{-- <form action="{{ route('user.send-verification-email', ['user' => $item->id]) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to send a verification email to this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Verification Email">
                                     <i class="ri-mail-send-line"></i>
                                 </button>
-                            </form>
+                            </form> --}}
                         @endif
                         
                     </td>
@@ -88,6 +88,9 @@
             <button type="button" id="bulkDelete" class="btn btn-danger" title="Delete">
                 <i class="la la-trash"></i>
             </button>
+            <button type="button" id="bulkVerifyEmail" class="btn btn-success" title="Send Email Verification">
+                <i class="ri-mail-send-line"></i>
+            </button>
         </div>
         
     </form>
@@ -103,6 +106,7 @@
 let bulkDeleteButton = document.getElementById('bulkDelete');
 let bulkBlockButton = document.getElementById('bulkBlock');
 let bulkStatusChangeButton = document.getElementById('bulkStatusChange');
+let bulkVerifyEmailButton = document.getElementById('bulkVerifyEmail');
 
 bulkDeleteButton.addEventListener('click', function() {
     if (confirm('Are you sure you want to delete the selected users?')) {
@@ -121,6 +125,13 @@ bulkBlockButton.addEventListener('click', function() {
 bulkStatusChangeButton.addEventListener('click', function() {
     if (confirm('Are you sure you want to change the status of the selected users?')) {
         document.getElementById('bulkActionForm').action = '{{ route("admin.users.bulkStatusChange") }}';
+        document.getElementById('bulkActionForm').submit();
+    }
+});
+
+bulkVerifyEmailButton.addEventListener('click', function() {
+    if (confirm('Are you sure you want to send verification emails to the selected users?')) {
+        document.getElementById('bulkActionForm').action = '{{ route("admin.users.bulkVerifyEmail") }}'; // New route for bulk verification
         document.getElementById('bulkActionForm').submit();
     }
 });
