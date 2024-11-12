@@ -33,6 +33,11 @@
                                     <div class="position-relative mb-3">
                                         <input type="text" class="form-control form-control-lg bg-light border-light"
                                             placeholder="Enter your Prompt" name="prompt" id="prompt">
+
+                                            <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute end-0 top-0" 
+                                            onclick="toggleOptimize()" id="optimizeIcon">
+                                             <i class="ri-hammer-line"></i> <!-- Default icon, will change on click -->
+                                         </a>
                                        
                                     </div>
                                 </div>
@@ -66,16 +71,6 @@
                                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                                     <option value="sd3.5-large">sd3.5-large</option>
                                 </select>
-
-
-                       <!-- Optimize my prompt checkbox -->
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" value="1" id="optimizePrompt" onchange="syncPromptOptimize()">
-                            <label class="form-check-label" for="optimizePrompt">
-                                Optimize my prompt
-                            </label>
-                        </div>
-
                                 
                             </div>
                             <!--end col-->
@@ -867,15 +862,19 @@ function syncModelVersion() {
     console.log('Selected Model Version: ' + modelVersion);  // For debugging
 }
 
-function syncPromptOptimize() {
-    // Get the checkbox element
-    const promptOptimizeChecked = document.getElementById('optimizePrompt').checked;
+function toggleOptimize() {
+        const optimizeInput = document.getElementById("hiddenPromptOptimize");
+        const optimizeIcon = document.getElementById("optimizeIcon").firstElementChild;
 
-    // Set the value of hiddenPromptOptimize based on whether the checkbox is checked
-    document.getElementById('hiddenPromptOptimize').value = promptOptimizeChecked ? '1' : '0';
-
-    console.log('Optimize my prompt: ' + (promptOptimizeChecked ? 'Yes' : 'No'));  // For debugging
-}
+        // Toggle between optimized and non-optimized
+        if (optimizeInput.value === "1") {
+            optimizeInput.value = "0";
+            optimizeIcon.classList.replace("ri-hammer-fill", "ri-hammer-line"); // Reset to default icon
+        } else {
+            optimizeInput.value = "1";
+            optimizeIcon.classList.replace("ri-hammer-line", "ri-hammer-fill"); // Change to optimized icon
+        }
+    }
 
     function syncOffcanvasInput() {
         // Get the value from the offcanvas input
