@@ -97,6 +97,59 @@
 
     @include('admin.layouts.customizer')
 
+
+    
+    {{-- Modal --}}
+
+    @php
+    $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+@endphp
+
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">Prompt Library</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="fs-15">Generate your images in the best format</h6>
+                    @foreach ($prompt_library as $item)
+                    <div class="card card-height-100">
+                        <div class="d-flex">
+                            <div class="flex-grow-1 p-2">
+                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                    <h5 class="mb-3">{{$item->prompt_name}}</h5>
+                                </a>
+                                <p class="mb-0 text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <span class="badge bg-light text-success mb-0">{{ substr($item->actual_prompt, 0, 65) }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- <div class="d-flex mt-2">
+                        <div class="flex-shrink-0">
+                            <i class="ri-checkbox-circle-fill text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
+                                <p class="text-muted mb-0">{{$item->prompt_name}}</p>
+                            </a>
+                        </div>
+                    </div>     --}}
+                    @endforeach
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <a class="btn btn-primary" href="{{route('prompt.manage')}}">Get More Prompts</a>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')
 

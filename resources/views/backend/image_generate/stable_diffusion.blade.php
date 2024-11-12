@@ -9,16 +9,37 @@
 @endsection
 @section('content')
     @component('admin.components.breadcrumb')
+
+
         @slot('li_1')
-            Pages
+            Image
         @endslot
         @slot('title')
-            Search Results
+            Stable Diffusion
         @endslot
+
+
     @endcomponent
     <div class="row">
         <div class="col-lg-12">
-           
+           <!-- Positioning Wrapper for Absolute Positioning -->
+       <!-- Positioning Wrapper for Absolute Positioning -->
+       <div class="position-relative">
+        <!-- Buttons positioned in the top-right corner and aligned horizontally -->
+        <div class="position-absolute top-0 end-0 d-flex align-items-center gap-2">
+            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2">
+                <span class="d-flex align-items-center">
+                    <span class="spinner-grow" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    <span class="ms-2">Get Image Prompt Ideas</span>
+                </span>
+            </a>
+            <button type="button" class="btn gradient-btn-5 mb-2" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                Prompt Library
+            </button>
+        </div>
+
                     <div class="row justify-content-center mb-4">
                         
                         <div class="col-lg-6">
