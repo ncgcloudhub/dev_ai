@@ -38,7 +38,7 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning gradient-text-2">Dall-E 3</strong></p>
+                                                    <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning gradient-text-3">Dall-E 3</strong></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -51,7 +51,7 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning gradient-text-2">GPT-4</strong></p>
+                                                    <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning gradient-text-3">GPT-4</strong></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -64,7 +64,7 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning gradient-text-2">Prompt Library</strong></p>
+                                                    <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning gradient-text-3">Prompt Library</strong></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -83,7 +83,7 @@
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning gradient-text-2">Latest GPT</strong></p>
+                                                    <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning gradient-text-3">Latest GPT</strong></p>
                                                 </div>
                                             </div>
                                         </div>

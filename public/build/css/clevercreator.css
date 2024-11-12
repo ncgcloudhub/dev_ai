@@ -292,6 +292,11 @@
     -webkit-text-fill-color: transparent;
 }
 
+.gradient-text-3 {
+    background: linear-gradient(45deg, #8f84eb, #e96fdf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .gradient-background-1{
     background: linear-gradient(45deg, #461b8a, #ff69b4);
