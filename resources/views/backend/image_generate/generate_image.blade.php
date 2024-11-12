@@ -387,47 +387,47 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="">
-                    <div class="card-body">
-                        <div class="row gallery-wrapper">
-                            @foreach ($images as $item)
-                            <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
-                                <div class="gallery-box card">
-                                    <div class="gallery-container">
-                                        <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
-                                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
-                                            {{-- <div class="gallery-overlay">
-                                                <h5 class="overlay-caption">{{ $item->prompt }}</h5>
-                                            </div> --}}
-                                        </a>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
-                                            <i data-feather="download"></i>
-                                        </a>
-                        
-                                        <!-- Like Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
-                                        </button>
-                        
-                                        <!-- Favorite Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+    <div class="row gallery-wrapper">
+        @foreach ($images as $item)
+        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
+            <div class="gallery-box card">
+                <div class="gallery-container">
+                    <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
+                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                        <div class="gallery-overlay">
+                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                         </div>
+                    </a>
+                </div>
+                <div class="box-content text-center mt-2">
+                    <!-- User Info -->
+                    <div class="d-flex align-items-center mb-2 text-muted">
+                        <div class="flex-grow-1">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-3">
+                        <!-- Download Button -->
+                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
+                            <i data-feather="download"></i>
+                        </a>
+    
+                        <!-- Like Button -->
+                        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
+                        </button>
+    
+                        <!-- Favorite Button -->
+                        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
+    
 
     {{-- Image Description --}}
     <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
