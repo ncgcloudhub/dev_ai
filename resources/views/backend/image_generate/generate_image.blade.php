@@ -387,47 +387,47 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="">
-                    <div class="card-body">
-                        <div class="row gallery-wrapper">
-                            @foreach ($images as $item)
-                            <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
-                                <div class="gallery-box card">
-                                    <div class="gallery-container">
-                                        <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
-                                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
-                                            {{-- <div class="gallery-overlay">
-                                                <h5 class="overlay-caption">{{ $item->prompt }}</h5>
-                                            </div> --}}
-                                        </a>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
-                                            <i data-feather="download"></i>
-                                        </a>
-                        
-                                        <!-- Like Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
-                                        </button>
-                        
-                                        <!-- Favorite Button -->
-                                        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+    <div class="row gallery-wrapper">
+        @foreach ($images as $item)
+        <div class="element-item col-xxl-3 col-xl-4 col-sm-6 project designing development" data-category="designing development">
+            <div class="gallery-box card">
+                <div class="gallery-container">
+                    <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
+                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                        <div class="gallery-overlay">
+                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                         </div>
+                    </a>
+                </div>
+                <div class="box-content text-center mt-2">
+                    <!-- User Info -->
+                    <div class="d-flex align-items-center mb-2 text-muted">
+                        <div class="flex-grow-1">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center gap-3">
+                        <!-- Download Button -->
+                        <a href="{{ $item->image_url }}" download="{{ basename($item->image) }}" class="btn btn-outline-primary btn-icon waves-effect waves-light"> 
+                            <i data-feather="download"></i>
+                        </a>
+    
+                        <!-- Like Button -->
+                        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
+                        </button>
+    
+                        <!-- Favorite Button -->
+                        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
+    
 
     {{-- Image Description --}}
     <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
@@ -467,51 +467,6 @@
 
 
 
-    {{-- Modal --}}
-    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalScrollableTitle">Prompt Library</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h6 class="fs-15">Generate your images in the best format</h6>
-                    @foreach ($prompt_library as $item)
-                    <div class="card card-height-100">
-                        <div class="d-flex">
-                            <div class="flex-grow-1 p-2">
-                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                    <h5 class="mb-3">{{$item->prompt_name}}</h5>
-                                </a>
-                                <p class="mb-0 text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                    <span class="badge bg-light text-success mb-0">{{ substr($item->actual_prompt, 0, 65) }}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {{-- <div class="d-flex mt-2">
-                        <div class="flex-shrink-0">
-                            <i class="ri-checkbox-circle-fill text-success"></i>
-                        </div>
-                        <div class="flex-grow-1 ms-2">
-                            <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                <p class="text-muted mb-0">{{$item->prompt_name}}</p>
-                            </a>
-                        </div>
-                    </div>     --}}
-                    @endforeach
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <a class="btn btn-primary" href="{{route('prompt.manage')}}">Get More Prompts</a>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 
 

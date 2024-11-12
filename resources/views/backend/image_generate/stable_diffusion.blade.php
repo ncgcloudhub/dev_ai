@@ -15,16 +15,37 @@
 @endsection
 @section('content')
     @component('admin.components.breadcrumb')
+
+
         @slot('li_1')
-            Pages
+            Image
         @endslot
         @slot('title')
-            Search Results
+            Stable Diffusion
         @endslot
+
+
     @endcomponent
     <div class="row">
         <div class="col-lg-12">
-           
+           <!-- Positioning Wrapper for Absolute Positioning -->
+       <!-- Positioning Wrapper for Absolute Positioning -->
+       <div class="position-relative">
+        <!-- Buttons positioned in the top-right corner and aligned horizontally -->
+        <div class="position-absolute top-0 end-0 d-flex align-items-center gap-2">
+            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2">
+                <span class="d-flex align-items-center">
+                    <span class="spinner-grow" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                    <span class="ms-2">Get Image Prompt Ideas</span>
+                </span>
+            </a>
+            <button type="button" class="btn gradient-btn-5 mb-2" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                Prompt Library
+            </button>
+        </div>
+
                     <div class="row justify-content-center mb-4">
                         
                         <div class="col-lg-6">
@@ -39,6 +60,11 @@
                                     <div class="position-relative mb-3">
                                         <input type="text" class="form-control form-control-lg bg-light border-light"
                                             placeholder="Enter your Prompt" name="prompt" id="prompt">
+
+                                            <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute end-0 top-0" 
+                                            onclick="toggleOptimize()" id="optimizeIcon">
+                                             <i class="ri-hammer-line"></i> <!-- Default icon, will change on click -->
+                                         </a>
                                        
                                     </div>
                                 </div>
@@ -72,16 +98,6 @@
                                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                                     <option value="sd3.5-large">sd3.5-large</option>
                                 </select>
-
-
-                       <!-- Optimize my prompt checkbox -->
-                        <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" value="1" id="optimizePrompt" onchange="syncPromptOptimize()">
-                            <label class="form-check-label" for="optimizePrompt">
-                                Optimize my prompt
-                            </label>
-                        </div>
-
                                 
                             </div>
                             <!--end col-->
@@ -805,18 +821,14 @@ $(document).ready(function() {
                 var promptValue = $('#prompt').val();
                 $('#promptDisplay').text(promptValue); 
 
-                // Show the prompt container
-                $('#promptContainer').show();
-
-                // Show success message
-                $('#responseMessage').html('<p class="text-success">Image generated successfully!</p>');
-
-
+            
                 // Display the image based on image_url or image_base64
                 if (response.image_url) {
-                    $('#imageContainer').html('<img src="' + response.image_url + '" alt="Generated Image" style="max-width:100%;">');
-                     // Set the Images tab as active and Result tab as inactive
-                  
+                    $('#imageContainer').html(`
+                        <img src="${response.image_url}" alt="Generated Image" style="max-width:100%;">
+                        <p>${response.prompt}</p>
+                    `);
+                        
 
                 } else if (response.image_base64) {
                     $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');
@@ -873,15 +885,19 @@ function syncModelVersion() {
     console.log('Selected Model Version: ' + modelVersion);  // For debugging
 }
 
-function syncPromptOptimize() {
-    // Get the checkbox element
-    const promptOptimizeChecked = document.getElementById('optimizePrompt').checked;
+function toggleOptimize() {
+        const optimizeInput = document.getElementById("hiddenPromptOptimize");
+        const optimizeIcon = document.getElementById("optimizeIcon").firstElementChild;
 
-    // Set the value of hiddenPromptOptimize based on whether the checkbox is checked
-    document.getElementById('hiddenPromptOptimize').value = promptOptimizeChecked ? '1' : '0';
-
-    console.log('Optimize my prompt: ' + (promptOptimizeChecked ? 'Yes' : 'No'));  // For debugging
-}
+        // Toggle between optimized and non-optimized
+        if (optimizeInput.value === "1") {
+            optimizeInput.value = "0";
+            optimizeIcon.classList.replace("ri-hammer-fill", "ri-hammer-line"); // Reset to default icon
+        } else {
+            optimizeInput.value = "1";
+            optimizeIcon.classList.replace("ri-hammer-line", "ri-hammer-fill"); // Change to optimized icon
+        }
+    }
 
     function syncOffcanvasInput() {
         // Get the value from the offcanvas input
