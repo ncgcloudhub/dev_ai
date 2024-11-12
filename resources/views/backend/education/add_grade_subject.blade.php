@@ -5,7 +5,17 @@
 
 @section('keywords', $seo->keywords)
 @section('content')
-
+@php
+    // Define the button styles array at the top of the view file
+    $buttonStyles = [
+        'btn-outline-primary',
+        'btn-outline-success',
+        'btn-outline-warning',
+        'btn-outline-info',
+        'btn-outline-secondary',
+        // Add more styles as needed
+    ];
+@endphp
 <div class="row">
     <div class="col-xxl-6">
         <h5 class="mb-3">Grade & Subject</h5>
@@ -25,11 +35,18 @@
                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                                 <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                                 {{ $item->grade }}
+                                <button type="button" class="btn btn-link p-0 edit-grade-btn" data-bs-toggle="modal" data-bs-target="#editGradeModal-{{ $item->id }}" aria-label="Edit Grade">
+                                    <i class="ri-edit-line fs-16"></i>
+                                </button>
+                                <!-- Delete Grade Button -->
+                                <button type="button" class="btn btn-link p-0 delete-grade-btn" data-bs-toggle="modal" data-bs-target="#deleteGradeModal-{{ $item->id }}" aria-label="Delete Grade">
+                                    <i class="ri-delete-bin-line fs-16"></i>
+                                </button>
                             </a>
-                        @endforeach
-                        
+                            @endforeach
                         </div>
-                    </div> <!-- end col-->
+                    </div>
+                
                     <div class="col-lg-9">
                         <div class="tab-content text-muted mt-3 mt-lg-0">
                             @foreach ($classes as $index => $item)
@@ -37,44 +54,135 @@
                                  id="custom-v-pills-{{ $item->id }}" 
                                  role="tabpanel" 
                                  aria-labelledby="custom-v-pills-{{ $item->id }}-tab">
-                            
-                                 @php
-                                 // Array of possible button styles
-                                 $buttonStyles = [
-                                     'btn-outline-primary',
-                                     'btn-outline-success',
-                                     'btn-outline-warning',
-                                     'btn-outline-info',
-                                     'btn-outline-secondary',
-                                     // Add more styles as needed
-                                 ];
-                             @endphp
-                             
-                             @if ($item->subjects->isNotEmpty())
-                                 <div class="subject-buttons">
-                                     @foreach ($item->subjects as $subject)
-                                         @php
-                                             // Pick a random style from the array
-                                             $randomStyle = $buttonStyles[array_rand($buttonStyles)];
-                                         @endphp
-                                         <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
-                                             {{ $subject->name }}
-                                         </button>
-                                     @endforeach
-                                 </div>
-                             @else
-                                 <p>No subjects allocated for this class.</p>
-                             @endif
-                             
-                        
-                               
+                                 
+                                @php
+                                $buttonStyles = [
+                                    'btn-outline-primary',
+                                    'btn-outline-success',
+                                    'btn-outline-warning',
+                                    'btn-outline-info',
+                                    'btn-outline-secondary',
+                                ];
+                                @endphp
+                
+                                @if ($item->subjects->isNotEmpty())
+                                    <div class="subject-buttons">
+                                        @foreach ($item->subjects as $subject)
+                                            @php
+                                            $randomStyle = $buttonStyles[array_rand($buttonStyles)];
+                                            @endphp
+                                            <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
+                                                {{ $subject->name }}
+                                                <button type="button" class="btn btn-link p-0 edit-subject-btn" data-bs-toggle="modal" data-bs-target="#editSubjectModal-{{ $subject->id }}" aria-label="Edit Subject">
+                                                    <i class="ri-edit-line fs-14"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-link p-0 delete-subject-btn" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal-{{ $subject->id }}" aria-label="Delete Subject">
+                                                    <i class="ri-delete-bin-line fs-14"></i>
+                                                </button>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p>No subjects allocated for this class.</p>
+                                @endif
                             </div>
-                        @endforeach
-                        
+                
+                            <!-- Edit Grade Modal -->
+                            <div class="modal fade" id="editGradeModal-{{ $item->id }}" tabindex="-1" aria-labelledby="editGradeLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editGradeLabel">Edit Grade</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('update.grade', $item->id) }}" method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="grade-name-{{ $item->id }}" class="form-label">Grade Name</label>
+                                                    <input type="text" class="form-control" id="grade-name-{{ $item->id }}" name="grade" value="{{ $item->grade }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <!-- Edit Subject Modal -->
+                            @foreach ($item->subjects as $subject)
+                            <div class="modal fade" id="editSubjectModal-{{ $subject->id }}" tabindex="-1" aria-labelledby="editSubjectLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editSubjectLabel">Edit Subject</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('update.subject', $subject->id) }}" method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="subject-name-{{ $subject->id }}" class="form-label">Subject Name</label>
+                                                    <input type="text" class="form-control" id="subject-name-{{ $subject->id }}" name="subject" value="{{ $subject->name }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
 
+                            <!-- Delete Grade Modal -->
+                            <div class="modal fade" id="deleteGradeModal-{{ $item->id }}" tabindex="-1" aria-labelledby="deleteGradeLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteGradeLabel">Confirm Deletion</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this grade? This action cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="{{ route('delete.grade', $item->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Subject Modal -->
+                            <div class="modal fade" id="deleteSubjectModal-{{ $subject->id }}" tabindex="-1" aria-labelledby="deleteSubjectLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteSubjectLabel">Confirm Deletion</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this subject? This action cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <form action="{{ route('delete.subject', $subject->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            @endforeach
                         </div>
-                    </div> <!-- end col-->
-                </div> <!-- end row-->
+                    </div>
+                </div>
+                
+                
             </div><!-- end card-body -->
         </div><!--end card-->
     </div><!--end col-->
@@ -109,7 +217,7 @@
                                     <input type="hidden" value="grade" name="grade_form">
                                         <div class="col-md-12">
                                             <label for="title" class="form-label">Grade/Class Name</label>
-                                            <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name">
+                                            <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name" required>
                                         </div>
                                     <div class="text-end">
                                         <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
@@ -120,26 +228,28 @@
 
                             <div class="tab-pane fade" id="custom-v-pills-add-subject" role="tabpanel" aria-labelledby="custom-v-pills-profile-tab">
                                
-                                <form method="POST" action="{{route('store.grade.class')}}" class="row g-3">
+                                <form method="POST" action="{{ route('store.grade.class') }}" class="row g-3">
                                     @csrf
                                     <input type="hidden" value="grade" name="subject_form">
-
+                                
                                     <label for="Banner Text" class="form-label">Grade/Class</label>
-                                    <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
-                                        <option selected="">Select Grade/Class</option>
+                                    <select class="form-select" name="grade_id" data-choices aria-label="Default select grade" required>
+                                        <option selected="" value="">Select Grade/Class</option>
                                         @foreach($classes as $item)
-                                            <option value="{{$item->id}}">{{$item->grade}}</option>
+                                            <option value="{{ $item->id }}">{{ $item->grade }}</option>
                                         @endforeach
                                     </select>
-                                        <div class="col-md-12">
-                                            <label for="title" class="form-label">Subject</label>
-                                            <input type="text" name="subject" class="form-control mb-3" id="subject" placeholder="Enter Subject Name">
-                                        </div>
+                                    
+                                    <div class="col-md-12">
+                                        <label for="title" class="form-label">Subject</label>
+                                        <input type="text" name="subject" class="form-control mb-3" id="subject" placeholder="Enter Subject Name" required>
+                                    </div>
+                                    
                                     <div class="text-end">
                                         <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
                                     </div>
-                               
-                                 </form>
+                                </form>
+                                
                             </div><!--end tab-pane-->
                           
                         </div>
@@ -150,18 +260,4 @@
     </div><!--end col-->
 </div>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

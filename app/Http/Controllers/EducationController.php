@@ -291,8 +291,13 @@ public function updateContent(Request $request, $id)
         // Generate and download the PDF
         $pdf = PDF::loadHTML($pdfHtml);
 
+        // Format the filename using the topic, created_at, and subject fields
+        $formattedDate = $content->created_at->format('Y_m_d'); // Format date as YYYY_MM_DD
+        $subjectName = $content->subject->name ?? 'UnknownSubject'; // Get subject name or fallback to 'UnknownSubject' if null
+        $fileName = $content->topic . '_' . $formattedDate . '(' . $subjectName . ').pdf';
+
         // Download the generated PDF
-        return $pdf->download('content_' . $content->id . '.pdf');
+        return $pdf->download($fileName);
     }
     
     public function markAsComplete(Request $request, $id)
@@ -715,6 +720,27 @@ public function toggleFavorite(Request $request)
         }
     }
 
+    public function updateGrade(Request $request, $id)
+{
+    $gradeClass = GradeClass::findOrFail($id); // Find the grade by ID
+    $gradeClass->grade = $request->input('grade'); // Update the grade field
+    $gradeClass->save(); // Save the changes
+
+    return redirect()->back()->with('success', 'Grade updated successfully.');
+}
+
+
+public function updateSubject(Request $request, $id)
+{
+    $subject = Subject::findOrFail($id); // Find the subject by ID
+    $subject->name = $request->input('subject'); // Update the subject name
+    $subject->save(); // Save the changes
+
+    return redirect()->back()->with('success', 'Subject updated successfully.');
+}
+
+
+
     // CREATE TOOLS
     public function manageTools()
     {   
@@ -754,149 +780,164 @@ public function toggleFavorite(Request $request)
     }
 
     public function StoreTools(Request $request)
-{
-    // dd($request);
-    // Validate the incoming request
-    $validatedData = $request->validate([
-        'name' => 'required|string',
-        'category' => 'required|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'description' => 'nullable|string',
-        'input_types' => 'required|array',
-        'input_names' => 'required|array',
-        'input_labels' => 'required|array',
-        'input_placeholders' => 'required|array',
-        'prompt' => 'nullable|string',
-        'popular' => 'nullable|string',
-    ]);
+    {
+        // dd($request);
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'category' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'nullable|string',
+            'input_types' => 'required|array',
+            'input_names' => 'required|array',
+            'input_labels' => 'required|array',
+            'input_placeholders' => 'required|array',
+            'prompt' => 'nullable|string',
+            'popular' => 'nullable|string',
+        ]);
 
-    // Create slug from the template name
-    $slug = Str::slug($validatedData['name']);
+        // Create slug from the template name
+        $slug = Str::slug($validatedData['name']);
 
-    // Create new Tool instance
-    $tool = new EducationTools();
-    $tool->name = $validatedData['name'];
-    $tool->slug = $slug;
-    $tool->category = $validatedData['category']; // Add category
+        // Create new Tool instance
+        $tool = new EducationTools();
+        $tool->name = $validatedData['name'];
+        $tool->slug = $slug;
+        $tool->category = $validatedData['category']; // Add category
 
-    // Handle image upload if provided
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('uploads/tools', 'public'); // Store image
-        $tool->image = $imagePath; // Save image path in the database
+        // Handle image upload if provided
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads/tools', 'public'); // Store image
+            $tool->image = $imagePath; // Save image path in the database
+        }
+
+        $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+        $tool->description = $validatedData['description'];
+
+        // Save input fields as JSON arrays
+        $tool->input_types = json_encode($validatedData['input_types']);
+        $tool->input_names = json_encode($validatedData['input_names']);
+        $tool->input_labels = json_encode($validatedData['input_labels']);
+        $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
+        
+        // Save the prompt
+        $tool->prompt = $validatedData['prompt'];
+
+        // Save the Tool instance
+        $tool->save();
+
+        // Success notification
+        $notification = array(
+            'message' => 'Tool Added Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
 
-    $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
-    $tool->description = $validatedData['description'];
 
-    // Save input fields as JSON arrays
-    $tool->input_types = json_encode($validatedData['input_types']);
-    $tool->input_names = json_encode($validatedData['input_names']);
-    $tool->input_labels = json_encode($validatedData['input_labels']);
-    $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
-    
-    // Save the prompt
-    $tool->prompt = $validatedData['prompt'];
-
-    // Save the Tool instance
-    $tool->save();
-
-    // Success notification
-    $notification = array(
-        'message' => 'Tool Added Successfully',
-        'alert-type' => 'success'
-    );
-
-    return redirect()->back()->with($notification);
-}
-
-
-public function editTools($id)
-{
-    $tool = EducationTools::findOrFail($id); // Fetch the tool
-    return view('backend.education.education_tools_edit', compact('tool')); // Return edit view
-}
-
-
-public function updateTools(Request $request, $id)
-{
-    $tool = EducationTools::findOrFail($id);
-
-    // Validate the incoming request
-    $validatedData = $request->validate([
-        'name' => 'required|string',
-        'category' => 'required|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'description' => 'nullable|string',
-        'input_types' => 'required|array',
-        'input_names' => 'required|array',
-        'input_labels' => 'required|array',
-        'input_placeholders' => 'required|array',
-        'prompt' => 'nullable|string',
-        'popular' => 'nullable|string',
-    ]);
-
-    // Update the tool's properties
-    $tool->name = $validatedData['name'];
-    $tool->slug = Str::slug($validatedData['name']);
-    $tool->category = $validatedData['category'];
-
-    // Handle image upload if provided
-    if ($request->hasFile('image')) {
-        // Optionally delete the old image here
-        $imagePath = $request->file('image')->store('uploads/tools', 'public');
-        $tool->image = $imagePath;
+    public function editTools($id)
+    {
+        $tool = EducationTools::findOrFail($id); // Fetch the tool
+        return view('backend.education.education_tools_edit', compact('tool')); // Return edit view
     }
 
-    $tool->description = $validatedData['description'];
-    $tool->input_types = json_encode($validatedData['input_types']);
-    $tool->input_names = json_encode($validatedData['input_names']);
-    $tool->input_labels = json_encode($validatedData['input_labels']);
-    $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
-    $tool->prompt = $validatedData['prompt'];
-    $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
 
-    // Save the Tool instance
-    $tool->save();
+    public function updateTools(Request $request, $id)
+    {
+        $tool = EducationTools::findOrFail($id);
 
-    // Success notification
-    $notification = [
-        'message' => 'Tool Updated Successfully',
-        'alert-type' => 'success'
-    ];
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'category' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'description' => 'nullable|string',
+            'input_types' => 'required|array',
+            'input_names' => 'required|array',
+            'input_labels' => 'required|array',
+            'input_placeholders' => 'required|array',
+            'prompt' => 'nullable|string',
+            'popular' => 'nullable|string',
+        ]);
 
-    return redirect()->route('manage.education.tools')->with($notification);
-}
+        // Update the tool's properties
+        $tool->name = $validatedData['name'];
+        $tool->slug = Str::slug($validatedData['name']);
+        $tool->category = $validatedData['category'];
 
-public function getToolContent($id)
-{
-    $content = ToolGeneratedContent::findOrFail($id);
-    return response()->json(['content' => $content->content]); // Ensure 'content' matches
-}
+        // Handle image upload if provided
+        if ($request->hasFile('image')) {
+            // Optionally delete the old image here
+            $imagePath = $request->file('image')->store('uploads/tools', 'public');
+            $tool->image = $imagePath;
+        }
+
+        $tool->description = $validatedData['description'];
+        $tool->input_types = json_encode($validatedData['input_types']);
+        $tool->input_names = json_encode($validatedData['input_names']);
+        $tool->input_labels = json_encode($validatedData['input_labels']);
+        $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
+        $tool->prompt = $validatedData['prompt'];
+        $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+
+        // Save the Tool instance
+        $tool->save();
+
+        // Success notification
+        $notification = [
+            'message' => 'Tool Updated Successfully',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('manage.education.tools')->with($notification);
+    }
+
+    public function getToolContent($id)
+    {
+        $content = ToolGeneratedContent::findOrFail($id);
+        return response()->json(['content' => $content->content]); // Ensure 'content' matches
+    }
 
 
-public function updateToolContent(Request $request, $id)
-{
-    $content = ToolGeneratedContent::findOrFail($id);
-    $content->content = $request->input('content');
-    $content->save();
+    public function updateToolContent(Request $request, $id)
+    {
+        $content = ToolGeneratedContent::findOrFail($id);
+        $content->content = $request->input('content');
+        $content->save();
 
-    return response()->json(['success' => true]);
-}
+        return response()->json(['success' => true]);
+    }
 
-public function destroyTools($id)
-{
-    $tool = EducationTools::findOrFail($id);
-    $tool->delete();
+    public function destroyTools($id)
+    {
+        $tool = EducationTools::findOrFail($id);
+        $tool->delete();
 
-    // Success notification
-    $notification = [
-        'message' => 'Tool Deleted Successfully',
-        'alert-type' => 'success'
-    ];
+        // Success notification
+        $notification = [
+            'message' => 'Tool Deleted Successfully',
+            'alert-type' => 'success'
+        ];
 
-    return redirect()->route('manage.education.tools')->with($notification);
-}
+        return redirect()->route('manage.education.tools')->with($notification);
+    }
+
+    public function deleteGrade($id)
+    {
+        $gradeClass = GradeClass::findOrFail($id); // Find the grade by ID
+        $gradeClass->delete(); // Delete the grade
+
+        return redirect()->back()->with('success', 'Grade deleted successfully.');
+    }
 
 
-    
+    public function deleteSubject($id)
+    {
+        $subject = Subject::findOrFail($id); // Find the subject by ID
+        $subject->delete(); // Delete the subject
+
+        return redirect()->back()->with('success', 'Subject deleted successfully.');
+    }
+
 }

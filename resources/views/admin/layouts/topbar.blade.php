@@ -1,4 +1,4 @@
-<header id="page-topbar">
+<header class="gradient-background-3" id="page-topbar">
     <div class="layout-width">
         <div class="navbar-header">
             <div class="d-flex">
@@ -63,9 +63,6 @@
 
             <div class="d-flex align-items-center">
 
-           
-
-
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
                         <i class='bx bx-fullscreen fs-22'></i>
@@ -79,7 +76,7 @@
                 </div>
 
 
-                <div class="dropdown ms-sm-3 header-item topbar-user">
+                <div class="dropdown ms-sm-3 header-item">
                     <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="d-flex align-items-center">
                             <img class="rounded-circle header-profile-user" src="@if (Auth::user()->avatar != ''){{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/avatar-1.jpg') }}@endif" alt="Header Avatar">
