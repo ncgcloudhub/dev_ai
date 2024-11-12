@@ -5,7 +5,13 @@
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-
+    <style>
+        /* Add this CSS for the selected background color */
+        .selected-background {
+            background: linear-gradient(45deg, #9293e0, #db9dd4); /* Choose a color you like for the selected card */
+            color: #e0e0e0; /* Adjust the text color if needed for better contrast */
+        }
+    </style>
 @endsection
 @section('content')
     @component('admin.components.breadcrumb')
@@ -46,8 +52,8 @@
                         <!--end col-->
                     </div>
 
-                    <div class="row justify-content-center p-3" style="background: linear-gradient(45deg, #f3c5c5, #59047e); border-radius: 12px; padding: 3px;">
-                        <div class="col-xl-3 col-lg-4 col-sm-6" style="background: white; border-radius: 12px; padding: 15px;">
+                    <div class="row justify-content-center p-3" style="background: linear-gradient(45deg, #ffffff, #d4b2d0); border-radius: 12px; padding: 3px;">
+                        <div class="col-xl-3 col-lg-4 col-sm-6" style="background: linear-gradient(45deg, #b7aee7, #dfc6dc);; border-radius: 12px; padding: 15px;">
                                 <label for="imageFormat" class="form-label">Select Image Format</label>
                                 <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
                                     <option value="" disabled selected>Select format</option>
@@ -841,10 +847,10 @@ $(document).ready(function() {
     
     // Remove 'selected-border' class from all image boxes
     const imageBoxes = document.querySelectorAll('.image-box');
-    imageBoxes.forEach(box => box.classList.remove('border-primary'));
+    imageBoxes.forEach(box => box.classList.remove('selected-background'));
     
     // Add 'selected-border' class to the clicked element only
-    element.classList.add('border-primary');
+    element.classList.add('selected-background');
     }
 
     function syncImageFormat() {
