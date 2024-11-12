@@ -334,6 +334,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::post('update-grade/{id}', [EducationController::class, 'updateGrade'])->name('update.grade');
 
         Route::post('update-subject/{id}', [EducationController::class, 'updateSubject'])->name('update.subject');
+
+        Route::post('delete-grade/{id}', [EducationController::class, 'deleteGrade'])->name('delete.grade');
+
+        Route::post('delete-subject/{id}', [EducationController::class, 'deleteSubject'])->name('delete.subject');
         
         Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools');
 
