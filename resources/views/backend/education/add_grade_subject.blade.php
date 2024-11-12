@@ -5,7 +5,17 @@
 
 @section('keywords', $seo->keywords)
 @section('content')
-
+@php
+    // Define the button styles array at the top of the view file
+    $buttonStyles = [
+        'btn-outline-primary',
+        'btn-outline-success',
+        'btn-outline-warning',
+        'btn-outline-info',
+        'btn-outline-secondary',
+        // Add more styles as needed
+    ];
+@endphp
 <div class="row">
     <div class="col-xxl-6">
         <h5 class="mb-3">Grade & Subject</h5>
@@ -25,11 +35,14 @@
                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                                 <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                                 {{ $item->grade }}
+                                <button type="button" class="btn btn-link p-0 edit-grade-btn" data-bs-toggle="modal" data-bs-target="#editGradeModal-{{ $item->id }}" aria-label="Edit Grade">
+                                    <i class="ri-edit-line fs-16"></i>
+                                </button>
                             </a>
-                        @endforeach
-                        
+                            @endforeach
                         </div>
-                    </div> <!-- end col-->
+                    </div>
+                
                     <div class="col-lg-9">
                         <div class="tab-content text-muted mt-3 mt-lg-0">
                             @foreach ($classes as $index => $item)
@@ -37,44 +50,88 @@
                                  id="custom-v-pills-{{ $item->id }}" 
                                  role="tabpanel" 
                                  aria-labelledby="custom-v-pills-{{ $item->id }}-tab">
-                            
-                                 @php
-                                 // Array of possible button styles
-                                 $buttonStyles = [
-                                     'btn-outline-primary',
-                                     'btn-outline-success',
-                                     'btn-outline-warning',
-                                     'btn-outline-info',
-                                     'btn-outline-secondary',
-                                     // Add more styles as needed
-                                 ];
-                             @endphp
-                             
-                             @if ($item->subjects->isNotEmpty())
-                                 <div class="subject-buttons">
-                                     @foreach ($item->subjects as $subject)
-                                         @php
-                                             // Pick a random style from the array
-                                             $randomStyle = $buttonStyles[array_rand($buttonStyles)];
-                                         @endphp
-                                         <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
-                                             {{ $subject->name }}
-                                         </button>
-                                     @endforeach
-                                 </div>
-                             @else
-                                 <p>No subjects allocated for this class.</p>
-                             @endif
-                             
-                        
-                               
+                                 
+                                @php
+                                $buttonStyles = [
+                                    'btn-outline-primary',
+                                    'btn-outline-success',
+                                    'btn-outline-warning',
+                                    'btn-outline-info',
+                                    'btn-outline-secondary',
+                                ];
+                                @endphp
+                
+                                @if ($item->subjects->isNotEmpty())
+                                    <div class="subject-buttons">
+                                        @foreach ($item->subjects as $subject)
+                                            @php
+                                            $randomStyle = $buttonStyles[array_rand($buttonStyles)];
+                                            @endphp
+                                            <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
+                                                {{ $subject->name }}
+                                                <button type="button" class="btn btn-link p-0 edit-subject-btn" data-bs-toggle="modal" data-bs-target="#editSubjectModal-{{ $subject->id }}" aria-label="Edit Subject">
+                                                    <i class="ri-edit-line fs-14"></i>
+                                                </button>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                @else
+                                    <p>No subjects allocated for this class.</p>
+                                @endif
                             </div>
-                        @endforeach
-                        
-
+                
+                            <!-- Edit Grade Modal -->
+                            <div class="modal fade" id="editGradeModal-{{ $item->id }}" tabindex="-1" aria-labelledby="editGradeLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editGradeLabel">Edit Grade</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('update.grade', $item->id) }}" method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="grade-name-{{ $item->id }}" class="form-label">Grade Name</label>
+                                                    <input type="text" class="form-control" id="grade-name-{{ $item->id }}" name="grade" value="{{ $item->grade }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <!-- Edit Subject Modal -->
+                            @foreach ($item->subjects as $subject)
+                            <div class="modal fade" id="editSubjectModal-{{ $subject->id }}" tabindex="-1" aria-labelledby="editSubjectLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editSubjectLabel">Edit Subject</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('update.subject', $subject->id) }}" method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="subject-name-{{ $subject->id }}" class="form-label">Subject Name</label>
+                                                    <input type="text" class="form-control" id="subject-name-{{ $subject->id }}" name="subject" value="{{ $subject->name }}">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                
+                            @endforeach
                         </div>
-                    </div> <!-- end col-->
-                </div> <!-- end row-->
+                    </div>
+                </div>
+                
+                
             </div><!-- end card-body -->
         </div><!--end card-->
     </div><!--end col-->
@@ -152,18 +209,4 @@
     </div><!--end col-->
 </div>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

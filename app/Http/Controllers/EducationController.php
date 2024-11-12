@@ -720,6 +720,27 @@ public function toggleFavorite(Request $request)
         }
     }
 
+    public function updateGrade(Request $request, $id)
+{
+    $gradeClass = GradeClass::findOrFail($id); // Find the grade by ID
+    $gradeClass->grade = $request->input('grade'); // Update the grade field
+    $gradeClass->save(); // Save the changes
+
+    return redirect()->back()->with('success', 'Grade updated successfully.');
+}
+
+
+public function updateSubject(Request $request, $id)
+{
+    $subject = Subject::findOrFail($id); // Find the subject by ID
+    $subject->name = $request->input('subject'); // Update the subject name
+    $subject->save(); // Save the changes
+
+    return redirect()->back()->with('success', 'Subject updated successfully.');
+}
+
+
+
     // CREATE TOOLS
     public function manageTools()
     {   
