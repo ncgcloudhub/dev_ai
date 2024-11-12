@@ -815,18 +815,14 @@ $(document).ready(function() {
                 var promptValue = $('#prompt').val();
                 $('#promptDisplay').text(promptValue); 
 
-                // Show the prompt container
-                $('#promptContainer').show();
-
-                // Show success message
-                $('#responseMessage').html('<p class="text-success">Image generated successfully!</p>');
-
-
+            
                 // Display the image based on image_url or image_base64
                 if (response.image_url) {
-                    $('#imageContainer').html('<img src="' + response.image_url + '" alt="Generated Image" style="max-width:100%;">');
-                     // Set the Images tab as active and Result tab as inactive
-                  
+                    $('#imageContainer').html(`
+                        <img src="${response.image_url}" alt="Generated Image" style="max-width:100%;">
+                        <p>${response.prompt}</p>
+                    `);
+                        
 
                 } else if (response.image_base64) {
                     $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');

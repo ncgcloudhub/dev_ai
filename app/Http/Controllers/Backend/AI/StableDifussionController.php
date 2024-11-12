@@ -86,6 +86,7 @@ class StableDifussionController extends Controller
     return response()->json([
         'image_url' => $result['image_url'] ?? null,
         'image_base64' => $result['image_base64'] ?? null,
+        'prompt' => $rephrasedPrompt,
     ]);
 }
 
