@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserNotification;
+use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
 use Illuminate\Support\Facades\Log;
@@ -115,7 +116,15 @@ class UserManageController extends Controller
     public function UserDetails($id)
     {
         $user = User::findOrFail($id);
-        return view('backend.user.user_details', compact('user'));
+        $images = ModelsDalleImageGenerate::where('user_id', $id)->get();
+
+
+        // Generate Azure Blob Storage URL for each image with SAS token
+        foreach ($images as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        }
+
+        return view('backend.user.user_details', compact('user','images'));
     }
 
     public function UpdateUserStats(Request $request)
@@ -159,6 +168,26 @@ class UserManageController extends Controller
         }
         return redirect()->back()->with('success', 'Block status updated for selected users.');
     }
+
+    public function bulkVerifyEmail(Request $request)
+    {
+        $userIds = $request->input('user_ids'); // Get the selected user IDs from the form
+
+        // Get the users that need email verification
+        $users = User::whereIn('id', $userIds)->get();
+
+        foreach ($users as $user) {
+            // Only send a verification email if the user hasn't verified their email already
+            if (!$user->email_verified_at) {
+                // You can use Laravel's built-in notification system for email verification
+                $user->sendEmailVerificationNotification(); // Assuming you're using Laravel's built-in notification for email verification
+            }
+        }
+
+        // You may want to add a success message or redirect the user to a specific page
+        return redirect()->back()->with('success', 'Email Verification sent to selected users.');
+    }
+
 
     public function bulkStatusChange(Request $request)
     {
