@@ -42,7 +42,7 @@
 
                             <div class="card-body p-4">
                                 <div class="text-center mt-2">
-                                    <h5 class="text-primary">Welcome Back !</h5>
+                                    <h5 class="gradient-text-2">Welcome Back !</h5>
                                     <p class="text-muted">Sign in to continue to Clever Creator.</p>
                                 </div>
 
@@ -59,7 +59,7 @@
                                 </div>
                                 @include('admin.layouts.alerts')
                                 <div class="signin-other-title mt-4 text-center">
-                                    <h3 class="fs-13 title">Or Sign In With</h3>
+                                    <h3 class="fs-13 title gradient-text-1">Or Sign In With</h3>
                                 </div>
                                 <div class="p-2 mt-2">
                                     <form method="POST" action="{{ route('login') }}">
@@ -74,7 +74,7 @@
                                         <div class="mb-3">
                                             <div class="float-end">
                                                 @if (Route::has('password.request'))
-                                                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                                                <a class="gradient-text-1 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                                                     {{ __('Forgot your password?') }}
                                                 </a>
                                             @endif
@@ -97,7 +97,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <button class="btn btn-success w-100" type="submit">Sign In</button>
+                                            <button class="btn gradient-btn-8 w-100" type="submit">Sign In</button>
                                         </div>
 
                                         <div class="mt-4 text-center">
@@ -125,7 +125,7 @@
 
                         <div class="mt-4 text-center">
                             <p class="mb-0">Don't have an account ? <a href={{ route('register') }}
-                                    class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
+                                    class="fw-semibold gradient-text-2 text-decoration-underline"> Signup </a> </p>
                         </div>
 
                         
