@@ -109,7 +109,7 @@
                                     <input type="hidden" value="grade" name="grade_form">
                                         <div class="col-md-12">
                                             <label for="title" class="form-label">Grade/Class Name</label>
-                                            <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name">
+                                            <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name" required>
                                         </div>
                                     <div class="text-end">
                                         <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
@@ -120,26 +120,28 @@
 
                             <div class="tab-pane fade" id="custom-v-pills-add-subject" role="tabpanel" aria-labelledby="custom-v-pills-profile-tab">
                                
-                                <form method="POST" action="{{route('store.grade.class')}}" class="row g-3">
+                                <form method="POST" action="{{ route('store.grade.class') }}" class="row g-3">
                                     @csrf
                                     <input type="hidden" value="grade" name="subject_form">
-
+                                
                                     <label for="Banner Text" class="form-label">Grade/Class</label>
-                                    <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
-                                        <option selected="">Select Grade/Class</option>
+                                    <select class="form-select" name="grade_id" data-choices aria-label="Default select grade" required>
+                                        <option selected="" value="">Select Grade/Class</option>
                                         @foreach($classes as $item)
-                                            <option value="{{$item->id}}">{{$item->grade}}</option>
+                                            <option value="{{ $item->id }}">{{ $item->grade }}</option>
                                         @endforeach
                                     </select>
-                                        <div class="col-md-12">
-                                            <label for="title" class="form-label">Subject</label>
-                                            <input type="text" name="subject" class="form-control mb-3" id="subject" placeholder="Enter Subject Name">
-                                        </div>
+                                    
+                                    <div class="col-md-12">
+                                        <label for="title" class="form-label">Subject</label>
+                                        <input type="text" name="subject" class="form-control mb-3" id="subject" placeholder="Enter Subject Name" required>
+                                    </div>
+                                    
                                     <div class="text-end">
                                         <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
                                     </div>
-                               
-                                 </form>
+                                </form>
+                                
                             </div><!--end tab-pane-->
                           
                         </div>
