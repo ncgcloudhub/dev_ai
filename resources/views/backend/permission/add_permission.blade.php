@@ -27,19 +27,22 @@
                     <label for="exampleInputEmail1" class="form-label">Group Name   </label>
                     <select name="group_name" class="form-select" id="exampleFormControlSelect1">
                         <option selected="" disabled="">Select Group</option>
-                        <option value="template">Template</option>
+                        <option value="greeting_card">Greeting Card</option>
+                        <option value="calendar">Calendar</option> 
+                        <option value="chattermate">Chattermate</option> 
+                        <option value="ai_content_creator">AI Content Creator</option> 
                         <option value="custom_template">Custom Template</option> 
                         <option value="prompt_library">Prompt Library</option> 
-                        <option value="chat">Chat</option> 
-                        <option value="image">Image</option> 
+                        <option value="clever_expert">Clever Experts</option> 
+                        <option value="clever_image_creator">Clever Image Creator</option> 
                         <option value="settings">Settings</option> 
-                        <option value="user">User</option> 
-                        <option value="pricing">Pricing</option> 
-                        <option value="newsletter">Newsletter</option> 
-                        <option value="refferal">Refferal</option> 
-                        <option value="page">Page</option> 
-                        <option value="job">Job</option> 
-                        <option value="role">Role & Permission </option>  
+                        <option value="role_and_permission">Role & Permission</option> 
+                        <option value="manage_user_and_admin">Manage User & Admin</option> 
+                        <option value="education">Education</option> 
+                        <option value="manage_newsletter">Manage Newsletter</option>  
+                        <option value="manage_referral">Manage Referral</option>  
+                        <option value="manage_page">Manage Page</option>  
+                        <option value="jobs">Jobs</option>  
                     </select>
 
                 </div> 
