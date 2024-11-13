@@ -101,8 +101,15 @@
                                 
                             </div>
                             <!--end col-->
-                            <div class="col-xl-6 col-lg-4 col-sm-6">
+                            <div class="col-xl-6 col-lg-4 col-sm-6" data-simplebar data-simplebar-auto-hide="false" style="max-height: 220px;">
                                 <div class="d-flex flex-wrap justify-content-between">
+                                    <!-- Image Box 1 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0 gradient-text-1-bold">Animation</p>
+                                        </div>
+                                    </div>
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
