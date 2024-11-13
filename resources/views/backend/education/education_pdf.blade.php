@@ -44,7 +44,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} <a href="https://clevercreator.ai" target="_blank" rel="noopener noreferrer">Clever Creator</a></p>
+            <p>&copy; {{ date('Y') }} <a href="https://clevercreator.ai" target="_blank" rel="noopener noreferrer">Clever Creator AI</a></p>
         </div>
         
     </div>
