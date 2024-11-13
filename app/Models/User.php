@@ -134,6 +134,12 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->save();
         }
     } 
+
+    public function StableDiffusionlikes()
+{
+    return $this->hasMany(StableDiffusionImageLike::class);
+}
+
     
 
    

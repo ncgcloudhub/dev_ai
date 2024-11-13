@@ -229,12 +229,17 @@
                                                             class="text-body text-truncate">Ron Mackie</a></div>
                                                     <div class="flex-shrink-0">
                                                         <div class="d-flex gap-3">
-                                                            <button type="button"
-                                                                class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
-                                                                <i
-                                                                    class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
-                                                                2.2K
-                                                            </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 like-button"
+                                                            data-image-id="{{ $item->id }}">
+                                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
+                                                            <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
+                                                        </button>
+                                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button">
+                                                            <i class="ri-download-fill text-muted align-bottom me-1"></i>
+                                                        </a>
+                                                        
+                                                        
                                                             <button type="button"
                                                                 class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
                                                                 <i
@@ -910,6 +915,31 @@ function toggleOptimize() {
         document.getElementById('hiddenImageFormat').value = selectedImageFormat;
         document.getElementById('hiddenModelVersion').value = selectedModelVersion;
     }
+</script>
+
+<script>
+    $(document).on('click', '.like-button', function() {
+        let button = $(this);
+        let imageId = button.data('image-id');
+
+        $.ajax({
+            url: '/stable-diffusion-like-image',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                image_id: imageId
+            },
+            success: function(response) {
+                if (response.status === 'liked') {
+                    button.find('.like-count').text(response.likes_count);
+                    button.addClass('liked');
+                } else if (response.status === 'unliked') {
+                    button.find('.like-count').text(response.likes_count);
+                    button.removeClass('liked');
+                }
+            }
+        });
+    });
 </script>
 
 
