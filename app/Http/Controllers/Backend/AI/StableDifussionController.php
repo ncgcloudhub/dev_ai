@@ -20,7 +20,7 @@ class StableDifussionController extends Controller
 
     public function index()
     {
-        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
+        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
         return view('backend.image_generate.stable_diffusion', compact('images'));
     }
 
@@ -90,6 +90,15 @@ public function likeImage(Request $request)
         'likes_count' => $likesCount
     ]);
 }
+
+public function incrementDownloadCount($id)
+{
+    $image = StableDiffusionGeneratedImage::findOrFail($id);
+    $image->increment('downloads');
+    
+    return response()->json(['status' => 'success']);
+}
+
 
     
 

@@ -235,11 +235,12 @@
                                                             <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
                                                             <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
                                                         </button>
-                                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button">
-                                                            <i class="ri-download-fill text-muted align-bottom me-1"></i>
-                                                        </a>
-                                                        
-                                                        
+                                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}"
+                                                            class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button"
+                                                            onclick="incrementDownloadCount({{ $item->id }})">
+                                                             <i class="ri-download-fill text-muted align-bottom me-1"></i> <span class="download-count">{{ $item->downloads }} </span>
+                                                         </a>
+                                                                                                                 
                                                             <button type="button"
                                                                 class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
                                                                 <i
@@ -941,6 +942,19 @@ function toggleOptimize() {
         });
     });
 </script>
+
+<script>
+    function incrementDownloadCount(imageId) {
+        fetch(`/increment-stable-download/${imageId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).catch(error => console.error('Download count increment failed:', error));
+    }
+    </script>
+    
 
 
 @endsection
