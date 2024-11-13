@@ -280,25 +280,34 @@ public function updateContent(Request $request, $id)
     {
         // Find the content
         $content = educationContent::findOrFail($id);
-
+    
         if (!$content) {
             return redirect()->back()->with('error', 'Content not found');
         }
-
+    
         // Generate the HTML for the PDF
         $pdfHtml = view('backend.education.education_pdf', ['content' => $content])->render();
-
+    
         // Generate and download the PDF
         $pdf = PDF::loadHTML($pdfHtml);
-
+    
         // Format the filename using the topic, created_at, and subject fields
         $formattedDate = $content->created_at->format('Y_m_d'); // Format date as YYYY_MM_DD
         $subjectName = $content->subject->name ?? 'UnknownSubject'; // Get subject name or fallback to 'UnknownSubject' if null
-        $fileName = $content->topic . '_' . $formattedDate . '(' . $subjectName . ').pdf';
-
+    
+        // Truncate the topic if it’s too long (e.g., limit to 50 characters)
+        $maxTopicLength = 50;
+        $truncatedTopic = strlen($content->topic) > $maxTopicLength 
+            ? substr($content->topic, 0, $maxTopicLength) . '...' 
+            : $content->topic;
+    
+        // Construct the filename with the truncated topic
+        $fileName = "{$truncatedTopic}({$subjectName})_{$formattedDate}.pdf";
+    
         // Download the generated PDF
         return $pdf->download($fileName);
     }
+    
     
     public function markAsComplete(Request $request, $id)
     {
