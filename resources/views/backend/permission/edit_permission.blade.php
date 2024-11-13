@@ -29,22 +29,26 @@
             </div>
 
                 <div class="form-group mb-3">
-<label for="exampleInputEmail1" class="form-label">Group Name   </label>
-           <select name="group_name" class="form-select" id="exampleFormControlSelect1">
+                <label for="exampleInputEmail1" class="form-label">Group Name   </label>
+        <select name="group_name" class="form-select" id="exampleFormControlSelect1">
             <option selected="" disabled="">Select Group</option>
-            <option value="template" {{ $permission->group_name == 'template' ? 'selected' : '' }}>Template</option>
-            <option value="custom_template" {{ $permission->group_name == 'custom_template' ? 'selected' : '' }}>Custom Template</option> 
-            <option value="prompt_library" {{ $permission->group_name == 'prompt_library' ? 'selected' : '' }}>Prompt Library</option> 
-            <option value="chat" {{ $permission->group_name == 'chat' ? 'selected' : '' }}>Chat</option> 
-            <option value="image" {{ $permission->group_name == 'image' ? 'selected' : '' }}>Image </option> 
-            <option value="settings" {{ $permission->group_name == 'settings' ? 'selected' : '' }}>Settings </option> 
-            <option value="user" {{ $permission->group_name == 'user' ? 'selected' : '' }}>User</option> 
-            <option value="pricing" {{ $permission->group_name == 'pricing' ? 'selected' : '' }}>Pricing</option> 
-            <option value="newsletter" {{ $permission->group_name == 'newsletter' ? 'selected' : '' }}>Newsletter</option> 
-            <option value="refferal" {{ $permission->group_name == 'refferal' ? 'selected' : '' }}>Refferal</option> 
-            <option value="page" {{ $permission->group_name == 'page' ? 'selected' : '' }}>Page</option> 
-            <option value="job" {{ $permission->group_name == 'job' ? 'selected' : '' }}>Job</option> 
-            <option value="role" {{ $permission->group_name == 'role' ? 'selected' : '' }}>Role & Permission </option>  
+            <option value="greeting_card" {{ $permission->group_name == 'greeting_card' ? 'selected' : '' }}>Greeting Card</option>
+            <option value="calendar" {{ $permission->group_name == 'calendar' ? 'selected' : '' }}>Calendar</option>
+            <option value="chattermate" {{ $permission->group_name == 'chattermate' ? 'selected' : '' }}>Chattermate</option>
+            <option value="ai_content_creator" {{ $permission->group_name == 'ai_content_creator' ? 'selected' : '' }}>AI Content Creator</option>
+            <option value="custom_template" {{ $permission->group_name == 'custom_template' ? 'selected' : '' }}>Custom Template</option>
+            <option value="prompt_library" {{ $permission->group_name == 'prompt_library' ? 'selected' : '' }}>Prompt Library</option>
+            <option value="clever_expert" {{ $permission->group_name == 'clever_expert' ? 'selected' : '' }}>Clever Experts</option>
+            <option value="clever_image_creator" {{ $permission->group_name == 'clever_image_creator' ? 'selected' : '' }}>Clever Image Creator</option>
+            <option value="settings" {{ $permission->group_name == 'settings' ? 'selected' : '' }}>Settings</option>
+            <option value="role_and_permission" {{ $permission->group_name == 'role_and_permission' ? 'selected' : '' }}>Role & Permission</option>
+            <option value="manage_user_and_admin" {{ $permission->group_name == 'manage_user_and_admin' ? 'selected' : '' }}>Manage User & Admin</option>
+            <option value="education" {{ $permission->group_name == 'education' ? 'selected' : '' }}>Education</option>
+            <option value="manage_newsletter" {{ $permission->group_name == 'manage_newsletter' ? 'selected' : '' }}>Manage Newsletter</option>
+            <option value="manage_referral" {{ $permission->group_name == 'manage_referral' ? 'selected' : '' }}>Manage Referral</option>
+            <option value="manage_page" {{ $permission->group_name == 'manage_page' ? 'selected' : '' }}>Manage Page</option>
+            <option value="jobs" {{ $permission->group_name == 'jobs' ? 'selected' : '' }}>Jobs</option>
+            
         </select>
 
             </div> 
