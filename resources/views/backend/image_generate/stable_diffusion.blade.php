@@ -101,8 +101,15 @@
                                 
                             </div>
                             <!--end col-->
-                            <div class="col-xl-6 col-lg-4 col-sm-6">
+                            <div class="col-xl-6 col-lg-4 col-sm-6" data-simplebar data-simplebar-auto-hide="false" style="max-height: 220px;">
                                 <div class="d-flex flex-wrap justify-content-between">
+                                    <!-- Image Box 1 -->
+                                    <div class="col-3 mb-3">
+                                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
+                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <p class="mb-0 gradient-text-1-bold">Animation</p>
+                                        </div>
+                                    </div>
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
@@ -229,12 +236,18 @@
                                                             class="text-body text-truncate">Ron Mackie</a></div>
                                                     <div class="flex-shrink-0">
                                                         <div class="d-flex gap-3">
-                                                            <button type="button"
-                                                                class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
-                                                                <i
-                                                                    class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
-                                                                2.2K
-                                                            </button>
+                                                        <button type="button"
+                                                            class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 like-button"
+                                                            data-image-id="{{ $item->id }}">
+                                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
+                                                            <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
+                                                        </button>
+                                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}"
+                                                            class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button"
+                                                            onclick="incrementDownloadCount({{ $item->id }})">
+                                                             <i class="ri-download-fill text-muted align-bottom me-1"></i> <span class="download-count">{{ $item->downloads }} </span>
+                                                         </a>
+                                                                                                                 
                                                             <button type="button"
                                                                 class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0">
                                                                 <i
@@ -911,6 +924,44 @@ function toggleOptimize() {
         document.getElementById('hiddenModelVersion').value = selectedModelVersion;
     }
 </script>
+
+<script>
+    $(document).on('click', '.like-button', function() {
+        let button = $(this);
+        let imageId = button.data('image-id');
+
+        $.ajax({
+            url: '/stable-diffusion-like-image',
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                image_id: imageId
+            },
+            success: function(response) {
+                if (response.status === 'liked') {
+                    button.find('.like-count').text(response.likes_count);
+                    button.addClass('liked');
+                } else if (response.status === 'unliked') {
+                    button.find('.like-count').text(response.likes_count);
+                    button.removeClass('liked');
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    function incrementDownloadCount(imageId) {
+        fetch(`/increment-stable-download/${imageId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        }).catch(error => console.error('Download count increment failed:', error));
+    }
+    </script>
+    
 
 
 @endsection

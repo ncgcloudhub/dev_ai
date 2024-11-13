@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\AI;
 
 use App\Http\Controllers\Controller;
 use App\Models\StableDiffusionGeneratedImage;
+use App\Models\StableDiffusionImageLike;
 use App\Services\StableDiffusionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -19,36 +20,9 @@ class StableDifussionController extends Controller
 
     public function index()
     {
-        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->get();
+        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
         return view('backend.image_generate.stable_diffusion', compact('images'));
     }
-
-    // public function generate(Request $request)
-    // {
-    //     $request->validate([
-    //         'prompt' => 'required|string',
-    //         'width' => 'nullable|integer',
-    //         'height' => 'nullable|integer',
-    //         'steps' => 'nullable|integer',
-    //     ]);
-
-    //     $prompt = $request->input('prompt');
-    //     $width = $request->input('width', 512);
-    //     $height = $request->input('height', 512);
-    //     $steps = $request->input('steps', 50);
-
-    //     $result = $this->stableDiffusionService->generateImage($prompt, $width, $height, $steps);
-
-    //     if (isset($result['error'])) {
-    //         return response()->json(['error' => $result['message']], 500);
-    //     }
-    //     Log::info('Image Generation Success:', $result);
-
-    //     return response()->json([
-    //         'image_url' => $result['image_url'] ?? null,
-    //         'image_base64' => $result['image_base64'] ?? null,
-    //     ]);
-    // }
 
     public function generate(Request $request)
 {
@@ -89,6 +63,42 @@ class StableDifussionController extends Controller
         'prompt' => $rephrasedPrompt,
     ]);
 }
+
+
+public function likeImage(Request $request)
+{
+    $imageId = $request->input('image_id');
+    $user = auth()->user();
+
+    $like = StableDiffusionImageLike::where('user_id', $user->id)->where('image_id', $imageId)->first();
+
+    if ($like) {
+        $like->delete(); // Unlike the image
+        $status = 'unliked';
+    } else {
+        StableDiffusionImageLike::create([
+            'user_id' => $user->id,
+            'image_id' => $imageId
+        ]);
+        $status = 'liked';
+    }
+
+    $likesCount = StableDiffusionImageLike::where('image_id', $imageId)->count();
+
+    return response()->json([
+        'status' => $status,
+        'likes_count' => $likesCount
+    ]);
+}
+
+public function incrementDownloadCount($id)
+{
+    $image = StableDiffusionGeneratedImage::findOrFail($id);
+    $image->increment('downloads');
+    
+    return response()->json(['status' => 'success']);
+}
+
 
     
 

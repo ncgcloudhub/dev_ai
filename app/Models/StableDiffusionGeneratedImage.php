@@ -10,4 +10,10 @@ class StableDiffusionGeneratedImage extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function StableDiffusionlikes()
+    {
+        return $this->hasMany(StableDiffusionImageLike::class);
+    }
+
 }
