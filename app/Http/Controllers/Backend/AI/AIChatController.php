@@ -256,7 +256,8 @@ class AIChatController extends Controller
                 'file_path' => $filePath,
                 'is_image' => $isImage,
                 'role' => $message->message ? 'user' : 'assistant',
-                'created_at' => $message->created_at->toDateTimeString()
+                'created_at' => $message->created_at->toDateTimeString(),
+                'id' => $message->id,
             ];
         })->toArray();
     
