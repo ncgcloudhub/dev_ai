@@ -158,15 +158,26 @@ class HomeController extends Controller
         $num_words = str_word_count($content);
         $num_characters = strlen($content);
 
+    // Stream the response
+    return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens) {
+        $chunks = explode("\n", $content); // Split the content into chunks
+        
+        // Stream each chunk
+        foreach ($chunks as $chunk) {
+            echo $chunk . "<br/>";
+            ob_flush(); // Flush the output buffer
+            flush();     // Flush the system output buffer
+            sleep(1);    // Simulate delay between chunks (optional)
+        }
 
-
-        return response()->json([
-            'content' => $content,
+        // Send the stats after content
+        echo json_encode([
             'num_tokens' => $num_tokens,
             'num_words' => $num_words,
             'num_characters' => $num_characters,
             'completionTokens' => $completionTokens,
         ]);
+    });
     }
 
     //Template Front End Page
