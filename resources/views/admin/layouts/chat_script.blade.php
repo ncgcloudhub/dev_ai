@@ -620,7 +620,6 @@ document.addEventListener('click', function(event) {
                     <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
                 </div>
             ` : ''}
-
             <div class="user-chat-content">
                 <div class="ctext-wrap">
                     <div class="ctext-wrap-content">
@@ -631,24 +630,20 @@ document.addEventListener('click', function(event) {
                             </a>
                         ` : ''}
                         ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
-                    </div>
-                    <div class="action-buttons">
                         <button class="btn btn-success btn-sm speech-btn1" data-target="message-content-${messageId}" title="Read aloud or stop">
                             <i class="ri-volume-up-line"></i> <!-- Initially a 'read' icon -->
                         </button>
                         <button class="btn btn-success btn-sm copy-btn1" data-target="message-content-${messageId}" title="Copy to clipboard">
                             <i class="ri-file-copy-line"></i>
                         </button>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="conversation-name">
-                <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>       
-            </div>
+                    </div>       
+        </div>
+        <div class="conversation-name">
+            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>       
         </div>
     </li>
 `;
+
 
 
 
@@ -865,7 +860,7 @@ document.addEventListener('click', function(event) {
             console.log("Speech is currently playing, stopping speech...");
             // Stop speech if it's currently speaking
             speechButton.classList.remove('speaking');
-            speechButton.innerHTML = `<i class="ri-volume-up-line"></i> Read aloud`;  // Change icon back to "read aloud"
+            speechButton.innerHTML = `<i class="ri-volume-up-line"></i>`;  // Change icon back to "read aloud"
             window.speechSynthesis.cancel(); // Stop speaking
         } else {
             // Start reading aloud
