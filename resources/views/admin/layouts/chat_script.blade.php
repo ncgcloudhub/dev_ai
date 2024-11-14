@@ -633,10 +633,10 @@ document.addEventListener('click', function(event) {
                         ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
                     </div>
                     <div class="action-buttons">
-                        <button class="btn btn-success btn-sm speech-btn" data-target="message-content-${messageId}" title="Read aloud or stop">
+                        <button class="btn btn-success btn-sm speech-btn1" data-target="message-content-${messageId}" title="Read aloud or stop">
                             <i class="ri-volume-up-line"></i> <!-- Initially a 'read' icon -->
                         </button>
-                        <button class="btn btn-success btn-sm copy-btn" data-target="message-content-${messageId}" title="Copy to clipboard">
+                        <button class="btn btn-success btn-sm copy-btn1" data-target="message-content-${messageId}" title="Copy to clipboard">
                             <i class="ri-file-copy-line"></i>
                         </button>
                     </div>
@@ -839,10 +839,10 @@ document.addEventListener('click', function(event) {
 
     document.addEventListener('click', function(event) {
     // Check if the clicked element is the speech button
-    if (event.target.closest('.speech-btn')) {
+    if (event.target.closest('.speech-btn1')) {
         console.log("Speech button clicked"); // Confirm button click in console
 
-        const targetId = event.target.closest('.speech-btn').getAttribute('data-target');
+        const targetId = event.target.closest('.speech-btn1').getAttribute('data-target');
         const messageElement = document.getElementById(targetId);
         
         // Check if the element exists and retrieve the text from its sibling `p` tag
@@ -857,7 +857,7 @@ document.addEventListener('click', function(event) {
         console.log("Target ID:", targetId); // Log the target ID
         console.log("Message Text:", messageText); // Log the retrieved message text
 
-        const speechButton = event.target.closest('.speech-btn');
+        const speechButton = event.target.closest('.speech-btn1');
         const isSpeaking = speechButton.classList.contains('speaking'); // Check if speech is currently playing
         console.log("Is Speaking:", isSpeaking); // Log speaking state
 
@@ -879,8 +879,8 @@ document.addEventListener('click', function(event) {
     }
 
     // Check if the clicked element is the copy button
-    if (event.target.closest('.copy-btn')) {
-        const targetId = event.target.closest('.copy-btn').getAttribute('data-target');
+    if (event.target.closest('.copy-btn1')) {
+        const targetId = event.target.closest('.copy-btn1').getAttribute('data-target');
         const messageElement = document.getElementById(targetId);
 
         let messageText = '';
