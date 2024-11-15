@@ -36,7 +36,7 @@ class RoleController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->route('all.permission')->with($notification);
+        return redirect()->route('add.permission')->with($notification);
 
     }// End Method 
 

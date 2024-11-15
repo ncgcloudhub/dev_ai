@@ -24,25 +24,25 @@
 				</div>
 
                 <div class="form-group mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Group Name   </label>
-                    <select name="group_name" class="form-select" id="exampleFormControlSelect1">
+                    <label for="exampleInputEmail1" class="form-label">Group Name</label>
+                    <select name="group_name" class="form-select" id="exampleFormControlSelect1" required>
                         <option selected="" disabled="">Select Group</option>
-                        <option value="greeting_card">Greeting Card</option>
-                        <option value="calendar">Calendar</option> 
-                        <option value="chattermate">Chattermate</option> 
-                        <option value="ai_content_creator">AI Content Creator</option> 
-                        <option value="custom_template">Custom Template</option> 
-                        <option value="prompt_library">Prompt Library</option> 
-                        <option value="clever_expert">Clever Experts</option> 
-                        <option value="clever_image_creator">Clever Image Creator</option> 
-                        <option value="settings">Settings</option> 
-                        <option value="role_and_permission">Role & Permission</option> 
-                        <option value="manage_user_and_admin">Manage User & Admin</option> 
-                        <option value="education">Education</option> 
-                        <option value="manage_newsletter">Manage Newsletter</option>  
-                        <option value="manage_referral">Manage Referral</option>  
-                        <option value="manage_page">Manage Page</option>  
-                        <option value="jobs">Jobs</option>  
+                        <option value="Greeting Card">Greeting Card</option>
+                        <option value="Calendar">Calendar</option> 
+                        <option value="Chattermate">Chattermate</option> 
+                        <option value="AI Content Creator">AI Content Creator</option> 
+                        <option value="Custom Template">Custom Template</option> 
+                        <option value="Prompt Library">Prompt Library</option> 
+                        <option value="Clever Experts">Clever Experts</option> 
+                        <option value="Clever Image Creator">Clever Image Creator</option> 
+                        <option value="Settings">Settings</option> 
+                        <option value="Role & Permission">Role & Permission</option> 
+                        <option value="Manage User & Admin">Manage User & Admin</option> 
+                        <option value="Education">Education</option> 
+                        <option value="Manage Newsletter">Manage Newsletter</option>  
+                        <option value="Manage Referral">Manage Referral</option>  
+                        <option value="Manage Page">Manage Page</option>  
+                        <option value="Jobs">Jobs</option>  
                     </select>
 
                 </div> 
