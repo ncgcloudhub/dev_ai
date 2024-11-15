@@ -229,6 +229,7 @@
 
                          </form>
 
+
                          <!-- Loading Spinner -->
                         <div id="loadingSpinner" style="display:none;">
                             <div class="spinner-border" role="status">
@@ -238,7 +239,9 @@
                      </div>
                      
                  </div>
+                 
              </div>
+             
             </div>
 
             <div class="col">
@@ -259,7 +262,10 @@
                                  <h4 class="card-title mb-0">Generated Content</h4>
                              </div><!-- end card header -->
                              <div class="card-body">
-                                 <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
+
+                                 <!-- Rendered content for display -->
+                                 <div id="formattedContentDisplay" class="mt-3"></div>
+
                                  <div class="mt-2">
                                      <p><strong>Statistics:</strong></p>
                                      <ul>
@@ -274,12 +280,14 @@
                      <!-- end col -->
                  </div>
                  
-                 <div class="text-end">
+                 <div class="text-end mb-3">
                      @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
                          <!-- Add the Generate Image button -->
-                         <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn btn-warning">Generate Image Now</a>
+                         <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn gradient-btn-1">Generate Image Now</a>
                      @endif
                  </div>
+
+                 <h5> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link gradient-text-2"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h5>
  
             </div>
  </div>
@@ -314,22 +322,22 @@
 
         <script>
             $(document).ready(function() {
-                // Retrieve and update the token count display on page load
-                let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
+                 // Retrieve and update the token count display on page load
+                 let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
                 $('#tokenCount').text(remainingTokens); // Update token count display
-        
+         
                 // Function to adjust the button based on token count
                 function adjustButton() {
                     if (remainingTokens <= 10) {
                         $('#generateBtn')
-                            .removeClass('btn-primary')
+                            .removeClass('gradient-btn-5')
                             .addClass('btn-success')
                             .text('Sign Up for Free')
                             .attr('onclick', "window.location.href='{{ route('register') }}';");
                     } else {
                         $('#generateBtn')
                             .removeClass('btn-success')
-                            .addClass('btn-primary')
+                            .addClass('gradient-btn-5')
                             .text('Generate')
                             .removeAttr('onclick');
                     }
@@ -380,14 +388,7 @@
                         data: $(this).serialize(),
                         success: function(response) {
                             // Hide loading spinner
-        
-                            // Update remaining tokens
-                            remainingTokens -= response.completionTokens;
-                            localStorage.setItem('remainingTokens', remainingTokens);
-        
-                            // Update token count display
-                            $('#tokenCount').text(remainingTokens);
-        
+                            
                             // Adjust the button based on the new token count
                             adjustButton();
         
@@ -497,20 +498,61 @@
             });
         </script>
 
-        <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+       <!-- Include SimpleMDE JS -->
+        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <!-- Include FileSaver.js for saving files -->
+        <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+        <!-- Include Marked.js for parsing markdown -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <!-- Include DOMPurify for sanitizing HTML -->
+        <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
 
         <script>
-            tinymce.init({
-                selector: 'textarea#myeditorinstance',
-                plugins: 'code table lists',
-                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table'
+          
+          document.addEventListener('DOMContentLoaded', function () {
+            let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
+            const form = document.querySelector('#generateForm');
+            const formattedContentDisplay = document.getElementById('formattedContentDisplay');
+
+        // Format content using marked.js and DOMPurify
+        function formatContent(content) {
+            marked.setOptions({
+                breaks: true,
+                gfm: true
             });
+            let formattedContent = marked.parse(content);
+            formattedContent = DOMPurify.sanitize(formattedContent);
+            return formattedContent;
+        }
 
+        // Copy button click event
+        document.getElementById('copyButton').addEventListener('click', function () {
+            const editorContent = formattedContentDisplay.innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = editorContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Content copied to clipboard!');
+        });
 
-            $(document).ready(function () {
-            $('#generateForm').submit(function (event) {
-                event.preventDefault();
+        // Download button click event using FileSaver.js
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            const editorContent = formattedContentDisplay.innerText;
 
+            // Create a new Blob with the content
+            const blob = new Blob([editorContent], { type: 'application/msword' });
+
+            // Use FileSaver.js to save the blob as a file
+            saveAs(blob, 'generated_content.doc');
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+               
                 // Show the spinner
                 $('#loadingSpinner').show();
 
@@ -523,13 +565,31 @@
                     return;
                 }
 
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: $(this).serialize(),
-                    success: function (response) {
-                        // Hide the spinner
-                        $('#loadingSpinner').hide();
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: form.getAttribute('method'),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            })
+            .then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let content = ''; // Variable to store streamed content
+                let stats = {};   // Variable to store stats
+
+                const processStream = ({ done, value }) => {
+                    if (done) {
+                        // Hide loading spinner after streaming is complete
+                        document.getElementById('loadingSpinner').classList.add('d-none');
+
+                        // Update the remaining tokens
+                        if (stats.completionTokens) {
+                            remainingTokens -= stats.completionTokens;
+                            localStorage.setItem('remainingTokens', remainingTokens);
+                            $('#tokenCount').text(remainingTokens);
+                        }
 
                         if (response == 0) {
                             alert('Please Upgrade Plan');
@@ -541,37 +601,43 @@
                             localStorage.setItem('tokensUsedToday', tokensUsedToday);
                         }
 
-                        let formattedContent = '';
-                        let lines = response.content.split('\n');
-
-                        if (lines.some(line => line.trim().startsWith('*'))) {
-                            formattedContent += '<ul>';
-                            lines.forEach(line => {
-                                if (line.trim().startsWith('*')) {
-                                    formattedContent += '<li>' + line.trim().substring(1).trim() + '</li>';
-                                } else {
-                                    formattedContent += '<p>' + line.trim() + '</p>';
-                                }
-                            });
-                            formattedContent += '</ul>';
-                        } else {
-                            formattedContent = '<p>' + lines.join('</p><p>') + '</p>';
-                        }
-
-                        tinymce.get('myeditorinstance').setContent(formattedContent);
-
-                        $('#numTokens').text(response.completionTokens);
-                        $('#numWords').text(response.num_words);
-                        $('#numCharacters').text(response.num_characters);
-                    },
-                    error: function (xhr, status, error) {
-                        // Hide the spinner
-                        $('#loadingSpinner').hide();
-                        console.error(xhr.responseText);
+                        // Display the stats
+                        document.getElementById('numTokens').innerText = stats.completionTokens || 0;
+                        document.getElementById('numWords').innerText = stats.num_words || 0;
+                        document.getElementById('numCharacters').innerText = stats.num_characters || 0;
+                        return;
                     }
-                });
-            });
 
+                    // Decode the chunk
+                    const chunk = decoder.decode(value, { stream: true });
+
+                    // Check if the chunk is JSON (for stats) or content
+                    if (chunk.startsWith('{') && chunk.endsWith('}')) {
+                        try {
+                            stats = JSON.parse(chunk); // Parse statistics
+                        } catch (e) {
+                            console.error('Error parsing stats:', e);
+                        }
+                    } else {
+                        content += chunk;
+                        formattedContentDisplay.innerHTML = formatContent(content); // Format and display streamed content
+                    }
+
+                    return reader.read().then(processStream); // Continue reading chunks
+                };
+
+                return reader.read().then(processStream);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingSpinner').classList.add('d-none');
+            });
+        });
+    });
+
+
+            $(document).ready(function () {
+         
             // Reset the token count at midnight
             function resetTokenCount() {
                 let now = new Date();
@@ -583,35 +649,6 @@
             }
 
             resetTokenCount();
-
-                // Copy button click event
-                $('#copyButton').click(function () {
-                    const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
-                    const textArea = document.createElement('textarea');
-                    textArea.value = editorContent;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    alert('Content copied to clipboard!');
-                });
-
-                // Download button click event
-                $('#downloadButton').click(function () {
-                    const editorContent = tinymce.get('myeditorinstance').getContent({ format: 'text' }); // Get content without HTML tags
-
-                    const blob = new Blob([editorContent], { type: 'application/msword' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'generated_content.docx';
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(() => {
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(url);
-                    }, 0);
-                });
 
             });
         </script>     

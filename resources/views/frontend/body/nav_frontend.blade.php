@@ -12,13 +12,13 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
-                <li class="nav-item active">
-                    <a class="nav-link fs-15" href="{{ route('home') }}">Home</a>
+                <li class="nav-item">
+                    <a class="nav-link fs-15 {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                 </li>
 
                 <!-- Dropdown for Services -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fs-15" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle fs-15 {{ request()->routeIs('home') ? 'active' : '' }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Services
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -43,12 +43,12 @@
 
                 <!-- AI Image Gallery Link -->
                 <li class="nav-item">
-                    <a class="nav-link fs-15" href="{{ route('ai.image.gallery') }}">AI Image Gallery</a>
+                    <a class="nav-link fs-15 {{ request()->routeIs('ai.image.gallery') ? 'active' : '' }}" href="{{ route('ai.image.gallery') }}">AI Image Gallery</a>
                 </li>
 
                 <!-- Dropdown for Company -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fs-15" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle fs-15 {{ request()->routeIs('all.jobs') || request()->routeIs('contact.us') || request()->routeIs('privacy.policy') || request()->routeIs('terms.condition') ? 'active' : '' }}" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Company
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
@@ -60,8 +60,8 @@
                 </li>
             </ul>
 
-            <!-- Authenticated User Links -->
-            <div class="">
+             <!-- Authenticated User Links -->
+             <div class="">
                 @if (Auth::check())
                     @if (Auth::user()->role === 'admin')
                         <a href="{{ url('/admin/dashboard') }}" class="btn gradient-btn-4">Dashboard</a>
@@ -71,8 +71,6 @@
                 @else
                     <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
                     <a href="{{ route('register') }}" class="btn gradient-btn-4">Sign Up</a>
-                  
-
                 @endif
             </div>
         </div>
@@ -83,24 +81,24 @@
 <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"></div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var toggler = document.getElementById('navbarToggler');
-    var dropdowns = document.querySelectorAll('.dropdown-menu');
 
-    dropdowns.forEach(function (dropdown) {
-        dropdown.addEventListener('click', function (e) {
-            e.stopPropagation(); // Prevents the click event from propagating to the toggler button
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggler = document.getElementById('navbarToggler');
+        var dropdowns = document.querySelectorAll('.dropdown-menu');
+
+        dropdowns.forEach(function (dropdown) {
+            dropdown.addEventListener('click', function (e) {
+                e.stopPropagation(); // Prevents the click event from propagating to the toggler button
+            });
+        });
+
+        // Prevent the toggler from collapsing when clicking inside the dropdown menu
+        document.querySelectorAll('.navbar-nav .dropdown-toggle').forEach(function (dropdownToggle) {
+            dropdownToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggler.setAttribute('aria-expanded', 'true'); // Keeps the navbar expanded
+            });
         });
     });
-
-    // Prevent the toggler from collapsing when clicking inside the dropdown menu
-    document.querySelectorAll('.navbar-nav .dropdown-toggle').forEach(function (dropdownToggle) {
-        dropdownToggle.addEventListener('click', function (e) {
-            e.stopPropagation();
-            toggler.setAttribute('aria-expanded', 'true'); // Keeps the navbar expanded
-        });
-    });
-});
-
 
 </script>
