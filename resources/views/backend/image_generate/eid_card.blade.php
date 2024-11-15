@@ -40,7 +40,7 @@
             <div class="live-preview">
                     <div class="col-xxl-12 ">
     
-                        <form  action="{{route('generate.eid.card')}}" method="post">
+                        <form  action="{{route('generate.greeting.card')}}" method="post">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -286,7 +286,7 @@
             // Send AJAX request
             $.ajax({
                 type: 'POST',
-                url: '/eid/card/generate',
+                url: '/greeting/card/generate',
                 data: formData,
                 success: function(response) {
 
