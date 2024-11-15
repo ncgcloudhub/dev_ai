@@ -111,10 +111,10 @@
                 </li>
                       
 
-                 {{-- Eid Card --}}
+                 {{-- Greeting Card --}}
                
                  <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('eid.card')}}">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('greeting.card')}}">
                         <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>

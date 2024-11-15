@@ -332,7 +332,7 @@ class GenerateImagesController extends Controller
 
 
     // EID CARD
-    public function EidCard()
+    public function GreetingCard()
     {
         $user_id = Auth::user()->id;
         $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival', 'yes')->get();
@@ -360,7 +360,7 @@ class GenerateImagesController extends Controller
     }
 
 
-    public function EidCardGenerate(Request $request)
+    public function GreetingCardGenerate(Request $request)
     {
 
         $id = Auth::user()->id;
