@@ -357,6 +357,7 @@
 
 
                  {{-- Permission ROLE --}}
+                 @can('rolePermission.menu')
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="#role" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -367,28 +368,37 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('rolePermission.permission')
                                     <li class="nav-item">
                                         <a href="{{ route('all.permission') }}" class="nav-link" >All Permission</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('rolePermission.roles')
                                     <li class="nav-item">
                                         <a href="{{ route('all.roles') }}" class="nav-link" >All Roles</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('rolePermission.roleInPermission')
                                     <li class="nav-item">
                                         <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
-                                      </li>
-
+                                    </li> 
+                                    @endcan
+                                   
+                                    @can('rolePermission.roleInPermissionManage')
                                     <li class="nav-item">
-                                    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
+                                        <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
                                     </li>
-                                    
+                                    @endcan
                                    
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
-
+                 @endcan
+              
 
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#user_admin" data-bs-toggle="collapse" role="button"
