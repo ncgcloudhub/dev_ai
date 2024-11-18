@@ -261,7 +261,7 @@
                 </li>
                 @endcan
               
-
+                @can('cleverImageCreator.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -272,14 +272,18 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('cleverImageCreator.generate')
                                     <li class="nav-item">
                                         <a href="#" class="nav-link sidebar-hover" data-bs-toggle="modal" data-bs-target="#loginModals">Generate Image</a>
                                     </li>
-                                   
+                                    @endcan
+                                  
+                                    @can('cleverImageCreator.manage')
                                     <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link sidebar-hover" >Manage Image</a>
                                     </li>
-
+                                    @endcan
+                                  
                                     <li class="nav-item">
                                         <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover" >Manage Favorite Image</a>
                                     </li>
@@ -290,11 +294,8 @@
                         </div>
                     </div>
                 </li>
-
-
-
-
-
+                @endcan
+             
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                
