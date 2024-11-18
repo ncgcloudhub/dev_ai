@@ -330,7 +330,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // EDUCATION        
     Route::prefix('education')->group(function () {
 
-        Route::get('/add/class/subject', [EducationController::class, 'manageGradeSubject'])->name('manage.grade.subject');
+        Route::get('/add/class/subject', [EducationController::class, 'manageGradeSubject'])->name('manage.grade.subject')->middleware('permission:education.manageGradeSubject');
 
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
 
@@ -434,7 +434,7 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
 
     Route::prefix('education')->group(function () {
-        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form');      
+        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('permission:education.educationWizard') ;      
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');       
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
@@ -450,10 +450,10 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
         Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
-        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents');
+        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('permission:education.library') ;
         Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
         Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
-        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('permission:education.manageTools') ;
         Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');

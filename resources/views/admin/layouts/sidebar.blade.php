@@ -69,6 +69,7 @@
                 @endcan
 
                 {{-- EDUCATION --}}
+                @can('education.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -79,26 +80,38 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('education.manageGradeSubject')
                                     <li class="nav-item">
                                         <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('education.educationWizard')
                                     <li class="nav-item">
                                         <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Education Wizard</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('education.manageTools')
                                     <li class="nav-item">
                                         <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('education.library')
                                     <li class="nav-item">
                                         <a href="{{route('education.tools.contents')}}" class="nav-link" >Library</a>
                                     </li>
-                                
-
+                                    @endcan
+                                   
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
+                @endcan
+               
 
                 {{-- Fixed Template --}}
                
