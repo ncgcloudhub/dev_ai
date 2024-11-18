@@ -47,8 +47,6 @@
                     </a>
                 </li>
                
-
-               
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('calender')}}">
                         <i class="las la-calendar"></i> <span >Calender</span>
@@ -64,44 +62,70 @@
                     </a>
                 </li>
 
+                {{-- EDUCATION --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class="las la-book-open"></i> <span >Education</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
 
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Education Wizard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('education.tools.contents')}}" class="nav-link" >Library</a>
+                                    </li>
+                                
+
+                                </ul>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </li>
 
                 {{-- Fixed Template --}}
                
-                    <li class="nav-item">
-                        <a class="nav-link menu-link sidebar-hover" href="#template" data-bs-toggle="collapse" role="button"
-                            aria-expanded="false" aria-controls="AITools">
-                            <i class=" lab la-blogger"></i> <span>AI Content Creator</span>
-                        </a>
-                        <div class="collapse menu-dropdown mega-dropdown-menu" id="template">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <ul class="nav nav-sm flex-column">
-                                        
-                                        <li class="nav-item">
-                                            <a href="{{route('aicontentcreator.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
-                                        </li>
-                                        
-                                        <li class="nav-item">
-                                            <a href="{{route('aicontentcreator.add')}}" class="nav-link sidebar-hover">Create New Content</a>
-                                        </li>
-                                      
-                                        <li class="nav-item">
-                                            <a href="{{route('aicontentcreator.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
-                                        </li>
-                                      
-                                    </ul>
-                                </div>     
-                            </div>
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="#template" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="AITools">
+                        <i class=" lab la-blogger"></i> <span>AI Content Creator</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="template">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('aicontentcreator.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('aicontentcreator.add')}}" class="nav-link sidebar-hover">Create New Content</a>
+                                    </li>
+                                    
+                                    <li class="nav-item">
+                                        <a href="{{route('aicontentcreator.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>     
                         </div>
-                    </li>
+                    </div>
+                </li>
                
-
-
-
 
                 {{-- Custom Template --}}
-               
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#AITools" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -341,32 +365,6 @@
                                     <li class="nav-item">
                                         <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover" >Send Email</a>
                                     </li>
-
-                                </ul>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </li>
-               
-                {{-- EDUCATION --}}
-                <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-book-open"></i> <span >Education</span>
-                    </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <ul class="nav nav-sm flex-column">
-
-                                    <li class="nav-item">
-                                        <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
-                                    </li>
-                                   
 
                                 </ul>
                             </div>

@@ -9,7 +9,10 @@
 @slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
 @slot('title') Manage Tools @endslot
 @endcomponent
-<a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
+@if(Auth::user()->role === 'admin')
+    <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
+@endif
+
 
 <section class="py-5 gradient-background-1 position-relative">
     <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
@@ -66,6 +69,7 @@
                             <a href="{{ route('tool.show', $tool->id) }}" class="btn btn-primary">
                                 <i class="ri-auction-fill align-bottom me-1"></i>Explore
                             </a>
+                            @if(Auth::user()->role === 'admin')
                             <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
                                 <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
                             </a>
@@ -76,6 +80,7 @@
                                     <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
