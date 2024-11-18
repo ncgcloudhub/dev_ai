@@ -604,7 +604,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
-    Route::get('greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card');
+    Route::get('greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('permission:greetingCard.menu');
 
     Route::post('greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
 

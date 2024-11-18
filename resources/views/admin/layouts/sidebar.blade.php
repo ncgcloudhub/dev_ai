@@ -39,13 +39,14 @@
                     </a>
                 </li>
 
-                  {{-- Eid Card --}}
-
-                  <li class="nav-item">
+                {{-- Greeting Card --}}
+                @can('greetingCard.menu')
+                <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('greeting.card')}}">
                         <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>
+                @endcan
                
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('calender')}}">
