@@ -29,12 +29,19 @@
                                 <td>{{ $item->sub_category_name }}</td>    
                                 <td>
                                     <div class="d-flex justify-content-center">
+
+                                        @can('promptLibrary.subcategory.edit')
                                         <a href="{{route('prompt.subcategory.edit',$item->id)}}" class="text-primary mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> 
                                             <i class="ri-pencil-fill fs-16"></i> 
                                         </a>
+                                        @endcan
+                                     
+                                        @can('promptLibrary.subcategory.delete')
                                         <a href="{{route('prompt.subcategory.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Subcategory?')" class="text-danger mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                             <i class="ri-delete-bin-5-fill fs-16"></i> 
                                         </a>
+                                        @endcan
+                                      
                                     </div>
                                 </td>    
                             </tr>

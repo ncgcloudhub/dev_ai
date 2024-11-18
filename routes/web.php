@@ -245,37 +245,37 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Prompt Library
     Route::prefix('prompt')->group(function () {
 
-        Route::get('/category/add', [PromptLibraryController::class, 'PromptCategoryAdd'])->name('prompt.category.add');
+        Route::get('/category/add', [PromptLibraryController::class, 'PromptCategoryAdd'])->name('prompt.category.add')->middleware('permission:promptLibrary.category');
 
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
 
-        Route::get('/category/edit/{id}', [PromptLibraryController::class, 'PromptCategoryEdit'])->name('prompt.category.edit');
+        Route::get('/category/edit/{id}', [PromptLibraryController::class, 'PromptCategoryEdit'])->name('prompt.category.edit')->middleware('permission:promptLibrary.category.edit');
 
         Route::post('/category/update', [PromptLibraryController::class, 'PromptCategoryUpdate'])->name('prompt.category.update');
 
-        Route::get('/category/delete/{id}', [PromptLibraryController::class, 'PromptCategoryDelete'])->name('prompt.category.delete');
+        Route::get('/category/delete/{id}', [PromptLibraryController::class, 'PromptCategoryDelete'])->name('prompt.category.delete')->middleware('permission:promptLibrary.category.delete');
 
-        Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add');
+        Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add')->middleware('permission:promptLibrary.subcategory');
 
         Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');
 
-        Route::get('/subcategory/edit/{id}', [PromptLibraryController::class, 'PromptSubCategoryEdit'])->name('prompt.subcategory.edit');
+        Route::get('/subcategory/edit/{id}', [PromptLibraryController::class, 'PromptSubCategoryEdit'])->name('prompt.subcategory.edit')->middleware('permission:promptLibrary.subcategory.edit');
 
         Route::post('/subcategory/update', [PromptLibraryController::class, 'PromptSubCategoryUpdate'])->name('prompt.subcategory.update');
 
-        Route::get('/subcategory/delete/{id}', [PromptLibraryController::class, 'PromptSubCategoryDelete'])->name('prompt.subcategory.delete');
+        Route::get('/subcategory/delete/{id}', [PromptLibraryController::class, 'PromptSubCategoryDelete'])->name('prompt.subcategory.delete')->middleware('permission:promptLibrary.subcategory.delete');
 
-        Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add');
+        Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add')->middleware('permission:promptLibrary.add');
 
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
 
-        Route::get('/edit/{id}', [PromptLibraryController::class, 'PromptEdit'])->name('prompt.edit');
+        Route::get('/edit/{id}', [PromptLibraryController::class, 'PromptEdit'])->name('prompt.edit')->middleware('permission:promptLibrary.edit');
 
         Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
 
         Route::post('/seo/update', [PromptLibraryController::class, 'PromptSEOUpdate'])->name('prompt.seo.update');
 
-        Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete');
+        Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete')->middleware('permission:promptLibrary.delete');
 
         // Route for deleting an example
         Route::delete('/example/{example}', [PromptLibraryController::class, 'delete'])->name('prompt.example.delete');
@@ -578,7 +578,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');
 
     //Fixed Prompt Library 
-    Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage');
+    Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage')->middleware('permission:promptLibrary.manage');
 
     Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
 

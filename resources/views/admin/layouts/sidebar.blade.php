@@ -187,9 +187,9 @@
                 </li>
                 @endcan
 
-                  {{-- Prompt Library --}}
-
-                  <li class="nav-item">
+                {{-- Prompt Library --}}
+                @can('promptLibrary.menu')
+                <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#prompt" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-pen"></i> <span >Prompt Library</span>
@@ -199,24 +199,40 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('promptLibrary.category')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.category.add')}}" class="nav-link sidebar-hover" >Prompt Categories</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('promptLibrary.subcategory')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.subcategory.add')}}" class="nav-link sidebar-hover" >Prompt Sub-Categories</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('promptLibrary.add')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.add')}}" class="nav-link sidebar-hover" >Add Prompt</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('promptLibrary.manage')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.manage')}}" class="nav-link sidebar-hover" >Manage prompt</a>
                                     </li>
-                                   
+                                    @endcan
+                                
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
+                @endcan
+
+
+
+
 
 
                 <li class="nav-item">
