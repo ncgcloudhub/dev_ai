@@ -185,26 +185,27 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Templates
     Route::prefix('ai-content-creator')->group(function () {
 
-        Route::get('/category/add', [AIContentCreatorController::class, 'AIContentCreatorCategoryAdd'])->name('aicontentcreator.category.add');
+        Route::get('/category/add', [AIContentCreatorController::class, 'AIContentCreatorCategoryAdd'])->name('aicontentcreator.category.add')->middleware('permission:aiContentCreator.category');
 
         Route::post('/category/store', [AIContentCreatorController::class, 'AIContentCreatorCategoryStore'])->name('aicontentcreator.category.store');
 
-        Route::get('/category/edit/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryEdit'])->name('aicontentcreator.category.edit');
+        Route::get('/category/edit/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryEdit'])->name('aicontentcreator.category.edit')->middleware('permission:aiContentCreator.category.edit');
 
         Route::post('/category/update', [AIContentCreatorController::class, 'AIContentCreatorCategoryUpdate'])->name('aicontentcreator.category.update');
 
-        Route::get('/category/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryDelete'])->name('aicontentcreator.category.delete');
+        Route::get('/category/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryDelete'])->name('aicontentcreator.category.delete')->middleware('permission:aiContentCreator.category.delete');
 
-        Route::get('/add', [AIContentCreatorController::class, 'AIContentCreatorAdd'])->name('aicontentcreator.add');
+        Route::get('/add', [AIContentCreatorController::class, 'AIContentCreatorAdd'])->name('aicontentcreator.add')->middleware('permission:aiContentCreator.add');
 
         Route::post('store', [AIContentCreatorController::class, 'AIContentCreatorStore'])->name('aicontentcreator.store');
 
-        Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit');
+        Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit')->middleware('permission:aiContentCreator.edit');
 
         Route::post('/update', [AIContentCreatorController::class, 'AIContentCreatorUpdate'])->name('aicontentcreator.update');
-        Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
-        Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
+        Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
+
+        Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
         Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign');
 
@@ -570,7 +571,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     });
 
     //Fixed Templates 
-    Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage');
+    Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('permission:aiContentCreator.manage');
 
     Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
 

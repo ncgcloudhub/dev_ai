@@ -33,8 +33,6 @@
                    
                    <button id="templateManageTourButton" class="btn gradient-btn-7 text-white">Template Tour</button>
 
-
-                   
                 </div>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
@@ -121,11 +119,15 @@
                                                             <i class="ri-eye-fill fs-16"></i>
                                                         </a> --}}
                                                     </li>
+                                                    
+                                                    @can('aiContentCreator.edit')
                                                     <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                         <a href="{{route('aicontentcreator.edit',$item->slug)}}" class="text-primary d-inline-block edit-item-btn">
                                                             <i class="ri-pencil-fill fs-16"></i>
                                                         </a>
-                                                    </li>
+                                                    </li>  
+                                                    @endcan
+                                                   
                                                     <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                         {{-- <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
                                                             <i class="ri-delete-bin-5-fill fs-16"></i>

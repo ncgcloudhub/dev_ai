@@ -114,7 +114,7 @@
                
 
                 {{-- Fixed Template --}}
-               
+                @can('aiContentCreator.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#template" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -125,24 +125,30 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     
+                                    @can('aiContentCreator.category')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
                                     </li>
-                                    
+                                    @endcan
+                                  
+                                    @can('aiContentCreator.add')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.add')}}" class="nav-link sidebar-hover">Create New Content</a>
                                     </li>
+                                    @endcan  
                                     
+                                    @can('aiContentCreator.manage')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
                                     </li>
+                                    @endcan
                                     
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
-               
+                @endcan
 
                 {{-- Custom Template --}}
                 <li class="nav-item">
