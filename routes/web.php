@@ -501,10 +501,9 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
         Route::post('/session/delete', [MainChat::class, 'delete']);
     });
 
-    Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form');
+    Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form')->middleware('permission:chattermate.menu');
+
     Route::post('/save-seen-tour-steps', [MainChat::class, 'saveSeenSteps'])->middleware('auth');
-
-
 
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
