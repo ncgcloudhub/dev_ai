@@ -39,30 +39,37 @@
                     </a>
                 </li>
 
-                  {{-- Eid Card --}}
-
-                  <li class="nav-item">
+                {{-- Greeting Card --}}
+                @can('greetingCard.menu')
+                <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('greeting.card')}}">
                         <i class="las la-id-card"></i> <span >Greeting Card</span>
                     </a>
                 </li>
+                @endcan
                
+                {{-- Calender --}}
+                @can('calender.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('calender')}}">
                         <i class="las la-calendar"></i> <span >Calender</span>
                     </a>
                 </li>
-              
+                @endcan
+                
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
+                @can('chattermate.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('main.chat.form')}}">
                         <i class="lab la-rocketchat"></i> <span >ChatterMate</span>
                     </a>
                 </li>
+                @endcan
 
                 {{-- EDUCATION --}}
+                @can('education.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -73,29 +80,41 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('education.manageGradeSubject')
                                     <li class="nav-item">
                                         <a href="{{route('manage.grade.subject')}}" class="nav-link sidebar-hover" >Manage Grade/Subject</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('education.educationWizard')
                                     <li class="nav-item">
                                         <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Education Wizard</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('education.manageTools')
                                     <li class="nav-item">
                                         <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('education.library')
                                     <li class="nav-item">
                                         <a href="{{route('education.tools.contents')}}" class="nav-link" >Library</a>
                                     </li>
-                                
-
+                                    @endcan
+                                   
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
+                @endcan
+               
 
                 {{-- Fixed Template --}}
-               
+                @can('aiContentCreator.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#template" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -106,26 +125,33 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     
+                                    @can('aiContentCreator.category')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.category.add')}}" class="nav-link sidebar-hover">Content Categories</a>
                                     </li>
-                                    
+                                    @endcan
+                                  
+                                    @can('aiContentCreator.add')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.add')}}" class="nav-link sidebar-hover">Create New Content</a>
                                     </li>
+                                    @endcan  
                                     
+                                    @can('aiContentCreator.manage')
                                     <li class="nav-item">
                                         <a href="{{route('aicontentcreator.manage')}}" class="nav-link sidebar-hover">Manage Content</a>
                                     </li>
+                                    @endcan
                                     
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
-               
+                @endcan
 
                 {{-- Custom Template --}}
+                @can('customTemplate.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#AITools" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -136,27 +162,34 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                    
+                                    @can('customTemplate.category')
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.category.add')}}" class="nav-link sidebar-hover" >Categories</a>
                                     </li>
+                                    @endcan
                                    
+                                    @can('customTemplate.add')
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.add')}}" class="nav-link sidebar-hover" >Add Template</a>
                                     </li>
+                                    @endcan
                                    
+                                    @can('customTemplate.manage')
                                     <li class="nav-item">
                                         <a href="{{route('custom.template.manage')}}" class="nav-link sidebar-hover" >Manage Template</a>
                                     </li>
-                                  
+                                    @endcan
+                                   
                                 </ul>
                             </div> 
                         </div>
                     </div>
                 </li>
+                @endcan
 
-                  {{-- Prompt Library --}}
-
-                  <li class="nav-item">
+                {{-- Prompt Library --}}
+                @can('promptLibrary.menu')
+                <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#prompt" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
                         <i class="las la-pen"></i> <span >Prompt Library</span>
@@ -166,26 +199,39 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('promptLibrary.category')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.category.add')}}" class="nav-link sidebar-hover" >Prompt Categories</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('promptLibrary.subcategory')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.subcategory.add')}}" class="nav-link sidebar-hover" >Prompt Sub-Categories</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('promptLibrary.add')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.add')}}" class="nav-link sidebar-hover" >Add Prompt</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('promptLibrary.manage')
                                     <li class="nav-item">
                                         <a href="{{route('prompt.manage')}}" class="nav-link sidebar-hover" >Manage prompt</a>
                                     </li>
-                                   
+                                    @endcan
+                                
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
-
-
+                @endcan
+              
+                {{-- Clever Expert --}}
+                @can('cleverExpert.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarExpert">
@@ -195,21 +241,27 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
+
+                                    @can('cleverExpert.add')
                                     <li class="nav-item">
                                         <a href="{{route('expert.add')}}" class="nav-link sidebar-hover" >Expert Creator</a>
                                     </li>
+                                    @endcan
+                                 
+                                    @can('cleverExpert.manage')
                                     <li class="nav-item">
                                         <a href="{{route('chat')}}" class="nav-link sidebar-hover" >AI Experts</a>
                                     </li>
+                                    @endcan
                                   
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
-
+                @endcan
+              
+                @can('cleverImageCreator.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#generateImage" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -220,14 +272,18 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('cleverImageCreator.generate')
                                     <li class="nav-item">
                                         <a href="#" class="nav-link sidebar-hover" data-bs-toggle="modal" data-bs-target="#loginModals">Generate Image</a>
                                     </li>
-                                   
+                                    @endcan
+                                  
+                                    @can('cleverImageCreator.manage')
                                     <li class="nav-item">
                                         <a href="{{route('manage.dalle.image.admin')}}" class="nav-link sidebar-hover" >Manage Image</a>
                                     </li>
-
+                                    @endcan
+                                  
                                     <li class="nav-item">
                                         <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover" >Manage Favorite Image</a>
                                     </li>
@@ -238,11 +294,8 @@
                         </div>
                     </div>
                 </li>
-
-
-
-
-
+                @endcan
+             
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                

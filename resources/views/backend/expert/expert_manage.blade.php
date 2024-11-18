@@ -26,22 +26,25 @@
                 </a>
                 <!-- Add Edit and Delete icons -->
                 <div class="mt-3 d-flex justify-content-end gap-2">
+
+                    @can('cleverExpert.edit')
                     <a href="{{ route('expert.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                         <i class="ri-pencil-fill fs-16"></i>
                     </a>
+                    @endcan
+                   
+                    @can('cleverExpert.delete')
                     <a href="{{ route('expert.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this expert?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                         <i class="ri-delete-bin-5-fill fs-16"></i>
                     </a>
-                    
+                    @endcan
+                  
                 </div>
             </div>
         </div>
     </div>
     @endforeach
 </div>
-
-
-
 
 
 @endsection
