@@ -621,6 +621,8 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 
 // Contact Us Page
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
+// Stable Frontend
+Route::get('/stable-diffusion', [HomeController::class, 'StableDiffusionPage'])->name('stable.frontend.page');
 
 // Frontend Free Template Page
 Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.aicontentcreator');
