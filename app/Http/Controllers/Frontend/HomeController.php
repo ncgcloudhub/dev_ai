@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use App\Models\PrivacyPolicy;
 use App\Models\PromptLibrary;
 use App\Models\PromptLibraryCategory;
+use App\Models\StableDiffusionGeneratedImage;
 use App\Models\Template;
 use App\Models\TemplateCategory;
 use App\Models\TermsConditions;
@@ -69,6 +70,13 @@ class HomeController extends Controller
     public function ContactUs()
     {
         return view('frontend.contact');
+    }
+   
+    // 
+    public function StableDiffusionPage()
+    {   
+        $images = StableDiffusionGeneratedImage::latest()->get();
+        return view('frontend.stable_diffusion_frontend', compact('images'));
     }
 
     //Template Front End Page
