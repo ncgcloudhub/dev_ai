@@ -521,15 +521,15 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::prefix('chat')->middleware(['check.status'])->group(function () {
 
         // CHAT
-        Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add');
+        Route::get('/expert/add', [ExpertController::class, 'ExpertAdd'])->name('expert.add')->middleware('permission:cleverExpert.add');
         Route::post('/expert/store', [ExpertController::class, 'ExpertStore'])->name('expert.store');
 
-        Route::get('/expert/edit/{slug}', [ExpertController::class, 'ExpertEdit'])->name('expert.edit');
+        Route::get('/expert/edit/{slug}', [ExpertController::class, 'ExpertEdit'])->name('expert.edit')->middleware('permission:cleverExpert.edit');
         Route::post('/expert/update/{id}', [ExpertController::class, 'ExpertUpdate'])->name('expert.update');
-        Route::get('/expert/delete/{id}', [ExpertController::class, 'ExpertDelete'])->name('expert.delete');
+        Route::get('/expert/delete/{id}', [ExpertController::class, 'ExpertDelete'])->name('expert.delete')->middleware('permission:cleverExpert.delete');
 
         // TEST CHAT
-        Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat');
+        Route::get('/expert/view', [ExpertController::class, 'index'])->name('chat')->middleware('permission:cleverExpert.manage');
         Route::get('/expert/{slug}/{id}', [ExpertController::class, 'ExpertChat'])->name('expert.chat');
         Route::post('/reply', [ExpertController::class, 'SendMessages']);
         Route::post('/expert/delete-conversation', [ExpertController::class, 'deleteConversation']);

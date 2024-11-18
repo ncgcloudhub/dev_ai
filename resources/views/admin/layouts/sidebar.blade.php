@@ -229,12 +229,9 @@
                     </div>
                 </li>
                 @endcan
-
-
-
-
-
-
+              
+                {{-- Clever Expert --}}
+                @can('cleverExpert.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarExpert">
@@ -244,20 +241,26 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
+
+                                    @can('cleverExpert.add')
                                     <li class="nav-item">
                                         <a href="{{route('expert.add')}}" class="nav-link sidebar-hover" >Expert Creator</a>
                                     </li>
+                                    @endcan
+                                 
+                                    @can('cleverExpert.manage')
                                     <li class="nav-item">
                                         <a href="{{route('chat')}}" class="nav-link sidebar-hover" >AI Experts</a>
                                     </li>
+                                    @endcan
                                   
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
+                @endcan
+              
 
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#generateImage" data-bs-toggle="collapse" role="button"
