@@ -13,7 +13,7 @@ class RoleController extends Controller
 {
     public function AllPermission(){
 
-        $permissions = Permission::latest()->get();
+        $permissions = Permission::orderBy('id', 'asc')->get();
         return view('backend.permission.all_permission',compact('permissions'));
 
     } // End Method 
