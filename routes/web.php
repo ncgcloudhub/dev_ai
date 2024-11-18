@@ -344,16 +344,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         
         Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools');
 
-        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
-
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
-
-        Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
-
-        Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
-
-        Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
-        Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
 
         // Route to show the form for editing a specific tool (edit)
         Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit');
@@ -363,8 +354,6 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         // Route to delete a specific tool (destroy)
         Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy');
-
-        Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
 
     });
 
@@ -436,45 +425,6 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
     // User Prompt Library
     Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
 
-    // Education
-    Route::prefix('education')->group(function () {
-
-        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form');
-       
-        Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');
-        
-        Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
-
-        Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
-
-        Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
-
-        Route::get('/content/{id}', [EducationController::class, 'getContent']);
-        Route::post('/content/{id}/update', [EducationController::class, 'updateContent']);
-       
-        Route::post('/get-contents/subject/library', [EducationController::class, 'getContentsBySubjectLibrary'])->name('education.getContentsBySubject.library');
-
-        Route::post('/get-content-by-id', [EducationController::class, 'getContentById'])->name('education.getContentById');
-
-        Route::delete('/deleteContent/{id}', [EducationController::class, 'deleteContent'])->name('education.deleteContent');
-
-        Route::get('/content/{id}/download', [EducationController::class, 'downloadPDF'])->name('education.content.download');
-
-        Route::post('/content/{id}/complete', [EducationController::class, 'markAsComplete'])->name('content.mark.complete');
-        
-        Route::post('/content/{id}/add-to-library', [EducationController::class, 'addToLibrary'])->name('content.add.library');
-
-        Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
-
-        Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
-
-        Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
-
-        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents');
-
-    });
-
-
 }); //End User Middleware
 
 Route::post('/generate-images', [EducationController::class, 'generateImages']);
@@ -482,6 +432,33 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 
 
 Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
+
+    Route::prefix('education')->group(function () {
+        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form');      
+        Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');       
+        Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
+        Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
+        Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
+        Route::get('/content/{id}', [EducationController::class, 'getContent']);
+        Route::post('/content/{id}/update', [EducationController::class, 'updateContent']);       
+        Route::post('/get-contents/subject/library', [EducationController::class, 'getContentsBySubjectLibrary'])->name('education.getContentsBySubject.library');
+        Route::post('/get-content-by-id', [EducationController::class, 'getContentById'])->name('education.getContentById');
+        Route::delete('/deleteContent/{id}', [EducationController::class, 'deleteContent'])->name('education.deleteContent');
+        Route::get('/content/{id}/download', [EducationController::class, 'downloadPDF'])->name('education.content.download');
+        Route::post('/content/{id}/complete', [EducationController::class, 'markAsComplete'])->name('content.mark.complete');       
+        Route::post('/content/{id}/add-to-library', [EducationController::class, 'addToLibrary'])->name('content.add.library');
+        Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
+        Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
+        Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
+        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents');
+        Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
+        Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
+        Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools');
+        Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
+        Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
+        Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
+        
+    });
 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
