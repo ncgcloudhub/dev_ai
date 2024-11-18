@@ -464,15 +464,15 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
 
-        Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add');
+        Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add')->middleware('permission:customTemplate.category');
 
         Route::post('/category/store', [CustomTemplateController::class, 'CustomTemplateCategoryStore'])->name('custom.template.category.store');
 
-        Route::get('/add', [CustomTemplateController::class, 'CustomTemplateAdd'])->name('custom.template.add');
+        Route::get('/add', [CustomTemplateController::class, 'CustomTemplateAdd'])->name('custom.template.add')->middleware('permission:customTemplate.add');
 
         Route::post('store', [CustomTemplateController::class, 'CustomTemplateStore'])->name('custom.template.store');
 
-        Route::get('/manage', [CustomTemplateController::class, 'CustomTemplateManage'])->name('custom.template.manage');
+        Route::get('/manage', [CustomTemplateController::class, 'CustomTemplateManage'])->name('custom.template.manage')->middleware('permission:customTemplate.manage');
 
         Route::get('/view/{id}', [CustomTemplateController::class, 'CustomTemplateView'])->name('custom.template.view');
 
