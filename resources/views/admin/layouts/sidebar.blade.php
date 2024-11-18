@@ -48,12 +48,15 @@
                 </li>
                 @endcan
                
+                {{-- Calender --}}
+                @can('calender.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('calender')}}">
                         <i class="las la-calendar"></i> <span >Calender</span>
                     </a>
                 </li>
-              
+                @endcan
+                
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
