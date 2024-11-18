@@ -179,7 +179,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // REFERRAL MANAGE
-    Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral');
+    Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral')->middleware('permission:manageRefferal.menu');
 
 
     // Templates
@@ -648,7 +648,7 @@ Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name
 
 // Newsletter Store for all users even without login
 Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
-Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage');
+Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage')->middleware('permission:manageNewsletter.menu');
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [AIContentCreatorController::class, 'provider'])->name('google.login');

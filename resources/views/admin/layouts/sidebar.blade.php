@@ -436,25 +436,31 @@
                     </div>
                 </li>
 
+                {{-- Newsletter --}}
+                @can('manageNewsletter.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('newsletter.manage')}}">
                         <i class="las la-newspaper"></i> <span >Manage Newsletter</span>
                     </a>
+                </li> 
+                @endcan
+            
+                {{-- REFERRAL --}}
+                @can('manageRefferal.menu')
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('manage.referral')}}">
+                        <i class="las la-share-square"></i> <span >Manage Refferal</span>
+                    </a>
                 </li>
-           
-            {{-- REFERRAL --}}
-            <li class="nav-item">
-                <a class="nav-link menu-link sidebar-hover" href="{{route('manage.referral')}}">
-                    <i class="las la-share-square"></i> <span >Manage Refferal</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link menu-link sidebar-hover" href="{{ route('dynamic-pages.index') }}">
-                    <i class="lab la-wpforms"></i> <span >Manage Page</span>
-                </a>
-            </li>
+                @endcan
              
-            {{-- JOB --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="{{ route('dynamic-pages.index') }}">
+                        <i class="lab la-wpforms"></i> <span >Manage Page</span>
+                    </a>
+                </li>
+             
+                {{-- JOB --}}
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>
                
                 <li class="nav-item">
