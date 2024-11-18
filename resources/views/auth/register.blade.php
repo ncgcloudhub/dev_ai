@@ -4,6 +4,8 @@
 @endsection
 @section('content')
 
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
         <div class="auth-page-wrapper pt-5">
             <!-- auth page bg -->
             <div class="auth-one-bg-position auth-one-bg"  id="auth-particles">
@@ -118,8 +120,18 @@
                                                 <p id="pass-upper" class="invalid fs-12 mb-2">At <b>least one uppercase</b> letter (A-Z)</p>
                                                 <p id="pass-number" class="invalid fs-12 mb-0">At <b>least one number</b> (0-9)</p>
                                             </div>
+                                            
+                                            {{-- <div class="mb-3">
+                                                <div class="g-recaptcha" data-sitekey="6LfHmYEqAAAAAAYUx-spoFfDCDt2gXRVcIcIQ3TR"></div>
+                                                @if($errors->has('g-recaptcha-response'))
+                                                    <div class="alert alert-danger">{{ $errors->first('g-recaptcha-response') }}</div>
+                                                @endif
+                                            </div> --}}
+
                                     
-                                            <button type="submit" class="btn gradient-btn-8 w-100" id="signUpButton" disabled>Sign Up</button>
+                                            <button type="submit" class="btn gradient-btn-8 w-100 g-recaptcha" id="signUpButton" disabled   data-sitekey="6LdVl4EqAAAAAC5LVhDSc5Cx2L6UaV7-uNm7jqRb" 
+                                            data-callback='onSubmit' 
+                                            data-action='submit'>Sign Up</button>
                                         </form>
                                     
                                         <script>
@@ -396,6 +408,12 @@
                     document.getElementById('signUpButton').disabled = !this.checked;
                 });
             </script>
+
+<script>
+    function onSubmit(token) {
+      document.getElementById("registrationForm").submit();
+    }
+  </script>
             
         @endsection
 
