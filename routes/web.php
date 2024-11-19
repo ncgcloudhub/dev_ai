@@ -112,7 +112,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Add Admin
     Route::controller(AdminController::class)->group(function () {
 
-        Route::get('/all/admin', 'AllAdmin')->name('all.admin');
+        Route::get('/all/admin', 'AllAdmin')->name('all.admin')->middleware('permission:manageUser&Admin.manageAdmin');
         Route::get('/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
         Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
@@ -146,7 +146,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // USER MANAGE
     Route::prefix('user')->group(function () {
 
-        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('permission:manageUser&Admin.manageUser');
 
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
@@ -169,9 +169,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange');
 
-        Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history');
+        Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history')->middleware('permission:manageUser&Admin.manageuserPackage');
      
-        Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request');
+        Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request')->middleware('permission:manageUser&Admin.manageFeedback');
 
         Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
 
@@ -397,7 +397,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::post('/users/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.users.bulkDelete');
 
     // SEND EMAIL
-    Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form');
+    Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form')->middleware('permission:manageUser&Admin.sendEmail'); 
     Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send');
     Route::post('/send-emails', [UserManageController::class, 'sendEmail'])->name('emails.send');
 

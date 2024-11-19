@@ -419,9 +419,9 @@
                         </div>
                     </div>
                 </li>
-                 @endcan
+                @endcan
               
-
+                @can('manageUser&Admin.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#user_admin" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -432,31 +432,44 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('manageUser&Admin.manageUser')
                                     <li class="nav-item">
                                         <a href="{{route('manage.user')}}" class="nav-link sidebar-hover" >Manage User</a>
                                     </li>
-
+                                    @endcan
+                                    
+                                    @can('manageUser&Admin.manageAdmin')
                                     <li class="nav-item">
                                         <a href="{{route('all.admin')}}" class="nav-link sidebar-hover" >Manage Admin</a>
                                     </li>
-                                    
+                                    @endcan
+                                   
+                                    @can('manageUser&Admin.manageuserPackage')
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.package.history')}}" class="nav-link sidebar-hover" >Manage User Package</a>
                                     </li>
-                                
+                                    @endcan
+                            
+                                    @can('manageUser&Admin.manageFeedback')
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover" >Manage Feedback Request</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('manageUser&Admin.sendEmail')
                                     <li class="nav-item">
                                         <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover" >Send Email</a>
                                     </li>
-
+                                    @endcan
+                                  
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
+                @endcan
+             
 
                 {{-- Newsletter --}}
                 @can('manageNewsletter.menu')
