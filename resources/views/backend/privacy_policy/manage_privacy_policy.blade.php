@@ -32,8 +32,14 @@
                             </td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    @can('settings.privacyPolicy.edit')
+                                        <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
+                                    @endcan
+                                    
+                                    @can('settings.privacyPolicy.delete')
+                                        <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    @endcan
+                                   
                                 </div>
                             </td>
                           
