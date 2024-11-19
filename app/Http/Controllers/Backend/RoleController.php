@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\PermissionExport;
 use App\Http\Controllers\Controller;
+use App\Imports\PermissionImport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RoleController extends Controller
 {
@@ -79,6 +82,27 @@ class RoleController extends Controller
         return redirect()->back()->with($notification);
 
     }// End Method 
+
+    public function ImportPermission(){
+
+        return view('backend.permission.import_permission');
+
+    }// End Method 
+
+    public function ExportPermission(){
+
+        return Excel::download(new PermissionExport, 'permission.xlsx');
+    }// End Method
+
+    public function ImportStore(Request $request){
+        Excel::import(new PermissionImport, $request->file('import_file'));
+       
+        $notification = array(
+            'message' => 'Permission Imported Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification); 
+    }// End Method
 
 
 

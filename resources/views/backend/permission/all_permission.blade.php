@@ -18,9 +18,18 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-1">Permission  <a href="{{ route('add.permission') }}" class="btn btn-primary">Add</a></h5>
-               
+
+                <div class="btn-group">
+                    <a href="{{ route('import.permission') }}" class="btn btn-warning px-5">Import </a>  
+                </div>
+
+                <div class="btn-group">
+                    <a href="{{ route('export.permission') }}" class="btn btn-danger px-5">Export </a>  
+                </div>
+
             </div>
 
+           
          
             <div class="card-body">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">

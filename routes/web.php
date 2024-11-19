@@ -240,6 +240,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles');
         Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
         Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')->name('admin.delete.roles');
+        Route::get('/import/permission', 'ImportPermission')->name('import.permission');
+        Route::get('/export/permission', 'ExportPermission')->name('export.permission');
+        Route::post('/import/store', 'ImportStore')->name('import.store.permission');
     });
 
     // Prompt Library
