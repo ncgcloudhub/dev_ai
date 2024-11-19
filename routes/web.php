@@ -308,11 +308,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 
-    Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition');
+    Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition')->middleware('permission:settings.termsAndConditions.edit');
 
     Route::post('/terms/condition/update', [HomeController::class, 'UpdateTermsCondition'])->name('update.terms.condition');
 
-    Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition');
+    Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition')->middleware('permission:settings.termsAndConditions.delete');
 
 
     // Pricing Plans
