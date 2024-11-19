@@ -81,12 +81,9 @@
                                         <label class="form-check-label" for="customSwitchsizemd"></label>
                                     @endcan
                                   
-                                   
+                                    @can('manageUser&Admin.manageAdmin.edit')
                                         <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
-                                   
-                                    {{-- @can('manageUser&Admin.manageAdmin.edit')
-                                        <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
-                                    @endcan --}}
+                                    @endcan
                                   
                                     @can('manageUser&Admin.manageAdmin.delete')
                                          {{-- Delete User --}}
