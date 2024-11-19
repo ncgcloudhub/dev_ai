@@ -368,10 +368,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy')->middleware('permission:settings.FAQ.delete');
 
     // JOB Admin
-    Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');
+    Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job')->middleware('permission:jobs.addJob');
     Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
-    Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');
-    Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications');
+    Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job')->middleware('permission:jobs.manageJobs');
+    Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications')->middleware('permission:jobs.manageJobApplication');
     Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
 
