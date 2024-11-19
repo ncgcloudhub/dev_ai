@@ -202,10 +202,12 @@ Profile | {{$user->name}}
                 </div><!-- end col -->
 
                 {{-- Modal --}}
-                <div>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModals">Edit</button>
-                </div>
-
+                @can('manageUser&Admin.manageUser.userEdit')
+                    <div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModals">Edit</button>
+                    </div>
+                @endcan
+              
                 <div class="col-xl-4 col-md-6">
                     
                     <div id="signupModals" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">

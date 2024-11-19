@@ -112,17 +112,17 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Add Admin
     Route::controller(AdminController::class)->group(function () {
 
-        Route::get('/all/admin', 'AllAdmin')->name('all.admin');
+        Route::get('/all/admin', 'AllAdmin')->name('all.admin')->middleware('permission:manageUser&Admin.manageAdmin');
         Route::get('/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
-        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
+        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin')->middleware('permission:manageUser&Admin.manageAdmin.edit');
         Route::post('/update/admin/{id}', 'UpdateAdmin')->name('update.admin');
     });
 
     // AI Settings
     Route::prefix('settings/OpenAI')->group(function () {
 
-        Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add');
+        Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('permission:settings.AISettings');
 
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
     });
@@ -130,7 +130,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // SEO Settings
     Route::prefix('settings/SEO')->group(function () {
 
-        Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add');
+        Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('permission:settings.SEOSettings');
 
         Route::put('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
     });
@@ -138,7 +138,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Site Settings
     Route::prefix('settings/site')->group(function () {
 
-        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add');
+        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add')->middleware('permission:settings.siteSettings');
 
         Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
     });
@@ -146,7 +146,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // USER MANAGE
     Route::prefix('user')->group(function () {
 
-        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user');
+        Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('permission:manageUser&Admin.manageUser');
 
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
 
@@ -156,22 +156,22 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
-        Route::post('/users/bulk-block', [UserManageController::class, 'bulkBlock'])->name('admin.users.bulkBlock');
+        Route::post('/users/bulk-block', [UserManageController::class, 'bulkBlock'])->name('admin.users.bulkBlock')->middleware('permission:manageUser&Admin.manageUser.block');
         // Route for bulk email verification
-        Route::post('/bulk-verify-email', [UserManageController::class, 'bulkVerifyEmail'])->name('admin.users.bulkVerifyEmail');
+        Route::post('/bulk-verify-email', [UserManageController::class, 'bulkVerifyEmail'])->name('admin.users.bulkVerifyEmail')->middleware('permission:manageUser&Admin.manageUser.sendVerificationMail');
 
-        Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block');
+        Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block')->middleware('permission:settings.countryBlock');
         Route::post('/block/store', [UserManageController::class, 'storeBlock'])->name('country.block.store');
-        Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit');
+        Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit')->middleware('permission:settings.countryBlock.edit');
         Route::post('/countries/block/update', [UserManageController::class, 'updateCountry'])->name('block.countries.update');
-        Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete');
+        Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete')->middleware('permission:settings.countryBlock.delete');
 
 
-        Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange');
+        Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange')->middleware('permission:manageUser&Admin.manageUser.statusChange');
 
-        Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history');
+        Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history')->middleware('permission:manageUser&Admin.manageuserPackage');
      
-        Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request');
+        Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request')->middleware('permission:manageUser&Admin.manageFeedback');
 
         Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
 
@@ -179,7 +179,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // REFERRAL MANAGE
-    Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral');
+    Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral')->middleware('permission:manageRefferal.menu');
 
 
     // Templates
@@ -207,7 +207,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
-        Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign');
+        Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign')->middleware('permission:settings.frontEndDesign');
 
         Route::post('/update-design', [AIContentCreatorController::class, 'updateDesign'])->name('user.update_design');
     });
@@ -215,7 +215,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     //  Permission
     Route::controller(RoleController::class)->group(function () {
 
-        Route::get('/all/permission', 'AllPermission')->name('all.permission');
+        Route::get('/all/permission', 'AllPermission')->name('all.permission')->middleware('permission:rolePermission.permission');
         Route::get('/add/permission', 'AddPermission')->name('add.permission');
         Route::post('/store/permission', 'StorePermission')->name('store.permission');
         Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
@@ -226,7 +226,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Roles 
     Route::controller(RoleController::class)->group(function () {
 
-        Route::get('/all/roles', 'AllRoles')->name('all.roles');
+        Route::get('/all/roles', 'AllRoles')->name('all.roles')->middleware('permission:rolePermission.roles');
         Route::get('/add/roles', 'AddRoles')->name('add.roles');
         Route::post('/store/roles', 'StoreRoles')->name('store.roles');
         Route::get('/edit/roles/{id}', 'EditRoles')->name('edit.roles');
@@ -234,9 +234,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');
 
         // RoleSetup
-        Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission');
+        Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission')->middleware('permission:rolePermission.roleInPermission');
         Route::post('/role/permission/store', 'RolePermissionStore')->name('role.permission.store');
-        Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission');
+        Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission')->middleware('permission:rolePermission.roleInPermissionManage');
         Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles');
         Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
         Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')->name('admin.delete.roles');
@@ -292,39 +292,39 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 
     // PRIVACY POLICY
-    Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
+    Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('permission:settings.privacyPolicy');
 
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
 
-    Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy');
+    Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy')->middleware('permission:settings.privacyPolicy.edit');
 
     Route::post('/privacy/policy/update', [HomeController::class, 'UpdatePrivacyPolicy'])->name('update.privacy.policy');
 
-    Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy');
+    Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy')->middleware('permission:settings.privacyPolicy.delete');
 
 
     // TERMS & CONDITIONS
-    Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
+    Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition')->middleware('permission:settings.termsAndConditions');
 
     Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 
-    Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition');
+    Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition')->middleware('permission:settings.termsAndConditions.edit');
 
     Route::post('/terms/condition/update', [HomeController::class, 'UpdateTermsCondition'])->name('update.terms.condition');
 
-    Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition');
+    Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition')->middleware('permission:settings.termsAndConditions.delete');
 
 
     // Pricing Plans
-    Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
+    Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing')->middleware('permission:settings.pricing');
 
-    Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
+    Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy')->middleware('permission:settings.pricing.delete');
 
     Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
 
     Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
 
-    Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+    Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit')->middleware('permission:settings.pricing.edit');
 
     Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
 
@@ -359,13 +359,13 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // FAQ
-    Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
+    Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('permission:settings.FAQ');
     // Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
     Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
     // routes/web.php
     Route::put('faq/update/{id}', [FAQController::class, 'update'])->name('faq.update');
     // routes/web.php
-    Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy');
+    Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy')->middleware('permission:settings.FAQ.delete');
 
     // JOB Admin
     Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');
@@ -379,13 +379,12 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::resource('dynamic-pages', DynamicPageController::class);
 
     // PAGE SEO Admin
-    Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
-        ->name('add.page.seo');
+    Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('permission:settings.pageSEOAdd');
     Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
 
     // Change User's Password by ADMIN
     Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
-        ->name('admin.users.changePassword.view');
+        ->name('admin.users.changePassword.view')->middleware('permission:manageUser&Admin.manageUser.changePassword');
 
     Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
         ->name('admin.users.updatePassword');
@@ -394,11 +393,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
 
     // Delete user from admin manage user table
-    Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
-    Route::post('/users/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.users.bulkDelete');
+    Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete')->middleware('permission:manageUser&Admin.manageAdmin.delete');
+    Route::post('/users/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.users.bulkDelete')->middleware('permission:manageUser&Admin.manageUser.delete');
 
     // SEND EMAIL
-    Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form');
+    Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form')->middleware('permission:manageUser&Admin.sendEmail'); 
     Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send');
     Route::post('/send-emails', [UserManageController::class, 'sendEmail'])->name('emails.send');
 
@@ -435,7 +434,7 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
 
     Route::prefix('education')->group(function () {
-        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('permission:education.educationWizard') ;      
+        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('permission:education.educationWizard');      
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');       
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
@@ -648,7 +647,7 @@ Route::get('/terms-condition', [HomeController::class, 'TermsConditions'])->name
 
 // Newsletter Store for all users even without login
 Route::post('/newsletter/store', [HomeController::class, 'NewsLetterStore'])->name('newsletter.store');
-Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage');
+Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->name('newsletter.manage')->middleware('permission:manageNewsletter.menu');
 
 // GOOGLE SOCIALITE
 Route::get('google/login', [AIContentCreatorController::class, 'provider'])->name('google.login');

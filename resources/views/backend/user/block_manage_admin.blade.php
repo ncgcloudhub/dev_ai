@@ -36,17 +36,20 @@
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
 
-                                    <a href="{{route('block.countries.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
-    
-                                    <form action="{{ route('block.countries.delete', $item->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this Category?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" style="background:none; border:none; padding:0; cursor:pointer;">
-                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                        </button>
-                                    </form>
-                                    
-
+                                    @can('settings.countryBlock.edit')
+                                        <a href="{{route('block.countries.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                    @endcan
+                                   
+                                    @can('settings.countryBlock.delete')
+                                        <form action="{{ route('block.countries.delete', $item->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Are you sure you want to delete this Category?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" style="background:none; border:none; padding:0; cursor:pointer;">
+                                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
+                                  
                                 </div>
                             </td>    
                         </tr>

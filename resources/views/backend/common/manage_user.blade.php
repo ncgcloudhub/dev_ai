@@ -68,9 +68,11 @@
                     <td>{{ $item->tokens_used }}</td>
                     <td>
                         <!-- Change Password -->
-                        <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Password">
-                            <i class="ri-lock-2-fill fs-16"></i>
-                        </a>
+                        @can('manageUser&Admin.manageUser.changePassword')
+                            <a href="{{ route('admin.users.changePassword.view', ['user' => $item->id]) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Change Password">
+                                <i class="ri-lock-2-fill fs-16"></i>
+                            </a>
+                        @endcan
                     </td>
                 </tr>
                 @endforeach
@@ -79,20 +81,31 @@
 
         <!-- Bulk Action Buttons -->
         <div class="bulk-actions mt-3">
-            <button type="button" id="bulkBlock" class="btn btn-warning" title="Block">
-                <i class="la la-lock"></i>
-            </button>
-            <button type="button" id="bulkStatusChange" class="btn btn-info" title="Status Change">
-                <i class="la la-exchange-alt"></i>
-            </button>
-            <button type="button" id="bulkDelete" class="btn btn-danger" title="Delete">
-                <i class="la la-trash"></i>
-            </button>
-            <button type="button" id="bulkVerifyEmail" class="btn btn-success" title="Send Email Verification">
-                <i class="ri-mail-send-line"></i>
-            </button>
+            @can('manageUser&Admin.manageUser.block')
+                <button type="button" id="bulkBlock" class="btn btn-warning" title="Block">
+                    <i class="la la-lock"></i>
+                </button>
+            @endcan
+           
+            @can('manageUser&Admin.manageUser.statusChange')
+                <button type="button" id="bulkStatusChange" class="btn btn-info" title="Status Change">
+                    <i class="la la-exchange-alt"></i>
+                </button>
+            @endcan
+          
+            @can('manageUser&Admin.manageUser.delete')
+                <button type="button" id="bulkDelete" class="btn btn-danger" title="Delete">
+                    <i class="la la-trash"></i>
+                </button>
+            @endcan
+          
+            @can('manageUser&Admin.manageUser.sendVerificationMail')
+                <button type="button" id="bulkVerifyEmail" class="btn btn-success" title="Send Email Verification">
+                    <i class="ri-mail-send-line"></i>
+                </button>
+            @endcan
+          
         </div>
-        
     </form>
 </div>
 

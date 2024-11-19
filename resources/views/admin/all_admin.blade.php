@@ -18,10 +18,8 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-1">Admin <a href="{{ route('add.admin') }}" class="btn btn-primary">Add</a></h5>
-               
             </div>
 
-         
             <div class="card-body">
                 <div class="table-responsive">
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
@@ -75,24 +73,27 @@
                             <td>{{ $item->credits_used }}</td>
                             <td>{{ $item->tokens_used }}</td>
                      
-                      
-        
                             @if ($item->status == 'active')
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
                                     <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
                                     <label class="form-check-label" for="customSwitchsizemd"></label>
                                     
-                                    <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
-                                    
-                                    {{-- Delete User --}}
-                                    <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                            <i class="ri-delete-bin-7-fill"></i>
-                                        </button>
-                                    </form>
+                                    @can('manageUser&Admin.manageAdmin.edit')
+                                        <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
+                                    @endcan
+                                  
+                                    @can('manageUser&Admin.manageAdmin.delete')
+                                         {{-- Delete User --}}
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                <i class="ri-delete-bin-7-fill"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
+                                   
                                 </div>
                             </td>
                             @else
@@ -101,14 +102,17 @@
                                     <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}">
                                     <label class="form-check-label" for="customSwitchsizemd"></label>
         
-                                    {{-- Delete User --}}
-                                    <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                            <i class="ri-delete-bin-3-fill"></i>
-                                        </button>
-                                    </form>
+                                    @can('manageUser&Admin.manageAdmin.delete')
+                                         {{-- Delete User --}}
+                                        <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                <i class="ri-delete-bin-3-fill"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
+                                   
                                 </div>
                             </td>
                             @endif

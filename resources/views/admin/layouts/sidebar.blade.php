@@ -299,6 +299,7 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                
+                @can('settings.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#settings" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -309,54 +310,76 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('settings.pageSEOAdd')
                                     <li class="nav-item">
                                         <a href="{{route('add.page.seo')}}" class="nav-link sidebar-hover" >Page SEO Add</a>
                                     </li>
-
+                                    @endcan
+                                 
+                                    @can('settings.AISettings')
                                     <li class="nav-item">
                                         <a href="{{route('ai.settings.add')}}" class="nav-link sidebar-hover" >AI Settings</a>
                                     </li>
-
+                                    @endcan
+                                  
+                                    @can('settings.siteSettings')
                                     <li class="nav-item">
                                         <a href="{{route('site.settings.add')}}" class="nav-link sidebar-hover" >Site Settings</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('settings.SEOSettings')
                                     <li class="nav-item">
                                         <a href="{{route('seo.settings.add')}}" class="nav-link sidebar-hover" >SEO Settings</a>
                                     </li>
-                                    
+                                    @endcan
+                                  
+                                    @can('settings.FAQ')
                                     <li class="nav-item">
                                         <a href="{{route('manage.faq')}}" class="nav-link sidebar-hover">Manage FAQ</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('settings.privacyPolicy')
                                     <li class="nav-item">
                                         <a href="{{route('manage.privacy.policy')}}" class="nav-link sidebar-hover">Manage Privacy Policy</a>
                                     </li>
-                                    
+                                    @endcan
+                                   
+                                    @can('settings.termsAndConditions')
                                     <li class="nav-item">
                                         <a href="{{route('manage.terms.condition')}}" class="nav-link sidebar-hover">Manage Terms & Conditions</a>
                                     </li>
-
+                                    @endcan
+                                  
+                                    @can('settings.pricing')
                                     <li class="nav-item">
                                         <a href="{{route('manage.pricing')}}" class="nav-link sidebar-hover">Manage Pricing</a>
                                     </li>
-                                  
+                                    @endcan
+                                 
+                                    @can('settings.frontEndDesign')
                                     <li class="nav-item">
                                         <a href="{{route('getDesign')}}" class="nav-link sidebar-hover">Manage Design</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('settings.countryBlock')
                                     <li class="nav-item">
                                         <a href="{{route('manage.block')}}" class="nav-link sidebar-hover">Manage Block</a>
                                     </li>
-               
+                                    @endcan
+                                   
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
-
+                @endcan
 
                  {{-- Permission ROLE --}}
+                 @can('rolePermission.menu')
                  <li class="nav-item">
                     <a class="nav-link menu-link" href="#role" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -367,29 +390,38 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('rolePermission.permission')
                                     <li class="nav-item">
                                         <a href="{{ route('all.permission') }}" class="nav-link" >All Permission</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('rolePermission.roles')
                                     <li class="nav-item">
                                         <a href="{{ route('all.roles') }}" class="nav-link" >All Roles</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('rolePermission.roleInPermission')
                                     <li class="nav-item">
                                         <a href="{{ route('add.roles.permission') }}" class="nav-link">Role in Permission </a>
-                                      </li>
-
+                                    </li> 
+                                    @endcan
+                                   
+                                    @can('rolePermission.roleInPermissionManage')
                                     <li class="nav-item">
-                                    <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
+                                        <a href="{{ route('all.roles.permission') }}" class="nav-link">All Role in Permission </a>
                                     </li>
-                                    
+                                    @endcan
                                    
                                 </ul>
                             </div>     
                         </div>
                     </div>
                 </li>
-
-
+                @endcan
+              
+                @can('manageUser&Admin.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#user_admin" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -400,51 +432,70 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('manageUser&Admin.manageUser')
                                     <li class="nav-item">
                                         <a href="{{route('manage.user')}}" class="nav-link sidebar-hover" >Manage User</a>
                                     </li>
-
+                                    @endcan
+                                    
+                                    @can('manageUser&Admin.manageAdmin')
                                     <li class="nav-item">
                                         <a href="{{route('all.admin')}}" class="nav-link sidebar-hover" >Manage Admin</a>
                                     </li>
-                                    
+                                    @endcan
+                                   
+                                    @can('manageUser&Admin.manageuserPackage')
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.package.history')}}" class="nav-link sidebar-hover" >Manage User Package</a>
                                     </li>
-                                
+                                    @endcan
+                            
+                                    @can('manageUser&Admin.manageFeedback')
                                     <li class="nav-item">
                                         <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover" >Manage Feedback Request</a>
                                     </li>
+                                    @endcan
+                                   
+                                    @can('manageUser&Admin.sendEmail')
                                     <li class="nav-item">
                                         <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover" >Send Email</a>
                                     </li>
-
+                                    @endcan
+                                  
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
+                @endcan
+             
 
+                {{-- Newsletter --}}
+                @can('manageNewsletter.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="{{route('newsletter.manage')}}">
                         <i class="las la-newspaper"></i> <span >Manage Newsletter</span>
                     </a>
+                </li> 
+                @endcan
+            
+                {{-- REFERRAL --}}
+                @can('manageRefferal.menu')
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="{{route('manage.referral')}}">
+                        <i class="las la-share-square"></i> <span >Manage Refferal</span>
+                    </a>
                 </li>
-           
-            {{-- REFERRAL --}}
-            <li class="nav-item">
-                <a class="nav-link menu-link sidebar-hover" href="{{route('manage.referral')}}">
-                    <i class="las la-share-square"></i> <span >Manage Refferal</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link menu-link sidebar-hover" href="{{ route('dynamic-pages.index') }}">
-                    <i class="lab la-wpforms"></i> <span >Manage Page</span>
-                </a>
-            </li>
+                @endcan
              
-            {{-- JOB --}}
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="{{ route('dynamic-pages.index') }}">
+                        <i class="lab la-wpforms"></i> <span >Manage Page</span>
+                    </a>
+                </li>
+             
+                {{-- JOB --}}
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>
                
                 <li class="nav-item">
