@@ -76,9 +76,11 @@
                             @if ($item->status == 'active')
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
-                                    <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
-                                    <label class="form-check-label" for="customSwitchsizemd"></label>
-                                    
+                                    @can('manageUser&Admin.manageAdmin.statusChange')
+                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
+                                        <label class="form-check-label" for="customSwitchsizemd"></label>
+                                    @endcan
+                                  
                                     @can('manageUser&Admin.manageAdmin.edit')
                                         <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
                                     @endcan
