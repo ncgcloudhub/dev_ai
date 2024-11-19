@@ -122,7 +122,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // AI Settings
     Route::prefix('settings/OpenAI')->group(function () {
 
-        Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add');
+        Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('permission:settings.AISettings');
 
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
     });
@@ -130,7 +130,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // SEO Settings
     Route::prefix('settings/SEO')->group(function () {
 
-        Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add');
+        Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('permission:settings.SEOSettings');
 
         Route::put('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
     });
@@ -138,7 +138,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Site Settings
     Route::prefix('settings/site')->group(function () {
 
-        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add');
+        Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add')->middleware('permission:settings.siteSettings');
 
         Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
     });
@@ -160,7 +160,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         // Route for bulk email verification
         Route::post('/bulk-verify-email', [UserManageController::class, 'bulkVerifyEmail'])->name('admin.users.bulkVerifyEmail');
 
-        Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block');
+        Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block')->middleware('permission:settings.countryBlock');
         Route::post('/block/store', [UserManageController::class, 'storeBlock'])->name('country.block.store');
         Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit');
         Route::post('/countries/block/update', [UserManageController::class, 'updateCountry'])->name('block.countries.update');
@@ -207,7 +207,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
-        Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign');
+        Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign')->middleware('permission:settings.frontEndDesign');
 
         Route::post('/update-design', [AIContentCreatorController::class, 'updateDesign'])->name('user.update_design');
     });
@@ -292,7 +292,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 
     // PRIVACY POLICY
-    Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy');
+    Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('permission:settings.privacyPolicy');
 
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
 
@@ -304,7 +304,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 
     // TERMS & CONDITIONS
-    Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition');
+    Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition')->middleware('permission:settings.termsAndConditions');
 
     Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
 
@@ -316,7 +316,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 
     // Pricing Plans
-    Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing');
+    Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing')->middleware('permission:settings.pricing');
 
     Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
 
@@ -359,7 +359,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // FAQ
-    Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq');
+    Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('permission:settings.FAQ');
     // Route::get('/add/faq', [FAQController::class, 'AddFAQ'])->name('add.faq');
     Route::post('/store/faq', [FAQController::class, 'StoreFAQ'])->name('store.faq');
     // routes/web.php
@@ -379,8 +379,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::resource('dynamic-pages', DynamicPageController::class);
 
     // PAGE SEO Admin
-    Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])
-        ->name('add.page.seo');
+    Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('permission:settings.pageSEOAdd');
     Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
 
     // Change User's Password by ADMIN
@@ -435,7 +434,7 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
 
     Route::prefix('education')->group(function () {
-        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('permission:education.educationWizard') ;      
+        Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('permission:education.educationWizard');      
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');       
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');

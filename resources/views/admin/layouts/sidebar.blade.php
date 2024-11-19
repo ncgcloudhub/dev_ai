@@ -299,6 +299,7 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
                
+                @can('settings.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#settings" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -309,52 +310,73 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
+                                    @can('settings.pageSEOAdd')
                                     <li class="nav-item">
                                         <a href="{{route('add.page.seo')}}" class="nav-link sidebar-hover" >Page SEO Add</a>
                                     </li>
-
+                                    @endcan
+                                 
+                                    @can('settings.AISettings')
                                     <li class="nav-item">
                                         <a href="{{route('ai.settings.add')}}" class="nav-link sidebar-hover" >AI Settings</a>
                                     </li>
-
+                                    @endcan
+                                  
+                                    @can('settings.siteSettings')
                                     <li class="nav-item">
                                         <a href="{{route('site.settings.add')}}" class="nav-link sidebar-hover" >Site Settings</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('settings.SEOSettings')
                                     <li class="nav-item">
                                         <a href="{{route('seo.settings.add')}}" class="nav-link sidebar-hover" >SEO Settings</a>
                                     </li>
-                                    
+                                    @endcan
+                                  
+                                    @can('settings.FAQ')
                                     <li class="nav-item">
                                         <a href="{{route('manage.faq')}}" class="nav-link sidebar-hover">Manage FAQ</a>
                                     </li>
-
+                                    @endcan
+                                   
+                                    @can('settings.privacyPolicy')
                                     <li class="nav-item">
                                         <a href="{{route('manage.privacy.policy')}}" class="nav-link sidebar-hover">Manage Privacy Policy</a>
                                     </li>
-                                    
+                                    @endcan
+                                   
+                                    @can('settings.termsAndConditions')
                                     <li class="nav-item">
                                         <a href="{{route('manage.terms.condition')}}" class="nav-link sidebar-hover">Manage Terms & Conditions</a>
                                     </li>
-
+                                    @endcan
+                                  
+                                    @can('settings.pricing')
                                     <li class="nav-item">
                                         <a href="{{route('manage.pricing')}}" class="nav-link sidebar-hover">Manage Pricing</a>
                                     </li>
-                                  
+                                    @endcan
+                                 
+                                    @can('settings.frontEndDesign')
                                     <li class="nav-item">
                                         <a href="{{route('getDesign')}}" class="nav-link sidebar-hover">Manage Design</a>
                                     </li>
+                                    @endcan
+                                  
+                                    @can('settings.countryBlock')
                                     <li class="nav-item">
                                         <a href="{{route('manage.block')}}" class="nav-link sidebar-hover">Manage Block</a>
                                     </li>
-               
+                                    @endcan
+                                   
                                 </ul>
                             </div>
                             
                         </div>
                     </div>
                 </li>
-
+                @endcan
 
                  {{-- Permission ROLE --}}
                  @can('rolePermission.menu')
