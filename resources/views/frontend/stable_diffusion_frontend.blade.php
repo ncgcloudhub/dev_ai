@@ -19,9 +19,19 @@
     <div class="layout-wrapper landing">
         @include('frontend.body.nav_frontend')
 
+        <section class=" position-relative" style="background-image: url('{{ asset('storage/stable.jpg') }}'); background-size: cover; background-position: center; height:500px">
+            
+        </section>
+        
+        {{-- <section>
+            <img src="{{ asset('storage/stable.jpg') }}" height="auto" style="background-size: cover" alt="">
+        </section> --}}
+
         <!-- start hero section -->
-        <section class="section job-hero-section bg-light pb-0" id="hero">
-            <div class="container">
+        <section 
+    class="section job-hero-section pb-0" 
+    id="hero">
+    <div class="container">
                 <div class="row justify-content-between align-items-center">
                     <div class="col-lg-6">
                         <div>

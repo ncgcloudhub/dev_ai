@@ -366,8 +366,8 @@ function sendMessage() {
                 <div class="user-chat-content">
                   <div class="ctext-wrap-content">
                     <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
-                    ${file ? `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px;">` : 'file'}
-                    ${pastedImageFile ? `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px;">` : 'pasted'}
+                    ${file ? `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px;">` : ''}
+                    ${pastedImageFile ? `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px;">` : ''}
                   </div>
                     <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
                 </div>
@@ -392,6 +392,14 @@ function sendMessage() {
                             <button class="btn btn-success btn-sm copy-btn" data-target="${assistantMessageId}" title="Copy to clipboard">
                                 <i class="ri-file-copy-line"></i>
                             </button>
+                              
+                            <button class="btn btn-primary btn-sm regenerate-btn" 
+                                    data-message-id="${assistantMessageId}" 
+                                    data-original-message="${message}" 
+                                    title="Regenerate">
+                                <i class="ri-refresh-line"></i>
+                            </button>
+
                             
                         </div>
                     </div>
@@ -899,6 +907,81 @@ document.addEventListener('click', function(event) {
 });
 
 
+// REGENERATE
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.regenerate-btn')) {
+        const button = event.target.closest('.regenerate-btn');
+        const messageId = button.getAttribute('data-message-id');
+        const originalMessage = button.getAttribute('data-original-message'); // Fetch original message from the data attribute
+
+        regenerateMessage(messageId, originalMessage);
+    }
+});
+
+function regenerateMessage(messageId, originalMessage) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const formData = new FormData();
+    formData.append('message', originalMessage); // Add the original message
+    formData.append('regenerate', true); // Indicate it's a regenerate request
+
+    fetch('/main/chat/send', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        body: formData,
+    })
+    .then(response => {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        const messageElement = document.getElementById(messageId); // Get the message container
+        if (!messageElement) {
+            console.error(`Element with ID '${messageId}' not found.`);
+            return;
+        }
+
+        messageElement.innerHTML = ''; // Clear previous content before streaming
+
+        function processChunk({ done, value }) {
+            if (done) {
+                console.log('Stream complete');
+                return;
+            }
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop(); // Keep incomplete line in buffer for the next chunk
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6).trim(); // Remove 'data: ' prefix
+                    if (data === '[DONE]') {
+                        console.log('Stream finished');
+                        return;
+                    }
+
+                    try {
+                        const json = JSON.parse(data);
+                        console.log('tr',json)
+                        // Append to the message container
+                        messageElement.innerHTML += json; // Append the message to the target element
+                    } catch (err) {
+                        console.error('Error parsing JSON:', err, data);
+                    }
+                }
+            }
+
+            reader.read().then(processChunk);
+        }
+
+        reader.read().then(processChunk);
+    })
+    .catch(err => {
+        console.error('Error during regenerate:', err);
+    });
+}
 
 
 

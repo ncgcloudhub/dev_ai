@@ -85,18 +85,25 @@ class MainChat extends Controller
     // Dashboard Chat Admin
     public function send(Request $request)
     {
+        $isRegenerate = $request->input('regenerate', false);
         $userMessage = $request->input('message');
         $file = $request->file('file');
         $title = $request->input('title');
         $sessionId = session('session_id');
 
-        Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
+        if ($isRegenerate) {
+            // Handle regeneration
+            // Optionally modify or enhance the user message for regeneration
+            $userMessage = "Regenerated: " . $userMessage;
+        }
+
+        // Log::info('Inside Message Session ID: ', ['session_id' => session('session_id')]);
 
         // Get the currently authenticated user
         $user = auth()->user();
         // Retrieve the selected model from the `selected_model` field
         $openaiModel = $user->selected_model;
-        Log::info('before: ' . $openaiModel);
+        // Log::info('before: ' . $openaiModel);
 
         // Retrieve the session and its messages from the database
         $session = ModelsSession::with('messages')->find($sessionId);
@@ -105,10 +112,10 @@ class MainChat extends Controller
         }
 
         $uploadedFiles = session('uploaded_files', []);
-        Log::info('Uploaded files: ', $uploadedFiles);
+        // Log::info('Uploaded files: ', $uploadedFiles);
 
         $pastedImages = session('pasted_images', []);
-        Log::info('Pasted images: ', $pastedImages);
+        // Log::info('Pasted images: ', $pastedImages);
 
        // Retrieve the session and its messages from the database
 $session = ModelsSession::with('messages')->find($sessionId);
@@ -137,10 +144,10 @@ foreach ($messagesFromDb as $message) {
         ];
     }
 }
-        Log::info('Conversation history: ', $conversationHistory);
+        // Log::info('Conversation history: ', $conversationHistory);
 
         $context = session('context', []);
-        Log::info('Context: ', $context);
+        // Log::info('Context: ', $context);
 
         if ($file) {
             $request->validate([
@@ -161,7 +168,7 @@ foreach ($messagesFromDb as $message) {
                 $filePath = $file->storeAs('uploads', $file->getClientOriginalName());
             }
         
-            Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
+            // Log::info('File stored at: ', ['path' => $filePath, 'extension' => $extension]);
         
             $fileContent = '';
             if (in_array($extension, ['pdf', 'doc', 'docx', 'txt'])) {
@@ -172,7 +179,7 @@ foreach ($messagesFromDb as $message) {
                 $fileContent = $response['choices'][0]['message']['content'];
             }
 
-            Log::info('File content: ', ['content' => $fileContent]);
+            // Log::info('File content: ', ['content' => $fileContent]);
         
             // Update session variables and context
             $uploadedFiles[$filePath] = $fileContent;
@@ -324,7 +331,7 @@ foreach ($messagesFromDb as $message) {
 
             $context['latest_message'] = $userMessage;
             session(['context' => $context]);
-            Log::info('Updated context with message: ', $context);
+            // Log::info('Updated context with message: ', $context);
 
              // Check if $filePath is set and not empty
             $filePath = !empty($filePath) ? $filePath : null;
@@ -336,7 +343,7 @@ foreach ($messagesFromDb as $message) {
                 'reply' => null,
                 'file_path' => $filePath,
             ]);
-            Log::info('File Path: ', ['pathss' => $filePath]);
+            // Log::info('File Path: ', ['pathss' => $filePath]);
 
             // Save context to database
             $session->context = json_encode($context);
@@ -387,7 +394,7 @@ foreach ($messagesFromDb as $message) {
             }
         });
 
-        Log::info('Messages to send to API: ', $messages);
+        // Log::info('Messages to send to API: ', $messages);
 
         $client = new Client();
         $response = $client->post('https://api.openai.com/v1/chat/completions', [
@@ -407,12 +414,12 @@ foreach ($messagesFromDb as $message) {
         $sessionId = session('session_id');
         
        // Log the full response for debugging purposes
-        Log::info('OpenAI API Streaming Response Started', [
-            'session_id' => $sessionId,
-            'user_id' => $user->id,
-            'model' => $openaiModel,
-            'messages' => $messages,
-        ]);
+        // Log::info('OpenAI API Streaming Response Started', [
+        //     'session_id' => $sessionId,
+        //     'user_id' => $user->id,
+        //     'model' => $openaiModel,
+        //     'messages' => $messages,
+        // ]);
         
         // Return a StreamedResponse to send data incrementally to the client
         return new StreamedResponse(function() use ($response, $user, $sessionId, $title) {
