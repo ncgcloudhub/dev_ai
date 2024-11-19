@@ -90,6 +90,9 @@
                         <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
                         <button class="btn gradient-btn-5" type="submit">Subscribe</button>
                     </div>
+                    @error('email')
+                        <div class="text-danger small">{{ $message }}</div>
+                    @enderror
                 </form>
             </div>
         </div>

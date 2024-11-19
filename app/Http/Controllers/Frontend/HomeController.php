@@ -255,6 +255,10 @@ class HomeController extends Controller
     public function NewsLetterStore(Request $request)
     {
 
+        $request->validate([
+            'email' => 'required|email|unique:news_letters,email', // Adjust the table and column name as needed
+        ]);
+        
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
 
