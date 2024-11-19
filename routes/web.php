@@ -398,7 +398,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // SEND EMAIL
     Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form')->middleware('permission:manageUser&Admin.sendEmail'); 
-    Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send');
+    Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send')->middleware('permission:manageUser&Admin.sendEmail.manage');
     Route::post('/send-emails', [UserManageController::class, 'sendEmail'])->name('emails.send');
 
 }); //End Admin Middleware

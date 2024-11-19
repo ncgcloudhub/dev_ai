@@ -26,10 +26,12 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
+            @can('manageUser&Admin.sendEmail.manage')
             <div class="card-header">
                 <h5 class="card-title mb-1"><a href="{{ route('manage.email.send') }}" class="btn btn-info">Manage Email</a></h5>
             </div>
-
+            @endcan
+           
             <div class="card-body">
                 <form action="{{ route('emails.send') }}" method="POST">
                     @csrf
