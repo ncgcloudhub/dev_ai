@@ -496,8 +496,7 @@
                 </li>
              
                 {{-- JOB --}}
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >JOB</span></li>
-               
+                @can('jobs.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#jobs" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="AITools">
@@ -508,16 +507,24 @@
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
-                                    <li class="nav-item">
-                                        <a href="{{route('add.job')}}" class="nav-link sidebar-hover" >Add Job</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('manage.job')}}" class="nav-link sidebar-hover" >Manage Job</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('manage.job.applications')}}" class="nav-link sidebar-hover" >Manage Job Application</a>
-                                    </li>
-                                   
+                                    @can('jobs.addJob')
+                                        <li class="nav-item">
+                                            <a href="{{route('add.job')}}" class="nav-link sidebar-hover" >Add Job</a>
+                                        </li>
+                                    @endcan
+                                  
+                                    @can('jobs.manageJobs')
+                                        <li class="nav-item">
+                                            <a href="{{route('manage.job')}}" class="nav-link sidebar-hover" >Manage Job</a>
+                                        </li>
+                                    @endcan
+                                 
+                                    @can('jobs.manageJobApplication')
+                                        <li class="nav-item">
+                                            <a href="{{route('manage.job.applications')}}" class="nav-link sidebar-hover" >Manage Job Application</a>
+                                        </li>
+                                    @endcan
+                                  
                                 </ul>
                             </div>
                             
@@ -525,7 +532,8 @@
                         </div>
                     </div>
                 </li>
-            {{-- JOB END--}}            
+                @endcan
+                {{-- JOB END--}}            
             
             </ul>
         </div>

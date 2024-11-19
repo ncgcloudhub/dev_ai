@@ -339,22 +339,22 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('update-subject/{id}', [EducationController::class, 'updateSubject'])->name('update.subject');
 
-        Route::post('delete-grade/{id}', [EducationController::class, 'deleteGrade'])->name('delete.grade');
+        Route::post('delete-grade/{id}', [EducationController::class, 'deleteGrade'])->name('delete.grade')->middleware('permission:education.manageGradeSubject.gradeDelete');
 
-        Route::post('delete-subject/{id}', [EducationController::class, 'deleteSubject'])->name('delete.subject');
+        Route::post('delete-subject/{id}', [EducationController::class, 'deleteSubject'])->name('delete.subject')->middleware('permission:education.manageGradeSubject.subjectDelete');
         
-        Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools');
+        Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools')->middleware('permission:education.manageTools.add');
 
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
 
         // Route to show the form for editing a specific tool (edit)
-        Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit');
+        Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit')->middleware('permission:education.manageTools.edit');
 
         // Route to update a specific tool (update)
         Route::put('/tools/{id}', [EducationController::class, 'updateTools'])->name('tools.update');
 
         // Route to delete a specific tool (destroy)
-        Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy');
+        Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy')->middleware('permission:education.manageTools.delete');
 
     });
 
@@ -368,10 +368,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy')->middleware('permission:settings.FAQ.delete');
 
     // JOB Admin
-    Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');
+    Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job')->middleware('permission:jobs.addJob');
     Route::post('/job/store', [JobController::class, 'storeJob'])->name('job.store');
-    Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job');
-    Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications');
+    Route::get('/manage-job', [JobController::class, 'manage'])->name('manage.job')->middleware('permission:jobs.manageJobs');
+    Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications')->middleware('permission:jobs.manageJobApplication');
     Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
 
@@ -398,7 +398,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // SEND EMAIL
     Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form')->middleware('permission:manageUser&Admin.sendEmail'); 
-    Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send');
+    Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send')->middleware('permission:manageUser&Admin.sendEmail.manage');
     Route::post('/send-emails', [UserManageController::class, 'sendEmail'])->name('emails.send');
 
 }); //End Admin Middleware

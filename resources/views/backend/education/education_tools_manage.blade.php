@@ -9,10 +9,12 @@
 @slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
 @slot('title') Manage Tools @endslot
 @endcomponent
-@if(Auth::user()->role === 'admin')
-    <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
-@endif
 
+@if(Auth::user()->role === 'admin')
+    @can('education.manageTools.add')
+        <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
+    @endcan
+@endif
 
 <section class="py-5 gradient-background-1 position-relative">
     <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
@@ -70,16 +72,22 @@
                                 <i class="ri-auction-fill align-bottom me-1"></i>Explore
                             </a>
                             @if(Auth::user()->role === 'admin')
-                            <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
-                                <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
-                            </a>
-                            <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                    <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
-                                </button>
-                            </form>
+                                @can('education.manageTools.edit')
+                                    <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
+                                        <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
+                                    </a>
+                                @endcan
+                            
+                                @can('education.manageTools.delete')
+                                    <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                            <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
+                                        </button>
+                                    </form>
+                                @endcan
+                           
                             @endif
                         </div>
                     </div>
@@ -96,14 +104,14 @@
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>
                     
-                    <div class="card-footer border-top border-top-dashed">
+                    {{-- <div class="card-footer border-top border-top-dashed">
                         <div class="d-flex align-items-center">
                             <div class="flex-grow-1 fs-14">
                                 <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest: <span class="fw-medium">{{ rand(10, 500) }}ETH</span>
                             </div>
                             <h5 class="flex-shrink-0 fs-14 text-primary mb-0">{{ rand(5, 450) }} ETH</h5>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         @endforeach

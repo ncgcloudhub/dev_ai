@@ -35,13 +35,21 @@
                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
                                 <i class="ri-home-4-line d-block fs-20 mb-1"></i>
                                 {{ $item->grade }}
-                                <button type="button" class="btn btn-link p-0 edit-grade-btn" data-bs-toggle="modal" data-bs-target="#editGradeModal-{{ $item->id }}" aria-label="Edit Grade">
-                                    <i class="ri-edit-line fs-16"></i>
-                                </button>
+
+                                <!-- Edit Grade Button -->
+                                @can('education.manageGradeSubject.gradeEdit')
+                                    <button type="button" class="btn btn-link p-0 edit-grade-btn" data-bs-toggle="modal" data-bs-target="#editGradeModal-{{ $item->id }}" aria-label="Edit Grade">
+                                        <i class="ri-edit-line fs-16"></i>
+                                    </button>
+                                @endcan
+                              
                                 <!-- Delete Grade Button -->
-                                <button type="button" class="btn btn-link p-0 delete-grade-btn" data-bs-toggle="modal" data-bs-target="#deleteGradeModal-{{ $item->id }}" aria-label="Delete Grade">
-                                    <i class="ri-delete-bin-line fs-16"></i>
-                                </button>
+                                @can('education.manageGradeSubject.gradeDelete')
+                                    <button type="button" class="btn btn-link p-0 delete-grade-btn" data-bs-toggle="modal" data-bs-target="#deleteGradeModal-{{ $item->id }}" aria-label="Delete Grade">
+                                        <i class="ri-delete-bin-line fs-16"></i>
+                                    </button>
+                                @endcan
+                             
                             </a>
                             @endforeach
                         </div>
@@ -73,12 +81,21 @@
                                             @endphp
                                             <button type="button" class="btn {{ $randomStyle }} waves-effect waves-light mb-2">
                                                 {{ $subject->name }}
-                                                <button type="button" class="btn btn-link p-0 edit-subject-btn" data-bs-toggle="modal" data-bs-target="#editSubjectModal-{{ $subject->id }}" aria-label="Edit Subject">
-                                                    <i class="ri-edit-line fs-14"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-link p-0 delete-subject-btn" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal-{{ $subject->id }}" aria-label="Delete Subject">
-                                                    <i class="ri-delete-bin-line fs-14"></i>
-                                                </button>
+
+                                                <!-- Edit Subject Button -->
+                                                @can('education.manageGradeSubject.subjectEdit')
+                                                    <button type="button" class="btn btn-link p-0 edit-subject-btn" data-bs-toggle="modal" data-bs-target="#editSubjectModal-{{ $subject->id }}" aria-label="Edit Subject">
+                                                        <i class="ri-edit-line fs-14"></i>
+                                                    </button>
+                                                @endcan
+                                               
+                                                <!-- Delete Subject Button -->
+                                                @can('education.manageGradeSubject.subjectDelete')
+                                                    <button type="button" class="btn btn-link p-0 delete-subject-btn" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal-{{ $subject->id }}" aria-label="Delete Subject">
+                                                        <i class="ri-delete-bin-line fs-14"></i>
+                                                    </button>
+                                                @endcan
+                                              
                                             </button>
                                         @endforeach
                                     </div>
