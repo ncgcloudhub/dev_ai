@@ -318,13 +318,13 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Pricing Plans
     Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing')->middleware('permission:settings.pricing');
 
-    Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy');
+    Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy')->middleware('permission:settings.pricing.delete');
 
     Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
 
     Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
 
-    Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit');
+    Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit')->middleware('permission:settings.pricing.edit');
 
     Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
 

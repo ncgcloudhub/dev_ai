@@ -270,14 +270,20 @@ h2.mb-0.text-center i {
 
                         </ul>
                         <div class="d-flex">
-                            <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
-                            <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                    <i class="ri-delete-bin-5-fill fs-16"></i> 
-                                </button>
-                            </form>
+                            @can('settings.pricing.edit')
+                                <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                            @endcan
+                          
+                            @can('settings.pricing.delete')
+                                <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                        <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                    </button>
+                                </form>
+                            @endcan
+                            
                         </div>
 
                     </div>
@@ -491,16 +497,21 @@ h2.mb-0.text-center i {
 
                     </ul>
                     <div class="d-flex">
-                        <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
-                        <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                <i class="ri-delete-bin-5-fill fs-16"></i> 
-                            </button>
-                        </form>
+                        @can('settings.pricing.edit')
+                            <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                        @endcan
+                                                 
+                        @can('settings.pricing.delete')
+                            <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                </button>
+                            </form>
+                        @endcan
+                    
                     </div>
-
                 </div>
             </div>
         </div>
