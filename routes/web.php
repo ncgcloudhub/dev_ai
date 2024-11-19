@@ -365,7 +365,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // routes/web.php
     Route::put('faq/update/{id}', [FAQController::class, 'update'])->name('faq.update');
     // routes/web.php
-    Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy');
+    Route::delete('faq/destroy/{id}', [FAQController::class, 'destroy'])->name('faq.destroy')->middleware('permission:settings.FAQ.delete');
 
     // JOB Admin
     Route::get('/add-job', [JobController::class, 'addJob'])->name('add.job');

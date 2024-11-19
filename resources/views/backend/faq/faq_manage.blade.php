@@ -41,9 +41,13 @@
                 {!! $item->answer !!}
                 <!-- Edit and Delete Buttons -->
                 <div class="button-group mt-3">
+                    @can('settings.FAQ.edit')
                     <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editModal{{$index}}">
                         Edit
                     </button>
+                    @endcan
+                  
+                    @can('settings.FAQ.delete')
                     <form action="{{ route('faq.destroy', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -51,6 +55,8 @@
                             Delete
                         </button>
                     </form>
+                    @endcan
+                  
                 </div>
             </div>
         </div>
