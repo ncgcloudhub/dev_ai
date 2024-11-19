@@ -162,9 +162,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/manage/block', [UserManageController::class, 'manageBlock'])->name('manage.block')->middleware('permission:settings.countryBlock');
         Route::post('/block/store', [UserManageController::class, 'storeBlock'])->name('country.block.store');
-        Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit');
+        Route::get('/countries/block/edit/{id}', [UserManageController::class, 'editCountry'])->name('block.countries.edit')->middleware('permission:settings.countryBlock.edit');
         Route::post('/countries/block/update', [UserManageController::class, 'updateCountry'])->name('block.countries.update');
-        Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete');
+        Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete')->middleware('permission:settings.countryBlock.delete');
 
 
         Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange');
