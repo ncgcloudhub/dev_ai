@@ -106,7 +106,7 @@
                     <a class="nav-link menu-link sidebar-hover" href="{{ route('main.chat.form') }}">
                         <i class="lab la-rocketchat"></i> 
                         <span>ChatterMate</span>
-                        <span class="badge bg-danger ms-2">New</span>
+                        <span class="badge bg-danger ms-2">AI Chat</span>
                     </a>
                 </li>
                       
