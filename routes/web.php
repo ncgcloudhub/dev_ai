@@ -115,7 +115,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/all/admin', 'AllAdmin')->name('all.admin')->middleware('permission:manageUser&Admin.manageAdmin');
         Route::get('/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
-        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
+        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin')->middleware('permission:manageUser&Admin.manageAdmin.edit');
         Route::post('/update/admin/{id}', 'UpdateAdmin')->name('update.admin');
     });
 
@@ -393,7 +393,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
 
     // Delete user from admin manage user table
-    Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete');
+    Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete')->middleware('permission:manageUser&Admin.manageAdmin.delete');
     Route::post('/users/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.users.bulkDelete')->middleware('permission:manageUser&Admin.manageUser.delete');
 
     // SEND EMAIL
