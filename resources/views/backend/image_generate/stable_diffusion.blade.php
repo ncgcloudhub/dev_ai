@@ -941,9 +941,11 @@ function toggleOptimize() {
                 if (response.status === 'liked') {
                     button.find('.like-count').text(response.likes_count);
                     button.addClass('liked');
+                    button.find('i').removeClass('ri-thumb-up-fill text-muted').addClass('ri-thumb-up-fill text-primary'); 
                 } else if (response.status === 'unliked') {
                     button.find('.like-count').text(response.likes_count);
                     button.removeClass('liked');
+                    button.find('i').removeClass('ri-thumb-up-fill text-primary').addClass('ri-thumb-up-fill text-muted');
                 }
             }
         });
