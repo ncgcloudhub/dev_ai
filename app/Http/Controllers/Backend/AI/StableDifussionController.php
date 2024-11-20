@@ -8,6 +8,7 @@ use App\Models\StableDiffusionImageLike;
 use App\Services\StableDiffusionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class StableDifussionController extends Controller
 {
@@ -97,6 +98,50 @@ public function incrementDownloadCount($id)
     $image->increment('downloads');
     
     return response()->json(['status' => 'success']);
+}
+
+
+// STABLE VIDEO
+
+public function Videoindex()
+{
+    return view('backend.video.stable_video');
+}
+
+
+public function generateVideo(Request $request)
+{
+    $imagePath = $request->file('image')->getRealPath(); // Uploaded image
+    $apiKey = env('STABLE_DIFFUSION_API_KEY'); // Store your API key in the .env file
+    $apiUrl = "https://api.stability.ai/v2beta/image-to-video";
+
+    $configapiKey = config('services.stable_diffusion.api_key');
+    // Debug Log
+    Log::info('Stable Diffusion API Request', [
+        'url' => $apiUrl,
+        'api_key' => substr($apiKey, 0, 5) . '...', // Log partially for security
+    ]);
+
+    Log::info('API Key from .env:', ['api_key' => env('STABLE_DIFFUSION_API_KEY')]);
+    Log::info('API Key from .config:', ['api_key' => $configapiKey]);
+
+
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+    ])->attach(
+        'image', file_get_contents($imagePath), $request->file('image')->getClientOriginalName()
+    )->post($apiUrl, [
+        'seed' => $request->input('seed', 0),
+        'cfg_scale' => $request->input('cfg_scale', 1.8),
+        'motion_bucket_id' => $request->input('motion_bucket_id', 127),
+    ]);
+
+    if ($response->successful()) {
+        return response()->json(['id' => $response->json()['id']], 200);
+    } else {
+        return response()->json(['error' => $response->json()], $response->status());
+    }
 }
 
 
