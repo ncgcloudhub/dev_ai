@@ -23,5 +23,71 @@
         <br>
         <button type="submit">Generate Video</button>
     </form>
+
+    <!-- Display the video after it's generated -->
+    <div id="videoContainer" style="margin-top: 20px; display: none;">
+        <h2>Generated Video</h2>
+        <video id="generatedVideo" controls>
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        // Handle form submission with AJAX
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+            
+            const formData = new FormData(form);
+            const response = await fetch("{{ route('generate.video') }}", {
+                method: "POST",
+                body: formData,
+            });
+            
+            const result = await response.json();
+
+            if (response.ok && result.id) {
+                // Successfully generated video, now fetch the video result
+                fetchVideo(result.id);
+            } else {
+                alert('Error: ' + result.error.message);
+            }
+        });
+
+
+        const apiKey = @json($apiKey); // Loaded from environment variable
+
+// Log the apiKey to verify it's loaded
+console.log('API Key:', apiKey);
+
+        // Fetch video result based on generation ID
+        function fetchVideo(generationId) {
+    fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Accept': 'video/*'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.video_url) {
+            // Handle successful response with video URL
+            console.log('Video URL:', data.video_url);
+            // You can use the video URL to show the video or download it
+        } else {
+            // Handle the case where there's no video URL in the response
+            console.error('No video URL found in the response:', data);
+        }
+    })
+    .catch(error => {
+        // Handle any errors in the fetch or response
+        console.error('Error fetching video:', error);
+    });
+}
+
+    </script>
 </body>
 </html>
+

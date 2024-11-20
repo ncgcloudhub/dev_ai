@@ -9,6 +9,7 @@ use App\Services\StableDiffusionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage; 
 
 class StableDifussionController extends Controller
 {
@@ -105,28 +106,18 @@ public function incrementDownloadCount($id)
 
 public function Videoindex()
 {
-    return view('backend.video.stable_video');
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.video.stable_video',compact('apiKey'));
 }
 
 
 public function generateVideo(Request $request)
 {
     $imagePath = $request->file('image')->getRealPath(); // Uploaded image
-    $apiKey = env('STABLE_DIFFUSION_API_KEY'); // Store your API key in the .env file
     $apiUrl = "https://api.stability.ai/v2beta/image-to-video";
+    $configapiKey = config('services.stable_diffusion.api_key'); // API key from config
 
-    $configapiKey = config('services.stable_diffusion.api_key');
-    // Debug Log
-    Log::info('Stable Diffusion API Request', [
-        'url' => $apiUrl,
-        'api_key' => substr($apiKey, 0, 5) . '...', // Log partially for security
-    ]);
-
-    Log::info('API Key from .env:', ['api_key' => env('STABLE_DIFFUSION_API_KEY')]);
-    Log::info('API Key from .config:', ['api_key' => $configapiKey]);
-
-
-
+    // Send request to generate the video
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
     ])->attach(
@@ -137,12 +128,68 @@ public function generateVideo(Request $request)
         'motion_bucket_id' => $request->input('motion_bucket_id', 127),
     ]);
 
+    // Check for successful response
     if ($response->successful()) {
-        return response()->json(['id' => $response->json()['id']], 200);
+        $generationId = $response->json()['id'];
+
+        Log::info('Video Generation Successful', [
+            'generation_id' => $generationId,
+        ]);
+        // Return the generation ID in the response
+        return response()->json(['id' => $generationId], 200);
     } else {
+
+        Log::error('Video Generation Failed', [
+            'error' => $response->json(),
+            'status_code' => $response->status(),
+        ]);
         return response()->json(['error' => $response->json()], $response->status());
     }
 }
+
+
+public function getVideoResult($generationId)
+{
+    $apiUrl = "https://api.stability.ai/v2beta/image-to-video/result/{$generationId}";
+    $configapiKey = config('services.stable_diffusion.api_key'); // API key from config
+
+    // Send GET request to fetch the video result
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'video/*',  // Accept video content type
+    ])->get($apiUrl);
+
+    // Check if video is in-progress
+    if ($response->status() == 202) {
+        return response()->json([
+            'message' => 'Video generation in progress, try again in a few seconds.',
+            'status' => 202,
+        ]);
+    }
+
+    // Check if video generation is complete
+    if ($response->status() == 200) {
+        // Save the video file
+        $videoPath = 'videos/video_' . time() . '.mp4';
+        Storage::put($videoPath, $response->body());
+
+        // Return the video URL
+        return response()->json([
+            'message' => 'Video generation complete!',
+            'video_url' => asset('storage/' . $videoPath), // URL to access the video
+        ]);
+    }
+
+    // Handle error response
+    return response()->json([
+        'error' => $response->json(),
+        'status' => $response->status(),
+    ]);
+}
+
+
+
+
 
 
     

@@ -707,6 +707,7 @@ Route::post('/increment-stable-download/{id}', [StableDifussionController::class
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
+Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
 
 
