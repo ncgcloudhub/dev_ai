@@ -62,30 +62,52 @@
 console.log('API Key:', apiKey);
 
         // Fetch video result based on generation ID
-        function fetchVideo(generationId) {
-    fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Accept': 'video/*'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data && data.video_url) {
-            // Handle successful response with video URL
-            console.log('Video URL:', data.video_url);
-            // You can use the video URL to show the video or download it
-        } else {
-            // Handle the case where there's no video URL in the response
-            console.error('No video URL found in the response:', data);
-        }
-    })
-    .catch(error => {
-        // Handle any errors in the fetch or response
-        console.error('Error fetching video:', error);
-    });
+      // Function to fetch video result
+function fetchVideo(generationId) {
+    // Polling interval (in milliseconds)
+    const pollingInterval = 10000; // 10 seconds
+
+    // Start polling
+    const pollForVideo = setInterval(() => {
+        fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle case when the video is ready
+            if (data && data.finish_reason === 'SUCCESS') {
+                console.log('Video is ready! Base64 video data:', data.video);
+
+                // Decode the base64 video and display or download it
+                const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
+                const videoUrl = URL.createObjectURL(videoBlob);
+
+                // Display video in the browser (you can adjust this as needed)
+                const videoElement = document.createElement('video');
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                document.body.appendChild(videoElement);
+
+                // Stop polling after success
+                clearInterval(pollForVideo);
+            } else if (data && data.status === 'in-progress') {
+                console.log('Video generation still in progress...');
+            } else {
+                console.error('Error fetching video:', data);
+                clearInterval(pollForVideo);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching video:', error);
+            clearInterval(pollForVideo);
+        });
+    }, pollingInterval);
 }
+
 
     </script>
 </body>

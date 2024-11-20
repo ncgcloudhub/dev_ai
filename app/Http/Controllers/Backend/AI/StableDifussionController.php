@@ -156,22 +156,28 @@ public function getVideoResult($generationId)
     // Send GET request to fetch the video result
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
-        'Accept' => 'video/*',  // Accept video content type
+        'Accept' => 'application/json',  // Accept JSON response
     ])->get($apiUrl);
 
-    // Check if video is in-progress
+    // Check if video generation is in-progress (status: 202)
     if ($response->status() == 202) {
         return response()->json([
             'message' => 'Video generation in progress, try again in a few seconds.',
             'status' => 202,
+            'generation_id' => $generationId,  // Return the generation ID for polling
         ]);
     }
 
-    // Check if video generation is complete
+    // Check if video generation is complete (status: 200)
     if ($response->status() == 200) {
-        // Save the video file
+        $videoData = $response->json();
+        
+        // Base64-encoded video data
+        $videoBase64 = $videoData['video'];
+
+        // Decode base64 video and save to storage
         $videoPath = 'videos/video_' . time() . '.mp4';
-        Storage::put($videoPath, $response->body());
+        Storage::put($videoPath, base64_decode($videoBase64));  // Save decoded video to disk
 
         // Return the video URL
         return response()->json([
@@ -186,6 +192,7 @@ public function getVideoResult($generationId)
         'status' => $response->status(),
     ]);
 }
+
 
 
 
