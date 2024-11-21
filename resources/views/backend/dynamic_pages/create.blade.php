@@ -92,5 +92,29 @@
         }
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const titleInput = document.getElementById('title');
+        const routeInput = document.getElementById('route');
+
+        titleInput.addEventListener('input', function () {
+            const slugifiedTitle = titleInput.value
+                .toLowerCase()                    // Convert to lowercase
+                .replace(/[^a-z0-9\s\/]/g, '')   // Allow letters, numbers, spaces, and slashes
+                .replace(/\s+/g, '-')            // Replace spaces with dashes
+                .trim();                         // Remove leading/trailing spaces
+
+            routeInput.value = `/${slugifiedTitle}`; // Ensure the route starts with a single "/"
+        });
+
+        routeInput.addEventListener('input', function () {
+            // Allow slashes but sanitize other characters
+            routeInput.value = routeInput.value
+                .replace(/[^a-z0-9\/\-]/g, '')  // Allow only letters, numbers, dashes, and slashes
+                .replace(/\/+/g, '/');          // Replace multiple slashes with a single slash
+        });
+    });
+</script>
+
 @endsection
 

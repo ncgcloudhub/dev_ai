@@ -379,7 +379,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
 
     // DYNAMIC PAGE
-    Route::resource('dynamic-pages', DynamicPageController::class);
+    Route::resource('dynamic-pages', DynamicPageController::class)->except(['show']);
+    // Catch-all dynamic page route (must be at the end)
+    Route::get('/{route}', [DynamicPageController::class, 'show'])->name('dynamic-pages.show');
 
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('admin.permission:settings.pageSEOAdd');
