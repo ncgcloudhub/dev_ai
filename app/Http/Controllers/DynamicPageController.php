@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DynamicPage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DynamicPageController extends Controller
 {
@@ -41,6 +42,8 @@ class DynamicPageController extends Controller
             'keywords' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
+        // Convert route to slug
+        $validated['route'] = Str::slug($validated['route'], '-');
 
         // Create a new dynamic page
         $dynamicPage = DynamicPage::create($validated);

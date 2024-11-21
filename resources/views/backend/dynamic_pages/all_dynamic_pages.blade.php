@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ route('dynamic-pages.show', ['dynamic_page' => $item->route]) }}" class="dynamic-page-link">{{ $item->title }}</a>
+                                <a href="{{ url($item->route) }}" class="dynamic-page-link">{{ $item->title }}</a>
                             </td>
                             <td>{{ $item->route }}</td>
                             <td>{{ strip_tags($item->content) }}</td>
