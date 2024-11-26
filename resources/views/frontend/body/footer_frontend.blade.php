@@ -54,19 +54,33 @@
 
             <div class="col-lg-4 ms-lg-auto">
                 <!-- Newsletter Section -->
-                <div class="row mt-4">
+                <div class="row mt-4" id="footer-newsletter">
                     <div>
                         <h5 class="text-white mb-3">Subscribe to Our Newsletter</h5>
-                        <form action="{{ route('newsletter.store') }}" method="post">
+                        <form action="{{ route('newsletter.store') }}#footer-newsletter" method="post">
                             @csrf
                             <div class="input-group">
                                 <input type="email" class="form-control" placeholder="Your Email Address" name="email" required>
-                                <button class="btn gradient-btn-5" type="submit">Subscribe</button>
+                                <button class="btn gradient-btn-5" type="submit" id="footerSubmitButton" disabled>Subscribe</button>
+                            </div>
+                            <!-- Checkbox -->
+                            <div class="mb-3 form-check mt-3">
+                                <input type="checkbox" class="form-check-input" id="footerTermsAgreement" required>
+                                <label class="form-check-label" for="footerTermsAgreement">
+                                    By subscribing, I agree to Clever Creator's
+                                    <a href="#" class="gradient-text-1" data-bs-toggle="modal" data-bs-target="#footerTermsModal">Consumer Terms</a> 
+                                    and 
+                                    <a href="#" class="gradient-text-1" data-bs-toggle="modal" data-bs-target="#footerPrivacyModal">Privacy Policy</a>.
+                                </label>
                             </div>
                         </form>
                     </div>
+                    @error('email')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
                 </div>
             </div>
+            
 
         </div>
 
@@ -127,3 +141,14 @@
        
     </div>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('footerTermsAgreement');
+        const submitButton = document.getElementById('footerSubmitButton');
+
+        checkbox.addEventListener('change', function () {
+            submitButton.disabled = !checkbox.checked;
+        });
+    });
+</script>
