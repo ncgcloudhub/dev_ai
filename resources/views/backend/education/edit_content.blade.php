@@ -97,14 +97,12 @@
                                                 <div class="col-sm-6">
                                                     <label for="lastName" class="form-label">Age</label>
                                                     <select class="form-select" name="age" data-choices aria-label="Default select age">
-                                                        <option value="4" {{ $content->age == 4 ? 'selected' : '' }}>4</option>
-                                                        <option value="5" {{ $content->age == 5 ? 'selected' : '' }}>5</option>
-                                                        <option value="6" {{ $content->age == 6 ? 'selected' : '' }}>6</option>
-                                                        <option value="7" {{ $content->age == 7 ? 'selected' : '' }}>7</option>
-                                                        <option value="8" {{ $content->age == 8 ? 'selected' : '' }}>8</option>
+                                                        @for ($i = 4; $i <= 20; $i++)
+                                                            <option value="{{ $i }}" {{ $content->age == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                        @endfor
                                                     </select>
-                                                    
                                                 </div>
+                                                
 
                                                 <div class="col-sm-6">
                                                     <label class="form-label">Content Difficulty Level</label>
@@ -156,46 +154,178 @@
                                             <p class="text-muted">Fill all information below</p>
                                         </div>
 
-                                        <div>
-                                            <div class="row g-3">
-                                                <div class="col-12">
-                                                    <label for="address" class="form-label">Topic</label>
-                                                    <input type="text" class="form-control" id="topic" name="topic"
-                                                        placeholder="{{$content->topic}}" required value="{{$content->topic}}">
-                                                    <div class="invalid-feedback">What is the Content Topic about?</div>
-                                                </div>
+                                            <div>
+                                                <div class="row g-3">
+                                                    <!-- Topic Field -->
+                                                    <div class="col-12">
+                                                        <label for="topic" class="form-label" title="What is the Topic of the Content">Topic</label>
+                                                        <input type="text" class="form-control" id="topic" name="topic" value="{{ old('topic', $content->topic ?? '') }}" placeholder="Briefly state the main topic" required>
+                                                        <div class="invalid-feedback">What is the Content Topic about?</div>
+                                                    </div>
 
-                                                <div class="col-12">
-                                                    <label for="additional_details" class="form-label">Additional Details Prompt
-                                                        <span class="text-muted">(Optional)</span>
-                                                    </label>
-                                                    <textarea class="form-control" id="additional_details" name="additional_details" rows="2" 
-                                                              placeholder="{{$content->additional_details}}"></textarea>
-                                                </div>  
-                                                
-                                                <div class="col-12">
-                                                    <label for="negative_word" class="form-label">Negative Word <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="negative_words" name="negative_words"
-                                                        placeholder="{{$content->negative_words}}" required>
-                                                    <div class="invalid-feedback">Which words you don't want to include in your content?</div>
-                                                </div>
+                                                    <!-- Topic Description (Optional) -->
+                                                    <div class="col-12">
+                                                        <label for="additional_details" class="form-label" title="Give a little more brief about the Topic">Topic Description
+                                                            <span class="text-muted">(Optional)</span>
+                                                        </label>
+                                                        <textarea class="form-control" id="additional_details" name="additional_details" rows="2" placeholder="Provide a short description or key points to cover">{{ old('additional_details', $content->additional_details ?? '') }}</textarea>
+                                                    </div>  
 
-                                                <div class="col-12">
-                                                    <label for="question_type" class="form-label">Question Type <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="question_type" name="question_type"
-                                                        placeholder="{{$content->question_type}}" required>
-                                                    <div class="invalid-feedback">What is the question type?</div>
-                                                </div>
+                                                    <!-- Content Type Selection -->
+                                                    <div class="col-6">
+                                                        <label for="content_type" class="form-label" title="What is the type of the Content?">Content Type</label>
+                                                        <input class="form-select" list="contentOption" id="content_type" name="content_type" placeholder="Select Content Type" aria-label="Select or type Content Type" value="{{ old('content_type', $content->content_type ?? '') }}">
+                                                        <datalist id="contentOption">
+                                                            <option value="story" {{ old('content_type', $content->content_type ?? '') == 'story' ? 'selected' : '' }}>
+                                                            <option value="book" {{ old('content_type', $content->content_type ?? '') == 'book' ? 'selected' : '' }}>
+                                                            <option value="passage" {{ old('content_type', $content->content_type ?? '') == 'passage' ? 'selected' : '' }}>
+                                                            <option value="poem" {{ old('content_type', $content->content_type ?? '') == 'poem' ? 'selected' : '' }}>
+                                                            <option value="worksheet" {{ old('content_type', $content->content_type ?? '') == 'worksheet' ? 'selected' : '' }}>
+                                                        </datalist>
+                                                    </div>
 
-                                                <div class="col-12">
-                                                    <label for="points" class="form-label">How many Questions to Include? <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="points" name="points"
-                                                        placeholder="{{$content->points}}" required>
-                                                    <div class="invalid-feedback">How many points to include?</div>
+                                                    <!-- Language Style Selection -->
+                                                    <div class="col-6">
+                                                        <label for="language_style" class="form-label" title="What is the Language Style?">Language Style</label>
+                                                        <input class="form-select" list="languageOption" id="language_style" name="language_style" placeholder="Select Language Style" aria-label="Select or type Language Style" value="{{ old('language_style', $content->language_style ?? '') }}">
+                                                        <datalist id="languageOption">
+                                                            <option value="Simple (suitable for young readers)" {{ old('language_style', $content->language_style ?? '') == 'Simple (suitable for young readers)' ? 'selected' : '' }}>
+                                                            <option value="Conversational" {{ old('language_style', $content->language_style ?? '') == 'Conversational' ? 'selected' : '' }}>
+                                                            <option value="Formal" {{ old('language_style', $content->language_style ?? '') == 'Formal' ? 'selected' : '' }}>
+                                                            <option value="Academic" {{ old('language_style', $content->language_style ?? '') == 'Academic' ? 'selected' : '' }}>                                                            
+                                                        </datalist>
+                                                    </div>
+
+                                                    <!-- Desired Length Selection -->
+                                                    <div class="col-12">
+                                                        <label for="desired_length" class="form-label" title="What is the desired length of the Content?">Desired Length</label>
+                                                        <input class="form-select" list="lengthOption" id="desired_length" name="desired_length" placeholder="Choose your desired length for the content" aria-label="Select or type your Desired Length" value="{{ old('desired_length', $content->desired_length ?? '') }}">
+                                                        <datalist id="lengthOption">
+                                                            <option value="Short (1-2 pages)" {{ old('desired_length', $content->desired_length ?? '') == 'Short (1-2 pages)' ? 'selected' : '' }}>
+                                                            <option value="Medium (3-5 pages)" {{ old('desired_length', $content->desired_length ?? '') == 'Medium (3-5 pages)' ? 'selected' : '' }}>
+                                                            <option value="Long (6+ pages)" {{ old('desired_length', $content->desired_length ?? '') == 'Long (6+ pages)' ? 'selected' : '' }}>
+                                                        </datalist>
+                                                    </div>
+
+                                                    <!-- Checkbox for Question Generation -->
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="generate_questions" class="form-check-label">
+                                                                <input type="checkbox" id="generate_questions" name="generate_questions" value="1" {{ old('generate_questions', $content->generate_questions ?? 0) == 1 ? 'checked' : '' }} onchange="toggleQuestionFields()"> 
+                                                                Generate Questions Based on Content
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Question Generation Fields (Hidden by default) -->
+                                                    <div id="question_fields" style="display: {{ old('generate_questions', $content->generate_questions ?? 0) ? 'block' : 'none' }}">
+                                                        <div class="row g-3">
+                                                            <!-- Number of Questions -->
+                                                            <div class="col-4">
+                                                                <label for="number_of_questions" title="How many questions do you want to include?">Number of Questions</label>
+                                                                <input type="number" id="number_of_questions" name="number_of_questions" class="form-control" value="{{ old('number_of_questions', $content->number_of_questions ?? '') }}">
+                                                            </div>
+
+                                                            <!-- Type of Questions -->
+                                                            <div class="col-4">
+                                                                <label for="question_type" class="form-label" title="What should be the Question Type?">Question Type</label>
+                                                                <input class="form-select" list="questionTypeOption" id="question_type" name="question_type" placeholder="Choose Question Type" aria-label="Choose Question Type" value="{{ old('question_type', $content->question_type ?? '') }}">
+                                                                <datalist id="questionTypeOption">
+                                                                    <option value="Multiple Choice" {{ old('question_type', $content->question_type ?? '') == 'Multiple Choice' ? 'selected' : '' }}>
+                                                                    <option value="True/False" {{ old('question_type', $content->question_type ?? '') == 'True/False' ? 'selected' : '' }}>
+                                                                    <option value="Short Answer" {{ old('question_type', $content->question_type ?? '') == 'Short Answer' ? 'selected' : '' }}>
+                                                                    <option value="Matching" {{ old('question_type', $content->question_type ?? '') == 'Matching' ? 'selected' : '' }}>
+                                                                    <option value="Fill-in-the-Blank" {{ old('question_type', $content->question_type ?? '') == 'Fill-in-the-Blank' ? 'selected' : '' }}>
+                                                                    <option value="Essay" {{ old('question_type', $content->question_type ?? '') == 'Essay' ? 'selected' : '' }}>
+                                                                </datalist>
+                                                            </div>
+
+                                                            <!-- Difficulty Level -->
+                                                            <div class="col-4">
+                                                                <label for="question_difficulty_level" title="What should be the difficulty level of the questions?">Difficulty Level</label>
+                                                                <select id="question_difficulty_level" name="question_difficulty_level" class="form-select">
+                                                                    <option value="easy" {{ old('question_difficulty_level', $content->question_difficulty_level ?? '') == 'easy' ? 'selected' : '' }}>Easy</option>
+                                                                    <option value="medium" {{ old('question_difficulty_level', $content->question_difficulty_level ?? '') == 'medium' ? 'selected' : '' }}>Medium</option>
+                                                                    <option value="hard" {{ old('question_difficulty_level', $content->question_difficulty_level ?? '') == 'hard' ? 'selected' : '' }}>Hard</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Checkbox for Answer Generation -->
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label for="generate_answers" class="form-check-label">
+                                                                <input type="checkbox" id="generate_answers" name="generate_answers" value="1" {{ old('generate_answers', $content->generate_answers ?? 0) == 1 ? 'checked' : '' }}> 
+                                                                Generate Answers for the Questions
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                 <!-- Checkbox to toggle image generation -->
+                                                    <div class="form-group">
+                                                        <label for="generate_images">
+                                                            <input type="checkbox" id="generate_images" name="generate_images" value="1" {{ old('generate_images', $content->generate_images ?? false) ? 'checked' : '' }} onchange="toggleImageFields()"> 
+                                                            Generate Images Based on Content
+                                                        </label>
+                                                    </div>
+
+                                                    <!-- Hidden fields for image generation, shown only if checkbox is checked -->
+                                                    <div id="image_fields" style="display: {{ old('generate_images', $content->generate_images ?? false) ? 'block' : 'none' }};">
+                                                        <div class="row g-3">
+                                                            
+                                                            <!-- Type of Image Dropdown and Manual Input -->
+                                                            <div class="col-4">
+                                                                <label for="image_type" class="form-label" title="What type of Image you want to Generate">Type of Image</label>
+                                                                <input class="form-select" list="imageTypeOption" id="image_type" name="image_type" placeholder="Select Image Type" aria-label="Select Image Type" 
+                                                                    value="{{ old('image_type', $content->image_type ?? '') }}">
+                                                                <datalist id="imageTypeOption">
+                                                                    <option value="Illustrations related to the story or topic">
+                                                                    <option value="Diagrams or charts">
+                                                                    <option value="Mathematical figures or graphs">
+                                                                    <option value="Scientific illustrations">
+                                                                    <option value="Customized images based on specific descriptions">
+                                                                </datalist>
+                                                            </div>
+
+                                                            <!-- Number of Image -->
+                                                            <div class="col-2">
+                                                                <label for="number_of_images" title="How many Images you want to Generate">Number of Images</label>
+                                                                <input type="number" id="number_of_images" name="number_of_images" class="form-control" 
+                                                                    value="{{ old('number_of_images', $content->number_of_images ?? 1) }}">
+                                                            </div>
+
+                                                            <!-- Image Placement -->
+                                                            <div class="col-3">
+                                                                <label for="image_placement" class="form-label" title="What place you want to include the Image">Placement of Image</label>
+                                                                <input class="form-select" list="imagePlacementOption" id="image_placement" name="image_placement" placeholder="Select Image Placement" aria-label="Select Image Placement" 
+                                                                    value="{{ old('image_placement', $content->image_placement ?? '') }}">
+                                                                <datalist id="imagePlacementOption">
+                                                                    <option value="Beginning of the content">
+                                                                    <option value="Throughout the content">
+                                                                    <option value="End of the content">
+                                                                    <option value="Next to related text or paragraphs">
+                                                                </datalist>
+                                                            </div>
+
+                                                            <!-- Image Style -->
+                                                            <div class="col-3">
+                                                                <label for="image_style" class="form-label" title="What should be the Style of the Image">Image Style</label>
+                                                                <input class="form-select" list="imageStyleOption" id="image_style" name="image_style" placeholder="Select Image Style" aria-label="Select Image Style" 
+                                                                    value="{{ old('image_style', $content->image_style ?? '') }}">
+                                                                <datalist id="imageStyleOption">
+                                                                    <option value="Cartoon / Animated">
+                                                                    <option value="Realistic">
+                                                                    <option value="Sketches">
+                                                                    <option value="Infographics">
+                                                                </datalist>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
                                                 </div>
-                                                
-                                              </div> 
-                                        </div>
+                                            </div>
 
                                         <div class="d-flex align-items-start gap-3 mt-4">
                                             <button type="button" class="btn btn-light btn-label previestab"
@@ -280,6 +410,22 @@
 
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Function to toggle visibility of question fields
+        function toggleQuestionFields() {
+            const questionFields = document.getElementById('question_fields');
+            questionFields.style.display = document.getElementById('generate_questions').checked ? 'block' : 'none';
+        }
+        toggleQuestionFields(); // Ensure the state is correct on page load
+
+        // Function to toggle visibility of image generation fields
+    function toggleImageFields() {
+        const imageFields = document.getElementById('image_fields');
+        imageFields.style.display = document.getElementById('generate_images').checked ? 'block' : 'none';
+    }
+    toggleImageFields(); // Ensure the state is correct on page load
+    </script>
 
     <script>
         $(document).ready(function() {
