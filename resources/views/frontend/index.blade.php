@@ -194,6 +194,32 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             {{-- SINGLE DALLE IMAGE GENERATE END--}}
 
 
+             <!-- start cta -->
+             <section class="py-5 gradient-background-1 position-relative">
+                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-sm">
+                            <div>
+                                <h4 class="text-white mb-0 fw-semibold">Create Your Own Images</h4>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-sm-auto">
+                            <div>
+                                <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
+                                    class="btn gradient-btn-10"><i
+                                        class="align-middle me-1"></i> Generate Image</a>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end cta -->
+
             {{-- How it Works --}}
             @if ($how_it_works == 'design1')
                 @include('frontend.designs.how_it_works.design_1')
@@ -374,35 +400,49 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 gradient-background-1 position-relative">
+            <section id="cta-newsletter" class="py-5 gradient-background-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
-                    <form method="post" action="{{ route('newsletter.store') }}">
+                    <form method="post" action="{{ route('newsletter.store') }}#cta-newsletter">
                         @csrf
-                        <div class="row align-items-center gy-4">
-                            <div class="col-sm">
+                        <div class="row align-items-center gy-3">
+                            <div class="col-sm-12">
                                 <div>
                                     <h4 class="text-white mb-0 fw-semibold">Get updated with the latest AI contents</h4>
                                 </div>
                             </div>
-                            <div class="col-sm-auto d-flex justify-content-end align-items-center">
-                                <!-- Input with Placeholder -->
-                                <div class="me-3 col-md-12 form-group">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-Mail">
+                            <div class="col-sm-12 d-flex align-items-center">
+                                <!-- Input Field -->
+                                <div class="me-2 col-md-8 form-group">
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-Mail" required>
                                 </div>
+                                <!-- Submit Button -->
                                 <div class="form-group">
-                                    <button type="submit" class="btn gradient-btn-10">
+                                    <button type="submit" class="btn gradient-btn-10" id="submitButton" disabled>
                                         <i class="align-middle me-1"></i>Submit
                                     </button>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <!-- Checkbox -->
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="termsAgreement" required>
+                                    <label class="form-check-label text-white" for="termsAgreement">
+                                        By continuing, I agree to Clever Creator's
+                                        <a href="#" class="gradient-text-4" data-bs-toggle="modal" data-bs-target="#termsModal">Consumer Terms</a>
+                                        and
+                                        <a href="#" class="gradient-text-4" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
+                                    </label>
+                                </div>
+                            </div>
                         </div>
+                        @error('email')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
                     </form>
-                    
-                    <!-- end row -->
                 </div>
-                <!-- end container -->
             </section>
+            
             <!-- end cta -->
           
 
@@ -415,7 +455,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end faqs -->
 
             <!-- start contact -->
-          @include('frontend.body.contact_us')
+            {{-- @include('frontend.body.contact_us') --}}
             <!-- end contact -->
 
             <!-- start cta -->
@@ -425,15 +465,15 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Create Your Own Images</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Get In Touch With Us</h4>
                             </div>
                         </div>
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
+                                <a href="{{route('contact.us')}}" target="_blank"
                                     class="btn gradient-btn-10"><i
-                                        class="align-middle me-1"></i> Generate Image</a>
+                                        class="align-middle me-1"></i>Contact Us</a>
                             </div>
                         </div>
                         <!-- end col -->
@@ -516,5 +556,17 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             }
         });
         </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('termsAgreement');
+        const submitButton = document.getElementById('submitButton');
+
+        checkbox.addEventListener('change', function () {
+            submitButton.disabled = !checkbox.checked;
+        });
+    });
+</script>
+
         
     @endsection
