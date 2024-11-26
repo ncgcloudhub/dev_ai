@@ -400,10 +400,10 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 gradient-background-1 position-relative">
+            <section id="cta-newsletter" class="py-5 gradient-background-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
-                    <form method="post" action="{{ route('newsletter.store') }}">
+                    <form method="post" action="{{ route('newsletter.store') }}#cta-newsletter">
                         @csrf
                         <div class="row align-items-center gy-4">
                             <div class="col-sm">
@@ -421,8 +421,12 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                         <i class="align-middle me-1"></i>Submit
                                     </button>
                                 </div>
+                               
                             </div>
                         </div>
+                        @error('email')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
                     </form>
                     
                     <!-- end row -->
