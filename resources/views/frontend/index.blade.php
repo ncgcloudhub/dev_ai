@@ -194,6 +194,32 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             {{-- SINGLE DALLE IMAGE GENERATE END--}}
 
 
+             <!-- start cta -->
+             <section class="py-5 gradient-background-1 position-relative">
+                <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+                <div class="container">
+                    <div class="row align-items-center gy-4">
+                        <div class="col-sm">
+                            <div>
+                                <h4 class="text-white mb-0 fw-semibold">Create Your Own Images</h4>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                        <div class="col-sm-auto">
+                            <div>
+                                <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
+                                    class="btn gradient-btn-10"><i
+                                        class="align-middle me-1"></i> Generate Image</a>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- end container -->
+            </section>
+            <!-- end cta -->
+
             {{-- How it Works --}}
             @if ($how_it_works == 'design1')
                 @include('frontend.designs.how_it_works.design_1')
@@ -415,7 +441,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end faqs -->
 
             <!-- start contact -->
-          @include('frontend.body.contact_us')
+            {{-- @include('frontend.body.contact_us') --}}
             <!-- end contact -->
 
             <!-- start cta -->
@@ -425,15 +451,15 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                     <div class="row align-items-center gy-4">
                         <div class="col-sm">
                             <div>
-                                <h4 class="text-white mb-0 fw-semibold">Create Your Own Images</h4>
+                                <h4 class="text-white mb-0 fw-semibold">Get In Touch With Us</h4>
                             </div>
                         </div>
                         <!-- end col -->
                         <div class="col-sm-auto">
                             <div>
-                                <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" target="_blank"
+                                <a href="{{route('contact.us')}}" target="_blank"
                                     class="btn gradient-btn-10"><i
-                                        class="align-middle me-1"></i> Generate Image</a>
+                                        class="align-middle me-1"></i>Contact Us</a>
                             </div>
                         </div>
                         <!-- end col -->
