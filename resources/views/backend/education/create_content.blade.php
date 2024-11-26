@@ -274,13 +274,6 @@
                                                         </datalist>
                                                 </div>
                                                 
-                                                <div class="col-12">
-                                                    <label for="negative_word" class="form-label" title="IF there are any negative words to include, type them here">Negative Word <span class="text-muted">(Optional)</span></label>
-                                                    <input type="text" class="form-control" id="negative_word" name="negative_word"
-                                                        placeholder="Negative words that you don't want to include in your content" required>
-                                                    <div class="invalid-feedback">Which words you don't want to include in your content?</div>
-                                                </div>
-
                                                 <!-- Checkbox to toggle question generation -->
                                                 <div class="form-group">
                                                     <label for="generate_questions">
@@ -443,7 +436,7 @@
                                                 </div>
                                                 {{-- Accordation Collapse End --}}
 
-                                              </div> 
+                                            </div> 
                                         </div>
 
                                         <div class="d-flex align-items-start gap-3 mt-4">
