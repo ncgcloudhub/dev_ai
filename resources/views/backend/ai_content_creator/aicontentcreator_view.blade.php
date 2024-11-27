@@ -248,7 +248,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4">Generate</button>
+                            <button id="generateButton" class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4">Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
@@ -469,111 +469,145 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const form = document.querySelector('#generateForm');
-    const loader = document.getElementById('loader');
-    const formattedContentDisplay = document.getElementById('formattedContentDisplay');
-
-    // Format content using marked.js and DOMPurify
-    function formatContent(content) {
-        // Set options for marked.js
-        marked.setOptions({
-            breaks: true,  // Enable line breaks
-            gfm: true      // Enable GitHub Flavored Markdown
-        });
-
-        // Parse Markdown to HTML
-        let formattedContent = marked.parse(content);
-
-        // Sanitize the HTML to prevent XSS
-        formattedContent = DOMPurify.sanitize(formattedContent);
-
-        return formattedContent;
-    }
-
-    // Copy button click event
-    document.getElementById('copyButton').addEventListener('click', function () {
-        const editorContent = formattedContentDisplay.innerText;
-        const textArea = document.createElement('textarea');
-        textArea.value = editorContent;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        alert('Content copied to clipboard!');
-    });
-
-    // Download button click event using FileSaver.js
-    document.getElementById('downloadButton').addEventListener('click', function () {
-        const editorContent = formattedContentDisplay.innerText;
-
-        // Create a new Blob with the content
-        const blob = new Blob([editorContent], { type: 'application/msword' });
-
-        // Use FileSaver.js to save the blob as a file
-        saveAs(blob, 'generated_content.doc');
-    });
-
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        // Show loader
-        loader.classList.remove('d-none');
-
-        const formData = new FormData(form);
-        fetch(form.getAttribute('action'), {
-            method: form.getAttribute('method'),
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: formData
-        })
-        .then(response => {
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let content = ''; // Variable to store streamed content
-            let stats = {};   // Variable to store stats
-
-            const processStream = ({ done, value }) => {
-                if (done) {
-                    // Hide loader after streaming is complete
-                    loader.classList.add('d-none');
-
-                    // Display the stats in the spans
-                    document.getElementById('numTokens').innerText = stats.completionTokens;
-                    document.getElementById('numWords').innerText = stats.num_words;
-                    document.getElementById('numCharacters').innerText = stats.num_characters;
-
-                    return;
-                }
-
-                // Decode the chunk
-                const chunk = decoder.decode(value, { stream: true });
-
-                // Check if it's JSON (indicating stats) or regular content
-                if (chunk.startsWith('{') && chunk.endsWith('}')) {
-                    try {
-                        stats = JSON.parse(chunk); // Parse statistics
-                    } catch (e) {
-                        console.error('Error parsing stats:', e);
-                    }
-                } else {
-                    // If it's not JSON, assume it's part of the content
-                    content += chunk;
-                    formattedContentDisplay.innerHTML = formatContent(content); // Format the streamed content
-                }
-
-                return reader.read().then(processStream); // Continue reading chunks
-            };
-
-            return reader.read().then(processStream);
-        })
-        .catch(error => {
-            console.error('Error:', error);
+        const form = document.querySelector('#generateForm');
+        const loader = document.getElementById('loader');
+        const formattedContentDisplay = document.getElementById('formattedContentDisplay');
+        const sendMessageBtn = document.getElementById('generateButton');
+        let abortController = null;  // To store the AbortController instance
+    
+        // Format content using marked.js and DOMPurify
+        function formatContent(content) {
+            // Set options for marked.js
+            marked.setOptions({
+                breaks: true,  // Enable line breaks
+                gfm: true      // Enable GitHub Flavored Markdown
+            });
+    
+            // Parse Markdown to HTML
+            let formattedContent = marked.parse(content);
+    
+            // Sanitize the HTML to prevent XSS
+            formattedContent = DOMPurify.sanitize(formattedContent);
+    
+            return formattedContent;
+        }
+    
+        // Function to reset the send button back to its original state
+        function resetButton() {
             loader.classList.add('d-none');
+            sendMessageBtn.innerHTML = 'Generate';
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.dataset.state = 'idle';  // Reset state
+            abortController = null;  // Clear the AbortController
+        }
+    
+        // Copy button click event
+        document.getElementById('copyButton').addEventListener('click', function () {
+            const editorContent = formattedContentDisplay.innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = editorContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Content copied to clipboard!');
+        });
+    
+        // Download button click event using FileSaver.js
+        document.getElementById('downloadButton').addEventListener('click', function () {
+            const editorContent = formattedContentDisplay.innerText;
+    
+            // Create a new Blob with the content
+            const blob = new Blob([editorContent], { type: 'application/msword' });
+    
+            // Use FileSaver.js to save the blob as a file
+            saveAs(blob, 'generated_content.doc');
+        });
+    
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+    
+            // Check if already generating (toggle stop)
+            if (sendMessageBtn.dataset.state === 'generating') {
+                // Stop generation by aborting the request
+                if (abortController) {
+                    abortController.abort();  // Stop the request
+                    resetButton();  // Reset the button back to "Generate"
+                }
+                return;  // Stop execution here
+            }
+    
+            // Show loader
+            loader.classList.remove('d-none');
+    
+            // Disable the button, change the text to "Stop", and store the generating state
+            sendMessageBtn.disabled = false;
+            sendMessageBtn.innerHTML = 'Stop';
+            sendMessageBtn.dataset.state = 'generating';
+    
+            // Create an AbortController instance
+            abortController = new AbortController();
+    
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: form.getAttribute('method'),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData,
+                signal: abortController.signal  // Pass the signal to fetch
+            })
+            .then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let content = ''; // Variable to store streamed content
+                let stats = {};   // Variable to store stats
+    
+                const processStream = ({ done, value }) => {
+                    if (done) {
+                        // Hide loader after streaming is complete
+                        resetButton();
+    
+                        // Display the stats in the spans
+                        document.getElementById('numTokens').innerText = stats.completionTokens;
+                        document.getElementById('numWords').innerText = stats.num_words;
+                        document.getElementById('numCharacters').innerText = stats.num_characters;
+    
+                        return;
+                    }
+    
+                    // Decode the chunk
+                    const chunk = decoder.decode(value, { stream: true });
+    
+                    // Check if it's JSON (indicating stats) or regular content
+                    if (chunk.startsWith('{') && chunk.endsWith('}')) {
+                        try {
+                            stats = JSON.parse(chunk); // Parse statistics
+                        } catch (e) {
+                            console.error('Error parsing stats:', e);
+                        }
+                    } else {
+                        // If it's not JSON, assume it's part of the content
+                        content += chunk;
+                        formattedContentDisplay.innerHTML = formatContent(content); // Format the streamed content
+                    }
+    
+                    return reader.read().then(processStream); // Continue reading chunks
+                };
+    
+                return reader.read().then(processStream);
+            })
+            .catch(error => {
+                if (abortController.signal.aborted) {
+                    console.log('Request aborted');
+                } else {
+                    console.error('Error:', error);
+                }
+                loader.classList.add('d-none');
+                resetButton();  // Reset the button state in case of error or abort
+            });
         });
     });
-});
-
 </script>
 
 @endsection
