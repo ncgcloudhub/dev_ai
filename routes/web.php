@@ -112,10 +112,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Add Admin
     Route::controller(AdminController::class)->group(function () {
 
-        Route::get('/all/admin', 'AllAdmin')->name('all.admin')->middleware('admin.permission:manageUser&Admin.manageAdmin');
+        Route::get('/all/admin', 'AllAdmin')->name('all.admin');
         Route::get('/add/admin', 'AddAdmin')->name('add.admin');
         Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
-        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin')->middleware('admin.permission:manageUser&Admin.manageAdmin.edit');
+        Route::get('/edit/admin/{id}', 'EditAdmin')->name('edit.admin');
         Route::post('/update/admin/{id}', 'UpdateAdmin')->name('update.admin');
     });
 
@@ -215,7 +215,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     //  Permission
     Route::controller(RoleController::class)->group(function () {
 
-        Route::get('/all/permission', 'AllPermission')->name('all.permission')->middleware('admin.permission:rolePermission.permission');
+        Route::get('/all/permission', 'AllPermission')->name('all.permission');
         Route::get('/add/permission', 'AddPermission')->name('add.permission');
         Route::post('/store/permission', 'StorePermission')->name('store.permission');
         Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
@@ -226,7 +226,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // Roles 
     Route::controller(RoleController::class)->group(function () {
 
-        Route::get('/all/roles', 'AllRoles')->name('all.roles')->middleware('admin.permission:rolePermission.roles');
+        Route::get('/all/roles', 'AllRoles')->name('all.roles');
         Route::get('/add/roles', 'AddRoles')->name('add.roles');
         Route::post('/store/roles', 'StoreRoles')->name('store.roles');
         Route::get('/edit/roles/{id}', 'EditRoles')->name('edit.roles');
@@ -234,7 +234,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');
 
         // RoleSetup
-        Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission')->middleware('admin.permission:rolePermission.roleInPermission');
+        Route::get('/add/roles/permission', 'AddRolesPermission')->name('add.roles.permission');
         Route::post('/role/permission/store', 'RolePermissionStore')->name('role.permission.store');
         Route::get('/all/roles/permission', 'AllRolesPermission')->name('all.roles.permission')->middleware('admin.permission:rolePermission.roleInPermissionManage');
         Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles');
