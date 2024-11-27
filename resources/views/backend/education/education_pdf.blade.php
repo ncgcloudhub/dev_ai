@@ -32,12 +32,18 @@
     <div class="container">
         <div class="header">
             <h1>{{ $content->topic }}</h1>
-            <p>Generated on: {{ now()->toFormattedDateString() }}</p>
+            @if($includeDate)
+                <p>Generated on: {{ now()->toFormattedDateString() }}</p>
+            @endif
         </div>
-
+        
         <div class="content">
-            <h2>Grade: {{ $content->gradeClass->grade }}</h2>
-            <h2>Subject: {{ $content->subject->name }}</h2>
+            @if($includeGrade)
+                <h2>Grade: {{ $content->gradeClass->grade }}</h2>
+            @endif
+            @if($includeSubject)
+                <h2>Subject: {{ $content->subject->name }}</h2>
+            @endif
             <div class="content-text">
                 {!! $content->generated_content !!}
             </div>

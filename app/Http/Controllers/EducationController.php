@@ -276,40 +276,47 @@ public function updateContent(Request $request, $id)
         return response()->json(['success' => 'Content deleted successfully']);
     }
 
-    public function downloadPDF($id)
-    {
-        // Find the content
-        $content = educationContent::findOrFail($id);
+    public function downloadPDF(Request $request, $id)
+{
+    $content = educationContent::findOrFail($id);
 
-        if (!$content) {
-            return redirect()->back()->with('error', 'Content not found');
-        }
-
-        // Convert markdown to plain text or formatted HTML
-        $parsedown = new Parsedown();
-        $formattedContent = $parsedown->text($content->generated_content); // Converts markdown to HTML
-
-        // Replace `generated_content` with formatted HTML
-        $content->generated_content = $formattedContent;
-
-        // Generate the HTML for the PDF
-        $pdfHtml = view('backend.education.education_pdf', ['content' => $content])->render();
-
-        // Generate and download the PDF
-        $pdf = PDF::loadHTML($pdfHtml);
-
-        // Format the filename using the topic, created_at, and subject fields
-        $formattedDate = $content->created_at->format('Y_m_d');
-        $subjectName = $content->subject->name ?? 'UnknownSubject';
-        $maxTopicLength = 50;
-        $truncatedTopic = strlen($content->topic) > $maxTopicLength 
-            ? substr($content->topic, 0, $maxTopicLength) . '...' 
-            : $content->topic;
-
-        $fileName = "{$truncatedTopic}({$subjectName})_{$formattedDate}.pdf";
-
-        return $pdf->download($fileName);
+    if (!$content) {
+        return redirect()->back()->with('error', 'Content not found');
     }
+
+    // Convert markdown to plain text or formatted HTML
+    $parsedown = new Parsedown();
+    $formattedContent = $parsedown->text($content->generated_content);
+    $content->generated_content = $formattedContent;
+
+    // Determine which details to include
+    $includeGrade = $request->query('include_grade', false);
+    $includeSubject = $request->query('include_subject', false);
+    $includeDate = $request->query('include_date', false);
+
+    // Pass these flags to the Blade view
+    $pdfHtml = view('backend.education.education_pdf', [
+        'content' => $content,
+        'includeGrade' => $includeGrade,
+        'includeSubject' => $includeSubject,
+        'includeDate' => $includeDate
+    ])->render();
+
+    $pdf = PDF::loadHTML($pdfHtml);
+
+    // Format the filename
+    $formattedDate = $content->created_at->format('Y_m_d');
+    $subjectName = $content->subject->name ?? 'UnknownSubject';
+    $maxTopicLength = 50;
+    $truncatedTopic = strlen($content->topic) > $maxTopicLength 
+        ? substr($content->topic, 0, $maxTopicLength) . '...' 
+        : $content->topic;
+
+    $fileName = "{$truncatedTopic}({$subjectName})_{$formattedDate}.pdf";
+
+    return $pdf->download($fileName);
+}
+
     
     
     public function markAsComplete(Request $request, $id)

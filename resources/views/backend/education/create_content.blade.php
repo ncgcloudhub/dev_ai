@@ -165,53 +165,7 @@
 
                                         <br>
                                        
-                                        <div class="col">
-                                            <div class="card card-height-100 border card-border-info">
-                                                <div class="card-header align-items-center d-flex">
-                                                    <h4 class="card-title mb-0 flex-grow-1">Last <span class="badge bg-danger align-middle fs-10">5</span> content</h4>
-                                                    <div class="flex-shrink-0">
-                                                        <div class="dropdown card-header-dropdown">
-                                                            <a class="text-reset dropdown-btn" href="{{route('user_generated_education_content')}}" aria-haspopup="true" aria-expanded="false">
-                                                                <span class="text-muted"><i class="ri-settings-4-line align-middle me-1 fs-15"></i>All</span>
-                                                            </a>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div><!-- end card header -->
-                                                <div class="card-body pt-0">
-                                                    <ul class="list-group list-group-flush border-dashed">
-                                                        @foreach ($educationContents as $item)
-                                                        <a href="{{route('user_generated_education_content')}}" class="text-decoration-none">
-                                                        <li class="list-group-item ps-0">
-
-                                                            <div class="row align-items-center g-3">
-                                                                <div class="col-auto">
-                                                                    <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
-                                                                        <div class="text-center">
-                                                                            <h5 class="mb-0">{{ $item->created_at->format('d') }}</h5>
-                                                                            <div class="text-muted">{{ $item->created_at->format('D') }}</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col">
-                                                                    <h5 class="text-muted mt-0 mb-1 fs-13">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
-                                                                    <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
-                                                                </div>
-                                                                
-                                                            </div>
-                                                            <!-- end row -->
-                                                        </li><!-- end -->
-                                                    </a>  
-                                                        @endforeach
-
-                                                    </ul><!-- end -->
-                                                   
-                                                </div><!-- end card body -->
-                                            </div><!-- end card -->
-                                        </div>
-
-
-
+                                     
                                     </div>
                                     <!-- end tab pane -->
                                     <div class="tab-pane fade" id="v-pills-bill-address" role="tabpanel"
@@ -499,9 +453,46 @@
                                                     style="width:100px;height:100px">
                                                 </lord-icon>
                                             </div>
-                                            <h5 id="h55">Almost there !</h5>
-                                            <p class="text-muted chunkss" id="chunkss">Your content is almost ready.</p>
+                                            <h5 id="h55">Standby while we create the content for you!</h5>
+                                            <p class="text-muted chunkss" id="chunkss"></p>
                                         </div>
+
+                                        <div class="col">
+                <div class="row"> <!-- Add row here -->
+                    @foreach ($educationContents as $item)
+                        <div class="col-md-4 mb-4"> <!-- Ensure proper grid column -->
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <div class="avatar-md mb-3 mx-auto">
+                                      
+                                        <img src="{{ asset('backend/giphy1.gif') }}" 
+                                        alt="Candidate Image" 
+                                        id="candidate-img" 
+                                        class="img-thumbnail rounded-circle shadow-none">
+                     
+                                    </div>
+    
+                                    <h5 id="candidate-name" class="mb-0">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
+                                    <p id="candidate-position" class="text-muted">                                                                    <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
+                                    </p>
+
+                                  
+                                    <div>
+                                        <button type="button" class="btn btn-success rounded-pill w-sm"   onclick="fetchContent({{ $item->id }})">
+                                            <i class="ri-add-fill me-1 align-bottom"></i> Details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div> <!-- End row -->
+            
+    </div>
+                                        
+
+
+
                                     </div>
                                     <!-- end tab pane -->
                                 </div>
@@ -523,6 +514,43 @@
     </div>
     <!-- end col -->
 </div>
+
+
+{{-- COMMON MODAL SHOULD  --}}
+<div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Content Details <span id="created" class="badge bg-primary"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div>
+                <img width="200px" height="200px" src="" alt="Generated Image" class="img-fluid" id="modal-image">
+            </div>
+            <div class="modal-body" id="modal-content-body">
+                
+            </div>
+            <div class="modal-footer">
+                  <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
+                    Mark as Complete
+                </button>               
+                <a id="download-link" href="#">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                        <i class="ri-download-line"></i> Download
+                    </button>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
+                    <i class="ri-close-line me-1 align-middle"></i> Close
+                </a>
+            </div>
+            
+            
+        </div>
+    </div>
+</div> 
+
+
 @endsection
 
 @section('script')
@@ -708,6 +736,60 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+// Should be Included as common script
+function fetchContent(contentId) {
+        fetch('{{ route('education.getContentById') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ content_id: contentId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Load the content into the modal
+            document.getElementById('modal-content-body').innerHTML = `
+                <h6 class="fs-15">${data.content.topic}</h6>
+                ${data.content.generated_content}
+            `;
+
+            const createdAt = new Date(data.content.created_at).toLocaleDateString('en-US', {
+            day: 'numeric', month: 'short', year: 'numeric'
+            });
+
+            document.getElementById('created').innerHTML = `
+            ${createdAt}
+            `;
+
+            const modalImage = document.getElementById('modal-image');
+            if (data.content.image_url) {
+                modalImage.src = data.content.image_url; // Set the image URL
+                modalImage.alt = data.content.topic; // Optionally set the alt text
+                modalImage.classList.remove('d-none'); // Show the image
+            } else {
+                modalImage.classList.add('d-none'); // Hide the image if no URL is available
+            }
+
+            // Set the download link with the appropriate URL
+            const downloadLink = document.getElementById('download-link');
+            const downloadUrl = `{{ url('education/content') }}/${contentId}/download`; // Dynamic download URL
+            downloadLink.setAttribute('href', downloadUrl);
+
+            // Update the Mark as Complete button with the correct onclick event
+            const markCompleteButton = document.getElementById('mark-complete-btn');
+            markCompleteButton.setAttribute('onclick', `markAsComplete(${contentId})`);
+
+            // Show the modal
+            var contentModal = new bootstrap.Modal(document.getElementById('contentModal'));
+            contentModal.show();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    
 
 
 
