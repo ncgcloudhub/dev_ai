@@ -130,7 +130,7 @@
                             role="tab" 
                             aria-controls="tab-content-{{ $item->id }}" 
                             aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                        {{ $item->grade }} <!-- Tab label -->
+                        {{ $item->grade }}
                     </button>
                 </li>
             @endforeach
@@ -186,7 +186,7 @@
                 <img width="200px" height="200px" src="" alt="Generated Image" class="img-fluid" id="modal-image">
             </div>
             <div class="modal-body" id="modal-content-body">
-             
+                
             </div>
             <div class="modal-footer">
                   <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
@@ -251,15 +251,30 @@
                                         <h5 class="mb-0">${content.topic}</h5>
                                         <p class="text-muted">${content.subject.name}</p>
                                        <p class="text-muted">${createdAt}</p>
-                                        <div class="d-flex gap-2 justify-content-center mb-3">
-                                            <a href="${downloadUrl}">
-                                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
-                                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                                        <i class="ri-download-line"></i>
-                                                    </span>
-                                                </button>
-                                            </a>
+                                    
+                                        <div class="form-check">
+                                            <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
+                                            <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
+                                            <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
+                                            <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
+                                        </div>
 
+                                       <div class="d-flex gap-2 justify-content-center mb-3">
+                                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" 
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    title="Download" 
+                                                    onclick="downloadContent(${content.id})">
+                                                <span class="avatar-title rounded-circle bg-light text-body">
+                                                    <i class="ri-download-line"></i>
+                                                </span>
+                                            </button>
                                         </div>
                                         <div>
                                             <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
@@ -279,6 +294,22 @@
             });
         });
     });
+
+    // Function to handle downloading with options
+function downloadContent(contentId) {
+    const includeGrade = document.getElementById(`include-grade-${contentId}`).checked;
+    const includeSubject = document.getElementById(`include-subject-${contentId}`).checked;
+    const includeDate = document.getElementById(`include-date-${contentId}`).checked;
+
+    const queryString = new URLSearchParams({
+        include_grade: includeGrade ? 1 : 0,
+        include_subject: includeSubject ? 1 : 0,
+        include_date: includeDate ? 1 : 0
+    }).toString();
+
+    const downloadUrl = `{{ url('education/content') }}/${contentId}/download?${queryString}`;
+    window.location.href = downloadUrl;
+}
 
     function deleteContent(contentId, element) {
     if (confirm('Are you sure you want to delete this content?')) {
