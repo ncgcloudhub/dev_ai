@@ -13,6 +13,7 @@
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
 
+
 <button type="button" class="btn gradient-btn-5" onclick="history.back()">
     <i class="las la-arrow-left"></i>
 </button>
@@ -264,13 +265,26 @@
            </div>
 
            <div class="col">
-                <!-- Add the Download Content button -->
-                <button id="copyButton" class="btn text-white gradient-btn-5 mx-1" title="Copy the generated Content">
-                    <i class="las la-copy"></i>
-                </button>
-                <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1" title="Download the generated Content">
-                    <i class="las la-download"></i>
-                </button>
+               <!-- Wrapper to place buttons side by side -->
+                <div class="d-flex">
+                    <!-- Copy Content Button -->
+                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1" title="Copy the generated Content">
+                        <i class="las la-copy"></i>
+                    </button>
+
+                    <!-- Dropdown for file type selection -->
+                    <div class="dropdown">
+                        <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Download the generated Content">
+                            <i class="las la-download"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="downloadButton">
+                            <li><a class="dropdown-item" href="#" id="downloadAsPdf">Download As PDF</a></li>
+                            <li><a class="dropdown-item" href="#" id="downloadAsDoc">Download As DOC</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
                 
                 
                 <div class="row mt-2">
@@ -458,6 +472,9 @@
 
 <!-- Include SimpleMDE JS -->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
 <!-- Include FileSaver.js for saving files -->
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
@@ -513,16 +530,38 @@
             alert('Content copied to clipboard!');
         });
     
-        // Download button click event using FileSaver.js
-        document.getElementById('downloadButton').addEventListener('click', function () {
-            const editorContent = formattedContentDisplay.innerText;
+      // Listen for click event on 'Download As PDF' option
+      document.getElementById('downloadAsPdf').addEventListener('click', function () {
+    const editorContent = formattedContentDisplay; // Reference to the content you want to download (it can be the entire element or innerHTML)
     
-            // Create a new Blob with the content
-            const blob = new Blob([editorContent], { type: 'application/msword' });
+    // Set up PDF options for better styling and appearance
+    const options = {
+        margin:       [10, 10, 10, 10],  // Set margins (top, left, bottom, right)
+        filename:     'generated_content.pdf', // Filename for the PDF
+        html2canvas:  { scale: 2 },      // Increase resolution for better quality (scale factor)
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }, // Set paper format to A4 and portrait orientation
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Prevent unnecessary page breaks
+    };
     
-            // Use FileSaver.js to save the blob as a file
-            saveAs(blob, 'generated_content.doc');
-        });
+    // Use html2pdf to convert HTML content into PDF with custom options
+    html2pdf()
+        .from(editorContent)  // Pass the content to be converted into PDF
+        .set(options)          // Apply custom options
+        .save();               // Trigger the save as PDF
+});
+
+
+// Listen for click event on 'Download As DOC' option
+document.getElementById('downloadAsDoc').addEventListener('click', function () {
+    const editorContent = formattedContentDisplay.innerText;
+    
+    // Create a new Blob for DOCX
+    const blob = new Blob([editorContent], { type: 'application/msword' });
+    
+    // Use FileSaver.js to save the blob as a DOC file
+    saveAs(blob, 'generated_content.doc');
+});
+
     
         form.addEventListener('submit', function (event) {
             event.preventDefault();
