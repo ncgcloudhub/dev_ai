@@ -428,8 +428,7 @@ class PromptLibraryController extends Controller
     public function AskAiPromptLibrary(Request $request)
     {
        
-        
-        $openaiModel = Auth::user()->selected_model;
+        $openaiModel = Auth::user()->selected_model ?? 'gpt-4o';
 
         if ($request->input('sub_category_instruction')) {
             $sub_category_instruction = $request->input('sub_category_instruction');
@@ -470,7 +469,10 @@ class PromptLibraryController extends Controller
         $completionTokens = $data['usage']['completion_tokens'] ?? 0;
         $totalTokens = $data['usage']['total_tokens'] ?? 0;
 
-        deductUserTokensAndCredits($totalTokens);
+        // Deduct user tokens only if the user is logged in
+        if (Auth::check()) {
+            deductUserTokensAndCredits($totalTokens);
+        }
 
         // Return the response
         return response()->json([
