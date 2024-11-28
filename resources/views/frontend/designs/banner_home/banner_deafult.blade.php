@@ -34,11 +34,11 @@
                             <div class="row row-cols-xxl-5 row-cols-lg-6 row-cols-1 justify-content-center py-5">
 
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb5.gif');">
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb5.gif'); min-height: 200px;">
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Images Using <br><strong class="text-warning gradient-text-3">Dall-E 3</strong></p>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -47,11 +47,11 @@
                                 </div><!-- end col -->
                             
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb1.gif');">
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb1.gif'); min-height: 200px;">
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Generate Free Contents with <br><strong class="text-warning gradient-text-3">GPT-4</strong></p>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -60,11 +60,11 @@
                                 </div><!-- end col -->
                             
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb4.gif');">
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb4.gif'); min-height: 200px;">
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Get Access to countless <br><strong class="text-warning gradient-text-3">Prompt Library</strong></p>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -79,11 +79,11 @@
                                 </div><!-- end col -->
                             
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb3.gif');">
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb3.gif'); min-height: 200px;">
                                         <div>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <p class="text-white mb-0">Personalized Chat Bot<br><strong class="text-warning gradient-text-3">Latest GPT</strong></p>
+                                                  
                                                 </div>
                                             </div>
                                         </div>
