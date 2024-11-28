@@ -162,6 +162,21 @@
             @endforeach
             </div>
         </div>
+
+
+        {{-- SEARCH --}}
+        <form id="searchForm">
+            <input type="text" name="search" id="searchBox" placeholder="Search..." class="form-control">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <div id="searchResults">
+            <!-- Results will be shown here -->
+        </div>
+
+
+
+
     </div>
 
     <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
@@ -545,6 +560,52 @@ function saveEditedContent() {
 
 
 
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var searchTerm = $('#searchBox').val();
+        
+        $.ajax({
+            url: '{{ route("educationContent.search") }}',
+            method: 'GET',
+            data: {
+                search: searchTerm
+            },
+            success: function(response) {
+                $('#searchResults').html('');
+                if (response.data.length > 0) {
+                    $.each(response.data, function(index, content) {
+                         // Check if gradeClass, subject, and user exist before attempting to access properties
+            const grade = content.gradeClass ? content.gradeClass.grade : 'N/A';
+            const subject = content.subject ? content.subject.name : 'N/A';
+            const author = content.user ? content.user.name : 'Unknown';
+
+            $('#searchResults').append(`
+                <div class="content-card">
+                    <h4>${content.topic}</h4>
+                    <p>Grade: ${grade}</p>
+                    <p>Subject: ${subject}</p>
+                    <p>Author: ${author}</p>
+                    <p>Status: ${content.status}</p>
+                </div>
+            `);
+                    });
+                } else {
+                    $('#searchResults').html('<p>No results found.</p>');
+                }
+            },
+            error: function() {
+                $('#searchResults').html('<p>An error occurred while searching.</p>');
+            }
+        });
+    });
+});
 </script>
 
 @endsection

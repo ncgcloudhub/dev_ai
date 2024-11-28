@@ -112,6 +112,52 @@ class EducationController extends Controller
         ]);
     }
 
+
+    public function search(Request $request)
+    {
+        $query = EducationContent::query();
+
+        // Check if there is a search term
+        if ($request->has('search') && $request->search != '') {
+            $searchTerm = $request->search;
+
+            // Convert the search term to lowercase
+            $searchTerm = strtolower($searchTerm);
+
+            $query->where(function ($q) use ($searchTerm) {
+                // Use ILIKE to make the search case-insensitive in PostgreSQL
+                $q->whereRaw('topic ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('difficulty_level ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('tone ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('persona ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('additional_details ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('example ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('reference ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('prompt ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('generated_content ILIKE ?', ['%' . $searchTerm . '%'])
+                  ->orWhereRaw('status ILIKE ?', ['%' . $searchTerm . '%']);
+            });
+
+            // You can also search through related tables with case-insensitivity
+            $query->orWhereHas('gradeClass', function ($q) use ($searchTerm) {
+                $q->whereRaw('grade ILIKE ?', ['%' . $searchTerm . '%']);
+            });
+
+            $query->orWhereHas('subject', function ($q) use ($searchTerm) {
+                $q->whereRaw('name ILIKE ?', ['%' . $searchTerm . '%']);
+            });
+
+            $query->orWhereHas('user', function ($q) use ($searchTerm) {
+                $q->whereRaw('name ILIKE ?', ['%' . $searchTerm . '%']);
+            });
+        }
+
+        // Paginate the results
+        $results = $query->with(['gradeClass', 'subject', 'user'])->paginate(10);
+        dd($results);
+        return response()->json($results);
+    }
+
     public function getContent($id)
 {
     $content = educationContent::findOrFail($id);
