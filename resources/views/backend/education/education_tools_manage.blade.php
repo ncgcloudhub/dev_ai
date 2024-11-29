@@ -99,7 +99,7 @@
                             19.29k <!-- This can be dynamically generated if needed -->
                         </p>
                         <h5 class="mb-1 fs-16">
-                            <a href="apps-nft-item-details.html" class="text-body">{{ $tool->name }}</a>
+                            <a href="{{ route('tool.show', $tool->id) }}" class="text-body">{{ $tool->name }}</a>
                         </h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>

@@ -77,6 +77,7 @@
 @endsection
 
 @section('script')
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     tinymce.init({
