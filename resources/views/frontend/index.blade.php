@@ -135,7 +135,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 } 
 
 .template-card:hover .card-body {
-    background-color: #d4e9f0; /* Light blue background color */
+    background: linear-gradient(45deg, #ffffff, #e0c0ee); /* Light color on hover */
 }
 
 /* parallex */
