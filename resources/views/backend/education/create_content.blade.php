@@ -478,8 +478,8 @@
 
                                   
                                     <div>
-                                        <button type="button" class="btn btn-success rounded-pill w-sm"   onclick="fetchContent({{ $item->id }})">
-                                            <i class="ri-add-fill me-1 align-bottom"></i> Details
+                                        <button type="button" class="btn gradient-btn-9 rounded-pill w-sm"   onclick="fetchContent({{ $item->id }})">
+                                            <i class="ri-add-fill me-1 align-bottom"></i> View
                                         </button>
                                     </div>
                                 </div>
