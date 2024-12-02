@@ -47,7 +47,7 @@
                         </li>
                         @foreach($categories as $category)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-medium" type="button" data-filter="{{ Str::slug($category) }}">{{ $category }}</button>
+                                <button class="nav-link fw-medium" type="button" data-filter="{{ Str::slug($category->category_name) }}">{{ $category->category_name }}</button>
                             </li>
                         @endforeach
                     </ul>
@@ -57,7 +57,7 @@
 
         <div class="row">
             @foreach($tools as $tool)
-            <div class="col-lg-4 product-item {{ Str::slug($tool->category) }}">
+            <div class="col-lg-4 product-item {{ Str::slug($tool->educationtools_category->category_name) }}">
                 <div class="card explore-box card-animate">
                     <div class="bookmark-icon position-absolute top-0 end-0 p-2">
                         <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">

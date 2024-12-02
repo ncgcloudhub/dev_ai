@@ -21,4 +21,8 @@ class EducationTools extends Model
         $user = auth()->user(); // Get the currently authenticated user
         return $user ? $this->favorites()->where('user_id', $user->id)->exists() : false;
     }
+
+    public function educationtools_category(){
+    	return $this->belongsTo(EducationToolsCategory::class,'category_id','id');
+    }
 }

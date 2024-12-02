@@ -813,7 +813,7 @@ public function updateSubject(Request $request, $id)
     public function manageTools()
     {   
         $tools = EducationTools::get();
-        $categories = $tools->pluck('category')->unique();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
 
         return view('backend.education.education_tools_manage', compact('tools', 'categories'));
     }
@@ -912,7 +912,8 @@ public function updateSubject(Request $request, $id)
 
     public function AddTools()
     {
-        return view('backend.education.education_tools_add');
+        $categories = EducationToolsCategory::latest()->get();
+        return view('backend.education.education_tools_add', compact('categories'));
     }
 
     public function StoreTools(Request $request)
@@ -921,7 +922,7 @@ public function updateSubject(Request $request, $id)
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'category' => 'required|string',
+            'category_id' => 'required|int',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
@@ -939,7 +940,7 @@ public function updateSubject(Request $request, $id)
         $tool = new EducationTools();
         $tool->name = $validatedData['name'];
         $tool->slug = $slug;
-        $tool->category = $validatedData['category']; // Add category
+        $tool->category_id = $validatedData['category_id']; // Add category
 
         // Handle image upload if provided
         if ($request->hasFile('image')) {
@@ -975,7 +976,8 @@ public function updateSubject(Request $request, $id)
     public function editTools($id)
     {
         $tool = EducationTools::findOrFail($id); // Fetch the tool
-        return view('backend.education.education_tools_edit', compact('tool')); // Return edit view
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        return view('backend.education.education_tools_edit', compact('tool', 'categories')); // Return edit view
     }
 
 
@@ -986,7 +988,7 @@ public function updateSubject(Request $request, $id)
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'category' => 'required|string',
+            'category_id' => 'required|int',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
@@ -1000,7 +1002,7 @@ public function updateSubject(Request $request, $id)
         // Update the tool's properties
         $tool->name = $validatedData['name'];
         $tool->slug = Str::slug($validatedData['name']);
-        $tool->category = $validatedData['category'];
+        $tool->category_id = $validatedData['category_id'];
 
         // Handle image upload if provided
         if ($request->hasFile('image')) {
