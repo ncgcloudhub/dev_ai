@@ -94,13 +94,17 @@
                                   
                                     @can('education.manageTools')
                                     <li class="nav-item">
-                                        <a href="{{route('manage.education.tools')}}" class="nav-link" >Manage Tools</a>
+                                        <a href="{{route('manage.education.tools')}}" class="nav-link sidebar-hover" >Manage Tools</a>
                                     </li>
                                     @endcan
+
+                                    <li class="nav-item">
+                                        <a href="{{route('education.tools.category.add')}}" class="nav-link sidebar-hover">Education Tools Category</a>
+                                    </li>
                                    
                                     @can('education.library')
                                     <li class="nav-item">
-                                        <a href="{{route('education.tools.contents')}}" class="nav-link" >Library</a>
+                                        <a href="{{route('education.tools.contents')}}" class="nav-link sidebar-hover" >Library</a>
                                     </li>
                                     @endcan
                                    

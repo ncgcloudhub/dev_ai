@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\educationContent;
 use App\Models\EducationTools;
+use App\Models\EducationToolsCategory;
 use App\Models\EducationToolsFavorite;
 use App\Models\GradeClass;
 use App\Models\Subject;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 use Parsedown;
 use PDF;
 use Illuminate\Support\Facades\Http;
@@ -811,7 +813,7 @@ public function updateSubject(Request $request, $id)
     public function manageTools()
     {   
         $tools = EducationTools::get();
-        $categories = $tools->pluck('category')->unique();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
 
         return view('backend.education.education_tools_manage', compact('tools', 'categories'));
     }
@@ -838,11 +840,80 @@ public function updateSubject(Request $request, $id)
         return view('backend.education.education_tools_view', compact('tool','classes','similarTools','toolContent','allToolContent'));
     }
 
+    // Education Tools Category
     
+    public function EducationToolsCategoryAdd()
+    {
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        return view('backend.education.educationtools_category', compact('categories'));
+    }
+
+    public function EducationToolsCategoryStore(Request $request)
+    {
+
+        flash()->success('Operation completed successfully.');
+
+        $EducationToolsCategory = EducationToolsCategory::insertGetId([
+
+            'category_name' => $request->category_name,
+            'created_at' => Carbon::now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Category Saved Successfully');
+    }
+
+    public function EducationToolsCategoryEdit($id)
+    {
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        $category = EducationToolsCategory::findOrFail($id);
+        return view('backend.education.educationtools_category_edit', compact('category', 'categories'));
+    }
+
+
+    public function EducationToolsCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        EducationToolsCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Category Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function EducationToolsCategoryDelete($id)
+    {
+        $category = EducationToolsCategory::findOrFail($id);
+
+        EducationToolsCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('education.tools.category.add')->with($notification);
+    } // end method
+
+    //Education Tools Category End
 
     public function AddTools()
     {
-        return view('backend.education.education_tools_add');
+        $categories = EducationToolsCategory::latest()->get();
+        return view('backend.education.education_tools_add', compact('categories'));
     }
 
     public function StoreTools(Request $request)
@@ -851,7 +922,7 @@ public function updateSubject(Request $request, $id)
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'category' => 'required|string',
+            'category_id' => 'required|int',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
@@ -869,7 +940,7 @@ public function updateSubject(Request $request, $id)
         $tool = new EducationTools();
         $tool->name = $validatedData['name'];
         $tool->slug = $slug;
-        $tool->category = $validatedData['category']; // Add category
+        $tool->category_id = $validatedData['category_id']; // Add category
 
         // Handle image upload if provided
         if ($request->hasFile('image')) {
@@ -905,7 +976,8 @@ public function updateSubject(Request $request, $id)
     public function editTools($id)
     {
         $tool = EducationTools::findOrFail($id); // Fetch the tool
-        return view('backend.education.education_tools_edit', compact('tool')); // Return edit view
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        return view('backend.education.education_tools_edit', compact('tool', 'categories')); // Return edit view
     }
 
 
@@ -916,7 +988,7 @@ public function updateSubject(Request $request, $id)
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'category' => 'required|string',
+            'category_id' => 'required|int',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
@@ -930,7 +1002,7 @@ public function updateSubject(Request $request, $id)
         // Update the tool's properties
         $tool->name = $validatedData['name'];
         $tool->slug = Str::slug($validatedData['name']);
-        $tool->category = $validatedData['category'];
+        $tool->category_id = $validatedData['category_id'];
 
         // Handle image upload if provided
         if ($request->hasFile('image')) {

@@ -111,3 +111,6 @@ change prompt to text in stable_diffusion_generated_image
 
 ------------13/11/2024---------------
 downloads integer default=0 in stable_diffusion_generated_image
+
+------------2/12/2024-----------------
+In education_tools add category_id bigint
