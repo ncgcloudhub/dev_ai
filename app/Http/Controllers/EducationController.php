@@ -117,10 +117,11 @@ class EducationController extends Controller
     {
         $query = EducationContent::query();
 
+        Log::info('Received request ');
         // Check if there is a search term
         if ($request->has('search') && $request->search != '') {
             $searchTerm = $request->search;
-
+            Log::info('line 124 ');
             // Convert the search term to lowercase
             $searchTerm = strtolower($searchTerm);
 
@@ -153,8 +154,8 @@ class EducationController extends Controller
         }
 
         // Paginate the results
-        $results = $query->with(['gradeClass', 'subject', 'user'])->paginate(10);
-        dd($results);
+        $results = $query->with(['gradeClasss', 'subject', 'user'])->paginate(10);
+
         return response()->json($results);
     }
 
