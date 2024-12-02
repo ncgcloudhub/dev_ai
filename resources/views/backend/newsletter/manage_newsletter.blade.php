@@ -20,12 +20,13 @@
                 <h5 class="card-title mb-0">Manage Newsletter</h5>
             </div>
             <div class="card-body">
-                <table id="newsletter-table" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th>SR No.</th>
                             <th>Email</th>
                             <th>IP ADDRESS</th>
+                            <th>Registered Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,6 +35,7 @@
                             <td>{{ $index + 1 }}</td>                       
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->ipaddress }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('F j, Y, g:i a') }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -44,6 +46,7 @@
 </div>
 
 @endsection
+
 @section('script')
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
@@ -61,19 +64,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#newsletter-table').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    extend: 'excelHtml5',
-                    title: 'Newsletter Data',
-                    text: 'Export to Excel',
-                    className: 'btn btn-primary mb-3'
-                }
-            ]
-        });
+$(document).ready(function () {
+    // Check if DataTable is already initialized
+    if ($.fn.DataTable.isDataTable('#alternative-pagination')) {
+        $('#alternative-pagination').DataTable().destroy(); // Destroy the existing instance
+    }
+
+    // Initialize the DataTable
+    $('#alternative-pagination').DataTable({
+        responsive: true,
+        pageLength: 10, // Default number of rows to display
+        lengthMenu: [10, 20, 50, 100], // Options for rows per page
+        dom: '<"row"<"col-md-6"l><"col-md-6"Bf>>' + // Length menu, buttons, and search box in the header
+             '<"row"<"col-md-12"tr>>' + // Table
+             '<"row"<"col-md-6"i><"col-md-6"p>>', // Info and pagination in the footer
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'Newsletter Data',
+                text: 'Export to Excel',
+                className: 'btn btn-success'
+            },
+        ]
     });
+});
+
 </script>
 
 @endsection
