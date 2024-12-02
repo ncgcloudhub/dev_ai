@@ -129,9 +129,7 @@
                                                     @endcan
                                                    
                                                     <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                        {{-- <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                        </a> --}}
+                                                        <a href="{{route('aicontentcreator.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this AI Content Creator')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
                                                     </li>
                                                 </ul>
                                             @endif

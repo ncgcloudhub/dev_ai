@@ -293,7 +293,21 @@ class AIContentCreatorController extends Controller
         $template->save();
 
         return redirect()->back()->with('success', 'Template updated successfully');
-    } // end method 
+    } // end method
+    
+    public function AIContentCreatorDelete($id)
+    {
+        $aiContentCreator = Template::findOrFail($id);
+
+        $aiContentCreator->delete();
+
+        $notification = array(
+            'message' => 'AI Content Creator Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
 
     public function AIContentCreatorSEOUpdate(Request $request)
     {
