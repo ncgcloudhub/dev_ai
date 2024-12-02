@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\educationContent;
 use App\Models\EducationTools;
+use App\Models\EducationToolsCategory;
 use App\Models\EducationToolsFavorite;
 use App\Models\GradeClass;
 use App\Models\Subject;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Illuminate\Support\Carbon;
 use Parsedown;
 use PDF;
 use Illuminate\Support\Facades\Http;
@@ -838,7 +840,75 @@ public function updateSubject(Request $request, $id)
         return view('backend.education.education_tools_view', compact('tool','classes','similarTools','toolContent','allToolContent'));
     }
 
+    // Education Tools Category
     
+    public function EducationToolsCategoryAdd()
+    {
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        return view('backend.education.educationtools_category', compact('categories'));
+    }
+
+    public function EducationToolsCategoryStore(Request $request)
+    {
+
+        flash()->success('Operation completed successfully.');
+
+        $EducationToolsCategory = EducationToolsCategory::insertGetId([
+
+            'category_name' => $request->category_name,
+            'created_at' => Carbon::now(),
+
+        ]);
+
+        return redirect()->back()->with('success', 'Category Saved Successfully');
+    }
+
+    public function EducationToolsCategoryEdit($id)
+    {
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        $category = EducationToolsCategory::findOrFail($id);
+        return view('backend.education.educationtools_category_edit', compact('category', 'categories'));
+    }
+
+
+    public function EducationToolsCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        EducationToolsCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Category Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+
+
+    public function EducationToolsCategoryDelete($id)
+    {
+        $category = EducationToolsCategory::findOrFail($id);
+
+        EducationToolsCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('education.tools.category.add')->with($notification);
+    } // end method
+
+    //Education Tools Category End
 
     public function AddTools()
     {

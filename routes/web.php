@@ -350,6 +350,21 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
 
+        // Education Tools Category
+
+        Route::get('/tools/category/add', [EducationController::class, 'EducationToolsCategoryAdd'])->name('education.tools.category.add');
+
+        Route::post('/tools/category/store', [EducationController::class, 'EducationToolsCategoryStore'])->name('education.tools.category.store');
+
+        Route::get('/tools/category/edit/{id}', [EducationController::class, 'EducationToolsCategoryEdit'])->name('education.tools.category.edit');
+
+        Route::post('/tools/category/update', [EducationController::class, 'EducationToolsCategoryUpdate'])->name('education.tools.category.update');
+
+        Route::get('/tools/category/delete/{id}', [EducationController::class, 'EducationToolsCategoryDelete'])->name('education.tools.category.delete');
+
+
+        //Education Tools category End
+
         // Route to show the form for editing a specific tool (edit)
         Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit')->middleware('admin.permission:education.manageTools.edit');
 
