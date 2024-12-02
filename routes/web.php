@@ -380,8 +380,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // DYNAMIC PAGE
     Route::resource('dynamic-pages', DynamicPageController::class)->except(['show']);
-    // Catch-all dynamic page route (must be at the end)
-    // Route::get('/{route}', [DynamicPageController::class, 'show'])->name('dynamic-pages.show');
+   
 
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('admin.permission:settings.pageSEOAdd');
@@ -440,7 +439,8 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
     Route::prefix('education')->group(function () {
         Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('admin.permission:education.educationWizard');      
-        Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');       
+        Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');     
+        Route::get('/search', [EducationController::class, 'search'])->name('educationContent.search');  
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
@@ -711,5 +711,8 @@ Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
-
+ // Catch-all dynamic page route (must be at the end)
+ Route::get('/{route}', [DynamicPageController::class, 'show'])
+ ->where('route', '.*') // Matches all routes
+ ->name('dynamic-pages.show');
 

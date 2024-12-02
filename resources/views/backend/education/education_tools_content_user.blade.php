@@ -162,6 +162,17 @@
             @endforeach
             </div>
         </div>
+
+        <form id="searchForm">
+            <input type="text" name="search" id="searchBox" placeholder="Search..." class="form-control">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <div id="searchResults">
+            <!-- Results will be shown here -->
+        </div>
+
+
     </div>
 
     <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
@@ -470,8 +481,95 @@ function downloadContent(contentId) {
     .catch(error => console.error('Error:', error));
 }
 
+</script>
+
+{{-- Should be Common --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var searchTerm = $('#searchBox').val();
+        
+        $.ajax({
+            url: '{{ route("educationContent.search") }}',
+            method: 'GET',
+            data: {
+                search: searchTerm
+            },
+            success: function(response) {
+    const contentDisplay = document.getElementById('content-display'); // Target your content display element
+    contentDisplay.innerHTML = ''; // Clear previous content
+
+    if (response.data.length > 0) {
+        response.data.forEach(content => {
+            console.log(content);
+
+                            // Format the date using JavaScript
+                            const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
+
+                const downloadUrl = '{{ url('education/content') }}/' + content.id + '/download';
+
+                // Create the content element dynamically
+                const contentElement = document.createElement('div');
+                contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
+
+                // Insert the content structure inside the element
+                contentElement.innerHTML = `
+                    <div class="neomorphic-card" data-id="${content.id}">
+                        <div class="card-body">
+                            <h5 class="mb-0">${content.topic}</h5>
+                            <p class="text-muted">${content.subject.name}</p>
+                            <p class="text-muted">${createdAt}</p>
+
+                            <div class="form-check">
+                                <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
+                                <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
+                                <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
+                                <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
+                            </div>
+
+                            <div class="d-flex gap-2 justify-content-center mb-3">
+                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Download" onclick="downloadContent(${content.id})">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-download-line"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
+                                    <i class="ri-add-fill me-1 align-bottom"></i>Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Append the dynamically created content element to the display area
+                contentDisplay.appendChild(contentElement);
+            });
+    } else {
+        contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
+    }
+},
+error: function() {
+    const contentDisplay = document.getElementById('content-display');
+    contentDisplay.innerHTML = '<p>An error occurred while loading the content.</p>';
+}
 
 
+        });
+    });
+});
 </script>
 
 @endsection

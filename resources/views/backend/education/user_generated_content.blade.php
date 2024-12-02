@@ -162,6 +162,21 @@
             @endforeach
             </div>
         </div>
+
+
+        {{-- SEARCH --}}
+        <form id="searchForm">
+            <input type="text" name="search" id="searchBox" placeholder="Search..." class="form-control">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
+        <div id="searchResults">
+            <!-- Results will be shown here -->
+        </div>
+
+
+
+
     </div>
 
     <div class="col-xxl-8 d-flex flex-wrap" id="content-display">
@@ -545,6 +560,115 @@ function saveEditedContent() {
 
 
 
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        var searchTerm = $('#searchBox').val();
+        
+        $.ajax({
+            url: '{{ route("educationContent.search") }}',
+            method: 'GET',
+            data: {
+                search: searchTerm
+            },
+            success: function(response) {
+    const contentDisplay = document.getElementById('content-display'); // Target your content display element
+    contentDisplay.innerHTML = ''; // Clear previous content
+
+    if (response.data.length > 0) {
+        response.data.forEach(content => {
+            console.log(content);
+
+            // Extract and handle data
+            const grade = content.gradeClasss ? content.gradeClasss.grade : 'N/A';
+            const subject = content.subject ? content.subject.name : 'N/A';
+            const author = content.user ? content.user.name : 'Unknown';
+
+            // Format the date
+            const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                day: 'numeric', month: 'short', year: 'numeric'
+            });
+
+            // Construct URLs
+            const downloadUrl = `/education/content/${content.id}/download`;
+            const editUrl = `/education/content/${content.id}/edit`;
+            const cardClass = content.status === 'completed' ? 'ribbon-box' : '';
+            const ribbonClass = content.status === 'completed' ? 'ribbon-two ribbon-two-success' : '';
+            const ribbonText = content.status === 'completed' ? 'Completed' : '';
+
+            // Create the content element dynamically
+            const contentElement = document.createElement('div');
+            contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
+
+            contentElement.innerHTML = `
+                <div class="neomorphic-card ${cardClass}" data-id="${content.id}">
+                    <div class="card-body">
+                        <div class="r ${ribbonClass}"><span>${ribbonText}</span></div>
+                        <h5 class="mb-0">${content.topic}</h5>
+                        <p class="text-muted">Grade: ${grade}</p>
+                        <p class="text-muted">Subject: ${subject}</p>
+                        <p class="text-muted">Author: ${author}</p>
+                        <p class="text-muted">${createdAt}</p>
+                        <div class="d-flex gap-2 justify-content-center mb-3">
+                            <a href="${downloadUrl}">
+                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-download-line"></i>
+                                    </span>
+                                </button>
+                            </a>
+                            <a href="${editUrl}">
+                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                        <i class="ri-edit-line"></i>
+                                    </span>
+                                </button>
+                            </a>
+                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="${content.status === 'completed' ? 'Unmark' : 'Completed'}" onclick="markAsComplete(${content.id})">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-${content.status === 'completed' ? 'close-line' : 'chat-forward-line'}"></i>
+                                </span>
+                            </button>
+                            <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" onclick="deleteContent(${content.id}, this)">
+                                <span class="avatar-title rounded-circle bg-light text-body">
+                                    <i class="ri-delete-bin-4-line"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-neomorphic mb-2" onclick="fetchContent(${content.id})">
+                                <i class="ri-add-fill me-1 align-bottom"></i>Details
+                            </button>
+                            <button type="button" class="btn btn-neomorphic" onclick="openEditorModal(${content.id})">
+                                <i class="ri-edit-2-fill me-1 align-bottom"></i>Edit in Editor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append the dynamically created content element
+            contentDisplay.appendChild(contentElement);
+        });
+    } else {
+        contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
+    }
+},
+error: function() {
+    const contentDisplay = document.getElementById('content-display');
+    contentDisplay.innerHTML = '<p>An error occurred while loading the content.</p>';
+}
+
+
+        });
+    });
+});
 </script>
 
 @endsection

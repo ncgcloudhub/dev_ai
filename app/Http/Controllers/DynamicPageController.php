@@ -43,7 +43,7 @@ class DynamicPageController extends Controller
             'description' => 'nullable|string',
         ]);
         // Convert route to slug
-        $validated['route'] = Str::slug($validated['route'], '-');
+        $validated['route'] = trim($request->input('route'), '/'); 
 
         // Create a new dynamic page
         $dynamicPage = DynamicPage::create($validated);

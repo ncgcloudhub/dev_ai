@@ -15,6 +15,12 @@ class educationContent extends Model
         {
             return $this->belongsTo(GradeClass::class, 'grade_id');
         }
+
+        public function gradeClasss()
+        {
+            return $this->belongsTo(GradeClass::class, 'grade_id');
+        }
+
     
         // Define the relationship with Subject
         public function subject()
