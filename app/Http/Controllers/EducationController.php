@@ -119,6 +119,15 @@ class EducationController extends Controller
     {
         $query = EducationContent::query();
 
+        // Check the route or a specific flag to apply different filters
+        if (request()->routeIs('education.tools.contents')) {
+            // For /education/tools/library route
+            $query->where('add_to_library', true); // Filter by added to library
+        } elseif (request()->routeIs('user_generated_education_content')) {
+            // For /education/get-content route
+            $query->where('user_id', auth()->id()); // Filter by authenticated user
+        }
+
         Log::info('Received request ');
         // Check if there is a search term
         if ($request->has('search') && $request->search != '') {
