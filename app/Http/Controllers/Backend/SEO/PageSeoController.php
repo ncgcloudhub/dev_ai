@@ -22,6 +22,18 @@ class PageSeoController extends Controller
         // Pass routes to the view
         return view('admin.seo_settings.page_seo_add', ['routes' => $routes]);
     }
+    
+    public function getPageSeoDetails(Request $request)
+    {
+        $route = $request->query('route');
+        $page = Page::where('route_name', $route)->first();
+
+        if ($page) {
+            return response()->json(['success' => true, 'page' => $page]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'No SEO data found for this route.']);
+    }
 
     public function storePageSeo(Request $request)
     {

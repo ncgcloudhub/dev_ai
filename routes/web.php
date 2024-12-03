@@ -401,6 +401,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('admin.permission:settings.pageSEOAdd');
+    Route::get('/get-seo-details', [PageSeoController::class, 'getPageSeoDetails'])->name('get.page.seo.details');
     Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
 
     // Change User's Password by ADMIN
