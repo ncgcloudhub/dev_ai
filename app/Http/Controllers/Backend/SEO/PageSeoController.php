@@ -37,27 +37,35 @@ class PageSeoController extends Controller
 
     public function storePageSeo(Request $request)
     {
-        // Validate the incoming request data
-        $validatedData = $request->validate([
-            'route_name' => 'required|string',
-            'title' => 'required|string',
-            'keywords' => 'nullable|string',
-            'description' => 'nullable|string',
+       // Validate incoming data
+    $validatedData = $request->validate([
+        'route_name' => 'required|string',
+        'title' => 'required|string',
+        'keywords' => 'nullable|string',
+        'description' => 'nullable|string',
+    ]);
+
+    // Check if a page already exists for the given route_name
+    $page = Page::where('route_name', $validatedData['route_name'])->first();
+
+    if ($page) {
+        // Update the existing page record
+        $page->update([
+            'title' => $validatedData['title'],
+            'keywords' => $validatedData['keywords'],
+            'description' => $validatedData['description'],
         ]);
-
-        // Create a new Page instance
+    } else {
+        // Create a new Page instance if no record exists
         $page = new Page();
-
-        // Fill the Page instance with the validated data
         $page->route_name = $validatedData['route_name'];
         $page->title = $validatedData['title'];
         $page->keywords = $validatedData['keywords'];
         $page->description = $validatedData['description'];
-
-        // Save the Page instance to the database
         $page->save();
+    }
 
-        // Redirect the user to a success page or back to the form with a success message
-        return redirect()->back()->with('success', 'Page SEO added successfully!');
+    // Redirect back with a success message
+    return redirect()->back()->with('success', 'Page SEO data saved successfully.');
     }
 }
