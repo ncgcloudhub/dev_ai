@@ -165,8 +165,6 @@ class DynamicPageController extends Controller
     $responseBody = json_decode($response->getBody()->getContents(), true);
     $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
 
-    Log::info('Assistant Content: ', ['content' => $assistantContent]);
-
     preg_match('/\*\*SEO Title:\*\*\s*(.*)/', $assistantContent, $titleMatches);
     preg_match('/\*\*SEO Description:\*\*\s*(.*)/', $assistantContent, $descriptionMatches);
     preg_match('/\*\*Tags:\*\*\s*(.*)$/s', $assistantContent, $tagsMatches);
@@ -176,10 +174,6 @@ class DynamicPageController extends Controller
     $seoDescription = $descriptionMatches[1] ?? 'No description generated';
     $seoTags = $tagsMatches[1] ?? 'No tags generated';
 
-    // Log the parsed values
-    Log::info('Parsed SEO Title: ', ['title' => $seoTitle]);
-    Log::info('Parsed SEO Description: ', ['description' => $seoDescription]);
-    Log::info('Parsed SEO Tags: ', ['tags' => $seoTags]);
 
     return response()->json([
         'success' => true,
