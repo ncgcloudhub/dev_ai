@@ -53,12 +53,12 @@
                                                 <label for="seo_title" class="form-label">Title</label>
                                                 <input type="text" name="seo_title" value="" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
                                             </div>
-                        
+                                        
                                             <div class="col-md-12 mb-3">
                                                 <label for="keywords" class="form-label">Keywords</label>
-                                                <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="Design, Remote"  />
+                                                <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="" placeholder="Enter Keywords">
                                             </div>
-                        
+                                        
                                             <div class="col-md-12">
                                                 <label for="description" class="form-label">Description</label>
                                                 <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
@@ -67,7 +67,7 @@
                                     
                                 </div>
                             </div>
-
+                            <button type="button" class="btn btn-info" id="generateSeoBtn">AI Generate</button>
                             <button type="submit" class="btn btn-primary">Create Page</button>
                         </form>
                     </div>
@@ -104,6 +104,42 @@
             .replace(/\/+/g, '/');            // Prevent multiple consecutive slashes
     });
 });
+
+
+// SEO Generation Script
+$(document).ready(function () {
+    $('#generateSeoBtn').on('click', function () {
+        let title = $('#title').val().trim(); // Get the SEO title value
+
+        if (!title) {
+            alert('Please enter a title to generate SEO content.');
+            return;
+        }
+
+        $.ajax({
+            url: '/dynamic-pages/seo/generate', // Adjust the URL to your route
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: { title: title },
+            success: function (response) {
+                if (response.success) {
+                    // Populate the SEO fields
+                    $('#seo_title').val(response.seo_title);
+                    $('#choices-text-unique-values').val(response.seo_tags); // Assuming "keywords" are tags
+                    $('#description').val(response.seo_description);
+                } else {
+                    alert(response.message || 'Failed to generate SEO content.');
+                }
+            },
+            error: function () {
+                alert('Error generating SEO content. Please try again.');
+            }
+        });
+    });
+});
+
 
 </script>
 

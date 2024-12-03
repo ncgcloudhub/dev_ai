@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\DynamicPage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
+
 
 class DynamicPageController extends Controller
 {
@@ -64,7 +66,7 @@ class DynamicPageController extends Controller
         // Redirect to the index or details page with success message
         return redirect()->route('dynamic-pages.index', ['dynamic_page' => $dynamicPage->route])
             ->with('success', 'Dynamic page created successfully.');
-            
+
     }
 
     /**
@@ -127,4 +129,56 @@ class DynamicPageController extends Controller
 
         return redirect()->route('dynamic-pages.index')->with($notification);
     }
+
+
+    public function generateSeoContent(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+    ]);
+
+    $title = $request->input('title');
+    $user = auth()->user();
+    $openaiModel = $user->selected_model;
+
+    $client = new Client();
+    $response = $client->post('https://api.openai.com/v1/chat/completions', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'model' => $openaiModel,
+            'messages' => [
+                [
+                    "role" => "system",
+                    "content" => "You are an SEO assistant."
+                ],
+                [
+                    "role" => "user",
+                    "content" => "Generate an SEO title not more than 60 characters, description not more than 160 characters, and 20 comma-separated tags for the title: $title."
+                ]
+            ],
+        ],
+    ]);
+
+    $responseBody = json_decode($response->getBody()->getContents(), true);
+    $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
+
+    preg_match('/\*\*SEO Title:\*\*\s*(.*)/', $assistantContent, $titleMatches);
+    preg_match('/\*\*SEO Description:\*\*\s*(.*)/', $assistantContent, $descriptionMatches);
+    preg_match('/\*\*Relevant Tags:\*\*\s*(.*)$/s', $assistantContent, $tagsMatches);
+
+    $seoTitle = $titleMatches[1] ?? 'No title generated';
+    $seoDescription = $descriptionMatches[1] ?? 'No description generated';
+    $seoTags = $tagsMatches[1] ?? 'No tags generated';
+
+    return response()->json([
+        'success' => true,
+        'seo_title' => $seoTitle,
+        'seo_description' => $seoDescription,
+        'seo_tags' => $seoTags,
+    ]);
+}
+
 }
