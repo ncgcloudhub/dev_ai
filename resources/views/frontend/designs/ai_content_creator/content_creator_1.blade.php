@@ -20,7 +20,7 @@
                                     <div style="width: 42px; height: 42px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 .125rem .3rem -0.0625rem rgba(0,0,0,.1),0 .275rem .75rem -0.0625rem rgba(249,248,249,.06)">
                                         <img width="22px" src="/build/images/templates/{{$item->icon}}.png" alt="" class="img-fluid">
                                     </div>
-                                    <h3 class="fw-medium link-primary">{{$item->template_name}}</h3>
+                                    <h3 class="fw-medium link-primary gradient-text-1">{{$item->template_name}}</h3>
                                     <p style="height: 3em; overflow: hidden; color:black" class="card-text customer_name">{{$item->description}}</p>
                                 </div>
                                 <div>

@@ -377,7 +377,7 @@ function saveEditedContent() {
                                         </div>
                                         <div>
                                             <button type="button" class="btn btn-neomorphic mb-2" onclick="fetchContent(${content.id})">
-                                                <i class="ri-add-fill me-1 align-bottom"></i>Details
+                                                <i class="ri-add-fill me-1 align-bottom"></i>View
                                             </button>
 
                                             <button type="button" class="btn btn-neomorphic" onclick="openEditorModal(${content.id})">

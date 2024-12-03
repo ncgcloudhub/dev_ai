@@ -27,14 +27,15 @@
                         <label for="name" class="form-label">Tools Name</label>
                     </div>
     
-                    <select class="form-select mb-3" name="category" id="category" aria-label="Floating label select example" required>
-                        <option disabled>Select Category</option>
-                        <option value="Category 1" {{ $tool->category == 'Category 1' ? 'selected' : '' }}>Category 1</option>
-                        <option value="Category 2" {{ $tool->category == 'Category 2' ? 'selected' : '' }}>Category 2</option>
-                        <option value="Category 3" {{ $tool->category == 'Category 3' ? 'selected' : '' }}>Category 3</option>
-                        <option value="Category 4" {{ $tool->category == 'Category 4' ? 'selected' : '' }}>Category 4</option>
-                        <option value="Category 5" {{ $tool->category == 'Category 5' ? 'selected' : '' }}>Category 5</option>
-                    </select>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
+                            <option value="{{$tool->category_id}}" selected="">{{$tool->educationtools_category->category_name}}</option>
+                            @foreach ($categories as $item)
+                            <option value="{{$item->id}}">{{$item->category_name}}</option>
+                            @endforeach
+                        </select>
+                        <label for="category_id" class="form-label">Category</label>
+                    </div>
     
                     <div class="form-floating mb-3">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description">{{ $tool->description }}</textarea>

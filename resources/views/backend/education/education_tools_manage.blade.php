@@ -47,7 +47,7 @@
                         </li>
                         @foreach($categories as $category)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link fw-medium" type="button" data-filter="{{ Str::slug($category) }}">{{ $category }}</button>
+                                <button class="nav-link fw-medium" type="button" data-filter="{{ Str::slug($category->category_name) }}">{{ $category->category_name }}</button>
                             </li>
                         @endforeach
                     </ul>
@@ -57,7 +57,7 @@
 
         <div class="row">
             @foreach($tools as $tool)
-            <div class="col-lg-4 product-item {{ Str::slug($tool->category) }}">
+            <div class="col-lg-4 product-item {{ Str::slug($tool->educationtools_category->category_name) }}">
                 <div class="card explore-box card-animate">
                     <div class="bookmark-icon position-absolute top-0 end-0 p-2">
                         <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">
@@ -99,7 +99,7 @@
                             19.29k <!-- This can be dynamically generated if needed -->
                         </p>
                         <h5 class="mb-1 fs-16">
-                            <a href="apps-nft-item-details.html" class="text-body">{{ $tool->name }}</a>
+                            <a href="{{ route('tool.show', $tool->id) }}" class="text-body">{{ $tool->name }}</a>
                         </h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>

@@ -27,15 +27,15 @@
                         <label for="name" class="form-label">Tools Name</label>
                     </div>
 
-                    <select class="form-select mb-3" name="category" id="category" aria-label="Floating label select example">
-                        <option disabled selected="">Select Category</option>
-                        <option value="Category 1">Category 1</option>
-                        <option value="Category 2">Category 2</option>
-                        <option value="Category 3">Category 3</option>
-                        <option value="Category 4">Category 4</option>
-                        <option value="Category 5">Category 5</option>
-                       
-                    </select>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
+                            <option disabled selected="">Select Category</option>
+                            @foreach ($categories as $item)
+                            <option value="{{$item->id}}">{{$item->category_name}}</option>
+                            @endforeach
+                        </select>
+                        <label for="category_id" class="form-label">Category</label>
+                    </div>
   
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
