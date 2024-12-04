@@ -399,6 +399,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::resource('dynamic-pages', DynamicPageController::class)->except(['show']);
     Route::post('/dynamic-pages/seo/generate', [DynamicPageController::class, 'generateSeoContent'])
     ->name('dynamic-pages.seo.generate');
+    Route::get('/dynamic-pages/check-route', [DynamicPageController::class, 'checkRouteAvailability'])->name('dynamic-pages.check-route');
+
 
    
 

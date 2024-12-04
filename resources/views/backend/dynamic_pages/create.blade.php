@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create Dynamic Page | ON PROCESS (SEO)</div>
+                    <div class="card-header">Create Dynamic Page</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('dynamic-pages.store') }}">
@@ -25,7 +25,8 @@
                             <div class="form-group">
                                 <label for="route">Route</label>
                                 <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route') }}" required>
-
+                                <small id="route-feedback" class="text-danger"></small>
+                                
                                 @error('route')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -42,6 +43,7 @@
                                     <span class="badge bg-danger keyword" data-keyword="products">Products</span>
                                 </div>
                             </div>
+                            
 
                             <div class="form-group">
                                 <label for="content">Content</label>
@@ -90,6 +92,7 @@
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script>
     tinymce.init({
         selector: 'textarea#myeditorinstance',
@@ -103,52 +106,92 @@
         }
     });
 </script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const routeInput = document.getElementById('route');
+    // Existing SEO Generation Script
+    $(document).ready(function () {
+        $('#generateSeoBtn').on('click', function () {
+            let title = $('#title').val().trim(); // Get the SEO title value
 
-    routeInput.addEventListener('input', function () {
-        // Allow letters, numbers, slashes, and dashes
-        routeInput.value = routeInput.value
-            .replace(/[^a-zA-Z0-9\/\-]/g, '')  // Sanitize input (letters, numbers, slashes, dashes)
-            .replace(/\/+/g, '/');            // Prevent multiple consecutive slashes
-    });
-});
+            if (!title) {
+                alert('Please enter a title to generate SEO content.');
+                return;
+            }
 
-
-// SEO Generation Script
-$(document).ready(function () {
-    $('#generateSeoBtn').on('click', function () {
-        let title = $('#title').val().trim(); // Get the SEO title value
-
-        if (!title) {
-            alert('Please enter a title to generate SEO content.');
-            return;
-        }
-
-        $.ajax({
-            url: '/dynamic-pages/seo/generate', // Adjust the URL to your route
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: { title: title },
-            success: function (response) {
-                if (response.success) {
-                    // Populate the SEO fields
-                    $('#seo_title').val(response.seo_title);
-                    $('#choices-text-unique-values').val(response.seo_tags); // Assuming "keywords" are tags
-                    $('#description').val(response.seo_description);
-                } else {
-                    alert(response.message || 'Failed to generate SEO content.');
+            $.ajax({
+                url: '/dynamic-pages/seo/generate', // Adjust the URL to your route
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { title: title },
+                success: function (response) {
+                    if (response.success) {
+                        // Populate the SEO fields
+                        $('#seo_title').val(response.seo_title);
+                        $('#choices-text-unique-values').val(response.seo_tags); // Assuming "keywords" are tags
+                        $('#description').val(response.seo_description);
+                    } else {
+                        alert(response.message || 'Failed to generate SEO content.');
+                    }
+                },
+                error: function () {
+                    alert('Error generating SEO content. Please try again.');
                 }
-            },
-            error: function () {
-                alert('Error generating SEO content. Please try again.');
+            });
+        });
+    });
+
+    // New Script: Route Availability Check
+    document.addEventListener('DOMContentLoaded', function () {
+        const routeInput = document.getElementById('route');
+        const feedback = document.createElement('small');
+        feedback.id = 'route-feedback';
+        feedback.className = 'form-text mt-1';
+        routeInput.parentNode.appendChild(feedback); // Add feedback below the input field
+
+        let debounceTimer;
+
+        routeInput.addEventListener('input', function () {
+            const route = routeInput.value.trim();
+
+            // Sanitize input
+            routeInput.value = route.replace(/[^a-zA-Z0-9\/\-]/g, '').replace(/\/+/g, '/');
+
+            if (route.length > 0) {
+                // Clear the existing debounce timer
+                clearTimeout(debounceTimer);
+
+                // Set a new debounce timer
+                debounceTimer = setTimeout(() => {
+                    // Make AJAX request to check route availability
+                    $.ajax({
+                        url: '/dynamic-pages/check-route', // Adjust to your actual route for checking
+                        method: 'GET',
+                        data: { route: route },
+                        success: function (response) {
+                            if (response.available) {
+                                feedback.textContent = "This route is available.";
+                                feedback.classList.remove('text-danger');
+                                feedback.classList.add('text-success');
+                            } else {
+                                feedback.textContent = "This route is already taken.";
+                                feedback.classList.remove('text-success');
+                                feedback.classList.add('text-danger');
+                            }
+                        },
+                        error: function () {
+                            feedback.textContent = "Error checking route availability.";
+                            feedback.classList.remove('text-success');
+                            feedback.classList.add('text-danger');
+                        }
+                    });
+                }, 300); // 300ms debounce delay
+            } else {
+                feedback.textContent = ""; // Clear feedback if input is empty
             }
         });
     });
-});
 
 </script>
 
@@ -171,4 +214,3 @@ $(document).ready(function () {
 
 
 @endsection
-

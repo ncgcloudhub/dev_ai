@@ -664,6 +664,10 @@ document.addEventListener('click', function(event) {
         // Store context in session storage
         sessionStorage.setItem('currentSessionContext', JSON.stringify(context));
 
+        // Scroll to the bottom
+        let conversationList = document.getElementById('users-conversation');
+        let lastMessage = conversationList.lastElementChild;
+        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
         
     })
     .catch(error => {
@@ -711,12 +715,19 @@ document.addEventListener('click', function(event) {
             chatConversation.insertAdjacentHTML('beforeend', messageHTML);
         });
        
+        // Scroll to the bottom of the conversation
+        let conversationList = document.getElementById('users-conversation');
+        let lastMessage = conversationList.lastElementChild;
+        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
 
     // Optionally, trigger a click event on the first session to load messages on page load
     const firstSession = sessionList.querySelector('li');
     if (firstSession) {
         firstSession.click();
+        let conversationList = document.getElementById('users-conversation');
+        let lastMessage = conversationList.lastElementChild;
+        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
     });
 

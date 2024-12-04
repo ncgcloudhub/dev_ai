@@ -130,6 +130,17 @@ class DynamicPageController extends Controller
         return redirect()->route('dynamic-pages.index')->with($notification);
     }
 
+    public function checkRouteAvailability(Request $request)
+{
+    $route = Str::lower(trim($request->get('route', ''), '/')); // Sanitize input
+    $exists = DynamicPage::where('route', $route)->exists();
+
+    return response()->json([
+        'available' => !$exists, // True if route is available, false if taken
+    ]);
+}
+
+
 
     public function generateSeoContent(Request $request)
 {
