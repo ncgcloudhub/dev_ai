@@ -32,6 +32,16 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+
+                                <div class="mt-2">
+                                    <label for="category">Choose Category</label>
+                                    <!-- Static Keywords -->
+                                    <span class="badge bg-primary keyword" data-keyword="home">Blog</span>
+                                    <span class="badge bg-secondary keyword" data-keyword="about">AI</span>
+                                    <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
+                                    <span class="badge bg-warning keyword" data-keyword="services">Services</span>
+                                    <span class="badge bg-danger keyword" data-keyword="products">Products</span>
+                                </div>
                             </div>
                             
 
@@ -182,5 +192,25 @@
             }
         });
     });
+
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const routeInput = document.getElementById('route');
+        const keywords = document.querySelectorAll('.keyword');
+
+        keywords.forEach(keyword => {
+            keyword.addEventListener('click', function () {
+                const selectedKeyword = this.getAttribute('data-keyword');
+                const currentValue = routeInput.value;
+
+                // Always append the keyword with a leading /
+                routeInput.value = currentValue + `/${selectedKeyword}`;
+            });
+        });
+    });
+</script>
+
+
 @endsection
