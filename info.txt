@@ -114,3 +114,6 @@ downloads integer default=0 in stable_diffusion_generated_image
 
 ------------2/12/2024-----------------
 In education_tools add category_id bigint
+
+------------3/12/2024-----------------
+in dynamic_pages, change seo_title, keywords and description to text
