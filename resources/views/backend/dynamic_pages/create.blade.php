@@ -36,8 +36,8 @@
                                 <div class="mt-2">
                                     <label for="category">Choose Category</label>
                                     <!-- Static Keywords -->
-                                    <span class="badge bg-primary keyword" data-keyword="home">Blog</span>
-                                    <span class="badge bg-secondary keyword" data-keyword="about">AI</span>
+                                    <span class="badge bg-primary keyword" data-keyword="blog">Blog</span>
+                                    <span class="badge bg-secondary keyword" data-keyword="content">Content</span>
                                     <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
                                     <span class="badge bg-warning keyword" data-keyword="services">Services</span>
                                     <span class="badge bg-danger keyword" data-keyword="products">Products</span>
