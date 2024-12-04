@@ -283,7 +283,21 @@ class HomeController extends Controller
 
         $newsletter = NewsLetter::orderby('id', 'asc')->get();
 
-        return view('backend.newsletter.manage_newsletter', compact('newsletter'));
+        // Get all user emails
+        $registeredEmails = User::pluck('email')->toArray();
+    
+        // Group emails and count occurrences
+        $groupedNewsletter = $newsletter->groupBy('email')->map(function ($group) use ($registeredEmails) {
+            $email = $group->first()->email;
+    
+            return [
+                'count' => $group->count(),
+                'data' => $group,
+                'isRegistered' => in_array($email, $registeredEmails), // Check in bulk
+            ];
+        });
+    
+        return view('backend.newsletter.manage_newsletter', compact('groupedNewsletter'));
     }
 
 

@@ -23,21 +23,41 @@
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>SR No.</th>
+                            <th>#</th>
                             <th>Email</th>
-                            <th>IP ADDRESS</th>
-                            <th>Registered Time</th>
+                          
+                            <th>Registered</th>
+                            <th>IP Address</th>
+                            <th>Created At</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($newsletter as $index => $item)
+                        @foreach ($groupedNewsletter as $email => $group)
                         <tr>
-                            <td>{{ $index + 1 }}</td>                       
-                            <td>{{ $item->email }}</td>
-                            <td>{{ $item->ipaddress }}</td>
-                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('F j, Y, g:i a') }}</td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $email }} <span class="badge bg-info">{{ $group['count'] }}</span></td>
+                            
+                            <td>
+                                @if ($group['isRegistered'])
+                                    <span class="badge bg-success">Yes</span>
+                                @else
+                                    <span class="badge bg-danger">No</span>
+                                @endif
+                            </td>
+                            <td>
+                                <!-- Display all IPs associated with this email -->
+                                @foreach ($group['data'] as $item)
+                                    <span>{{ $item->ipaddress }}</span><br>
+                                @endforeach
+                            </td>
+                            <td>
+                                <!-- Display all created_at dates associated with this email -->
+                                @foreach ($group['data'] as $item)
+                                    <span>{{ \Carbon\Carbon::parse($item->created_at)->format('F j, Y, g:i a') }}</span><br>
+                                @endforeach
+                            </td>
                         </tr>
-                        @endforeach
+                    @endforeach
                     </tbody>
                 </table>
             </div>
