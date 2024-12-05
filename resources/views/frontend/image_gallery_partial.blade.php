@@ -9,13 +9,29 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" data-image-id="{{ $item->id }}">
+    @auth
+        <button type="button" 
+                class="btn btn-sm btn-outline-primary position-relative like-button {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}" 
+                data-image-id="{{ $item->id }}">
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
         </button>
-
-        <button type="button" class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" data-image-id="{{ $item->id }}">
+    
+        <button type="button" 
+                class="btn btn-sm btn-outline-primary position-relative favorite-button {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}" 
+                data-image-id="{{ $item->id }}">
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
         </button>
+    @else
+        <a href="{{ route('login') }}" 
+        class="btn btn-sm btn-outline-primary position-relative {{ $item->liked_by_user ? 'ri-thumb-up-fill' : 'ri-thumb-up-line' }}">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">{{ $item->likes_count }}</span>
+        </a>
+
+        <a href="{{ route('login') }}" 
+            class="btn btn-sm btn-outline-primary position-relative {{ $item->favorited_by_user ? 'ri-heart-2-fill' : 'ri-heart-2-line' }}">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $item->favorites_count }}</span>
+        </a>
+    @endauth
 
         <a href="{{ $item->image_url }}" download="{{ $item->prompt }}.jpg" class="btn btn-sm btn-outline-secondary position-relative download-button">
             <i class="ri-download-line"></i>

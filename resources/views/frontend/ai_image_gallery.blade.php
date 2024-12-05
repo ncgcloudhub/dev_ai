@@ -10,17 +10,17 @@
 
 <style>
     #imageModal .btn-link {
-    z-index: 10;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-}
-
+        z-index: 10;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
 </style>
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
-    @endsection
-    @section('content')
+@endsection
+
+@section('content')
         <!-- Begin page -->
         <div class="layout-wrapper landing">
             @include('frontend.body.nav_frontend')
@@ -115,264 +115,258 @@
             <!-- end footer -->
 
             <!--start back-to-top-->
-        <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
-            <i class="ri-arrow-up-line"></i>
-        </button>
-        <!--end back-to-top-->
+            <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
+                <i class="ri-arrow-up-line"></i>
+            </button>
+            <!--end back-to-top-->
 
         </div>
         <!-- end layout wrapper -->
 
         <!-- Modal -->
         {{-- Image Description --}}
-  <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
-        <div class="modal-content border-0 overflow-hidden">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="row g-0">
-                <!-- Image div updated to col-lg-8 -->
-                <div class="col-lg-8 d-flex align-items-center justify-content-center position-relative" style="background: #000;">
-                    <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
-                        <i class="ri-arrow-left-s-line"></i>
-                    </button>
-                    <img id="modalImage" src="" class="img-fluid" style="max-width: 100%; max-height: 100vh; object-fit: contain;" alt="Image">
-                    <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
-                        <i class="ri-arrow-right-s-line"></i>
-                    </button>
-                </div>
-
-                <!-- Details div updated to col-lg-4 -->
-                <div class="col-lg-4 d-flex align-items-center">
-                    <div class="modal-body p-5">
-                        <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
-                        <span class="text-muted mb-4" id="resolution"></span>
+        <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+                <div class="modal-content border-0 overflow-hidden">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
+                    <div class="row g-0">
+                        <!-- Image div updated to col-lg-8 -->
+                        <div class="col-lg-8 d-flex align-items-center justify-content-center position-relative" style="background: #000;">
+                            <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
+                                <i class="ri-arrow-left-s-line"></i>
+                            </button>
+                            <img id="modalImage" src="" class="img-fluid" style="max-width: 100%; max-height: 100vh; object-fit: contain;" alt="Image">
+                            <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
+                                <i class="ri-arrow-right-s-line"></i>
+                            </button>
+                        </div>
 
-        
+                        <!-- Details div updated to col-lg-4 -->
+                        <div class="col-lg-4 d-flex align-items-center">
+                            <div class="modal-body p-5">
+                                <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
+                                <span class="text-muted mb-4" id="resolution"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
 
-    @endsection
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+@section('script')
+
+    {{-- SHAREE --}}
+    <script>
+        $(document).ready(function() {
+            $('.share-button').click(function() {
+                var imageUrl = $(this).data('image-url');
+                var promptText = $(this).data('image-prompt');
+    
+                // Construct the share message
+                var shareMessage = promptText + ': ' + imageUrl;
+    
+                // Open share dialog based on the platform
+                if (navigator.share) {
+                    navigator.share({
+                        title: promptText,
+                        text: shareMessage,
+                        url: imageUrl
+                    }).then(() => console.log('Successful share')).catch((error) => console.log('Error sharing', error));
+                } else {
+                    // Fallback for browsers that do not support native share API
+                    var whatsappUrl = 'whatsapp://send?text=' + encodeURIComponent(shareMessage);
+                    window.open(whatsappUrl);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        var images = []; // To hold the list of images
+        var currentIndex = -1; // To track the current image index
+
+        function updateModalContent(image) {
+            $('#modalImage').attr('src', image.url);
+            $('#imageModalLabel').text(image.title);
+            $('#resolution').text(image.resolution);
+        }
+
+        $(document).on('click', '.image-popups', function() {
+            images = $('.image-popups').map(function() {
+                return {
+                    url: $(this).data('image-url'),
+                    title: $(this).attr('title'),
+                    resolution: $(this).data('image-resolution')
+                };
+            }).get();
+
+            currentIndex = $('.image-popups').index(this);
+            const image = images[currentIndex];
+            updateModalContent(image);
+
+            // Show the modal
+            $('#imageModal').modal('show');
+        });
+
+        $('#prevButton').click(function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateModalContent(images[currentIndex]);
+            }
+        });
+
+        $('#nextButton').click(function() {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                updateModalContent(images[currentIndex]);
+            }
+        });
+    </script>
 
 
-    @section('script')
-        <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            var page = 1; // initialize page number
+            var isLoading = false; // flag to prevent multiple simultaneous AJAX requests
+            var hasMoreImages = true; // flag to check if there are more images to load
+
+            function loadMoreImages() {
+                if (isLoading || !hasMoreImages) return; // exit if already loading or no more images
+                isLoading = true; // set loading flag
+
+                $('.infinite-scroll-loader').show(); // show loader
+                $.ajax({
+                    url: '{{ route("ai.image.gallery") }}?page=' + page,
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.trim() === '') {
+                            hasMoreImages = false; // no more images to load
+                        } else {
+                            // Append only if it's not the initial load (page > 1)
+                            if (page > 1) {
+                                $('#image-container').append(response);
+                            }
+                            page++; // increment page number
+                        }
+                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
+                        isLoading = false; // reset loading flag
+                    }
+                });
+            }
+
+            $(window).scroll(function() {
+                if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+                    loadMoreImages();
+                }
+            });
+
+            $('#search, select[name="resolution"], select[name="style"]').on('change input', function() {
+            var searchText = $('#search').val().toLowerCase();
+            var resolution = $('select[name="resolution"]').val();
+            var style = $('select[name="style"]').val();
+            
+            $.ajax({
+                url: '{{ route("ai.image.gallery") }}',
+                type: 'GET',
+                data: {
+                    search: searchText,
+                    resolution: resolution,
+                    style: style
+                },
+                success: function(response) {
+                    $('#image-container').html(response);
+                    page = 1; // reset page number
+                    hasMoreImages = true; // reset has more images flag
+                }
+            });
+            });
 
 
-        @section('script')
+                // Initial load of images only if it's not an AJAX request
+                if (!window.location.href.includes('?')) {
+                    loadMoreImages();
+                }
+            });
+    </script>
 
-        {{-- SHAREE --}}
-        <script>
-            $(document).ready(function() {
-                $('.share-button').click(function() {
-                    var imageUrl = $(this).data('image-url');
-                    var promptText = $(this).data('image-prompt');
-        
-                    // Construct the share message
-                    var shareMessage = promptText + ': ' + imageUrl;
-        
-                    // Open share dialog based on the platform
-                    if (navigator.share) {
-                        navigator.share({
-                            title: promptText,
-                            text: shareMessage,
-                            url: imageUrl
-                        }).then(() => console.log('Successful share')).catch((error) => console.log('Error sharing', error));
-                    } else {
-                        // Fallback for browsers that do not support native share API
-                        var whatsappUrl = 'whatsapp://send?text=' + encodeURIComponent(shareMessage);
-                        window.open(whatsappUrl);
+
+    {{-- LIKE --}}
+    <script>
+        $(document).ready(function() {
+            // Like button functionality
+            $(document).off('click', '.like-button').on('click', '.like-button', function() {
+                var imageId = $(this).data('image-id');
+                var likeButton = $(this); 
+                var likeCountBadge = likeButton.find('.badge');
+                $.ajax({
+                    url: '/like',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: { image_id: imageId },
+                    success: function(response) {
+                        // Update UI to reflect the new like status
+                        if (response.liked) {
+                            // Image is liked
+                            likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
+                            likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
+                        } else {
+                            // Image is unliked
+                            likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
+                            likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle errors
                     }
                 });
             });
-        </script>
 
-<script>
-    var images = []; // To hold the list of images
-    var currentIndex = -1; // To track the current image index
-
-    function updateModalContent(image) {
-        $('#modalImage').attr('src', image.url);
-        $('#imageModalLabel').text(image.title);
-        $('#resolution').text(image.resolution);
-    }
-
-    $(document).on('click', '.image-popups', function() {
-        images = $('.image-popups').map(function() {
-            return {
-                url: $(this).data('image-url'),
-                title: $(this).attr('title'),
-                resolution: $(this).data('image-resolution')
-            };
-        }).get();
-
-        currentIndex = $('.image-popups').index(this);
-        const image = images[currentIndex];
-        updateModalContent(image);
-
-        // Show the modal
-        $('#imageModal').modal('show');
-    });
-
-    $('#prevButton').click(function() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateModalContent(images[currentIndex]);
-        }
-    });
-
-    $('#nextButton').click(function() {
-        if (currentIndex < images.length - 1) {
-            currentIndex++;
-            updateModalContent(images[currentIndex]);
-        }
-    });
-</script>
-
-
-<script>
-   $(document).ready(function() {
-    var page = 1; // initialize page number
-    var isLoading = false; // flag to prevent multiple simultaneous AJAX requests
-    var hasMoreImages = true; // flag to check if there are more images to load
-
-    function loadMoreImages() {
-        if (isLoading || !hasMoreImages) return; // exit if already loading or no more images
-        isLoading = true; // set loading flag
-
-        $('.infinite-scroll-loader').show(); // show loader
-        $.ajax({
-            url: '{{ route("ai.image.gallery") }}?page=' + page,
-            type: 'GET',
-            success: function(response) {
-                if (response.trim() === '') {
-                    hasMoreImages = false; // no more images to load
-                } else {
-                    // Append only if it's not the initial load (page > 1)
-                    if (page > 1) {
-                        $('#image-container').append(response);
+            // Favorite button functionality
+            $(document).off('click', '.favorite-button').on('click', '.favorite-button', function() {
+                var imageId = $(this).data('image-id');
+                var favoriteButton = $(this);
+                var favoriteCountBadge = favoriteButton.find('.badge');
+                $.ajax({
+                    url: '/favorite',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: { image_id: imageId },
+                    success: function(response) {
+                        // Update UI to reflect the new favorite status
+                        if (response.favorited) {
+                            // Image is favorited
+                            favoriteButton.removeClass('ri-heart-2-line').addClass('ri-heart-2-fill');
+                            favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) + 1);
+                        } else {
+                            // Image is unfavorited
+                            favoriteButton.removeClass('ri-heart-2-fill').addClass('ri-heart-2-line');
+                            favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) - 1);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle errors
                     }
-                    page++; // increment page number
-                }
-                $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
-                isLoading = false; // reset loading flag
-            }
+                });
+            });
+
         });
-    }
+    </script>
 
-    $(window).scroll(function() {
-        if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-            loadMoreImages();
-        }
-    });
-
-    $('#search, select[name="resolution"], select[name="style"]').on('change input', function() {
-    var searchText = $('#search').val().toLowerCase();
-    var resolution = $('select[name="resolution"]').val();
-    var style = $('select[name="style"]').val();
+@endsection
     
-    $.ajax({
-        url: '{{ route("ai.image.gallery") }}',
-        type: 'GET',
-        data: {
-            search: searchText,
-            resolution: resolution,
-            style: style
-        },
-        success: function(response) {
-            $('#image-container').html(response);
-            page = 1; // reset page number
-            hasMoreImages = true; // reset has more images flag
-        }
-    });
-});
-
-
-    // Initial load of images only if it's not an AJAX request
-    if (!window.location.href.includes('?')) {
-        loadMoreImages();
-    }
-});
-</script>
-
-
-        {{-- LIKE --}}
-        <script>
-           $(document).ready(function() {
-    // Like button functionality
-    $(document).off('click', '.like-button').on('click', '.like-button', function() {
-        var imageId = $(this).data('image-id');
-        var likeButton = $(this); 
-        var likeCountBadge = likeButton.find('.badge');
-        $.ajax({
-            url: '/like',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: { image_id: imageId },
-            success: function(response) {
-                // Update UI to reflect the new like status
-                if (response.liked) {
-                    // Image is liked
-                    likeButton.toggleClass('ri-thumb-up-line ri-thumb-up-fill');
-                    likeCountBadge.text(parseInt(likeCountBadge.text()) + 1);
-                } else {
-                    // Image is unliked
-                    likeButton.removeClass('ri-thumb-up-fill').addClass('ri-thumb-up-line');
-                    likeCountBadge.text(parseInt(likeCountBadge.text()) - 1);
-                }
-            },
-            error: function(xhr) {
-                // Handle errors
-            }
-        });
-    });
-
-    // Favorite button functionality
-    $(document).off('click', '.favorite-button').on('click', '.favorite-button', function() {
-        var imageId = $(this).data('image-id');
-        var favoriteButton = $(this);
-        var favoriteCountBadge = favoriteButton.find('.badge');
-        $.ajax({
-            url: '/favorite',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: { image_id: imageId },
-            success: function(response) {
-                // Update UI to reflect the new favorite status
-                if (response.favorited) {
-                    // Image is favorited
-                    favoriteButton.removeClass('ri-heart-2-line').addClass('ri-heart-2-fill');
-                    favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) + 1);
-                } else {
-                    // Image is unfavorited
-                    favoriteButton.removeClass('ri-heart-2-fill').addClass('ri-heart-2-line');
-                    favoriteCountBadge.text(parseInt(favoriteCountBadge.text()) - 1);
-                }
-            },
-            error: function(xhr) {
-                // Handle errors
-            }
-        });
-    });
-
- });
-         </script>
-
-
-    @endsection
-    
-    @endsection
+@endsection

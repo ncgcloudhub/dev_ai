@@ -464,16 +464,6 @@
     </div>
 
 
-
-
-
-
-
-
-   
-
-
-
 @endsection
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>

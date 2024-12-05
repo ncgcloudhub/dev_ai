@@ -167,7 +167,7 @@ class DynamicPageController extends Controller
                 ],
                 [
                     "role" => "user",
-                    "content" => "Generate an SEO title not more than 60 characters, description not more than 160 characters, and 20 comma-separated tags for the title: $title."
+                    "content" => "Generate an SEO title not more than 60 characters, description not more than 160 characters, and 20 comma-separated tags for the title: $title. The header for the Title should be '**SEO Title:**', the header for Description should be '**SEO Description:**', and the header for the Tags should be '**Tags:**'"
                 ]
             ],
         ],
@@ -180,11 +180,9 @@ class DynamicPageController extends Controller
     preg_match('/\*\*SEO Description:\*\*\s*(.*)/', $assistantContent, $descriptionMatches);
     preg_match('/\*\*Tags:\*\*\s*(.*)$/s', $assistantContent, $tagsMatches);
 
-
     $seoTitle = $titleMatches[1] ?? 'No title generated';
     $seoDescription = $descriptionMatches[1] ?? 'No description generated';
     $seoTags = $tagsMatches[1] ?? 'No tags generated';
-
 
     return response()->json([
         'success' => true,
