@@ -233,7 +233,7 @@
                                             <div class="box-content">
                                                 <div class="d-flex align-items-center mt-2">
                                                     <div class="flex-grow-1 text-muted">by <a href=""
-                                                            class="text-body text-truncate">Ron Mackie</a></div>
+                                                            class="text-body text-truncate">{{ $item->user->name }}</a></div>
                                                     <div class="flex-shrink-0">
                                                         <div class="d-flex gap-3">
                                                         <button type="button"
