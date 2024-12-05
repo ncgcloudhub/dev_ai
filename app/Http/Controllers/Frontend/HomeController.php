@@ -30,7 +30,8 @@ class HomeController extends Controller
     public function AIImageGallery(Request $request)
     {
         $query = DalleImageGenerate::withCount(['likes', 'favorites']);
-    
+        $stableImages = StableDiffusionGeneratedImage::withCount('stableDiffusionLike')->get();
+
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
@@ -60,7 +61,7 @@ class HomeController extends Controller
             return view('frontend.image_gallery_partial', compact('images'))->render();
         }
     
-        return view('frontend.ai_image_gallery', compact('images'));
+        return view('frontend.ai_image_gallery', compact('images','stableImages'));
     }
     
 

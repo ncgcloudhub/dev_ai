@@ -21,4 +21,10 @@ class StableDiffusionImageLike extends Model
         return $this->belongsTo(StableDiffusionGeneratedImage::class);
     }
 
+    public function images()
+    {
+        return $this->belongsTo(StableDiffusionGeneratedImage::class, 'image_id');
+    }
+
+
 }
