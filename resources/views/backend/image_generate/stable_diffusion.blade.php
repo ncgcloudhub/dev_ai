@@ -56,10 +56,10 @@
                                 <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
                                 <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
                             <div class="row g-2">
-                                <div class="col">
+                                {{-- <div class="col">
                                     <div class="position-relative mb-3">
-                                        <input type="text" class="form-control form-control-lg bg-light border-light"
-                                            placeholder="Enter your Prompt" name="prompt" id="prompt">
+                                        <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                        <i class="ri-search-line search-icon"></i>
 
                                             <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute end-0 top-0" 
                                             onclick="toggleOptimize()" id="optimizeIcon">
@@ -67,7 +67,18 @@
                                          </a>
                                        
                                     </div>
+                                </div> --}}
+                                <div class="col">
+                                    <div class="search-box position-relative">
+                                        <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y" 
+                                            
+                                           onclick="toggleOptimize()" id="optimizeIcon">
+                                            <i class="ri-hammer-line"></i>
+                                        </a>
+                                        <textarea class="form-control search ps-5" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                    </div>
                                 </div>
+                                
                                 <div class="col-auto">
                                     <button onclick="syncOffcanvasInput()" type="submit" class="btn gradient-btn-7 btn-lg waves-effect waves-light"><i
                                         class="mdi mdi-magnify me-1"></i> Generate</button>
@@ -862,6 +873,18 @@ $(document).ready(function() {
         });
     });
 });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Function to resize textarea
+        function resizeTextarea() {
+            $(this).css('height', 'auto').css('height', this.scrollHeight + 'px');
+        }
+
+        // Call the resizeTextarea function on textarea input
+        $('textarea').each(resizeTextarea).on('input', resizeTextarea);
+    });
 </script>
 
 <script>
