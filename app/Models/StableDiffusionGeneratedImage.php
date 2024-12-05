@@ -16,4 +16,10 @@ class StableDiffusionGeneratedImage extends Model
         return $this->hasMany(StableDiffusionImageLike::class);
     }
 
+        public function stableDiffusionLike()
+    {
+        return $this->hasMany(StableDiffusionImageLike::class, 'image_id');
+    }
+
+
 }
