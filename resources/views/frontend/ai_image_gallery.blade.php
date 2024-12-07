@@ -293,7 +293,6 @@
             });
             });
 
-
                 // Initial load of images only if it's not an AJAX request
                 if (!window.location.href.includes('?')) {
                     loadMoreImages();
