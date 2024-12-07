@@ -211,7 +211,13 @@ class RoleController extends Controller
 
     public function AllRolesPermission(){
 
-        $roles = Role::all();
+        $roles = Role::withCount(['users' => function ($query) {
+            $query->where('role', 'admin'); // Filter only admin users
+        }])
+        ->with(['users' => function ($query) {
+            $query->where('role', 'admin'); // Include only admin users
+        }])
+        ->get();
         return view('backend.roleSetup.all_roles_permission',compact('roles'));
 
     }// End Method 
