@@ -167,7 +167,7 @@ class DynamicPageController extends Controller
                 ],
                 [
                     "role" => "user",
-                    "content" => "Generate an SEO title not more than 60 characters, description not more than 160 characters, and 20 comma-separated tags for the title: $title. The header for the Title should be '**SEO Title:**', the header for Description should be '**SEO Description:**', and the header for the Tags should be '**Tags:**'"
+                    "content" => "Generate an SEO title not more than 60 characters, make sure the title doesn't have any special characters except 'dash', for description not more than 160 characters, and 20 comma-separated tags for the title: $title. The title, description, and tags should be SEO optimized. The header for the Title should be '**SEO Title:**', the header for Description should be '**SEO Description:**', and the header for the Tags should be '**Tags:**'"
                 ]
             ],
         ],
