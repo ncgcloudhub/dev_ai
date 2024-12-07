@@ -28,7 +28,9 @@
                         <tr>
                             <th scope="col">ID.</th>
                             <th scope="col">Role Name</th>
-                            <th>Permission </th> 
+                            <th scope="col">Users Count</th> <!-- New column for user count -->
+                            <th scope="col">Users</th> <!-- New column for user names -->
+                            <th scope="col">Permission </th> 
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -38,6 +40,18 @@
                             <td>{{ $key+1 }}</td>
                             <td>
                                 <a href="" class="fw-medium link-primary">{{ $item->name }}</a>
+                            </td>
+                            <td>{{ $item->users_count }}</td> <!-- Display user count -->
+                            <td>
+                                @if($item->users->isNotEmpty())
+                                    <ul>
+                                        @foreach($item->users as $user)
+                                            <li>{{ $user->name }}</li> <!-- Display user name -->
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <span class="text-muted">No users assigned</span>
+                                @endif
                             </td>
                             <td>
                                 @foreach($item->permissions as $perm)
