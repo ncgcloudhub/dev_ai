@@ -513,14 +513,4 @@ class PromptLibraryController extends Controller
         return redirect()->back()->with('success', 'Example deleted successfully.');
     }
 
-
-
-    // USER PROMPT-------------------------------------------------------------------------------
-    public function UserPromptManage()
-    {
-        $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
-        $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
-        $categories = PromptLibraryCategory::latest()->get();
-        return view('user.prompt_library.user_prompt_library', compact('prompt_library', 'prompt_library_category', 'categories'));
-    }
 }
