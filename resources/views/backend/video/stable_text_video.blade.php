@@ -15,7 +15,22 @@
     <button type="submit">Generate Video</button>
 </form>
 
+    <!-- Display the video after it's generated -->
+    <div id="videoContainer" style="margin-top: 20px; display: none;">
+        <h2>Generated Video</h2>
+        <video id="generatedVideo" controls>
+            <source id="videoSource" src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
 <script>
+
+const apiKey = @json($apiKey); // Loaded from environment variable
+
+// Log the apiKey to verify it's loaded
+console.log('API Key:', apiKey);
+
     document.querySelector('form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -28,10 +43,10 @@
         const result = await response.json();
 
         if (response.ok) {
-            console.log('Image generated:', result.image_url);
+            console.log('video generated id:', result.generation_id);
 
             // Poll for video result
-            pollForVideo(result.generation_id);
+            fetchVideo(result.generation_id);
         } else {
             console.error('Error:', result.error);
         }
@@ -40,22 +55,49 @@
     }
 });
 
-function pollForVideo(generationId) {
-    const interval = setInterval(async () => {
-        const response = await fetch(`/video-result/${generationId}`);
-        const result = await response.json();
+function fetchVideo(generationId) {
+    // Polling interval (in milliseconds)
+    const pollingInterval = 10000; // 10 seconds
 
-        if (result.status === 200) {
-            clearInterval(interval);
-            document.getElementById('generatedVideo').src = result.video_url;
-            document.getElementById('videoContainer').style.display = 'block';
-        } else if (result.status === 202) {
-            console.log(result.message);
-        } else {
-            clearInterval(interval);
-            console.error('Error:', result.error);
-        }
-    }, 10000); // Poll every 10 seconds
+    // Start polling
+    const pollForVideo = setInterval(() => {
+        fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle case when the video is ready
+            if (data && data.finish_reason === 'SUCCESS') {
+                console.log('Video is ready! Base64 video data:', data.video);
+
+                // Decode the base64 video and display or download it
+                const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
+                const videoUrl = URL.createObjectURL(videoBlob);
+
+                // Display video in the browser (you can adjust this as needed)
+                const videoElement = document.createElement('video');
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                document.body.appendChild(videoElement);
+
+                // Stop polling after success
+                clearInterval(pollForVideo);
+            } else if (data && data.status === 'in-progress') {
+                console.log('Video generation still in progress...');
+            } else {
+                console.error('Error fetching video:', data);
+                clearInterval(pollForVideo);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching video:', error);
+            clearInterval(pollForVideo);
+        });
+    }, pollingInterval);
 }
 
 </script>

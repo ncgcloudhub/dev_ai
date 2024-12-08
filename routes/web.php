@@ -732,7 +732,7 @@ Route::post('/increment-stable-download/{id}', [StableDifussionController::class
 // Stable Text to Video
 Route::get('/stable-text-video-form', [StableDifussionController::class, 'TextVideoindex'])->name('stable.text.video.form');
 Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.image_to_video');
-Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getGeneratedVideo']);
+Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 
 

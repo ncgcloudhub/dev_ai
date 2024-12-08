@@ -245,31 +245,38 @@ public function generateImageToVideo(Request $request)
 
     try {
         // Step 2.1: Load the image from the local file path
-        Log::info('Step 2.1: Loading image from local file path.', ['image_url' => $imageUrl]);
+        Log::info('Step 2.1: Loading the image from URL.', ['image_url' => $imageUrl]);
+        $fileName = basename($imageUrl);
+
+        // Build the local file path
+        $filePath = storage_path('app/public/' . $fileName);
+    
+        // Check if the file exists
+        if (!file_exists($filePath)) {
+            Log::error('Step 2.1: File not found in storage.', ['file_path' => $filePath]);
+            return response()->json(['error' => 'File not found in storage.'], 404);
+        }
     
         // Load the image using Intervention
-        $image = Image::make($imageUrl);
+        $image = Image::make($filePath);
     
-        // Step 2.2: Resize the image to 768x768
-        Log::info('Step 2.2: Resizing image to 768x768.');
-        $image->resize(768, 768);
-    
-        // Step 3: Save the resized image locally
-        $resizedImagePath = storage_path('app/public/resized_image_' . time() . '.jpg');
-        $image->save($resizedImagePath);
-    
-        // Log: Image resized and saved
-        Log::info('Step 2.3: Image resized and saved successfully.', ['resized_image_path' => $resizedImagePath]);
-    
-        // Return the URL of the resized image
-        return response()->json(['resized_image_url' => Storage::url($resizedImagePath)]);
+        Log::info('Step 2.1: Image loaded successfully.', ['file_path' => $filePath]);
+
+    // Step 2.2: Resize the image to 768x768
+    Log::info('Step 2.2: Resizing the image to 768x768.');
+    $image->resize(768, 768);
+    Log::info('Step 2.2: Image resized successfully.');
+
+    // Step 3: Save the resized image locally
+    $resizedImagePath = storage_path('app/public/resized_image_' . time() . '.jpg');
+    Log::info('Step 3: Saving the resized image.', ['path' => $resizedImagePath]);
+    $image->save($resizedImagePath);
+    Log::info('Step 3: Resized image saved successfully.', ['path' => $resizedImagePath]);
     
     } catch (\Exception $e) {
         Log::error('Step 2.1: Image processing failed.', ['error' => $e->getMessage()]);
         return response()->json(['error' => 'Image processing failed'], 500);
-    }
-
-    
+    } 
    
     // Step 3: Use the Generated Image to Create a Video
     Log::info('Step 3: Video generation started.');
@@ -282,7 +289,7 @@ public function generateImageToVideo(Request $request)
     // Send the request to generate the video
     $videoResponse = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
-    ])->post($apiUrl, [
+    ])->attach('image', fopen($resizedImagePath, 'r'), basename($resizedImagePath))->post($apiUrl, [
         'image_url' => $imageUrl,
         'seed' => $request->input('seed', 0),
         'cfg_scale' => $request->input('cfg_scale', 1.8),
