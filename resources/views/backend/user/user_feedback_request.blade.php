@@ -16,7 +16,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-body">
-                <table id="alternative-pagination" class="table table-striped table-hover table-bordered text-center align-middle" style="width:100%">
+                <table id="alternative-pagination" class="table responsive table-striped table-hover table-bordered text-center align-middle" style="width:100%">
                     <thead>
                         <tr>
                             <th>SL.</th>
