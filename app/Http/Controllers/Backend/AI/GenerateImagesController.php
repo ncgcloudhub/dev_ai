@@ -216,13 +216,13 @@ class GenerateImagesController extends Controller
                 imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $sourceWidth, $sourceHeight, $sourceWidth, $sourceHeight);
     
                 ob_start(); // Turn on output buffering
-                imagejpeg($targetImage, null, 60); // Compress and output the image as JPEG
+                imagejpeg($targetImage, null, 80); // Compress and output the image as JPEG
                 $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
                 ob_end_clean(); // Turn off output buffering
     
                 // Save the compressed image to Azure Blob Storage
                 $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-                $imageName = time() . '-' . uniqid() . '.jpg';
+                $imageName = time() . '-' . uniqid() . '.webp';
                 $containerName = config('filesystems.disks.azure.container');
                 $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
     
