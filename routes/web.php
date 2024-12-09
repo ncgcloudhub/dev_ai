@@ -449,9 +449,6 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
 
     Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
 
-    // User Prompt Library
-    Route::get('/user/prompt/library', [PromptLibraryController::class, 'UserPromptManage'])->name('user.prompt.library');
-
 }); //End User Middleware
 
 Route::post('/generate-images', [EducationController::class, 'generateImages']);

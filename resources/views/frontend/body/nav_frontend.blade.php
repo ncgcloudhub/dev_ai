@@ -33,7 +33,7 @@
                             @if (Auth::user()->role == 'admin')
                                 <li><a class="dropdown-item" href="{{ route('prompt.manage') }}">Prompt Library</a></li>
                             @elseif (Auth::user()->role == 'user')
-                                <li><a class="dropdown-item" href="{{ route('user.prompt.library') }}">Prompt Library</a></li>
+                                <li><a class="dropdown-item" href="{{ route('prompt.manage') }}">Prompt Library</a></li>
                             @endif
                         @else
                             <li><a class="dropdown-item" href="{{ route('frontend.free.prompt.library') }}">Prompt Library</a></li>

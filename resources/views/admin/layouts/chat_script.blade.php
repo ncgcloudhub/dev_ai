@@ -235,6 +235,74 @@ function handleImagePaste(event) {
             let currentSpeech = null;  // Global variable to store the current SpeechSynthesisUtterance
             let isReading = false;     // Flag to track if speech is ongoing
 
+            function translateWithOpenAI(text, targetLang) {
+                const apiKey = "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"; // Replace with your OpenAI API key
+                const url = "https://api.openai.com/v1/chat/completions";
+
+                const systemMessage = `You are a translation assistant. Translate the following text into ${targetLang}:`;
+
+                const data = {
+                    model: "gpt-4", // or "gpt-3.5-turbo" for cost efficiency
+                    messages: [
+                        { role: "system", content: systemMessage },
+                        { role: "user", content: text },
+                    ],
+                    temperature: 0.3, // Low temperature for accurate and consistent responses
+                };
+
+                return fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${apiKey}`,
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        if (result.choices && result.choices.length > 0) {
+                            return result.choices[0].message.content.trim();
+                        }
+                        throw new Error("Translation failed");
+                    })
+                    .catch((error) => {
+                        console.error("Error translating with OpenAI:", error);
+                        return "Translation failed. Please try again.";
+                    });
+            }
+
+
+            document.addEventListener("click", function (event) {
+                if (event.target && event.target.classList.contains("translate-btn")) {
+                    const assistantMessageId = event.target.dataset.target;
+                    const messageElement = document.getElementById(assistantMessageId);
+
+                    if (messageElement) {
+                        const messageContent = messageElement.textContent;
+
+                        // Ask the user for the target language
+                        const targetLang = prompt(
+                            "Enter the target language (e.g., Bangla, Spanish, French):"
+                        );
+
+                        if (targetLang) {
+                            translateWithOpenAI(messageContent, targetLang)
+                                .then((translatedText) => {
+                                    messageElement.innerHTML = `<p class="mb-0 ctext-content">${translatedText}</p>`;
+                                })
+                                .catch((error) => {
+                                    console.error("Translation error:", error);
+                                    messageElement.innerHTML = `<p class="mb-0 ctext-content text-danger">Translation error. Please try again later.</p>`;
+                                });
+                        }
+                    }
+                }
+            });
+
+
+
+
+
             // Function to toggle reading aloud and stopping
             function toggleReadAloud(button, targetId) {
                 if (isReading) {
@@ -399,8 +467,12 @@ function sendMessage() {
                                     title="Regenerate">
                                 <i class="ri-refresh-line"></i>
                             </button>
+                            <button class="btn btn-info btn-sm translate-btn" 
+                                    data-target="${assistantMessageId}" 
+                                    title="Translate">
+                                <i class="ri-translate"></i> Translate
+                            </button>
 
-                            
                         </div>
                     </div>
                     <div class="conversation-name">

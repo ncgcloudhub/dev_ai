@@ -3,7 +3,7 @@
         <div class="row align-items-center gy-4">
             <div class="col-lg-6 col-sm-7 mx-10">
                 <div>
-                    <img src="https://ai.smsblastnet.com/public/uploads/media/lOF5TPvuGPcU0HBFb4vyvE11lvXufZemYwZBSgPq.jpg" class="img-fluid mx-auto" alt="about image">
+                    <img src="{{URL::asset('build/images/nft/ai4.webp')}}" class="img-fluid mx-auto" alt="about image">
                 </div>
             </div>
             <div class="col-lg-6 ">
@@ -47,10 +47,10 @@
                         <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                     </div>
                     <div class="explore-place-bid-img">
-                        <img src="{{URL::asset('build/images/nft/ai.jpg')}}" alt="" class="card-img-top explore-img" />
+                        <img src="{{URL::asset('build/images/nft/ai.webp')}}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{route('generate.image.view')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i> Generate Image</a>
+                            <a href="{{route('generate.image.view')}}" class="btn gradient-btn-7"><i class="ri-auction-fill align-bottom me-1"></i> Generate Image</a>
                         </div>
                     </div>
                    
@@ -63,10 +63,10 @@
                         <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                     </div>
                     <div class="explore-place-bid-img">
-                        <img src="{{URL::asset('build/images/nft/ai1.jpg')}}" alt="" class="card-img-top explore-img" />
+                        <img src="{{URL::asset('build/images/nft/ai1.webp')}}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{route('prompt.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Prompt Library</a>
+                            <a href="{{route('prompt.manage')}}" class="btn gradient-btn-7"><i class="ri-auction-fill align-bottom me-1"></i>Prompt Library</a>
                         </div>
                     </div>
                    
@@ -79,10 +79,10 @@
                         <button type="button" class="btn btn-icon active" data-bs-toggle="button" aria-pressed="true"><i class="mdi mdi-cards-heart fs-16"></i></button>
                     </div>
                     <div class="explore-place-bid-img">
-                        <img src="{{URL::asset('build/images/nft/ai2.jpg')}}" alt="" class="card-img-top explore-img" />
+                        <img src="{{URL::asset('build/images/nft/ai2.webp')}}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{route('aicontentcreator.manage')}}" class="btn btn-primary"><i class="ri-auction-fill align-bottom me-1"></i>Free AI Templates</a>
+                            <a href="{{route('aicontentcreator.manage')}}" class="btn gradient-btn-7"><i class="ri-auction-fill align-bottom me-1"></i>Free AI Templates</a>
                         </div>
                     </div>
                    
