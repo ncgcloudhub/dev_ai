@@ -32,43 +32,35 @@
 
                             {{-- UI Card Start --}}
                             <div class="row row-cols-xxl-5 row-cols-lg-6 row-cols-1 justify-content-center py-5">
-
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb5.gif'); min-height: 200px;">
-                                        <div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 ms-2">
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
+                                        <video autoplay loop muted playsinline class="w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0; z-index: -1;">
+                                            <source src="{{ asset('build/images/bb5.webm') }}" type="video/webm">
+                                            Your browser does not support the video tag.
+                                        </video>
                                         <a href="{{ auth()->check() ? route('generate.image.view') : route('login') }}" class="btn waves-effect waves-light mt-auto gradient-btn-5">Generate Images</a>
                                     </div>
                                 </div><!-- end col -->
                             
-                                <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb1.gif'); min-height: 200px;">
-                                        <div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 ms-2">
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div class="col d-flex flex-column position-relative">
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
+                                        <video autoplay loop muted playsinline class="w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0; z-index: -1;">
+                                            <source src="{{ asset('build/images/bb1.webm') }}" type="video/webm">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <!-- Your card content here -->
                                         <a href="{{ auth()->check() ? route('aicontentcreator.manage') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Generate Contents</a>
+                                      
                                     </div>
                                 </div><!-- end col -->
+                                
                             
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb4.gif'); min-height: 200px;">
-                                        <div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 ms-2">
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
+                                        <video autoplay loop muted playsinline class="w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0; z-index: -1;">
+                                            <source src="{{ asset('build/images/bb4.webm') }}" type="video/webm">
+                                            Your browser does not support the video tag.
+                                        </video>
                                         @auth                                                 
                                             <a href="{{ route('prompt.manage') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Prompt Library</a> 
                                         @else
@@ -79,14 +71,11 @@
                                 </div><!-- end col -->
                             
                                 <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="background-image: url('build/images/bb3.gif'); min-height: 200px;">
-                                        <div>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 ms-2">
-                                                  
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
+                                        <video autoplay loop muted playsinline class="w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0; z-index: -1;">
+                                            <source src="{{ asset('build/images/bb3.webm') }}" type="video/webm">
+                                            Your browser does not support the video tag.
+                                        </video>
                                         <a href="{{ auth()->check() ? route('main.chat.form') : route('login') }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">Chat Bot</a>
                                     </div>
                                 </div><!-- end col -->
