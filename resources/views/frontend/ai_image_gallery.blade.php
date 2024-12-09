@@ -84,7 +84,7 @@
                                             <div class="row gallery-wrapper justify-content-center" id="image-container">
                                                 @include('frontend.stable_images_partial_frontend', ['stableImages' => $stableImages])
                                             </div>
-                                            <div class="row gallery-wrapper justify-content-center" id="image-container">
+                                            <div class="row gallery-wrapper justify-content-center" id="image-container1">
                                                 @include('frontend.image_gallery_partial', ['images' => $images])
                                             </div>
                                             
@@ -285,13 +285,13 @@
                     style: style
                 },
                 success: function(response) {
-                    $('#image-container').html(response);
+                    $('#image-container').html(response.stableImagesPartial);
+                    $('#image-container1').html(response.imagesPartial);
                     page = 1; // reset page number
                     hasMoreImages = true; // reset has more images flag
                 }
             });
             });
-
 
                 // Initial load of images only if it's not an AJAX request
                 if (!window.location.href.includes('?')) {

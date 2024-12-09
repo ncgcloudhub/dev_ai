@@ -729,6 +729,13 @@ Route::post('/stable-image', [StableDifussionController::class, 'generate'])->na
 Route::post('/stable-diffusion-like-image', [StableDifussionController::class, 'likeImage'])->name('like.image');
 Route::post('/increment-stable-download/{id}', [StableDifussionController::class, 'incrementDownloadCount']);
 
+// Stable Text to Video
+Route::get('/stable-text-video-form', [StableDifussionController::class, 'TextVideoindex'])->name('stable.text.video.form');
+Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.image_to_video');
+Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
+Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
+
+
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
