@@ -26,8 +26,6 @@ class CustomTemplateController extends Controller
 
     public function CustomTemplateCategoryStore(Request $request)
     {
-
-
         $user_id = Auth::user()->id;
 
         $customTemplateCategory = CustomTemplateCategory::insertGetId([
@@ -41,14 +39,51 @@ class CustomTemplateController extends Controller
 
         return redirect()->back()->with('success', 'Custom Template Category Saved Successfully');
 
-        //  $notification = array(
-        //       'message' => 'Settings Changed Successfully',
-        //       'alert-type' => 'success'
-        //   );
-
-        //   return redirect()->back()->with($notification);
-
     }
+
+    public function CustomTemplateCategoryEdit($id)
+    {
+        $categories = CustomTemplateCategory::orderBy('id', 'ASC')->get();
+        $category = CustomTemplateCategory::findOrFail($id);
+        return view('backend.custom_template.category_edit', compact('category', 'categories'));
+    }
+
+
+    public function CustomTemplateCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        CustomTemplateCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'category_icon' => $request->category_icon,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Category Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+    } // end method 
+
+
+    public function CustomTemplateCategoryDelete($id)
+    {
+        $category = CustomTemplateCategory::findOrFail($id);
+
+        CustomTemplateCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('custom.template.category.add')->with($notification);
+    } // end method
 
     // Custom Template
 
@@ -184,6 +219,7 @@ class CustomTemplateController extends Controller
 
         $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
 
+      
 
         foreach ($input->all() as $name => $inpVal) {
             if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
@@ -201,17 +237,31 @@ class CustomTemplateController extends Controller
             }
         }
 
-        $result = $client->completions()->create([
+          // Prepare messages for chat completions endpoint
+          $messages = 
+          [
+              [
+                  'role' => 'system', 
+                  'content' => 'You are a helpful assistant.'
+              ],
+  
+              [
+                  'role' => 'user', 
+                  'content' => $prompt
+              ],
+          ];
+
+        $result = $client->chat()->create([
             "model" => $openaiModel,
             "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
             'max_tokens' => $max_result_length_value,
-            'prompt' => $prompt,
+            'messages' => $messages,
         ]);
 
-        $content = trim($result['choices'][0]['text']);
+        $content = trim($result['choices'][0]['message']['content']);
 
         // return view('backend.custom_template.template_view', compact('title', 'content'));
         return $content;

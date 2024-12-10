@@ -492,6 +492,12 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
         Route::post('/category/store', [CustomTemplateController::class, 'CustomTemplateCategoryStore'])->name('custom.template.category.store');
 
+        Route::get('/category/edit/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryEdit'])->name('custom.template.category.edit');
+
+        Route::post('/category/update', [CustomTemplateController::class, 'CustomTemplateCategoryUpdate'])->name('custom.template.category.update');
+
+        Route::get('/category/delete/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryDelete'])->name('custom.template.category.delete');
+
         Route::get('/add', [CustomTemplateController::class, 'CustomTemplateAdd'])->name('custom.template.add')->middleware('admin.permission:customTemplate.add');
 
         Route::post('store', [CustomTemplateController::class, 'CustomTemplateStore'])->name('custom.template.store');
