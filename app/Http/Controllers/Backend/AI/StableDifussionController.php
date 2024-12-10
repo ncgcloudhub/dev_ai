@@ -316,32 +316,76 @@ public function generateImageToVideo(Request $request)
 }
 
 
-public function testResize(Request $request)
+// Upscale
+public function UpscaleForm()
 {
-    // Image URL to be resized
-    $imageUrl = 'https://media.licdn.com/dms/image/v2/D4D12AQHVMcx-ckRzTQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1693712101604?e=2147483647&v=beta&t=x2x4Klr6G4MotvdA5Vknr0huNRVJi0dNJ4ojugImG-Q'; // Example placeholder image
-    
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.video.stable_upscale',compact('apiKey'));
+}
+
+public function upscale(Request $request)
+{
+    Log::info('Upscale Request Data:', $request->all());
+
+    $request->validate([
+        'image' => 'required|image', // Validate that an image file is provided
+        'prompt' => 'nullable|string', // Optional prompt
+        'output_format' => 'nullable|string', // Output format
+    ]);
+
+    $image = $request->file('image');
+    $prompt = $request->input('prompt') ?? '';
+    $outputFormat = $request->input('output_format') ?? 'webp';
+    $configapiKey = config('services.stable_diffusion.api_key');
+
     try {
-        // Step 1: Download the image from the URL
-        $image = Image::make($imageUrl);
+        // Stability AI Upscale API endpoint
+        $url = "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
 
-        // Step 2: Resize the image to 768x768
-        $image->resize(768, 768);
+        // Prepare the image file
+        $filePath = $image->getRealPath();
 
-        // Step 3: Save the resized image locally (in storage/app/public)
-        $imagePath = storage_path('app/public/resized_image.jpg');
-        $image->save($imagePath);
-
-        Log::info('Image resized successfully and saved to ' . $imagePath);
-
-        // Return the resized image URL
-        return response()->json([
-            'message' => 'Image resized successfully',
-            'image_url' => asset('storage/resized_image.jpg'),
+        // Make the HTTP request using Laravel's HTTP Client
+        $response = Http::timeout(60) // Set timeout to 60 seconds
+        ->withHeaders([
+            'Authorization' => 'Bearer ' . $configapiKey,
+            'accept' => 'image/*',
+        ])->attach(
+            'image', file_get_contents($filePath), $image->getClientOriginalName()
+        )->asMultipart()->post($url, [
+            'prompt' => $prompt,
+            'output_format' => $outputFormat,
         ]);
+
+         // Log the response details
+        Log::info('Received response from Stability AI Upscale API.', [
+            'status_code' => $response->status(),
+            'response_body' => $response->body(),
+        ]);
+
+        if ($response->successful()) {
+            // Save the upscaled image
+            $fileName = 'upscaled_' . $image->getClientOriginalName();
+            $outputPath = 'images/upscaled/' . $fileName;
+            Storage::disk('public')->put($outputPath, $response->body());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image upscaled successfully.',
+                'upscaled_image_url' => asset('storage/' . $outputPath),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => $response->json('error') ?? 'An error occurred while upscaling the image.',
+            ], $response->status());
+        }
     } catch (\Exception $e) {
-        Log::error('Image resize failed: ' . $e->getMessage());
-        return response()->json(['error' => 'Image resize failed'], 500);
+        Log::error('Upscale Error: ' . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred during the upscale process.',
+        ], 500);
     }
 }
 
