@@ -93,30 +93,7 @@ class CustomTemplateController extends Controller
         return view('backend.custom_template.template_add', compact('categories'));
     }
 
-    public function CustomTemplateManage()
-    {
-        $user_id = Auth::user()->id;
-        $templates = CustomTemplate::where('user_id', $user_id)->get();
-        $customtemplatecategories = CustomTemplateCategory::where('user_id', $user_id)->get();
-        return view('backend.custom_template.template_manage', compact('templates', 'customtemplatecategories'));
-    }
-
-    public function CustomTemplateView($id)
-    {
-        $customTemplate = CustomTemplate::findOrFail($id);
-
-        // Convert JSON strings to arrays
-        $inputTypes = json_decode($customTemplate->input_types, true);
-        $inputNames = json_decode($customTemplate->input_names, true);
-        $inputLabels = json_decode($customTemplate->input_labels, true);
-
-        $content = '';
-
-
-        return view('backend.custom_template.template_view', compact('customTemplate', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
-    }
-
-
+   
     public function CustomTemplateStore(Request $request)
     {
 
@@ -160,6 +137,96 @@ class CustomTemplateController extends Controller
         );
 
         return redirect()->back()->with($notification);
+    }
+
+    public function CustomTemplateEdit($slug)
+    {
+        $categories = CustomTemplateCategory::orderBy('id', 'ASC')->get();
+        $template = CustomTemplate::where('slug', $slug)->firstOrFail();
+
+        $templateInputs = json_decode($template->input_types, true);
+        $inputNames = json_decode($template->input_names, true);
+        $inputLabels = json_decode($template->input_labels, true);
+        // $inputPlaceholders = json_decode($template->input_placeholders, true);
+
+        $templateInputsArray = [];
+        foreach ($templateInputs as $index => $type) {
+            $templateInputsArray[] = [
+                'type' => $type,
+                'name' => $inputNames[$index] ?? '',
+                'label' => $inputLabels[$index] ?? '',
+                // 'placeholder' => $inputPlaceholders[$index] ?? '',
+            ];
+        }
+        return view('backend.custom_template.template_edit', compact('template', 'categories', 'templateInputsArray'));
+    }
+
+
+    public function CustomTemplateUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'template_name' => 'required|string',
+            'icon' => 'nullable|string',
+            'category_id' => 'required|exists:template_categories,id',
+            'description' => 'nullable|string',
+            'input_types' => 'required|array',
+            'input_names' => 'required|array',
+            'input_labels' => 'required|array',
+            'prompt' => 'nullable|string',
+        ]);
+
+        $template = CustomTemplate::findOrFail($id);
+        $template->template_name = $validatedData['template_name'];
+        $template->icon = $validatedData['icon'];
+        $template->category_id = $validatedData['category_id'];
+        $template->description = $validatedData['description'];
+        $template->input_types = json_encode($validatedData['input_types']);
+        $template->input_names = json_encode($validatedData['input_names']);
+        $template->input_labels = json_encode($validatedData['input_labels']);
+        $template->prompt = $validatedData['prompt'];
+        $template->save();
+
+        return redirect()->back()->with('success', 'Template updated successfully');
+    } // end method
+    
+    public function CustomTemplateDelete($id)
+    {
+        $aiContentCreator = CustomTemplate::findOrFail($id);
+
+        $aiContentCreator->delete();
+
+        $notification = array(
+            'message' => 'Template Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
+    public function CustomTemplateManage()
+    {
+        $user_id = Auth::user()->id;
+        $templates = CustomTemplate::where('user_id', $user_id)->get();
+        $customtemplatecategories = CustomTemplateCategory::where('user_id', $user_id)->get();
+        return view('backend.custom_template.template_manage', compact('templates', 'customtemplatecategories'));
+    }
+
+    public function CustomTemplateView($id)
+    {
+        $customTemplate = CustomTemplate::findOrFail($id);
+
+        // Convert JSON strings to arrays
+        $inputTypes = json_decode($customTemplate->input_types, true);
+        $inputNames = json_decode($customTemplate->input_names, true);
+        $inputLabels = json_decode($customTemplate->input_labels, true);
+
+        $content = '';
+
+
+        return view('backend.custom_template.template_view', compact('customTemplate', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
     }
 
     // Generate Using Open AI
