@@ -28,9 +28,27 @@
                                 <label for="language" class="form-label">Select Language</label>
                                 <select class="form-select" name="language" id="language" aria-label="Floating label select example">
                                     <option disabled selected="">Enter Language</option>
-                                    <option value="English">English</option>
+                                    <option value="English" selected>English</option>
+                                    <option value="Arabic">Arabic</option>
                                     <option value="Bengali">Bengali</option>
-                                    
+                                    <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+                                    <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+                                    <option value="Dutch">Dutch</option>
+                                    <option value="French">French</option>
+                                    <option value="German">German</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Indonesian">Indonesian</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Korean">Korean</option>
+                                    <option value="Polish">Polish</option>
+                                    <option value="Portuguese">Portuguese</option>
+                                    <option value="Russian">Russian</option>
+                                    <option value="Spanish">Spanish</option>
+                                    <option value="Swahili">Swahili</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Turkish">Turkish</option>
+                                    <option value="Vietnamese">Vietnamese</option>
                                   </select>
                              
                             </div>
@@ -69,8 +87,8 @@
             
                 <div class="col-md-12">
                     <label for="max_result_length" class="form-label">Max Result Length</label>
-                    <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
-                    <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
+                    <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="1000">
+                    <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="1000">
                     
                 </div>
                 
