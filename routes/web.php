@@ -732,6 +732,14 @@ Route::post('/generate-image-to-video', [StableDifussionController::class, 'gene
 Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 
+// Stable Image Upscale
+Route::get('/stable-upscale-form', [StableDifussionController::class, 'UpscaleForm'])->name('stable.upscale.form');
+Route::post('/upscale', [StableDifussionController::class, 'upscale']);
+
+// Stable Edit
+Route::get('/stable-edit-form', [StableDifussionController::class, 'EditForm'])->name('stable.edit.form');
+Route::post('/edit-background', [StableDifussionController::class, 'editBackground'])->name('edit.background');
+Route::post('/check-generation-status', [StableDifussionController::class, 'checkGenerationStatus']);
 
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');

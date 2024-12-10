@@ -316,44 +316,220 @@ public function generateImageToVideo(Request $request)
 }
 
 
-public function testResize(Request $request)
+// Upscale
+public function UpscaleForm()
 {
-    // Image URL to be resized
-    $imageUrl = 'https://media.licdn.com/dms/image/v2/D4D12AQHVMcx-ckRzTQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1693712101604?e=2147483647&v=beta&t=x2x4Klr6G4MotvdA5Vknr0huNRVJi0dNJ4ojugImG-Q'; // Example placeholder image
-    
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.video.stable_upscale',compact('apiKey'));
+}
+
+public function upscale(Request $request)
+{
+    Log::info('Upscale Request Data:', $request->all());
+
+    $request->validate([
+        'image' => 'required|image', // Validate that an image file is provided
+        'prompt' => 'nullable|string', // Optional prompt
+        'output_format' => 'nullable|string', // Output format
+    ]);
+
+    $image = $request->file('image');
+    $prompt = $request->input('prompt') ?? '';
+    $outputFormat = $request->input('output_format') ?? 'webp';
+    $configapiKey = config('services.stable_diffusion.api_key');
+
     try {
-        // Step 1: Download the image from the URL
-        $image = Image::make($imageUrl);
+        // Stability AI Upscale API endpoint
+        $url = "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
 
-        // Step 2: Resize the image to 768x768
-        $image->resize(768, 768);
+        // Prepare the image file
+        $filePath = $image->getRealPath();
 
-        // Step 3: Save the resized image locally (in storage/app/public)
-        $imagePath = storage_path('app/public/resized_image.jpg');
-        $image->save($imagePath);
-
-        Log::info('Image resized successfully and saved to ' . $imagePath);
-
-        // Return the resized image URL
-        return response()->json([
-            'message' => 'Image resized successfully',
-            'image_url' => asset('storage/resized_image.jpg'),
+        // Make the HTTP request using Laravel's HTTP Client
+        $response = Http::timeout(60) // Set timeout to 60 seconds
+        ->withHeaders([
+            'Authorization' => 'Bearer ' . $configapiKey,
+            'accept' => 'image/*',
+        ])->attach(
+            'image', file_get_contents($filePath), $image->getClientOriginalName()
+        )->asMultipart()->post($url, [
+            'prompt' => $prompt,
+            'output_format' => $outputFormat,
         ]);
+
+         // Log the response details
+        Log::info('Received response from Stability AI Upscale API.', [
+            'status_code' => $response->status(),
+            'response_body' => $response->body(),
+        ]);
+
+        if ($response->successful()) {
+            // Save the upscaled image
+            $fileName = 'upscaled_' . $image->getClientOriginalName();
+            $outputPath = 'images/upscaled/' . $fileName;
+            Storage::disk('public')->put($outputPath, $response->body());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image upscaled successfully.',
+                'upscaled_image_url' => asset('storage/' . $outputPath),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => $response->json('error') ?? 'An error occurred while upscaling the image.',
+            ], $response->status());
+        }
     } catch (\Exception $e) {
-        Log::error('Image resize failed: ' . $e->getMessage());
-        return response()->json(['error' => 'Image resize failed'], 500);
+        Log::error('Upscale Error: ' . $e->getMessage());
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred during the upscale process.',
+        ], 500);
     }
 }
 
+// STABLE EDIT
 
+public function EditForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.edit_form',compact('apiKey'));
+}
 
-
-
-
-
-
-
-
+public function editBackground(Request $request)
+{
     
+    // Log request data
+    Log::info('Edit Background Request Data:', $request->all());
+
+    return response()->json([
+        'status' => 'success',
+        'generation_id' => '41c4577579df28601521782d1b2b647919e29a611f8645141b2eef5481823ff6',
+    ]);
+
+    // Validate input
+    $request->validate([
+        'subject_image' => 'required|file|mimes:jpeg,png,jpg',
+        'background_prompt' => 'required|string',
+        'output_format' => 'required|string|in:webp,jpeg,png',
+    ]);
+
+    // Extract inputs
+    $subjectImage = $request->file('subject_image');
+    $backgroundPrompt = $request->input('background_prompt');
+    $outputFormat = $request->input('output_format');
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    // API endpoint and key
+    $url = "https://api.stability.ai/v2beta/stable-image/edit/replace-background-and-relight";
+
+    try {
+        // Prepare and log API request
+        Log::info('Preparing to call Stability AI Replace Background API.', [
+            'url' => $url,
+            'background_prompt' => $backgroundPrompt,
+            'output_format' => $outputFormat,
+        ]);
+
+        // Send API request
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $configapiKey,
+            'accept' => 'image/*',
+        ])->attach(
+            'subject_image',
+            file_get_contents($subjectImage->getRealPath()),
+            $subjectImage->getClientOriginalName()
+        )->asMultipart()->post($url, [
+            'background_prompt' => $backgroundPrompt,
+            'output_format' => $outputFormat,
+        ]);
+
+        // Log response
+        if ($response->successful()) {
+            Log::info('Received successful response from Stability AI API.', [
+                'status' => $response->status(),
+                'id' => $response->json()['id'] ?? 'N/A',
+            ]);
+
+            $imageUrl = "data:image/{$outputFormat};base64," . base64_encode($response->body());
+
+            // Return response
+            return response()->json([
+                'status' => 'success',
+                'image_url' => $imageUrl,
+            ]);
+        } else {
+            Log::error('Failed response from Stability AI API.', [
+                'status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to process the image.',
+            ], 500);
+        }
+    } catch (\Exception $e) {
+        // Log exception
+        Log::error('Exception occurred during Stability AI Replace Background API call.', [
+            'error_message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred during the image processing.',
+        ], 500);
+    }
+}
+
+public function checkGenerationStatus(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'generation_id' => 'required|string',
+        ]);
+
+        $generationId = $request->input('generation_id');
+        $configapiKey = config('services.stable_diffusion.api_key');
+
+        // Prepare the URL for the API request
+        $url = "https://api.stability.ai/v2beta/results/{$generationId}";
+
+        try {
+            // Log the request to monitor progress
+            Log::info('Checking generation status for generation ID: ' . $generationId);
+
+            // Make the GET request to check the status of the generation
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'Accept' => 'application/json' ,  // Or 'application/json' for base64 JSON
+            ])->get($url);
+
+            if ($response->successful()) {
+                $result = $response->json()['result'];
+                return response()->json([
+                    'status' => 'success',
+                    'image_url' => 'data:image/webp;base64,' . $result
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to retrieve generation status.'
+                ], 500);
+            }
+
+         
+        } catch (\Exception $e) {
+            // Catch any exception that occurs during the request
+            Log::error('Error occurred while checking generation status.', ['error' => $e->getMessage()]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while checking the generation status.',
+            ], 500);
+        }
+    }
+
+
 
 }
