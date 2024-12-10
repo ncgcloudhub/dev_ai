@@ -309,6 +309,47 @@ class AIContentCreatorController extends Controller
         return redirect()->back()->with($notification);
     }
 
+    public function AIContentCreatorManage()
+    {
+        $templates = Template::orderby('id', 'asc')->get();
+        $templatecategories = TemplateCategory::latest()->get();
+        $userRatings = [];
+        $userFeedbacks = [];
+
+        if (auth()->check()) {
+            $userRatings = RatingTemplate::where('user_id', auth()->id())
+                ->pluck('rating', 'template_id')
+                ->toArray();
+
+                // Fetch feedbacks related to the user
+                $userRequestFeedbacks = RequestModuleFeedback::where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+                $hasPendingFeedback = RequestModuleFeedback::where('user_id', auth()->id())
+                ->where('status', 'Pending')
+                ->exists();
+        }
+
+        return view('backend.ai_content_creator.aicontentcreator_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks','hasPendingFeedback'));
+    }
+
+    public function AIContentCreatorView($slug)
+    {
+        // Find the template by slug
+        $Template = Template::where('slug', $slug)->firstOrFail();
+
+        // Convert JSON strings to arrays
+        $inputTypes = json_decode($Template->input_types, true);
+        $inputNames = json_decode($Template->input_names, true);
+        $inputLabels = json_decode($Template->input_labels, true);
+        $inputPlaceholders = json_decode($Template->input_placeholders, true);
+
+        $content = '';
+
+        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
+    }
+
     public function AIContentCreatorSEOUpdate(Request $request)
     {
 
@@ -403,48 +444,6 @@ class AIContentCreatorController extends Controller
                     'seo_description' => $seoDescription,
                     'seo_tags' => $seoTags,
                 ]);
-    }
-
-
-    public function AIContentCreatorManage()
-    {
-        $templates = Template::orderby('id', 'asc')->get();
-        $templatecategories = TemplateCategory::latest()->get();
-        $userRatings = [];
-        $userFeedbacks = [];
-
-        if (auth()->check()) {
-            $userRatings = RatingTemplate::where('user_id', auth()->id())
-                ->pluck('rating', 'template_id')
-                ->toArray();
-
-                // Fetch feedbacks related to the user
-                $userRequestFeedbacks = RequestModuleFeedback::where('user_id', auth()->id())
-                ->orderBy('created_at', 'desc')
-                ->get();
-
-                $hasPendingFeedback = RequestModuleFeedback::where('user_id', auth()->id())
-                ->where('status', 'Pending')
-                ->exists();
-        }
-
-        return view('backend.ai_content_creator.aicontentcreator_manage', compact('templates', 'templatecategories', 'userRatings','userRequestFeedbacks','hasPendingFeedback'));
-    }
-
-    public function AIContentCreatorView($slug)
-    {
-        // Find the template by slug
-        $Template = Template::where('slug', $slug)->firstOrFail();
-
-        // Convert JSON strings to arrays
-        $inputTypes = json_decode($Template->input_types, true);
-        $inputNames = json_decode($Template->input_names, true);
-        $inputLabels = json_decode($Template->input_labels, true);
-        $inputPlaceholders = json_decode($Template->input_placeholders, true);
-
-        $content = '';
-
-        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
 
