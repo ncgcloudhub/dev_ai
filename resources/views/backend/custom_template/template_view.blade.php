@@ -14,187 +14,189 @@
 
 <div class="row">
    
-           <div class="col-xxl-6">
-            <div class="card">
-               
-        
-                <div class="card-body">
-                  
-                    <div class="live-preview">
-                        <form id="generateForm"  action="{{route ('custom.template.generate')}}" method="post" class="row g-3">
-                            @csrf
-                            {{-- <input type="hidden" name="template_code" value="{{ $template->slug }}"> --}}
+    <div class="col-xxl-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="live-preview">
+                    <form id="generateForm"  action="{{route ('custom.template.generate')}}" method="post" class="row g-3">
+                        @csrf
+                        {{-- <input type="hidden" name="template_code" value="{{ $template->slug }}"> --}}
+                        <div class="col-md-12">
+                            <label for="language" class="form-label">Select Language</label>
+                            <select class="form-select" name="language" id="language" aria-label="Floating label select example">
+                                <option disabled selected="">Enter Language</option>
+                                <option value="English" selected>English</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="Bengali">Bengali</option>
+                                <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+                                <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+                                <option value="Dutch">Dutch</option>
+                                <option value="French">French</option>
+                                <option value="German">German</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Indonesian">Indonesian</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Japanese">Japanese</option>
+                                <option value="Korean">Korean</option>
+                                <option value="Polish">Polish</option>
+                                <option value="Portuguese">Portuguese</option>
+                                <option value="Russian">Russian</option>
+                                <option value="Spanish">Spanish</option>
+                                <option value="Swahili">Swahili</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Turkish">Turkish</option>
+                                <option value="Vietnamese">Vietnamese</option>
+                                </select>
+                        </div>
+
+                        @isset($inputTypes)
+                        @foreach($inputTypes as $key => $type)
                             <div class="col-md-12">
-                                <label for="language" class="form-label">Select Language</label>
-                                <select class="form-select" name="language" id="language" aria-label="Floating label select example">
-                                    <option disabled selected="">Enter Language</option>
-                                    <option value="English">English</option>
-                                    <option value="Bengali">Bengali</option>
-                                    
-                                  </select>
-                             
+                                    <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
+                            @if($type == 'text')
+                                <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="Enter {{ $inputLabels[$key] }}">
+                            @elseif($type == 'textarea')
+                                <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" rows="3"></textarea>
+                            @endif
                             </div>
 
-                            @isset($inputTypes)
-                            @foreach($inputTypes as $key => $type)
-                                <div class="col-md-12">
-                                     <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
-                                @if($type == 'text')
-                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="Enter {{ $inputLabels[$key] }}">
-                                @elseif($type == 'textarea')
-                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" rows="3"></textarea>
-                                @endif
-                                </div>
+                            <div hidden class="col-md-12" data-prompt="{{ $customTemplate->prompt }}">
+                                <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{$customTemplate->prompt}}</textarea>
+                            </div>
+                        @endforeach
+                        @endisset                                                
+                        
+                        <!-- Accordion Flush Example -->
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed bg-secondary-subtle" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Advance Settings
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                                    data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
 
-                                <div hidden class="col-md-12" data-prompt="{{ $customTemplate->prompt }}">
-                                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{$customTemplate->prompt}}</textarea>
-                                </div>
-                            @endforeach
-                            @endisset                                                
-                           
-
-                            <!-- Accordion Flush Example -->
-                            <div class="accordion accordion-flush" id="accordionFlushExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="flush-headingOne">
-                                        <button class="accordion-button collapsed bg-secondary-subtle" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                            Advance Settings
-                                        </button>
-                                    </h2>
-                                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
-                                        data-bs-parent="#accordionFlushExample">
-                                        <div class="accordion-body">
-
+        
+                                        <div class="col-md-12">
+                                            <label for="max_result_length" class="form-label">Max Result Length</label>
+                                            <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="1000">
+                                            <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="1000">
+                                            
+                                        </div>
             
-                <div class="col-md-12">
-                    <label for="max_result_length" class="form-label">Max Result Length</label>
-                    <input type="range" name="max_result_length" class="form-range" id="max_result_length" min="10" max="4000" step="10" value="100">
-                    <input type="number" name="max_result_length_value" class="form-control" id="max_result_length_value" min="10" max="4000" step="10" value="100">
-                    
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="creative_level" class="form-label">Creative Level</label>
+                                                <select class="form-select" name="creative_level" id="creative_level" aria-label="Floating label select example" onchange="disableInputs()">
+                                                    <option disabled selected="">No Creativity Level</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="tone" class="form-label">Choose a Tone</label>
+                                                <select class="form-select" name="tone" id="tone" aria-label="Floating label select example">
+                                                    <option disabled selected="">Enter Tone</option>
+                                                    <option value="Friendly">Friendly</option>
+                                                    <option value="Luxury">Luxury</option>
+                                                    <option value="Relaxed">Relaxed</option>
+                                                    <option value="Professional">Professional</option>
+                                                    <option value="Casual">Casual</option>
+                                                    <option value="Excited">Excited</option>
+                                                    <option value="Bold">Bold</option>
+                                                    <option value="Masculine">Masculine</option>
+                                                    <option value="Dramatic">Dramatic</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label for="temperature" class="form-label">Temperature (Creativity)</label>
+                                                <input type="range" name="temperature" class="form-range" id="temperature" min="0" max="1" step="0.01" value="0.00" >
+                                                <input type="number" name="temperature_value" class="form-control" id="temperature_value" min="0" max="1" step="0.01" value="0.00">
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label for="top_p" class="form-label">Top P</label>
+                                                <input type="range" name="top_p" class="form-range" id="top_p" min="0" max="1" step="0.01" value="1.00" >
+                                                <input type="number" name="top_p_value" class="form-control" id="top_p_value" min="0" max="1" step="0.01" value="1.00">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="frequency_penalty" class="form-label">Frequency Penalty</label>
+                                                <input type="range" name="frequency_penalty" class="form-range" id="frequency_penalty" min="0" max="2" step="0.01" value="0.00">
+                                                <input type="number" name="frequency_penalty_value" class="form-control" id="frequency_penalty_value" min="0" max="2" step="0.01" value="0.00">
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label for="presence_penalty" class="form-label">Presence Penalty</label>
+                                                <input type="range" name="presence_penalty" class="form-range" id="presence_penalty" min="0" max="2" step="0.01" value="0.00">
+                                                <input type="number" name="presence_penalty_value" class="form-control" id="presence_penalty_value" min="0" max="2" step="0.01" value="0.00">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12">
+                            <div class="text-end">
+                                <button class="btn btn-rounded btn-primary mb-5">Generate</button>
+                                {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="creative_level" class="form-label">Creative Level</label>
-                        <select class="form-select" name="creative_level" id="creative_level" aria-label="Floating label select example" onchange="disableInputs()">
-                            <option disabled selected="">No Creativity Level</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="tone" class="form-label">Choose a Tone</label>
-                        <select class="form-select" name="tone" id="tone" aria-label="Floating label select example">
-                            <option disabled selected="">Enter Tone</option>
-                            <option value="Friendly">Friendly</option>
-                            <option value="Luxury">Luxury</option>
-                            <option value="Relaxed">Relaxed</option>
-                            <option value="Professional">Professional</option>
-                            <option value="Casual">Casual</option>
-                            <option value="Excited">Excited</option>
-                            <option value="Bold">Bold</option>
-                            <option value="Masculine">Masculine</option>
-                            <option value="Dramatic">Dramatic</option>
-                    
-                          </select>
-                    
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-md-6">
-                        <label for="temperature" class="form-label">Temperature (Creativity)</label>
-                        <input type="range" name="temperature" class="form-range" id="temperature" min="0" max="1" step="0.01" value="0.00" >
-                        <input type="number" name="temperature_value" class="form-control" id="temperature_value" min="0" max="1" step="0.01" value="0.00">
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label for="top_p" class="form-label">Top P</label>
-                        <input type="range" name="top_p" class="form-range" id="top_p" min="0" max="1" step="0.01" value="1.00" >
-                        <input type="number" name="top_p_value" class="form-control" id="top_p_value" min="0" max="1" step="0.01" value="1.00">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="frequency_penalty" class="form-label">Frequency Penalty</label>
-                        <input type="range" name="frequency_penalty" class="form-range" id="frequency_penalty" min="0" max="2" step="0.01" value="0.00">
-                        <input type="number" name="frequency_penalty_value" class="form-control" id="frequency_penalty_value" min="0" max="2" step="0.01" value="0.00">
-
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="presence_penalty" class="form-label">Presence Penalty</label>
-                        <input type="range" name="presence_penalty" class="form-range" id="presence_penalty" min="0" max="2" step="0.01" value="0.00">
-                        <input type="number" name="presence_penalty_value" class="form-control" id="presence_penalty_value" min="0" max="2" step="0.01" value="0.00">
-
-
-
-                    </div>
-                </div>
-
-
             </div>
         </div>
     </div>
-    
-</div>
-<div class="col-12">
-    <div class="text-end">
-        <button class="btn btn-rounded btn-primary mb-5">Generate</button>
-        {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
+    <div class="col">
+
+        <div class="row mt-2">
+            <div class="col-lg-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Generated Content</h4>
+                    </div><!-- end card header -->
+
+                    <div class="card-body">
+                        <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
+
+                        {{-- <div class="snow-editor" >
+                            {{ $content }}
+
+                        </div>  --}}
+                    </div><!-- end card-body -->
+
+                </div><!-- end card -->
+
+            </div>
+            <!-- end col -->
+        </div>
+
     </div>
-</div>
-                        </form>
-                    </div>
-                    
-                </div>
-            </div>
-           </div>
-           <div class="col">
 
-            <div class="row mt-2">
-                <div class="col-lg-12">
-        
-                
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Generated Content</h4>
-                        </div><!-- end card header -->
-        
-                        <div class="card-body">
-                            <textarea class="ifaz" id="myeditorinstance" readonly></textarea>
-
-                            {{-- <div class="snow-editor" >
-                                {{ $content }}
-        
-                            </div>  --}}
-                        </div><!-- end card-body -->
-
-
-                    </div><!-- end card -->
-        
-                 
-                </div>
-                <!-- end col -->
-            </div>
-
-           </div>
-
- 
 </div>
 @endsection
+
 @section('script')
 <script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
 <script src="{{ URL::asset('build/libs/quill/quill.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/form-editor.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
 
 {{-- Submit Form Editor --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -361,9 +363,5 @@ tinymce.get('myeditorinstance').setContent(formattedContent);
 });
 
 </script>
-
-
-
-
 
 @endsection

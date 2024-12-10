@@ -14,80 +14,69 @@
     </style>
 @endsection
 @section('content')
-    @component('admin.components.breadcrumb')
+@component('admin.components.breadcrumb')
+@slot('li_1') Image @endslot
+@slot('title') Stable Diffusion @endslot
+@endcomponent
 
 
-        @slot('li_1')
-            Image
-        @endslot
-        @slot('title')
-            Stable Diffusion
-        @endslot
-
-
-    @endcomponent
     <div class="row">
+
+       
         <div class="col-lg-12">
            <!-- Positioning Wrapper for Absolute Positioning -->
        <!-- Positioning Wrapper for Absolute Positioning -->
        <div class="position-relative">
-        <!-- Buttons positioned in the top-right corner and aligned horizontally -->
-        <div class="position-absolute top-0 end-0 d-flex align-items-center gap-2">
-            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2">
-                <span class="d-flex align-items-center">
-                    <span class="spinner-grow" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </span>
-                    <span class="ms-2">Get Image Prompt Ideas</span>
-                </span>
-            </a>
-            <button type="button" class="btn gradient-btn-5 mb-2" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
-                Prompt Library
-            </button>
-        </div>
-
-                    <div class="row justify-content-center mb-4">
-                        
-                        <div class="col-lg-6">
-                            <form id="imageForm" action="{{ route('stable.image') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="hiddenStyle" id="hiddenStyle">
-                                <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
-                                <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
-                                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
-                            <div class="row g-2">
-                                {{-- <div class="col">
-                                    <div class="position-relative mb-3">
-                                        <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                        <i class="ri-search-line search-icon"></i>
-
-                                            <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute end-0 top-0" 
-                                            onclick="toggleOptimize()" id="optimizeIcon">
-                                             <i class="ri-hammer-line"></i> <!-- Default icon, will change on click -->
-                                         </a>
-                                       
-                                    </div>
-                                </div> --}}
-                                <div class="col">
-                                    <div class="search-box position-relative">
-                                        <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y" 
-                                            
-                                           onclick="toggleOptimize()" id="optimizeIcon">
-                                            <i class="ri-hammer-line"></i>
-                                        </a>
-                                        <textarea class="form-control search ps-5" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-auto">
-                                    <button onclick="syncOffcanvasInput()" type="submit" class="btn gradient-btn-7 btn-lg waves-effect waves-light"><i
-                                        class="mdi mdi-magnify me-1"></i> Generate</button>
-                                </div>
+        <div class="row justify-content-center mb-4">
+            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <h4 class="card-title mb-2 mb-md-0">Generate Image</h4>
+                <div class="d-flex flex-column flex-sm-row">
+                    <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-3">
+                        <span class="d-flex align-items-center">
+                            <span class="spinner-grow" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </span>
+                            <span>Get Image Prompt Ideas</span>
+                        </span>
+                    </a>
+                    <button type="button" class="btn gradient-btn-5 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                        Prompt Library
+                    </button>
+                </div>
+            </div><!-- end card header -->
+        
+            <div class="col-lg-6 col-12">
+                <form id="imageForm" action="{{ route('stable.image') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="hiddenStyle" id="hiddenStyle">
+                    <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
+                    <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
+                    <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
+        
+                    <div class="row g-2">
+                        <!-- Search Box -->
+                        <div class="col-12 col-md-9 order-1 order-md-1">
+                            <div class="search-box position-relative">
+                                <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y"
+                                   onclick="toggleOptimize()" id="optimizeIcon">
+                                    <i class="ri-hammer-line"></i>
+                                </a>
+                                <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
                             </div>
-                        </form>
                         </div>
-                        <!--end col-->
+        
+                        <!-- Generate Button -->
+                        <div class="col-12 col-md-3 text-end order-2 order-md-2">
+                            <button onclick="syncOffcanvasInput()" type="submit" class="btn gradient-btn-7 btn-lg waves-effect waves-light w-100">
+                                <i class="mdi mdi-magnify me-1"></i> Generate
+                            </button>
+                        </div>
                     </div>
+                </form>
+            </div>
+            <!--end col-->
+        </div>
+        
 
                     <div class="row justify-content-center p-3" style="background: linear-gradient(45deg, #ffffff, #d4b2d0); border-radius: 12px; padding: 3px;">
                         <div class="col-xl-3 col-lg-4 col-sm-6" style="background: linear-gradient(45deg, #b7aee7, #dfc6dc);; border-radius: 12px; padding: 15px;">

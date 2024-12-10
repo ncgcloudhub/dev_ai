@@ -2,11 +2,11 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('custom.template.manage')}}">Templates</a> @endslot
 @slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
 
-<a href="{{ route('aicontentcreator.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category
+<a href="{{ route('custom.template.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category
 </a>
 
 <div class="row">
@@ -34,9 +34,9 @@
                                 <td>
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
-                                        <a href="{{route('aicontentcreator.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill fs-16"></i></a>
+                                        <a href="{{route('custom.template.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="ri-pencil-fill fs-16"></i></a>
     
-                                        <a href="{{route('aicontentcreator.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-5-fill fs-16"></i></a>
+                                        <a href="{{route('custom.template.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-5-fill fs-16"></i></a>
     
                                     </div>
                                 </td>    
@@ -62,7 +62,7 @@
                 {{-- @include('admin.layouts.alerts') --}}
     
                 <div class="live-preview">
-                    <form  action="{{ route('aicontentcreator.category.update') }}" method="post" class="row g-3">
+                    <form  action="{{ route('custom.template.category.update') }}" method="post" class="row g-3">
                         @csrf
                         <input type="hidden" name="id" value="{{$category->id}}">  
                         <div class="form-floating">

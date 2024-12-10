@@ -26,8 +26,6 @@ class CustomTemplateController extends Controller
 
     public function CustomTemplateCategoryStore(Request $request)
     {
-
-
         $user_id = Auth::user()->id;
 
         $customTemplateCategory = CustomTemplateCategory::insertGetId([
@@ -41,14 +39,51 @@ class CustomTemplateController extends Controller
 
         return redirect()->back()->with('success', 'Custom Template Category Saved Successfully');
 
-        //  $notification = array(
-        //       'message' => 'Settings Changed Successfully',
-        //       'alert-type' => 'success'
-        //   );
-
-        //   return redirect()->back()->with($notification);
-
     }
+
+    public function CustomTemplateCategoryEdit($id)
+    {
+        $categories = CustomTemplateCategory::orderBy('id', 'ASC')->get();
+        $category = CustomTemplateCategory::findOrFail($id);
+        return view('backend.custom_template.category_edit', compact('category', 'categories'));
+    }
+
+
+    public function CustomTemplateCategoryUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        CustomTemplateCategory::findOrFail($id)->update([
+            'category_name' => $request->category_name,
+            'category_icon' => $request->category_icon,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Category Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+    } // end method 
+
+
+    public function CustomTemplateCategoryDelete($id)
+    {
+        $category = CustomTemplateCategory::findOrFail($id);
+
+        CustomTemplateCategory::findOrFail($id)->delete();
+
+        $notification = array(
+            'message' => 'Category Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->route('custom.template.category.add')->with($notification);
+    } // end method
 
     // Custom Template
 
@@ -58,30 +93,7 @@ class CustomTemplateController extends Controller
         return view('backend.custom_template.template_add', compact('categories'));
     }
 
-    public function CustomTemplateManage()
-    {
-        $user_id = Auth::user()->id;
-        $templates = CustomTemplate::where('user_id', $user_id)->get();
-        $customtemplatecategories = CustomTemplateCategory::where('user_id', $user_id)->get();
-        return view('backend.custom_template.template_manage', compact('templates', 'customtemplatecategories'));
-    }
-
-    public function CustomTemplateView($id)
-    {
-        $customTemplate = CustomTemplate::findOrFail($id);
-
-        // Convert JSON strings to arrays
-        $inputTypes = json_decode($customTemplate->input_types, true);
-        $inputNames = json_decode($customTemplate->input_names, true);
-        $inputLabels = json_decode($customTemplate->input_labels, true);
-
-        $content = '';
-
-
-        return view('backend.custom_template.template_view', compact('customTemplate', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
-    }
-
-
+   
     public function CustomTemplateStore(Request $request)
     {
 
@@ -125,6 +137,96 @@ class CustomTemplateController extends Controller
         );
 
         return redirect()->back()->with($notification);
+    }
+
+    public function CustomTemplateEdit($slug)
+    {
+        $categories = CustomTemplateCategory::orderBy('id', 'ASC')->get();
+        $template = CustomTemplate::where('slug', $slug)->firstOrFail();
+
+        $templateInputs = json_decode($template->input_types, true);
+        $inputNames = json_decode($template->input_names, true);
+        $inputLabels = json_decode($template->input_labels, true);
+        // $inputPlaceholders = json_decode($template->input_placeholders, true);
+
+        $templateInputsArray = [];
+        foreach ($templateInputs as $index => $type) {
+            $templateInputsArray[] = [
+                'type' => $type,
+                'name' => $inputNames[$index] ?? '',
+                'label' => $inputLabels[$index] ?? '',
+                // 'placeholder' => $inputPlaceholders[$index] ?? '',
+            ];
+        }
+        return view('backend.custom_template.template_edit', compact('template', 'categories', 'templateInputsArray'));
+    }
+
+
+    public function CustomTemplateUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'template_name' => 'required|string',
+            'icon' => 'nullable|string',
+            'category_id' => 'required|exists:template_categories,id',
+            'description' => 'nullable|string',
+            'input_types' => 'required|array',
+            'input_names' => 'required|array',
+            'input_labels' => 'required|array',
+            'prompt' => 'nullable|string',
+        ]);
+
+        $template = CustomTemplate::findOrFail($id);
+        $template->template_name = $validatedData['template_name'];
+        $template->icon = $validatedData['icon'];
+        $template->category_id = $validatedData['category_id'];
+        $template->description = $validatedData['description'];
+        $template->input_types = json_encode($validatedData['input_types']);
+        $template->input_names = json_encode($validatedData['input_names']);
+        $template->input_labels = json_encode($validatedData['input_labels']);
+        $template->prompt = $validatedData['prompt'];
+        $template->save();
+
+        return redirect()->back()->with('success', 'Template updated successfully');
+    } // end method
+    
+    public function CustomTemplateDelete($id)
+    {
+        $aiContentCreator = CustomTemplate::findOrFail($id);
+
+        $aiContentCreator->delete();
+
+        $notification = array(
+            'message' => 'Template Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
+    public function CustomTemplateManage()
+    {
+        $user_id = Auth::user()->id;
+        $templates = CustomTemplate::where('user_id', $user_id)->get();
+        $customtemplatecategories = CustomTemplateCategory::where('user_id', $user_id)->get();
+        return view('backend.custom_template.template_manage', compact('templates', 'customtemplatecategories'));
+    }
+
+    public function CustomTemplateView($id)
+    {
+        $customTemplate = CustomTemplate::findOrFail($id);
+
+        // Convert JSON strings to arrays
+        $inputTypes = json_decode($customTemplate->input_types, true);
+        $inputNames = json_decode($customTemplate->input_names, true);
+        $inputLabels = json_decode($customTemplate->input_labels, true);
+
+        $content = '';
+
+
+        return view('backend.custom_template.template_view', compact('customTemplate', 'inputTypes', 'inputNames', 'inputLabels', 'content'));
     }
 
     // Generate Using Open AI
@@ -184,6 +286,7 @@ class CustomTemplateController extends Controller
 
         $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Do not write translations.';
 
+      
 
         foreach ($input->all() as $name => $inpVal) {
             if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
@@ -201,17 +304,31 @@ class CustomTemplateController extends Controller
             }
         }
 
-        $result = $client->completions()->create([
+          // Prepare messages for chat completions endpoint
+          $messages = 
+          [
+              [
+                  'role' => 'system', 
+                  'content' => 'You are a helpful assistant.'
+              ],
+  
+              [
+                  'role' => 'user', 
+                  'content' => $prompt
+              ],
+          ];
+
+        $result = $client->chat()->create([
             "model" => $openaiModel,
             "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
             'max_tokens' => $max_result_length_value,
-            'prompt' => $prompt,
+            'messages' => $messages,
         ]);
 
-        $content = trim($result['choices'][0]['text']);
+        $content = trim($result['choices'][0]['message']['content']);
 
         // return view('backend.custom_template.template_view', compact('title', 'content'));
         return $content;

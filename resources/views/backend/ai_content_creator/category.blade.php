@@ -6,6 +6,7 @@
 @slot('title') Category Add  @endslot
 @endcomponent
 
+
 <div class="row">
 
     <div class="col-xxl-6">
@@ -90,7 +91,6 @@
         </div>
     </div>
     
-    </div>
 </div>
 
 

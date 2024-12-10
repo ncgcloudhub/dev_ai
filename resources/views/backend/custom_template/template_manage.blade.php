@@ -58,14 +58,14 @@
                 <div>
                     <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active All py-3" data-bs-toggle="tab" id="All"
+                            <a class="nav-link n1 active All py-3" data-bs-toggle="tab" id="All"
                                 href="#home1" role="tab" aria-selected="true">
                                 <i class="ri-store-2-fill me-1 align-bottom"></i> All Templates
                             </a>
                         </li>
                         @foreach ($customtemplatecategories as $item)
                             <li class="nav-item">
-                                <a class="nav-link py-3 {{$item->category_name}}" data-bs-toggle="tab" id="{{$item->id}}"
+                                <a class="nav-link n1 py-3 {{$item->category_name}}" data-bs-toggle="tab" id="{{$item->id}}"
                                     href="#{{$item->id}}" role="tab" aria-selected="false">
                                     <i class="{{$item->category_icon}}"></i> {{$item->category_name}}
                                 </a>
@@ -89,23 +89,16 @@
                                         <p style="height: 3em; overflow: hidden;" class="card-text customer_name">{{$item->description}}</p>
                                        
                                         <small class="text-muted">0 Words generated</small>
-                                        
                                       
                                         <ul class="list-inline hstack gap-2 mb-0">
-                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                <a href="apps-ecommerce-order-details" class="text-primary d-inline-block">
-                                                    <i class="ri-eye-fill fs-16"></i>
-                                                </a>
-                                            </li>
+                                           
                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                <a href="#showModal" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                <a href="{{route('custom.template.edit',$item->slug)}}" class="text-primary d-inline-block edit-item-btn">
                                                     <i class="ri-pencil-fill fs-16"></i>
                                                 </a>
-                                            </li>
+                                            </li>  
                                             <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                    <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                </a>
+                                                <a href="{{route('custom.template.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Template')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -195,10 +188,10 @@
 
 <script>
     $(document).ready(function() {
-        $('.nav-link').on('click', function() {
+        $('.n1').on('click', function() {
 
             // Remove 'active' class from all nav links
-        $('.nav-link').removeClass('active');
+        $('.n1').removeClass('active');
         
         // Add 'active' class to the clicked nav link
         $(this).addClass('active');

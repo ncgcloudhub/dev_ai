@@ -2,8 +2,6 @@
 @section('title') @lang('translation.starter')  @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.6/lottie.min.js"></script>
-
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
@@ -24,16 +22,6 @@
     }
     .position-absolute {
         position: absolute;
-    }
-    .start-0 {
-        left: 10px; /* Adjust as needed */
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .end-0 {
-        right: 10px; /* Adjust as needed */
-        top: 50%;
-        transform: translateY(-50%);
     }
     .btn-outline-secondary {
         background: rgba(255, 255, 255, 0.5); /* Optional: To make buttons more visible on the image */
@@ -62,7 +50,6 @@
         </div>
     </div><!-- end card header -->
     
-
     <div class="card-body">
         @if($get_user->credits_left <= 0) 
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -354,8 +341,6 @@
                                 </div>
                                 {{-- Dalle 3 END --}}
 
-
-
                             </div>
                         </div><!-- end card-body -->
                     </div><!-- end card -->
@@ -382,8 +367,7 @@
                 <div id="image-container" class="d-flex justify-content-center">      
                 
                 </div>
-    
-    
+
         </div>
     </div>
 
@@ -428,7 +412,6 @@
         @endforeach
     </div>
     
-
     {{-- Image Description --}}
     <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
@@ -462,7 +445,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-
 
 @endsection
 @section('script')
@@ -738,6 +720,5 @@
         });
     });
 </script>
-
 
 @endsection

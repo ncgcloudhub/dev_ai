@@ -117,3 +117,6 @@ In education_tools add category_id bigint
 
 ------------3/12/2024-----------------
 in dynamic_pages, change seo_title, keywords and description to text
+
+------------10/12/2024-----------------
+custom_template_category table, category icon can be null
