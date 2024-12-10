@@ -30,7 +30,7 @@
                             @foreach ($categories as $item)
                             <tr>
                                 <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
-                                <td>{{ $item->category_name }}</td>    
+                                <td><i class="{{ $item->category_icon }}"></i>  {{ $item->category_name }}</td>    
                                 <td>
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
