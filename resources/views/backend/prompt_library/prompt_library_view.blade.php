@@ -9,13 +9,21 @@
 <style>
     .copy-icon {
         position: absolute;
-        right: 5px;
+        right: 5%;
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
-        color: #007bff;
+        color: #ff0077;
+        font-size: 1.5rem; /* Increased size */
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+    
+    .copy-icon:hover {
+        transform: translateY(-50%) scale(1.2); /* Adds a zoom effect on hover */
+        color: #ff3399; /* Slightly lighter shade on hover */
     }
 </style>
+
 @endsection
 
 @section('content')
@@ -85,8 +93,9 @@
                         <label for="language" class="form-label">Actual Prompt</label>
                         <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
                             {{$prompt_library->actual_prompt}}
-                            <span class="copy-icon" onclick="copyText(this)">📋</span>
+                          
                         </p>
+                        <span class="copy-icon" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
                     </div>
                 </div>
             </div> 
