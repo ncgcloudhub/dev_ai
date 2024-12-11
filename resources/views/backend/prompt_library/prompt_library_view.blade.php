@@ -9,13 +9,21 @@
 <style>
     .copy-icon {
         position: absolute;
-        right: 5px;
+        right: 5%;
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
-        color: #007bff;
+        color: #ff0077;
+        font-size: 1.5rem; /* Increased size */
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+    
+    .copy-icon:hover {
+        transform: translateY(-50%) scale(1.2); /* Adds a zoom effect on hover */
+        color: #ff3399; /* Slightly lighter shade on hover */
     }
 </style>
+
 @endsection
 
 @section('content')
@@ -26,7 +34,7 @@
 
 <div class="row">
     <div class="col-xxl-6">
-        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white">Tour</button>
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white mb-3">Tour</button>
 
         <div class="card">
             <div class="card-body"> 
@@ -85,8 +93,9 @@
                         <label for="language" class="form-label">Actual Prompt</label>
                         <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
                             {{$prompt_library->actual_prompt}}
-                            <span class="copy-icon" onclick="copyText(this)">📋</span>
+                          
                         </p>
+                        <span class="copy-icon" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
                     </div>
                 </div>
             </div> 
@@ -152,11 +161,6 @@
 </div>
 
 
-
-
-            
-            
-
         @if (Auth::check() && Auth::user()->hasRole('admin'))
         <!-- Container for adding examples -->
         <div class="card mt-3">
@@ -169,14 +173,19 @@
                             <div id="examples-container">
                                 <!-- Example editor boxes will be added here -->
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">
-                                <i class="la la-plus"></i>
-                              </button>
+                            <div class="d-flex gap-2 mt-3">
+                                <button type="button" class="btn gradient-btn-add" title="Add Example" onclick="addExampleEditor()">
+                                    <i class="la la-plus"></i> Add
+                                </button>
+                                <button id="remove-btn" type="button" class="btn gradient-btn-remove d-none" title="Remove Example" onclick="removeLastExampleEditor()">
+                                    <i class="la la-minus"></i> Remove
+                                </button>
+                                <button type="submit" title="Save Example" class="btn gradient-btn-save">
+                                    <i class="la la-save"></i> Save
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">
-                        <i class="la la-save"></i>
-                      </button>
                 </form>
             </div>
         </div>
@@ -233,10 +242,10 @@
                     
                     <div class="row mt-3">
                         <div class="col-md-12 text-end" id="copy-download-tour">
-                            <button id="copyButton" class="btn btn-primary me-2">
+                            <button id="copyButton" class="btn gradient-btn-copy me-2">
                                 <i class="las la-copy"></i>
                             </button>
-                            <button id="downloadButton" class="btn btn-success">
+                            <button id="downloadButton" class="btn gradient-btn-download">
                                 <i class="las la-download"></i>
                             </button>
                         </div>
@@ -370,45 +379,53 @@
 
         // Function to add example editors with Quill (unchanged)
         window.addExampleEditor = function() {
-            const container = document.getElementById('examples-container');
-            const exampleEditor = document.createElement('div');
-            exampleEditor.className = 'form-group mt-3';
-            exampleEditor.innerHTML = `
-                <div class="snow-editor" style="height: 200px;"></div>
-                <input type="hidden" name="examples[]">
-                <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
-                    <i class="la la-minus"></i>
-                </button>
-            `;
-            container.appendChild(exampleEditor);
+        const container = document.getElementById('examples-container');
+        const exampleEditor = document.createElement('div');
+        exampleEditor.className = 'form-group mt-3';
+        exampleEditor.innerHTML = `
+            <div class="snow-editor" style="height: 200px;"></div>
+            <input type="hidden" name="examples[]">
+        `;
+        container.appendChild(exampleEditor);
 
-             // Initialize Quill editor with default configuration
-             const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'font': [] }, { 'size': [] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'direction': 'rtl' }, { 'align': [] }],
-                        ['link', 'image', 'video'],
-                        ['clean']
-                    ]
-                }
-            });
-            // Sync Quill content to the hidden input field
-            quill.on('text-change', function() {
-                const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
-                exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
-            });
+        // Initialize Quill editor with default configuration
+        const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }, { 'size': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
 
-            window.removeExampleEditor = function(button) {
-                button.parentElement.remove();
-            };
-        };
+        // Sync Quill content to the hidden input field
+        quill.on('text-change', function() {
+            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
+            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+        });
+
+        // Show the Remove button when an editor is added
+        document.getElementById('remove-btn').classList.remove('d-none');
+    };
+
+    window.removeLastExampleEditor = function() {
+        const container = document.getElementById('examples-container');
+        if (container.lastElementChild) {
+            container.lastElementChild.remove();
+        }
+        // Hide the Remove button if no editors are left
+        if (container.children.length === 0) {
+            document.getElementById('remove-btn').classList.add('d-none');
+        }
+    };
 
     });
 </script>
