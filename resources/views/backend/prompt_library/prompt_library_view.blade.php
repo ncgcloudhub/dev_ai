@@ -34,7 +34,7 @@
 
 <div class="row">
     <div class="col-xxl-6">
-        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white">Tour</button>
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white mb-3">Tour</button>
 
         <div class="card">
             <div class="card-body"> 
@@ -161,11 +161,6 @@
 </div>
 
 
-
-
-            
-            
-
         @if (Auth::check() && Auth::user()->hasRole('admin'))
         <!-- Container for adding examples -->
         <div class="card mt-3">
@@ -247,10 +242,10 @@
                     
                     <div class="row mt-3">
                         <div class="col-md-12 text-end" id="copy-download-tour">
-                            <button id="copyButton" class="btn btn-primary me-2">
+                            <button id="copyButton" class="btn gradient-btn-copy me-2">
                                 <i class="las la-copy"></i>
                             </button>
-                            <button id="downloadButton" class="btn btn-success">
+                            <button id="downloadButton" class="btn gradient-btn-download">
                                 <i class="las la-download"></i>
                             </button>
                         </div>
