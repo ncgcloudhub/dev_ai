@@ -403,10 +403,10 @@ public function editBackground(Request $request)
     // Log request data
     Log::info('Edit Background Request Data:', $request->all());
 
-    return response()->json([
-        'status' => 'success',
-        'generation_id' => '41c4577579df28601521782d1b2b647919e29a611f8645141b2eef5481823ff6',
-    ]);
+    // return response()->json([
+    //     'status' => 'success',
+    //     'generation_id' => '41c4577579df28601521782d1b2b647919e29a611f8645141b2eef5481823ff6',
+    // ]);
 
     // Validate input
     $request->validate([
@@ -452,12 +452,12 @@ public function editBackground(Request $request)
                 'id' => $response->json()['id'] ?? 'N/A',
             ]);
 
-            $imageUrl = "data:image/{$outputFormat};base64," . base64_encode($response->body());
+            // $imageUrl = "data:image/{$outputFormat};base64," . base64_encode($response->body());
 
             // Return response
             return response()->json([
                 'status' => 'success',
-                'image_url' => $imageUrl,
+                'generation_id' =>  $response->json()['id'] ?? 'N/A',
             ]);
         } else {
             Log::error('Failed response from Stability AI API.', [
@@ -493,6 +493,8 @@ public function checkGenerationStatus(Request $request)
         $generationId = $request->input('generation_id');
         $configapiKey = config('services.stable_diffusion.api_key');
 
+        Log::info('inside check generation function 496' . $generationId);
+
         // Prepare the URL for the API request
         $url = "https://api.stability.ai/v2beta/results/{$generationId}";
 
@@ -507,10 +509,16 @@ public function checkGenerationStatus(Request $request)
             ])->get($url);
 
             if ($response->successful()) {
-                $result = $response->json()['result'];
+                $responseData = $response->json();
+                $result = $responseData['result'];
+                $seed = $responseData['seed']; // Extract the seed from the response
+            
+                Log::info('line 515: ' . $seed);
+            
                 return response()->json([
                     'status' => 'success',
-                    'image_url' => 'data:image/webp;base64,' . $result
+                    'seed' => $seed, // Include the seed in the response
+                    'image_url' => 'data:image/webp;base64,' . $result,
                 ]);
             } else {
                 return response()->json([

@@ -12,10 +12,10 @@
     <form id="edit-background-form" action="{{ route('edit.background') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <label for="subject_image">Upload Image:</label>
-        <input type="file" name="subject_image" id="subject_image" required>
+        <input type="file" name="subject_image" id="subject_image" >
         
         <label for="background_prompt">Background Prompt:</label>
-        <input type="text" name="background_prompt" id="background_prompt" required>
+        <input type="text" name="background_prompt" id="background_prompt" >
         
         <label for="output_format">Output Format:</label>
         <select name="output_format" id="output_format">
@@ -27,12 +27,11 @@
         <button type="submit">Submit</button>
     </form>
     
-    <div id="loading-spinner" style="display:none;">Processing...</div>
-    
-    <div id="result-container" style="display:none;">
-        <h3>Generation Complete</h3>
-        <img id="result-image" src="" alt="Generated Image">
+    <div id="result-container" style="display: none;">
+        <img id="result-image" src="" alt="Generated Image" />
     </div>
+    <div id="loading-spinner">Loading...</div>
+    
 
     <!-- Your script -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -61,7 +60,7 @@
                             pollGenerationStatus(response.generation_id);
                      
                             // If generation is complete, display the result
-                            $('#result-container').show();
+                            // $('#result-container').show();
                             // $('#result-image').attr('src', response.image_url);
                         
                     },
@@ -85,20 +84,11 @@
                             _token: $('input[name="_token"]').val(),  // CSRF token for security
                         },
                         success: function (response) {
-                            if (response.status === 'pending') {
-                                // If still pending, continue polling
-                                console.log('Generation in progress, retrying...');
-                            } else if (response.status === 'success') {
-                                // If generation is complete, stop polling and show the result
-                                clearInterval(interval);
-                                $('#result-container').show();
-                                $('#result-image').attr('src', 'data:image/webp;base64,' + response.image_url);
-                                $('#loading-spinner').hide(); // Hide loading spinner
-                            } else {
-                                // If there's an error, stop polling
-                                clearInterval(interval);
-                                alert(response.message || 'An error occurred while checking generation status.');
-                            }
+                            $('#result-container').show();
+                            $('#result-image').attr('src', response.image_url);
+                            $('#loading-spinner').hide(); // Hide loading spinner
+                            clearInterval(interval); // Stop polling
+                          
                         },
                         error: function (xhr) {
                             // Handle error during polling
