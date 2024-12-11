@@ -236,13 +236,13 @@ function handleImagePaste(event) {
             let isReading = false;     // Flag to track if speech is ongoing
 
             function translateWithOpenAI(text, targetLang) {
-                const apiKey = "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"; // Replace with your OpenAI API key
+                const apiKey = @json(config('app.openai_api_key')); // Fetch the API key from config
                 const url = "https://api.openai.com/v1/chat/completions";
 
                 const systemMessage = `You are a translation assistant. Translate the following text into ${targetLang}:`;
 
                 const data = {
-                    model: "gpt-4", // or "gpt-3.5-turbo" for cost efficiency
+                    model: "gpt-4o", // or "gpt-3.5-turbo" for cost efficiency
                     messages: [
                         { role: "system", content: systemMessage },
                         { role: "user", content: text },
@@ -288,7 +288,12 @@ function handleImagePaste(event) {
                         if (targetLang) {
                             translateWithOpenAI(messageContent, targetLang)
                                 .then((translatedText) => {
-                                    messageElement.innerHTML = `<p class="mb-0 ctext-content">${translatedText}</p>`;
+                                    messageElement.innerHTML = ` <div class="original-text">
+                                <p class="mb-0 ctext-content"><strong>Original:</strong> ${messageContent}</p>
+                            </div>
+                            <div class="translated-text">
+                                <p class="mb-0 ctext-content"><strong>Translated (${targetLang}):</strong> ${translatedText}</p>
+                            </div>`;
                                 })
                                 .catch((error) => {
                                     console.error("Translation error:", error);
@@ -298,9 +303,6 @@ function handleImagePaste(event) {
                     }
                 }
             });
-
-
-
 
 
             // Function to toggle reading aloud and stopping
