@@ -15,6 +15,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">Sl.</th>
+                                <th scope="col">Category Name</th>
                                 <th scope="col">Sub Category Name</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -26,7 +27,9 @@
                             @foreach ($subcategories as $item)
                             <tr>
                                 <td>{{ $sl++ }}</td> <!-- Increment the variable and display its value -->
+                                <td>{{ $item->category->category_name }}</td>   
                                 <td>{{ $item->sub_category_name }}</td>    
+                                
                                 <td>
                                     <div class="d-flex justify-content-center">
 
