@@ -178,14 +178,19 @@
                             <div id="examples-container">
                                 <!-- Example editor boxes will be added here -->
                             </div>
-                            <button type="button" class="btn btn-primary mt-3" onclick="addExampleEditor()">
-                                <i class="la la-plus"></i>
-                              </button>
+                            <div class="d-flex gap-2 mt-3">
+                                <button type="button" class="btn gradient-btn-add" title="Add Example" onclick="addExampleEditor()">
+                                    <i class="la la-plus"></i> Add
+                                </button>
+                                <button id="remove-btn" type="button" class="btn gradient-btn-remove d-none" title="Remove Example" onclick="removeLastExampleEditor()">
+                                    <i class="la la-minus"></i> Remove
+                                </button>
+                                <button type="submit" title="Save Example" class="btn gradient-btn-save">
+                                    <i class="la la-save"></i> Save
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3">
-                        <i class="la la-save"></i>
-                      </button>
                 </form>
             </div>
         </div>
@@ -379,45 +384,53 @@
 
         // Function to add example editors with Quill (unchanged)
         window.addExampleEditor = function() {
-            const container = document.getElementById('examples-container');
-            const exampleEditor = document.createElement('div');
-            exampleEditor.className = 'form-group mt-3';
-            exampleEditor.innerHTML = `
-                <div class="snow-editor" style="height: 200px;"></div>
-                <input type="hidden" name="examples[]">
-                <button type="button" class="btn btn-danger mt-2" onclick="removeExampleEditor(this)">
-                    <i class="la la-minus"></i>
-                </button>
-            `;
-            container.appendChild(exampleEditor);
+        const container = document.getElementById('examples-container');
+        const exampleEditor = document.createElement('div');
+        exampleEditor.className = 'form-group mt-3';
+        exampleEditor.innerHTML = `
+            <div class="snow-editor" style="height: 200px;"></div>
+            <input type="hidden" name="examples[]">
+        `;
+        container.appendChild(exampleEditor);
 
-             // Initialize Quill editor with default configuration
-             const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'font': [] }, { 'size': [] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'direction': 'rtl' }, { 'align': [] }],
-                        ['link', 'image', 'video'],
-                        ['clean']
-                    ]
-                }
-            });
-            // Sync Quill content to the hidden input field
-            quill.on('text-change', function() {
-                const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
-                exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
-            });
+        // Initialize Quill editor with default configuration
+        const quill = new Quill(exampleEditor.querySelector('.snow-editor'), {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'font': [] }, { 'size': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'header': '1' }, { 'header': '2' }, 'blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }, { 'align': [] }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        });
 
-            window.removeExampleEditor = function(button) {
-                button.parentElement.remove();
-            };
-        };
+        // Sync Quill content to the hidden input field
+        quill.on('text-change', function() {
+            const editorContent = exampleEditor.querySelector('.snow-editor').innerHTML;
+            exampleEditor.querySelector('input[name="examples[]"]').value = editorContent;
+        });
+
+        // Show the Remove button when an editor is added
+        document.getElementById('remove-btn').classList.remove('d-none');
+    };
+
+    window.removeLastExampleEditor = function() {
+        const container = document.getElementById('examples-container');
+        if (container.lastElementChild) {
+            container.lastElementChild.remove();
+        }
+        // Hide the Remove button if no editors are left
+        if (container.children.length === 0) {
+            document.getElementById('remove-btn').classList.add('d-none');
+        }
+    };
 
     });
 </script>
