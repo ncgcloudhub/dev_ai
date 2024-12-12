@@ -508,24 +508,53 @@ public function checkGenerationStatus(Request $request)
                 'Accept' => 'application/json' ,  // Or 'application/json' for base64 JSON
             ])->get($url);
 
-            if ($response->successful()) {
-                $responseData = $response->json();
-                $result = $responseData['result'];
-                $seed = $responseData['seed']; // Extract the seed from the response
-            
-                Log::info('line 515: ' . $seed);
-            
-                return response()->json([
-                    'status' => 'success',
-                    'seed' => $seed, // Include the seed in the response
-                    'image_url' => 'data:image/webp;base64,' . $result,
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Failed to retrieve generation status.'
-                ], 500);
-            }
+    // Log the full response for debugging purposes
+    Log::debug('Response status code', ['status_code' => $response->status()]);
+    Log::debug('Response body', ['body' => $response->body()]);
+
+    // Handle different status codes
+    if ($response->status() === 202) {
+        Log::info('Generation is still in progress', ['generation_id' => $generationId]);
+
+        return response()->json([
+            'status' => 'in-progress',
+            'message' => 'Generation is still in progress.',
+        ], 200);
+    } elseif ($response->status() === 200) {
+        $responseData = $response->json();
+
+        // Safely extract keys
+        $result = $responseData['result'] ?? null;
+        $seed = $responseData['seed'] ?? null;
+
+        if ($result && $seed) {
+            Log::info('Generation completed successfully', ['seed' => $seed]);
+
+            return response()->json([
+                'status' => 'success',
+                'seed' => $seed, // Include the seed in the response
+                'image_url' => 'data:image/webp;base64,' . $result,
+            ]);
+        } else {
+            Log::warning('Expected keys missing in completed generation response', ['response' => $responseData]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Generation completed, but result or seed is missing.',
+            ], 500);
+        }
+    } else {
+        // Handle unexpected status codes
+        Log::error('Unexpected status code from API', [
+            'status_code' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unexpected response from the server.',
+        ], 500);
+    }
 
          
         } catch (\Exception $e) {
