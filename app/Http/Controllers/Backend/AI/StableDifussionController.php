@@ -336,14 +336,25 @@ public function upscale(Request $request)
     $image = $request->file('image');
     $prompt = $request->input('prompt') ?? '';
     $outputFormat = $request->input('output_format') ?? 'webp';
+    $upscaleType = $request->input('upscale_type'); 
     $configapiKey = config('services.stable_diffusion.api_key');
 
     try {
         // Stability AI Upscale API endpoint
-        $url = "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
+        $url = $upscaleType == 'fast' 
+        ? "https://api.stability.ai/v2beta/stable-image/upscale/fast"
+        : "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
 
         // Prepare the image file
         $filePath = $image->getRealPath();
+
+        $data = [
+            'output_format' => $outputFormat,
+        ];
+
+        if ($upscaleType === 'conservative') {
+            $data['prompt'] = $prompt;
+        }
 
         // Make the HTTP request using Laravel's HTTP Client
         $response = Http::timeout(60) // Set timeout to 60 seconds
@@ -352,10 +363,7 @@ public function upscale(Request $request)
             'accept' => 'image/*',
         ])->attach(
             'image', file_get_contents($filePath), $image->getClientOriginalName()
-        )->asMultipart()->post($url, [
-            'prompt' => $prompt,
-            'output_format' => $outputFormat,
-        ]);
+        )->asMultipart()->post($url, $data);
 
          // Log the response details
         Log::info('Received response from Stability AI Upscale API.', [
