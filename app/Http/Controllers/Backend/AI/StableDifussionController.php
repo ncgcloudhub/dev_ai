@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage; 
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class StableDifussionController extends Controller
 {
@@ -336,14 +337,25 @@ public function upscale(Request $request)
     $image = $request->file('image');
     $prompt = $request->input('prompt') ?? '';
     $outputFormat = $request->input('output_format') ?? 'webp';
+    $upscaleType = $request->input('upscale_type'); 
     $configapiKey = config('services.stable_diffusion.api_key');
 
     try {
         // Stability AI Upscale API endpoint
-        $url = "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
+        $url = $upscaleType == 'fast' 
+        ? "https://api.stability.ai/v2beta/stable-image/upscale/fast"
+        : "https://api.stability.ai/v2beta/stable-image/upscale/conservative";
 
         // Prepare the image file
         $filePath = $image->getRealPath();
+
+        $data = [
+            'output_format' => $outputFormat,
+        ];
+
+        if ($upscaleType === 'conservative') {
+            $data['prompt'] = $prompt;
+        }
 
         // Make the HTTP request using Laravel's HTTP Client
         $response = Http::timeout(60) // Set timeout to 60 seconds
@@ -352,10 +364,7 @@ public function upscale(Request $request)
             'accept' => 'image/*',
         ])->attach(
             'image', file_get_contents($filePath), $image->getClientOriginalName()
-        )->asMultipart()->post($url, [
-            'prompt' => $prompt,
-            'output_format' => $outputFormat,
-        ]);
+        )->asMultipart()->post($url, $data);
 
          // Log the response details
         Log::info('Received response from Stability AI Upscale API.', [
@@ -508,24 +517,53 @@ public function checkGenerationStatus(Request $request)
                 'Accept' => 'application/json' ,  // Or 'application/json' for base64 JSON
             ])->get($url);
 
-            if ($response->successful()) {
-                $responseData = $response->json();
-                $result = $responseData['result'];
-                $seed = $responseData['seed']; // Extract the seed from the response
-            
-                Log::info('line 515: ' . $seed);
-            
-                return response()->json([
-                    'status' => 'success',
-                    'seed' => $seed, // Include the seed in the response
-                    'image_url' => 'data:image/webp;base64,' . $result,
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Failed to retrieve generation status.'
-                ], 500);
-            }
+    // Log the full response for debugging purposes
+    Log::debug('Response status code', ['status_code' => $response->status()]);
+    Log::debug('Response body', ['body' => $response->body()]);
+
+    // Handle different status codes
+    if ($response->status() === 202) {
+        Log::info('Generation is still in progress', ['generation_id' => $generationId]);
+
+        return response()->json([
+            'status' => 'in-progress',
+            'message' => 'Generation is still in progress.',
+        ], 200);
+    } elseif ($response->status() === 200) {
+        $responseData = $response->json();
+
+        // Safely extract keys
+        $result = $responseData['result'] ?? null;
+        $seed = $responseData['seed'] ?? null;
+
+        if ($result && $seed) {
+            Log::info('Generation completed successfully', ['seed' => $seed]);
+
+            return response()->json([
+                'status' => 'success',
+                'seed' => $seed, // Include the seed in the response
+                'image_url' => 'data:image/webp;base64,' . $result,
+            ]);
+        } else {
+            Log::warning('Expected keys missing in completed generation response', ['response' => $responseData]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Generation completed, but result or seed is missing.',
+            ], 500);
+        }
+    } else {
+        // Handle unexpected status codes
+        Log::error('Unexpected status code from API', [
+            'status_code' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Unexpected response from the server.',
+        ], 500);
+    }
 
          
         } catch (\Exception $e) {
@@ -537,6 +575,103 @@ public function checkGenerationStatus(Request $request)
             ], 500);
         }
     }
+
+
+// Search and Recolor
+
+public function WithoutAsyncEditForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.edit_without_async_form',compact('apiKey'));
+}
+
+public function WithoutAsyncEdit(Request $request)
+{
+    
+    // Log request data
+    Log::info('Edit Background Request Data:', $request->all());
+
+    // Validate input
+    $request->validate([
+        'subject_image' => 'required|file|mimes:jpeg,png,jpg',
+        'prompt' => 'required|string',
+        'select_prompt' => 'required|string',
+        'output_format' => 'required|string|in:webp,jpeg,png',
+    ]);
+
+    // Extract inputs
+    $subjectImage = $request->file('subject_image');
+    $prompt = $request->input('prompt');
+    $selectPrompt = $request->input('select_prompt');
+    $outputFormat = $request->input('output_format');
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    // API endpoint and key
+    $url = "https://api.stability.ai/v2beta/stable-image/edit/search-and-recolor";
+
+    try {
+
+              // Send API request
+              $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',  // Requesting image response
+            ])->timeout(60)->attach(
+                'image',
+                file_get_contents($subjectImage->getRealPath()),
+                $subjectImage->getClientOriginalName()
+            )->asMultipart()->post($url, [
+                'prompt' => $prompt,
+                'select_prompt' => $selectPrompt,
+                'output_format' => $outputFormat,
+            ]);
+    
+            Log::info('Response from API', [
+                'status_code' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+
+        // Log response
+        if ($response->successful()) {
+         
+            // Assuming the response body contains the raw image data
+            $responseBody = $response->body();
+
+            $filename = Str::random(10) . '.' . $outputFormat;
+
+            // Save the image to the public/images directory
+            Storage::disk('public')->put("images/{$filename}", $responseBody);
+
+            // Convert the raw binary image data to Base64
+            $imageData = base64_encode($responseBody);
+
+            // Return the response as JSON with the Base64 encoded image
+            return response()->json([
+                'status' => 'success',
+                'image_data' => $imageData
+            ]);
+        } else {
+            Log::error('Failed response from Stability AI API.', [
+                'status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to process the image.',
+            ], 500);
+        }
+    } catch (\Exception $e) {
+        // Log exception
+        Log::error('Exception occurred during Stability AI Replace Background API call.', [
+            'error_message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred during the image processing.',
+        ], 500);
+    }
+}
 
 
 

@@ -55,14 +55,10 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                     
+                 
                             // If the request is still in progress, start polling
                             pollGenerationStatus(response.generation_id);
                      
-                            // If generation is complete, display the result
-                            // $('#result-container').show();
-                            // $('#result-image').attr('src', response.image_url);
-                        
                     },
                     error: function (xhr) {
                         // Handle error in image processing
@@ -84,10 +80,21 @@
                             _token: $('input[name="_token"]').val(),  // CSRF token for security
                         },
                         success: function (response) {
-                            $('#result-container').show();
-                            $('#result-image').attr('src', response.image_url);
-                            $('#loading-spinner').hide(); // Hide loading spinner
-                            clearInterval(interval); // Stop polling
+                            if (response.status === 'in-progress') {
+                    // Generation is still in progress, log or handle as needed
+                    console.log('Generation is in progress...');
+                } else if (response.status === 'success') {
+                    // Generation is complete, display the result
+                    $('#result-container').show();
+                    $('#result-image').attr('src', response.image_url);
+                    $('#loading-spinner').hide(); // Hide loading spinner
+                    clearInterval(interval); // Stop polling
+                } else {
+                    // Handle unexpected statuses or errors from the response
+                    console.error('Unexpected response status:', response);
+                    $('#loading-spinner').hide();
+                    clearInterval(interval); // Stop polling
+                }
                           
                         },
                         error: function (xhr) {

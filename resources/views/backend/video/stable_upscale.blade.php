@@ -21,6 +21,10 @@
             <option value="jpeg">JPEG</option>
             <option value="png">PNG</option>
         </select>
+        <select name="upscale_type" required>
+            <option value="conservative">Conservative</option>
+            <option value="fast">Fast</option>
+        </select>
         
         <button type="submit">Upscale Image</button>
     </form>

@@ -753,6 +753,10 @@ Route::get('/stable-edit-form', [StableDifussionController::class, 'EditForm'])-
 Route::post('/edit-background', [StableDifussionController::class, 'editBackground'])->name('edit.background');
 Route::post('/check-generation-status', [StableDifussionController::class, 'checkGenerationStatus']);
 
+// Stable Edit Without async
+Route::get('/stable-without-async-edit-form', [StableDifussionController::class, 'WithoutAsyncEditForm']);
+Route::post('/stable--without-async-edit', [StableDifussionController::class, 'WithoutAsyncEdit'])->name('without.async.edit');
+
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
