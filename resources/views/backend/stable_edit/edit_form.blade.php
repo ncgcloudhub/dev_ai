@@ -13,6 +13,9 @@
         @csrf
         <label for="subject_image">Upload Image:</label>
         <input type="file" name="subject_image" id="subject_image" >
+       
+        <label for="bg_reference">Background Reference:</label>
+        <input type="file" name="bg_reference" id="bg_reference" >
         
         <label for="background_prompt">Background Prompt:</label>
         <input type="text" name="background_prompt" id="background_prompt" >
@@ -55,15 +58,10 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                     
-                        console.log('after success 59 blade', response.generation_id);
+                 
                             // If the request is still in progress, start polling
                             pollGenerationStatus(response.generation_id);
                      
-                            // If generation is complete, display the result
-                            // $('#result-container').show();
-                            // $('#result-image').attr('src', response.image_url);
-                        
                     },
                     error: function (xhr) {
                         // Handle error in image processing
