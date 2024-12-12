@@ -502,11 +502,11 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
         Route::post('store', [CustomTemplateController::class, 'CustomTemplateStore'])->name('custom.template.store');
 
-        Route::get('/edit/{slug}', [CustomTemplateController::class, 'CustomTemplateEdit'])->name('custom.template.edit');
+        Route::get('/edit/{slug}', [CustomTemplateController::class, 'CustomTemplateEdit'])->name('custom.template.edit')->middleware('admin.permission:customTemplate.edit');
 
         Route::post('/update', [CustomTemplateController::class, 'CustomTemplateUpdate'])->name('custom.template.update');
         
-        Route::get('/delete/{id}', [CustomTemplateController::class, 'CustomTemplateDelete'])->name('custom.template.delete');
+        Route::get('/delete/{id}', [CustomTemplateController::class, 'CustomTemplateDelete'])->name('custom.template.delete')->middleware('admin.permission:customTemplate.delete');
 
         Route::get('/manage', [CustomTemplateController::class, 'CustomTemplateManage'])->name('custom.template.manage')->middleware('admin.permission:customTemplate.manage');
 

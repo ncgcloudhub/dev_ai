@@ -92,14 +92,19 @@
                                       
                                         <ul class="list-inline hstack gap-2 mb-0">
                                            
+                                            @can('customTemplate.edit')
                                             <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
                                                 <a href="{{route('custom.template.edit',$item->slug)}}" class="text-primary d-inline-block edit-item-btn">
                                                     <i class="ri-pencil-fill fs-16"></i>
                                                 </a>
                                             </li>  
+                                            @endcan
+
+                                            @can('customTemplate.delete')
                                             <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
                                                 <a href="{{route('custom.template.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Template')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
                                             </li>
+                                            @endcan
                                         </ul>
                                     </div>
                                 </div>
