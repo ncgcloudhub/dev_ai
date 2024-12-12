@@ -27,7 +27,9 @@ class ProfileEditController extends Controller
         
         if ($packageHistory->isEmpty()) {
             // Free plan case
-            $freePricingPlan = PricingPlan::where('title', 'Free')->first();
+            $freePricingPlan = PricingPlan::where('package_type', 'monthly')
+            ->where('slug', 'like', '%free%')
+            ->first();
             
             // Calculate the next reset date for free plan
             $now = Carbon::now();

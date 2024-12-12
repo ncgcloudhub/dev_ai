@@ -457,7 +457,7 @@
                                     <div class="row align-items-end">
                                         <div class="col-sm-8">
                                             <div class="p-3">
-                                                <p class="fs-16 lh-base text-white">Upgrade your plan from a <span class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
+                                                <p class="fs-16 lh-base text-white">Upgrade your plan from a <span class="fw-semibold">{{$freePricingPlan->title}}</span>, to ‘Premium Plan’ <i class="mdi mdi-arrow-right"></i></p>
                                                 <div class="mt-3">
                                                     <a href="{{route('all.package')}}" class="btn btn-info">Upgrade
                                                         Account!</a>
