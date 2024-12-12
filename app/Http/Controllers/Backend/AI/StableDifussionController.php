@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage; 
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class StableDifussionController extends Controller
 {
@@ -574,6 +575,103 @@ public function checkGenerationStatus(Request $request)
             ], 500);
         }
     }
+
+
+// Search and Recolor
+
+public function WithoutAsyncEditForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.edit_without_async_form',compact('apiKey'));
+}
+
+public function WithoutAsyncEdit(Request $request)
+{
+    
+    // Log request data
+    Log::info('Edit Background Request Data:', $request->all());
+
+    // Validate input
+    $request->validate([
+        'subject_image' => 'required|file|mimes:jpeg,png,jpg',
+        'prompt' => 'required|string',
+        'select_prompt' => 'required|string',
+        'output_format' => 'required|string|in:webp,jpeg,png',
+    ]);
+
+    // Extract inputs
+    $subjectImage = $request->file('subject_image');
+    $prompt = $request->input('prompt');
+    $selectPrompt = $request->input('select_prompt');
+    $outputFormat = $request->input('output_format');
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    // API endpoint and key
+    $url = "https://api.stability.ai/v2beta/stable-image/edit/search-and-recolor";
+
+    try {
+
+              // Send API request
+              $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',  // Requesting image response
+            ])->timeout(60)->attach(
+                'image',
+                file_get_contents($subjectImage->getRealPath()),
+                $subjectImage->getClientOriginalName()
+            )->asMultipart()->post($url, [
+                'prompt' => $prompt,
+                'select_prompt' => $selectPrompt,
+                'output_format' => $outputFormat,
+            ]);
+    
+            Log::info('Response from API', [
+                'status_code' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+
+        // Log response
+        if ($response->successful()) {
+         
+            // Assuming the response body contains the raw image data
+            $responseBody = $response->body();
+
+            $filename = Str::random(10) . '.' . $outputFormat;
+
+            // Save the image to the public/images directory
+            Storage::disk('public')->put("images/{$filename}", $responseBody);
+
+            // Convert the raw binary image data to Base64
+            $imageData = base64_encode($responseBody);
+
+            // Return the response as JSON with the Base64 encoded image
+            return response()->json([
+                'status' => 'success',
+                'image_data' => $imageData
+            ]);
+        } else {
+            Log::error('Failed response from Stability AI API.', [
+                'status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to process the image.',
+            ], 500);
+        }
+    } catch (\Exception $e) {
+        // Log exception
+        Log::error('Exception occurred during Stability AI Replace Background API call.', [
+            'error_message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred during the image processing.',
+        ], 500);
+    }
+}
 
 
 
