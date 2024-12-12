@@ -13,9 +13,6 @@
         @csrf
         <label for="subject_image">Upload Image:</label>
         <input type="file" name="subject_image" id="subject_image" >
-       
-        <label for="bg_reference">Background Reference:</label>
-        <input type="file" name="bg_reference" id="bg_reference" >
         
         <label for="background_prompt">Background Prompt:</label>
         <input type="text" name="background_prompt" id="background_prompt" >
