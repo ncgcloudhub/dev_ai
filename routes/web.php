@@ -201,7 +201,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit')->middleware('admin.permission:aiContentCreator.edit');
         
-        Route::get('/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorDelete'])->name('aicontentcreator.delete');
+        Route::get('/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorDelete'])->name('aicontentcreator.delete')->middleware('admin.permission:aiContentCreator.delete');
 
         Route::post('/update', [AIContentCreatorController::class, 'AIContentCreatorUpdate'])->name('aicontentcreator.update');
 
