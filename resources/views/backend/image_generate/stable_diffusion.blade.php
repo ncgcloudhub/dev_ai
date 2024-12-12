@@ -85,7 +85,7 @@
                                     <option value="" disabled selected>Select format</option>
                                     <option value="jpeg">JPEG</option>
                                     <option value="png">PNG</option>
-                                    <option value="webp">WEBP</option>
+                                    {{-- <option value="webp">WEBP</option> --}}
                                 </select>
                                 
                                 <label for="modelVersion" class="form-label">Select Model Version</label>
