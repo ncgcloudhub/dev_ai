@@ -201,7 +201,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit')->middleware('admin.permission:aiContentCreator.edit');
         
-        Route::get('/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorDelete'])->name('aicontentcreator.delete');
+        Route::get('/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorDelete'])->name('aicontentcreator.delete')->middleware('admin.permission:aiContentCreator.delete');
 
         Route::post('/update', [AIContentCreatorController::class, 'AIContentCreatorUpdate'])->name('aicontentcreator.update');
 
@@ -492,21 +492,21 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
         Route::post('/category/store', [CustomTemplateController::class, 'CustomTemplateCategoryStore'])->name('custom.template.category.store');
 
-        Route::get('/category/edit/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryEdit'])->name('custom.template.category.edit');
+        Route::get('/category/edit/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryEdit'])->name('custom.template.category.edit')->middleware('admin.permission:customTemplate.category.edit');
 
         Route::post('/category/update', [CustomTemplateController::class, 'CustomTemplateCategoryUpdate'])->name('custom.template.category.update');
 
-        Route::get('/category/delete/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryDelete'])->name('custom.template.category.delete');
+        Route::get('/category/delete/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryDelete'])->name('custom.template.category.delete')->middleware('admin.permission:customTemplate.category.delete');
 
         Route::get('/add', [CustomTemplateController::class, 'CustomTemplateAdd'])->name('custom.template.add')->middleware('admin.permission:customTemplate.add');
 
         Route::post('store', [CustomTemplateController::class, 'CustomTemplateStore'])->name('custom.template.store');
 
-        Route::get('/edit/{slug}', [CustomTemplateController::class, 'CustomTemplateEdit'])->name('custom.template.edit');
+        Route::get('/edit/{slug}', [CustomTemplateController::class, 'CustomTemplateEdit'])->name('custom.template.edit')->middleware('admin.permission:customTemplate.edit');
 
         Route::post('/update', [CustomTemplateController::class, 'CustomTemplateUpdate'])->name('custom.template.update');
         
-        Route::get('/delete/{id}', [CustomTemplateController::class, 'CustomTemplateDelete'])->name('custom.template.delete');
+        Route::get('/delete/{id}', [CustomTemplateController::class, 'CustomTemplateDelete'])->name('custom.template.delete')->middleware('admin.permission:customTemplate.delete');
 
         Route::get('/manage', [CustomTemplateController::class, 'CustomTemplateManage'])->name('custom.template.manage')->middleware('admin.permission:customTemplate.manage');
 
