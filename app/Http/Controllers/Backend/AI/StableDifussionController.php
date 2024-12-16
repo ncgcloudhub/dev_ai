@@ -913,7 +913,6 @@ public function inpaint(Request $request)
 
 
 // Edit Outpaint
-
 public function outpaintForm()
 {
     $apiKey = config('services.stable_diffusion.api_key');
@@ -936,8 +935,6 @@ public function outpaint(Request $request)
     $left = $request->input('left');
     $down = $request->input('down');
     $outputFormat = $request->input('output_format');
-
-    $apiKey = 'your-api-key-here';
 
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
@@ -966,5 +963,63 @@ public function outpaint(Request $request)
         ], $response->status());
     }
 }
+
+
+
+
+// SD Control (Sketch)
+public function controlSketchForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_control.sketch_form',compact('apiKey'));
+}
+
+public function controlSketch(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'prompt' => 'required|string',
+        'control_strength' => 'required|numeric|min:0|max:1',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $prompt = $request->input('prompt');
+    $controlStrength = $request->input('control_strength');
+    $outputFormat = $request->input('output_format');
+
+    $apiKey = 'your-api-key-here';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/control/sketch',
+        [
+            'prompt' => $prompt,
+            'control_strength' => $controlStrength,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
+    }
+}
+
+
 
 }

@@ -782,6 +782,10 @@ Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
+// Stable Diffusion Control(Sketch)
+Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
+Route::post('/stable-control-sketch', [StableDifussionController::class, 'controlSketch'])->name('stable.control.sketch');
+
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])
  ->where('route', '.*') // Matches all routes
