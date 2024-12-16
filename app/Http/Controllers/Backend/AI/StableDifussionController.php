@@ -779,7 +779,7 @@ public function searchAndReplace(Request $request)
             );
 
             Log::info('Received response from Stability AI API', [
-                'status' => $response,
+                'response' => $response,
             ]);
 
             if ($response->status() === 200) {
@@ -807,6 +807,51 @@ public function searchAndReplace(Request $request)
         }
     }
 
+
+    // Stable Edit Erase
+
+    public function eraseForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.erase_form',compact('apiKey'));
+}
+
+    public function erase(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+  
+    $url = 'https://api.stability.ai/v2beta/stable-image/edit/erase';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($request->file('image')->getRealPath()),
+        $request->file('image')->getClientOriginalName()
+    )->attach(
+        'mask',
+        file_get_contents($request->file('mask')->getRealPath()),
+        $request->file('mask')->getClientOriginalName()
+    )->post($url, [
+        'output_format' => $request->input('output_format', 'webp'),
+    ]);
+
+    Log::info('Received response from Stability AI API', [
+        'response' => $response,
+    ]);
+
+
+    if ($response->ok()) {
+        // Return the binary image data
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/webp')
+            ->header('Content-Disposition', 'inline');
+    }
+
+    // Handle errors
+    return response()->json(['error' => $response->json()], $response->status());
+}
 
 
 }
