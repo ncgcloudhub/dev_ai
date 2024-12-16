@@ -911,4 +911,60 @@ public function inpaint(Request $request)
     }
 }
 
+
+// Edit Outpaint
+
+public function outpaintForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.outpaint_form',compact('apiKey'));
+}
+
+
+public function outpaint(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'left' => 'required|integer|min:0',
+        'down' => 'required|integer|min:0',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $left = $request->input('left');
+    $down = $request->input('down');
+    $outputFormat = $request->input('output_format');
+
+    $apiKey = 'your-api-key-here';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/edit/outpaint',
+        [
+            'left' => $left,
+            'down' => $down,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
+    }
+}
+
 }
