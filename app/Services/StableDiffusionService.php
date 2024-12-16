@@ -18,7 +18,7 @@ class StableDiffusionService
         $this->apiUrl = config('services.stable_diffusion.api_url');
     }
 
-    public function generateImage($prompt, $imageFormat, $modelVersion)
+    public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion)
     {
         // Set up headers and payload similar to your Python request
         $headers = [
@@ -35,7 +35,7 @@ class StableDiffusionService
         // Send the request
         $response = Http::withHeaders($headers)
             ->asMultipart() // Use multipart to handle image data properly
-            ->post($this->apiUrl, $data);
+            ->post($endpoint, $data);
 
             Log::info('Stable Diffusion API Response:', [
                 'status' => $response->status(),
