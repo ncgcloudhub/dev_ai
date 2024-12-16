@@ -79,15 +79,8 @@
         
 
                     <div class="row justify-content-center p-3" style="background: linear-gradient(45deg, #ffffff, #d4b2d0); border-radius: 12px; padding: 3px;">
-                        <div class="col-xl-3 col-lg-4 col-sm-6" style="background: linear-gradient(45deg, #b7aee7, #dfc6dc);; border-radius: 12px; padding: 15px;">
-                                <label for="imageFormat" class="form-label">Select Image Format</label>
-                                <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
-                                    <option value="" disabled selected>Select format</option>
-                                    <option value="jpeg">JPEG</option>
-                                    <option value="png">PNG</option>
-                                    {{-- <option value="webp">WEBP</option> --}}
-                                </select>
-                                
+                            <div class="col-xl-3 col-lg-4 col-sm-6" style="background: linear-gradient(45deg, #b7aee7, #dfc6dc); border-radius: 12px; padding: 15px;">
+
                                 <label for="modelVersion" class="form-label">Select Model Version</label>
                                 <select name="modelVersion" id="modelVersion" class="form-select" data-choices onchange="syncModelVersion()">
                                     <option value="" disabled selected>Select Model</option>
@@ -97,9 +90,22 @@
                                     <option value="sd3.5-medium">sd3.5-medium</option>
                                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                                     <option value="sd3.5-large">sd3.5-large</option>
+                                    <option value="sd-ultra">SD Ultra</option>
+                                    <option value="sd-core">SD Core</option>
+                                </select>
+
+
+                                <label for="imageFormat" class="form-label">Select Image Format</label>
+                                <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
+                                    <option value="" disabled selected>Select format</option>
+                                    <option value="jpeg">JPEG</option>
+                                    <option value="png">PNG</option>
+                                    <option value="webp">WEBP</option>
                                 </select>
                                 
+                                
                             </div>
+                        
                             <!--end col-->
                             <div class="col-xl-6 col-lg-4 col-sm-6" data-simplebar data-simplebar-auto-hide="false" style="max-height: 220px;">
                                 <div class="d-flex flex-wrap justify-content-between">

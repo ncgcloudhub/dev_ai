@@ -46,6 +46,23 @@ class StableDifussionController extends Controller
     $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
     $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
 
+    // Set the appropriate endpoint
+    $endpoints = [
+        'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
+        'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
+        'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
+    ];
+
+    $endpoint = $endpoints['default']; // Default to SD3 endpoint
+
+    if (array_key_exists($modelVersion, $endpoints)) {
+        $endpoint = $endpoints[$modelVersion];
+    }
+
+    // Log the selected model and endpoint
+    Log::info('Selected Model Version:', ['modelVersion' => $modelVersion]);
+    Log::info('Resolved Endpoint:', ['endpoint' => $endpoint]);
+
     if ($style) {
         $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
     }
@@ -58,7 +75,7 @@ class StableDifussionController extends Controller
     }
  
     // Call the service to generate the image
-    $result = $this->stableDiffusionService->generateImage($rephrasedPrompt, $imageFormat, $modelVersion);
+    $result = $this->stableDiffusionService->generateImage($endpoint, $rephrasedPrompt, $imageFormat, $modelVersion);
 
     // Return the response as JSON
     return response()->json([
