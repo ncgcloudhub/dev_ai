@@ -769,6 +769,10 @@ Route::post('/stable-edit-search-And-Replace', [StableDifussionController::class
 Route::get('/stable-edit-erase-form', [StableDifussionController::class, 'eraseForm']);
 Route::post('/stable-edit-erase', [StableDifussionController::class, 'erase'])->name('stable.edit.erase');
 
+// Stable Diffusion Edit Inpaint
+Route::get('/stable-edit-inpaint-form', [StableDifussionController::class, 'inpaintForm']);
+Route::post('/stable-edit-inpaint', [StableDifussionController::class, 'inpaint'])->name('stable.edit.inpaint');
+
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');

@@ -854,4 +854,61 @@ public function searchAndReplace(Request $request)
 }
 
 
+
+// Edit Inpaint
+public function inpaintForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.inpaint_form',compact('apiKey'));
+}
+
+public function inpaint(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'mask' => 'nullable|file|mimes:png,jpg,jpeg',
+        'prompt' => 'required|string',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $mask = $request->file('mask');
+    $prompt = $request->input('prompt');
+    $outputFormat = $request->input('output_format');
+
+    $apiKey = 'your-api-key-here';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->attach(
+        'mask',
+        file_get_contents($mask->getRealPath()),
+        $mask->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/edit/inpaint',
+        [
+            'prompt' => $prompt,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
+    }
+}
+
 }
