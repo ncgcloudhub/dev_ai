@@ -761,6 +761,10 @@ Route::post('/stable--without-async-edit', [StableDifussionController::class, 'W
 Route::get('/stable-edit-remove-bg-form', [StableDifussionController::class, 'RemoveBgForm']);
 Route::post('/edit-remove-background', [StableDifussionController::class, 'editRemoveBackground'])->name('stable.remove.background');
 
+// Stable Diffusion Search and Replace
+Route::get('/stable-edit-search-replace-form', [StableDifussionController::class, 'SearchReplaceForm']);
+Route::post('/stable-edit-search-And-Replace', [StableDifussionController::class, 'searchAndReplace'])->name('stable.search.replace');
+
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');

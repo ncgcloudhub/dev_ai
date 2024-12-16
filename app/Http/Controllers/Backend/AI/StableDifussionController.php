@@ -670,7 +670,6 @@ public function WithoutAsyncEdit(Request $request)
 
 
 // STABLE EDIT
-
 public function RemoveBgForm()
 {
     $apiKey = config('services.stable_diffusion.api_key');
@@ -718,6 +717,80 @@ public function editRemoveBackground(Request $request)
                     'success' => true,
                     'image_url' => asset('storage/' . $outputFileName),
                 ]);
+            } else {
+                // Handle API errors
+                return response()->json([
+                    'success' => false,
+                    'message' => $response->json()['message'] ?? 'An error occurred while processing the image.',
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+// Stable Search and Replace
+public function SearchReplaceForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.search_and_replace_form',compact('apiKey'));
+}
+
+public function searchAndReplace(Request $request)
+    {
+
+        $configapiKey = config('services.stable_diffusion.api_key');
+    
+        // Validate the form inputs
+        $request->validate([
+            'subject_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // max 5MB
+            'prompt' => 'required|string',
+            'search_prompt' => 'required|string',
+            'output_format' => 'required|in:webp,png,jpg',
+        ]);
+
+        try {
+            // Get the uploaded file and form data
+            $file = $request->file('subject_image');
+            $prompt = $request->input('prompt');
+            $searchPrompt = $request->input('search_prompt');
+            $outputFormat = $request->input('output_format');
+
+            // Call Stability AI API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',
+            ])->attach(
+                'image',
+                file_get_contents($file->getRealPath()),
+                $file->getClientOriginalName()
+            )->post(
+                'https://api.stability.ai/v2beta/stable-image/edit/search-and-replace',
+                [
+                    'prompt' => $prompt,
+                    'search_prompt' => $searchPrompt,
+                    'output_format' => $outputFormat,
+                ]
+            );
+
+            Log::info('Received response from Stability AI API', [
+                'status' => $response,
+            ]);
+
+            if ($response->status() === 200) {
+                // Save the generated image locally
+                $outputFileName = 'output_' . uniqid() . '.' . $outputFormat;
+                $outputFilePath = storage_path('app/public/' . $outputFileName);
+                file_put_contents($outputFilePath, $response->body());
+
+                $imageData = $response->body();
+                return response($imageData, 200)
+                    ->header('Content-Type', 'image/' . $outputFormat);
             } else {
                 // Handle API errors
                 return response()->json([
