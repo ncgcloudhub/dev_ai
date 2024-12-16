@@ -412,11 +412,6 @@ public function editBackground(Request $request)
     // Log request data
     Log::info('Edit Background Request Data:', $request->all());
 
-    // return response()->json([
-    //     'status' => 'success',
-    //     'generation_id' => '41c4577579df28601521782d1b2b647919e29a611f8645141b2eef5481823ff6',
-    // ]);
-
     // Validate input
     $request->validate([
         'subject_image' => 'required|file|mimes:jpeg,png,jpg',
@@ -670,6 +665,358 @@ public function WithoutAsyncEdit(Request $request)
             'status' => 'error',
             'message' => 'An error occurred during the image processing.',
         ], 500);
+    }
+}
+
+
+// STABLE EDIT
+public function RemoveBgForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.remove_bg_form',compact('apiKey'));
+}
+
+public function editRemoveBackground(Request $request)
+    {
+        $configapiKey = config('services.stable_diffusion.api_key');
+     
+        // Validate the form inputs
+        $request->validate([
+            'subject_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // max 5MB
+            'output_format' => 'required|in:webp,png,jpg',
+        ]);
+
+        try {
+            // Get the uploaded file
+            $file = $request->file('subject_image');
+            $outputFormat = $request->input('output_format');
+
+            // Call Stability AI API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',
+            ])->attach(
+                'image', 
+                file_get_contents($file->getRealPath()), 
+                $file->getClientOriginalName()
+            )->post(
+                'https://api.stability.ai/v2beta/stable-image/edit/remove-background', 
+                [
+                    'output_format' => $outputFormat,
+                ]
+            );
+
+            if ($response->status() === 200) {
+                // Save the generated image locally
+                $outputFileName = 'output_' . uniqid() . '.' . $outputFormat;
+                $outputFilePath = storage_path('app/public/' . $outputFileName);
+                file_put_contents($outputFilePath, $response->body());
+
+                // Return the file path for frontend use
+                return response()->json([
+                    'success' => true,
+                    'image_url' => asset('storage/' . $outputFileName),
+                ]);
+            } else {
+                // Handle API errors
+                return response()->json([
+                    'success' => false,
+                    'message' => $response->json()['message'] ?? 'An error occurred while processing the image.',
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+// Stable Search and Replace
+public function SearchReplaceForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.search_and_replace_form',compact('apiKey'));
+}
+
+public function searchAndReplace(Request $request)
+    {
+
+        $configapiKey = config('services.stable_diffusion.api_key');
+    
+        // Validate the form inputs
+        $request->validate([
+            'subject_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // max 5MB
+            'prompt' => 'required|string',
+            'search_prompt' => 'required|string',
+            'output_format' => 'required|in:webp,png,jpg',
+        ]);
+
+        try {
+            // Get the uploaded file and form data
+            $file = $request->file('subject_image');
+            $prompt = $request->input('prompt');
+            $searchPrompt = $request->input('search_prompt');
+            $outputFormat = $request->input('output_format');
+
+            // Call Stability AI API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',
+            ])->attach(
+                'image',
+                file_get_contents($file->getRealPath()),
+                $file->getClientOriginalName()
+            )->post(
+                'https://api.stability.ai/v2beta/stable-image/edit/search-and-replace',
+                [
+                    'prompt' => $prompt,
+                    'search_prompt' => $searchPrompt,
+                    'output_format' => $outputFormat,
+                ]
+            );
+
+            Log::info('Received response from Stability AI API', [
+                'response' => $response,
+            ]);
+
+            if ($response->status() === 200) {
+                // Save the generated image locally
+                $outputFileName = 'output_' . uniqid() . '.' . $outputFormat;
+                $outputFilePath = storage_path('app/public/' . $outputFileName);
+                file_put_contents($outputFilePath, $response->body());
+
+                $imageData = $response->body();
+                return response($imageData, 200)
+                    ->header('Content-Type', 'image/' . $outputFormat);
+            } else {
+                // Handle API errors
+                return response()->json([
+                    'success' => false,
+                    'message' => $response->json()['message'] ?? 'An error occurred while processing the image.',
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    // Stable Edit Erase
+
+    public function eraseForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.erase_form',compact('apiKey'));
+}
+
+    public function erase(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+  
+    $url = 'https://api.stability.ai/v2beta/stable-image/edit/erase';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($request->file('image')->getRealPath()),
+        $request->file('image')->getClientOriginalName()
+    )->attach(
+        'mask',
+        file_get_contents($request->file('mask')->getRealPath()),
+        $request->file('mask')->getClientOriginalName()
+    )->post($url, [
+        'output_format' => $request->input('output_format', 'webp'),
+    ]);
+
+    Log::info('Received response from Stability AI API', [
+        'response' => $response,
+    ]);
+
+
+    if ($response->ok()) {
+        // Return the binary image data
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/webp')
+            ->header('Content-Disposition', 'inline');
+    }
+
+    // Handle errors
+    return response()->json(['error' => $response->json()], $response->status());
+}
+
+
+
+// Edit Inpaint
+public function inpaintForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.inpaint_form',compact('apiKey'));
+}
+
+public function inpaint(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'mask' => 'nullable|file|mimes:png,jpg,jpeg',
+        'prompt' => 'required|string',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $mask = $request->file('mask');
+    $prompt = $request->input('prompt');
+    $outputFormat = $request->input('output_format');
+
+    $apiKey = 'your-api-key-here';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->attach(
+        'mask',
+        file_get_contents($mask->getRealPath()),
+        $mask->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/edit/inpaint',
+        [
+            'prompt' => $prompt,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
+    }
+}
+
+
+// Edit Outpaint
+public function outpaintForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.outpaint_form',compact('apiKey'));
+}
+
+
+public function outpaint(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'left' => 'required|integer|min:0',
+        'down' => 'required|integer|min:0',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $left = $request->input('left');
+    $down = $request->input('down');
+    $outputFormat = $request->input('output_format');
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/edit/outpaint',
+        [
+            'left' => $left,
+            'down' => $down,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
+    }
+}
+
+
+
+
+// SD Control (Sketch)
+public function controlSketchForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_control.sketch_form',compact('apiKey'));
+}
+
+public function controlSketch(Request $request)
+{
+    $configapiKey = config('services.stable_diffusion.api_key');
+
+    $request->validate([
+        'image' => 'required|file|mimes:png,jpg,jpeg',
+        'prompt' => 'required|string',
+        'control_strength' => 'required|numeric|min:0|max:1',
+        'output_format' => 'required|in:webp,png,jpg',
+    ]);
+
+    $image = $request->file('image');
+    $prompt = $request->input('prompt');
+    $controlStrength = $request->input('control_strength');
+    $outputFormat = $request->input('output_format');
+
+    $apiKey = 'your-api-key-here';
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $configapiKey,
+        'Accept' => 'image/*',
+    ])->attach(
+        'image',
+        file_get_contents($image->getRealPath()),
+        $image->getClientOriginalName()
+    )->post(
+        'https://api.stability.ai/v2beta/stable-image/control/sketch',
+        [
+            'prompt' => $prompt,
+            'control_strength' => $controlStrength,
+            'output_format' => $outputFormat,
+        ]
+    );
+
+    if ($response->ok()) {
+        return response($response->body(), 200)
+            ->header('Content-Type', 'image/' . $outputFormat)
+            ->header('Content-Disposition', 'inline');
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => $response->json(),
+        ], $response->status());
     }
 }
 

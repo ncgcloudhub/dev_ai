@@ -757,10 +757,34 @@ Route::post('/check-generation-status', [StableDifussionController::class, 'chec
 Route::get('/stable-without-async-edit-form', [StableDifussionController::class, 'WithoutAsyncEditForm']);
 Route::post('/stable--without-async-edit', [StableDifussionController::class, 'WithoutAsyncEdit'])->name('without.async.edit');
 
+// Stable Diffusion Remove Background
+Route::get('/stable-edit-remove-bg-form', [StableDifussionController::class, 'RemoveBgForm']);
+Route::post('/edit-remove-background', [StableDifussionController::class, 'editRemoveBackground'])->name('stable.remove.background');
+
+// Stable Diffusion Search and Replace
+Route::get('/stable-edit-search-replace-form', [StableDifussionController::class, 'SearchReplaceForm']);
+Route::post('/stable-edit-search-And-Replace', [StableDifussionController::class, 'searchAndReplace'])->name('stable.search.replace');
+
+// Stable Diffusion Edit Erase
+Route::get('/stable-edit-erase-form', [StableDifussionController::class, 'eraseForm']);
+Route::post('/stable-edit-erase', [StableDifussionController::class, 'erase'])->name('stable.edit.erase');
+
+// Stable Diffusion Edit Inpaint
+Route::get('/stable-edit-inpaint-form', [StableDifussionController::class, 'inpaintForm']);
+Route::post('/stable-edit-inpaint', [StableDifussionController::class, 'inpaint'])->name('stable.edit.inpaint');
+
+// Stable Diffusion Edit Inpaint
+Route::get('/stable-edit-outpaint-form', [StableDifussionController::class, 'outpaintForm']);
+Route::post('/stable-edit-outpaint', [StableDifussionController::class, 'outpaint'])->name('stable.edit.outpaint');
+
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
+
+// Stable Diffusion Control(Sketch)
+Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
+Route::post('/stable-control-sketch', [StableDifussionController::class, 'controlSketch'])->name('stable.control.sketch');
 
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])
