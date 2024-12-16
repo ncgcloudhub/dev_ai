@@ -412,11 +412,6 @@ public function editBackground(Request $request)
     // Log request data
     Log::info('Edit Background Request Data:', $request->all());
 
-    // return response()->json([
-    //     'status' => 'success',
-    //     'generation_id' => '41c4577579df28601521782d1b2b647919e29a611f8645141b2eef5481823ff6',
-    // ]);
-
     // Validate input
     $request->validate([
         'subject_image' => 'required|file|mimes:jpeg,png,jpg',
@@ -672,6 +667,72 @@ public function WithoutAsyncEdit(Request $request)
         ], 500);
     }
 }
+
+
+// STABLE EDIT
+
+public function RemoveBgForm()
+{
+    $apiKey = config('services.stable_diffusion.api_key');
+    return view('backend.stable_edit.remove_bg_form',compact('apiKey'));
+}
+
+public function editRemoveBackground(Request $request)
+    {
+        $configapiKey = config('services.stable_diffusion.api_key');
+     
+        // Validate the form inputs
+        $request->validate([
+            'subject_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120', // max 5MB
+            'output_format' => 'required|in:webp,png,jpg',
+        ]);
+
+        try {
+            // Get the uploaded file
+            $file = $request->file('subject_image');
+            $outputFormat = $request->input('output_format');
+
+            // Call Stability AI API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $configapiKey,
+                'accept' => 'image/*',
+            ])->attach(
+                'image', 
+                file_get_contents($file->getRealPath()), 
+                $file->getClientOriginalName()
+            )->post(
+                'https://api.stability.ai/v2beta/stable-image/edit/remove-background', 
+                [
+                    'output_format' => $outputFormat,
+                ]
+            );
+
+            if ($response->status() === 200) {
+                // Save the generated image locally
+                $outputFileName = 'output_' . uniqid() . '.' . $outputFormat;
+                $outputFilePath = storage_path('app/public/' . $outputFileName);
+                file_put_contents($outputFilePath, $response->body());
+
+                // Return the file path for frontend use
+                return response()->json([
+                    'success' => true,
+                    'image_url' => asset('storage/' . $outputFileName),
+                ]);
+            } else {
+                // Handle API errors
+                return response()->json([
+                    'success' => false,
+                    'message' => $response->json()['message'] ?? 'An error occurred while processing the image.',
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 
 
