@@ -30,6 +30,7 @@
         <select name="control_type" id="control_type" required>
             <option value="sketch">Sketch</option>
             <option value="structure">Structure</option>
+            <option value="style">Style</option>
         </select>
     
         <button type="submit">Submit</button>

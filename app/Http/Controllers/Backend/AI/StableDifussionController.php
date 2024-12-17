@@ -1020,7 +1020,7 @@ public function controlSketch(Request $request)
         'prompt' => 'required|string',
         'control_strength' => 'required|numeric|min:0|max:1',
         'output_format' => 'required|in:webp,png,jpg',
-        'control_type' => 'required|in:sketch,structure',
+        'control_type' => 'required|in:sketch,structure,style',
     ]);
 
     $image = $request->file('image');
@@ -1033,6 +1033,7 @@ public function controlSketch(Request $request)
     $endpoints = [
         'sketch' => 'https://api.stability.ai/v2beta/stable-image/control/sketch',
         'structure' => 'https://api.stability.ai/v2beta/stable-image/control/structure',
+        'style' => 'https://api.stability.ai/v2beta/stable-image/control/style',
     ];
 
     $apiEndpoint = $endpoints[$controlType] ?? null;
