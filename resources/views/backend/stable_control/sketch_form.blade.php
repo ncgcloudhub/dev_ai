@@ -25,6 +25,12 @@
             <option value="png">PNG</option>
             <option value="jpg">JPG</option>
         </select>
+
+        <label for="control_type">Control Type:</label>
+        <select name="control_type" id="control_type" required>
+            <option value="sketch">Sketch</option>
+            <option value="structure">Structure</option>
+        </select>
     
         <button type="submit">Submit</button>
     </form>

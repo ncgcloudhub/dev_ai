@@ -1010,14 +1010,38 @@ public function controlSketch(Request $request)
         'prompt' => 'required|string',
         'control_strength' => 'required|numeric|min:0|max:1',
         'output_format' => 'required|in:webp,png,jpg',
+        'control_type' => 'required|in:sketch,structure',
     ]);
 
     $image = $request->file('image');
     $prompt = $request->input('prompt');
     $controlStrength = $request->input('control_strength');
     $outputFormat = $request->input('output_format');
+    $controlType = $request->input('control_type');
 
-    $apiKey = 'your-api-key-here';
+    // Dynamically select the endpoint
+    $endpoints = [
+        'sketch' => 'https://api.stability.ai/v2beta/stable-image/control/sketch',
+        'structure' => 'https://api.stability.ai/v2beta/stable-image/control/structure',
+    ];
+
+    $apiEndpoint = $endpoints[$controlType] ?? null;
+
+     // Log the selected control type and endpoint
+     Log::info('Control type selected:', ['control_type' => $controlType]);
+     Log::info('API Endpoint being used:', ['endpoint' => $apiEndpoint]);
+
+    if (!$apiEndpoint) {
+        return response()->json(['success' => false, 'message' => 'Invalid control type'], 400);
+    }
+
+     // Log the request payload before calling the API
+     Log::info('API Request Payload:', [
+        'prompt' => $prompt,
+        'control_strength' => $controlStrength,
+        'output_format' => $outputFormat,
+        'image_name' => $image->getClientOriginalName()
+    ]);
 
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
@@ -1026,20 +1050,22 @@ public function controlSketch(Request $request)
         'image',
         file_get_contents($image->getRealPath()),
         $image->getClientOriginalName()
-    )->post(
-        'https://api.stability.ai/v2beta/stable-image/control/sketch',
-        [
-            'prompt' => $prompt,
-            'control_strength' => $controlStrength,
-            'output_format' => $outputFormat,
-        ]
-    );
+    )->post($apiEndpoint, [
+        'prompt' => $prompt,
+        'control_strength' => $controlStrength,
+        'output_format' => $outputFormat,
+    ]);
+
+     // Log the response status and data
+     Log::info('API Response Status:', ['status' => $response->status()]);
+     Log::debug('API Response Body:', ['body' => $response->body()]);
 
     if ($response->ok()) {
         return response($response->body(), 200)
             ->header('Content-Type', 'image/' . $outputFormat)
             ->header('Content-Disposition', 'inline');
     } else {
+        Log::error('API Request Failed:', ['response' => $response->json()]);
         return response()->json([
             'success' => false,
             'message' => $response->json(),
