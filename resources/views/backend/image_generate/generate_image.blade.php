@@ -386,7 +386,7 @@
                 <div class="box-content text-center mt-2">
                     <!-- User Info -->
                     <div class="d-flex align-items-center mb-2 text-muted">
-                        <div class="flex-grow-1">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
+                        <div class="flex-grow-1">by <a href="" class="text-body text-truncate">{{ $item->user->name }}</a></div>
                     </div>
                     
                     <!-- Action Buttons -->

@@ -15,10 +15,10 @@
         <label for="subject_image">Upload Image:</label>
         <input type="file" name="subject_image" id="subject_image" >
         
-        <label for="prompt">Prompt:</label>
+        <label for="prompt">Prompt: (What you wish to see in the output image)</label>
         <input type="text" name="prompt" id="prompt" >
        
-        <label for="select_prompt">Select Prompt:</label>
+        <label for="select_prompt">Select Prompt: (short description of what to search for in the image)</label>
         <input type="text" name="select_prompt" id="select_prompt" >
         
         <label for="output_format">Output Format:</label>

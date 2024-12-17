@@ -18,7 +18,6 @@
         <select name="output_format" id="output_format">
             <option value="webp">WEBP</option>
             <option value="png">PNG</option>
-            <option value="jpg">JPG</option>
         </select>
     
         <button type="submit">Submit</button>

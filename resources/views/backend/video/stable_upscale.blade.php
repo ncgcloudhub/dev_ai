@@ -11,8 +11,10 @@
         @csrf
         <label for="image">Select Image:</label>
         <input type="file" name="image" id="image" required>
+        <p>Width must be between 32 and 1,536 pixels for Fast<br>
+            Height must be between 32 and 1,536 pixels for Fast</p>
         
-        <label for="prompt">Prompt (Optional):</label>
+        <label for="prompt">Prompt (Required For Conservative):</label>
         <input type="text" name="prompt" id="prompt">
         
         <label for="output_format">Output Format:</label>

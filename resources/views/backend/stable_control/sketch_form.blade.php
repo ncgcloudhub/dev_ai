@@ -17,13 +17,20 @@
         <input type="text" name="prompt" id="prompt" placeholder="e.g., a medieval castle on a hill" required>
     
         <label for="control_strength">Control Strength (0.0 - 1.0):</label>
-        <input type="number" name="control_strength" id="control_strength" step="0.1" min="0" max="1" required>
+        <input type="number" name="control_strength" id="control_strength" step="0.1" min="0" max="1" >
     
         <label for="output_format">Output Format:</label>
         <select name="output_format" id="output_format">
             <option value="webp">WEBP</option>
             <option value="png">PNG</option>
             <option value="jpg">JPG</option>
+        </select>
+
+        <label for="control_type">Control Type:</label>
+        <select name="control_type" id="control_type" required>
+            <option value="sketch">Sketch</option>
+            <option value="structure">Structure</option>
+            <option value="style">Style</option>
         </select>
     
         <button type="submit">Submit</button>

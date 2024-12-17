@@ -14,10 +14,10 @@
         <label for="subject_image">Upload Image:</label>
         <input type="file" name="subject_image" id="subject_image" required>
     
-        <label for="prompt">Prompt:</label>
+        <label for="prompt">Prompt: (What you want to replace it with)</label>
         <input type="text" name="prompt" id="prompt" required placeholder="golden retriever in a field">
     
-        <label for="search_prompt">Search Prompt:</label>
+        <label for="search_prompt">Search Prompt: (short description of what to inpaint in the image)</label>
         <input type="text" name="search_prompt" id="search_prompt" required placeholder="dog">
     
         <label for="output_format">Output Format:</label>

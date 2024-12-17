@@ -224,6 +224,16 @@ public function generateImageToVideo(Request $request)
 
     ini_set('max_execution_time', 300);
 
+
+     // Set the appropriate endpoint
+     $endpoints = [
+        'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
+        'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
+        'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
+    ];
+
+    $endpoint = $endpoints['default']; // Default to SD3 endpoint
+
     // Step 1: Validate the input
     Log::info('Step 1: Validation started.');
     $request->validate([
@@ -249,7 +259,7 @@ public function generateImageToVideo(Request $request)
     Log::info('Prompt: ' . $prompt);
 
     //Call the service to generate the image
-    $imageResult = $this->stableDiffusionService->generateImage($prompt, $imageFormat, $modelVersion);
+    $imageResult = $this->stableDiffusionService->generateImage($endpoint, $prompt, $imageFormat, $modelVersion);
 
     Log::info('Step 2: Image generation API response.', ['response' => $imageResult]);
 
@@ -943,14 +953,24 @@ public function outpaint(Request $request)
 
     $request->validate([
         'image' => 'required|file|mimes:png,jpg,jpeg',
-        'left' => 'required|integer|min:0',
-        'down' => 'required|integer|min:0',
         'output_format' => 'required|in:webp,png,jpg',
     ]);
 
+    // Sanitize and validate directional inputs
+    $left = intval($request->input('left', 0)); // Default to 0 if not provided
+    $right = intval($request->input('right', 0)); // Default to 0 if not provided
+    $up = intval($request->input('up', 0)); // Default to 0 if not provided
+    $down = intval($request->input('down', 0)); // Default to 0 if not provided
+
+    // Check if all inputs are zero
+    if ($left === 0 && $right === 0 && $up === 0 && $down === 0) {
+        return response()->json([
+            'success' => false,
+            'message' => 'At least one of the inputs (left, right, up, or down) is required.',
+        ], 422);
+    }
+
     $image = $request->file('image');
-    $left = $request->input('left');
-    $down = $request->input('down');
     $outputFormat = $request->input('output_format');
 
     $response = Http::withHeaders([
@@ -964,6 +984,8 @@ public function outpaint(Request $request)
         'https://api.stability.ai/v2beta/stable-image/edit/outpaint',
         [
             'left' => $left,
+            'right' => $right,
+            'up' => $up,
             'down' => $down,
             'output_format' => $outputFormat,
         ]
@@ -982,8 +1004,6 @@ public function outpaint(Request $request)
 }
 
 
-
-
 // SD Control (Sketch)
 public function controlSketchForm()
 {
@@ -998,16 +1018,41 @@ public function controlSketch(Request $request)
     $request->validate([
         'image' => 'required|file|mimes:png,jpg,jpeg',
         'prompt' => 'required|string',
-        'control_strength' => 'required|numeric|min:0|max:1',
+        // 'control_strength' => 'required|numeric|min:0|max:1',
         'output_format' => 'required|in:webp,png,jpg',
+        'control_type' => 'required|in:sketch,structure,style',
     ]);
 
     $image = $request->file('image');
     $prompt = $request->input('prompt');
-    $controlStrength = $request->input('control_strength');
+    // $controlStrength = $request->input('control_strength');
     $outputFormat = $request->input('output_format');
+    $controlType = $request->input('control_type');
 
-    $apiKey = 'your-api-key-here';
+    // Dynamically select the endpoint
+    $endpoints = [
+        'sketch' => 'https://api.stability.ai/v2beta/stable-image/control/sketch',
+        'structure' => 'https://api.stability.ai/v2beta/stable-image/control/structure',
+        'style' => 'https://api.stability.ai/v2beta/stable-image/control/style',
+    ];
+
+    $apiEndpoint = $endpoints[$controlType] ?? null;
+
+     // Log the selected control type and endpoint
+     Log::info('Control type selected:', ['control_type' => $controlType]);
+     Log::info('API Endpoint being used:', ['endpoint' => $apiEndpoint]);
+
+    if (!$apiEndpoint) {
+        return response()->json(['success' => false, 'message' => 'Invalid control type'], 400);
+    }
+
+     // Log the request payload before calling the API
+     Log::info('API Request Payload:', [
+        'prompt' => $prompt,
+        // 'control_strength' => $controlStrength,
+        'output_format' => $outputFormat,
+        'image_name' => $image->getClientOriginalName()
+    ]);
 
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $configapiKey,
@@ -1016,20 +1061,22 @@ public function controlSketch(Request $request)
         'image',
         file_get_contents($image->getRealPath()),
         $image->getClientOriginalName()
-    )->post(
-        'https://api.stability.ai/v2beta/stable-image/control/sketch',
-        [
-            'prompt' => $prompt,
-            'control_strength' => $controlStrength,
-            'output_format' => $outputFormat,
-        ]
-    );
+    )->post($apiEndpoint, [
+        'prompt' => $prompt,
+        // 'control_strength' => $controlStrength,
+        'output_format' => $outputFormat,
+    ]);
+
+     // Log the response status and data
+     Log::info('API Response Status:', ['status' => $response->status()]);
+     Log::debug('API Response Body:', ['body' => $response->body()]);
 
     if ($response->ok()) {
         return response($response->body(), 200)
             ->header('Content-Type', 'image/' . $outputFormat)
             ->header('Content-Disposition', 'inline');
     } else {
+        Log::error('API Request Failed:', ['response' => $response->json()]);
         return response()->json([
             'success' => false,
             'message' => $response->json(),

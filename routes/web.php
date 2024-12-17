@@ -748,23 +748,6 @@ Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 Route::get('/stable-upscale-form', [StableDifussionController::class, 'UpscaleForm'])->name('stable.upscale.form');
 Route::post('/upscale', [StableDifussionController::class, 'upscale']);
 
-// Stable Edit
-Route::get('/stable-edit-form', [StableDifussionController::class, 'EditForm'])->name('stable.edit.form');
-Route::post('/edit-background', [StableDifussionController::class, 'editBackground'])->name('edit.background');
-Route::post('/check-generation-status', [StableDifussionController::class, 'checkGenerationStatus']);
-
-// Stable Edit Without async
-Route::get('/stable-without-async-edit-form', [StableDifussionController::class, 'WithoutAsyncEditForm']);
-Route::post('/stable--without-async-edit', [StableDifussionController::class, 'WithoutAsyncEdit'])->name('without.async.edit');
-
-// Stable Diffusion Remove Background
-Route::get('/stable-edit-remove-bg-form', [StableDifussionController::class, 'RemoveBgForm']);
-Route::post('/edit-remove-background', [StableDifussionController::class, 'editRemoveBackground'])->name('stable.remove.background');
-
-// Stable Diffusion Search and Replace
-Route::get('/stable-edit-search-replace-form', [StableDifussionController::class, 'SearchReplaceForm']);
-Route::post('/stable-edit-search-And-Replace', [StableDifussionController::class, 'searchAndReplace'])->name('stable.search.replace');
-
 // Stable Diffusion Edit Erase
 Route::get('/stable-edit-erase-form', [StableDifussionController::class, 'eraseForm']);
 Route::post('/stable-edit-erase', [StableDifussionController::class, 'erase'])->name('stable.edit.erase');
@@ -776,6 +759,24 @@ Route::post('/stable-edit-inpaint', [StableDifussionController::class, 'inpaint'
 // Stable Diffusion Edit Inpaint
 Route::get('/stable-edit-outpaint-form', [StableDifussionController::class, 'outpaintForm']);
 Route::post('/stable-edit-outpaint', [StableDifussionController::class, 'outpaint'])->name('stable.edit.outpaint');
+
+// Stable Diffusion Search and Replace
+Route::get('/stable-edit-search-replace-form', [StableDifussionController::class, 'SearchReplaceForm']);
+Route::post('/stable-edit-search-And-Replace', [StableDifussionController::class, 'searchAndReplace'])->name('stable.search.replace');
+
+// Stable Edit Without async
+Route::get('/stable-edit-search-recolor-form', [StableDifussionController::class, 'WithoutAsyncEditForm']);
+Route::post('/stable--without-async-edit', [StableDifussionController::class, 'WithoutAsyncEdit'])->name('without.async.edit');
+
+// Stable Diffusion Remove Background
+Route::get('/stable-edit-remove-bg-form', [StableDifussionController::class, 'RemoveBgForm']);
+Route::post('/edit-remove-background', [StableDifussionController::class, 'editRemoveBackground'])->name('stable.remove.background');
+
+// Stable Edit
+Route::get('/stable-edit-replacebg-relight-form', [StableDifussionController::class, 'EditForm'])->name('stable.edit.form');
+Route::post('/edit-background', [StableDifussionController::class, 'editBackground'])->name('edit.background');
+Route::post('/check-generation-status', [StableDifussionController::class, 'checkGenerationStatus']);
+
 
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
