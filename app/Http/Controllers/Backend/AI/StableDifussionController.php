@@ -1018,14 +1018,14 @@ public function controlSketch(Request $request)
     $request->validate([
         'image' => 'required|file|mimes:png,jpg,jpeg',
         'prompt' => 'required|string',
-        'control_strength' => 'required|numeric|min:0|max:1',
+        // 'control_strength' => 'required|numeric|min:0|max:1',
         'output_format' => 'required|in:webp,png,jpg',
         'control_type' => 'required|in:sketch,structure,style',
     ]);
 
     $image = $request->file('image');
     $prompt = $request->input('prompt');
-    $controlStrength = $request->input('control_strength');
+    // $controlStrength = $request->input('control_strength');
     $outputFormat = $request->input('output_format');
     $controlType = $request->input('control_type');
 
@@ -1049,7 +1049,7 @@ public function controlSketch(Request $request)
      // Log the request payload before calling the API
      Log::info('API Request Payload:', [
         'prompt' => $prompt,
-        'control_strength' => $controlStrength,
+        // 'control_strength' => $controlStrength,
         'output_format' => $outputFormat,
         'image_name' => $image->getClientOriginalName()
     ]);
@@ -1063,7 +1063,7 @@ public function controlSketch(Request $request)
         $image->getClientOriginalName()
     )->post($apiEndpoint, [
         'prompt' => $prompt,
-        'control_strength' => $controlStrength,
+        // 'control_strength' => $controlStrength,
         'output_format' => $outputFormat,
     ]);
 
