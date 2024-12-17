@@ -943,14 +943,24 @@ public function outpaint(Request $request)
 
     $request->validate([
         'image' => 'required|file|mimes:png,jpg,jpeg',
-        'left' => 'required|integer|min:0',
-        'down' => 'required|integer|min:0',
         'output_format' => 'required|in:webp,png,jpg',
     ]);
 
+    // Sanitize and validate directional inputs
+    $left = intval($request->input('left', 0)); // Default to 0 if not provided
+    $right = intval($request->input('right', 0)); // Default to 0 if not provided
+    $up = intval($request->input('up', 0)); // Default to 0 if not provided
+    $down = intval($request->input('down', 0)); // Default to 0 if not provided
+
+    // Check if all inputs are zero
+    if ($left === 0 && $right === 0 && $up === 0 && $down === 0) {
+        return response()->json([
+            'success' => false,
+            'message' => 'At least one of the inputs (left, right, up, or down) is required.',
+        ], 422);
+    }
+
     $image = $request->file('image');
-    $left = $request->input('left');
-    $down = $request->input('down');
     $outputFormat = $request->input('output_format');
 
     $response = Http::withHeaders([
@@ -964,6 +974,8 @@ public function outpaint(Request $request)
         'https://api.stability.ai/v2beta/stable-image/edit/outpaint',
         [
             'left' => $left,
+            'right' => $right,
+            'up' => $up,
             'down' => $down,
             'output_format' => $outputFormat,
         ]
@@ -980,8 +992,6 @@ public function outpaint(Request $request)
         ], $response->status());
     }
 }
-
-
 
 
 // SD Control (Sketch)
