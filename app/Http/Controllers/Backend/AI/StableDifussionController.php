@@ -224,6 +224,16 @@ public function generateImageToVideo(Request $request)
 
     ini_set('max_execution_time', 300);
 
+
+     // Set the appropriate endpoint
+     $endpoints = [
+        'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
+        'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
+        'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
+    ];
+
+    $endpoint = $endpoints['default']; // Default to SD3 endpoint
+
     // Step 1: Validate the input
     Log::info('Step 1: Validation started.');
     $request->validate([
@@ -249,7 +259,7 @@ public function generateImageToVideo(Request $request)
     Log::info('Prompt: ' . $prompt);
 
     //Call the service to generate the image
-    $imageResult = $this->stableDiffusionService->generateImage($prompt, $imageFormat, $modelVersion);
+    $imageResult = $this->stableDiffusionService->generateImage($endpoint, $prompt, $imageFormat, $modelVersion);
 
     Log::info('Step 2: Image generation API response.', ['response' => $imageResult]);
 
