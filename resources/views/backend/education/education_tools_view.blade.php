@@ -92,7 +92,7 @@
                             @endforeach
                 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary" id="educationToolsGenerate" disabled>
+                            <button type="submit" class="btn btn-primary disabled-on-load" id="educationToolsGenerate" disabled>
                                 <i class="ri-auction-fill align-bottom me-1"></i>Generate
                             </button>
                         </form>
@@ -430,14 +430,6 @@
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
-<script>
-    // Wait until the page is fully loaded
-    window.onload = function () {
-        // Enable the "Generate" button for the auction page
-        document.getElementById('educationToolsGenerate').disabled = false;
-    };
-</script>
 
 <script>
     $(document).ready(function () {
