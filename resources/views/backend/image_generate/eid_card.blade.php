@@ -45,12 +45,12 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="from" class="form-label">From</label>
-                                    <input name="from" id="from" type="text" class="form-control">
+                                    <input name="from" id="from" type="text" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="to" class="form-label">To</label>
-                                    <input name="to" id="to" type="text" class="form-control">
+                                    <input name="to" id="to" type="text" class="form-control" required>
                                 </div>
                                
                                 <div class="col-md-6 mb-3">
