@@ -243,7 +243,24 @@ if (!function_exists('saveModuleFeedback')) {
                 return "Error: Unable to rephrase the prompt at this time.";
             }
         }
-}
+    }
+
+
+    if (!function_exists('checkOptimizePrompt')) {
+        function checkOptimizePrompt($prompt, $request)
+        {
+            $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
+            
+            if ($optimizePrompt == '1') {
+                // Call the rephrasePrompt function if optimization is enabled
+                return rephrasePrompt($prompt);
+            }
+    
+            // Return the original prompt if optimization is not enabled
+            return $prompt;
+        }
+    }
+    
 
 }
 

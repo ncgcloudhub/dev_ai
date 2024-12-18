@@ -90,7 +90,9 @@
                                     <!-- Base Example -->
                                     <form action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
-
+                                        {{-- For Value of Hammer(Optimize) --}}
+                                        <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
+                                        
                                         <input type="hidden" name="dall_e_2"  value="dall_e_2">
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
                                             <div class="accordion-item">
@@ -183,8 +185,11 @@
                                         <div class="row g-3 justify-content-center">
                                             <div class="col-xxl-5 col-sm-6">
                                                 <div class="search-box">
+                                                    <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y"
+                                                    onclick="toggleOptimize()" id="optimizeIcon">
+                                                     <i class="ri-hammer-line"></i>
+                                                    </a>
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                                    <i class="ri-search-line search-icon"></i>
                                                 </div>
                                             </div>
                                             
@@ -592,7 +597,7 @@
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('Image');
+             showMagicBall('image');
 
         
             // Create a FormData object

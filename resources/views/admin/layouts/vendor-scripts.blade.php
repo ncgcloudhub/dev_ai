@@ -151,6 +151,25 @@
     });
 </script>
 
+{{-- Optimize Hammer --}}
+<script>
+function toggleOptimize() {
+    const optimizeInput = document.getElementById("hiddenPromptOptimize");
+    const optimizeIcon = document.getElementById("optimizeIcon").firstElementChild;
+
+    // Toggle between optimized and non-optimized
+    if (optimizeInput.value === "1") {
+        optimizeInput.value = "0";
+        console.log('on');
+        optimizeIcon.classList.replace("ri-hammer-fill", "ri-hammer-line"); // Reset to default icon
+    } else {
+        optimizeInput.value = "1";
+        console.log('off');
+        optimizeIcon.classList.replace("ri-hammer-line", "ri-hammer-fill"); // Change to optimized icon
+    }
+}
+</script>
+
 <script>
     // Auto dismiss success alert after 3 seconds
     window.setTimeout(function() {
