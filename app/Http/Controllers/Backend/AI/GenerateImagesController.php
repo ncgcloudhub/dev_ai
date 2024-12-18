@@ -135,13 +135,14 @@ class GenerateImagesController extends Controller
                 }
             }
 
+            $prompt = checkOptimizePrompt($request->prompt, $request);
 
             if ($creditsLeft >= 1) {
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
                 ])->post('https://api.openai.com/v1/images/generations', [
-                    'prompt' => $request->prompt . ' and the style should be ' . $request->userStyleImplode,
+                    'prompt' => $prompt . ' and the style should be ' . $request->userStyleImplode,
                     'size' => $size,
                     'style' => $style,
                     'quality' => $quality,

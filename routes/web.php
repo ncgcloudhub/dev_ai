@@ -307,6 +307,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy')->middleware('admin.permission:settings.privacyPolicy.delete');
 
+    // Magic Ball (Jokes) | Middleware Must be added
+    Route::get('/jokes', [HomeController::class, 'MagicBallJokes'])->name('magic.ball.jokes');
+    Route::post('/store/jokes', [HomeController::class, 'MagicBallJokeStore'])->name('jokes.store');
+
 
     // TERMS & CONDITIONS
     Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition')->middleware('admin.permission:settings.termsAndConditions');

@@ -430,6 +430,13 @@
                                     </li>
                                     @endcan
                                    
+                                  
+                                    {{-- @can must be added --}}
+                                    <li class="nav-item">
+                                        <a href="{{route('magic.ball.jokes')}}" class="nav-link sidebar-hover">Manage Jokes(Magic Ball)</a>
+                                    </li>
+                                   
+                                   
                                 </ul>
                             </div>
                             

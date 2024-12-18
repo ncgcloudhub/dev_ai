@@ -41,6 +41,9 @@
 
 </style>
 
+    {{-- Magic Ball --}}
+    <x-jokes_common />
+
     @include('admin.layouts.body')
 @show
     <!-- Begin page -->
