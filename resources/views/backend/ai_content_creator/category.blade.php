@@ -70,8 +70,8 @@
                         @csrf
     
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category">
-                            <label for="category_name">Category</label>
+                            <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Enter Category" required>
+                            <label for="category_name">Category <span class="text-danger">*</span></label>
                         </div>
     
                         <div class="form-floating">
