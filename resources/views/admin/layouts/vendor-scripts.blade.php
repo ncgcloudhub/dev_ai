@@ -32,6 +32,18 @@
 <script src="{{ asset('backend/js/tinymce.js') }}"></script>
 <!--END tinymce TEXT EDITOR-->
 
+<script>
+    window.onload = function () {
+        // Select all buttons with the class 'disabled-on-load'
+        const buttons = document.querySelectorAll('.disabled-on-load');
+        
+        // Enable each button after the page is fully loaded
+        buttons.forEach(button => {
+            button.disabled = false;
+        });
+    };
+</script>
+
 
 {{-- CHAT STARt Scripts--}}
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

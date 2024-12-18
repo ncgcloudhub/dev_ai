@@ -44,13 +44,15 @@
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="from" class="form-label">From</label>
-                                    <input name="from" id="from" type="text" class="form-control">
+                                    <label for="from" class="form-label">
+                                        From <span class="text-danger">*</span>
+                                    </label>
+                                    <input name="from" id="from" type="text" class="form-control" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="to" class="form-label">To</label>
-                                    <input name="to" id="to" type="text" class="form-control">
+                                    <label for="to" class="form-label">To <span class="text-danger">*</span></label>
+                                    <input name="to" id="to" type="text" class="form-control" required>
                                 </div>
                                
                                 <div class="col-md-6 mb-3">
@@ -175,7 +177,7 @@
                                 
                                 
                                 <div class="col-md-6 mb-3 d-flex align-items-end">
-                                    <button class="btn gradient-btn-5 mb-2">Create Card</button>
+                                    <button class="btn gradient-btn-5 mb-2 disabled-on-load" disabled>Create Card</button>
                                 </div>
                             </div><!-- end row -->
                             <div id="error-msg" style="color: red;"></div>
@@ -250,7 +252,6 @@
 
 <!-- Select2 JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
 
 <script>
     $(document).ready(function() {

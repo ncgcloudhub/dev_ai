@@ -67,9 +67,13 @@
         
                         <!-- Generate Button -->
                         <div class="col-12 col-md-3 text-end order-2 order-md-2">
-                            <button onclick="syncOffcanvasInput()" type="submit" class="btn gradient-btn-7 btn-lg waves-effect waves-light w-100">
-                                <i class="mdi mdi-magnify me-1"></i> Generate
-                            </button>
+                            <button 
+                            onclick="syncOffcanvasInput()" 
+                            type="submit" 
+                            class="btn gradient-btn-7 btn-lg waves-effect waves-light w-100 disabled-on-load" 
+                            disabled>
+                            <i class="mdi mdi-magnify me-1"></i> Generate
+                        </button>
                         </div>
                     </div>
                 </form>
@@ -238,8 +242,7 @@
                                             </div>
                                             <div class="box-content">
                                                 <div class="d-flex align-items-center mt-2">
-                                                    <div class="flex-grow-1 text-muted">by <a href=""
-                                                            class="text-body text-truncate">{{ $item->user->name }}</a></div>
+                                                 
                                                     <div class="flex-shrink-0">
                                                         <div class="d-flex gap-3">
                                                         <button type="button"
@@ -820,6 +823,8 @@
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <script>
 $(document).ready(function() {
     $('#imageForm').on('submit', function(e) {

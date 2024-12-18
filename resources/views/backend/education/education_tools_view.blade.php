@@ -92,7 +92,7 @@
                             @endforeach
                 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary disabled-on-load" id="educationToolsGenerate" disabled>
                                 <i class="ri-auction-fill align-bottom me-1"></i>Generate
                             </button>
                         </form>

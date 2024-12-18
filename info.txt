@@ -120,3 +120,6 @@ in dynamic_pages, change seo_title, keywords and description to text
 
 ------------10/12/2024-----------------
 custom_template_category table, category icon can be null
+
+18/12/2024
+From template_category, the category_icon can be nullable
