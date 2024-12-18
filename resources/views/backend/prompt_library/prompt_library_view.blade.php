@@ -205,7 +205,7 @@
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
 
                         <div class="col-md-3" id="generate-button-tour">
-                            <button type="button" id="ask" class="btn gradient-btn-5" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            <button type="button" id="ask" class="btn gradient-btn-5 disabled-on-load" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">
@@ -271,13 +271,6 @@
 <!-- Include FileSaver.js for saving files -->
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
-<script>
-    // Wait until the page is fully loaded
-    window.onload = function () {
-        // Enable the "Ask" button
-        document.getElementById('ask').disabled = false;
-    };
-</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
