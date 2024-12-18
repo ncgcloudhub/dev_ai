@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
 use App\Models\FavoriteImageDalle;
 use App\Models\Job;
+use App\Models\Jokes;
 use App\Models\LikedImagesDalle;
 use App\Models\NewsLetter;
 use Illuminate\Support\Carbon;
@@ -71,7 +72,28 @@ class HomeController extends Controller
         return view('frontend.ai_image_gallery', compact('images','stableImages'));
     }
     
+    //Jokes (Magic Ball)
+    public function MagicBallJokes()
+    {
+        $jokes = Jokes::latest()->get();
+        return view('backend.magic_ball_jokes.manage_jokes', compact('jokes'));
+    }
 
+    public function MagicBallJokeStore(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        // Save the joke to the database
+        Jokes::create([
+            'category' => $request->category,
+            'content' => $request->content,
+        ]);
+
+        return response()->json(['message' => 'Joke added successfully!']);
+    }
 
 
     //Image Gallery Front End Page

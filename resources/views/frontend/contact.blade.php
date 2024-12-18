@@ -23,8 +23,6 @@
           @include('frontend.body.contact_us')
             <!-- end contact -->
 
-     
-
             <!-- Start footer -->
             @include('frontend.body.footer_frontend')
             <!-- end footer -->
