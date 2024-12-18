@@ -28,8 +28,6 @@
 
 const apiKey = @json($apiKey); // Loaded from environment variable
 
-// Log the apiKey to verify it's loaded
-console.log('API Key:', apiKey);
 
     document.querySelector('form').addEventListener('submit', async (event) => {
     event.preventDefault();

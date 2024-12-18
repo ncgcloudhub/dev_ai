@@ -299,6 +299,62 @@
                     </div>
                 </li>
                 @endcan
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover" href="#stableDiffusion" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="stableDiffusion">
+                        <i class="las la-paint-brush"></i> <span>Stable Diffusion</span>
+                    </a>
+                    <div class="collapse menu-dropdown mega-dropdown-menu" id="stableDiffusion">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <ul class="nav nav-sm flex-column">
+                                    <!-- Upscale -->
+                                    <li class="nav-item">
+                                        <a href="{{ route('stable.upscale.form') }}" class="nav-link sidebar-hover">Upscale</a>
+                                    </li>
+                
+                                    <!-- Edit -->
+                                    <li class="nav-item">
+                                        <a class="nav-link menu-link sidebar-hover" href="#stableEdit" data-bs-toggle="collapse"
+                                            role="button" aria-expanded="false" aria-controls="stableEdit">Edit</a>
+                                        <div class="collapse menu-dropdown" id="stableEdit">
+                                            <ul class="nav nav-sm flex-column ms-3">
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-erase-form" class="nav-link sidebar-hover">Erase</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-outpaint-form" class="nav-link sidebar-hover">Outpaint</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-inpaint-form" class="nav-link sidebar-hover">Inpaint</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-search-replace-form" class="nav-link sidebar-hover">Search and Replace</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-search-recolor-form" class="nav-link sidebar-hover">Search and Recolor</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/stable-edit-remove-bg-form" class="nav-link sidebar-hover">Remove Background</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="{{ route('stable.edit.form') }}" class="nav-link sidebar-hover">Replace Background & Relight</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                
+                                    <!-- Control -->
+                                    <li class="nav-item">
+                                        <a href="/stable-control-sketch-form" class="nav-link sidebar-hover">Control</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                
              
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >Settings</span></li>
