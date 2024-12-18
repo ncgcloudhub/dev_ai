@@ -22,22 +22,23 @@
             <div class="live-preview">
                 
                     <div class="form-floating mb-3">
-                        <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter Template Name">
-                        <label for="template_name" class="form-label">Template Name</label>
+                        <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter Template Name" required>
+                        <label for="template_name" class="form-label">Template Name <span class="text-danger">*</span></label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
                         <label for="icon" class="form-label">Icon</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                            <option disabled selected="">Select Category</option>
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example" required>
+                            <option value="" disabled selected>Select Category</option>
                             @foreach ($categories as $item)
-                            <option value="{{$item->id}}">{{$item->category_name}}</option>
+                                <option value="{{$item->id}}">{{$item->category_name}}</option>
                             @endforeach
                         </select>
-                        <label for="category_id" class="form-label">Category</label>
+                        <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                     </div>
+                    
                   
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
@@ -59,21 +60,22 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="input_types" class="form-label">Input Type</label>
-                        <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example">
+                        <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" required>
+                            <option value="" disabled selected>Select Input Type</option>
                             <option value="text">Input Field</option>
                             <option value="textarea">Textarea Field</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="input_names" class="form-label">Input Name</label>
+                        <label for="input_names" class="form-label">Input Name <span class="text-danger">*</span></label>
                         <input type="text" name="input_names[]" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
                     </div>
                     <div class="col-md-3">
-                        <label for="input_label" class="form-label">Input Label</label>
+                        <label for="input_label" class="form-label">Input Label <span class="text-danger">*</span></label>
                         <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" required>
                     </div>
                     <div class="col-md-3">
-                        <label for="input_placeholders" class="form-label">Input Placeholder</label>
+                        <label for="input_placeholders" class="form-label">Input Placeholder <span class="text-danger">*</span></label>
                         <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                     </div>
                 </div>
@@ -99,10 +101,11 @@
         </div><!-- end card header -->
         <div class="card-body">
             <div class="live-preview">
-                <label for="custom_prompt" class="form-label">Custom Prompt</label>
+                <label for="custom_prompt" class="form-label">Custom Prompt <span class="text-danger">*</span></label>
                 <div class="col-md-12">
-                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message"></textarea>
+                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message" required></textarea>
                 </div>
+                
             </div>
         </div>
     </div>
