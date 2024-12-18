@@ -59,7 +59,7 @@
             <div class="live-preview">
                 <div class="row">
                     <div class="col-md-3">
-                        <label for="input_types" class="form-label">Input Type</label>
+                        <label for="input_types" class="form-label">Input Type <span class="text-danger">*</span></label>
                         <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" required>
                             <option value="" disabled selected>Select Input Type</option>
                             <option value="text">Input Field</option>
