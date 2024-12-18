@@ -58,9 +58,6 @@
 
         const apiKey = @json($apiKey); // Loaded from environment variable
 
-// Log the apiKey to verify it's loaded
-console.log('API Key:', apiKey);
-
         // Fetch video result based on generation ID
       // Function to fetch video result
 function fetchVideo(generationId) {
