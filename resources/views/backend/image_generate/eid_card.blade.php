@@ -175,7 +175,7 @@
                                 
                                 
                                 <div class="col-md-6 mb-3 d-flex align-items-end">
-                                    <button class="btn gradient-btn-5 mb-2">Create Card</button>
+                                    <button id="createCardButton" class="btn gradient-btn-5 mb-2" disabled>Create Card</button>
                                 </div>
                             </div><!-- end row -->
                             <div id="error-msg" style="color: red;"></div>
@@ -251,6 +251,13 @@
 <!-- Select2 JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+<script>
+    // Wait until the page is fully loaded
+    window.onload = function () {
+        // Enable the "Create Card" button
+        document.getElementById('createCardButton').disabled = false;
+    };
+</script>
 
 <script>
     $(document).ready(function() {
