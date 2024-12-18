@@ -77,7 +77,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Update</button>
+                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Update</button>
                             </div>
                         </div>
                     </form>

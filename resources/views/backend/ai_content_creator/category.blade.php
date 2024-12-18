@@ -81,7 +81,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Save</button>
+                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Save</button>
                             </div>
                         </div>
                     </form>
