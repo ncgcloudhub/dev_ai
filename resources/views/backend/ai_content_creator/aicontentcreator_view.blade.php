@@ -249,7 +249,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button id="generateButton" class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4">Generate</button>
+                            <button id="generateButton" class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4" disabled>Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
@@ -344,6 +344,14 @@
 
 {{-- Submit Form Editor --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Wait until the page is fully loaded
+    window.onload = function () {
+        // Enable the "Generate" button
+        document.getElementById('generateButton').disabled = false;
+    };
+</script>
 
 <script>
     document.getElementById('clearInputsButton').addEventListener('click', function() {
