@@ -824,6 +824,10 @@
 $(document).ready(function() {
     $('#imageForm').on('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission
+
+         // Show the magic ball
+         showMagicBall('Image');
+
                     $('#result-li').addClass('active');
                     $('#image-li').removeClass('active');
 
@@ -836,10 +840,11 @@ $(document).ready(function() {
             type: 'POST',
             data: $(this).serialize(), // Serialize form data
             success: function(response) {
-
+                
+                hideMagicBall();
+                
                 var promptValue = $('#prompt').val();
                 $('#promptDisplay').text(promptValue); 
-
             
                 // Display the image based on image_url or image_base64
                 if (response.image_url) {

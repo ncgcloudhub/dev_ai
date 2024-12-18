@@ -458,17 +458,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-    // Load the Lottie animation
-    var animation = lottie.loadAnimation({
-        container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
-        path: '/build/json/lottie.json', // the path to the animation json
-        renderer: 'svg', // 'svg' or 'canvas' or 'html'
-        loop: true, // loop the animation
-        autoplay: true, // start playing the animation
-    });
-</script>
-
 <!-- JavaScript to control the generate button and spinner -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
