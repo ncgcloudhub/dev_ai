@@ -72,18 +72,18 @@
                         @csrf
 
                         <div class="form-floating mb-3">
-                            <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                                <option disabled selected>Select Category</option>
+                            <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example" required>
+                                <option value="" disabled selected>Select Category</option>
                                 @foreach ($categories as $item)
                                     <option value="{{$item->id}}">{{$item->category_name}}</option>
                                 @endforeach
                             </select>
-                            <label for="category_id" class="form-label">Category</label>
+                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="text" name="sub_category_name" class="form-control" id="sub_category_name" placeholder="Enter Sub-Category Name">
-                            <label for="sub_category_name">Sub-Category Name</label>
+                            <input type="text" name="sub_category_name" class="form-control" id="sub_category_name" placeholder="Enter Sub-Category Name" required>
+                            <label for="sub_category_name">Sub-Category Name <span class="text-danger">*</span></label>
                         </div>
 
                         <div class="form-floating mb-3">
@@ -93,7 +93,7 @@
 
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Save</button>
+                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Save</button>
                             </div>
                         </div>
                     </form>
