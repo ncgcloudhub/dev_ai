@@ -237,7 +237,7 @@
                                             <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name" required>
                                         </div>
                                     <div class="text-end">
-                                        <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
+                                        <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Add">
                                     </div>
                                
                                 </form>
@@ -263,7 +263,7 @@
                                     </div>
                                     
                                     <div class="text-end">
-                                        <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Add">
+                                        <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Add">
                                     </div>
                                 </form>
                                 
