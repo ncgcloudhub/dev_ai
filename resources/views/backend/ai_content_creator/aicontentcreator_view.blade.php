@@ -565,7 +565,8 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
     
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-    
+      // Show the magic ball
+      showMagicBall('image');
             // Check if already generating (toggle stop)
             if (sendMessageBtn.dataset.state === 'generating') {
                 // Stop generation by aborting the request
@@ -601,12 +602,12 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                 const decoder = new TextDecoder();
                 let content = ''; // Variable to store streamed content
                 let stats = {};   // Variable to store stats
-    
+                hideMagicBall();
                 const processStream = ({ done, value }) => {
                     if (done) {
                         // Hide loader after streaming is complete
                         resetButton();
-    
+                      
                         // Display the stats in the spans
                         document.getElementById('numTokens').innerText = stats.completionTokens;
                         document.getElementById('numWords').innerText = stats.num_words;
@@ -643,6 +644,7 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                     console.error('Error:', error);
                 }
                 loader.classList.add('d-none');
+                hideMagicBall();
                 resetButton();  // Reset the button state in case of error or abort
             });
         });

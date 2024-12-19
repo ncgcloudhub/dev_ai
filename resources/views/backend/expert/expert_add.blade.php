@@ -25,28 +25,28 @@
             <div class="live-preview">
                 
                     <div class="col-md-12">
-                        <label for="expert_name" class="form-label">Expert Name</label>
+                        <label for="expert_name" class="form-label">Expert Name <span class="text-danger">*</span></label>
                         <input type="text" name="expert_name" class="form-control mb-3" id="expert_name" placeholder="Enter Expert Name" required>
                     </div>
 
                     <div class="col-md-12">
-                        <label for="character_name" class="form-label">Character Name</label>
+                        <label for="character_name" class="form-label">Character Name <span class="text-danger">*</span></label>
                         <input type="text" name="character_name" class="form-control mb-3" id="character_name" placeholder="Enter Character Name" required>
                     </div>
 
                     <div class="col-md-12">
-                        <label for="description" class="form-label">Short Description</label>
+                        <label for="description" class="form-label">Short Description <span class="text-danger">*</span></label>
                         <textarea name="description" class="form-control mb-3" id="description" rows="3" placeholder="Enter Short Description" required></textarea>
                     </div>
 
                     <div class="col-md-12">
-                        <label for="role" class="form-label">Role</label>
+                        <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
                         <input type="text" name="role" class="form-control mb-3" id="role" placeholder="Enter Role" required>
                     </div>
 
                     <div class="col-md-12">
-                        <div class="col"> <label for="expertise" class="form-label">System Instruction</label></div>
-                        <textarea name="expertise" class="form-control" id="expertise" rows="3" placeholder="Enter System Instruction"></textarea>
+                        <div class="col"> <label for="expertise" class="form-label">System Instruction <span class="text-danger">*</span></label></div>
+                        <textarea name="expertise" class="form-control" id="expertise" rows="3" placeholder="Enter System Instruction" required></textarea>
                     </div>
                
             </div>
@@ -93,7 +93,7 @@
     {{-- 3rd Card End --}}
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+            <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Save">
         </div>
     </div>
 </form>
