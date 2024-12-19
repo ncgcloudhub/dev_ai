@@ -287,6 +287,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         // Route for updating an example (if not defined already)
         Route::put('/example/{id}',  [PromptLibraryController::class, 'update'])->name('prompt.example.update');
+
+        Route::get('/seo/fetch/{id}', [PromptLibraryController::class, 'fetchPrompt'])->name('promptLibrary.seo.fetch');
+
     });
 
 
