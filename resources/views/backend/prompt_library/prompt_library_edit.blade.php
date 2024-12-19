@@ -47,8 +47,8 @@
                             
                                                     <div class="col-12">
                                                         <div class="form-floating mb-3 w-100">
-                                                            <input type="text" name="prompt_name" value="{{ $category->prompt_name }}" class="form-control w-100" id="prompt_name" placeholder="Enter Template Name">
-                                                            <label for="prompt_name" class="form-label">Prompt Name</label>
+                                                            <input type="text" name="prompt_name" value="{{ $category->prompt_name }}" class="form-control w-100" id="prompt_name" placeholder="Enter Template Name" required>
+                                                            <label for="prompt_name" class="form-label">Prompt Name <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                             
@@ -67,7 +67,7 @@
                                                                 <option value="{{ $item->id }}">{{ $item->category_name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <label for="category_id" class="form-label">Category</label>
+                                                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                             
@@ -76,7 +76,7 @@
                                                             <select class="form-select w-100" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example">
                                                                 <option value="{{ $category->sub_category_id }}" selected>{{ $category->subcategory->sub_category_name }}</option>
                                                             </select>
-                                                            <label for="subcategory_id" class="form-label">Subcategory</label>
+                                                            <label for="subcategory_id" class="form-label">Subcategory <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                             
@@ -89,8 +89,8 @@
                             
                                                     <div class="col-12">
                                                         <div class="form-floating mb-3 w-100" data-bs-toggle="tooltip" data-bs-placement="right">
-                                                            <textarea name="actual_prompt" class="form-control w-100" id="actual_prompt" rows="3" placeholder="Enter actual_prompt">{{ $category->actual_prompt }}</textarea>
-                                                            <label for="actual_prompt">Actual Prompt</label>
+                                                            <textarea name="actual_prompt" class="form-control w-100" id="actual_prompt" rows="3" placeholder="Enter actual_prompt" required>{{ $category->actual_prompt }}</textarea>
+                                                            <label for="actual_prompt">Actual Prompt <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                             
@@ -113,7 +113,7 @@
                                         
                                         <div class="col-12">
                                             <div class="text-end">
-                                                <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                                                <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Update">
                                             </div>
                                         </div>
                                     </form>

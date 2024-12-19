@@ -65,8 +65,8 @@
                         @csrf
                         <input type="hidden" name="id" value="{{$category->id}}">  
                         <div class="form-floating">
-                            <input type="text" name="category_name" class="form-control" value="{{$category->category_name}}" id="category_name" placeholder="Enter Category">
-                            <label for="category_name">Category</label>
+                            <input type="text" name="category_name" class="form-control" value="{{$category->category_name}}" id="category_name" placeholder="Enter Category" required>
+                            <label for="category_name">Category <span class="text-danger">*</span></label>
                         </div>
     
                         <div class="form-floating">
@@ -76,7 +76,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Update</button>
+                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Update</button>
                             </div>
                         </div>
                     </form>

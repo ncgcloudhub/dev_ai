@@ -22,8 +22,8 @@
             <div class="live-preview">
                 
                     <div class="form-floating mb-3">
-                        <input type="text" name="prompt_name" class="form-control" id="prompt_name" placeholder="Enter Template Name">
-                        <label for="prompt_name" class="form-label">Prompt Name</label>
+                        <input type="text" name="prompt_name" class="form-control" id="prompt_name" placeholder="Enter Template Name" required>
+                        <label for="prompt_name" class="form-label">Prompt Name <span class="text-danger">*</span></label>
                     </div>
                     
                     <div class="form-floating mb-3">
@@ -32,20 +32,20 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                            <option disabled selected="">Select Category</option>
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example" required>
+                            <option value="" disabled selected="">Select Category</option>
                             @foreach ($categories as $item)
                             <option value="{{$item->id}}">{{$item->category_name}}</option>
                             @endforeach
                         </select>
-                        <label for="category_id" class="form-label">Category</label>
+                        <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                     </div>
 
                     <div class="form-floating mb-3">
-                    <select class="form-select" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example">
-                        <option disabled selected>Select Subcategory</option>
+                    <select class="form-select" name="subcategory_id" id="subcategory_id" aria-label="Floating label select example" required>
+                        <option value="" disabled selected>Select Subcategory</option>
                     </select>
-                    <label for="category_id" class="form-label">Subcategory</label>
+                    <label for="category_id" class="form-label">Subcategory <span class="text-danger">*</span></label>
                     </div>
                     
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
@@ -54,8 +54,8 @@
                     </div>
 
                     <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right">
-                        <textarea name="actual_prompt" class="form-control" id="actual_prompt" rows="3" placeholder="Enter actual_prompt" ></textarea>
-                        <label for="actual_prompt">Actual Prompt</label>
+                        <textarea name="actual_prompt" class="form-control" id="actual_prompt" rows="3" placeholder="Enter actual_prompt" required></textarea>
+                        <label for="actual_prompt">Actual Prompt <span class="text-danger">*</span></label>
                     </div>
                
             </div>
@@ -64,7 +64,7 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+            <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Save">
         </div>
     </div>
 </form>

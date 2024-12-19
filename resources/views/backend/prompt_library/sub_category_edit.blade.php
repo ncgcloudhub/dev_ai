@@ -73,12 +73,12 @@
                                 <option value="{{$item->id}}">{{$item->category_name}}</option>
                                 @endforeach
                             </select>
-                            <label for="category_id" class="form-label">Category</label>
+                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                         </div>
     
                         <div class="form-floating">
-                            <input type="text" name="sub_category_name" value="{{$subcategory->sub_category_name}}" class="form-control" id="sub_category_name" placeholder="Enter Name">
-                            <label for="category_name">Sub-Category Name</label>
+                            <input type="text" name="sub_category_name" value="{{$subcategory->sub_category_name}}" class="form-control" id="sub_category_name" placeholder="Enter Name" required>
+                            <label for="category_name">Sub-Category Name <span class="text-danger">*</span></label>
                         </div>
     
                         <div class="form-floating">
@@ -89,7 +89,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Update</button>
+                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Update</button>
                             </div>
                         </div>
                     </form>
