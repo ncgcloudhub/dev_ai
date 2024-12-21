@@ -52,6 +52,13 @@
                     <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
                     <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
                     <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
+
+                    <select name="mode" id="mode">
+                        <option value="text-to-image">Text to Image</option>
+                        <option value="image-to-image">Image to Image</option>
+                    </select>
+                    <input type="file" name="base_image" id="base_image" />
+                    <input type="number" name="strength" id="strength" placeholder="Strength (0.1 to 1.0)" step="0.1" />
         
                     <div class="row g-2">
                         <!-- Search Box -->
@@ -840,10 +847,16 @@ $(document).ready(function() {
                     $('#all').addClass('active').removeClass('fade');
                     $('#images').removeClass('active').addClass('fade');
 
+                     // Create FormData object to include file inputs
+                     var formData = new FormData(this);
+
         $.ajax({
             url: $(this).attr('action'), // Use the form's action URL
             type: 'POST',
-            data: $(this).serialize(), // Serialize form data
+            data: formData, // Send FormData
+            processData: false, // Prevent jQuery from processing the data
+            contentType: false, // Ensure the correct content type for files
+            
             success: function(response) {
                 
                 hideMagicBall();
@@ -860,6 +873,7 @@ $(document).ready(function() {
                         
 
                 } else if (response.image_base64) {
+                    hideMagicBall();
                     $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');
 
                     $('#result-li').addClass('active');
@@ -872,6 +886,7 @@ $(document).ready(function() {
             },
 
             error: function(xhr) {
+                hideMagicBall();
                 // Handle errors
                 $('#responseMessage').html('<p>Error generating image. Please try again.</p>');
             }
