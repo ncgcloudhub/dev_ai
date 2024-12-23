@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+
 
 class DynamicPageController extends Controller
 {
@@ -48,26 +50,34 @@ class DynamicPageController extends Controller
             'keywords' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
-    
+
         // Convert route to lowercase and remove leading/trailing slashes
         $validated['route'] = Str::lower(trim($validated['route'], '/'));
-    
-        // Check if the route already exists (redundant due to validation, but for clarity)
+
+        // Check if the route conflicts with existing routes in web.php
+        $allRoutes = collect(Route::getRoutes())->pluck('uri')->toArray();
+        if (in_array($validated['route'], $allRoutes)) {
+            return redirect()->back()
+                ->withErrors(['route' => 'The route conflicts with an existing route in the application.'])
+                ->withInput();
+        }
+
+        // Check if the route already exists in the database
         $existingPage = DynamicPage::where('route', $validated['route'])->first();
         if ($existingPage) {
             return redirect()->back()
                 ->withErrors(['route' => 'The route name already exists.'])
                 ->withInput();
         }
-    
+
         // Create a new dynamic page
         $dynamicPage = DynamicPage::create($validated);
-    
-        // Redirect to the index or details page with success message
+
+        // Redirect to the index or details page with a success message
         return redirect()->route('dynamic-pages.index', ['dynamic_page' => $dynamicPage->route])
             ->with('success', 'Dynamic page created successfully.');
-
     }
+
 
     /**
      * Display the specified resource.
@@ -133,13 +143,34 @@ class DynamicPageController extends Controller
     public function checkRouteAvailability(Request $request)
 {
     $route = Str::lower(trim($request->get('route', ''), '/')); // Sanitize input
-    $exists = DynamicPage::where('route', $route)->exists();
+
+    // Check if route exists in the database
+    $existsInDatabase = DynamicPage::where('route', $route)->exists();
+
+    // Check if route exists in web.php
+    $existsInRoutes = collect(Route::getRoutes()->getRoutes())->contains(function ($routeObj) use ($route) {
+        return $routeObj->uri() === $route;
+    });
+
+    if ($existsInDatabase) {
+        return response()->json([
+            'status' => 'taken',
+            'message' => 'This route is already taken.',
+        ]);
+    }
+
+    if ($existsInRoutes) {
+        return response()->json([
+            'status' => 'declared',
+            'message' => 'This route is already declared in route files (web.php).',
+        ]);
+    }
 
     return response()->json([
-        'available' => !$exists, // True if route is available, false if taken
+        'status' => 'available',
+        'message' => 'This route is available.',
     ]);
 }
-
 
 
     public function generateSeoContent(Request $request)

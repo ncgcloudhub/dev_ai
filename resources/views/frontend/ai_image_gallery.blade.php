@@ -126,31 +126,33 @@
         <!-- Modal -->
         {{-- Image Description --}}
         <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content border-0 overflow-hidden">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
                     <div class="row g-0">
-                        <!-- Image div updated to col-lg-8 -->
-                        <div class="col-lg-8 d-flex align-items-center justify-content-center position-relative" style="background: #000;">
-                            <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
-                                <i class="ri-arrow-left-s-line"></i>
-                            </button>
-                            <img id="modalImage" src="" class="img-fluid" style="max-width: 100%; max-height: 100vh; object-fit: contain;" alt="Image">
-                            <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
-                                <i class="ri-arrow-right-s-line"></i>
-                            </button>
+                    
+                        <div class="col-lg-5">
+                            <div class="subscribe-modals-cover h-100 d-flex align-items-center justify-content-center">
+                                <button type="button" class="btn btn-outline-secondary position-absolute start-0" id="prevButton">
+                                    <i class="ri-arrow-left-s-line"></i>
+                                </button>
+                                <img id="modalImage" src="" class="img-fluid w-100" alt="Image">
+                                <button type="button" class="btn btn-outline-secondary position-absolute end-0" id="nextButton">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                </button>
+                            </div>
                         </div>
-
-                        <!-- Details div updated to col-lg-4 -->
-                        <div class="col-lg-4 d-flex align-items-center">
+                        <div class="col-lg-7 d-flex align-items-center">
                             <div class="modal-body p-5">
                                 <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
                                 <span class="text-muted mb-4" id="resolution"></span>
                             </div>
+                            
                         </div>
+                        <!-- Left button -->
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -164,6 +166,9 @@
     <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 @section('script')
 
     {{-- SHAREE --}}
