@@ -145,7 +145,11 @@
                             <div class="modal-body p-5">
                                 <p class="lh-base modal-title mb-2" id="imageModalLabel"></p>
                                 <span class="text-muted mb-4" id="resolution"></span>
+                                <button type="button" class="btn btn-outline-secondary" id="fullscreenButton">
+                                    <i class="ri-fullscreen-line"></i> Fullscreen
+                                </button>
                             </div>
+                         
                             
                         </div>
                         <!-- Left button -->
@@ -371,6 +375,21 @@
 
         });
     </script>
+
+<script>
+    $(document).on('click', '#fullscreenButton', function() {
+        const modalImage = document.getElementById('modalImage');
+        if (modalImage.requestFullscreen) {
+            modalImage.requestFullscreen();
+        } else if (modalImage.mozRequestFullScreen) { // Firefox
+            modalImage.mozRequestFullScreen();
+        } else if (modalImage.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            modalImage.webkitRequestFullscreen();
+        } else if (modalImage.msRequestFullscreen) { // IE/Edge
+            modalImage.msRequestFullscreen();
+        }
+    });
+</script>
 
 @endsection
     
