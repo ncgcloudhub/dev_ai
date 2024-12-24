@@ -170,14 +170,18 @@
                         method: 'GET',
                         data: { route: route },
                         success: function (response) {
-                            if (response.available) {
-                                feedback.textContent = "This route is available.";
-                                feedback.classList.remove('text-danger');
-                                feedback.classList.add('text-success');
-                            } else {
-                                feedback.textContent = "This route is already taken.";
+                            if (response.status === 'taken') {
+                                feedback.textContent = response.message; // This route is already taken in the database
                                 feedback.classList.remove('text-success');
                                 feedback.classList.add('text-danger');
+                            } else if (response.status === 'declared') {
+                                feedback.textContent = response.message; // This route is already declared in route files
+                                feedback.classList.remove('text-success');
+                                feedback.classList.add('text-warning');
+                            } else {
+                                feedback.textContent = response.message; // This route is available
+                                feedback.classList.remove('text-danger', 'text-warning');
+                                feedback.classList.add('text-success');
                             }
                         },
                         error: function () {

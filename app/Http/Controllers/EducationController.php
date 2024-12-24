@@ -695,8 +695,10 @@ public function updateContent(Request $request, $id)
     $prompt = $savedPrompt . " "; 
 
     foreach ($request->all() as $key => $value) {
-        if (!empty($value) && !in_array($key, ['_token'])) {
-            $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $value. ";
+        if (!empty($value) && !in_array($key, ['_token', 'tool_id'])) {
+            // Escape special characters to prevent malformed prompt
+            $escapedValue = addslashes($value);
+            $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $escapedValue. ";
         }
     }
 
