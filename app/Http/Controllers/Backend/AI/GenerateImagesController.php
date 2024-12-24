@@ -245,15 +245,16 @@ class GenerateImagesController extends Controller
             }
     
             // Deduct credits and update the user information
-            $credits = calculateCredits($size, $quality);
-            User::where('id', $id)->update([
-                'credits_used' => DB::raw('credits_used + ' . $credits),
-                'credits_left' => DB::raw('credits_left - ' . $credits),
-                'images_generated' => DB::raw('images_generated + ' . $n),
-            ]);
+            deductUserTokensAndCredits(0, calculateCredits($size, $quality));
+            // $credits = calculateCredits($size, $quality);
+            // User::where('id', $id)->update([
+            //     'credits_used' => DB::raw('credits_used + ' . $credits),
+            //     'credits_left' => DB::raw('credits_left - ' . $credits),
+            //     'images_generated' => DB::raw('images_generated + ' . $n),
+            // ]);
     
-            $newCreditLeft = Auth::user()->credits_left - $credits;
-            $responseData['credit_left'] = $newCreditLeft;
+            // $newCreditLeft = Auth::user()->credits_left - $credits;
+            // $responseData['credit_left'] = $newCreditLeft;
     
             return $responseData;
         } else {
