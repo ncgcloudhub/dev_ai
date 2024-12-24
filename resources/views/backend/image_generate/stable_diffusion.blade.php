@@ -51,7 +51,6 @@
                     <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                     <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
                     <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
-
                     <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
 
                     <select name="mode" id="mode">
