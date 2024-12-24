@@ -51,7 +51,8 @@
                     <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                     <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
                     <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
-                    <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
+
+                    <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
 
                     <select name="mode" id="mode">
                         <option value="text-to-image">Text to Image</option>
@@ -65,7 +66,7 @@
                         <div class="col-12 col-md-9 order-1 order-md-1">
                             <div class="search-box position-relative">
                                 <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y"
-                                   onclick="toggleOptimize()" id="optimizeIcon">
+                                   onclick="toggleOptimize('sd')" id="optimizeIcon_sd">
                                     <i class="ri-hammer-line"></i>
                                 </a>
                                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
@@ -941,19 +942,19 @@ function syncModelVersion() {
     console.log('Selected Model Version: ' + modelVersion);  // For debugging
 }
 
-function toggleOptimize() {
-        const optimizeInput = document.getElementById("hiddenPromptOptimize");
-        const optimizeIcon = document.getElementById("optimizeIcon").firstElementChild;
+// function toggleOptimize() {
+//         const optimizeInput = document.getElementById("hiddenPromptOptimize");
+//         const optimizeIcon = document.getElementById("optimizeIcon").firstElementChild;
 
-        // Toggle between optimized and non-optimized
-        if (optimizeInput.value === "1") {
-            optimizeInput.value = "0";
-            optimizeIcon.classList.replace("ri-hammer-fill", "ri-hammer-line"); // Reset to default icon
-        } else {
-            optimizeInput.value = "1";
-            optimizeIcon.classList.replace("ri-hammer-line", "ri-hammer-fill"); // Change to optimized icon
-        }
-    }
+//         // Toggle between optimized and non-optimized
+//         if (optimizeInput.value === "1") {
+//             optimizeInput.value = "0";
+//             optimizeIcon.classList.replace("ri-hammer-fill", "ri-hammer-line"); // Reset to default icon
+//         } else {
+//             optimizeInput.value = "1";
+//             optimizeIcon.classList.replace("ri-hammer-line", "ri-hammer-fill"); // Change to optimized icon
+//         }
+//     }
 
     function syncOffcanvasInput() {
         // Get the value from the offcanvas input

@@ -91,9 +91,9 @@
                                     <form action="{{route('generate.image')}}" method="post" class="row g-3">
                                         @csrf
                                         {{-- For Value of Hammer(Optimize) --}}
-                                        <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize">
-                                        
+                                        <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle2">
                                         <input type="hidden" name="dall_e_2"  value="dall_e_2">
+
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne">
@@ -186,7 +186,7 @@
                                             <div class="col-xxl-5 col-sm-6">
                                                 <div class="search-box">
                                                     <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y"
-                                                    onclick="toggleOptimize()" id="optimizeIcon">
+                                                    onclick="toggleOptimize('dalle2')" id="optimizeIcon_dalle2">
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
@@ -212,6 +212,7 @@
                                 <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
                                     <form action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
                                         @csrf
+                                        <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle3">
                                         <input type="hidden" name="dall_e_3" value="dall_e_3">
                                     
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
@@ -321,9 +322,12 @@
 
                                         <div class="row g-3 justify-content-center">
                                             <div class="col-xxl-5 col-sm-6">
-                                                <div class="search-box" id="search-box-tour">
+                                                <div class="search-box">
+                                                    <a title="Optimize Prompt" class="btn btn-link link-success btn-lg position-absolute top-50 translate-middle-y"
+                                                    onclick="toggleOptimize('dalle3')" id="optimizeIcon_dalle3">
+                                                     <i class="ri-hammer-line"></i>
+                                                    </a>
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
-                                                    <i class="ri-search-line search-icon"></i>
                                                 </div>
                                             </div>
                                             
