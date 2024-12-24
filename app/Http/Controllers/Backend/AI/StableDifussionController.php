@@ -45,6 +45,9 @@ class StableDifussionController extends Controller
     $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
     $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
     $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
+    $mode = $request->input('mode') ?? 'text-to-image'; // Default to text-to-image
+    $baseImage = $request->file('base_image'); // For image-to-image
+    $strength = $request->input('strength'); // For image-to-image
 
     // Set the appropriate endpoint
     $endpoints = [
@@ -73,9 +76,21 @@ class StableDifussionController extends Controller
         // If not optimized, use the original prompt
         $rephrasedPrompt = $prompt;
     }
+
+    Log::info('before Requestsend to service');
  
-    // Call the service to generate the image
-    $result = $this->stableDiffusionService->generateImage($endpoint, $rephrasedPrompt, $imageFormat, $modelVersion);
+     // Call the service to generate the image
+     $result = $this->stableDiffusionService->generateImage(
+        $endpoint,
+        $rephrasedPrompt,
+        $imageFormat,
+        $modelVersion,
+        $mode,
+        $baseImage,
+        $strength
+    );
+
+    Log::info('After Request:', $result);
 
     // Return the response as JSON
     return response()->json([

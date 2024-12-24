@@ -18,7 +18,7 @@ class StableDiffusionService
         $this->apiUrl = config('services.stable_diffusion.api_url');
     }
 
-    public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion)
+    public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null)
     {
         // Set up headers and payload similar to your Python request
         $headers = [
@@ -30,12 +30,37 @@ class StableDiffusionService
             'prompt' => $prompt,
             'output_format' => $imageFormat, 
             'model' => $modelVersion,
+            'baseImage' => $baseImage,
+            'strength' => $strength,
+            'mode' => $mode,
         ];
 
-        // Send the request
+        Log::info('Service Data:', $data);
+
+        
+      // Add image-to-image specific parameters
+    if ($mode === 'image-to-image') {
+        if (!$baseImage) {
+            throw new \Exception('Base image is required for image-to-image generation.');
+        }
+        if (!$strength) {
+            throw new \Exception('Strength is required for image-to-image generation.');
+        }
+
+        $data['strength'] = $strength;
+
+        // Add the base image to the request
         $response = Http::withHeaders($headers)
-            ->asMultipart() // Use multipart to handle image data properly
+            ->asMultipart()
+            ->attach('image', file_get_contents($baseImage->getRealPath()), $baseImage->getClientOriginalName())
             ->post($endpoint, $data);
+    } else {
+        // For text-to-image
+        $response = Http::withHeaders($headers)
+            ->asMultipart()
+            ->post($endpoint, $data);
+    }
+
 
             Log::info('Stable Diffusion API Response:', [
                 'status' => $response->status(),
