@@ -618,8 +618,9 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
 
     Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
+    
+    // AI Content Creator Extract and Generate
     Route::get('ai-content-creator/extract', [AIContentCreatorController::class, 'AIContentCreatorExtractPromptAndGenerate'])->name('aicontentcreator.view.extract.prompt');
-
     Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');
 
     //Fixed Prompt Library 
