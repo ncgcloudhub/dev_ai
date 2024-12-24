@@ -131,6 +131,12 @@ if (!function_exists('deductUserTokensAndCredits')) {
             $user->tokens_left = max(0, $user->tokens_left - $tokens);
             $user->tokens_used = max(0, $user->tokens_used + $tokens);
             $user->credits_left = max(0, $user->credits_left - $credits);
+            $user->credits_used = max(0, $user->credits_used + $credits);
+            // Increment images_generated only if credits are used
+            if ($credits > 0) {
+                $user->images_generated += 1;
+            }
+
 
             // Save the changes to the database
             $user->save();
