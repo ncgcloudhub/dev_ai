@@ -176,6 +176,8 @@ class GenerateImagesController extends Controller
                 }
             }
 
+            $prompt = checkOptimizePrompt($request->prompt, $request);
+
             if ($creditsLeft >= 1) {
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $apiKey,
