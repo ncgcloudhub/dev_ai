@@ -582,6 +582,7 @@ class AIContentCreatorController extends Controller
     ]);
 
     $completionTokens = $result->usage->completionTokens;
+    $totalTokens = $result->usage->totalTokens;
 
     // Process the response
     $content = trim($result['choices'][0]['message']['content']);
@@ -593,15 +594,10 @@ class AIContentCreatorController extends Controller
     if ($user->tokens_left <= 0) {
         return response()->json(0);
     } else {
-        // Update user token usage
-        User::where('id', $user->id)->update([
-            'tokens_used' => DB::raw('tokens_used + ' . $completionTokens),
-            'tokens_left' => DB::raw('tokens_left - ' . $completionTokens),
-            'words_generated' => DB::raw('words_generated + ' . $num_words),
-        ]);
+        deductUserTokensAndCredits($totalTokens);
 
         Template::where('id', $template->id)->update([
-            'total_word_generated' => DB::raw('total_word_generated + ' . $completionTokens),
+            'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
         ]);
 
         // Limit the saved generated contents per template
