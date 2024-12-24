@@ -258,6 +258,36 @@ class GenerateImagesController extends Controller
             return response()->json(['error' => 'Failed to generate image'], 500);
         }
     }
+
+
+   // Extract Prompt From Image
+public function ExtractImage(Request $request)
+{
+    if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
+        $imageFile = $request->file('custom_image');
+        $base64Image = base64_encode(file_get_contents($imageFile));
+
+        $response = callOpenAIImageAPI($base64Image);
+
+        $responseArray = json_decode(json_encode($response), true);
+
+        Log::info('Response as array: ' . json_encode($responseArray));
+
+        if (isset($responseArray['choices'][0]['message']['content'])) {
+            $extractedPrompt = $responseArray['choices'][0]['message']['content'];
+
+            return response()->json([
+                'content' => $extractedPrompt,
+            ]);
+        } else {
+            Log::error('Failed to extract prompt from image analysis response');
+            return response()->json(['error' => 'Failed to extract prompt'], 500);
+        }
+    } else {
+        return response()->json(['error' => 'Invalid or missing image'], 400);
+    }
+}
+
     
     // Call OpenAI to analyze the image and extract a prompt
     private function callOpenAIImageAPI($base64Image)

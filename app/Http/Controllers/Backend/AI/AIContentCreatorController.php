@@ -350,9 +350,14 @@ class AIContentCreatorController extends Controller
         return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
+    // Extract Image from Prompt
+    public function AIContentCreatorExtractPromptAndGenerate()
+    {
+        return view('backend.ai_content_creator.aicontentcreator_image_generate_view');
+    }
+
     public function AIContentCreatorSEOUpdate(Request $request)
     {
-
         $id = $request->id;
 
         $validatedData = $request->validate([

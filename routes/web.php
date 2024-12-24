@@ -600,7 +600,8 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
         Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
-        Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
+    Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
+    Route::post('/extract/image', [GenerateImagesController::class, 'ExtractImage'])->name('extract.image');
     });
 
     //Profile 
@@ -617,6 +618,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
 
     Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
+    Route::get('ai-content-creator/extract', [AIContentCreatorController::class, 'AIContentCreatorExtractPromptAndGenerate'])->name('aicontentcreator.view.extract.prompt');
 
     Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');
 
