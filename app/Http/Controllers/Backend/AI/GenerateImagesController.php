@@ -94,26 +94,28 @@ class GenerateImagesController extends Controller
             $response = $this->callOpenAIImageAPI($base64Image);
 
             // Decode or access the content as an array
-    $responseArray = json_decode(json_encode($response), true);
+            $responseArray = json_decode(json_encode($response), true);
 
-    // Log the response in a way that PHP can handle
-    Log::info('Response as array: ' . json_encode($responseArray));
+            // Log the response in a way that PHP can handle
+            Log::info('Response as array: ' . json_encode($responseArray));
 
-          
+            if (isset($responseArray['choices'][0]['message']['content'])) {
+                $extractedPrompt = $responseArray['choices'][0]['message']['content'];
+                $prompt = $extractedPrompt;  // Use the prompt extracted from the image
 
-    if (isset($responseArray['choices'][0]['message']['content'])) {
-        $extractedPrompt = $responseArray['choices'][0]['message']['content'];
-        $prompt = $extractedPrompt;  // Use the prompt extracted from the image
-
-        Log::info('Extracted prompt: ' . $prompt);
-    } else {
-        Log::error('Failed to extract prompt from image analysis response');
-        return response()->json(['error' => 'Failed to extract prompt'], 500);
-    }
+                Log::info('Extracted prompt: ' . $prompt);
+            } else {
+                Log::error('Failed to extract prompt from image analysis response');
+                return response()->json(['error' => 'Failed to extract prompt'], 500);
+            }
         } else {
             Log::info('No image detected in the request line 97');
             // Handle user text input
-            $prompt = $request->prompt . ' and the style should be ' . $userStyleImplode;
+            $prompt = $request->prompt;
+
+            if ($userStyleImplode) {
+                $prompt .= ' and the style should be: ' . $userStyleImplode . '. ';
+            }
         }
 
         
@@ -176,7 +178,7 @@ class GenerateImagesController extends Controller
                 }
             }
 
-            $prompt = checkOptimizePrompt($request->prompt, $request);
+            $prompt = checkOptimizePrompt($prompt, $request);
 
             if ($creditsLeft >= 1) {
                 $response = Http::withHeaders([
