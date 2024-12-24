@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use OpenAI\Laravel\Facades\OpenAI;
 
 
 if (!function_exists('calculateCredits')) {
@@ -260,6 +261,37 @@ if (!function_exists('saveModuleFeedback')) {
             return $prompt;
         }
     }
+
+
+// Extract Prompt From Image
+if (!function_exists('callOpenAIImageAPI')) {
+    function callOpenAIImageAPI($base64Image)
+    {
+        try {
+            $response = OpenAI::chat()->create([
+                'model' => 'gpt-4o',
+                'messages' => [
+                    [
+                        'role' => 'user',
+                        'content' => [
+                            ['type' => 'text', 'text' => 'What’s in this image?'],
+                            ['type' => 'image_url', 'image_url' => [
+                                'url' => 'data:image/jpeg;base64,' . $base64Image,
+                            ]],
+                        ],
+                    ],
+                ],
+                'max_tokens' => 300,
+            ]);
+
+            return $response;
+        } catch (Exception $e) {
+            // Handle exceptions, log errors, or return a meaningful message
+            return ['error' => $e->getMessage()];
+        }
+    }
+}
+
     
 
 }

@@ -26,14 +26,23 @@ class StableDiffusionService
             'Accept' => 'image/*'
         ];
 
-        $data = [
-            'prompt' => $prompt,
-            'output_format' => $imageFormat, 
-            'model' => $modelVersion,
-            'baseImage' => $baseImage,
-            'strength' => $strength,
-            'mode' => $mode,
-        ];
+        // Prepare the data payload
+    $data = [
+        'prompt' => $prompt,
+        'output_format' => $imageFormat,
+        'model' => $modelVersion,
+        'mode' => $mode,
+    ];
+
+    // Include base image and strength only if mode is 'image-to-image'
+    if ($mode === 'image-to-image') {
+        if ($baseImage) {
+            $data['baseImage'] = $baseImage;
+        }
+        if ($strength !== null) {
+            $data['strength'] = $strength;
+        }
+    }
 
         Log::info('Service Data:', $data);
 
