@@ -31,12 +31,12 @@ class HomeController extends Controller
     public function AIImageGallery(Request $request)
     {
         $query = DalleImageGenerate::withCount(['likes', 'favorites']);
-        $stableImagesQuery = StableDiffusionGeneratedImage::withCount('stableDiffusionLike');
+        // $stableImagesQuery = StableDiffusionGeneratedImage::withCount('stableDiffusionLike');
 
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
-            $stableImagesQuery->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
+            // $stableImagesQuery->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
         }
     
         if ($request->has('resolution') && !empty($request->input('resolution'))) {
@@ -51,7 +51,7 @@ class HomeController extends Controller
     
     
         $images = $query->latest()->paginate(20);
-        $stableImages = $stableImagesQuery->latest()->paginate(20);
+        // $stableImages = $stableImagesQuery->latest()->paginate(20);
     
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
@@ -61,15 +61,16 @@ class HomeController extends Controller
         }
     
         if ($request->ajax()) {
-            $imageGalleryPartial = view('frontend.image_gallery_partial', compact('images'))->render();
-            $stableImagesPartial = view('frontend.stable_images_partial_frontend', compact('stableImages'))->render();
-            return response()->json([
-                'imagesPartial' => $imageGalleryPartial,
-                'stableImagesPartial' => $stableImagesPartial,
-            ]);
+            // $imageGalleryPartial = view('frontend.image_gallery_partial', compact('images'))->render();
+            // $stableImagesPartial = view('frontend.stable_images_partial_frontend', compact('stableImages'))->render();
+            // return response()->json([
+            //     'imagesPartial' => $imageGalleryPartial,
+            //     'stableImagesPartial' => $stableImagesPartial,
+            // ]);
+            return view('frontend.image_gallery_partial', compact('images'))->render();
         }
     
-        return view('frontend.ai_image_gallery', compact('images','stableImages'));
+        return view('frontend.ai_image_gallery', compact('images'));
     }
     
     //Jokes (Magic Ball)
