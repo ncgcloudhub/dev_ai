@@ -35,7 +35,10 @@ class GenerateImagesController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
         
-        $prompt_library = PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+        $prompt_library = PromptLibrary::whereHas('category', function ($query) {
+            $query->where('category_name', 'Art');
+        })->orderby('id', 'asc')->limit(50)->get();
+
         $check_user = Auth::user()->role;
 
         if ($check_user == 'admin') {
