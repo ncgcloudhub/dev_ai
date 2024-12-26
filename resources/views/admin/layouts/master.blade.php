@@ -105,7 +105,7 @@
     {{-- Modal --}}
 
     @php
-    $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+    $promptLibrary = $promptLibrary ?? \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
     @endphp
 
     <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
