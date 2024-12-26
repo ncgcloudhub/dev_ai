@@ -1027,11 +1027,21 @@ function regenerateMessage(messageId, originalMessage) {
             return;
         }
 
+        let fullContent = ''; // Accumulate the full content here
         messageElement.innerHTML = ''; // Clear previous content before streaming
 
         function processChunk({ done, value }) {
             if (done) {
                 console.log('Stream complete');
+                // Final formatting of the complete content
+                const formattedContent = formatContent(fullContent);
+                messageElement.innerHTML = formattedContent;
+
+                // Highlight code blocks within the message element
+                messageElement.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
                 return;
             }
 
@@ -1049,9 +1059,22 @@ function regenerateMessage(messageId, originalMessage) {
 
                     try {
                         const json = JSON.parse(data);
-                        console.log('tr',json)
-                        // Append to the message container
-                        messageElement.innerHTML += json; // Append the message to the target element
+                        if (json) {
+                            fullContent += json; // Accumulate the content
+                            // Optionally update the UI for a "live preview"
+                            const formattedPreview = formatContent(fullContent);
+                            messageElement.innerHTML = formattedPreview;
+
+                            // Highlight code blocks
+                            messageElement.querySelectorAll('pre code').forEach((block) => {
+                                hljs.highlightElement(block);
+                            });
+
+                            // Scroll the last message into view
+                            const conversationList = document.getElementById('users-conversation');
+                            const lastMessage = conversationList.lastElementChild;
+                            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }
                     } catch (err) {
                         console.error('Error parsing JSON:', err, data);
                     }
@@ -1067,7 +1090,6 @@ function regenerateMessage(messageId, originalMessage) {
         console.error('Error during regenerate:', err);
     });
 }
-
 
 
 </script>
