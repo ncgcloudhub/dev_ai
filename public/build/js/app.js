@@ -1888,6 +1888,14 @@ File: Main Js File
                             "dark"
                         );
                         break;
+                    case "gradient":
+                        getElementUsingTagname("data-topbar", "gradient");
+                        sessionStorage.setItem("data-topbar", "gradient");
+                        document.documentElement.setAttribute(
+                            "data-topbar",
+                            "gradient"
+                        );
+                        break;
                     default:
                         if (sessionStorage.getItem("data-topbar") == "dark") {
                             getElementUsingTagname("data-topbar", "dark");
@@ -1895,6 +1903,15 @@ File: Main Js File
                             document.documentElement.setAttribute(
                                 "data-topbar",
                                 "dark"
+                            );
+                        } else if (
+                            sessionStorage.getItem("data-topbar") == "gradient"
+                        ) {
+                            getElementUsingTagname("data-topbar", "gradient");
+                            sessionStorage.setItem("data-topbar", "gradient");
+                            document.documentElement.setAttribute(
+                                "data-topbar",
+                                "gradient"
                             );
                         } else {
                             getElementUsingTagname("data-topbar", "light");

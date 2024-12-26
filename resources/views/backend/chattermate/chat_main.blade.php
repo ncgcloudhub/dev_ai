@@ -239,7 +239,7 @@
                             <div class="col-auto">
                                 <div class="chat-input-links me-2">
                                     <i id="icon" class="ri-attachment-line" style="cursor: pointer; font-size:22px;" title="Max file size is 20MB"></i>
-                                    <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                    <input name="file" type="file" id="file_input" class="form-control" style="display: none;" accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png" multiple>
                                 </div>
                             </div>
                     
@@ -260,14 +260,11 @@
                         </div>
                     
                         <!-- Image display should be placed below the row -->
-                        
-                                <div id="image_display" class="mt-2"></div>
+                        <div id="image_display" class="mt-2"></div>
                            
                     </div>
                     
-                    
-                    
-
+                
                     <div class="replyCard">
                         <div class="card mb-0">
                             <div class="card-body py-3">

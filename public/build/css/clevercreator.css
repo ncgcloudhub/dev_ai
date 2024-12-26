@@ -370,6 +370,10 @@
     background: linear-gradient(45deg, #aee0f0, #d596f0);
 }
 
+.gradient-background-4{
+    background: linear-gradient(45deg, #aee0f0, #dfb3f1);
+}
+
 
 
 .sidebar-hover:hover {
