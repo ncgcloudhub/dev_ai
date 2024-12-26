@@ -338,9 +338,9 @@
                                                     <!-- Disable the button initially and include the spinner inside -->
                                                     <button id="generate-button-tour" class="btn btn-rounded gradient-btn-5 mb-2" disabled>
                                                         <span id="generate-button-text">Generate</span>
-                                                        <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
+                                                        {{-- <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
                                                             <span class="visually-hidden">Loading...</span>
-                                                        </div>
+                                                        </div> --}}
                                                     </button>
                                                 </div>
                                             </div>
@@ -465,33 +465,26 @@
 
 <script>
 window.onload = function () {
-    console.log("Page fully loaded. Checking if form should be submitted...");
+    console.log("Page fully loaded. Checking if the textarea has value...");
 
-    // Check if the textarea exists
+    // Find the textarea and form
     const textarea = document.getElementById('prompt');
-  
+    const form = document.getElementById('form_dalle3');
 
-    if (textarea) {
-        // Get the content without trimming
-        const content = textarea.value;
-        if (content !== '') {
+    if (textarea && form) {
+        const content = textarea.value.trim(); // Remove extra spaces
+        if (content) {
             console.log("Textarea has content. Submitting the form...");
-            
-            // Find the form and submit it
-            const form = document.getElementById('form_dalle3');
-            if (form) {
-                console.log("Form found. Dispatching submit event...");
-                form.dispatchEvent(new Event('submit', { cancelable: true }));
-            } else {
-                console.error("Form not found. Unable to submit.");
-            }
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
         } else {
             console.log("Textarea is empty. Form will not be submitted.");
         }
     } else {
-        console.error("Textarea with id 'prompt' not found. Form submission aborted.");
+        if (!textarea) console.error("Textarea not found.");
+        if (!form) console.error("Form not found.");
     }
 };
+
 
 
 </script>
