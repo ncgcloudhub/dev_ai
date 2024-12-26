@@ -413,7 +413,7 @@ foreach ($messagesFromDb as $message) {
         $user = Auth::user();
         $sessionId = session('session_id');
         
-       // Log the full response for debugging purposes
+        // Log the full response for debugging purposes
         // Log::info('OpenAI API Streaming Response Started', [
         //     'session_id' => $sessionId,
         //     'user_id' => $user->id,
@@ -477,6 +477,7 @@ foreach ($messagesFromDb as $message) {
                         } else {
                             try {
                                 $parsedData = json_decode($data, true);
+                                Log::info('Parsed JSON Data', ['data' => $parsedData]);
                                 if (isset($parsedData['choices'][0]['delta']['content'])) {
                                     $content = $parsedData['choices'][0]['delta']['content'];
                                     $messageContent .= $content;

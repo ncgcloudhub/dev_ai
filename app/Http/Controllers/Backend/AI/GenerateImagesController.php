@@ -126,6 +126,9 @@ class GenerateImagesController extends Controller
         
         if ($request->dall_e_2) {
 
+            Log::info($request->all());
+            Log::info('Inside Dalle 2 prompt: ' . $prompt);
+
             if ($request->quality) {
                 $quality = $request->quality;
             }

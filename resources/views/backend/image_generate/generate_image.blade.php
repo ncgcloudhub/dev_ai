@@ -210,7 +210,7 @@
                          
                                 {{-- Dalle 3 Start --}}
                                 <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
-                                    <form action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
+                                    <form id="form_dalle3" action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle3">
                                         <input type="hidden" name="dall_e_3" value="dall_e_3">
@@ -469,6 +469,8 @@ window.onload = function () {
 
     // Check if the textarea exists
     const textarea = document.getElementById('prompt');
+  
+
     if (textarea) {
         // Get the content without trimming
         const content = textarea.value;
@@ -476,7 +478,7 @@ window.onload = function () {
             console.log("Textarea has content. Submitting the form...");
             
             // Find the form and submit it
-            const form = document.querySelector('form');
+            const form = document.getElementById('form_dalle3');
             if (form) {
                 console.log("Form found. Dispatching submit event...");
                 form.dispatchEvent(new Event('submit', { cancelable: true }));
