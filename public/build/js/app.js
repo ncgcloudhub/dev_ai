@@ -3161,35 +3161,3 @@ if (mybutton) {
         document.documentElement.scrollTop = 0;
     }
 }
-
-// ...existing code...
-
-//Set the Sidebar Color Gradient 2 by default always
-document.addEventListener("DOMContentLoaded", function () {
-    const sidebarColorKey = "sidebarColor";
-    const defaultColor = "sidebar-color-gradient-2";
-
-    // Get the saved sidebar color from localStorage
-    const savedColor = localStorage.getItem(sidebarColorKey);
-
-    // Determine the color to set
-    const colorToSet = savedColor || defaultColor;
-
-    // Set the sidebar color
-    const sidebarColorElement = document.getElementById(colorToSet);
-    if (sidebarColorElement) {
-        sidebarColorElement.checked = true;
-        // Trigger any change event if necessary
-        sidebarColorElement.dispatchEvent(new Event("change"));
-    }
-
-    // Add event listeners to save the selected color to localStorage
-    const sidebarColorOptions = document.querySelectorAll(
-        'input[name="data-sidebar"]'
-    );
-    sidebarColorOptions.forEach((option) => {
-        option.addEventListener("change", function () {
-            localStorage.setItem(sidebarColorKey, this.id);
-        });
-    });
-});
