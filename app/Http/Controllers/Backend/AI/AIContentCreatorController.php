@@ -833,11 +833,10 @@ class AIContentCreatorController extends Controller
                 return [
                     'id' => $content->id,
                     'created_at' => $content->created_at->format('jS F y'),
-                    'generated_content' => Str::limit($content->generated_content, 100, '...'),
+                    'generated_content' => $content->generated_content,
                 ];
             }),
         ]);
     }
-    
 
 }

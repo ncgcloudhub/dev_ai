@@ -309,6 +309,21 @@
         </div><!-- /.modal -->
 
 
+        <div id="detailsModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-3" style="border-color: #4CAF50; overflow: hidden;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Content Full Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Dynamic content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
                 
                 
                 <div class="row mt-2">
@@ -714,15 +729,20 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
 
             // Populate the modal with content
             const modalBody = document.querySelector('#subscribeModals .modal-body');
-            const contentListHtml = data.content_list.map(content => `
+           const contentListHtml = data.content_list.map((content, index) => `
             <div class="card card-body">
                                         <div class="d-flex mb-4 align-items-center">
                                             <div class="flex-grow-1 ms-2">
-                                                <h5 class="card-title mb-1">${content.generated_content}</h5>
+                                                <h5 class="card-title mb-1">${content.generated_content.substring(0, 100)}...</h5>
                                                 <p class="text-muted mb-0">${content.created_at}</p>
                                             </div>
                                         </div>
-                                        <a href="javascript:void(0)" class="btn gradient-btn-6 text-white my-2 btn-sm">See Details</a>
+                                     <a href="javascript:void(0)" 
+                                        class="btn gradient-btn-6 text-white my-2 btn-sm see-details-btn" 
+                                        data-index="${index}" 
+                                        data-full-content="${encodeURIComponent(content.generated_content)}">
+                                        See Details
+                                     </a>
                                     </div> `
            ).join('');
 
@@ -730,6 +750,25 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                 <h2>Latest Contents of <span class="text-danger">${data.template_name}<span></h2>
                 <div>${contentListHtml}</div>
             `;
+
+            // Add event listener to handle "See Details" click
+            document.querySelectorAll('.see-details-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const fullContent = decodeURIComponent(this.getAttribute('data-full-content')); // Get full content
+                    const createdAt = this.parentElement.querySelector('.text-muted').innerText; // Optional: Get created_at
+
+                    // Populate the details modal
+                    const detailsModalBody = document.querySelector('#detailsModal .modal-body');
+                    detailsModalBody.innerHTML = `
+                        <p>${fullContent}</p>
+                        <p class="text-muted">Created At: ${createdAt}</p>
+                    `;
+
+                    // Show the details modal
+                    const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                    detailsModal.show();
+                });
+            });
         })
                 .catch(error => {
                     console.error(error);
