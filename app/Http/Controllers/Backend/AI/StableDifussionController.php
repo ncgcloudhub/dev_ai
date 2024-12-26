@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage; 
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use App\Models\PromptLibrary;
 
 class StableDifussionController extends Controller
 {
@@ -24,8 +25,12 @@ class StableDifussionController extends Controller
 
     public function index()
     {
+        $prompt_library = PromptLibrary::whereHas('category', function ($query) {
+            $query->where('category_name', 'Image');
+        })->orderby('id', 'asc')->limit(50)->get();
+
         $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
-        return view('backend.image_generate.stable_diffusion', compact('images'));
+        return view('backend.image_generate.stable_diffusion', compact('images','prompt_library'));
     }
 
     public function generate(Request $request)

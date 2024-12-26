@@ -105,8 +105,11 @@
     {{-- Modal --}}
 
     @php
-    $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
-@endphp
+    if (!isset($prompt_library)) {
+        $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+    }
+    @endphp
+
 
     <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -119,12 +122,16 @@
                 <div class="modal-body">
                     <h6 class="fs-15">Generate your images in the best format</h6>
                     @foreach ($prompt_library as $item)
-                    <div class="card card-height-100">
+                    <div class="card card-height-100" onclick="populatePromptField('{{ addslashes($item->actual_prompt) }}')">
                         <div class="d-flex">
                             <div class="flex-grow-1 p-2">
-                                <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}">
-                                    <h5 class="mb-3">{{$item->prompt_name}}</h5>
-                                </a>
+                                
+                                <a href="javascript:void(0);" 
+                                onclick="populatePromptField('{{$item->actual_prompt}}'); 
+                               ">
+                                 <h5 class="mb-3">{{$item->prompt_name}}</h5>
+                             </a>
+                                
                                 <p class="mb-0 text-muted" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                     <span class="badge bg-light text-success mb-0">{{ substr($item->actual_prompt, 0, 65) }}</span>
                                 </p>
@@ -162,6 +169,25 @@
         {{-- <script src="{{ URL::asset('build/js/app.js') }}"></script> --}}
 
         @stack('scripts')
+        <script>
+            function populatePromptField(actualPrompt) {
+            // Get all textareas with the id 'prompt' (even though using the same id multiple times is not recommended)
+            const promptTextareas = document.querySelectorAll('#prompt');
+        
+            promptTextareas.forEach(function(promptTextarea) {
+                if (promptTextarea) {
+                    promptTextarea.value = actualPrompt; // Set the value directly to the textarea
+                    promptTextarea.focus(); // Optional: Focus on the textarea for user feedback
+                    console.log('Textarea populated with prompt');
+                } else {
+                    console.error('Textarea with id="prompt" not found.');
+                }
+            });
+        }
+        
+        </script>
+
+
 </body>
 
 </html>

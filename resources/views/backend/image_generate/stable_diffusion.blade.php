@@ -818,6 +818,8 @@
     </div>
     <!--end row-->
 @endsection
+
+
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
@@ -834,6 +836,7 @@
 
 <script>
 $(document).ready(function() {
+
     $('#imageForm').on('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission
 
@@ -1006,7 +1009,7 @@ function syncModelVersion() {
         }).catch(error => console.error('Download count increment failed:', error));
     }
     </script>
-    
+
 
 
 @endsection
