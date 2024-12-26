@@ -38,7 +38,7 @@ class GenerateImagesController extends Controller
         $content = $request->query('content', ''); // Default to empty string if content not passed
         
         $prompt_library = PromptLibrary::whereHas('category', function ($query) {
-            $query->where('category_name', 'Art');
+            $query->where('category_name', 'Image');
         })->orderby('id', 'asc')->limit(50)->get();
 
         $check_user = Auth::user()->role;
@@ -125,6 +125,9 @@ class GenerateImagesController extends Controller
 
         
         if ($request->dall_e_2) {
+
+            Log::info($request->all());
+            Log::info('Inside Dalle 2 prompt: ' . $prompt);
 
             if ($request->quality) {
                 $quality = $request->quality;

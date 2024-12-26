@@ -198,16 +198,33 @@ foreach ($messagesFromDb as $message) {
         }        
 
         // Handle image processing for generated similar images
-        if ($file && in_array($file->getMimeType(), ['image/png', 'image/jpg', 'image/jpeg'])) {
-            $filePath = $file->store('uploads', 'public');
-            $base64Image = $this->encodeImage(storage_path('app/public/' . $filePath));
-            $response = $this->callOpenAIImageAPI($base64Image);
-            $imageContent = $response['choices'][0]['message']['content'];
+        if ($request->has('file') && in_array($file->getMimeType(), ['image/png', 'image/jpg', 'image/jpeg'])) {
 
-            $pastedImages[$filePath] = $imageContent;
-            session(['pasted_images' => $pastedImages]);
-            $context['pasted_image_content'] = $imageContent;
-            session(['context' => $context]);
+            $images = $request->file('file');
+            $imageResponses = [];
+
+            foreach ($images as $image) {
+                $imageFilePath = $image->store('uploads', 'public');
+                $base64Image = $this->encodeImage(storage_path('app/public/' . $imageFilePath));
+
+                // Analyze the image using OpenAI API
+                $response = $this->callOpenAIImageAPI($base64Image);
+                $imageContent = $response['choices'][0]['message']['content'];
+
+                // Store the image content in session
+                $pastedImages[$imageFilePath] = $imageContent;
+                session(['pasted_images' => $pastedImages]);
+
+                // Update context for each image analyzed
+                $context['pasted_image_content'] = $imageContent;
+                session(['context' => $context]);
+
+                $imageResponses[] = $imageContent;
+            }
+
+            // Concatenate the analysis responses
+            $finalImageResponse = implode("\n\n", $imageResponses);
+            Log::info('Image analysis result: ', ['response' => $finalImageResponse]);
 
             if (empty($userMessage)) {
                 $userMessage = 'Describe the Image';
@@ -352,6 +369,14 @@ foreach ($messagesFromDb as $message) {
             $conversationHistory = json_decode($session->messages->pluck('message')->toJson(), true);
         }
 
+        // Handle response generation for multiple pasted images
+        if (!empty($finalImageResponse)) {
+            $conversationHistory[] = ['role' => 'assistant', 'content' => $finalImageResponse];
+            session(['conversation_history' => $conversationHistory]);
+
+            Log::info('Final image response added to conversation history: ', $finalImageResponse);
+        }
+
         // Update session data
         session([
             'conversation_history' => $conversationHistory,
@@ -413,7 +438,7 @@ foreach ($messagesFromDb as $message) {
         $user = Auth::user();
         $sessionId = session('session_id');
         
-       // Log the full response for debugging purposes
+        // Log the full response for debugging purposes
         // Log::info('OpenAI API Streaming Response Started', [
         //     'session_id' => $sessionId,
         //     'user_id' => $user->id,
@@ -477,6 +502,7 @@ foreach ($messagesFromDb as $message) {
                         } else {
                             try {
                                 $parsedData = json_decode($data, true);
+                                Log::info('Parsed JSON Data', ['data' => $parsedData]);
                                 if (isset($parsedData['choices'][0]['delta']['content'])) {
                                     $content = $parsedData['choices'][0]['delta']['content'];
                                     $messageContent .= $content;

@@ -81,10 +81,10 @@
                                             </form>
                                             
                                             <br>
-                                            {{-- <div class="row gallery-wrapper justify-content-center" id="image-container">
-                                                @include('frontend.stable_images_partial_frontend', ['stableImages' => $stableImages])
-                                            </div> --}}
                                             <div class="row gallery-wrapper justify-content-center" id="image-container">
+                                                @include('frontend.stable_images_partial_frontend', ['stableImages' => $stableImages])
+                                            </div>
+                                            <div class="row gallery-wrapper justify-content-center" id="image-container1">
                                                 @include('frontend.image_gallery_partial', ['images' => $images])
                                             </div>
                                             
@@ -249,6 +249,7 @@
             var page = 1; // initialize page number
             var isLoading = false; // flag to prevent multiple simultaneous AJAX requests
             var hasMoreImages = true; // flag to check if there are more images to load
+            let debounceTimer;
 
             function loadMoreImages() {
                 if (isLoading || !hasMoreImages) return; // exit if already loading or no more images
@@ -256,29 +257,43 @@
 
                 $('.infinite-scroll-loader').show(); // show loader
                 $.ajax({
-                    url: '{{ route("ai.image.gallery") }}?page=' + page,
+                    url: '{{ route("ai.image.gallery") }}',
                     type: 'GET',
+                    data: {
+                        page: page,
+                        search: $('#search').val(),
+                        resolution: $('select[name="resolution"]').val(),
+                        style: $('select[name="style"]').val()
+                    },
                     success: function(response) {
-                        if (response.trim() === '') {
-                            hasMoreImages = false; // no more images to load
+                        console.log(response); // Debug response structure
+                        if (!response.imagesPartial && !response.stableImagesPartial) {
+                            hasMoreImages = false; // No more images to load
                         } else {
-                            // Append only if it's not the initial load (page > 1)
-                            if (page > 1) {
-                                $('#image-container').append(response);
+                            if (response.imagesPartial) {
+                                $('#image-container1').append(response.imagesPartial);
                             }
-                            page++; // increment page number
+                            if (response.stableImagesPartial) {
+                                $('#image-container').append(response.stableImagesPartial);
+                            }
+                            page++; // Increment page
                         }
-                        $('.infinite-scroll-loader').hide(); // hide loader after images are loaded
-                        isLoading = false; // reset loading flag
+                        $('.infinite-scroll-loader').hide(); // Hide loader
+                        isLoading = false; // Reset loading flag
                     }
                 });
+
             }
 
-            $(window).scroll(function() {
-                if($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
-                    loadMoreImages();
-                }
-            });
+                $(window).scroll(function() {
+                    clearTimeout(debounceTimer);
+                    debounceTimer = setTimeout(function() {
+                        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 300) {
+                            loadMoreImages();
+                        }
+                    }, 200); // Adjust debounce time as needed
+                });
+
 
             $('#search, select[name="resolution"], select[name="style"]').on('change input', function() {
             var searchText = $('#search').val().toLowerCase();
@@ -303,9 +318,10 @@
             });
 
                 // Initial load of images only if it's not an AJAX request
-                if (!window.location.href.includes('?')) {
-                    loadMoreImages();
-                }
+                // if (!window.location.href.includes('?')) {
+                //         loadMoreImages();
+                //     }
+
             });
     </script>
 

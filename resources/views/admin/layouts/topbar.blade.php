@@ -1,4 +1,4 @@
-<header class="gradient-background-3" id="page-topbar">
+<header id="page-topbar">
     <div class="layout-width">
         <div class="navbar-header">
             <div class="d-flex">
