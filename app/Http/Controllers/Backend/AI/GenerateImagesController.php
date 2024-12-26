@@ -25,7 +25,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class GenerateImagesController extends Controller
 {
-    public function AIGenerateImageView()
+    public function AIGenerateImageView(Request $request)
     {
         $user_id = Auth::user()->id;
         
@@ -34,6 +34,8 @@ class GenerateImagesController extends Controller
                     ->where('user_id', $user_id)
                     ->orderBy('id', 'desc')
                     ->get();
+        
+        $content = $request->query('content', ''); // Default to empty string if content not passed
         
         $prompt_library = PromptLibrary::whereHas('category', function ($query) {
             $query->where('category_name', 'Art');
@@ -64,7 +66,7 @@ class GenerateImagesController extends Controller
                                 ->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
 
-        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId'));
+        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId','content'));
     }
 
 

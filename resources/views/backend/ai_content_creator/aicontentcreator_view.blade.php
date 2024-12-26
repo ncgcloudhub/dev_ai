@@ -324,10 +324,13 @@
                 
                 
                 <div class="text-end">
-                    @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
-                        <!-- Add the Generate Image button -->
-                        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn gradient-btn-6">Generate Image Now</a>
+                    @if($Template->slug == 'image-prompt-idea')
+                    <a href="{{ route('generate.image.view') }}" 
+                       id="generateBtnCopyContext" 
+                       class="btn gradient-btn-6"
+                       data-content="{{ $content ?? '' }}">Generate Image Now</a>
                     @endif
+                
                 </div>
 
            </div>
@@ -344,6 +347,20 @@
 
 {{-- Submit Form Editor --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.getElementById('generateBtnCopyContext').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    const button = event.currentTarget;
+    const content = document.querySelector('#formattedContentDisplay').innerText.trim(); // Adjust selector as needed
+    const route = button.getAttribute('href');
+
+    // Redirect with content as a query parameter
+    window.location.href = `${route}?content=${encodeURIComponent(content)}`;
+});
+
+</script>
 
 <script>
     document.getElementById('clearInputsButton').addEventListener('click', function() {

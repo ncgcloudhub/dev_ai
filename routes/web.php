@@ -599,7 +599,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('/fetch-joke/{category}', [FAQController::class, 'fetchRandomJoke'])->name('jokes');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
-        Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
+    Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
     Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
     Route::post('/extract/image', [GenerateImagesController::class, 'ExtractImage'])->name('extract.image');
     });

@@ -189,7 +189,7 @@
                                                     onclick="toggleOptimize('dalle2')" id="optimizeIcon_dalle2">
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
-                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
                                                 </div>
                                             </div>
                                             
@@ -327,7 +327,7 @@
                                                     onclick="toggleOptimize('dalle3')" id="optimizeIcon_dalle3">
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
-                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
                                                 </div>
                                             </div>
                                             
@@ -463,7 +463,37 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<!-- JavaScript to control the generate button and spinner -->
+<script>
+window.onload = function () {
+    console.log("Page fully loaded. Checking if form should be submitted...");
+
+    // Check if the textarea exists
+    const textarea = document.getElementById('prompt');
+    if (textarea) {
+        // Get the content without trimming
+        const content = textarea.value;
+        if (content !== '') {
+            console.log("Textarea has content. Submitting the form...");
+            
+            // Find the form and submit it
+            const form = document.querySelector('form');
+            if (form) {
+                console.log("Form found. Dispatching submit event...");
+                form.dispatchEvent(new Event('submit', { cancelable: true }));
+            } else {
+                console.error("Form not found. Unable to submit.");
+            }
+        } else {
+            console.log("Textarea is empty. Form will not be submitted.");
+        }
+    } else {
+        console.error("Textarea with id 'prompt' not found. Form submission aborted.");
+    }
+};
+
+
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const generateButton = document.getElementById('generate-button-tour');
@@ -593,6 +623,7 @@
 
 <script>
     $(document).ready(function() {
+
         $('form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
             
