@@ -464,15 +464,25 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-window.onload = function () {
-    console.log("Page fully loaded. Checking if the textarea has value...");
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded. Checking if the textarea has value...");
 
     // Find the textarea and form
     const textarea = document.getElementById('prompt');
     const form = document.getElementById('form_dalle3');
+    console.log("Textarea found:", textarea);
+    console.log("Textarea value :", textarea.value);
+    console.log("Textarea value trim:", textarea.value.trim());
+
+    if (textarea) {
+        const content = textarea.value.trim(); // Remove extra spaces
+        console.log("Textarea value before:", content ? `"${content}"` : "(empty)");
+    } else {
+        console.error("Textarea not found.");
+    }
 
     if (textarea && form) {
-        const content = textarea.value.trim(); // Remove extra spaces
+        const content = textarea.value.trim(); // Ensure the variable is defined
         if (content) {
             console.log("Textarea has content. Submitting the form...");
             form.dispatchEvent(new Event('submit', { cancelable: true }));
@@ -480,12 +490,9 @@ window.onload = function () {
             console.log("Textarea is empty. Form will not be submitted.");
         }
     } else {
-        if (!textarea) console.error("Textarea not found.");
         if (!form) console.error("Form not found.");
     }
-};
-
-
+});
 
 </script>
 
