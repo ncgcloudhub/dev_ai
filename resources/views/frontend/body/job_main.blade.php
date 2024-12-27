@@ -203,7 +203,7 @@
                                 <a href="{{ route('google.login') }}" class="btn btn-light">
                                     <i class="ri-google-fill align-bottom text-danger"></i> Google
                                 </a>
-                                <a href="/login" class="btn btn-info"><i class="ri-sign-up-fill align-bottom"></i> Sign Up</a>
+                                <a href="/login" class="btn btn-info"><i class="ri-sign-up-fill align-bottom"></i> Sign Up for Free</a>
                                
                             </div> 
                             @endguest
