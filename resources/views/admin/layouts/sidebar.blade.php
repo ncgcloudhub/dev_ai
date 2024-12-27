@@ -53,6 +53,15 @@
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
 
+
+                @can('chattermate.menu')
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('main.chat.form') ? 'active' : '' }}" href="{{route('main.chat.form')}}">
+                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span>
+                    </a>
+                </li>
+                @endcan
+
                 {{-- EDUCATION --}}
                 @can('education.menu')
                 <li class="nav-item">
