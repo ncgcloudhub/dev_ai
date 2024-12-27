@@ -809,4 +809,34 @@ class AIContentCreatorController extends Controller
         // Redirect to dashboard or any other page
         return redirect('/chat');
     }
+
+    // Get Generated Content by User
+    public function getTemplateContent($id)
+    {
+        $userId = auth()->id(); // Get the logged-in user ID
+    
+        $template = Template::find($id);
+        // Fetch all matching records for the given template and user
+        $contents = TemplateGeneratedContent::where('template_id', $id)
+            ->where('user_id', $userId)
+            ->get();
+    
+        // If no records are found, return an error response
+        if ($contents->isEmpty()) {
+            return response()->json(['error' => 'No content found for this template or access denied'], 404);
+        }
+    
+        // Return the list of generated content
+        return response()->json([
+            'template_name' => $template->template_name, // Optional: Provide template details if needed
+            'content_list' => $contents->map(function ($content) {
+                return [
+                    'id' => $content->id,
+                    'created_at' => $content->created_at->format('jS F y'),
+                    'generated_content' => $content->generated_content,
+                ];
+            }),
+        ]);
+    }
+
 }
