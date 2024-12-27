@@ -377,9 +377,35 @@
 
 
 .sidebar-hover:hover {
-    color: #831cc7 !important; /* Text color on hover */
+    background: linear-gradient(45deg, #8f84eb, #e96fdf);
+    color: #aad8df !important; /* Text color on hover */
+    box-shadow: 0 6px 20px rgb(24, 5, 5);
+    transform: scale(1.05);
 }
 
 .sidebar-hover:focus {
-    color: #831cc7 !important; /* Text color on hover */
+    background: linear-gradient(45deg, #4d96a8, #b14885);
+    color: #3e385a !important; /* Text color on hover */
 }
+
+.sidebar-hover.active {
+    background: linear-gradient(45deg, #aee0f0, #d596f0);
+    color: #220535 !important; /* Text color on hover */
+}
+  
+
+
+/* Gradient Backgrounds for Sidebar and Topbar, taken from app.min.css*/ 
+#page-topbar {
+    background: var(--vz-header-bg); /* Use 'background' instead of 'background-color' */
+  }
+
+:root[data-topbar=gradient]{--vz-header-bg: linear-gradient(90deg, #aee0f0, #d596f0);--vz-header-item-color: rgba(1, 13, 14, 0.85);--vz-header-item-bg: #42acd6;--vz-header-item-sub-color: #050d14;--vz-topbar-user-bg: #64b3db;--vz-topbar-search-bg: rgba(148, 205, 228, 0.733);--vz-topbar-search-color: #fff;--vz-header-border: #133b50}
+
+:root[data-sidebar=gradient]{--vz-vertical-menu-bg: linear-gradient(45deg, #461b8a, #ff69b4);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-2]{--vz-vertical-menu-bg: linear-gradient(45deg, #60aec9, #9547b6);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-3]{--vz-vertical-menu-bg: linear-gradient(90deg, #940fec, #e418a0);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-4]{--vz-vertical-menu-bg: linear-gradient(to top, rgb(112, 114, 245), rgb(201, 18, 201));--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+
+/* Gradient Background for Login and Register Pages top image */
+.auth-one-bg .bg-overlay{background:linear-gradient(to right,#6180d8, #da39d7);opacity:.9}

@@ -38,7 +38,7 @@ class GenerateImagesController extends Controller
         $content = $request->query('content', ''); // Default to empty string if content not passed
         
         $prompt_library = PromptLibrary::whereHas('category', function ($query) {
-            $query->where('category_name', 'Image');
+            $query->where('category_name', 'Art');
         })->orderby('id', 'asc')->limit(50)->get();
 
         $check_user = Auth::user()->role;
