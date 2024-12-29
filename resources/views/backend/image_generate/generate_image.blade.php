@@ -463,38 +463,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-window.onload = function () {
-    console.log("Page fully loaded. Checking if the textarea has value...");
 
-    // Find the textarea and form
-    const textarea = document.getElementById('prompt');
-    const form = document.getElementById('form_dalle3');
-
-    if (textarea && form) {
-        const content = textarea.value.trim(); // Remove extra spaces
-        if (content) {
-            console.log("Textarea has content. Submitting the form...");
-            form.dispatchEvent(new Event('submit', { cancelable: true }));
-        } else {
-            console.log("Textarea is empty. Form will not be submitted.");
-        }
-    } else {
-        if (!textarea) console.error("Textarea not found.");
-        if (!form) console.error("Form not found.");
-    }
-};
-
-
-
-</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const generateButton = document.getElementById('generate-button-tour');
         const spinner = document.getElementById('loading-spinner');
         
-        generateButton.disabled = true; // Disable button initially
+        generateButton.disabled = false; // Disable button initially
         spinner.style.display = 'inline-block'; // Show spinner initially
     });
 
@@ -617,68 +593,84 @@ window.onload = function () {
 </script>
 
 <script>
-    $(document).ready(function() {
+$(document).ready(function () {
+    const form = document.getElementById('form_dalle3');
+    const textarea = form?.querySelector('textarea[name="prompt"]');
 
-        $('form').submit(function(event) {
-            event.preventDefault(); // Prevent default form submission
-            
-             // Show the magic ball
-             showMagicBall('image');
+    // Ensure form and textarea are present
+    if (textarea && form) {
+        const content = textarea.value.trim();
+        if (content) {
+            console.log("Textarea has content. Triggering the form submission...");
 
+            // Trigger the submit handler
+            $('form').trigger('submit');
+        } else {
+            console.log("Textarea is empty. Form will not be submitted.");
+        }
+    } else {
+        console.error("Form or textarea not found.");
+    }
+
+    // Attach submit handler for form
+    $('form').submit(function (event) {
+        event.preventDefault(); // Prevent default form submission
         
-            // Create a FormData object
-            var formData = new FormData(this);
+        // Show the magic ball
+        showMagicBall('image');
 
-            // Send AJAX request
-            $.ajax({
-                type: 'POST',
-                url: '/generate/image',
-                data: formData,
-                processData: false, // Prevent jQuery from automatically processing the data
-                contentType: false,
-                success: function(response) {
-                   // Hide the magic ball after content loads
-                   hideMagicBall();
+        // Create a FormData object
+        var formData = new FormData(this);
 
-                    console.log(response);
-                    
-                    $('#image-container').empty(); // Clear previous images if any
-                    response.data.forEach(function(imageData) {
-                        // Create an image element
-                        var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
-                                    </a>`;
+        // Send AJAX request
+        $.ajax({
+            type: 'POST',
+            url: '/generate/image',
+            data: formData,
+            processData: false, // Prevent jQuery from automatically processing the data
+            contentType: false,
+            success: function (response) {
+                // Hide the magic ball after content loads
+                hideMagicBall();
 
-                        // Append the image to the container
-                        $('#image-container').append(temp);
-                    });
+                console.log(response);
 
-                    // Initialize Glightbox
-                    $(document).ready(function() {
-                        const lightbox = GLightbox({
-                            selector: '.image-popup',
-                            touchNavigation: true,
-                            loop: true
-                        });
-                    });
-              
-                         var credits_left = response.credit_left;
-                         $('.credit-left').text(credits_left);
+                $('#image-container').empty(); // Clear previous images if any
+                response.data.forEach(function (imageData) {
+                    // Create an image element
+                    var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                    <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
+                                </a>`;
 
-                  // Hide loader
-                  $('#loader').addClass('d-none');
-                },
-                error: function(xhr, status, error) {
-                    // Handle error response
-                     // Hide the magic ball after content loads
-                    hideMagicBall();
-                    console.error(xhr.responseText);
-                    $('#loader').addClass('d-none');
-                }
-            });
+                    // Append the image to the container
+                    $('#image-container').append(temp);
+                });
+
+                // Initialize Glightbox
+                const lightbox = GLightbox({
+                    selector: '.image-popup',
+                    touchNavigation: true,
+                    loop: true
+                });
+
+                var credits_left = response.credit_left;
+                $('.credit-left').text(credits_left);
+
+                // Hide loader
+                $('#loader').addClass('d-none');
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                hideMagicBall();
+                console.error(xhr.responseText);
+                $('#loader').addClass('d-none');
+            }
         });
     });
+});
+
 </script>
+
 
 {{-- LIKE & FAVORITE FUNCTIONALITY --}}
 <script>
