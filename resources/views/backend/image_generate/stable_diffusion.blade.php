@@ -39,9 +39,9 @@
                             <span>Get Image Prompt Ideas</span>
                         </span>
                     </a>
-                    <button type="button" class="btn gradient-btn-5 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                    {{-- <button type="button" class="btn gradient-btn-5 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
                         Prompt Library
-                    </button>
+                    </button> --}}
                 </div>
             </div><!-- end card header -->
         
