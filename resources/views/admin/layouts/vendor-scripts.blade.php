@@ -24,6 +24,11 @@
 
 <script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
 
+
+<script src="{{ URL::asset('vendor/flasher/flasher-toastr.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
 {{-- Select Multiple Tag --}}
 <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
 

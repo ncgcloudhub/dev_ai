@@ -192,7 +192,7 @@ function copyToClipboard(targetId) {
     const content = contentElement.innerText; // Get the content to copy
     navigator.clipboard.writeText(content)
         .then(() => {
-            alert('Content copied to clipboard!'); // Show success message
+            toastr.success('Content copied to clipboard!'); // Show success message
         })
         .catch(err => {
             console.error('Error copying content: ', err);

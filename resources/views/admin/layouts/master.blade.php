@@ -104,7 +104,7 @@
     
     {{-- Modal --}}
 
-    @php
+    {{-- @php
     if (!isset($prompt_library)) {
         $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
     }
@@ -137,7 +137,7 @@
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     
                     {{-- <div class="d-flex mt-2">
                         <div class="flex-shrink-0">
@@ -149,7 +149,7 @@
                             </a>
                         </div>
                     </div>     --}}
-                    @endforeach
+                    {{-- @endforeach
 
                 </div>
                 <div class="modal-footer">
@@ -158,7 +158,7 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div><!-- /.modal --> --}}
 
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')

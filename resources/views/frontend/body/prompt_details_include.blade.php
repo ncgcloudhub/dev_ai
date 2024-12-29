@@ -409,7 +409,7 @@
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-        alert('Content copied to clipboard!');
+        toastr.success('Content copied to clipboard!');
     });
 
     $('#downloadButton').click(function () {

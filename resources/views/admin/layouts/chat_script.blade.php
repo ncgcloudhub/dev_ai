@@ -375,7 +375,7 @@ function handleImagePaste(event) {
                 const content = contentElement.innerText; // Get the content to copy
                 navigator.clipboard.writeText(content)
                     .then(() => {
-                        alert('Content copied to clipboard!'); // Show success message
+                        toastr.success('Content copied to clipboard!');
                     })
                     .catch(err => {
                         console.error('Error copying content: ', err);
@@ -1013,7 +1013,7 @@ document.addEventListener('click', function(event) {
 
         // Copy to clipboard
         navigator.clipboard.writeText(messageText).then(function() {
-            alert('Message copied to clipboard!');
+            toastr.success('Content copied to clipboard!');
         }).catch(function(err) {
             console.error('Failed to copy text: ', err);
         });
