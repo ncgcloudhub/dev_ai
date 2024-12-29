@@ -34,7 +34,7 @@
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('user.dashboard')}}">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('user.dashboard') ? 'active' : '' }}" href="{{route('user.dashboard')}}">
                         <i class="las la-home"></i> <span >Dashboard</span>
                     </a>
                 </li>
@@ -44,17 +44,17 @@
 
                 {{-- Favorites --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#favorite" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs(['manage.favourite.image']) ? 'active' : '' }}" href="#favorite" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs(['manage.favourite.image']) ? 'true' : 'false' }}" aria-controls="favorite">
                         <i class="las la-star"></i> <span >Favorites</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="favorite">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs(['manage.favourite.image']) ? 'show' : '' }}" id="favorite">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
 
                                     <li class="nav-item">
-                                        <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover" >Manage Favorite Image</a>
+                                        <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.favourite.image') ? 'active' : '' }}" >Manage Favorite Image</a>
                                     </li>
                                   
                                    
@@ -67,43 +67,40 @@
 
                 {{-- EDUCATION --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#education" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-graduation-cap"></i> <span >Education</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs(['education.form', 'manage.education.tools', 'education.tools.contents']) ? 'active' : '' }}" href="#education" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs(['education.form', 'manage.education.tools', 'education.tools.contents']) ? 'true' : 'false' }}" aria-controls="education">
+                        <i class="las la-graduation-cap"></i> <span>Education</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="education">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs(['education.form', 'manage.education.tools', 'education.tools.contents']) ? 'show' : '' }}" id="education">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-
                                     <li class="nav-item">
-                                        <a href="{{route('education.form')}}" class="nav-link sidebar-hover" >Education Wizard</a>
+                                        <a href="{{ route('education.form') }}" class="nav-link sidebar-hover {{ request()->routeIs('education.form') ? 'active' : '' }}">Education Wizard</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('manage.education.tools')}}" class="nav-link sidebar-hover" >Education Tools</a>
+                                        <a href="{{ route('manage.education.tools') }}" class="nav-link sidebar-hover {{ request()->routeIs('manage.education.tools') ? 'active' : '' }}">Education Tools</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('education.tools.contents')}}" class="nav-link sidebar-hover" >Library</a>
+                                        <a href="{{ route('education.tools.contents') }}" class="nav-link sidebar-hover {{ request()->routeIs('education.tools.contents') ? 'active' : '' }}">Library</a>
                                     </li>
-                                   
                                 </ul>
                             </div>
-       
                         </div>
                     </div>
                 </li>
 
                 {{-- Fixed Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('aicontentcreator.manage')}}">
-                        <i class="las la-file-alt"></i> <span >AI Content Creator</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('aicontentcreator.manage') ? 'active' : '' }}" href="{{ route('aicontentcreator.manage') }}">
+                        <i class="las la-file-alt"></i> <span>AI Content Creator</span>
                     </a>
                 </li>
                 
 
                 {{-- AI CHAT --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{ route('main.chat.form') }}">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('main.chat.form') ? 'active' : '' }}" href="{{ route('main.chat.form') }}">
                         <i class="lab la-rocketchat"></i> 
                         <span>ChatterMate</span>
                         <span class="badge bg-danger ms-2">AI Chat</span>
@@ -112,83 +109,72 @@
                       
 
                  {{-- Greeting Card --}}
-               
                  <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="{{route('greeting.card')}}">
-                        <i class="las la-id-card"></i> <span >Greeting Card</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('greeting.card') ? 'active' : '' }}" href="{{ route('greeting.card') }}">
+                        <i class="las la-id-card"></i> <span>Greeting Card</span>
                     </a>
                 </li>
                 
 
                 {{-- Custom Template --}}
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#AITools" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pencil-ruler"></i> <span >Custom Template</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs(['custom.template.category.add', 'custom.template.add', 'custom.template.manage']) ? 'active' : '' }}" href="#AITools" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs(['custom.template.category.add', 'custom.template.add', 'custom.template.manage']) ? 'true' : 'false' }}" aria-controls="AITools">
+                        <i class="las la-pencil-ruler"></i> <span>Custom Template</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="AITools">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs(['custom.template.category.add', 'custom.template.add', 'custom.template.manage']) ? 'show' : '' }}" id="AITools">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.category.add')}}" class="nav-link sidebar-hover" >Categories</a>
+                                        <a href="{{ route('custom.template.category.add') }}" class="nav-link sidebar-hover {{ request()->routeIs('custom.template.category.add') ? 'active' : '' }}">Categories</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.add')}}" class="nav-link sidebar-hover" >Add Template</a>
+                                        <a href="{{ route('custom.template.add') }}" class="nav-link sidebar-hover {{ request()->routeIs('custom.template.add') ? 'active' : '' }}">Add Template</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{route('custom.template.manage')}}" class="nav-link sidebar-hover" >Manage Template</a>
+                                        <a href="{{ route('custom.template.manage') }}" class="nav-link sidebar-hover {{ request()->routeIs('custom.template.manage') ? 'active' : '' }}">Manage Template</a>
                                     </li>
-                                   
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
 
                 {{-- Prompt Library --}}
-               
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#prompt" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-pen"></i> <span >Prompt Library</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('prompt.manage') ? 'active' : '' }}" href="#prompt" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs('prompt.manage') ? 'true' : 'false' }}" aria-controls="prompt">
+                        <i class="las la-pen"></i> <span>Prompt Library</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="prompt">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('prompt.manage') ? 'show' : '' }}" id="prompt">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-
                                     <li class="nav-item">
-                                        <a href="{{route('prompt.manage')}}" class="nav-link sidebar-hover" >Manage Prompt</a>
+                                        <a href="{{ route('prompt.manage') }}" class="nav-link sidebar-hover {{ request()->routeIs('prompt.manage') ? 'active' : '' }}">Manage Prompt</a>
                                     </li>
                                 </ul>
-                            </div>     
+                            </div>
                         </div>
                     </div>
                 </li>
-               
 
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="sidebarExpert">
-                        <i class="l las la-sms"></i> <span >AI Chat</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('chat') ? 'active' : '' }}" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs('chat') ? 'true' : 'false' }}" aria-controls="sidebarExpert">
+                        <i class="las la-sms"></i> <span>AI Chat</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="sidebarExpert">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('chat') ? 'show' : '' }}" id="sidebarExpert">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-                                    
                                     <li class="nav-item">
-                                        <a href="{{route('chat')}}" class="nav-link sidebar-hover" >AI Professional Bots</a>
+                                        <a href="{{ route('chat') }}" class="nav-link sidebar-hover {{ request()->routeIs('chat') ? 'active' : '' }}">AI Professional Bots</a>
                                     </li>
-                                  
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
@@ -196,24 +182,19 @@
             
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#generateImage" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="AITools">
-                        <i class="las la-image"></i> <span >Generate Image</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('generate.image.view') ? 'active' : '' }}" href="#generateImage" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs('generate.image.view') ? 'true' : 'false' }}" aria-controls="generateImage">
+                        <i class="las la-image"></i> <span>Generate Image</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="generateImage">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('generate.image.view') ? 'show' : '' }}" id="generateImage">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
-
                                     <li class="nav-item">
-                                        <a href="{{route('generate.image.view')}}" class="nav-link sidebar-hover" >Generate with Dall-E</a>
+                                        <a href="{{ route('generate.image.view') }}" class="nav-link sidebar-hover {{ request()->routeIs('generate.image.view') ? 'active' : '' }}">Generate with Dall-E</a>
                                     </li>
-                                  
-                                   
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
@@ -222,22 +203,19 @@
 
                  {{-- Subscription --}}
                  <li class="nav-item">
-                    <a class="nav-link menu-link sidebar-hover" href="#subscription" data-bs-toggle="collapse" role="button"
-                        aria-expanded="false" aria-controls="subscription">
-                        <i class="ri-price-tag-3-line"></i> <span >Subscription</span>
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}" href="#subscription" data-bs-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->routeIs('all.package') ? 'true' : 'false' }}" aria-controls="subscription">
+                        <i class="ri-price-tag-3-line"></i> <span>Subscription</span>
                     </a>
-                    <div class="collapse menu-dropdown mega-dropdown-menu" id="subscription">
+                    <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('all.package') ? 'show' : '' }}" id="subscription">
                         <div class="row">
                             <div class="col-lg-4">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{route('all.package')}}" class="nav-link sidebar-hover" >Buy Package</a>
+                                        <a href="{{ route('all.package') }}" class="nav-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}">Buy Package</a>
                                     </li>
-                                  
                                 </ul>
                             </div>
-                            
-                            
                         </div>
                     </div>
                 </li>
