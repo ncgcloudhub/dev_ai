@@ -553,7 +553,7 @@
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
+            toastr.success('Content copied to clipboard!');
         });
 
         // Download button click event using FileSaver.js
