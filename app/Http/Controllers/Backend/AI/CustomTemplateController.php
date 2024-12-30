@@ -328,6 +328,9 @@ class CustomTemplateController extends Controller
             'messages' => $messages,
         ]);
 
+        $totalTokens = $result->usage->totalTokens;
+        deductUserTokensAndCredits($totalTokens);
+
         $content = trim($result['choices'][0]['message']['content']);
 
         // return view('backend.custom_template.template_view', compact('title', 'content'));

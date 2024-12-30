@@ -547,6 +547,9 @@ class PromptLibraryController extends Controller
  
              // Decode the response to get a more readable format
              $responseBody = json_decode($response->getBody()->getContents(), true);
+
+             $totalTokens = $responseBody['usage']['total_tokens'];
+             deductUserTokensAndCredits($totalTokens);
  
              // Log the entire raw API response for debugging
              Log::info('OpenAI API Full Response: ', ['response' => $responseBody]);
