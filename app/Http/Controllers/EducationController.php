@@ -842,7 +842,6 @@ public function updateSubject(Request $request, $id)
 
     public function showTool($id)
     {
-
         $userId = auth()->id();
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);
