@@ -44,9 +44,9 @@
                     </span>
                 </span>
             </a>
-            {{-- <button type="button" class="btn gradient-btn-5" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+            <button type="button" class="btn gradient-btn-5" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
                 Prompt Library
-            </button> --}}
+            </button>
         </div>
     </div><!-- end card header -->
     
