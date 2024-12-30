@@ -198,6 +198,21 @@
 </script>
 
 
+{{-- Copy Toaster button Velzon Default Gradient --}}
+<script>
+    document.querySelectorAll('.copy-toast-btn').forEach(button => {
+    button.setAttribute('data-toast', '');
+    button.setAttribute('data-toast-text', 'Content copied to clipboard!');
+    button.setAttribute('data-toast-gravity', 'top');
+    button.setAttribute('data-toast-position', 'right');
+    button.setAttribute('data-toast-className', 'primary');
+    button.setAttribute('data-toast-duration', '3000');
+    button.setAttribute('data-toast-close', 'close');
+    button.setAttribute('data-toast-style', 'style'); //Responsible for the gradient background
+});
+
+</script>
+
 
 @yield('script')
 @yield('script-bottom')
