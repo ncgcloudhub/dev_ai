@@ -269,7 +269,7 @@
                <!-- Wrapper to place buttons side by side -->
                 <div class="d-flex">
                     <!-- Copy Content Button -->
-                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1" title="Copy the generated Content">
+                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1 copy-toast-btn" title="Copy the generated Content">
                         <i class="las la-copy"></i>
                     </button>
 
@@ -583,7 +583,7 @@
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            toastr.success('Content copied to clipboard!');
+            // toastr.success('Content copied to clipboard!');
         });
     
       // Listen for click event on 'Download As PDF' option
