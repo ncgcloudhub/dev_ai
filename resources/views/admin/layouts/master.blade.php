@@ -104,12 +104,16 @@
     
     {{-- Modal --}}
 
-    {{-- @php
+    @php
+    // Check if $prompt_library is defined or passed
     if (!isset($prompt_library)) {
+        // Fallback: Retrieve a default set of prompt_library records
         $prompt_library = \App\Models\PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+    } elseif ($prompt_library instanceof \Illuminate\Database\Eloquent\Model) {
+        // If it's a single record, wrap it in a collection
+        $prompt_library = collect([$prompt_library]);
     }
     @endphp
-
 
     <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -137,7 +141,7 @@
                                 </p>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     
                     {{-- <div class="d-flex mt-2">
                         <div class="flex-shrink-0">
@@ -149,7 +153,7 @@
                             </a>
                         </div>
                     </div>     --}}
-                    {{-- @endforeach
+                    @endforeach
 
                 </div>
                 <div class="modal-footer">
@@ -158,7 +162,7 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal --> --}}
+    </div><!-- /.modal -->
 
     <!-- JAVASCRIPT -->
     @include('admin.layouts.vendor-scripts')
