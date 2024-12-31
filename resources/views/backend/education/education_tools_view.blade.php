@@ -30,7 +30,8 @@
                                     <img src="{{ asset('storage/' . $similarTool->image) }}" alt="" class="avatar-xs rounded-circle">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
-                                    <h6 class="mb-1"><a href="{{ route('tool.show', $similarTool->id) }}" class="link-secondary">{{ $similarTool->name }}</a></h6>
+                                  
+                                    <h6 class="mb-1"><a href="  {{ route('tool.show', ['id' => $similarTool->id, 'slug' => $similarTool->slug]) }}" class="link-secondary">{{ $similarTool->name }}</a></h6>
                                     <p class="text-muted mb-0">{{ $similarTool->description ?? 'Tool Description' }}</p>
                                 </div>
                              

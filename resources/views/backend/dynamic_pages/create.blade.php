@@ -41,6 +41,7 @@
                                     <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
                                     <span class="badge bg-warning keyword" data-keyword="services">Services</span>
                                     <span class="badge bg-danger keyword" data-keyword="products">Products</span>
+                                    <span class="badge bg-info keyword" id="dynamic-category"></span>
                                 </div>
                             </div>
                             
@@ -215,6 +216,26 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById('title').addEventListener('input', function() {
+        var title = this.value.trim();
+        var slug = title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+        
+        // Update the dynamic category slug
+        var dynamicCategory = document.getElementById('dynamic-category');
+        dynamicCategory.textContent = slug ? slug : 'Enter Title to Generate Slug';
+        dynamicCategory.setAttribute('data-keyword', slug);
+    });
+
+    // Add event listener to make the dynamically generated category clickable
+    document.getElementById('dynamic-category').addEventListener('click', function() {
+        var selectedKeyword = this.getAttribute('data-keyword');
+        alert('Category chosen: ' + selectedKeyword);
+        // You can add your category selection logic here
+    });
+</script>
+
 
 
 @endsection
