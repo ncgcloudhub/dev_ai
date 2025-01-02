@@ -685,7 +685,7 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                     } else {
                         // If it's not JSON, assume it's part of the content
                         content += chunk;
-                        formattedContentDisplay.innerHTML = formatContent(content); // Format the streamed content
+                        formattedContentDisplay.innerHTML = content; // Format the streamed content
                     }
     
                     return reader.read().then(processStream); // Continue reading chunks

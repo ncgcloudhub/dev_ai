@@ -634,10 +634,12 @@ class AIContentCreatorController extends Controller
         // Stream the response
         return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens) {
             $chunks = explode("\n", $content); // Split the content into chunks
+            $parsedown = new Parsedown(); // Initialize Parsedown
             
             // Stream each chunk
             foreach ($chunks as $chunk) {
-                echo $chunk . "<br/>";
+                $htmlChunk = $parsedown->text($chunk);
+                echo $htmlChunk;
                 ob_flush(); // Flush the output buffer
                 flush();     // Flush the system output buffer
                 sleep(1);    // Simulate delay between chunks (optional)
