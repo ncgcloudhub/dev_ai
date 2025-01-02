@@ -220,6 +220,7 @@
                             Image generated successfully!
                         </div>
                         <img src="${response.image_url}" alt="Generated Image" class="img-fluid rounded shadow-sm" style="height: 650px; width: 650px">
+                        <button id="generateVideoButton" class="btn btn-primary mt-3">Generate Video</button>
                     `);
 
                 // Add click event for Generate Video button
