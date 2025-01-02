@@ -353,7 +353,8 @@ class AIContentCreatorController extends Controller
     // Extract Image from Prompt
     public function AIContentCreatorExtractPromptAndGenerate()
     {
-        return view('backend.ai_content_creator.aicontentcreator_image_generate_view');
+        $apiKey = config('services.stable_diffusion.api_key');
+        return view('backend.ai_content_creator.aicontentcreator_image_generate_view',compact('apiKey'));
     }
 
     public function AIContentCreatorSEOUpdate(Request $request)
