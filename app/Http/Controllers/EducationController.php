@@ -738,8 +738,11 @@ public function updateContent(Request $request, $id)
     // Stream the response
     return response()->stream(function () use ($content) {
         $chunks = explode("\n", $content);
+        $parsedown = new Parsedown(); // Initialize Parsedown
+
         foreach ($chunks as $chunk) {
-            echo $chunk . "<br/>";
+            $htmlChunk = $parsedown->text($chunk);
+            echo $htmlChunk;
             ob_flush();
             flush();
             sleep(1); // Simulate delay between chunks
