@@ -462,7 +462,7 @@ Route::post('/generate-images', [EducationController::class, 'generateImages']);
 
 
 
-Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function () {
+Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->group(function () {
 
     Route::prefix('education')->group(function () {
         Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('admin.permission:education.educationWizard');      

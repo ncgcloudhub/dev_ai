@@ -201,31 +201,54 @@ fileInput.addEventListener('change', function(event) {
         });
 
         // Function to handle image paste
-function handleImagePaste(event) {
+        function handleImagePaste(event) {
     const clipboardItems = event.clipboardData.items;
-    const remainingSlots = 3 - selectedFiles.length;
-
-    let pastedCount = 0;
+    let imagePasted = false;
 
     for (let i = 0; i < clipboardItems.length; i++) {
         const item = clipboardItems[i];
-
-        if (item.type.indexOf("image") !== -1 && pastedCount < remainingSlots) {
+        if (item.type.indexOf("image") !== -1) {
             const blob = item.getAsFile();
-            pastedCount++;
+            const imageUrl = URL.createObjectURL(blob);
 
-             // Add the pasted image to selectedFiles
-             selectedFiles.push(blob);
+            // Create image element
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.maxWidth = '100px'; // Adjust image size as needed
+
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'X';
+            removeBtn.classList.add('remove-btn');
+            removeBtn.addEventListener('click', () => {
+                // Clear the image display
+                imageDisplay.innerHTML = '';
+                pastedImageFile = null; // Reset pastedImageFile
+            });
+
+            // Container for image and button
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+
+            // Display the pasted image in image_display div
+            imageDisplay.innerHTML = ''; // Clear any previous image
+            imageDisplay.appendChild(container);
+
+            pastedImageFile = blob; // Store the pasted image
+            imagePasted = true;
+            break;
         }
     }
-    if (pastedCount > 0) {
-        displayImages();  // Update display after pasting images
-        event.preventDefault();  // Prevent multiple pastes
+
+    if (imagePasted) {
+        event.preventDefault(); // Prevent default paste for images only
     }
 }
 
-            // Listen for paste events on messageInput
-            messageInput.addEventListener('paste', handleImagePaste);
+// Listen for paste events on messageInput
+messageInput.addEventListener('paste', handleImagePaste);
             let abortController = null;  // To store the AbortController instance
 
            // Listen for click events on buttons
