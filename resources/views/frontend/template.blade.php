@@ -1,7 +1,9 @@
 @extends('admin.layouts.master-without-nav')
-@section('title')
-   Templates
-@endsection
+@section('title', $seo->title)
+
+@section('description', $seo->description)
+
+@section('keywords', $seo->keywords)
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection

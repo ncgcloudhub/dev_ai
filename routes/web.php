@@ -486,7 +486,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
         Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
         Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools') ;
-        Route::get('/tool/{id}', [EducationController::class, 'showTool'])->name('tool.show');
+        Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
@@ -599,7 +599,7 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('/fetch-joke/{category}', [FAQController::class, 'fetchRandomJoke'])->name('jokes');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
-        Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
+    Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
     Route::post('/image', [GenerateImagesController::class, 'generateImage'])->name('generate.image');
     Route::post('/extract/image', [GenerateImagesController::class, 'ExtractImage'])->name('extract.image');
     });
@@ -618,6 +618,8 @@ Route::middleware(['auth', 'check.status', 'check.blocked.ip'])->group(function 
     Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
 
     Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
+
+    Route::get('/ai-content-creator/getContentByUser/{id}', [AIContentCreatorController::class, 'getTemplateContent'])->name('template.content');
     
     // AI Content Creator Extract and Generate
     Route::get('ai-content-creator/extract', [AIContentCreatorController::class, 'AIContentCreatorExtractPromptAndGenerate'])->name('aicontentcreator.view.extract.prompt');

@@ -215,13 +215,12 @@ if (!function_exists('saveModuleFeedback')) {
         {
             // Initialize the OpenAI Client
             $user = auth()->user();
-            $apiKey = config('app.openai_api_key');
-            $client = OpenAI::client($apiKey);
+         
             $openaiModel = $user->selected_model;
-    
+            
             try {
                 // Send the request to OpenAI
-                $response = $client->chat()->create([
+                $response = OpenAI::chat()->create([
                     'model' => $openaiModel,
                     'messages' => [
                         [

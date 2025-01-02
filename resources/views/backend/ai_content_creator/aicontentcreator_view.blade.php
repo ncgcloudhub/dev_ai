@@ -19,6 +19,7 @@
 </button>
 
 <button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Template View Tour</button>
+<button id="generatedContents" type="button" class="btn gradient-btn-6 text-white my-2" data-bs-toggle="modal" data-bs-target="#subscribeModals">{{$Template->template_name}} Contents</button>
 
 <div class="row">
    
@@ -268,7 +269,7 @@
                <!-- Wrapper to place buttons side by side -->
                 <div class="d-flex">
                     <!-- Copy Content Button -->
-                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1" title="Copy the generated Content">
+                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1 copy-toast-btn" title="Copy the generated Content">
                         <i class="las la-copy"></i>
                     </button>
 
@@ -284,6 +285,44 @@
                     </div>
                 </div>
 
+
+                 {{-- Generated Contents Modal --}}
+           <div id="subscribeModals" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-lg-7">
+                            <div class="modal-body p-5">
+                                <h2 class="lh-base">Give us a s<span class="text-danger">AI</span>cond <span class="text-danger"> Fetching your contents</span>!</h2>
+                                <p class="text-muted mb-4"></p>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="subscribe-modals-cover h-100">
+                                <img src="https://aicontentfy.com/hubfs/Blog/23173f76-4d66-4847-8ee8-58ce8d575518.jpg" alt="" class="h-100 w-100 object-fit-cover" style="clip-path: polygon(100% 0%, 100% 100%, 100% 100%, 0% 100%, 25% 50%, 0% 0%);">
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <div id="detailsModal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-3" style="border-color: #4CAF50; overflow: hidden;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Content Full Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Dynamic content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
                 
                 
@@ -324,10 +363,13 @@
                 
                 
                 <div class="text-end">
-                    @if($Template->slug == 'image-prompt-idea') {{-- Assuming template_id for the specific template is 78 --}}
-                        <!-- Add the Generate Image button -->
-                        <a href="{{route('generate.image.view')}}" id="downloadButton" class="btn gradient-btn-6">Generate Image Now</a>
+                    @if($Template->slug == 'image-prompt-idea')
+                    <a href="{{ route('generate.image.view') }}" 
+                       id="generateBtnCopyContext" 
+                       class="btn gradient-btn-6"
+                       data-content="{{ $content ?? '' }}">Generate Image Now</a>
                     @endif
+                
                 </div>
 
            </div>
@@ -344,6 +386,20 @@
 
 {{-- Submit Form Editor --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.getElementById('generateBtnCopyContext').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    const button = event.currentTarget;
+    const content = document.querySelector('#formattedContentDisplay').innerText.trim(); // Adjust selector as needed
+    const route = button.getAttribute('href');
+
+    // Redirect with content as a query parameter
+    window.location.href = `${route}?content=${encodeURIComponent(content)}`;
+});
+
+</script>
 
 <script>
     document.getElementById('clearInputsButton').addEventListener('click', function() {
@@ -527,7 +583,7 @@
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
+            // toastr.success('Content copied to clipboard!');
         });
     
       // Listen for click event on 'Download As PDF' option
@@ -647,6 +703,77 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                 hideMagicBall();
                 resetButton();  // Reset the button state in case of error or abort
             });
+        });
+    });
+</script>
+
+{{-- Generated Content Modal Populate --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('generatedContents').addEventListener('click', function () {
+            const templateId = '{{ $Template->id }}'; // Pass the template ID dynamically
+
+            // AJAX call to fetch template content
+            fetch(`/ai-content-creator/getContentByUser/${templateId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch template content.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            // Populate the modal with content
+            const modalBody = document.querySelector('#subscribeModals .modal-body');
+           const contentListHtml = data.content_list.map((content, index) => `
+            <div class="card card-body">
+                                        <div class="d-flex mb-4 align-items-center">
+                                            <div class="flex-grow-1 ms-2">
+                                                <h5 class="card-title mb-1">${content.generated_content.substring(0, 100)}...</h5>
+                                                <p class="text-muted mb-0">${content.created_at}</p>
+                                            </div>
+                                        </div>
+                                     <a href="javascript:void(0)" 
+                                        class="btn gradient-btn-6 text-white my-2 btn-sm see-details-btn" 
+                                        data-index="${index}" 
+                                        data-full-content="${encodeURIComponent(content.generated_content)}">
+                                        See Details
+                                     </a>
+                                    </div> `
+           ).join('');
+
+            modalBody.innerHTML = `
+                <h2>Latest Contents of <span class="text-danger">${data.template_name}<span></h2>
+                <div>${contentListHtml}</div>
+            `;
+
+            // Add event listener to handle "See Details" click
+            document.querySelectorAll('.see-details-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const fullContent = decodeURIComponent(this.getAttribute('data-full-content')); // Get full content
+                    const createdAt = this.parentElement.querySelector('.text-muted').innerText; // Optional: Get created_at
+
+                    // Populate the details modal
+                    const detailsModalBody = document.querySelector('#detailsModal .modal-body');
+                    detailsModalBody.innerHTML = `
+                        <p>${fullContent}</p>
+                        <p class="text-muted">Created At: ${createdAt}</p>
+                    `;
+
+                    // Show the details modal
+                    const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                    detailsModal.show();
+                });
+            });
+        })
+                .catch(error => {
+                    console.error(error);
+                    alert('An error occurred while loading the content.');
+                });
         });
     });
 </script>

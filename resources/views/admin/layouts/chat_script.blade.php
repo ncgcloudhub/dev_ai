@@ -73,12 +73,18 @@ $(document).ready(function() {
             }
         }
 
-        fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
+        let selectedFiles = [];  // Store both attached and pasted images
 
-    if (file) {
+    // Function to display images
+    function displayImages() {
+    imageDisplay.innerHTML = '';  // Clear current display
+    fileNameDisplay.innerHTML = '';  // Clear file names
+
+    selectedFiles.forEach((file, index) => {
         // Display the file name
-        fileNameDisplay.textContent = "Selected File: " + file.name;
+        const fileNameDiv = document.createElement('div');
+        fileNameDiv.textContent = "Selected File: " + file.name;
+        fileNameDisplay.appendChild(fileNameDiv);
 
         // If the file is an image
         if (file.type.startsWith('image/')) {
@@ -88,28 +94,32 @@ $(document).ready(function() {
             const img = document.createElement('img');
             img.src = imageUrl;
             img.style.maxWidth = '100px'; // Adjust image size as needed
+            img.style.marginRight = '10px'; // Add spacing between images
 
             // Create remove button
             const removeBtn = document.createElement('button');
             removeBtn.textContent = 'X';
             removeBtn.classList.add('remove-btn');
+            removeBtn.style.marginLeft = '5px'; // Space between image and button
             removeBtn.addEventListener('click', () => {
-                // Clear the file input, image display, and file name display
-                fileInput.value = '';
-                imageDisplay.innerHTML = '';
-                fileNameDisplay.textContent = '';
+                // Remove the image from selectedFiles and refresh display
+                selectedFiles.splice(index, 1);
+                displayImages();
+                if (selectedFiles.length === 0) {
+                    fileInput.value = ''; // Clear the file input if no more images
+                }
             });
 
             // Container for image and button
             const container = document.createElement('div');
             container.classList.add('image-container');
+            container.style.display = 'inline-block'; // Align images horizontally
+            container.style.marginBottom = '10px'; // Add spacing between rows
             container.appendChild(img);
             container.appendChild(removeBtn);
 
-            // Display the image in image_display div
-            imageDisplay.innerHTML = ''; // Clear any previous image
+            // Append the image and remove button to image_display div
             imageDisplay.appendChild(container);
-
         } else {
             // For non-image files, just display the file name and a remove button
             fileNameDisplay.textContent = "Selected File: " + file.name;
@@ -127,7 +137,25 @@ $(document).ready(function() {
             // Append the remove button next to the file name display
             fileNameDisplay.appendChild(removeFileBtn);
         }
+    });
+}
+
+// File input event handler
+fileInput.addEventListener('change', function(event) {
+    const files = event.target.files;
+    const remainingSlots = 3 - selectedFiles.length;
+    if (files.length > remainingSlots) {
+        alert(`You can only attach ${remainingSlots} more images.`);
+        return;
     }
+     // Add selected files to the selectedFiles array
+     Array.from(files).forEach(file => {
+        if (selectedFiles.length < 3) {
+            selectedFiles.push(file);
+        }
+    });
+    // Update display
+    displayImages();
 });
 
 
@@ -175,41 +203,24 @@ $(document).ready(function() {
         // Function to handle image paste
 function handleImagePaste(event) {
     const clipboardItems = event.clipboardData.items;
+    const remainingSlots = 3 - selectedFiles.length;
+
+    let pastedCount = 0;
+
     for (let i = 0; i < clipboardItems.length; i++) {
         const item = clipboardItems[i];
-        if (item.type.indexOf("image") !== -1) {
+
+        if (item.type.indexOf("image") !== -1 && pastedCount < remainingSlots) {
             const blob = item.getAsFile();
-            pastedImageFile = blob;
-            const imageUrl = URL.createObjectURL(blob);
+            pastedCount++;
 
-            // Create image element
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.style.maxWidth = '100px'; // Adjust image size as needed
-
-            // Create remove button
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = 'X';
-            removeBtn.classList.add('remove-btn');
-            removeBtn.addEventListener('click', () => {
-                // Clear the image display
-                imageDisplay.innerHTML = '';
-                pastedImageFile = null; // Reset pastedImageFile
-            });
-
-            // Container for image and button
-            const container = document.createElement('div');
-            container.classList.add('image-container');
-            container.appendChild(img);
-            container.appendChild(removeBtn);
-
-            // Display the pasted image in image_display div
-            imageDisplay.innerHTML = ''; // Clear any previous image
-            imageDisplay.appendChild(container);
-
-            event.preventDefault(); // Stop further processing to prevent multiple image pastes
-            break;
+             // Add the pasted image to selectedFiles
+             selectedFiles.push(blob);
         }
+    }
+    if (pastedCount > 0) {
+        displayImages();  // Update display after pasting images
+        event.preventDefault();  // Prevent multiple pastes
     }
 }
 
@@ -364,7 +375,7 @@ function handleImagePaste(event) {
                 const content = contentElement.innerText; // Get the content to copy
                 navigator.clipboard.writeText(content)
                     .then(() => {
-                        alert('Content copied to clipboard!'); // Show success message
+                        toastr.success('Content copied to clipboard!');
                     })
                     .catch(err => {
                         console.error('Error copying content: ', err);
@@ -432,18 +443,36 @@ function sendMessage() {
 
         const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         let userMessageHTML = `<li class="chat-list right">
-            <div class="conversation-list">
-                <div class="user-chat-content">
-                  <div class="ctext-wrap-content">
-                    <p class="mb-0 ctext-content">${message || file?.name || 'Pasted Image'}</p>
-                    ${file ? `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px;">` : ''}
-                    ${pastedImageFile ? `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px;">` : ''}
-                  </div>
-                    <div class="conversation-name"><small class="text-muted time">${currentTime}</small></div>
-                </div>
+    <div class="conversation-list">
+        <div class="user-chat-content">
+            <div class="ctext-wrap-content">
+                <p class="mb-0 ctext-content">${message || 'Attached/Pasted Images'}</p>
+`;
+
+// Loop through attached files
+if (fileInput.files.length > 0) {
+    Array.from(fileInput.files).forEach((file) => {
+        userMessageHTML += `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
+    });
+}
+
+// Handle pasted image if any
+if (pastedImageFile) {
+    userMessageHTML += `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
+}
+
+userMessageHTML += `
             </div>
-        </li>`;
-        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+            <div class="conversation-name">
+                <small class="text-muted time">${currentTime}</small>
+            </div>
+        </div>
+    </div>
+</li>`;
+
+// Append the generated HTML to the chat conversation
+chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
+
 
         const assistantMessageId = `assistant-message-${Date.now()}`;
         let assistantMessageHTML = `
@@ -984,7 +1013,7 @@ document.addEventListener('click', function(event) {
 
         // Copy to clipboard
         navigator.clipboard.writeText(messageText).then(function() {
-            alert('Message copied to clipboard!');
+            toastr.success('Content copied to clipboard!');
         }).catch(function(err) {
             console.error('Failed to copy text: ', err);
         });
@@ -1027,11 +1056,21 @@ function regenerateMessage(messageId, originalMessage) {
             return;
         }
 
+        let fullContent = ''; // Accumulate the full content here
         messageElement.innerHTML = ''; // Clear previous content before streaming
 
         function processChunk({ done, value }) {
             if (done) {
                 console.log('Stream complete');
+                // Final formatting of the complete content
+                const formattedContent = formatContent(fullContent);
+                messageElement.innerHTML = formattedContent;
+
+                // Highlight code blocks within the message element
+                messageElement.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
                 return;
             }
 
@@ -1049,9 +1088,22 @@ function regenerateMessage(messageId, originalMessage) {
 
                     try {
                         const json = JSON.parse(data);
-                        console.log('tr',json)
-                        // Append to the message container
-                        messageElement.innerHTML += json; // Append the message to the target element
+                        if (json) {
+                            fullContent += json; // Accumulate the content
+                            // Optionally update the UI for a "live preview"
+                            const formattedPreview = formatContent(fullContent);
+                            messageElement.innerHTML = formattedPreview;
+
+                            // Highlight code blocks
+                            messageElement.querySelectorAll('pre code').forEach((block) => {
+                                hljs.highlightElement(block);
+                            });
+
+                            // Scroll the last message into view
+                            const conversationList = document.getElementById('users-conversation');
+                            const lastMessage = conversationList.lastElementChild;
+                            lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        }
                     } catch (err) {
                         console.error('Error parsing JSON:', err, data);
                     }
@@ -1067,7 +1119,6 @@ function regenerateMessage(messageId, originalMessage) {
         console.error('Error during regenerate:', err);
     });
 }
-
 
 
 </script>

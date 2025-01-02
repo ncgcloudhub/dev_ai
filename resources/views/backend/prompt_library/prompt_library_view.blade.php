@@ -95,7 +95,7 @@
                             {{$prompt_library->actual_prompt}}
                           
                         </p>
-                        <span class="copy-icon" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
+                        <span class="copy-icon copy-toast-btn" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
                     </div>
                 </div>
             </div> 
@@ -242,7 +242,7 @@
                     
                     <div class="row mt-3">
                         <div class="col-md-12 text-end" id="copy-download-tour">
-                            <button id="copyButton" class="btn gradient-btn-copy me-2">
+                            <button id="copyButton" class="btn gradient-btn-copy me-2 copy-toast-btn">
                                 <i class="las la-copy"></i>
                             </button>
                             <button id="downloadButton" class="btn gradient-btn-download">
@@ -285,7 +285,7 @@
             tempInput.select();
             document.execCommand("copy");
             document.body.removeChild(tempInput);
-            alert("Text copied to clipboard");
+            // alert("Text copied to clipboard");
         };
 
         // Remove SimpleMDE initialization since we're using a div now
@@ -368,7 +368,7 @@
             textArea.select();
             document.execCommand('copy');
             document.body.removeChild(textArea);
-            alert('Content copied to clipboard!');
+            // toastr.success('Content copied to clipboard!');
         });
 
         // Download button click event using FileSaver.js

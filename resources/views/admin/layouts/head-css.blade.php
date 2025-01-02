@@ -11,3 +11,6 @@
 <link href="{{ URL::asset('build/css/custom.min.css') }}"  rel="stylesheet" type="text/css" />
 
 <link href="{{ URL::asset('build/css/clevercreator.css') }}?v={{ filemtime(public_path('build/css/clevercreator.css')) }}" rel="stylesheet" type="text/css" />
+
+
+<link href="{{ URL::asset('vendor/flasher/flasher.min.css') }}" rel="stylesheet">

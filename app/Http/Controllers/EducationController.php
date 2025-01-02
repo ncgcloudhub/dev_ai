@@ -572,6 +572,11 @@ public function updateContent(Request $request, $id)
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
 
+        // Get the total tokens used
+        $totalTokens = $response['usage']['total_tokens'];
+        deductUserTokensAndCredits($totalTokens);
+
+        
         // Initialize $firstImageUrl as null by default
         $firstImageUrl = null;
 
@@ -598,6 +603,8 @@ public function updateContent(Request $request, $id)
                 'quality' => 'standard',
                 'n' => (int) $numberOfImages,
             ]);
+
+            deductUserTokensAndCredits(0, calculateCredits('1024*1024', 'standard'));
 
             Log::info('API Response Body: ' . $response->body());
 
@@ -712,6 +719,10 @@ public function updateContent(Request $request, $id)
     ]);
 
     $content = $response['choices'][0]['message']['content'];
+
+    // Get the total tokens used
+    $totalTokens = $response['usage']['total_tokens'];
+    deductUserTokensAndCredits($totalTokens);
 
     $toolContent = new ToolGeneratedContent();  // Assuming you have a model named ToolContent
     $toolContent->tool_id = $toolId;
@@ -831,7 +842,6 @@ public function updateSubject(Request $request, $id)
 
     public function showTool($id)
     {
-
         $userId = auth()->id();
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);

@@ -68,7 +68,7 @@
                         <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{ route('tool.show', $tool->id) }}" class="btn btn-primary">
+                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary">
                                 <i class="ri-auction-fill align-bottom me-1"></i>Explore
                             </a>
                             @if(Auth::user()->role === 'admin')
@@ -99,7 +99,7 @@
                             19.29k <!-- This can be dynamically generated if needed -->
                         </p>
                         <h5 class="mb-1 fs-16">
-                            <a href="{{ route('tool.show', $tool->id) }}" class="text-body">{{ $tool->name }}</a>
+                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
                         </h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>
