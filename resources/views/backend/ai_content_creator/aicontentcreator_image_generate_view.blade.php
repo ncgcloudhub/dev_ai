@@ -300,6 +300,57 @@
                         </div>
                         <img src="${response.image_url}" alt="Generated Image" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
                     `);
+
+                // Add click event for Generate Video button
+                $("#generateVideoButton").on("click", function () {
+                    const videoRoute = "{{ route('generate.image_to_video') }}";
+
+                    const formDatas = new FormData();
+
+                    // Extract the prompt from the displayed content
+                    const extractedPrompt = $("#extractedContent").text().replace("Extracted Content:", "").trim();
+                        console.log("Prompt:", extractedPrompt);
+
+                        if (!extractedPrompt) {
+                            alert("Prompt not found. Please extract content first.");
+                            return;
+                        }
+
+                        formDatas.append("prompt", extractedPrompt); // Add the extracted prompt
+                        formDatas.append("_token", "{{ csrf_token() }}");
+
+                    $.ajax({
+                        url: videoRoute,
+                        type: "POST",
+                        data: formDatas,
+                        processData: false,
+                        contentType: false,
+                        success: function (videoResponse) {
+                            if (videoResponse.id) {
+                                $("#generatedImage").append(`
+                                    <div class="alert alert-success mt-3" role="alert">
+                                        Video generation successful! ID: ${videoResponse.id}
+                                    </div>
+                                    <button id="generateVideoButton" class="btn btn-primary mt-3">Generate Video</button>
+                                `);
+                            } else {
+                                $("#generatedImage").append(`
+                                    <div class="alert alert-warning mt-3" role="alert">
+                                        Failed to generate video.
+                                    </div>
+                                `);
+                            }
+                        },
+                        error: function (xhr) {
+                            $("#generatedImage").append(`
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    An error occurred while generating the video: ${xhr.responseJSON?.error || "Unknown error"}
+                                </div>
+                            `);
+                        }
+                    });
+                });
+
                 } else {
                     $("#generatedImage").html(`
                         <div class="alert alert-warning" role="alert">
