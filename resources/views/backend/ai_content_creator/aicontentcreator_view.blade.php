@@ -753,22 +753,23 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
 
             // Add event listener to handle "See Details" click
             document.querySelectorAll('.see-details-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const fullContent = decodeURIComponent(this.getAttribute('data-full-content')); // Get full content
-                    const createdAt = this.parentElement.querySelector('.text-muted').innerText; // Optional: Get created_at
+            button.addEventListener('click', function () {
+                const fullContent = decodeURIComponent(this.getAttribute('data-full-content')); // Get full content
+                const createdAt = this.parentElement.querySelector('.text-muted').innerText; // Optional: Get created_at
 
-                    // Populate the details modal
-                    const detailsModalBody = document.querySelector('#detailsModal .modal-body');
-                    detailsModalBody.innerHTML = `
-                        <p>${fullContent}</p>
-                        <p class="text-muted">Created At: ${createdAt}</p>
-                    `;
+                // Populate the details modal
+                const detailsModalBody = document.querySelector('#detailsModal .modal-body');
+                detailsModalBody.innerHTML = `
+                    <div>${fullContent}</div> <!-- Rendered Markdown HTML -->
+                    <p class="text-muted">Created At: ${createdAt}</p>
+                `;
 
-                    // Show the details modal
-                    const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
-                    detailsModal.show();
-                });
+                // Show the details modal
+                const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+                detailsModal.show();
             });
+        });
+
         })
                 .catch(error => {
                     console.error(error);
