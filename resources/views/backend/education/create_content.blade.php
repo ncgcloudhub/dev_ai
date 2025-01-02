@@ -711,7 +711,7 @@
                             // Replace the p tag content with the full formatted content
                             const pElement = document.querySelector("#chunkss");
                             if (pElement) {
-                                pElement.innerHTML = formatContent(content);  // Format and replace content
+                                pElement.innerHTML = content;  // Format and replace content
                             }
     
                             console.log("Stream complete");
@@ -732,7 +732,7 @@
                         content += decoder.decode(value, { stream: true });
     
                         // Optionally: Show the formatted content progressively while streaming
-                        document.querySelector("#chunkss").innerHTML = formatContent(content);
+                        document.querySelector("#chunkss").innerHTML = content;
     
                         // Continue reading more chunks
                         return reader.read().then(processStream);
