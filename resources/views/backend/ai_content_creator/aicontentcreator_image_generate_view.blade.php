@@ -80,6 +80,14 @@
                 <div id="imageGenerateSection" class="mt-4 text-center" style="display: none;">
                     <button id="generateImageButton" class="btn btn-success btn-rounded">Generate Image</button>
                 </div>
+
+                <div id="videoContainer" style="margin-top: 20px; display: none;">
+                    <h2>Generated Video</h2>
+                    <video id="generatedVideo" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
                
             </div>
         </div>
