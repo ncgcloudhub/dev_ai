@@ -4,6 +4,11 @@
 @section('description', $seo->description)
 
 @section('keywords', $seo->keywords)
+@section('css')
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+@endsection
 @section('content')
 
 <div class="row">
@@ -473,12 +478,13 @@
                                     </div>
     
                                     <h5 id="candidate-name" class="mb-0">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
-                                    <p id="candidate-position" class="text-muted">                                                                    <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
+                                    <p id="candidate-position" class="text-muted">                                                                    
+                                        <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
                                     </p>
 
                                   
                                     <div>
-                                        <button type="button" class="btn gradient-btn-9 rounded-pill w-sm"   onclick="fetchContent({{ $item->id }})">
+                                        <button type="button" class="btn gradient-btn-9 rounded-pill w-sm" onclick="fetchContent({{ $item->id }})">
                                             <i class="ri-add-fill me-1 align-bottom"></i> View
                                         </button>
                                     </div>
@@ -489,10 +495,7 @@
                 </div> <!-- End row -->
             
     </div>
-                                        
-
-
-
+                               
                                     </div>
                                     <!-- end tab pane -->
                                 </div>
@@ -558,6 +561,12 @@
     <script src="{{ URL::asset('build/js/pages/form-wizard.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+    <!-- Include DOMPurify for sanitizing HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 
     <script>
         function toggleQuestionFields() {
@@ -645,82 +654,101 @@
         });
     </script>
     
-
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector(".vertical-navs-step");
-    const generateButton = document.querySelector(".generateButton");
-
-    generateButton.addEventListener("click", function () {
-        const formData = new FormData(form);
-
-        // Step 1: Fetch and display content stream
-        fetch(form.getAttribute("action"), {
-            method: form.getAttribute("method"),
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: formData
-        })
-        .then(response => {
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let content = "";  // Variable to store the entire content
-
-            const processStream = ({ done, value }) => {
-                if (done) {
-                    // Hide loading icon once done
-                    const lordIconElement = document.getElementById('almost');
-                    if (lordIconElement) {
-                        lordIconElement.style.display = 'none';
-                    }
-
-                    // Change h5 content to "Your content is ready"
+        // Format content using marked.js and DOMPurify
+        function formatContent(content) {
+            // Set options for marked.js
+            marked.setOptions({
+                breaks: true,  // Enable line breaks
+                gfm: true      // Enable GitHub Flavored Markdown
+            });
+    
+            // Parse Markdown to HTML
+            let formattedContent = marked.parse(content);
+    
+            // Sanitize the HTML to prevent XSS
+            formattedContent = DOMPurify.sanitize(formattedContent);
+    
+            return formattedContent;
+        }
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector(".vertical-navs-step");
+            const generateButton = document.querySelector(".generateButton");
+    
+            generateButton.addEventListener("click", function () {
+                const formData = new FormData(form);
+    
+                // Step 1: Fetch and display content stream
+                fetch(form.getAttribute("action"), {
+                    method: form.getAttribute("method"),
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let content = "";  // Variable to store the entire content
+    
+                    const processStream = ({ done, value }) => {
+                        if (done) {
+                            // Hide loading icon once done
+                            const lordIconElement = document.getElementById('almost');
+                            if (lordIconElement) {
+                                lordIconElement.style.display = 'none';
+                            }
+    
+                            // Change h5 content to "Your content is ready"
+                            const h5Element = document.querySelector("#h55");
+                            if (h5Element) {
+                                h5Element.textContent = "Your content is ready!";
+                            }
+    
+                            // Replace the p tag content with the full formatted content
+                            const pElement = document.querySelector("#chunkss");
+                            if (pElement) {
+                                pElement.innerHTML = formatContent(content);  // Format and replace content
+                            }
+    
+                            console.log("Stream complete");
+    
+                            // Step 2: Fetch and display images after content is streamed
+                            // fetchImages();
+    
+                            return;
+                        }
+    
+                        const parentDiv = document.querySelector('.center-content');
+                        if (parentDiv) {
+                            parentDiv.classList.remove('text-center');
+                            parentDiv.classList.remove('pt-4');
+                        }
+    
+                        // Append new chunks to content
+                        content += decoder.decode(value, { stream: true });
+    
+                        // Optionally: Show the formatted content progressively while streaming
+                        document.querySelector("#chunkss").innerHTML = formatContent(content);
+    
+                        // Continue reading more chunks
+                        return reader.read().then(processStream);
+                    };
+    
+                    return reader.read().then(processStream);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     const h5Element = document.querySelector("#h55");
-                    if (h5Element) {
-                        h5Element.textContent = "Your content is ready!";
-                    }
-
-                    // Replace the p tag content with the full content
-                    const pElement = document.querySelector("#chunkss");
-                    if (pElement) {
-                        pElement.innerHTML = content;  // Replacing the entire content once streaming is done
-                    }
-
-                    console.log("Stream complete");
-
-                    // Step 2: Fetch and display images after content is streamed
-                    // fetchImages();
-
-                    return;
-                }
-
-                const parentDiv = document.querySelector('.center-content');
-                if (parentDiv) {
-                    parentDiv.classList.remove('text-center');
-                    parentDiv.classList.remove('pt-4');
-                }
-
-                // Append new chunks to content
-                content += decoder.decode(value, { stream: true });
-
-                // Optionally: Show the content progressively while streaming
-                document.querySelector("#chunkss").innerHTML = content;
-
-                // Continue reading more chunks
-                return reader.read().then(processStream);
-            };
-
-            return reader.read().then(processStream);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            const h5Element = document.querySelector("#h55");
-            h5Element.textContent = "There was an error processing your request.";
+                    h5Element.textContent = "There was an error processing your request.";
+                });
+            });
         });
-    });
 
-});
+    
 
 // modal script
 document.addEventListener('DOMContentLoaded', function () {
