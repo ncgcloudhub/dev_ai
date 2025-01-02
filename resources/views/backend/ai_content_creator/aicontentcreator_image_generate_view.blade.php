@@ -256,13 +256,17 @@
                         processData: false,
                         contentType: false,
                         success: function (videoResponse) {
-                            if (videoResponse.id) {
+                            if (videoResponse.generation_id) {
                                 $("#generatedImage").append(`
                                     <div class="alert alert-success mt-3" role="alert">
-                                        Video generation successful! ID: ${videoResponse.id}
+                                        Video generation successful! ID: ${videoResponse.generation_id}
                                     </div>
                                     <button id="generateVideoButton" class="btn btn-primary mt-3">Generate Video</button>
                                 `);
+
+                                 // Call fetchVideo with the generation ID
+                                fetchVideo(videoResponse.generation_id);
+
                             } else {
                                 $("#generatedImage").append(`
                                     <div class="alert alert-warning mt-3" role="alert">
@@ -298,6 +302,55 @@
             }
         });
     });
+
+    const apiKey = @json($apiKey);
+    
+    function fetchVideo(generationId) {
+    // Polling interval (in milliseconds)
+    const pollingInterval = 10000; // 10 seconds
+
+    // Start polling
+    const pollForVideo = setInterval(() => {
+        fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle case when the video is ready
+            if (data && data.finish_reason === 'SUCCESS') {
+                console.log('Video is ready! Base64 video data:', data.video);
+
+                // Decode the base64 video and display or download it
+                const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
+                const videoUrl = URL.createObjectURL(videoBlob);
+
+                // Display video in the browser
+                const videoElement = document.createElement('video');
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                videoElement.classList.add("img-fluid", "rounded", "shadow-sm", "mt-3");
+                videoElement.style.maxWidth = "650px";
+                $("#generatedImage").append(videoElement);
+
+                // Stop polling after success
+                clearInterval(pollForVideo);
+            } else if (data && data.status === 'in-progress') {
+                console.log('Video generation still in progress...');
+            } else {
+                console.error('Error fetching video:', data);
+                clearInterval(pollForVideo);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching video:', error);
+            clearInterval(pollForVideo);
+        });
+    }, pollingInterval);
+}
 
 </script>
 
