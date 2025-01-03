@@ -1,4 +1,5 @@
 @php
+    use Carbon\Carbon;
     $users = \App\Models\User::orderBy('id', 'desc')->get();
 @endphp
 
@@ -15,6 +16,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Email Verified</th>
+                    <th scope="col">Last Seen</th>
                     <th scope="col">Role</th>
                     <th scope="col">Country</th>
                     <th scope="col">IP</th>
@@ -49,6 +51,20 @@
                             </form> --}}
                         @endif
                         
+                    </td>
+                    <td>
+                        @if ($item->last_seen)
+                            @if (Carbon::parse($item->last_seen)->diffInMinutes() < 5)
+                                <span class="text-success">Active Now</span>
+                                <span class="spinner-grow flex-shrink-0" role="status">
+
+                                </span>
+                            @else
+                                Last seen {{ Carbon::parse($item->last_seen)->diffForHumans() }}
+                            @endif
+                        @else
+                            Never Active
+                        @endif
                     </td>
                     <td>
                         {!! $item->role == 'admin' 

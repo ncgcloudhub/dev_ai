@@ -123,3 +123,6 @@ custom_template_category table, category icon can be null
 
 18/12/2024
 From template_category, the category_icon can be nullable
+
+3/01/2025
+add last_seen, users table, timestamp without timezone Nullable
