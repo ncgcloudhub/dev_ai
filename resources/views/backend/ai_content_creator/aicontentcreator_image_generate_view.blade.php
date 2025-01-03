@@ -234,18 +234,9 @@
 
                 // Add click event for Generate Video button
                 $("#generateVideoButton").on("click", function () {
-                    const videoRoute = "{{ route('generate.video') }}";
-
+                    const videoRoute = "{{ route('ai.content.creator.image_to_video') }}";
                     const formDatas = new FormData();
-
-                   // Check if image_url exists
-                    if (response.image_url) {
-                        formDatas.append("image_url", response.image_url); // Pass image URL to backend
-                    } else {
-                        alert("Image URL not found. Please generate an image first.");
-                        return;
-                    }
-
+                    formDatas.append("image_url", response.image_url);
                     formDatas.append("_token", "{{ csrf_token() }}");
 
                     $.ajax({
@@ -255,32 +246,18 @@
                         processData: false,
                         contentType: false,
                         success: function (videoResponse) {
-                            if (videoResponse.id) {
-                                $("#generatedImage").append(`
-                                    <div class="alert alert-success mt-3" role="alert">
-                                        Video generation successful! ID: ${videoResponse.id}
-                                    </div>
-                                    <button id="generateVideoButton" class="btn btn-primary mt-3">Generate Video</button>
-                                `);
-
-                                 // Call fetchVideo with the generation ID
-                                fetchVideo(videoResponse.generation_id);
-
-                            } else {
-                                $("#generatedImage").append(`
-                                    <div class="alert alert-warning mt-3" role="alert">
-                                        Failed to generate video.
-                                    </div>
-                                `);
-                            }
-                        },
-                        error: function (xhr) {
+                        if (videoResponse.generation_id) {
                             $("#generatedImage").append(`
-                                <div class="alert alert-danger mt-3" role="alert">
-                                    An error occurred while generating the video: ${xhr.responseJSON?.error || "Unknown error"}
+                                <div class="alert alert-success mt-3" role="alert">
+                                    Video generation started! Generation ID: ${videoResponse.generation_id}
                                 </div>
                             `);
+                            fetchVideo(videoResponse.generation_id);
                         }
+                    },
+                    error: function (error) {
+                        alert("Video generation failed: " + error.responseJSON.error);
+                    }
                     });
                 });
 
