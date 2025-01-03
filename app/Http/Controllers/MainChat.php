@@ -27,6 +27,7 @@ class MainChat extends Controller
 {
     public function MainChatForm()
 {
+    logActivity('Chattermate', 'Sidebar Chattermate Button Clicked');
     $userId = auth()->id(); // Get the authenticated user's ID
     $sessions = Session::with('messages') // Eager load the related messages
         ->where('user_id', $userId)

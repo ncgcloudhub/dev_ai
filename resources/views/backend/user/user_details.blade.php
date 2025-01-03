@@ -273,6 +273,14 @@ Profile | {{$user->name}}
                             Images Generated
                         </a>
                     </li>
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#userActivityLog" role="tab">
+                            <i class="fas fa-home"></i>
+                            Activity Log
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </div>
             <div class="card-body p-4">
@@ -355,6 +363,19 @@ Profile | {{$user->name}}
                     </div>
                     <!--end tab-pane-->
                 </div>
+
+                {{-- Activity Log --}}
+                <div class="tab-content">
+                    <div class="tab-pane" id="userActivityLog" role="tabpanel">
+                        @foreach ($logs as $item)
+                                <h5 class="text-truncate font-size-14 mb-0">{{ $item->action }}</h5>
+                                <p>{{$item->details}}</p>
+                               
+                        @endforeach
+                    </div>
+                    <!--end tab-pane-->
+                </div>
+
             </div>
         </div>
     </div>
