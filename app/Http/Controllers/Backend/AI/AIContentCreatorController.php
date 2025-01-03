@@ -528,11 +528,11 @@ class AIContentCreatorController extends Controller
         $prompt =  $input->prompt;
 
         if ($input->emoji == 1) {
-            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' points about it. Do not write translations. ';
+            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' variations about it. Do not write translations. ';
         } elseif (isset($input->style) && $input->style != "") {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Write '. $points . ' points about it. Do not write translations. ';
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Write '. $points . ' variations about it. Do not write translations. ';
         } else {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' points about it. Do not write translations. ';
+            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' variations about it. Do not write translations. ';
         }
 
 
