@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use OpenAI;
 use Stevebauman\Location\Facades\Location;
 use GuzzleHttp\Client;
+use Parsedown;
 
 class AIContentCreatorController extends Controller
 {
@@ -633,10 +634,12 @@ class AIContentCreatorController extends Controller
         // Stream the response
         return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens) {
             $chunks = explode("\n", $content); // Split the content into chunks
+            $parsedown = new Parsedown(); // Initialize Parsedown
             
             // Stream each chunk
             foreach ($chunks as $chunk) {
-                echo $chunk . "<br/>";
+                $htmlChunk = $parsedown->text($chunk);
+                echo $htmlChunk;
                 ob_flush(); // Flush the output buffer
                 flush();     // Flush the system output buffer
                 sleep(1);    // Simulate delay between chunks (optional)
@@ -830,14 +833,16 @@ class AIContentCreatorController extends Controller
             return response()->json(['error' => 'No content found for this template or access denied'], 404);
         }
     
+        $parsedown = new Parsedown();
+
         // Return the list of generated content
         return response()->json([
-            'template_name' => $template->template_name, // Optional: Provide template details if needed
-            'content_list' => $contents->map(function ($content) {
+            'template_name' => $template->template_name,
+            'content_list' => $contents->map(function ($content) use ($parsedown) {
                 return [
                     'id' => $content->id,
                     'created_at' => $content->created_at->format('jS F y'),
-                    'generated_content' => $content->generated_content,
+                    'generated_content' => $parsedown->text($content->generated_content), // Convert to Markdown
                 ];
             }),
         ]);
