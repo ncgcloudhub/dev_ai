@@ -756,6 +756,9 @@ Route::post('/generate-image-to-video', [StableDifussionController::class, 'gene
 Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 
+// Ai Content Creator Image to Video
+Route::post('/ai-content-creator/image-to-video', [StableDifussionController::class, 'AiContentCreatorImageToVideo'])->name('ai.content.creator.image_to_video');
+
 // Stable Image Upscale
 Route::get('/stable-upscale-form', [StableDifussionController::class, 'UpscaleForm'])->name('stable.upscale.form');
 Route::post('/upscale', [StableDifussionController::class, 'upscale']);
