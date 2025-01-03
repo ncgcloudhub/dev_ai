@@ -18,10 +18,12 @@ class UpdateLastSeen
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user_id = Auth::user()->id;
-        $user = User::findOrFail($user_id);
-        $user->last_seen = Carbon::now();
-        $user->save();
+        if (Auth::check()) { // Check if a user is authenticated
+            $user_id = Auth::user()->id;
+            $user = User::findOrFail($user_id);
+            $user->last_seen = Carbon::now();
+            $user->save();
+        }
 
         return $next($request);
 
