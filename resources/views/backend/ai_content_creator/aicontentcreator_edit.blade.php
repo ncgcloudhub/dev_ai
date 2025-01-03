@@ -262,13 +262,17 @@
                         <option value="textarea">Textarea Field</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="input_names" class="form-label">Input Name</label>
                     <input type="text" name="input_names[]" onchange="generateInputNames(true)" placeholder="Type input name" class="form-control" required>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="input_label" class="form-label">Input Label</label>
                     <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label for="input_placeholders" class="form-label">Input Placeholder</label>
+                    <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                 </div>
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">

@@ -572,6 +572,11 @@ public function updateContent(Request $request, $id)
         // Get the response content
         $content = $response['choices'][0]['message']['content'];
 
+        // Get the total tokens used
+        $totalTokens = $response['usage']['total_tokens'];
+        deductUserTokensAndCredits($totalTokens);
+
+        
         // Initialize $firstImageUrl as null by default
         $firstImageUrl = null;
 
@@ -598,6 +603,8 @@ public function updateContent(Request $request, $id)
                 'quality' => 'standard',
                 'n' => (int) $numberOfImages,
             ]);
+
+            deductUserTokensAndCredits(0, calculateCredits('1024*1024', 'standard'));
 
             Log::info('API Response Body: ' . $response->body());
 
@@ -634,8 +641,12 @@ public function updateContent(Request $request, $id)
             // Stream the response
         return response()->stream(function () use ($content, $images) {
             $chunks = explode("\n", $content);
+            $parsedown = new Parsedown(); // Initialize Parsedown
+
             foreach ($chunks as $chunk) {
-                echo $chunk . "<br/>";
+                // Parse the Markdown into HTML
+                $htmlChunk = $parsedown->text($chunk);
+                echo $htmlChunk;
                 ob_flush();
                 flush();
                 sleep(1); // Simulate delay between chunks
@@ -713,6 +724,10 @@ public function updateContent(Request $request, $id)
 
     $content = $response['choices'][0]['message']['content'];
 
+    // Get the total tokens used
+    $totalTokens = $response['usage']['total_tokens'];
+    deductUserTokensAndCredits($totalTokens);
+
     $toolContent = new ToolGeneratedContent();  // Assuming you have a model named ToolContent
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
@@ -723,8 +738,11 @@ public function updateContent(Request $request, $id)
     // Stream the response
     return response()->stream(function () use ($content) {
         $chunks = explode("\n", $content);
+        $parsedown = new Parsedown(); // Initialize Parsedown
+
         foreach ($chunks as $chunk) {
-            echo $chunk . "<br/>";
+            $htmlChunk = $parsedown->text($chunk);
+            echo $htmlChunk;
             ob_flush();
             flush();
             sleep(1); // Simulate delay between chunks
@@ -831,7 +849,6 @@ public function updateSubject(Request $request, $id)
 
     public function showTool($id)
     {
-
         $userId = auth()->id();
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);

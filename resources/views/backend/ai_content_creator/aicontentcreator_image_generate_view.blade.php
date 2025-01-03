@@ -13,145 +13,94 @@
 @slot('title') Extract Prompt and Generate Image @endslot
 @endcomponent
 
-
-<button type="button" class="btn gradient-btn-5" onclick="history.back()">
-    <i class="las la-arrow-left"></i>
-</button>
-
-<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Template View Tour</button>
-
 <div class="row">
-   
-           <div class="col-xxl-6">
-            <div class="card">
-               
-                <div class="card-body">
-                    <div class="d-flex justify-content-end">
-                        <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
-                            <i class="las la-undo-alt"></i> Clear Inputs
+    <div class="col-xxl-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4 class="card-title mb-0">Extract Prompt and Generate Image</h4>
+            </div>
+            <div class="card-body">
+                {{-- <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-outline-danger" id="clearInputsButton" title="Clear all the Input values">
+                        <i class="las la-undo-alt"></i> Clear Inputs
+                    </button>
+                </div> --}}
+                <form id="generateForm" action="{{ route('extract.image') }}" method="post" enctype="multipart/form-data" class="row g-3">
+                    @csrf
+                    <div class="col-md-6">
+                        <label for="language" class="form-label">Select Language</label>
+                        <select class="form-select" name="language" id="language" aria-label="Floating label select example">
+                            <option disabled>Enter Language</option>
+                            <option value="English" selected>English</option>
+                            <option value="Arabic">Arabic</option>
+                            <option value="Bengali">Bengali</option>
+                            <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+                            <option value="Chinese (Traditional)">Chinese (Traditional)</option>
+                            <option value="Dutch">Dutch</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="Indonesian">Indonesian</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Polish">Polish</option>
+                            <option value="Portuguese">Portuguese</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="Swahili">Swahili</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Turkish">Turkish</option>
+                            <option value="Vietnamese">Vietnamese</option>
+                        </select>
+                        <small class="form-text text-muted">English is selected by default</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="custom_image" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" name="custom_image" id="custom_image" aria-label="Upload image" onchange="previewImage(event)">
+                        <div id="image_preview" class="mt-3" style="display: none;">
+                            <img id="preview_img" src="" alt="Image Preview" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+                        </div>
+                    </div>
+                    <div class="col-12 text-center my-3 d-none" id="loader">
+                        <button class="btn btn-outline-primary btn-load">
+                            <span class="d-flex align-items-center">
+                                <span class="spinner-border flex-shrink-0" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                                <span class="flex-grow-1 ms-2">Loading...</span>
+                            </span>
                         </button>
                     </div>
-                    
-                    <div class="live-preview ">
-                        <form id="generateForm" action="{{ route('extract.image') }}" method="post" enctype="multipart/form-data" class="row g-3">
-                            @csrf
-                        
-                          
-                            <div class="col-md-6" id="select-language-tour">
-                                <label for="language" class="form-label">Select Language</label>
-                                <select class="form-select" name="language" id="language" aria-label="Floating label select example">
-                                    <option disabled>Enter Language</option>
-                                    <option value="English" selected>English</option>
-                                    <option value="Arabic">Arabic</option>
-                                    <option value="Bengali">Bengali</option>
-                                    <option value="Chinese (Simplified)">Chinese (Simplified)</option>
-                                    <option value="Chinese (Traditional)">Chinese (Traditional)</option>
-                                    <option value="Dutch">Dutch</option>
-                                    <option value="French">French</option>
-                                    <option value="German">German</option>
-                                    <option value="Hindi">Hindi</option>
-                                    <option value="Indonesian">Indonesian</option>
-                                    <option value="Italian">Italian</option>
-                                    <option value="Japanese">Japanese</option>
-                                    <option value="Korean">Korean</option>
-                                    <option value="Polish">Polish</option>
-                                    <option value="Portuguese">Portuguese</option>
-                                    <option value="Russian">Russian</option>
-                                    <option value="Spanish">Spanish</option>
-                                    <option value="Swahili">Swahili</option>
-                                    <option value="Tamil">Tamil</option>
-                                    <option value="Turkish">Turkish</option>
-                                    <option value="Vietnamese">Vietnamese</option>
-                                </select>
-                                <small class="form-text text-muted">English is selected by default</small>
-                            </div>
-
-                              <!-- Image Upload and Checkbox -->
-                                <div class="col-md-6">
-
-                                    <div class="form-group mt-2" id="image_upload">
-                                        <input type="file" class="form-control" name="custom_image" id="custom_image" aria-label="Upload image" onchange="previewImage(event)">
-                                    </div>
-
-                                    <!-- Image Preview Section -->
-                                    <div id="image_preview" style="display: none; margin-top: 10px;">
-                                        <img id="preview_img" src="" alt="Image Preview" class="img-fluid rounded shadow-sm" style="max-width: 20%; height: auto;">
-                                    </div>
-                                </div>
-                            
-
-
-
-                                                                           
-                            <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none"  id="loader">
-                                <button class="btn btn-outline-primary btn-load">
-                                    <span class="d-flex align-items-center">
-                                        <span class="spinner-border flex-shrink-0" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </span>
-                                        <span class="flex-grow-1 ms-2">
-                                            Loading...
-                                        </span>
-                                    </span>
-                                </button>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="text-end">
-                                    <button id="generateButton" class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4" type="button">Extract Prompt</button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-12 text-end">
+                        <button id="generateButton" class="btn btn-primary btn-rounded text-white" type="button">Extract Prompt</button>
                     </div>
-
-                    <!-- Display the extracted content -->
-                    <div id="extractedContent" style="margin-top: 20px;"></div>
-
-                    <!-- Button to generate the image -->
-                    <div id="imageGenerateSection" style="margin-top: 20px; display: none;">
-                        <button id="generateImageButton" class="btn btn-rounded btn-success">Generate Image</button>
-                    </div>
-
-                    <!-- Container to display the generated image -->
-                    <div id="generatedImage" style="margin-top: 20px;"></div>
-                    
-                    <!-- Custom Ratio Video -->
-                    <div class="ratio" style="--vz-aspect-ratio: 50%;">
-                        <iframe src="" title="YouTube video" allowfullscreen></iframe>
-                    </div>
+                </form>
+                <div id="extractedContent" class="mt-4"></div>
+                <div id="imageGenerateSection" class="mt-4 text-center" style="display: none;">
+                    <button id="generateImageButton" class="btn btn-success btn-rounded">Generate Image</button>
                 </div>
+
+                <div id="videoContainer" style="margin-top: 20px; display: none;">
+                    <h2>Generated Video</h2>
+                    <video id="generatedVideo" controls>
+                        <source id="videoSource" src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+               
             </div>
-           </div>
+        </div>
+    </div>
 
-           <div class="col">
-               <!-- Wrapper to place buttons side by side -->
-                
-                <div class="row mt-2">
-                    <div class="col-lg-12">
-                        <div class="card border border-primary">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">Generated Content <button type="button" class="btn btn-outline-secondary">                            
-                                    Tokens Left: <span class="badge gradient-background-2 ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
-                            </button></h4>
-                        
-                            </div><!-- end card header -->
-
-                            <div class="card-body" id="generated-content">
-                                <!-- Rendered content for display -->
-                                <div id="formattedContentDisplay" class="mt-3"></div>
-                            
-                            </div>
-                            
-                            
-                            
-                        </div><!-- end card -->
-                        <h4> Read more details about <a href="" target="_blank" class="link gradient-text-2"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
-                       
-                    </div>
-                    <!-- end col -->
-                </div>
-                
-           </div>
+    <div class="col-xxl-6">
+        <div class="card shadow-sm">
+            <div id="generatedImage" class="mt-4 text-center mb-3">
+                <!-- Generated image will be displayed here -->
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 
@@ -179,27 +128,7 @@
     });
 </script>
 
-<script>
-    function disableInputs() {
-        var creativeLevel = document.getElementById("creative_level").value;
-        var temperatureInput = document.getElementById("temperature");
-        var temperatureValueInput = document.getElementById("temperature_value");
-        var topPInput = document.getElementById("top_p");
-        var topPValueInput = document.getElementById("top_p_value");
 
-        if (creativeLevel === "") {
-            temperatureInput.disabled = false;
-            temperatureValueInput.disabled = false;
-            topPInput.disabled = false;
-            topPValueInput.disabled = false;
-        } else {
-            temperatureInput.disabled = true;
-            temperatureValueInput.disabled = true;
-            topPInput.disabled = true;
-            topPValueInput.disabled = true;
-        }
-    }
-</script>
 
 <!-- Include SimpleMDE JS -->
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
@@ -298,8 +227,40 @@
                         <div class="alert alert-success" role="alert">
                             Image generated successfully!
                         </div>
-                        <img src="${response.image_url}" alt="Generated Image" class="img-fluid rounded shadow-sm" style="max-width: 100%; height: auto;">
+                        <img src="${response.image_url}" alt="Generated Image" class="img-fluid rounded shadow-sm" style="height: 650px; width: 650px">
+                        <a href="${response.image_url}" download="generated-image.png" class="btn btn-success">Download Image</a>
+                        <button id="generateVideoButton" class="btn btn-primary mt-3">Generate Video</button>
                     `);
+
+                // Add click event for Generate Video button
+                $("#generateVideoButton").on("click", function () {
+                    const videoRoute = "{{ route('ai.content.creator.image_to_video') }}";
+                    const formDatas = new FormData();
+                    formDatas.append("image_url", response.image_url);
+                    formDatas.append("_token", "{{ csrf_token() }}");
+
+                    $.ajax({
+                        url: videoRoute,
+                        type: "POST",
+                        data: formDatas,
+                        processData: false,
+                        contentType: false,
+                        success: function (videoResponse) {
+                        if (videoResponse.generation_id) {
+                            $("#generatedImage").append(`
+                                <div class="alert alert-success mt-3" role="alert">
+                                    Video generation started! Generation ID: ${videoResponse.generation_id}
+                                </div>
+                            `);
+                            fetchVideo(videoResponse.generation_id);
+                        }
+                    },
+                    error: function (error) {
+                        alert("Video generation failed: " + error.responseJSON.error);
+                    }
+                    });
+                });
+
                 } else {
                     $("#generatedImage").html(`
                         <div class="alert alert-warning" role="alert">
@@ -317,6 +278,55 @@
             }
         });
     });
+
+    const apiKey = @json($apiKey);
+    
+    function fetchVideo(generationId) {
+    // Polling interval (in milliseconds)
+    const pollingInterval = 10000; // 10 seconds
+
+    // Start polling
+    const pollForVideo = setInterval(() => {
+        fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle case when the video is ready
+            if (data && data.finish_reason === 'SUCCESS') {
+                console.log('Video is ready! Base64 video data:', data.video);
+
+                // Decode the base64 video and display or download it
+                const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
+                const videoUrl = URL.createObjectURL(videoBlob);
+
+                // Display video in the browser
+                const videoElement = document.createElement('video');
+                videoElement.src = videoUrl;
+                videoElement.controls = true;
+                videoElement.classList.add("img-fluid", "rounded", "shadow-sm", "mt-3");
+                videoElement.style.maxWidth = "650px";
+                $("#generatedImage").append(videoElement);
+
+                // Stop polling after success
+                clearInterval(pollForVideo);
+            } else if (data && data.status === 'in-progress') {
+                console.log('Video generation still in progress...');
+            } else {
+                console.error('Error fetching video:', data);
+                clearInterval(pollForVideo);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching video:', error);
+            clearInterval(pollForVideo);
+        });
+    }, pollingInterval);
+}
 
 </script>
 

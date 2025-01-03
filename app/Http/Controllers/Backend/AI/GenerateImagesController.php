@@ -25,7 +25,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class GenerateImagesController extends Controller
 {
-    public function AIGenerateImageView()
+    public function AIGenerateImageView(Request $request)
     {
         $user_id = Auth::user()->id;
         
@@ -35,7 +35,12 @@ class GenerateImagesController extends Controller
                     ->orderBy('id', 'desc')
                     ->get();
         
-        $prompt_library = PromptLibrary::orderby('id', 'asc')->limit(50)->get();
+        $content = $request->query('content', ''); // Default to empty string if content not passed
+        
+        $prompt_library = PromptLibrary::whereHas('category', function ($query) {
+            $query->where('category_name', 'Art');
+        })->orderby('id', 'asc')->limit(50)->get();
+
         $check_user = Auth::user()->role;
 
         if ($check_user == 'admin') {
@@ -61,7 +66,7 @@ class GenerateImagesController extends Controller
                                 ->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
 
-        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId'));
+        return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId','content'));
     }
 
 
@@ -120,6 +125,9 @@ class GenerateImagesController extends Controller
 
         
         if ($request->dall_e_2) {
+
+            Log::info($request->all());
+            Log::info('Inside Dalle 2 prompt: ' . $prompt);
 
             if ($request->quality) {
                 $quality = $request->quality;

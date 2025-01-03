@@ -4,6 +4,7 @@ use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\RequestModuleFeedback;
 use App\Models\User;
+use App\Models\UserActivityLog;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -215,13 +216,12 @@ if (!function_exists('saveModuleFeedback')) {
         {
             // Initialize the OpenAI Client
             $user = auth()->user();
-            $apiKey = config('app.openai_api_key');
-            $client = OpenAI::client($apiKey);
+         
             $openaiModel = $user->selected_model;
-    
+            
             try {
                 // Send the request to OpenAI
-                $response = $client->chat()->create([
+                $response = OpenAI::chat()->create([
                     'model' => $openaiModel,
                     'messages' => [
                         [
@@ -294,6 +294,34 @@ if (!function_exists('callOpenAIImageAPI')) {
         } catch (Exception $e) {
             // Handle exceptions, log errors, or return a meaningful message
             return ['error' => $e->getMessage()];
+        }
+    }
+}
+
+// User Activity Log (ADMIN)
+if (!function_exists('UserActivityLog')) {
+    function logActivity($action, $details = null)
+    {
+        if (auth()->check()) {
+            $userId = auth()->id();
+
+            // Insert the new log
+            UserActivityLog::create([
+                'user_id' => $userId,
+                'action' => $action,
+                'details' => $details,
+            ]);
+
+            // Keep only the latest 20 logs for the user
+            $excessLogs = UserActivityLog::where('user_id', $userId)
+                ->orderBy('created_at', 'asc')
+                ->skip(20)
+                ->take(PHP_INT_MAX)
+                ->pluck('id');
+
+            if ($excessLogs->isNotEmpty()) {
+                UserActivityLog::whereIn('id', $excessLogs)->delete();
+            }
         }
     }
 }

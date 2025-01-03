@@ -70,7 +70,7 @@
                     @endif
                 @else
                     <a href="{{ route('login') }}" class="btn btn-link fw-medium text-decoration-none text-dark">Sign in</a>
-                    <a href="{{ route('register') }}" class="btn gradient-btn-4">Sign Up</a>
+                    <a href="{{ route('register') }}" class="btn gradient-btn-4">Sign Up for Free AI Services</a>
                 @endif
             </div>
         </div>

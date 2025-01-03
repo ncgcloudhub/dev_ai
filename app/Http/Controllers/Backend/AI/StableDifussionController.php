@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage; 
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use App\Models\PromptLibrary;
 
 class StableDifussionController extends Controller
 {
@@ -24,8 +25,12 @@ class StableDifussionController extends Controller
 
     public function index()
     {
+        $prompt_library = PromptLibrary::whereHas('category', function ($query) {
+            $query->where('category_name', 'Image');
+        })->orderby('id', 'asc')->limit(50)->get();
+
         $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
-        return view('backend.image_generate.stable_diffusion', compact('images'));
+        return view('backend.image_generate.stable_diffusion', compact('images','prompt_library'));
     }
 
     public function generate(Request $request)
@@ -226,6 +231,68 @@ public function getVideoResult($generationId)
         'status' => $response->status(),
     ]);
 }
+
+
+public function AiContentCreatorImageToVideo(Request $request)
+{
+    ini_set('max_execution_time', 300);
+
+    $endpoints = [
+        'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
+        'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
+        'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
+    ];
+
+    $endpoint = $endpoints['default'];
+
+    // Image generation step - Mocked for simplicity.
+    $image_url = $request->input('image_url'); // Should be validated as part of request
+    if (!$image_url) {
+        return response()->json(['error' => 'Image URL is required'], 400);
+    }
+
+    try {
+        $fileName = basename($image_url);
+        $filePath = storage_path('app/public/' . $fileName);
+
+        // Download image if not already stored
+        if (!file_exists($filePath)) {
+            file_put_contents($filePath, file_get_contents($image_url));
+        }
+
+        $image = Image::make($filePath);
+        $image->resize(768, 768);
+        $resizedImagePath = storage_path('app/public/resized_image_' . time() . '.jpg');
+        $image->save($resizedImagePath);
+
+    } catch (\Exception $e) {
+        Log::error('Image processing failed', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Image processing failed'], 500);
+    }
+
+    $apiUrl = "https://api.stability.ai/v2beta/image-to-video";
+    $apiKey = config('services.stable_diffusion.api_key');
+
+    $videoResponse = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $apiKey,
+    ])->attach('image', fopen($resizedImagePath, 'r'), basename($resizedImagePath))->post($apiUrl, [
+        'image_url' => $image_url,
+        'seed' => $request->input('seed', 0),
+        'cfg_scale' => $request->input('cfg_scale', 1.8),
+        'motion_bucket_id' => $request->input('motion_bucket_id', 127),
+    ]);
+
+    if (!$videoResponse->successful()) {
+        return response()->json(['error' => 'Video generation failed', 'details' => $videoResponse->json()], $videoResponse->status());
+    }
+
+    $generationId = $videoResponse->json()['id'];
+    return response()->json([
+        'message' => 'Video generation started',
+        'generation_id' => $generationId,
+    ]);
+}
+
 
 // TEXT TO VIDEO 
 public function TextVideoindex()

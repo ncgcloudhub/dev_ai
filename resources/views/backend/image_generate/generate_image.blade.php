@@ -189,7 +189,7 @@
                                                     onclick="toggleOptimize('dalle2')" id="optimizeIcon_dalle2">
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
-                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
                                                 </div>
                                             </div>
                                             
@@ -210,7 +210,7 @@
                          
                                 {{-- Dalle 3 Start --}}
                                 <div class="tab-pane active" id="pill-justified-profile-1" role="tabpanel">
-                                    <form action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
+                                    <form id="form_dalle3" action="{{route('generate.image')}}" method="post" class="row g-3" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle3">
                                         <input type="hidden" name="dall_e_3" value="dall_e_3">
@@ -327,7 +327,7 @@
                                                     onclick="toggleOptimize('dalle3')" id="optimizeIcon_dalle3">
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
-                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image"></textarea>
+                                                    <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
                                                 </div>
                                             </div>
                                             
@@ -338,9 +338,9 @@
                                                     <!-- Disable the button initially and include the spinner inside -->
                                                     <button id="generate-button-tour" class="btn btn-rounded gradient-btn-5 mb-2" disabled>
                                                         <span id="generate-button-text">Generate</span>
-                                                        <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
+                                                        {{-- <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
                                                             <span class="visually-hidden">Loading...</span>
-                                                        </div>
+                                                        </div> --}}
                                                     </button>
                                                 </div>
                                             </div>
@@ -463,7 +463,39 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<!-- JavaScript to control the generate button and spinner -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded. Checking if the textarea has value...");
+
+    // Find the textarea and form
+    const textarea = document.getElementById('prompt');
+    const form = document.getElementById('form_dalle3');
+    console.log("Textarea found:", textarea);
+    console.log("Textarea value :", textarea.value);
+    console.log("Textarea value trim:", textarea.value.trim());
+
+    if (textarea) {
+        const content = textarea.value.trim(); // Remove extra spaces
+        console.log("Textarea value before:", content ? `"${content}"` : "(empty)");
+    } else {
+        console.error("Textarea not found.");
+    }
+
+    if (textarea && form) {
+        const content = textarea.value.trim(); // Ensure the variable is defined
+        if (content) {
+            console.log("Textarea has content. Submitting the form...");
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
+        } else {
+            console.log("Textarea is empty. Form will not be submitted.");
+        }
+    } else {
+        if (!form) console.error("Form not found.");
+    }
+});
+
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const generateButton = document.getElementById('generate-button-tour');
@@ -593,6 +625,7 @@
 
 <script>
     $(document).ready(function() {
+
         $('form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
             
