@@ -152,46 +152,7 @@ public function Videoindex()
 
 public function generateVideo(Request $request)
 {
-    ini_set('max_execution_time', 300);
-
-    $imagePath = null;
-
-    if ($request->hasFile('image')) {
-        // Resize the uploaded image to 768x768
-        $uploadedImage = $request->file('image');
-        $resizedImage = Image::make($uploadedImage)
-            ->resize(768, 768)
-            ->encode('jpg'); // Resize and encode the image as a JPEG
-
-        // Save the resized image temporarily
-        $tempPath = storage_path('app/public/temp_resized_image.jpg');
-        $resizedImage->save($tempPath);
-
-        $imagePath = $tempPath;
-    } elseif ($request->filled('image_url')) {
-        // Download and resize the image from the URL
-        try {
-            $imageContent = file_get_contents($request->input('image_url'));
-
-            $resizedImage = Image::make($imageContent)
-                ->resize(768, 768)
-                ->encode('jpg'); // Resize and encode the image as a JPEG
-
-            // Save the resized image temporarily
-            $tempPath = storage_path('app/public/temp_resized_image_from_url.jpg');
-            $resizedImage->save($tempPath);
-
-            $imagePath = $tempPath;
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to process the image URL.'], 400);
-        }
-    } else {
-        return response()->json(['error' => 'No image provided. Please upload an image or provide an image URL.'], 400);
-    }
-
-    Log::info('Video generation input', [
-        'image_path' => $imagePath,
-    ]);    
+    $imagePath = $request->file('image')->getRealPath(); // Uploaded image
     $apiUrl = "https://api.stability.ai/v2beta/image-to-video";
     $configapiKey = config('services.stable_diffusion.api_key'); // API key from config
 
