@@ -119,7 +119,7 @@
                                                     <label for="grade-name-{{ $item->id }}" class="form-label">Grade Name</label>
                                                     <input type="text" class="form-control" id="grade-name-{{ $item->id }}" name="grade" value="{{ $item->grade }}">
                                                 </div>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                <button type="submit" class="btn gradient-btn-save">Save changes</button>
                                             </form>
                                         </div>
                                     </div>
@@ -142,7 +142,7 @@
                                                     <label for="subject-name-{{ $subject->id }}" class="form-label">Subject Name</label>
                                                     <input type="text" class="form-control" id="subject-name-{{ $subject->id }}" name="subject" value="{{ $subject->name }}">
                                                 </div>
-                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                <button type="submit" class="btn gradient-btn-save">Save changes</button>
                                             </form>
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@
                                             <input type="text" name="grade" class="form-control mb-3" id="grade" placeholder="Enter Name" required>
                                         </div>
                                     <div class="text-end">
-                                        <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Add">
+                                        <input type="submit" class="btn btn-rounded gradient-btn-save mb-5 disabled-on-load" disabled value="Add">
                                     </div>
                                
                                 </form>
@@ -263,7 +263,7 @@
                                     </div>
                                     
                                     <div class="text-end">
-                                        <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Add">
+                                        <input type="submit" class="btn btn-rounded gradient-btn-save mb-5 disabled-on-load" disabled value="Add">
                                     </div>
                                 </form>
                                 

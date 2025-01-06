@@ -26,7 +26,7 @@
 <div class="accordion custom-accordionwithicon custom-accordion-border accordion-border-box accordion-secondary" id="accordionBordered">
     <!-- Varying Modal Content -->
 <div class="hstack gap-2 flex-wrap">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#varyingcontentModal" data-bs-whatever="@mdo">Add FAQ</button>
+    <button type="button" class="btn gradient-btn-10" data-bs-toggle="modal" data-bs-target="#varyingcontentModal" data-bs-whatever="@mdo">Add FAQ</button>
 </div> 
 
 @foreach($faqs as $index => $item)
@@ -42,7 +42,7 @@
                 <!-- Edit and Delete Buttons -->
                 <div class="button-group mt-3">
                     @can('settings.FAQ.edit')
-                    <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#editModal{{$index}}">
+                    <button type="button" class="btn gradient-btn-9 me-2" data-bs-toggle="modal" data-bs-target="#editModal{{$index}}">
                         Edit
                     </button>
                     @endcan
@@ -51,7 +51,7 @@
                     <form action="{{ route('faq.destroy', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this FAQ?')">
+                        <button type="submit" class="btn gradient-btn-remove" onclick="return confirm('Are you sure you want to delete this FAQ?')">
                             Delete
                         </button>
                     </form>
@@ -82,7 +82,7 @@
                             <label for="answer{{$index}}" class="form-label">Answer</label>
                             <textarea class="form-control" id="tinymceExample" name="answer" rows="12" required>{!! $item->answer !!}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn gradient-btn-save">Save changes</button>
                     </form>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                         <label for="message-text" class="col-form-label">Answer</label>
                         <textarea name="answer" class="form-control" id="tinymceExample" rows="12"></textarea>
                     </div>
-                    <button type="submit">Submit</button>
+                    <button class="btn gradient-btn-save" type="submit">Submit</button>
                 </form>
             </div>
            

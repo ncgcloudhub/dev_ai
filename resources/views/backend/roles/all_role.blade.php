@@ -17,7 +17,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Role  <a href="{{ route('add.roles') }}" class="btn btn-primary">Add</a></h5>
+                <h5 class="card-title mb-1">Role  <a href="{{ route('add.roles') }}" class="btn gradient-btn-9">Add</a></h5>
                
             </div>
 

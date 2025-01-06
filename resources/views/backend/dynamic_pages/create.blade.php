@@ -80,8 +80,8 @@
                                     
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-info" id="generateSeoBtn">AI Generate</button>
-                            <button type="submit" class="btn btn-primary">Create Page</button>
+                            <button type="button" class="btn gradient-btn-5" id="generateSeoBtn">AI Generate</button>
+                            <button type="submit" class="btn gradient-btn-save">Create Page</button>
                         </form>
                     </div>
                 </div>

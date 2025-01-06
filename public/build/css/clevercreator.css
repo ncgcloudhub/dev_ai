@@ -374,6 +374,10 @@
     background: linear-gradient(45deg, #aee0f0, #dfb3f1);
 }
 
+.gradient-background-5{
+    background: linear-gradient(45deg, #d2aef0, #f1b3c8);
+}
+
 :root[data-sidebar="gradient"] .sidebar-hover,
 :root[data-sidebar="gradient-2"] .sidebar-hover,
 :root[data-sidebar="gradient-3"] .sidebar-hover,

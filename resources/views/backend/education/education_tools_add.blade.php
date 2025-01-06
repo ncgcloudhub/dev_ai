@@ -11,7 +11,7 @@
 @endcomponent
 
 <div class="col-xxl-6"> 
-    <a href="{{route('manage.education.tools')}}">manage</a>
+    {{-- <a href="{{route('manage.education.tools')}}">manage</a> --}}
     <form method="POST" action="{{route('store.education.tools')}}" class="row g-3" enctype="multipart/form-data">
         @csrf
     <div class="card">
@@ -116,7 +116,7 @@
     </label>
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Save">
+            <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
         </div>
     </div>
 </form>

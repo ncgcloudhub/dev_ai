@@ -79,7 +79,7 @@
 
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded btn-primary mb-5 disabled-on-load" disabled value="Update">
+                <input type="submit" class="btn btn-rounded gradient-btn-save mb-5 disabled-on-load" disabled value="Update">
             </div>
         </div>
     </form>

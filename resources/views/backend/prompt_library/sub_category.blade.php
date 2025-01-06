@@ -61,8 +61,8 @@
             <div class="card-header d-flex flex-column flex-md-row">
                 <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
                     Prompt Library Sub-Category Add
-                    <a href="{{ route('prompt.manage') }}" class="btn text-white badge-gradient-primary mx-1">Library</a>
-                    <a href="{{ route('prompt.category.add') }}" class="btn text-white badge-gradient-primary mx-1">Category</a>
+                    <a href="{{ route('prompt.manage') }}" class="btn text-white gradient-btn-11 mx-1">Library</a>
+                    <a href="{{ route('prompt.category.add') }}" class="btn text-white gradient-btn-11 mx-1">Category</a>
                 </h4>
             </div><!-- end card header -->
 
@@ -93,7 +93,7 @@
 
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Save</button>
+                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled>Save</button>
                             </div>
                         </div>
                     </form>

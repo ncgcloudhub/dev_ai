@@ -67,7 +67,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Update Page</button>
+                            <button type="submit" class="btn gradient-btn-save">Update Page</button>
                         </form>
                     </div>
                 </div>

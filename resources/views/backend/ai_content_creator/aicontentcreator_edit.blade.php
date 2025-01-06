@@ -175,7 +175,7 @@
                                 {{-- 4th Card End --}}
                                 <div class="col-12">
                                     <div class="text-end">
-                                        <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                                        <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
                                     </div>
                                 </div>
                             </form>
@@ -211,9 +211,9 @@
                                 
                                     <div class="col-12">
                                         <div class="text-end">
-                                            <button type="button" class="btn btn-rounded btn-info mb-5" id="populateBtn">AI Generate</button>
+                                            <button type="button" class="btn btn-rounded gradient-btn-5 mb-5" id="populateBtn">AI Generate</button>
                                     
-                                            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+                                            <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
                                         </div>
                                     </div>
                                 </form>

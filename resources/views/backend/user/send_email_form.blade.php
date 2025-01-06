@@ -28,7 +28,7 @@
         <div class="card">
             @can('manageUser&Admin.sendEmail.manage')
             <div class="card-header">
-                <h5 class="card-title mb-1"><a href="{{ route('manage.email.send') }}" class="btn btn-info">Manage Email</a></h5>
+                <h5 class="card-title mb-1"><a href="{{ route('manage.email.send') }}" class="btn gradient-btn-11">Manage Email</a></h5>
             </div>
             @endcan
            
@@ -54,7 +54,7 @@
                         <label for="body">Message Body:</label>
                         <textarea id="tinymceExample" name="body" rows="5"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Send Email</button>
+                    <button type="submit" class="btn gradient-btn-3">Send Email</button>
                 </form>
             </div>
             

@@ -13,8 +13,9 @@
 
 <div class="row">
     <div class="col-xxl-3">
-        <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 20%">
+        <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 200px; overflow: hidden;">
         </div>
+        
         
         <!--end card-->
         <div class="card mb-3">
@@ -85,15 +86,15 @@
                                     <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
                 
                                     @if ($input_type == 'textarea')
-                                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_names)[$index] }}"></textarea>
+                                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}"></textarea>
                                     @else
-                                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_names)[$index] }}">
+                                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}">
                                     @endif
                                 </div>
                             @endforeach
                 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary disabled-on-load" id="educationToolsGenerate" disabled>
+                            <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
                                 <i class="ri-auction-fill align-bottom me-1"></i>Generate
                             </button>
                         </form>
@@ -241,9 +242,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 
