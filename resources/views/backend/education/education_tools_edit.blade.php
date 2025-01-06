@@ -10,7 +10,7 @@
 @slot('title') Add Tools @endslot
 @endcomponent
 
-<div class="col-xxl-6"> 
+<div class="col-xxl-8"> 
     <a href="{{ route('manage.education.tools') }}">manage</a>
     <form method="POST" action="{{ route('tools.update', $tool->id) }}" class="row g-3" enctype="multipart/form-data">
         @csrf
@@ -60,24 +60,34 @@
                     <div class="row">
                         <!-- Loop through input types, names, labels, placeholders -->
                         @foreach (json_decode($tool->input_types) as $key => $type)
-                        <div class="col-md-3">
-                            <label for="input_types" class="form-label">Input Type</label>
-                            <select class="form-select" name="input_types[]" aria-label="Floating label select example" required>
-                                <option value="text" {{ $type == 'text' ? 'selected' : '' }}>Input Field</option>
-                                <option value="textarea" {{ $type == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="input_names" class="form-label">Input Name</label>
-                            <input type="text" name="input_names[]" placeholder="Type input name" class="form-control" value="{{ json_decode($tool->input_names)[$key] }}" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="input_labels" class="form-label">Input Label</label>
-                            <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" value="{{ json_decode($tool->input_labels)[$key] }}" required>
-                        </div>
-                        <div class="col-md-3">
-                            <label for="input_placeholders" class="form-label">Input Placeholder</label>
-                            <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" value="{{ json_decode($tool->input_placeholders)[$key] }}" required>
+                        <div class="row input-row">
+                            <div class="col-md-3">
+                                <label for="input_types" class="form-label">Input Type</label>
+                                <select class="form-select" name="input_types[]" aria-label="Floating label select example" required>
+                                    <option value="text" {{ $type == 'text' ? 'selected' : '' }}>Input Field</option>
+                                    <option value="textarea" {{ $type == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="input_names" class="form-label">Input Name</label>
+                                <input type="text" name="input_names[]" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" value="{{ json_decode($tool->input_names)[$key] }}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="input_labels" class="form-label">Input Label</label>
+                                <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" value="{{ json_decode($tool->input_labels)[$key] }}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="input_placeholders" class="form-label">Input Placeholder</label>
+                                <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" value="{{ json_decode($tool->input_placeholders)[$key] }}" required>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
+                                    <div class="d-flex align-items-center">
+                                        <i data-feather="minus"></i>
+                                        <span>Remove</span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                         @endforeach
                     </div>
@@ -94,6 +104,11 @@
         <div class="card">
             <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">Prompt Information</h4>
+                <div class="mb-4 hint d-none">
+                    <label class="form-label">Input Variables</label>
+                    <div class="mb-1 input_names_prompts"></div>
+                    <small>*Click on variable to set the user input of it in your prompts</small>
+                </div>
             </div>
             <div class="card-body">
                 <div class="live-preview">
