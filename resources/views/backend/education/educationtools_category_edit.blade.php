@@ -6,7 +6,7 @@
 @slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
 
-<a href="{{ route('education.tools.category.add') }}" class="btn waves-effect waves-light btn-primary mb-3">Add Category
+<a href="{{ route('education.tools.category.add') }}" class="btn waves-effect waves-light gradient-btn-11 mb-3">Add Category
 </a>
 
 <div class="row">
@@ -72,7 +72,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2 disabled-on-load" disabled>Update</button>
+                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled>Update</button>
                             </div>
                         </div>
                     </form>

@@ -204,7 +204,7 @@ Profile | {{$user->name}}
                 {{-- Modal --}}
                 @can('manageUser&Admin.manageUser.userEdit')
                     <div>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModals">Edit</button>
+                        <button type="button" class="btn gradient-btn-9" data-bs-toggle="modal" data-bs-target="#signupModals">Edit</button>
                     </div>
                 @endcan
               
@@ -239,7 +239,7 @@ Profile | {{$user->name}}
                                         
                                        
                                         <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">Update</button>
+                                            <button type="submit" class="btn gradient-btn-save">Update</button>
                                         </div>
                                     </form>
                                 </div>

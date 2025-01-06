@@ -70,7 +70,7 @@
             </div>
         @endforeach
     
-        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+        <button type="submit" class="btn gradient-btn-save me-2">Save Changes</button>
     </form>
     
 
@@ -78,22 +78,23 @@
           </div>
         </div>
 
-
-
-
         </div>
       </div>
     
-      <script type="text/javascript">
+    
+@endsection
+
+@section('script')
+  <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+  <script type="text/javascript">
         
-        $('#checkDefaultmain').click(function(){
-          if ($(this).is(':checked')) {
-            $('input[ type= checkbox]').prop('checked',true);
-          }else{
-             $('input[ type= checkbox]').prop('checked',false);
-          }
-        });
-    </script>  
-
-
+    $('#checkDefaultmain').click(function(){
+      if ($(this).is(':checked')) {
+        $('input[ type= checkbox]').prop('checked',true);
+      }else{
+         $('input[ type= checkbox]').prop('checked',false);
+      }
+    });
+</script>  
 @endsection

@@ -17,7 +17,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <a href="{{ route('dynamic-pages.create') }}" class="btn btn-primary">Create Page</a>
+                <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11">Create Page</a>
             </div>
             
             <div class="card-body">
