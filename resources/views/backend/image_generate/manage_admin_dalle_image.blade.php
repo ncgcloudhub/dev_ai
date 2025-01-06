@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const promptText = this.dataset.prompt;
             document.getElementById('promptText').value = promptText;
             document.getElementById('details').value = '';  // Clear details
+            document.getElementById('promptName').value = '';  // Clear prompt name
             modal.show();
         });
     });
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({ prompt: promptText, category, subcategory, details })
+            body: JSON.stringify({ prompt: promptText, category, subcategory, details, prompt_name: promptName })
         }).then(response => {
             if (response.ok) {
                 alert('Prompt saved successfully!');

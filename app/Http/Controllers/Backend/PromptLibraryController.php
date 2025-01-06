@@ -614,7 +614,8 @@ class PromptLibraryController extends Controller
                 ],
                 [
                     "role" => "user",
-                    "content" => "Generate a brief details on this prompt: $prompt, make sure the details doesn't have any special characters except 'dash'. The details should be SEO optimized. The header for Details should be '**Details:**'"
+                   "content" => "Generate a brief description and a suggested prompt name for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. Format the response with two distinct sections: '**Prompt Name:**' followed by the name and '**Details:**' followed by the description."
+
                 ]
             ],
         ],
@@ -622,17 +623,31 @@ class PromptLibraryController extends Controller
 
     $responseBody = json_decode($response->getBody()->getContents(), true);
     $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
-
-    // Extract the content without "**Details:**" using regex or string manipulation
-    $details = preg_replace('/^\*\*Details:\*\*\s*/', '', $assistantContent);
-
-    // Log the result for reference
-    Log::info('OpenAI API response', ['prompt' => $prompt, 'details' => $details]);
-
+    
+    $promptNamePattern = '/\*\*Prompt Name:\*\*\s*(.*?)\s*\*\*Details:\*\*/s';  // Extract everything before **Details:**
+    $detailsPattern = '/\*\*Details:\*\*\s*(.+)/s';  // Extract everything after **Details:**
+    
+    $promptName = '';
+    $details = '';
+    
+    if (preg_match($promptNamePattern, $assistantContent, $matches)) {
+        $promptName = trim($matches[1]);  // Extract prompt name without **Details:**
+    }
+    
+    if (preg_match($detailsPattern, $assistantContent, $matches)) {
+        $details = trim($matches[1]);  // Extract details after **Details:**
+    }
+    
+    // Log the results
+    Log::info("Prompt Name: " . $promptName);
+    Log::info("Details: " . $details);
+    
+    
     return response()->json([
+        'promptName' => $promptName,
         'details' => $details,
     ]);
-
+    
 
 }
 
