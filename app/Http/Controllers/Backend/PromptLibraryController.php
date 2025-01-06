@@ -590,4 +590,71 @@ class PromptLibraryController extends Controller
                  ]);
      }
 
+
+    //  AI GENERATE PROMPT (Images)
+    public function GenerateDetails(Request $request)
+{
+    $prompt = $request->input('prompt');
+
+    $user = auth()->user();
+    $openaiModel = $user->selected_model;
+
+    $client = new Client();
+    $response = $client->post('https://api.openai.com/v1/chat/completions', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'model' => $openaiModel,
+            'messages' => [
+                [
+                    "role" => "system",
+                    "content" => "You are a helpfull assistant."
+                ],
+                [
+                    "role" => "user",
+                    "content" => "Generate a brief details on this prompt: $prompt, make sure the details doesn't have any special characters except 'dash'. The details should be SEO optimized. The header for Details should be '**Details:**'"
+                ]
+            ],
+        ],
+    ]);
+
+    $responseBody = json_decode($response->getBody()->getContents(), true);
+    $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
+
+    // Extract the content without "**Details:**" using regex or string manipulation
+    $details = preg_replace('/^\*\*Details:\*\*\s*/', '', $assistantContent);
+
+    // Log the result for reference
+    Log::info('OpenAI API response', ['prompt' => $prompt, 'details' => $details]);
+
+    return response()->json([
+        'details' => $details,
+    ]);
+
+
+}
+
+
+public function saveToLibrary(Request $request)
+{
+    $validated = $request->validate([
+        'prompt' => 'required|string',
+        'category' => 'required|string',
+        'subcategory' => 'required|string',
+        'details' => 'nullable|string',
+    ]);
+
+    $library = new PromptLibrary();
+    $library->prompt_name = $validated['prompt'];
+    $library->category_id = $validated['category'];
+    $library->sub_category_id = $validated['subcategory'];
+    $library->description = $validated['details'];
+    $library->save();
+
+    return response()->json(['message' => 'Prompt saved successfully!']);
+}
+
+
 }
