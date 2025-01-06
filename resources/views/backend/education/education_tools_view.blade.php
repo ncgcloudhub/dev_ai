@@ -13,8 +13,9 @@
 
 <div class="row">
     <div class="col-xxl-3">
-        <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 20%">
+        <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 200px; overflow: hidden;">
         </div>
+        
         
         <!--end card-->
         <div class="card mb-3">
@@ -241,9 +242,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 
 
