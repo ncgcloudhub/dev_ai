@@ -85,9 +85,9 @@
                                     <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
                 
                                     @if ($input_type == 'textarea')
-                                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_names)[$index] }}"></textarea>
+                                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}"></textarea>
                                     @else
-                                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_names)[$index] }}">
+                                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}">
                                     @endif
                                 </div>
                             @endforeach

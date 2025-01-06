@@ -11,7 +11,7 @@
 @endcomponent
 
 <div class="col-xxl-6"> 
-    <a href="{{route('manage.education.tools')}}">manage</a>
+    {{-- <a href="{{route('manage.education.tools')}}">manage</a> --}}
     <form method="POST" action="{{route('store.education.tools')}}" class="row g-3" enctype="multipart/form-data">
         @csrf
     <div class="card">
