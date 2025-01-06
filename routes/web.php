@@ -290,6 +290,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::get('/seo/fetch/{id}', [PromptLibraryController::class, 'fetchPrompt'])->name('promptLibrary.seo.fetch');
 
+        Route::post('/generate/details', [PromptLibraryController::class, 'GenerateDetails']);
+        Route::post('/add/library', [PromptLibraryController::class, 'saveToLibrary'])->name('prompt.add.library');
+
     });
 
 

@@ -590,4 +590,97 @@ class PromptLibraryController extends Controller
                  ]);
      }
 
+
+    //  AI GENERATE PROMPT (Images)
+    public function GenerateDetails(Request $request)
+{
+    $prompt = $request->input('prompt');
+
+    $user = auth()->user();
+    $openaiModel = $user->selected_model;
+
+    $client = new Client();
+    $response = $client->post('https://api.openai.com/v1/chat/completions', [
+        'headers' => [
+            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+            'Content-Type' => 'application/json',
+        ],
+        'json' => [
+            'model' => $openaiModel,
+            'messages' => [
+                [
+                    "role" => "system",
+                    "content" => "You are a helpfull assistant."
+                ],
+                [
+                    "role" => "user",
+                   "content" => "Generate a brief description and a suggested prompt name for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. Format the response with two distinct sections: '**Prompt Name:**' followed by the name and '**Details:**' followed by the description."
+
+                ]
+            ],
+        ],
+    ]);
+
+    $responseBody = json_decode($response->getBody()->getContents(), true);
+    $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
+    
+    $promptNamePattern = '/\*\*Prompt Name:\*\*\s*(.*?)\s*\*\*Details:\*\*/s';  // Extract everything before **Details:**
+    $detailsPattern = '/\*\*Details:\*\*\s*(.+)/s';  // Extract everything after **Details:**
+    
+    $promptName = '';
+    $details = '';
+    
+    if (preg_match($promptNamePattern, $assistantContent, $matches)) {
+        $promptName = trim($matches[1]);  // Extract prompt name without **Details:**
+    }
+    
+    if (preg_match($detailsPattern, $assistantContent, $matches)) {
+        $details = trim($matches[1]);  // Extract details after **Details:**
+    }
+    
+    // Log the results
+    Log::info("Prompt Name: " . $promptName);
+    Log::info("Details: " . $details);
+    
+    
+    return response()->json([
+        'promptName' => $promptName,
+        'details' => $details,
+    ]);
+    
+
+}
+
+
+public function saveToLibrary(Request $request)
+{
+    // Generate slug from prompt name
+    $slug = Str::slug($request->prompt_name);
+    
+    // Validate the incoming request
+    $validated = $request->validate([
+        'prompt' => 'required|string',
+        'category' => 'required|string',
+        'subcategory' => 'required|string',
+        'details' => 'nullable|string',
+    ]);
+
+    // Create a new instance of PromptLibrary
+    $library = new PromptLibrary();
+    $library->prompt_name = $validated['prompt'];         // Save the prompt name
+    $library->category_id = $validated['category'];       // Save the category
+    $library->sub_category_id = $validated['subcategory']; // Save the subcategory
+    $library->description = $validated['details'];        // Save the details
+    $library->slug = $slug;                               // Save the generated slug
+    $library->actual_prompt = $validated['prompt'];    // Save the actual prompt
+
+    // Save the new record in the database
+    $library->save();
+
+    // Return a success response
+    return response()->json(['message' => 'Prompt saved successfully!']);
+}
+
+
+
 }

@@ -20,6 +20,53 @@
                 <h5 class="card-title mb-0">Admin Manage Dalle</h5>
             </div>
             <div class="card-body">
+
+                {{-- Modal --}}
+<!-- Modal -->
+<div class="modal fade" id="promptModal" tabindex="-1" aria-labelledby="promptModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="promptModalLabel">Prompt Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="promptForm">
+                    <div class="mb-3">
+                        <label for="promptText" class="form-label">Prompt</label>
+                        <textarea class="form-control" id="promptText" name="prompt" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category (Image)</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="1">Image</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subcategory" class="form-label">Subcategory</label>
+                        <select class="form-select" id="subcategory" name="subcategory">
+                            @foreach ($prompt_sub_categories as $item)
+                                <option value="{{ $item->id }}">{{ $item->sub_category_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="promptName" class="form-label">Prompt Name</label>
+                        <input type="text" class="form-control" id="promptName" name="prompt_name" placeholder="Enter prompt name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="details" class="form-label">Details</label>
+                        <textarea class="form-control" id="details" name="details" rows="3" placeholder="Details will be fetched here"></textarea>
+                    </div>
+                    <button type="button" id="fetchDataButton" class="btn btn-primary">Fetch Details</button>
+                    <button type="button" id="savePromptButton" class="btn btn-success">Save to Library</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal END --}}
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -43,7 +90,9 @@
                                 </a>
                             </td>
                             
-                            <td>{{ $item->prompt }}</td>
+                            <td>
+                                <a href="#" class="prompt-link" data-prompt="{{ $item->prompt }}">{{ $item->prompt }}</a>
+                            </td>
                             <td>
                                 @if ($item->user)
                                     {{ $item->user->id }}/{{ $item->user->name }}
@@ -145,6 +194,63 @@ $(document).ready(function() {
                 // Handle error response
                 console.error(error);
                 console.log('inside Error');
+            }
+        });
+    });
+});
+
+</script>
+
+{{-- New SCRIPT --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('promptModal'));
+
+    document.querySelectorAll('.prompt-link').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const promptText = this.dataset.prompt;
+            document.getElementById('promptText').value = promptText;
+            document.getElementById('details').value = '';  // Clear details
+            document.getElementById('promptName').value = '';  // Clear prompt name
+            modal.show();
+        });
+    });
+
+    document.getElementById('fetchDataButton').addEventListener('click', function () {
+        const promptText = document.getElementById('promptText').value;
+        fetch(`/prompt/generate/details`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ prompt: promptText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('details').value = data.details;
+            document.getElementById('promptName').value = data.promptName;
+        });
+    });
+
+    document.getElementById('savePromptButton').addEventListener('click', function () {
+        const promptText = document.getElementById('promptText').value;
+        const category = document.getElementById('category').value;
+        const subcategory = document.getElementById('subcategory').value;
+        const details = document.getElementById('details').value;
+        const promptName = document.getElementById('promptName').value;
+
+        fetch(`/prompt/add/library`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ prompt: promptText, category, subcategory, details, prompt_name: promptName })
+        }).then(response => {
+            if (response.ok) {
+                alert('Prompt saved successfully!');
+                modal.hide();
             }
         });
     });
