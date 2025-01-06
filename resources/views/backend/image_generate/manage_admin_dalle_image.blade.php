@@ -39,9 +39,12 @@
                     <div class="mb-3">
                         <label for="category" class="form-label">Category (Image)</label>
                         <select class="form-select" id="category" name="category">
-                            <option value="1">Image</option>
+                            @foreach($prompt_category as $category)
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                            @endforeach
                         </select>
                     </div>
+                    
                     <div class="mb-3">
                         <label for="subcategory" class="form-label">Subcategory</label>
                         <select class="form-select" id="subcategory" name="subcategory">
