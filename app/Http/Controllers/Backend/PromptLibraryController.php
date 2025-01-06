@@ -631,7 +631,9 @@ class PromptLibraryController extends Controller
     $details = '';
     
     if (preg_match($promptNamePattern, $assistantContent, $matches)) {
-        $promptName = trim($matches[1]);  // Extract prompt name without **Details:**
+        $promptName = trim($matches[1]);  // Extract prompt name
+        $promptName = str_replace('-', ' ', $promptName);  // Replace dashes with spaces
+        $promptName = ucwords($promptName);  // Convert to title case
     }
     
     if (preg_match($detailsPattern, $assistantContent, $matches)) {
@@ -659,6 +661,7 @@ public function saveToLibrary(Request $request)
     
     // Validate the incoming request
     $validated = $request->validate([
+        'prompt_name' => 'required|string',
         'prompt' => 'required|string',
         'category' => 'required|string',
         'subcategory' => 'required|string',
@@ -667,7 +670,7 @@ public function saveToLibrary(Request $request)
 
     // Create a new instance of PromptLibrary
     $library = new PromptLibrary();
-    $library->prompt_name = $validated['prompt'];         // Save the prompt name
+    $library->prompt_name = $validated['prompt_name'];         // Save the prompt name
     $library->category_id = $validated['category'];       // Save the category
     $library->sub_category_id = $validated['subcategory']; // Save the subcategory
     $library->description = $validated['details'];        // Save the details

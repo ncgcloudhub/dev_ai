@@ -328,18 +328,19 @@ public function ExtractImage(Request $request)
     // Admin Manage Dalle Image
     public function DalleImageManageAdmin()
     {
-        $images = ModelsDalleImageGenerate::latest()->limit(2)->get();
+        // $images = ModelsDalleImageGenerate::latest()->limit(2)->get();
 
-        $prompt_sub_categories = PromptLibrarySubCategory::where('category_id', 1)->get();
+        $prompt_category = PromptLibraryCategory::where('id', 30)->get();
+        $prompt_sub_categories = PromptLibrarySubCategory::where('category_id', 30)->get();
 
-        // $images = ModelsDalleImageGenerate::latest()->get();
+        $images = ModelsDalleImageGenerate::latest()->get();
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
-        return view('backend.image_generate.manage_admin_dalle_image', compact('images','prompt_sub_categories'));
+        return view('backend.image_generate.manage_admin_dalle_image', compact('images','prompt_sub_categories', 'prompt_category'));
     }
 
     public function ManageFavoriteImage()
