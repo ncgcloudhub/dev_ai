@@ -654,6 +654,10 @@ class PromptLibraryController extends Controller
 
 public function saveToLibrary(Request $request)
 {
+    // Generate slug from prompt name
+    $slug = Str::slug($request->prompt_name);
+    
+    // Validate the incoming request
     $validated = $request->validate([
         'prompt' => 'required|string',
         'category' => 'required|string',
@@ -661,15 +665,22 @@ public function saveToLibrary(Request $request)
         'details' => 'nullable|string',
     ]);
 
+    // Create a new instance of PromptLibrary
     $library = new PromptLibrary();
-    $library->prompt_name = $validated['prompt'];
-    $library->category_id = $validated['category'];
-    $library->sub_category_id = $validated['subcategory'];
-    $library->description = $validated['details'];
+    $library->prompt_name = $validated['prompt'];         // Save the prompt name
+    $library->category_id = $validated['category'];       // Save the category
+    $library->sub_category_id = $validated['subcategory']; // Save the subcategory
+    $library->description = $validated['details'];        // Save the details
+    $library->slug = $slug;                               // Save the generated slug
+    $library->actual_prompt = $validated['prompt'];    // Save the actual prompt
+
+    // Save the new record in the database
     $library->save();
 
+    // Return a success response
     return response()->json(['message' => 'Prompt saved successfully!']);
 }
+
 
 
 }
