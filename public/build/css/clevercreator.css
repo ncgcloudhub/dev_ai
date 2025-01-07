@@ -397,12 +397,12 @@
 }
 
 .sidebar-hover:focus {
-    background: linear-gradient(45deg, #4d96a8, #b14885);
+    background: linear-gradient(45deg, #500533, #d596f0);
     color: #3e385a !important; /* Text color on hover */
 }
 
 .sidebar-hover.active {
-    background: linear-gradient(45deg, #aee0f0, #d596f0);
+    background: linear-gradient(45deg, #500533, #d596f0);
     color: #220535 !important; /* Text color on hover */
 }
   
