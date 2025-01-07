@@ -40,7 +40,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
-                                <a href="{{ route('user.details',$item->id) }}" class="fw-medium link-primary">{{$item->name}}({{$item->username}})</a>
+                                <a href="{{ route('user.details', ['id' => $item->id, 'name' => Str::slug($item->name)]) }}" class="fw-medium link-primary">{{$item->name}}({{$item->username}})</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">

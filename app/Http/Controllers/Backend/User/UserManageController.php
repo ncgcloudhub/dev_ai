@@ -114,7 +114,7 @@ class UserManageController extends Controller
 
     
 
-    public function UserDetails($id)
+    public function UserDetails($id, $name)
     {
         $user = User::findOrFail($id);
         $images = ModelsDalleImageGenerate::where('user_id', $id)->get();

@@ -1,16 +1,3 @@
-{{-- <!DOCTYPE html>
-<html>
-<head>
-    <title>{{ $details['subject'] }}</title>
-</head>
-<body>
-    <h1>{{ $details['subject'] }}</h1>
-    <p>{!! $details['body'] !!}</p>
-
-    <p>Thank you!</p>
-</body>
-</html> --}}
-
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
