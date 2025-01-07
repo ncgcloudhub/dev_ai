@@ -278,37 +278,37 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/amazon.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/walmart.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/lenovo.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/paypal.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/shopify.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                         <div class="swiper-slide">
                                             <div class="client-images">
                                                 <img src="{{ URL::asset('build/images/clients/verizon.svg') }}" alt="client-img"
-                                                    class="mx-auto img-fluid d-block">
+                                                    class="mx-auto img-fluid d-block" loading="lazy">
                                             </div>
                                         </div>
                                     </div>

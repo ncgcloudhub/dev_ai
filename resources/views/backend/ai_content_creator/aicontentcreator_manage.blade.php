@@ -63,7 +63,7 @@
             </div>
             <div class="card-body pt-0">
                 <div>
-                    <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
+                    <ul class="nav nav-tabs nav-pills nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
                      
                         <li class="nav-item">
                             <a class="requeste py-3 btn <?= $hasPendingFeedback ? 'btn-outline-warning' : 'btn-outline-success' ?> waves-effect waves-light" data-bs-toggle="tab" id="requeste"

@@ -40,7 +40,7 @@
                 <div class="avatar-group">
                     @foreach ($images_slider as $item)
                         <a href="{{ $item->image_url }}" class="avatar-group-item image-popup" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $item->prompt }}">
-                            <img src="{{ $item->image_url }}" alt="" class="rounded-circle avatar-xl">
+                            <img src="{{ $item->image_url }}" alt="" class="rounded-circle avatar-xl" loading="lazy">
                         </a>
                     @endforeach
                     <a href="{{route('ai.image.gallery')}}" class="avatar-group-item" data-bs-toggle="tooltip" data-bs-placement="top" title="more">

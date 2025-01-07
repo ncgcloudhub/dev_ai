@@ -294,14 +294,19 @@
 
 /* Gradient Button for Save */
 .gradient-btn-save {
-    background: linear-gradient(to right, #9c27b0, #e91e63, #f06292);
+    background: linear-gradient(45deg, #74068f, #f753a5);
     color: white;
     border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .gradient-btn-save:hover {
-    background: linear-gradient(to right, #7b1fa2, #d81b60, #ec407a);
+    background: linear-gradient(45deg, #cf54c9, #7e0646);
     color: white;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
 }
 
  /* Darker Gradient Button for Copy */
@@ -392,12 +397,12 @@
 }
 
 .sidebar-hover:focus {
-    background: linear-gradient(45deg, #4d96a8, #b14885);
+    background: linear-gradient(45deg, #500533, #d596f0);
     color: #3e385a !important; /* Text color on hover */
 }
 
 .sidebar-hover.active {
-    background: linear-gradient(45deg, #aee0f0, #d596f0);
+    background: linear-gradient(45deg, #500533, #d596f0);
     color: #220535 !important; /* Text color on hover */
 }
   
@@ -417,3 +422,36 @@
 
 /* Gradient Background for Login and Register Pages top image */
 .auth-one-bg .bg-overlay{background:linear-gradient(to right,#6180d8, #da39d7);opacity:.9}
+
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: white;
+    background: linear-gradient(45deg, #8a2be2, #ff69b4) !important;
+}
+.custom-verti-nav-pills .nav-link.active:before{
+    border-left-color: rgba(117, 15, 117, 0.555) !important;
+}
+
+.nav-link:hover{
+    color: rgb(156, 32, 156) !important;
+}
+
+.btn-link{
+    --vz-btn-color: rgb(173, 34, 173)!important;
+}
+.btn-link:hover{
+    color: rgb(207, 129, 152)!important;
+}
+
+.nav-link {
+   
+    color: #c725e2;
+}
+
+.nav-link.active{
+    color: white !important;
+}
+
+.nav-success.nav-tabs-custom .nav-link.active:after{
+    background-color: purple !important;
+}

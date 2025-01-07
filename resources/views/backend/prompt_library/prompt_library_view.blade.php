@@ -307,6 +307,8 @@
             var message = $('#ask_ai').val();
             var sub_category_instruction = $('#sub_category_instruction').val();
             $('#loader').removeClass('d-none');
+            showMagicBall('image'); // Show the magic ball loader
+
 
             $.ajax({
                 url: "{{ route('ask.ai.prompt') }}",
@@ -317,6 +319,8 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
+                    hideMagicBall();
+
                     if (response == 0) {
                         alert('Please Upgrade Plan');
                         $('#loader').addClass('d-none');
@@ -337,6 +341,8 @@
                     $('#loader').addClass('d-none');
                 },
                 error: function(xhr) {
+                    hideMagicBall();
+
                     console.error(xhr.responseText);
                     $('#loader').addClass('d-none');
                 }

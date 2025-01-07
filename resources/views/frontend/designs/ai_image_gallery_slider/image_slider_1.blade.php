@@ -13,7 +13,7 @@
                     @foreach ($images_slider as $item)
                     <div class="swiper-slide">
                         <a class="image-popup" href="{{ $item->image_url }}" title="">
-                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                            <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" loading="lazy" />
                         </a>
                     </div>
                     @endforeach

@@ -204,8 +204,6 @@
             <div id="image-container" class="d-flex justify-content-center">
     
             </div>
-    
-    
     </div>
 </div>
 
@@ -277,7 +275,8 @@
     $(document).ready(function() {
         $('form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
-            
+            showMagicBall('image'); // Show the magic ball loader
+
             // Show loader
         $('#loader').removeClass('d-none');
 
@@ -290,6 +289,8 @@
                 url: '/greeting/card/generate',
                 data: formData,
                 success: function(response) {
+                    hideMagicBall();
+
 
                     console.log(response);
                     
@@ -308,6 +309,8 @@
         // Append the image to the container
         $('#image-container').append(temp);
     } else {
+        hideMagicBall();
+
         // Handle case where no image data is returned
         console.log('No image data returned');
     }

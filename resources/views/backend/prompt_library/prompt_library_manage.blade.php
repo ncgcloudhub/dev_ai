@@ -135,12 +135,12 @@
                             @if(auth()->user()->role == 'admin')
                             <td>
                                 <div class="d-flex align-items-center">
-                                   <a href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">{{$item->category->category_name}}</a>
+                                   <a class="gradient-text-1" href="{{ route('category.prompt.library.view', ['id' => $item->category_id]) }}">{{$item->category->category_name}}</a>
                                 </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                   <a href="{{ route('sub.category.prompt.library.view', ['id' => $item->sub_category_id]) }}"> {{$item->subcategory->sub_category_name}}</a>
+                                   <a class="gradient-text-1" href="{{ route('sub.category.prompt.library.view', ['id' => $item->sub_category_id]) }}"> {{$item->subcategory->sub_category_name}}</a>
                                 </div>
                             </td>
                             <td>
