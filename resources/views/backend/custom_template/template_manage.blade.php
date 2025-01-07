@@ -56,7 +56,7 @@
             </div>
             <div class="card-body pt-0">
                 <div>
-                    <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
+                    <ul class="nav nav-tabs nav-pills nav-tabs-custom nav-success mb-3 justify-content-center" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link n1 active All py-3" data-bs-toggle="tab" id="All"
                                 href="#home1" role="tab" aria-selected="true">
