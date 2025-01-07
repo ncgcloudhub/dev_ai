@@ -152,7 +152,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
 
-        Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
+        Route::get('/details/{id}/{name}', [UserManageController::class, 'UserDetails'])->name('user.details');
 
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
