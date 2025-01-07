@@ -422,3 +422,36 @@
 
 /* Gradient Background for Login and Register Pages top image */
 .auth-one-bg .bg-overlay{background:linear-gradient(to right,#6180d8, #da39d7);opacity:.9}
+
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: white;
+    background: linear-gradient(45deg, #8a2be2, #ff69b4) !important;
+}
+.custom-verti-nav-pills .nav-link.active:before{
+    border-left-color: rgba(117, 15, 117, 0.555) !important;
+}
+
+.nav-link:hover{
+    color: rgb(156, 32, 156) !important;
+}
+
+.btn-link{
+    --vz-btn-color: rgb(173, 34, 173)!important;
+}
+.btn-link:hover{
+    color: rgb(207, 129, 152)!important;
+}
+
+.nav-link {
+   
+    color: #c725e2;
+}
+
+.nav-link.active{
+    color: white !important;
+}
+
+.nav-success.nav-tabs-custom .nav-link.active:after{
+    background-color: purple !important;
+}
