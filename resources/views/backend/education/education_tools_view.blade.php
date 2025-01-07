@@ -435,6 +435,8 @@
     $('form').on('submit', function (e) {
         e.preventDefault(); // Prevent the form from submitting the traditional way
 
+        showMagicBall('image'); // Show the magic ball loader
+
         let formData = $(this).serialize(); // Collect the form data
 
         $.ajax({
@@ -445,12 +447,16 @@
                 onprogress: function (event) {
                     const contentChunk = event.currentTarget.responseText;
                     $('#stream-output').html(contentChunk); // Update the stream output div
+                    hideMagicBall();
                 }
             },
+           
+
             success: function (response) {
                 console.log('Content generation completed.');
             },
             error: function (error) {
+                hideMagicBall();
                 console.error('Error during content generation:', error);
             }
         });
