@@ -20,7 +20,7 @@
                 <div class="gallery-box card">
                     <div class="gallery-container">
                         <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
-                            <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image_url) }}" alt="" />
+                            <img class="gallery-img img-fluid mx-auto" src="{{ asset($item->image_url) }}" alt="" loading="lazy" />
                             <div class="gallery-overlay">
                                 <h5 class="overlay-caption">{{$item->prompt}}</h5>
                             </div>

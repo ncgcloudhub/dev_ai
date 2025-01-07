@@ -4,7 +4,7 @@
         <div class="gallery-container">
             <a class="image-popups" href="#" data-bs-toggle="modal" data-bs-target="#imageModal"
                 title="{{ $item->prompt }}" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}">
-                <img class="gallery-img img-fluid mx-auto d-block" src="{{ $item->image_url }}" alt="{{ $item->prompt }}" />
+                <img class="gallery-img img-fluid mx-auto d-block" src="{{ $item->image_url }}" alt="{{ $item->prompt }}" loading="lazy" />
             </a>
         </div>
     </div>
