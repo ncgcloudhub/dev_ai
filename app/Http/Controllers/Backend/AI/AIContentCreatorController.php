@@ -312,6 +312,8 @@ class AIContentCreatorController extends Controller
 
     public function AIContentCreatorManage()
     {
+        logActivity('AI Content Creator', 'accessed AI Content Creator');
+
         $templates = Template::orderby('id', 'asc')->get();
         $templatecategories = TemplateCategory::latest()->get();
         $userRatings = [];
@@ -339,6 +341,9 @@ class AIContentCreatorController extends Controller
     {
         // Find the template by slug
         $Template = Template::where('slug', $slug)->firstOrFail();
+
+        // Log the activity with the template name
+        logActivity('AI Content Creator', 'accessed AI Content Creator View for template: ' . $Template->template_name);
 
         // Convert JSON strings to arrays
         $inputTypes = json_decode($Template->input_types, true);
@@ -630,6 +635,9 @@ class AIContentCreatorController extends Controller
             'prompt' => $prompt,
             'generated_content' => $content,
         ]);
+
+        // Log the activity
+        logActivity('AI Content Creator', 'generated content from template: ' . $template->template_name);
 
         // Stream the response
         return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens, $totalTokens) {
