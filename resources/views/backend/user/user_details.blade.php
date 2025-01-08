@@ -366,17 +366,27 @@ Profile | {{$user->name}}
 
                 {{-- Activity Log --}}
                 <div class="tab-content">
-                    <div class="tab-pane" id="userActivityLog" role="tabpanel">
-                        @foreach ($logs as $item)
-                                <h5 class="text-truncate font-size-14 mb-0">{{ $item->action }}</h5>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span>{{$item->details}}</span>
-                                    <span>{{$item->created_at->diffForHumans()}}</span>
-                                </div>
-                                
-                               
-                        @endforeach
+                    <div class="tab-pane active" id="userActivityLog" role="tabpanel">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="width: 20%;">Action</th>
+                                    <th style="width: 50%;">Details</th>
+                                    <th style="width: 30%;">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($logs as $item)
+                                    <tr>
+                                        <td>{{ $item->action }}</td>
+                                        <td>{{ $item->details }}</td>
+                                        <td>{{ $item->created_at->diffForHumans() }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
+                    
                     <!--end tab-pane-->
                 </div>
 
