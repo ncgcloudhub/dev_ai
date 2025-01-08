@@ -435,6 +435,7 @@ foreach ($messagesFromDb as $message) {
             ],
             'stream' => true,
         ]);
+        logActivity('Chattermate', 'interacted with Chattermate');
         
         $user = Auth::user();
         $sessionId = session('session_id');
