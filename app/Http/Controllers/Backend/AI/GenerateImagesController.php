@@ -413,6 +413,7 @@ public function ExtractImage(Request $request)
 
     public function GreetingCardGenerate(Request $request)
     {
+        
 
         $id = Auth::user()->id;
         $user = Auth::user();
@@ -501,7 +502,7 @@ public function ExtractImage(Request $request)
                 }
 
                 // $credits = calculateCredits($size, $quality);
-
+                logActivity('Greeting Card Generate', 'generated a greeting card');
                 deductUserTokensAndCredits(0, calculateCredits($size, $quality));
                 // User::where('id', $id)->update([
                 //     'credits_used' => DB::raw('credits_used + ' . $credits),
@@ -514,9 +515,11 @@ public function ExtractImage(Request $request)
 
                 return  $responseData;
             } else {
+                logActivity('Greeting Card Generate', 'failed to generate');
                 return response()->json(['error' => 'Failed to generate image'], 500);
             }
         } else {
+            logActivity('Greeting Card Generate', 'failed to generate [No condition met]');
             return response()->json(['error' => 'No condition met'], 500);
         }
     }
