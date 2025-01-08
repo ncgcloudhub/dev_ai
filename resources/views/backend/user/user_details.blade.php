@@ -369,7 +369,11 @@ Profile | {{$user->name}}
                     <div class="tab-pane" id="userActivityLog" role="tabpanel">
                         @foreach ($logs as $item)
                                 <h5 class="text-truncate font-size-14 mb-0">{{ $item->action }}</h5>
-                                <p>{{$item->details}}</p>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>{{$item->details}}</span>
+                                    <span>{{$item->created_at->diffForHumans()}}</span>
+                                </div>
+                                
                                
                         @endforeach
                     </div>
