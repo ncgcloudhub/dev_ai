@@ -75,6 +75,8 @@
                                 <div class="card">
                                     <div class="card-header align-items-center d-flex">
                                         <h4 class="card-title mb-0 flex-grow-1">Input Information</h4>
+                                        <a name="add" id="add" class="btn bg-gradient-dark mb-0"><i class="las la-plus" aria-hidden="true"></i>Add</a>
+
                                     </div><!-- end card header -->
                             
                                     <div class="card-body custom-input-informations">
@@ -111,7 +113,6 @@
                                             </div>
                                             @endforeach
                                             
-                                            <a name="add" id="add" class="btn bg-gradient-dark mb-0"><i class="las la-plus" aria-hidden="true"></i>Add</a>
                                             <div id="template_info" class="input-informations">
                                                 <!-- Additional input fields will be appended here -->
                                             </div>
