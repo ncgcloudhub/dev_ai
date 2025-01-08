@@ -449,9 +449,13 @@
 }
 
 .nav-link.active{
-    color: white !important;
+    color: rgb(255, 255, 255) !important;
 }
 
 .nav-success.nav-tabs-custom .nav-link.active:after{
+    background-color: purple !important;
+}
+
+.nav-tabs-custom .nav-item .nav-link:after{
     background-color: purple !important;
 }
