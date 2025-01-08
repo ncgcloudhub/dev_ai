@@ -17,7 +17,7 @@ class AdminController extends Controller
 {
     public function AdminDashboard()
     {
-        logActivity('Logo', 'Admin Sidebar Logo Clicked');
+        logActivity('Dashboard', 'accessed Dashboard');
         $user = Auth::user();
         $templates_count = Template::count();
         $custom_templates_count = CustomTemplate::count();
