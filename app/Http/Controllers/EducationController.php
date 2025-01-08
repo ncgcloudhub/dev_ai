@@ -27,6 +27,8 @@ class EducationController extends Controller
     // USER SECTION
     public function educationForm()
     {
+        logActivity('Education Wizard', 'accessed the education wizard');
+
         $classes = GradeClass::with('subjects')->orderBy('id', 'asc')->get();
 
         $userId = auth()->id(); // Get the authenticated user's ID
@@ -835,6 +837,8 @@ public function updateSubject(Request $request, $id)
     // CREATE TOOLS
     public function manageTools()
     {   
+        logActivity('Education Tools', 'accessed the education tools');
+
         $tools = EducationTools::get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
 
