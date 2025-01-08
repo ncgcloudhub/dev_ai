@@ -385,13 +385,13 @@ public function ExtractImage(Request $request)
     // EID CARD
     public function GreetingCard()
     {
+        logActivity('Greeting Card', 'accessed Greeting Card');
         $user_id = Auth::user()->id;
         $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival', 'yes')->get();
 
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
-
 
         $check_user = Auth::user()->role;
 

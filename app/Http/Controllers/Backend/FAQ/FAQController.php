@@ -18,10 +18,10 @@ class FAQController extends Controller
     }
 
     // In your controller
-        public function fetchRandomJoke($category) {
-            $joke = Jokes::where('category', $category)->inRandomOrder()->first();
-            return response()->json(['joke' => $joke->content ?? 'No jokes available in this category.']);
-        }
+    public function fetchRandomJoke($category) {
+        $joke = Jokes::where('category', $category)->inRandomOrder()->first();
+        return response()->json(['joke' => $joke->content ?? 'No jokes available in this category.']);
+    }
 
     
 

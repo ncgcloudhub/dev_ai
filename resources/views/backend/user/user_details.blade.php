@@ -260,7 +260,7 @@ Profile | {{$user->name}}
     <div class="col-xxl-8">
         <div class="card mt-xxl-n5">
             <div class="card-header">
-                <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                <ul class="nav nav-pills nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
                             <i class="fas fa-home"></i>
@@ -369,7 +369,11 @@ Profile | {{$user->name}}
                     <div class="tab-pane" id="userActivityLog" role="tabpanel">
                         @foreach ($logs as $item)
                                 <h5 class="text-truncate font-size-14 mb-0">{{ $item->action }}</h5>
-                                <p>{{$item->details}}</p>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>{{$item->details}}</span>
+                                    <span>{{$item->created_at->diffForHumans()}}</span>
+                                </div>
+                                
                                
                         @endforeach
                     </div>

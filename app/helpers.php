@@ -299,22 +299,27 @@ if (!function_exists('callOpenAIImageAPI')) {
 }
 
 // User Activity Log (ADMIN)
-if (!function_exists('UserActivityLog')) {
+if (!function_exists('logActivity')) {
     function logActivity($action, $details = null)
     {
         if (auth()->check()) {
             $userId = auth()->id();
+            $role = auth()->user()->role;  // Assuming 'role' is a field in your User model
+            
+            // Append the role to the details
+            $roleText = ($role == 'admin') ? 'Admin' : 'User';  // Adjust role check based on your role values
+            $detailsWithRole = $roleText . ' - ' . $details;
 
-            // Insert the new log
+            // Insert the new log with dynamic role in details
             UserActivityLog::create([
                 'user_id' => $userId,
                 'action' => $action,
-                'details' => $details,
+                'details' => $detailsWithRole,  // Save the role info in details
             ]);
 
             // Keep only the latest 20 logs for the user
             $excessLogs = UserActivityLog::where('user_id', $userId)
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->skip(20)
                 ->take(PHP_INT_MAX)
                 ->pluck('id');
@@ -325,6 +330,7 @@ if (!function_exists('UserActivityLog')) {
         }
     }
 }
+
 
     
 

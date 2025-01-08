@@ -106,7 +106,7 @@
         <div class="card">
             <div class="card-header">
                 <div>
-                    <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <ul class="nav nav-pills nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#stream-output" role="tab">
                                 Output
