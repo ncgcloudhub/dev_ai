@@ -29,6 +29,8 @@ class GenerateImagesController extends Controller
 {
     public function AIGenerateImageView(Request $request)
     {
+        logActivity('Dall E Image', 'accessed Dall E Image generate page');
+
         $user_id = Auth::user()->id;
         
         // Fetch images along with like and favorite counts
@@ -90,7 +92,7 @@ class GenerateImagesController extends Controller
 
         $response = null;
 
-       // Handle image-based generation
+        // Handle image-based generation
         $prompt = null;
 
         if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
@@ -125,9 +127,7 @@ class GenerateImagesController extends Controller
             }
         }
 
-        
         if ($request->dall_e_2) {
-
             Log::info($request->all());
             Log::info('Inside Dalle 2 prompt: ' . $prompt);
 
@@ -169,7 +169,6 @@ class GenerateImagesController extends Controller
         // DAll-e 2 End
 
         if ($request->dall_e_3) {
-
             Log::info($request->all());
             Log::info('Inside Dalle 3 prompt: ' . $prompt);
             if ($request->quality) {
@@ -209,7 +208,6 @@ class GenerateImagesController extends Controller
             }
         }
         // DAll-e 3 End
-
 
         if ($response && $response->successful()) {
             $responseData = $response->json();
@@ -256,18 +254,10 @@ class GenerateImagesController extends Controller
     
             // Deduct credits and update the user information
             deductUserTokensAndCredits(0, calculateCredits($size, $quality));
-            // $credits = calculateCredits($size, $quality);
-            // User::where('id', $id)->update([
-            //     'credits_used' => DB::raw('credits_used + ' . $credits),
-            //     'credits_left' => DB::raw('credits_left - ' . $credits),
-            //     'images_generated' => DB::raw('images_generated + ' . $n),
-            // ]);
-    
-            // $newCreditLeft = Auth::user()->credits_left - $credits;
-            // $responseData['credit_left'] = $newCreditLeft;
-    
+            logActivity('Image Generation', 'Image generated using ' . ($request->dall_e_2 ? 'DALL-E 2' : 'DALL-E 3'));
             return $responseData;
         } else {
+            logActivity('Image Generation Error', 'Failed to generate image using ' . ($request->dall_e_2 ? 'DALL-E 2' : 'DALL-E 3'));
             return response()->json(['error' => 'Failed to generate image'], 500);
         }
     }
