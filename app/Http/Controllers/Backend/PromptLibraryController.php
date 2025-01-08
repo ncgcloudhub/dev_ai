@@ -469,6 +469,8 @@ class PromptLibraryController extends Controller
             ],
         ]);
 
+        logActivity('Prompt Library', 'generated content from template');
+
        
       
         $data = json_decode($response->getBody(), true);
