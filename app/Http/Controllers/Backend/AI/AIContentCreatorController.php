@@ -632,7 +632,7 @@ class AIContentCreatorController extends Controller
         ]);
 
         // Stream the response
-        return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens) {
+        return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens, $totalTokens) {
             $chunks = explode("\n", $content); // Split the content into chunks
             $parsedown = new Parsedown(); // Initialize Parsedown
             
@@ -651,6 +651,7 @@ class AIContentCreatorController extends Controller
                 'num_words' => $num_words,
                 'num_characters' => $num_characters,
                 'completionTokens' => $completionTokens,
+                'totalTokens' => $totalTokens,
             ]);
         });
     }

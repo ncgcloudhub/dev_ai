@@ -665,7 +665,7 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                         resetButton();
                       
                         // Display the stats in the spans
-                        document.getElementById('numTokens').innerText = stats.completionTokens;
+                        document.getElementById('numTokens').innerText = stats.totalTokens;
                         document.getElementById('numWords').innerText = stats.num_words;
                         document.getElementById('numCharacters').innerText = stats.num_characters;
     
