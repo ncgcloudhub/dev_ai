@@ -136,7 +136,7 @@
         </div>
     
         <!-- Tabs Navigation -->
-        <ul class="nav nav-tabs nav-tabs-custom nav-info nav-justified" role="tablist">
+        <ul class="nav nav-tabs nav-pills nav-tabs-custom nav-info nav-justified" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" data-bs-toggle="tab" href="#chats" role="tab">
                     Chats

@@ -297,6 +297,8 @@ class PromptLibraryController extends Controller
 
     public function PromptManage()
     {
+        logActivity('Prompt Library', 'accessed prompt library manage page');
+
         $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
         $prompt_library_category = PromptLibraryCategory::orderby('id', 'asc')->get();
         $categories = PromptLibraryCategory::latest()->get();
@@ -306,8 +308,13 @@ class PromptLibraryController extends Controller
 
     public function PromptView($slug)
     {
+        
         // Find the template by slug
         $prompt_library = PromptLibrary::where('slug', $slug)->firstOrFail();
+
+        // Log activity
+        logActivity('Prompt Library', 'viewed prompt with name: ' . $prompt_library->prompt_name);
+
         // Get the related examples
         $prompt_library_examples = $prompt_library->examples;
 
@@ -461,6 +468,8 @@ class PromptLibraryController extends Controller
                 ],
             ],
         ]);
+
+        logActivity('Prompt Library', 'generated content from template');
 
        
       
