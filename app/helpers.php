@@ -314,7 +314,7 @@ if (!function_exists('UserActivityLog')) {
 
             // Keep only the latest 20 logs for the user
             $excessLogs = UserActivityLog::where('user_id', $userId)
-                ->orderBy('created_at', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->skip(20)
                 ->take(PHP_INT_MAX)
                 ->pluck('id');
