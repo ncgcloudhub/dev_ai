@@ -31,6 +31,9 @@
                         <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i> Clear Inputs
                         </button>
+                        <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
+                            <i class="las la-magic"></i> Populate Inputs
+                        </button>
                     </div>
                     
                     <div class="live-preview ">
@@ -411,6 +414,13 @@
         document.getElementById('points').value = '1'; // Default variations
 
         // For additional input types, clear manually if needed
+    });
+
+    document.getElementById('populateInputsButton').addEventListener('click', function() {
+    const inputs = document.querySelectorAll('input[type="text"], textarea');
+    inputs.forEach(input => {
+        input.value = input.placeholder;  // Populate input fields with placeholder values
+    });
     });
 </script>
 
