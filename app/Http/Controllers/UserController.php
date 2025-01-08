@@ -22,6 +22,8 @@ class UserController extends Controller
 {
     public function UserDashboard()
     {
+        logActivity('Dashboard', 'accessed Dashboard');
+
         $user = Auth::user();
         $templates_count = Template::count();
         $chatbot_count = Expert::count();
