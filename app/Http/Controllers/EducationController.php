@@ -777,12 +777,6 @@ public function toggleFavorite(Request $request)
 }
 
 
-
-
-
-
-
-
     // ADMIN SECTION
     public function manageGradeSubject()
     {
