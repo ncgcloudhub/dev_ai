@@ -82,20 +82,35 @@ class HomeController extends Controller
     }
 
     public function MagicBallJokeStore(Request $request)
-    {
-        $request->validate([
-            'category' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+    {   
 
-        // Save the joke to the database
-        Jokes::create([
-            'category' => $request->category,
-            'content' => $request->content,
-        ]);
+    // Log received joke content for debugging
+    Log::info('Received Joke Content:', ['content' => $request->joke_content]);
 
-        return response()->json(['message' => 'Joke added successfully!']);
+    // Split the joke content by new lines
+    $points = preg_split('/\r\n|\r|\n/', $request->joke_content);
+
+     // Log the split points for debugging
+     Log::info('Split Points:', ['points' => $points]);
+
+    // Loop through the points array and store each point as a separate entry in the database
+    foreach ($points as $point) {
+        // Trim whitespace and avoid storing empty points
+        Log::info('Storing Point:', ['point' => $point]);
+
+        $point = trim($point);
+        if ($point) {
+            Jokes::create([
+                'category' => 'Magic Ball', 
+                'content' => $point,  
+            ]);
+        }
     }
+
+    // Return a success response
+    return response()->json(['message' => 'Jokes added successfully!']);
+}
+
 
     public function MagicBallJokeEdit($id)
     {
@@ -152,7 +167,7 @@ class HomeController extends Controller
         $points = $validated['points'];
     
         // Example of how you might structure the message for the AI generation
-        $aiMessage = "Generate a joke based on the category: $category with $points points.";
+        $aiMessage = "Generate $points jokes based on the category: $category, each joke should be one liner.";
     
         // Initialize the HTTP client (Guzzle) for making the request to the AI API
         $client = new Client();

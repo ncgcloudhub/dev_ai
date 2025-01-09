@@ -123,6 +123,8 @@
     {{-- List Of Jokes (After Output) --}}
     <form id="jokeForm" style="display: none;">
         @csrf
+        <input type="hidden" id="joke_content_input" value="">
+
         <div class="form-group">
             <label for="joke_points">Select Joke Points:</label>
             <div id="jokePointsContainer"></div>
@@ -336,7 +338,7 @@ $(document).ready(function() {
 
 
 // Save the Jokes From Selected List
- // Handle form submission via AJAX
+
  $('#jokeForm').submit(function(e) {
         e.preventDefault();
 
@@ -346,13 +348,22 @@ $(document).ready(function() {
             selectedPoints.push($(this).val());
         });
 
+        console.log('Selected Points:', selectedPoints);
+
+       // Combine selected points into a single string (or use another method if needed)
+    var jokeContent = selectedPoints.join("\n");
+
+    // Set the hidden input value with the combined joke content
+    $('#joke_content_input').val(jokeContent);
+
         // Send selected points via AJAX to store in the database
         $.ajax({
             url: '{{ route("jokes.store") }}', // Route to store the joke
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
-                points: selectedPoints
+                points: selectedPoints,
+                joke_content: jokeContent,
             },
             success: function(response) {
                 // Handle success (show success message, etc.)
