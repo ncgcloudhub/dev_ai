@@ -2,20 +2,25 @@
 
 namespace App\Services;
 
+use App\Models\SiteSettings;
 use App\Models\StableDiffusionGeneratedImage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class StableDiffusionService
 {
     protected $apiKey;
     protected $apiUrl;
+    protected $siteSettings;
 
     public function __construct()
     {
         $this->apiKey = config('services.stable_diffusion.api_key');
         $this->apiUrl = config('services.stable_diffusion.api_url');
+
+        $this->siteSettings = SiteSettings::find(1);
     }
 
     public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null)
@@ -83,11 +88,26 @@ class StableDiffusionService
             $seedId = $response->header('seed') ?? null;
 
             if ($response->status() == 200) {
-                 // Use selected output format as file extension
+                // Use selected output format as file extension
                 $extension = strtolower($imageFormat); // Convert format to lowercase to ensure compatibility
                 // Save the binary content as an image
                 $imageName = 'user_' . auth()->id() . '_image_' . time() . '.' . $extension;
-                Storage::put('public/' . $imageName, $response->body());
+            
+                 // Create an instance of Intervention Image from the response content
+                $image = Image::make($response->body());
+                
+                // Define the watermark path
+                $watermarkPath = public_path('backend/uploads/site/' .$this->siteSettings->watermark);
+                
+                // Adjust path as necessary
+                $watermark = Image::make($watermarkPath); // Create an instance of the watermark image
+
+                // Apply watermark at the bottom-right corner with 10px offset
+                $image->insert($watermark, 'bottom-right', 10, 10);
+                
+                // Save the watermarked image to the storage
+                $watermarkedImagePath = storage_path('app/public/' . $imageName);
+                $image->save($watermarkedImagePath);
 
                 // Save the image data to the database
                 StableDiffusionGeneratedImage::create([
