@@ -324,6 +324,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     Route::get('/jokes/delete/{id}', [HomeController::class, 'MagicBallJokeDelete'])->name('jokes.delete');
 
+    Route::post('/ai/generate', [HomeController::class, 'generateAiJoke'])->name('jokes.ai.generate');
+
 
 
     // TERMS & CONDITIONS

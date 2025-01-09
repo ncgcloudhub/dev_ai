@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use OpenAI;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 
 class HomeController extends Controller
 {
@@ -80,20 +82,35 @@ class HomeController extends Controller
     }
 
     public function MagicBallJokeStore(Request $request)
-    {
-        $request->validate([
-            'category' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+    {   
 
-        // Save the joke to the database
-        Jokes::create([
-            'category' => $request->category,
-            'content' => $request->content,
-        ]);
+    // Log received joke content for debugging
+    Log::info('Received Joke Content:', ['content' => $request->joke_content]);
 
-        return response()->json(['message' => 'Joke added successfully!']);
+    // Split the joke content by new lines
+    $points = preg_split('/\r\n|\r|\n/', $request->joke_content);
+
+     // Log the split points for debugging
+     Log::info('Split Points:', ['points' => $points]);
+
+    // Loop through the points array and store each point as a separate entry in the database
+    foreach ($points as $point) {
+        // Trim whitespace and avoid storing empty points
+        Log::info('Storing Point:', ['point' => $point]);
+
+        $point = trim($point);
+        if ($point) {
+            Jokes::create([
+                'category' => 'Magic Ball', 
+                'content' => $point,  
+            ]);
+        }
     }
+
+    // Return a success response
+    return response()->json(['message' => 'Jokes added successfully!']);
+}
+
 
     public function MagicBallJokeEdit($id)
     {
@@ -135,6 +152,83 @@ class HomeController extends Controller
 
         return redirect()->route('magic.ball.jokes')->with('success', 'Joke deleted successfully');
     }
+    
+    public function generateAiJoke(Request $request)
+    {   
+        $validated = $request->validate([
+            'category' => 'required|string',
+            'points' => 'required|integer',
+        ]);
+        $user = auth()->user();
+        $openaiModel = $user->selected_model;
+    
+        // Get the category and points from the request
+        $category = $validated['category'];
+        $points = $validated['points'];
+    
+        // Example of how you might structure the message for the AI generation
+        $aiMessage = "Generate $points jokes based on the category: $category, each joke should be one liner.";
+    
+        // Initialize the HTTP client (Guzzle) for making the request to the AI API
+        $client = new Client();
+    
+        try {
+            $response = $client->post('https://api.openai.com/v1/chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => $openaiModel,
+                    'messages' => [
+                        [
+                            "role" => "system",
+                            "content" => "You are an Comedian."
+                        ],
+                        [
+                            "role" => "user",
+                            "content" => $aiMessage,
+                        ]
+                    ],
+                ],
+            ]);
+    
+        // Decode the JSON response
+        $responseBody = json_decode($response->getBody()->getContents(), true);
+
+        // Extract the joke content from the response
+        $jokeContent = $responseBody['choices'][0]['message']['content'] ?? 'No joke generated';
+
+        // Log the full response and the generated joke content
+        Log::info('API Response:', [
+            'status' => $response->getStatusCode(),
+            'headers' => $response->getHeaders(),
+            'body' => $responseBody,
+            'joke_content' => $jokeContent
+        ]);
+
+      // Extract the points from the joke content (split by new lines)
+      $points = preg_split('/\r\n|\r|\n/', $jokeContent);
+
+      // Send the joke content and points back to the frontend
+      return response()->json([
+          'success' => true,
+          'joke_content' => $jokeContent,
+          'points' => $points,
+      ]);
+
+        } catch (\Exception $e) {
+            // Handle any errors that occur during the API request
+            Log::error('Error generating AI joke: ' . $e->getMessage());
+    
+            // Return an error response
+            return response()->json([
+                'success' => false,
+                'message' => 'There was an error generating the joke.',
+            ]);
+        }
+    }
+    
 
 
     //Image Gallery Front End Page
