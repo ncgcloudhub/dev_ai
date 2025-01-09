@@ -498,7 +498,7 @@
                                         <td>
                                             <a class="image-popup" href="{{ asset($image->image_url) }}" title="">
                                                 <div class="d-flex align-items-center fw-medium">
-                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2">
+                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2" loading="lazy">
                                                 </div>
                                             </a>
                                         </td>
@@ -541,7 +541,7 @@
                                         <td>
                                             <a class="image-popup" href="{{ asset($image->image_url) }}" title="">
                                                 <div class="d-flex align-items-center fw-medium">
-                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2">
+                                                    <img src="{{ asset($image->image_url) }}" alt="{{ $image->prompt }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-2" loading="lazy">
                                                 </div>
                                             </a>
                                         </td>
@@ -693,16 +693,16 @@
 @endsection
 @section('script')
 <!-- apexcharts -->
-<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
-<script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js')}}"></script>
+<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/jsvectormap/js/jsvectormap.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js')}}" defer></script>
 <!-- dashboard init -->
-<script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/app.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}" defer></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
