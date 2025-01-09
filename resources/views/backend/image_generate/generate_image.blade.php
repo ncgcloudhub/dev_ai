@@ -107,7 +107,6 @@
                                                     <div class="accordion-body">           
                                                     
                                                         <div class="row">
-                                                            
                                                             <div class="col-md-3 mb-3">
                                                                 <label for="input1">Image Style</label>
                                                             
@@ -386,7 +385,7 @@
             <div class="gallery-box card">
                 <div class="gallery-container">
                     <a class="gallery-link" href="{{ $item->image_url }}" title="{{ $item->prompt }}" data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ $item->image_url }}" data-image-prompt="{{ $item->prompt }}" data-image-resolution="{{ $item->resolution }}">
-                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" />
+                        <img class="gallery-img img-fluid mx-auto" src="{{ $item->image_url }}" alt="" loading="lazy" />
                         <div class="gallery-overlay">
                             <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                         </div>
