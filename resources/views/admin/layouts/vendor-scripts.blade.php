@@ -1,13 +1,13 @@
-<script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/simplebar/simplebar.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/node-waves/waves.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/feather-icons/feather.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
-<script src="{{ URL::asset('build/js/plugins.js') }}"></script>
+<script src="{{ URL::asset('build/libs/bootstrap/js/bootstrap.bundle.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/simplebar/simplebar.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/node-waves/waves.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/libs/feather-icons/feather.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/pages/plugins/lord-icon-2.1.0.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/plugins.js') }}" defer></script>
 
 {{-- Sweetalerts --}}
-<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ URL::asset('build/js/pages/sweetalerts.init.js') }}"></script>
+<script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/pages/sweetalerts.init.js') }}" defer></script>
 
 {{-- Datatables --}}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -22,15 +22,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-<script src="{{ URL::asset('build/js/pages/datatables.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/datatables.init.js') }}" defer></script>
 
 
-<script src="{{ URL::asset('vendor/flasher/flasher-toastr.min.js') }}"></script>
+<script src="{{ URL::asset('vendor/flasher/flasher-toastr.min.js') }}" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 {{-- Select Multiple Tag --}}
-<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}" defer></script>
 
 <!-- tinymce | TEXT EDITOR -->
 <script src="{{ asset('backend/js/tinymce/tinymce.min.js') }}"></script>

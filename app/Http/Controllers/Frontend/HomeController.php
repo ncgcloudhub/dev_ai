@@ -95,6 +95,47 @@ class HomeController extends Controller
         return response()->json(['message' => 'Joke added successfully!']);
     }
 
+    public function MagicBallJokeEdit($id)
+    {
+        $countries = Jokes::latest()->get();
+        $country = Jokes::findOrFail($id);
+        return view('backend.user.block_edit_admin', compact('countries', 'country'));
+    }
+
+
+    public function MagicBallJokeUpdate(Request $request)
+    {
+
+        $id = $request->id;
+
+        Jokes::findOrFail($id)->update([
+            'category' => $request->category,
+            'content' => $request->content,
+            'updated_at' => Carbon::now(),
+
+        ]);
+
+        $notification = array(
+            'message' => 'Joke Updated Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+
+        // end else 
+
+    } // end method 
+    
+
+
+    public function MagicBallJokeDelete($id)
+    {
+        $joke = Jokes::findOrFail($id);
+        $joke->delete();
+
+        return redirect()->route('magic.ball.jokes')->with('success', 'Joke deleted successfully');
+    }
+
 
     //Image Gallery Front End Page
     public function ContactUs()

@@ -315,7 +315,15 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // Magic Ball (Jokes) | Middleware Must be added
     Route::get('/jokes', [HomeController::class, 'MagicBallJokes'])->name('magic.ball.jokes');
+
     Route::post('/store/jokes', [HomeController::class, 'MagicBallJokeStore'])->name('jokes.store');
+
+    Route::get('/jokes/edit/{id}', [HomeController::class, 'MagicBallJokeEdit'])->name('jokes.edit');
+
+    Route::post('/jokes/update', [HomeController::class, 'MagicBallJokeUpdate'])->name('jokes.update');
+
+    Route::get('/jokes/delete/{id}', [HomeController::class, 'MagicBallJokeDelete'])->name('jokes.delete');
+
 
 
     // TERMS & CONDITIONS
