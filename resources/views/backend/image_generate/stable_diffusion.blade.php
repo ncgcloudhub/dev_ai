@@ -123,14 +123,14 @@
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Animation</p>
                                         </div>
                                     </div>
                                     <!-- Image Box 1 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Animation</p>
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                     <!-- Image Box 2 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Cinematic</p>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@
                                     <!-- Image Box 3 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Comic</p>
                                         </div>
                                     </div>
@@ -154,7 +154,7 @@
                                     <!-- Image Box 4 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Cyberpunk</p>
                                         </div>
                                     </div>
@@ -162,7 +162,7 @@
                                     <!-- Image Box 5 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Futurism</p>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                     <!-- Image Box 6 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Doodle Art</p>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
                                     <!-- Image Box 7 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Graffiti</p>
                                         </div>
                                     </div>
@@ -186,7 +186,7 @@
                                     <!-- Image Box 8 -->
                                     <div class="col-3 mb-3">
                                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch', this)" style="height: 150px;">
-                                            <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;">
+                                            <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
                                             <p class="mb-0 gradient-text-1-bold">Sketch</p>
                                         </div>
                                     </div>
@@ -241,7 +241,7 @@
                                             <div class="gallery-container">
                                                 <a class="image-popup" href="{{ $item->image_url }}" title="">
                                                     <img class="gallery-img img-fluid mx-auto"
-                                                        src="{{ $item->image_url }}" alt="" />
+                                                        src="{{ $item->image_url }}" alt="" loading="lazy" />
                                                     <div class="gallery-overlay">
                                                         <h5 class="overlay-caption">{{ $item->prompt }}</h5>
                                                     </div>
@@ -309,7 +309,7 @@
                             </div>
                         </div>
                         <!--end tab-pane-->
-                        <div class="tab-pane" id="news" role="tabpanel">
+                        {{-- <div class="tab-pane" id="news" role="tabpanel">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="card border">
@@ -590,9 +590,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end tab-pane-->
-                        <div class="tab-pane" id="video" role="tabpanel">
+                        {{-- <div class="tab-pane" id="video" role="tabpanel">
                             <div class="row">
                                 <div class="col-lg-12 video-list">
                                     <div class="list-element">
@@ -804,7 +804,7 @@
                                 </div>
                             </div>
                             <!--end row-->
-                        </div>
+                        </div> --}}
                         <!--end tab-pane-->
                     </div>
                     <!--end tab-content-->
