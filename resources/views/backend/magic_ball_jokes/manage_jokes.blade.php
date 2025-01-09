@@ -13,25 +13,25 @@
 @slot('title')Manage @endslot
 @endcomponent
 
+
 <div class="row">
-    <div class="col-lg-12">
+
+
+    <div class="col-xxl-6">
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Manage Jokes <button type="button" class="btn gradient-btn-8" data-bs-toggle="modal" data-bs-target="#addJokeModal">Add Joke</button></h5>
-                
-            </div>
-            <div class="card-body">
-                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Sl.</th>
-                            <th>Category</th>
-                            <th>Joke</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($jokes as $joke)
+    
+                <div class="card-body">
+                    <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Sl.</th>
+                                <th>Category</th>
+                                <th>Joke</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($jokes as $joke)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td> <span class="badge bg-info">{{ $joke->category }}</span></td>
@@ -57,45 +57,69 @@
                             </td>    
                         </tr>
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+    
+    
         </div>
     </div>
-</div>
-
-<!-- Default Modals -->
-
-<div id="addJokeModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Add Joke</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-            </div>
-            <div class="modal-body">
-                <form id="jokeForm">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <input type="text" class="form-control" id="category" name="category" required>
+    
+    <div class="col-xxl-6">
+        <form method="POST" action="{{ route('jokes.store') }}" class="row g-3">
+            @csrf
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Add Joke</h4>
+                </div><!-- end card header -->
+    
+                <div class="card-body">
+                    <div class="live-preview">
+                        <!-- Category select dropdown -->
+                        <div class="row">
+                            <!-- Category select dropdown -->
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="general">General</option>
+                                    <option value="programming">Programming</option>
+                                    <option value="funny">Funny</option>
+                                    <option value="tech">Tech</option>
+                                    <!-- Add other categories here as needed -->
+                                </select>
+                            </div>
+    
+                            <!-- Points select dropdown -->
+                            <div class="col-md-6 mb-3">
+                                <label for="points" class="form-label">Points</label>
+                                <select class="form-control" id="points" name="points" required>
+                                    <option value="">Select Points</option>
+                                    <option value="1">1 Point</option>
+                                    <option value="2">2 Points</option>
+                                    <option value="3">3 Points</option>
+                                    <option value="5">5 Points</option>
+                                    <!-- Add other point values here as needed -->
+                                </select>
+                            </div>
                         </div>
+                        
+                        <!-- Joke content input -->
                         <div class="mb-3">
                             <label for="content" class="form-label">Joke Content</label>
                             <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn gradient-btn-save ">Save Joke</button>
-                    </div>
-                </form>
-            </div>
-           
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+                </div><!-- end card body -->
+                
+                <div class="card-footer">
+                    <button type="button" class="btn btn-info" id="aiGenerateBtn">AI Generate</button>
+                    <button type="submit" class="btn gradient-btn-save">Save Joke</button>
+                </div><!-- end card footer -->
+            </div><!-- end card -->
+        </form>
+    </div>
+    </div>
 
 <!-- Edit Joke Modal -->
 <div id="editJokeModal" class="modal fade" tabindex="-1" aria-labelledby="editJokeModalLabel" aria-hidden="true" style="display: none;">
@@ -110,8 +134,7 @@
                     @csrf
                     <input type="hidden" id="editJokeId" name="id">
                     <div class="mb-3">
-                        <label for="editCategory" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="editCategory" name="category" required>
+                        
                     </div>
                     <div class="mb-3">
                         <label for="editContent" class="form-label">Joke Content</label>
@@ -180,7 +203,7 @@ $(document).ready(function () {
 <script>
     $(document).ready(function() {
         // Handle form submission
-        $('#jokeForm').submit(function(event) {
+        $('#jokesForm').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
 
             // Get form data
@@ -250,6 +273,40 @@ $(document).ready(function () {
         });
     });
 });
+
+// Jokes
+$(document).ready(function() {
+    $('#aiGenerateBtn').click(function() {
+        var category = $('#category').val();
+        var points = $('#points').val();
+
+        // Check if both category and points are selected
+        if (!category || !points) {
+            alert('Please select both category and points.');
+            return;
+        }
+
+        // Send data via AJAX
+        $.ajax({
+            url: '{{ route("jokes.ai.generate") }}', // Route for AI generation
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                category: category,
+                points: points
+            },
+            success: function(response) {
+                // Handle the response (success)
+                alert(response.message);  // Show a success message
+            },
+            error: function(xhr, status, error) {
+                // Handle the error
+                alert('There was an error. Please try again.');
+            }
+        });
+    });
+});
+
 
 </script>
 
