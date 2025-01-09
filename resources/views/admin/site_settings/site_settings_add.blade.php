@@ -50,6 +50,32 @@
                     <!-- end card body -->
                 </div>
 
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Watermark (Images)</h4>
+                    </div><!-- end card header -->
+                    
+                    <div class="card-body">
+                      
+                        <div class="avatar-xl mx-auto">
+                            <input type="file"
+                                   class="filepond filepond-input-circle"
+                                   name="watermark"
+                                   accept="image/png, image/jpeg, image/gif"/>
+                        </div>
+                
+                        <!-- Display current watermark image -->
+                        <div class="mt-3">
+                            @if($setting->watermark)
+                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->watermark) }}" alt="Current watermark" width="100px" class="img-fluid"/>
+                            @else
+                                <p></p>
+                            @endif
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+
                     <div class="col-md-12">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" name="title" class="form-control mb-3" id="title" value="{{$setting->title}}" placeholder="Enter Character Name">

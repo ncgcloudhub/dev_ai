@@ -35,16 +35,30 @@ class SiteSettingsController extends Controller
             $updateData['favicon'] = $faviconName;
         }
 
-        if ($request->hasFile('header_logo_light')) {
-            $oldHeaderLogoLight = SiteSettings::findOrFail(1)->header_logo_light;
-            if ($oldHeaderLogoLight) {
-                unlink(public_path('backend/uploads/site/' . $oldHeaderLogoLight));
+        if ($request->hasFile('favicon')) {
+            // Unlink the old favicon if it exists
+            $oldFavicon = SiteSettings::findOrFail(1)->favicon;
+            if ($oldFavicon) {
+                unlink(public_path('backend/uploads/site/' . $oldFavicon));
             }
 
-            $header_logo_light = $request->file('header_logo_light');
-            $header_logo_light_Name = time() . '-' . uniqid() . '.' . $header_logo_light->getClientOriginalExtension();
-            $header_logo_light->move('backend/uploads/site', $header_logo_light_Name);
-            $updateData['header_logo_light'] = $header_logo_light_Name;
+            $favicon = $request->file('favicon');
+            $faviconName = time() . '-' . uniqid() . '.' . $favicon->getClientOriginalExtension();
+            $favicon->move('backend/uploads/site', $faviconName);
+
+            $updateData['favicon'] = $faviconName;
+        }
+
+        if ($request->hasFile('watermark')) {
+            $oldwatermark = SiteSettings::findOrFail(1)->watermark;
+            if ($oldwatermark) {
+                unlink(public_path('backend/uploads/site/' . $oldwatermark));
+            }
+
+            $watermark = $request->file('watermark');
+            $watermark_Name = time() . '-' . uniqid() . '.' . $watermark->getClientOriginalExtension();
+            $watermark->move('backend/uploads/site', $watermark_Name);
+            $updateData['watermark'] = $watermark_Name;
         }
 
         if ($request->hasFile('header_logo_dark')) {
