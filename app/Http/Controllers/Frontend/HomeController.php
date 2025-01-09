@@ -168,7 +168,7 @@ class HomeController extends Controller
                     'messages' => [
                         [
                             "role" => "system",
-                            "content" => "You are an SEO assistant."
+                            "content" => "You are an Comedian."
                         ],
                         [
                             "role" => "user",
@@ -192,12 +192,16 @@ class HomeController extends Controller
             'joke_content' => $jokeContent
         ]);
 
-        // Optionally return the joke in the response for frontend usage
-        return response()->json([
-            'success' => true,
-            'joke' => $jokeContent,
-        ]);
-        
+      // Extract the points from the joke content (split by new lines)
+      $points = preg_split('/\r\n|\r|\n/', $jokeContent);
+
+      // Send the joke content and points back to the frontend
+      return response()->json([
+          'success' => true,
+          'joke_content' => $jokeContent,
+          'points' => $points,
+      ]);
+
         } catch (\Exception $e) {
             // Handle any errors that occur during the API request
             Log::error('Error generating AI joke: ' . $e->getMessage());

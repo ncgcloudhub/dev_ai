@@ -119,6 +119,17 @@
             </div><!-- end card -->
         </form>
     </div>
+
+    {{-- List Of Jokes (After Output) --}}
+    <form id="jokeForm" style="display: none;">
+        @csrf
+        <div class="form-group">
+            <label for="joke_points">Select Joke Points:</label>
+            <div id="jokePointsContainer"></div>
+        </div>
+        <button type="submit" class="btn btn-success">Save Joke</button>
+    </form>
+
     </div>
 
 <!-- Edit Joke Modal -->
@@ -296,8 +307,24 @@ $(document).ready(function() {
                 points: points
             },
             success: function(response) {
-                // Handle the response (success)
-                alert(response.message);  // Show a success message
+                var pointsContainer = $('#jokePointsContainer');
+                    pointsContainer.empty();  // Clear previous checkboxes
+
+                    // Loop through the points and create checkboxes
+                    response.points.forEach(function(point, index) {
+                        var checkbox = `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${point}" id="point${index}" name="points[]">
+                                <label class="form-check-label" for="point${index}">
+                                    ${point}
+                                </label>
+                            </div>
+                        `;
+                        pointsContainer.append(checkbox);
+                    });
+
+                    // Show the form with checkboxes
+                    $('#jokeForm').show();
             },
             error: function(xhr, status, error) {
                 // Handle the error
@@ -306,6 +333,37 @@ $(document).ready(function() {
         });
     });
 });
+
+
+// Save the Jokes From Selected List
+ // Handle form submission via AJAX
+ $('#jokeForm').submit(function(e) {
+        e.preventDefault();
+
+        // Collect selected points
+        var selectedPoints = [];
+        $('input[name="points[]"]:checked').each(function() {
+            selectedPoints.push($(this).val());
+        });
+
+        // Send selected points via AJAX to store in the database
+        $.ajax({
+            url: '{{ route("jokes.store") }}', // Route to store the joke
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                points: selectedPoints
+            },
+            success: function(response) {
+                // Handle success (show success message, etc.)
+                alert('Joke saved successfully!');
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                alert('There was an error. Please try again.');
+            }
+        });
+    });
 
 
 </script>
