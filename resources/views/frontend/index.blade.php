@@ -20,31 +20,30 @@
 @endsection
 @section('body')
 
-<!-- Add the script here, using defer -->
-<script defer>
+<script>
     const APP_URL1 = "{{ config('app.custom_url') }}";
 
-    // Detect in-app browser (Messenger, Facebook, Instagram)
+    // Detect in-app browser early, even before DOM is loaded
     (function() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        // Check if the browser is Facebook, Instagram, or Messenger in-app browser
+        // Check for Facebook, Instagram, Messenger or other in-app browsers
         if (/FBAN|FBAV|Instagram|FB_IAB|FB4A|Messenger/.test(userAgent)) {
-            // Alert user to open in the default browser
+            // Immediately alert the user to open the link in an external browser
             alert("For a better experience, please open this link in your default browser.");
 
-            // Construct an external URL
+            // Construct the external URL
             const externalUrl = `${APP_URL1}`;
 
-            // Check if the device is Android
+            // Try to detect Android or iOS and redirect accordingly
             if (/android/i.test(userAgent)) {
-                // Intent to open in Chrome
+                // For Android, redirect using intent URL for Chrome
                 window.location.href = `intent://${externalUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
             } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // For iOS, open in Safari
-                window.open(externalUrl, '_system');
+                // For iOS, try to open the external URL in Safari using _system
+                window.location.href = externalUrl; // This will open in the default browser (Safari)
             } else {
-                // For other browsers, open in a new tab
+                // For any other browsers, fallback to opening in a new tab
                 window.open(externalUrl, '_blank');
             }
         }
