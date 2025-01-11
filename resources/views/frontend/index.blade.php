@@ -582,14 +582,32 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <div style="text-align: center; margin-top: 20%; font-family: Arial, sans-serif;">
                 <h2>Unsupported Browser</h2>
                 <p>It looks like you're using an in-app browser. For a better experience, please open this link in your default browser.</p>
-                <button onclick="window.open('${APP_URL1}', '_blank')" 
+                <button id="openExternal" 
                         style="padding: 10px 20px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     Open in Browser
                 </button>
             </div>
         `;
+
+        document.getElementById('openExternal').addEventListener('click', function () {
+            // Construct an intent URL for Android or iOS
+            const externalUrl = `${APP_URL1}`;
+            
+            // Check if on Android
+            if (/android/i.test(userAgent)) {
+                // Use an intent to force open in an external browser
+                window.location.href = `intent://${externalUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                // For iOS, open with Safari
+                window.open(externalUrl, '_system');
+            } else {
+                // Fallback for other browsers
+                window.open(externalUrl, '_blank');
+            }
+        });
     }
-});
+    });
+
 
 </script>
 
