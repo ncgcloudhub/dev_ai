@@ -576,7 +576,6 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
         if (/FBAN|FBAV|Instagram/.test(userAgent)) {
             // Detected Facebook/Instagram in-app browser
-            alert("For a better experience, please open this link in your default browser.");
 
             // Construct an intent URL for Android or iOS
             const externalUrl = `${APP_URL1}`;
