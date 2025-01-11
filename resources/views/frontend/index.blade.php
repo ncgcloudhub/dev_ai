@@ -568,5 +568,30 @@ border: 1px solid rgba(255, 255, 255, 0.99);
     });
 </script>
 
+<script>
+
+    const APP_URL1 = "{{ config('app.custom_url') }}";
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/FBAN|FBAV|Instagram/.test(userAgent)) {
+        // Detected Facebook/Instagram in-app browser
+        alert("For a better experience, please open this link in your default browser.");
+        document.body.innerHTML = `
+            <div style="text-align: center; margin-top: 20%; font-family: Arial, sans-serif;">
+                <h2>Unsupported Browser</h2>
+                <p>It looks like you're using an in-app browser. For a better experience, please open this link in your default browser.</p>
+                <button onclick="window.open('${APP_URL1}', '_blank')" 
+                        style="padding: 10px 20px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Open in Browser
+                </button>
+            </div>
+        `;
+    }
+});
+
+</script>
+
         
     @endsection
