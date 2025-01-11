@@ -569,30 +569,18 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 </script>
 
 <script>
-
     const APP_URL1 = "{{ config('app.custom_url') }}";
 
     document.addEventListener('DOMContentLoaded', function () {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-    if (/FBAN|FBAV|Instagram/.test(userAgent)) {
-        // Detected Facebook/Instagram in-app browser
-        alert("For a better experience, please open this link in your default browser.");
-        document.body.innerHTML = `
-            <div style="text-align: center; margin-top: 20%; font-family: Arial, sans-serif;">
-                <h2>Unsupported Browser</h2>
-                <p>It looks like you're using an in-app browser. For a better experience, please open this link in your default browser.</p>
-                <button id="openExternal" 
-                        style="padding: 10px 20px; background-color: #4285F4; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Open in Browser
-                </button>
-            </div>
-        `;
+        if (/FBAN|FBAV|Instagram/.test(userAgent)) {
+            // Detected Facebook/Instagram in-app browser
+            alert("For a better experience, please open this link in your default browser.");
 
-        document.getElementById('openExternal').addEventListener('click', function () {
             // Construct an intent URL for Android or iOS
             const externalUrl = `${APP_URL1}`;
-            
+
             // Check if on Android
             if (/android/i.test(userAgent)) {
                 // Use an intent to force open in an external browser
@@ -604,12 +592,10 @@ border: 1px solid rgba(255, 255, 255, 0.99);
                 // Fallback for other browsers
                 window.open(externalUrl, '_blank');
             }
-        });
-    }
+        }
     });
-
-
 </script>
+
 
         
     @endsection
