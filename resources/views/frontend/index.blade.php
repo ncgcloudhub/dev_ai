@@ -20,36 +20,6 @@
 @endsection
 @section('body')
 
-<script>
-    const APP_URL1 = "{{ config('app.custom_url') }}";
-
-    // Detect in-app browser early, even before DOM is loaded
-    (function() {
-        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-        // Check for Facebook, Instagram, Messenger or other in-app browsers
-        if (/FBAN|FBAV|Instagram|FB_IAB|FB4A|Messenger/.test(userAgent)) {
-            // Immediately alert the user to open the link in an external browser
-            alert("For a better experience, please open this link in your default browser.");
-
-            // Construct the external URL
-            const externalUrl = `${APP_URL1}`;
-
-            // Try to detect Android or iOS and redirect accordingly
-            if (/android/i.test(userAgent)) {
-                // For Android, redirect using intent URL for Chrome
-                window.location.href = `intent://${externalUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
-            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // For iOS, try to open the external URL in Safari using _system
-                window.location.href = externalUrl; // This will open in the default browser (Safari)
-            } else {
-                // For any other browsers, fallback to opening in a new tab
-                window.open(externalUrl, '_blank');
-            }
-        }
-    })();
-</script>
-
 <style>
 
     body, html {
@@ -597,6 +567,35 @@ border: 1px solid rgba(255, 255, 255, 0.99);
         });
     });
 </script>
+
+<script>
+    const APP_URL1 = "{{ config('app.custom_url') }}";
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Enhanced check for Facebook/Instagram/Messenger in-app browsers
+        if (/FBAN|FBAV|Instagram|FB_IAB|FB4A|Messenger/.test(userAgent)) {
+            // Detected Facebook/Instagram in-app browser
+
+            // Construct an intent URL for Android or iOS
+            const externalUrl = `${APP_URL1}`;
+
+            // Check if on Android
+            if (/android/i.test(userAgent)) {
+                // Use an intent to force open in an external browser
+                window.location.href = `intent://${externalUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                // For iOS, open with Safari
+                window.open(externalUrl, '_system');
+            } else {
+                // Fallback for other browsers
+                window.open(externalUrl, '_blank');
+            }
+        }
+    });
+</script>
+
 
         
     @endsection
