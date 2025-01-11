@@ -20,34 +20,35 @@
 @endsection
 @section('body')
 
+<!-- Add the script here, using defer -->
 <script defer>
     const APP_URL1 = "{{ config('app.custom_url') }}";
 
-    // Check for Messenger or in-app browsers
-    document.addEventListener('DOMContentLoaded', function () {
+    // Detect in-app browser (Messenger, Facebook, Instagram)
+    (function() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        // Enhanced check for Facebook/Instagram/Messenger in-app browsers
+        // Check if the browser is Facebook, Instagram, or Messenger in-app browser
         if (/FBAN|FBAV|Instagram|FB_IAB|FB4A|Messenger/.test(userAgent)) {
-            // Detected Facebook/Instagram/Messenger in-app browser
+            // Alert user to open in the default browser
             alert("For a better experience, please open this link in your default browser.");
 
-            // Construct an intent URL for Android or iOS
+            // Construct an external URL
             const externalUrl = `${APP_URL1}`;
 
-            // Check if on Android
+            // Check if the device is Android
             if (/android/i.test(userAgent)) {
-                // Use an intent to force open in an external browser
+                // Intent to open in Chrome
                 window.location.href = `intent://${externalUrl.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end;`;
             } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // For iOS, open with Safari
+                // For iOS, open in Safari
                 window.open(externalUrl, '_system');
             } else {
-                // Fallback for other browsers
+                // For other browsers, open in a new tab
                 window.open(externalUrl, '_blank');
             }
         }
-    });
+    })();
 </script>
 
 <style>
