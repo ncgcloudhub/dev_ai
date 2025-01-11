@@ -574,7 +574,8 @@ border: 1px solid rgba(255, 255, 255, 0.99);
     document.addEventListener('DOMContentLoaded', function () {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        if (/FBAN|FBAV|Instagram/.test(userAgent)) {
+        // Enhanced check for Facebook/Instagram/Messenger in-app browsers
+        if (/FBAN|FBAV|Instagram|FB_IAB|FB4A|Messenger/.test(userAgent)) {
             // Detected Facebook/Instagram in-app browser
 
             // Construct an intent URL for Android or iOS
