@@ -34,7 +34,7 @@
                     </td>
                     <td>{{ $index + 1 }}</td>
                     <td>
-                        <a href="{{ route('user.details', ['id' => $item->id, 'name' => Str::slug($item->name ?? $item->username ?? 'default-name', '-')]) }}" 
+                        <a href="{{ route('user.details', ['id' => $item->id, 'name' => Str::slug($item->name ?: $item->username ?: 'user')]) }}" 
                             class="fw-medium link-primary">
                              {{ $item->name }} ({{ $item->username }})
                          </a>                         
