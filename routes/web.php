@@ -38,13 +38,17 @@ use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
+use App\Models\NewsLetter;
 use App\Models\PromptLibrary;
+use App\Models\Referral;
 use App\Models\SectionDesign;
 use App\Models\SeoSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
-
+use Laravel\Socialite\Facades\Socialite;
+use Stevebauman\Location\Facades\Location;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
@@ -720,6 +724,62 @@ Route::get('google/callback', [AIContentCreatorController::class, 'callbackHande
 Route::get('github/login', [AIContentCreatorController::class, 'githubprovider'])->name('github.login');
 Route::get('github/callback', [AIContentCreatorController::class, 'githubcallbackHandel'])->name('github.login.callback');
 
+Route::get('/auth/facebook', function () {
+    return Socialite::driver('facebook')->redirect();
+});
+
+Route::get('/auth/facebook/callback', function () {
+    $user = Socialite::driver('facebook')->user();
+
+    // Retrieve user's IP address
+    $ipAddress = request()->ip();
+    
+    // Retrieve user's location based on IP address
+    $location = Location::get($ipAddress);
+    $regionAndCountry = $location ? ($location->regionName . ', ' . $location->countryName) : 'Location not found';
+
+    // Handle user login or registration
+    $existingUser = User::where('email', $user->getEmail())->first();
+
+    if ($existingUser) {
+        auth()->login($existingUser);
+    } else {
+        $newUser = User::create([
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'facebook_id' => $user->getId(),
+            'avatar' => $user->getAvatar(),
+            'status' => 'active',
+            'credits_left' => 100,
+            'tokens_left' => 5000,
+            'role' => 'user',
+            'password' => '',
+            'ipaddress' => $ipAddress,
+            'email_verified_at' => now(),
+            'country' => $regionAndCountry,
+        ]);
+
+        $newUser->referral_link = route('register', ['ref' => $newUser->id]);
+        $newUser->save();
+
+        if (request()->ref) {
+            Referral::create([
+                'referrer_id' => request()->ref,
+                'referral_id' => $newUser->id,
+                'status' => 'pending',
+            ]);
+        }
+
+        NewsLetter::create([
+            'email' => $newUser->email,
+            'ipaddress' => $ipAddress,
+        ]);
+
+        auth()->login($newUser);
+    }
+
+    return redirect('/chat');
+});
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
 

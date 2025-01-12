@@ -51,6 +51,12 @@
                                         <i class="ri-google-fill fs-16 mx-2"></i> Sign In with Google
                                     </a>
                                 </div>
+
+                                <div class="mt-2">
+                                    <a href="{{ url('/auth/facebook') }}" class="btn btn-primary btn-icon waves-effect waves-light w-100">
+                                        <i class="ri-facebook-fill fs-16 mx-2"></i> Sign In with Facebook
+                                    </a>
+                                </div>
                                 
                                 <div class="mt-2">
                                     <a href="{{ route('github.login') }}" class="btn btn-dark btn-icon waves-effect waves-light w-100">
