@@ -41,7 +41,7 @@
                         <div class="col-xxl-5 col-sm-6">
                             <div class="search-box" id="search-tour">
                                 <input type="text" class="form-control search"
-                                    placeholder="Search for order ID, customer, order status or something...">
+                                    placeholder="Search for Templates">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
