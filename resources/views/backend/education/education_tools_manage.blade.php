@@ -22,14 +22,11 @@
         <div class="row align-items-center gy-4">
             <div class="col-sm">
                 <div>
-                    <h4 class="text-white mb-0 fw-semibold">Create Your Contents with our Pre-defined Tools</h4>
+                    <h4 class="text-white mb-0 fw-semibold text-center">Empower Your Classroom with AI-Driven Tools</h4>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 <section class="section bg-light" id="marketplace">
@@ -37,10 +34,9 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="text-center mb-5">
-                    <h2 class="mb-3 fw-bold lh-base">Explore Products</h2>
-                    <p class="text-muted mb-4">Collection widgets specialize in displaying many elements of the same type, such as a collection of pictures from a collection of articles.</p>
+                   
+                    <p class="text-muted mb-4">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
                     
-                 
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-medium active" type="button" data-filter="all">All Items</button>

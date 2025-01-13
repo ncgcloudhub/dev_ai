@@ -3,7 +3,7 @@
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="#">Video Generation</a> @endslot
+@slot('li_1') <a href="#">Image to Video Generation</a> @endslot
 @slot('title') Generate Animated Video @endslot
 @endcomponent
 
@@ -11,7 +11,7 @@
     <div class="col-xxl-6">
         <div class="card">
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Generate Animated Video</h4>
+                <h4 class="card-title mb-0 flex-grow-1">Image to Video Generation</h4>
             </div>
             <div class="card-body">
                 <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
