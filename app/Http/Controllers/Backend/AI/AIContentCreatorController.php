@@ -826,6 +826,62 @@ class AIContentCreatorController extends Controller
         return redirect('/chat');
     }
 
+    // FACEBOOK
+    public function redirectToFacebook() {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+public function handleFacebookCallback() {
+    $user = Socialite::driver('facebook')->user();
+    $ipAddress = request()->ip();
+    $location = Location::get($ipAddress);
+    $regionAndCountry = $location ? ($location->regionName . ', ' . $location->countryName) : 'Location not found';
+
+    $existingUser = User::where('email', $user->getEmail())->first();
+
+    if ($existingUser) {
+        auth()->login($existingUser);
+    } else {
+        $newUser = User::create([
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'status' => 'active',
+            'credits_left' => 100,
+            'tokens_left' => 5000,
+            'role' => 'user',
+            'password' => bcrypt(Str::random(16)),  // Consider encrypting a random password
+            'ipaddress' => $ipAddress,
+            'email_verified_at' => now(),
+            'country' => 'testing_local',
+        ]);
+
+        $newUser->referral_link = route('register', ['ref' => $newUser->id]);
+        $newUser->save();
+
+        if (request()->ref) {
+            Referral::create([
+                'referrer_id' => request()->ref,
+                'referral_id' => $newUser->id,
+                'status' => 'pending',
+            ]);
+        }
+
+        NewsLetter::create([
+            'email' => $newUser->email,
+            'ipaddress' => $ipAddress,
+        ]);
+
+        auth()->login($newUser);
+    }
+
+    return redirect('/chat');
+}
+
+
+
+
+
+
     // Get Generated Content by User
     public function getTemplateContent($id)
     {

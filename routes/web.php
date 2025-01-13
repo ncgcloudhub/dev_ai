@@ -724,62 +724,11 @@ Route::get('google/callback', [AIContentCreatorController::class, 'callbackHande
 Route::get('github/login', [AIContentCreatorController::class, 'githubprovider'])->name('github.login');
 Route::get('github/callback', [AIContentCreatorController::class, 'githubcallbackHandel'])->name('github.login.callback');
 
-Route::get('/auth/facebook', function () {
-    return Socialite::driver('facebook')->redirect();
+Route::middleware(['web'])->group(function () {
+    Route::get('/auth/facebook', [AIContentCreatorController::class, 'redirectToFacebook']);
+    Route::get('/auth/facebook/callback', [AIContentCreatorController::class, 'handleFacebookCallback']);
 });
 
-Route::get('/auth/facebook/callback', function () {
-    $user = Socialite::driver('facebook')->user();
-
-    // Retrieve user's IP address
-    $ipAddress = request()->ip();
-    
-    // Retrieve user's location based on IP address
-    $location = Location::get($ipAddress);
-    $regionAndCountry = $location ? ($location->regionName . ', ' . $location->countryName) : 'Location not found';
-
-    // Handle user login or registration
-    $existingUser = User::where('email', $user->getEmail())->first();
-
-    if ($existingUser) {
-        auth()->login($existingUser);
-    } else {
-        $newUser = User::create([
-            'name' => $user->getName(),
-            'email' => $user->getEmail(),
-            'facebook_id' => $user->getId(),
-            'avatar' => $user->getAvatar(),
-            'status' => 'active',
-            'credits_left' => 100,
-            'tokens_left' => 5000,
-            'role' => 'user',
-            'password' => '',
-            'ipaddress' => $ipAddress,
-            'email_verified_at' => now(),
-            'country' => $regionAndCountry,
-        ]);
-
-        $newUser->referral_link = route('register', ['ref' => $newUser->id]);
-        $newUser->save();
-
-        if (request()->ref) {
-            Referral::create([
-                'referrer_id' => request()->ref,
-                'referral_id' => $newUser->id,
-                'status' => 'pending',
-            ]);
-        }
-
-        NewsLetter::create([
-            'email' => $newUser->email,
-            'ipaddress' => $ipAddress,
-        ]);
-
-        auth()->login($newUser);
-    }
-
-    return redirect('/chat');
-});
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
 
