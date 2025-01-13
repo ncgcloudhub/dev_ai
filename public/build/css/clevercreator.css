@@ -76,6 +76,26 @@
     transform: scale(0.98);
 }
 
+/* Button 3 - Glowing Purple */
+.gradient-btn-3-square {
+    background: linear-gradient(45deg, #9b00ff, #e900ff);
+    color: white;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 15px rgba(97, 93, 97, 0.5), 0 0 30px rgba(37, 37, 37, 0.3);
+    margin: 3px 3px 0px 0px;
+}
+
+.gradient-btn-3-square:hover {
+    background: linear-gradient(45deg, #e900ff, #9b00ff);
+    color: white;
+    box-shadow: 0 0 25px rgba(85, 82, 85, 0.7), 0 0 50px rgba(56, 49, 56, 0.5);
+    transform: scale(1.05);
+}
+
+.gradient-btn-3-square:active {
+    transform: scale(0.98);
+}
+
 
 /* Button 4 - Gradient Glow; Sign Up Button in Homepage top right */ 
 .gradient-btn-4 {
@@ -96,6 +116,12 @@
 .gradient-btn-4:active {
     transform: scale(0.98);
 }
+
+.gradient-bg {
+    background: linear-gradient(45deg, #9b00ff, #e900ff);
+    color: white !important;
+}
+
 
 
 /* Button 5 - Gradient Glow; Sign Up Button in Homepage top right */ 
@@ -458,4 +484,8 @@
 
 .nav-tabs-custom .nav-item .nav-link:after{
     background-color: purple !important;
+}
+
+.border-color-purple{
+    border-color: purple !important;
 }
