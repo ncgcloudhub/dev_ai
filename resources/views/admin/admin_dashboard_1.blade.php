@@ -138,6 +138,44 @@
             <div class="swiper-button-prev"></div>
         </div>
 
+        {{-- 1st col 4th row --}}
+        <div class="row">
+            <div class="col-6"><div class="card" style="border-color: #be06af">
+            <div class="card-body">
+                <div class="d-flex position-relative">
+                    <img src="/build/images/nft/friends.png" class="flex-shrink-0 me-3 avatar-xl rounded" alt="...">
+                    <div>
+                        <h5 class="mt-0 gradient-text-1-bold">Referral Link</h5>
+                        <p>Share this link to your friends to get more Free tokens and credits.</p>
+                        <a onclick="copyText(this)" class="btn gradient-btn-3">{{$user->referral_link}}</a>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+            <div class="col-3"><div class="card" style="border-color: #be06af">
+            <div class="card-body">
+                <div class="d-flex position-relative">
+                    <div>
+                        <h5 class="mt-0 gradient-text-1-bold">Tokens Left</h5>
+                        <p>Used for generating AI Content Creator, Chat, Prompting and many more!</p>
+                        <a href="javascript:void(0);" class="btn gradient-btn-3">{{$user->tokens_left}}</a>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+            <div class="col-3"><div class="card" style="border-color: #be06af">
+            <div class="card-body">
+                
+                    <div>
+                        <h5 class="mt-0 gradient-text-1-bold">Credits left</h5>
+                        <p>Used for generating High Quality Images in Dalle and Stable Diffusion!</p>
+                        <a href="javascript:void(0);" class="btn gradient-btn-3"> {{$user->credits_left}}</a>
+                    </div>
+                
+            </div>
+        </div></div>
+        </div>
+
     </div> 
 
     {{-- Second Col --}}
@@ -258,5 +296,16 @@
         greetingElement.textContent = greeting + ", " + name;
     });
 </script>
+
+<script>
+    function copyText(element) {
+        var text = element.textContent; // Use textContent to get the text inside
+        navigator.clipboard.writeText(text).then(() => {
+            alert(`"${text}" copied to clipboard!`);
+        }).catch(err => {
+            console.error('Error copying text: ', err);
+        });
+    }
+    </script>
 
 @endsection
