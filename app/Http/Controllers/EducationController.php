@@ -707,9 +707,16 @@ public function updateContent(Request $request, $id)
     // Start building the final prompt by appending the saved prompt from the tool
     $prompt = $savedPrompt . " "; 
 
-    foreach ($request->all() as $key => $value) {
-        if (!empty($value) && !in_array($key, ['_token', 'tool_id'])) {
-            // Escape special characters to prevent malformed prompt
+    // Fetch the selected grade from the `grade_id`
+    if ($gradeId = $request->input('grade_id')) {
+        $grade = GradeClass::find($gradeId); // Assuming your model is `Grade`
+        if ($grade) {
+            $prompt .= "Grade: " . $grade->grade . ". "; // Append the actual grade value
+        }
+    }
+
+    foreach ($request->except(['_token', 'tool_id', 'grade_id']) as $key => $value) {
+        if (!empty($value)) {
             $escapedValue = addslashes($value);
             $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $escapedValue. ";
         }
