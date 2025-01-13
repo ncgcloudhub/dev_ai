@@ -65,7 +65,7 @@ class AdminController extends Controller
         $totalFav = $favImages->sum('favorites_count');
 
         // dd($templates_count);
-        return view('admin.admin_dashboard', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav'));
+        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav'));
     }
 
     public function showChangePasswordForm(User $user)
