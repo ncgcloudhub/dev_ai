@@ -405,7 +405,7 @@
             </div> <!-- end row-->
 
             <div class="row">
-                <div class="col-xl-8">
+                <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header border-0 align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Latest Images</h4>
@@ -420,7 +420,7 @@
                                     <div class="gallery-box card">
                                         <div class="gallery-container">
                                             <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
-                                                <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" />
+                                                <img class="gallery-img img-fluid mx-auto d-block" src="{{ asset($item->image_url) }}" alt="" loading="lazy" />
                                                 <div class="gallery-overlay">
                                                     <h5 class="overlay-caption">{{$item->prompt}}</h5>
                                                 </div>
@@ -442,7 +442,7 @@
                     </div><!-- end card -->
                 </div><!-- end col -->
 
-                <div class="col-xl-4">
+                {{-- <div class="col-xl-4">
                     <!-- card -->
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
@@ -474,7 +474,7 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                </div>
+                </div> --}}
                 <!-- end col -->
 
                 {{-- CHAT START--}}
