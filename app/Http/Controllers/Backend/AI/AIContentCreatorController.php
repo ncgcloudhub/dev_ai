@@ -832,7 +832,7 @@ class AIContentCreatorController extends Controller
     }
 
 public function handleFacebookCallback() {
-    $user = Socialite::driver('facebook')->user();
+    $user = Socialite::driver('facebook')->stateless()->user();
     $ipAddress = request()->ip();
     $location = Location::get($ipAddress);
     $regionAndCountry = $location ? ($location->regionName . ', ' . $location->countryName) : 'Location not found';
