@@ -1,112 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Video</title>
-</head>
-<body>
-    <h1>Generate Animated Video</h1>
-    <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="image">Select Image:</label>
-        <input type="file" name="image" id="image" required>
-        <br>
-        <label for="seed">Seed:</label>
-        <input type="number" name="seed" id="seed" value="0">
-        <br>
-        <label for="cfg_scale">CFG Scale:</label>
-        <input type="number" name="cfg_scale" id="cfg_scale" value="1.8" step="0.1">
-        <br>
-        <label for="motion_bucket_id">Motion Bucket ID:</label>
-        <input type="number" name="motion_bucket_id" id="motion_bucket_id" value="127">
-        <br>
-        <button type="submit">Generate Video</button>
-    </form>
+@extends('admin.layouts.master')
+@section('title') Image to Video @endsection
 
-    <!-- Display the video after it's generated -->
-    <div id="videoContainer" style="margin-top: 20px; display: none;">
-        <h2>Generated Video</h2>
-        <video id="generatedVideo" controls>
-            <source id="videoSource" src="" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+@section('content')
+@component('admin.components.breadcrumb')
+@slot('li_1') <a href="#">Video Generation</a> @endslot
+@slot('title') Generate Animated Video @endslot
+@endcomponent
+
+<div class="row">
+    <div class="col-xxl-6">
+        <div class="card">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Generate Animated Video</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Select Image</label>
+                        <input type="file" name="image" id="image" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="seed" class="form-label">Seed</label>
+                        <input type="number" name="seed" id="seed" class="form-control" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cfg_scale" class="form-label">CFG Scale</label>
+                        <input type="number" name="cfg_scale" id="cfg_scale" class="form-control" value="1.8" step="0.1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="motion_bucket_id" class="form-label">Motion Bucket ID</label>
+                        <input type="number" name="motion_bucket_id" id="motion_bucket_id" class="form-control" value="127">
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-rounded gradient-btn-save">Generate Video</button>
+                    </div>
+                </form>
+              
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Handle form submission with AJAX
-        const form = document.querySelector('form');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent default form submission
-            
-            const formData = new FormData(form);
+    <div class="col-xxl-6">
+        <div class="card">
+            <div id="videoContainer" style="margin-top: 20px; display: none;">
+                <h5>Generated Video</h5>
+                <video id="generatedVideo" controls>
+                    <source id="videoSource" src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+</div>
+@endsection
+
+@section('script')
+
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+
+<script>
+    document.getElementById('videoGenerationForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
             const response = await fetch("{{ route('generate.video') }}", {
                 method: "POST",
                 body: formData,
             });
-            
+
             const result = await response.json();
 
             if (response.ok && result.id) {
-                // Successfully generated video, now fetch the video result
                 fetchVideo(result.id);
             } else {
-                alert('Error: ' + result.error.message);
+                alert('Error: ' + (result.error?.message || 'Unknown error occurred'));
             }
-        });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
 
+    const apiKey = @json($apiKey);
 
-        const apiKey = @json($apiKey); // Loaded from environment variable
+    function fetchVideo(generationId) {
+        const pollingInterval = 10000;
 
-        // Fetch video result based on generation ID
-      // Function to fetch video result
-function fetchVideo(generationId) {
-    // Polling interval (in milliseconds)
-    const pollingInterval = 10000; // 10 seconds
+        const pollForVideo = setInterval(() => {
+            fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.finish_reason === 'SUCCESS') {
+                    const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
+                    const videoUrl = URL.createObjectURL(videoBlob);
 
-    // Start polling
-    const pollForVideo = setInterval(() => {
-        fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle case when the video is ready
-            if (data && data.finish_reason === 'SUCCESS') {
-                console.log('Video is ready! Base64 video data:', data.video);
+                    const videoElement = document.getElementById('generatedVideo');
+                    const videoContainer = document.getElementById('videoContainer');
+                    const videoSource = document.getElementById('videoSource');
 
-                // Decode the base64 video and display or download it
-                const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
-                const videoUrl = URL.createObjectURL(videoBlob);
+                    videoSource.src = videoUrl;
+                    videoElement.load();
+                    videoContainer.style.display = 'block';
 
-                // Display video in the browser (you can adjust this as needed)
-                const videoElement = document.createElement('video');
-                videoElement.src = videoUrl;
-                videoElement.controls = true;
-                document.body.appendChild(videoElement);
-
-                // Stop polling after success
+                    clearInterval(pollForVideo);
+                } else if (data.status === 'in-progress') {
+                    console.log('Video generation still in progress...');
+                } else {
+                    console.error('Error fetching video:', data);
+                    clearInterval(pollForVideo);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching video:', error);
                 clearInterval(pollForVideo);
-            } else if (data && data.status === 'in-progress') {
-                console.log('Video generation still in progress...');
-            } else {
-                console.error('Error fetching video:', data);
-                clearInterval(pollForVideo);
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching video:', error);
-            clearInterval(pollForVideo);
-        });
-    }, pollingInterval);
-}
-
-
-    </script>
-</body>
-</html>
-
+            });
+        }, pollingInterval);
+    }
+</script>
+@endsection
