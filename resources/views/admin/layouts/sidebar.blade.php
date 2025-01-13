@@ -364,6 +364,16 @@
                                     <li class="nav-item">
                                         <a href="/stable-control-sketch-form" class="nav-link sidebar-hover">Control</a>
                                     </li>
+
+                                    {{-- Image to Video --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('stable.video.form') }}" class="nav-link sidebar-hover">Image to Video</a>
+                                    </li>
+
+                                    {{-- Text to video --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('stable.text.video.form') }}" class="nav-link sidebar-hover">Text to Video</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
