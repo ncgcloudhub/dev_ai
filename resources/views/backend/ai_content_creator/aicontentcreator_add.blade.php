@@ -65,6 +65,7 @@
                             <option value="" disabled selected>Select Input Type</option>
                             <option value="text">Input Field</option>
                             <option value="textarea">Textarea Field</option>
+                            <option value="attachment">Attachment</option>
                         </select>
                     </div>
                     <div class="col-md-3">

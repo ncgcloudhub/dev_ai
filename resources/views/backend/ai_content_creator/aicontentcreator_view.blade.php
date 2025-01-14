@@ -85,28 +85,32 @@
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                     <option value="10">10</option>
-
                                 </select>
-                               
                             </div>
                             
-
                             @isset($inputTypes)
-                            @foreach($inputTypes as $key => $type)
-                                <div class="col-md-12" @if ($loop->first) id="content-tour" @endif>
-                                     <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
-                                @if($type == 'text')
-                                    <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
-                                @elseif($type == 'textarea')
-                                    <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
-                                @endif
-                                </div>
+                                @foreach($inputTypes as $key => $type)
+                                    <div class="col-md-12" @if ($loop->first) id="content-tour" @endif>
+                                        <label for="{{ $inputNames[$key] }}" class="form-label">{{ $inputLabels[$key] }}</label>
+                                        
+                                        @if($type == 'text')
+                                            <!-- Input Field -->
+                                            <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
+                                        @elseif($type == 'textarea')
+                                            <!-- Textarea Field -->
+                                            <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
+                                        @elseif($type == 'attachment')
+                                            <!-- File Input Field -->
+                                            <input type="file" name="attachment" class="form-control" id="{{ $inputNames[$key] }}" required>
+                                        @endif
+                                    </div>
 
-                                <div hidden class="col-md-12" data-prompt="{{ $Template->prompt }}">
-                                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{$Template->prompt}}</textarea>
-                                </div>
-                            @endforeach
-                            @endisset                                                
+                                    <div hidden class="col-md-12" data-prompt="{{ $Template->prompt }}">
+                                        <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{ $Template->prompt }}</textarea>
+                                    </div>
+                                @endforeach
+                            @endisset
+                                                
 
                             <!-- Use Emoji -->
                             <div class="form-check form-switch">
