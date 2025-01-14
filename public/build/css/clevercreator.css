@@ -33,6 +33,7 @@
 
 
 
+
 /* Button 2 */
 .gradient-btn-2 {
     background: linear-gradient(45deg, #ff007f, #ff00ff);
@@ -487,5 +488,10 @@
 }
 
 .border-color-purple{
-    border-color: purple !important;
+    border-color: #be06af !important;
+}
+
+.badge-gradient-purple{
+    background:linear-gradient(45deg, #9b00ff, #e900ff);
+    
 }
