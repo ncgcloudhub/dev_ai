@@ -6,8 +6,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
-@slot('title') Add Template @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Content Creator Tools</a> @endslot
+@slot('title') Add Content Creator Tools @endslot
 @endcomponent
 
 <div class="col-xxl-6">
@@ -22,8 +22,8 @@
             <div class="live-preview">
                 
                     <div class="form-floating mb-3">
-                        <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter Template Name" required>
-                        <label for="template_name" class="form-label">Template Name <span class="text-danger">*</span></label>
+                        <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter Content Creator Tool Name" required>
+                        <label for="template_name" class="form-label">Content Creator Tool Name <span class="text-danger">*</span></label>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" name="icon" class="form-control" id="icon" placeholder="Enter Icon">
@@ -38,9 +38,8 @@
                         </select>
                         <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                     </div>
-                    
                   
-                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
+                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Content Creator Tool Name">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
                         <label for="description">Description</label>
                     </div>
