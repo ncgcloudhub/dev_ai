@@ -12,25 +12,30 @@
 
 <div class="row">
     <div class="col-xxl-3">
-        <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 200px; overflow: hidden;">
+        <div class="explore-place-bid-img">
+        <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
         </div>
         
         <!--end card-->
-        <div class="card mb-3">
+        <div class="card mb-3 mt-3 border-color-purple">
             <div class="card-body">
-                <div class="d-flex mb-3">
-                    <h6 class="card-title mb-0 flex-grow-1">Similar Tools</h6>
+                <div class="d-flex mb-3 align-items-center">
+                    <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
+                    <a href="{{route('manage.education.tools')}}" class="ms-auto">
+                        <span class="badge badge-gradient-purple">More Tools</span>
+                    </a>
                 </div>
+                
                 <ul class="list-unstyled vstack gap-3 mb-0">
                     @foreach ($similarTools as $similarTool)
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $similarTool->image) }}" alt="" class="avatar-xs rounded-circle">
+                                    <img src="{{ asset('storage/' . $similarTool->image) }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   
-                                    <h6 class="mb-1"><a href="  {{ route('tool.show', ['id' => $similarTool->id, 'slug' => $similarTool->slug]) }}" class="link-secondary">{{ $similarTool->name }}</a></h6>
+                                    <h6 class="mb-1"><a href="{{ route('tool.show', ['id' => $similarTool->id, 'slug' => $similarTool->slug]) }}" class="gradient-text-1">{{ $similarTool->name }}</a></h6>
                                     <p class="text-muted mb-0">{{ $similarTool->description ?? 'Tool Description' }}</p>
                                 </div>
                              
@@ -38,20 +43,18 @@
                         </li>
                     @endforeach
                 </ul>
-                <div class="mt-3 text-center">
-                    <button type="button" class="btn btn-primary">View more</button>
-                </div>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card border-color-purple">
             <div class="card-body">
-                <h5 class="card-title mb-3">Explore More Categories</h5>
+                <h5 class="card-title mb-3 gradient-text-1-bold">Explore More Categories</h5>
                 <div class="vstack gap-2">
                     <div class="hstack flex-wrap gap-2 fs-15">
-                        <div class="badge fw-medium bg-secondary-subtle text-secondary">UI/UX</div>
-                        <div class="badge fw-medium bg-secondary-subtle text-secondary">Dashboard</div>
-                        <div class="badge fw-medium bg-secondary-subtle text-secondary">Design</div>
+                        @foreach ($categories as $item)
+                        <a href="{{route('manage.education.tools')}}"><span class="badge badge-gradient-purple">{{$item->category_name}}</span></a>
+                           
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -60,44 +63,62 @@
     </div>
     <!---end col-->
     <div class="col-xxl-9">
-        <div class="card">
+        <div class="card border-color-purple">
             <div class="card-body">
-                <div class="text-muted">
-                    <h6 class="mb-3 fw-semibold text-uppercase">{{$tool->name}}</h6>
-                    <p>{{$tool->description}}</p>
-
-                        <form action="" method="POST" id="generate-content-form">
-                            @csrf
-                            <input type="hidden" name="tool_id" value="{{ $tool->id }}">
-                            <div class="form-group mb-3">
-                            <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
-                                <option selected="">Select Grade/Class</option>
-                                @foreach($classes as $item)
-                                    <option value="{{$item->id}}">{{$item->grade}}</option>
-                                @endforeach
-                            </select>
-                            </div>
-                
-                            <!-- Loop through input types and labels -->
-                            @foreach (json_decode($tool->input_types) as $index => $input_type)
-                                <div class="form-group mb-3">
-                                    <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
-                
-                                    @if ($input_type == 'textarea')
-                                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}"></textarea>
-                                    @else
-                                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}">
-                                    @endif
-                                </div>
-                            @endforeach
-                
-                            <!-- Submit Button -->
-                            <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
-                                <i class="ri-auction-fill align-bottom me-1"></i>Generate
+                <div class="row">
+                    <div class="col"> 
+                        <h3 class="mb-1 gradient-text-1-bold text-uppercase">{{$tool->name}}</h3>
+                        <p class="gradient-text-2">{{$tool->description}}</p></div>
+                    <div class="col">  
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
+                            <i class="las la-undo-alt"></i>Clear Inputs
                             </button>
-                        </form>
-  
+                            
+                            <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
+                            <i class="las la-magic"></i>Populate Inputs
+                            </button>
+                    </div></div>
+                    </div>
+               
+              <div class="row">
+                <div class="col-10 bg-marketplace">
+                    <form action="" method="POST" id="generate-content-form">
+                        @csrf
+                        <input type="hidden" name="tool_id" value="{{ $tool->id }}">
+                        <div class="form-group mb-3">
+                        <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
+                            <option selected="">Select Grade/Class</option>
+                            @foreach($classes as $item)
+                                <option value="{{$item->id}}">{{$item->grade}}</option>
+                            @endforeach
+                        </select>
+                        </div>
+            
+                        <!-- Loop through input types and labels -->
+                        @foreach (json_decode($tool->input_types) as $index => $input_type)
+                            <div class="form-group mb-3">
+                                <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
+            
+                                @if ($input_type == 'textarea')
+                                    <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}"></textarea>
+                                @else
+                                    <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}">
+                                @endif
+                            </div>
+                        @endforeach
+            
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
+                            <i class="ri-auction-fill align-bottom me-1"></i>Generate
+                        </button>
+                    </form>
                 </div>
+                <div class="col-2">
+                    <img src="/build/images/nft/edu_01.png" alt="" class="img-fluid">
+                </div>
+              </div>
+               
             </div>
         </div>
         <!--end card-->
@@ -508,6 +529,12 @@ function saveEditedToolContent() {
     })
     .catch(error => console.error('Error:', error));
 }
+
+// Clear all input values
+document.getElementById('clearInputsButton').addEventListener('click', function() {
+        // Reset the form (clear inputs)
+        document.getElementById('generate-content-form').reset();
+ });
 
 
 </script>
