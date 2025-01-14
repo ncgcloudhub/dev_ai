@@ -820,7 +820,7 @@ public function toggleFavorite(Request $request)
         }
     }
 
-    public function updateGrade(Request $request, $id)
+public function updateGrade(Request $request, $id)
 {
     $gradeClass = GradeClass::findOrFail($id); // Find the grade by ID
     $gradeClass->grade = $request->input('grade'); // Update the grade field
@@ -838,8 +838,6 @@ public function updateSubject(Request $request, $id)
 
     return redirect()->back()->with('success', 'Subject updated successfully.');
 }
-
-
 
     // CREATE TOOLS
     public function manageTools()
@@ -859,8 +857,8 @@ public function updateSubject(Request $request, $id)
         $tool = EducationTools::findOrFail($id);
         $classes = GradeClass::with('subjects')->get();
         $similarTools = EducationTools::where('category', $tool->category)
-        ->where('id', '!=', $id) // Exclude the current tool
-        ->get();
+        ->where('id', '!=', $id)->inRandomOrder()
+        ->limit(5)->get();
 
         $toolContent = ToolGeneratedContent::where('tool_id', $id)
         ->where('user_id', $userId)
