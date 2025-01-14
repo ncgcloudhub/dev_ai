@@ -515,26 +515,30 @@ class AIContentCreatorController extends Controller
 
         // Integrate File Content into the Prompt
         $prompt = $input->prompt;
+
+        // Add language and tone details
+        $prompt .= "\n\nWrite in {$language} language. Creativity level should be {$creative_level}. The tone of voice should be {$tone}.";
+
+        // Add variations if necessary
+        if ($points > 1) {
+            $prompt .= " Write {$points} variations about it. Do not write translations.";
+        }
+
+        // Add style if applicable
+        if (!empty($input->style)) {
+            $prompt .= " The image style should be {$input->style}.";
+        }
+
+        // Add emoji usage if enabled
+        if ($input->emoji == 1) {
+            $prompt .= " Use proper emojis.";
+        }
+
+        // Only append file content if available
         if (!empty($fileContent)) {
             $prompt .= "\n\nAnalyze the following file content and generate insights:\n" . $fileContent;
         }
 
-        if ($input->emoji == 1) {
-            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '.';
-            if ($points > 1) {
-                $prompt .= ' Write ' . $points . ' variations about it. Do not write translations.';
-            }
-        } elseif (isset($input->style) && $input->style != "") {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '.';
-            if ($points > 1) {
-                $prompt .= ' Write ' . $points . ' variations about it. Do not write translations.';
-            }
-        } else {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '.';
-            if ($points > 1) {
-                $prompt .= ' Write ' . $points . ' variations about it. Do not write translations.';
-            }
-        }
 
 
         foreach ($input->all() as $name => $inpVal) {
