@@ -9,7 +9,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Content Creator Tools</a> @endslot
 @slot('title') {{$Template->template_name}} @endslot
 @endcomponent
 
@@ -18,7 +18,7 @@
     <i class="las la-arrow-left"></i>
 </button>
 
-<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Template View Tour</button>
+<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
 <button id="generatedContents" type="button" class="btn gradient-btn-6 text-white my-2" data-bs-toggle="modal" data-bs-target="#subscribeModals">{{$Template->template_name}} Contents</button>
 
 <div class="row">
