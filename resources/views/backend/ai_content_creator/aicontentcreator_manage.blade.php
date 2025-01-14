@@ -6,8 +6,8 @@
 @section('keywords', $seo->keywords)
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
-@slot('title') All Templates @endslot
+@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Content Creator Tools</a> @endslot
+@slot('title') All Content Creator Tools @endslot
 @endcomponent
 
 <style>
@@ -29,9 +29,9 @@
         <div class="card" id="orderList">
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Templates</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">Content Creator Tools</h5>
                    
-                   <button id="templateManageTourButton" class="btn gradient-btn-7 text-white">Template Tour</button>
+                   <button id="templateManageTourButton" class="btn gradient-btn-7 text-white">Content Creator Tools Tour</button>
 
                 </div>
             </div>
@@ -41,7 +41,7 @@
                         <div class="col-xxl-5 col-sm-6">
                             <div class="search-box" id="search-tour">
                                 <input type="text" class="form-control search"
-                                    placeholder="Search for Templates">
+                                    placeholder="Search for Content Creator Tools">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -68,14 +68,14 @@
                         <li class="nav-item">
                             <a class="requeste py-3 btn <?= $hasPendingFeedback ? 'btn-outline-warning' : 'btn-outline-success' ?> waves-effect waves-light" data-bs-toggle="tab" id="requeste"
                                 href="#requested" role="tab" aria-selected="false">
-                                <i class="ri-store-2-fill me-1 align-bottom"></i> Requested Templates
+                                <i class="ri-store-2-fill me-1 align-bottom"></i> Requested Content Creator Tools
                             </a>
                         </li>
                      
                         <li class="nav-item" id="category-tour">
                             <a class="nav-link n1 active All py-3" data-bs-toggle="tab" id="All"
                                 href="#home1" role="tab" aria-selected="true">
-                                <i class="ri-store-2-fill me-1 align-bottom"></i> All Templates
+                                <i class="ri-store-2-fill me-1 align-bottom"></i> All Content Creator Tools
                             </a>
                         </li>
 
@@ -170,8 +170,8 @@
                                         trigger="loop" colors="primary:#405189,secondary:#0ab39c"
                                         style="width:75px;height:75px">
                                     </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Templates Found</h5>
-                                    <p class="text-muted">We've searched more than 71+ Templates. We did not find any templates matching your search.</p>
+                                    <h5 class="mt-2">Sorry! No Content Creator Tools Found</h5>
+                                    <p class="text-muted">We've searched more than 71+ Content Creator Tools. We did not find any templates matching your search.</p>
 
                                     <form action="{{ route('template.module.feedback') }}" method="POST">
                                         @csrf
