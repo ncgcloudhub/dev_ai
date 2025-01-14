@@ -6,16 +6,14 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
-@slot('title') Manage Tools @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
+@slot('title') {{$tool->name}} @endslot
 @endcomponent
-
 
 <div class="row">
     <div class="col-xxl-3">
         <div class="card" style="background-image: url('{{ asset('storage/' . $tool->image) }}'); background-size: cover; background-position: center; height: 200px; overflow: hidden;">
         </div>
-        
         
         <!--end card-->
         <div class="card mb-3">
