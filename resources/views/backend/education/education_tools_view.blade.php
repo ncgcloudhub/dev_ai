@@ -64,6 +64,14 @@
     <div class="col-xxl-9">
         <div class="card">
             <div class="card-body">
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
+                        <i class="las la-undo-alt"></i> Clear Inputs
+                    </button>
+                    <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
+                        <i class="las la-magic"></i> Populate Inputs
+                    </button>
+                </div>
                 <div class="text-muted">
                     <h6 class="mb-3 fw-semibold text-uppercase">{{$tool->name}}</h6>
                     <p>{{$tool->description}}</p>
@@ -510,6 +518,12 @@ function saveEditedToolContent() {
     })
     .catch(error => console.error('Error:', error));
 }
+
+// Clear all input values
+document.getElementById('clearInputsButton').addEventListener('click', function() {
+        // Reset the form (clear inputs)
+        document.getElementById('generate-content-form').reset();
+ });
 
 
 </script>

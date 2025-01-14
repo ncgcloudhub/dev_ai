@@ -416,12 +416,7 @@
         // For additional input types, clear manually if needed
     });
 
-    document.getElementById('populateInputsButton').addEventListener('click', function() {
-    const inputs = document.querySelectorAll('input[type="text"], textarea');
-    inputs.forEach(input => {
-        input.value = input.placeholder;  // Populate input fields with placeholder values
-    });
-    });
+    
 </script>
 
 <script>
