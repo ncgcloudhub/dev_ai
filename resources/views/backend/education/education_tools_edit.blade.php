@@ -6,12 +6,12 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
-@slot('title') Add Tools @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
+@slot('title') Edit Tools | {{$tool->name}} @endslot
 @endcomponent
 
 <div class="col-xxl-8"> 
-    <a href="{{ route('manage.education.tools') }}">manage</a>
+    {{-- <a href="{{ route('manage.education.tools') }}">manage</a> --}}
     <form method="POST" action="{{ route('tools.update', $tool->id) }}" class="row g-3" enctype="multipart/form-data">
         @csrf
         @method('PUT')
