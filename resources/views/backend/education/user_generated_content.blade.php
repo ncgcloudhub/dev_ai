@@ -1,10 +1,5 @@
 @extends('admin.layouts.master')
-
-@section('title', $seo->title)
-
-@section('description', $seo->description)
-
-@section('keywords', $seo->keywords)
+@section('title') Education Wizard Contents @endsection
 
 @section('content')
  <style>
