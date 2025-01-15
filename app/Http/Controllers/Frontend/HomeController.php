@@ -158,7 +158,6 @@ class HomeController extends Controller
         $validated = $request->validate([
             'category' => 'required|string',
             'points' => 'required|integer',
-            'content' => 'nullable|string',
         ]);
 
         $user = auth()->user();
@@ -167,10 +166,9 @@ class HomeController extends Controller
         // Get the category and points from the request
         $category = $validated['category'];
         $points = $validated['points'];
-        $content = $validated['content'];
     
         // Example of how you might structure the message for the AI generation
-        $aiMessage = "Generate $points jokes based on the category: $category, specifically on $content and each joke should be one liner.";
+        $aiMessage = "Generate $points jokes based on the category: $category, each joke should be one liner.";
     
         // Initialize the HTTP client (Guzzle) for making the request to the AI API
         $client = new Client();
