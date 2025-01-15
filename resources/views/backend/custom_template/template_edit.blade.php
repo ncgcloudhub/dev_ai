@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('custom.template.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('custom.template.manage')}}">Custom AI Content Creator</a> @endslot
 @slot('title') Edit | {{$template->template_name}} @endslot
 @endcomponent
 
