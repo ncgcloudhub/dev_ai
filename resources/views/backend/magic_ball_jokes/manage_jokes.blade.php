@@ -65,7 +65,7 @@
     <div class="col-xxl-6">
         <form method="POST" action="{{ route('jokes.store') }}" class="row g-3">
             @csrf
-            <div class="card border-color-purple">
+            <div class="card">
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Add Joke</h4>
                 </div><!-- end card header -->
@@ -102,9 +102,9 @@
                         </div>
                         
                         <!-- Joke content input -->
-                        <div>
+                        <div class="mb-3">
                             <label for="content" class="form-label">Joke Content</label>
-                            <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                         </div>
                     </div>
                 </div><!-- end card body -->
@@ -117,7 +117,7 @@
         </form>
 
          {{-- List Of Jokes (After Output) --}}
-    <form id="jokeForm border-color-purple" style="display: none;">
+         <form id="jokeForm" style="display: none;">
         @csrf
         <input type="hidden" id="joke_content_input" value="">
 
