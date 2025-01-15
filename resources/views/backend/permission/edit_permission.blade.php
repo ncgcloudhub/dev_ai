@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Edit Permission ({{ $permission->name }})  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Role & Permission @endslot
@@ -14,8 +14,6 @@
         <div class="row">
          <div class="card">
           <div class="card-body">
-
-        <h6 class="card-title">Add Permission   </h6>
 
  <form id="myForm" method="POST" action="{{ route('update.permission') }}" class="forms-sample">
             @csrf

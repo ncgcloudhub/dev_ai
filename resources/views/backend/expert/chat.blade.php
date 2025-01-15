@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.chat') @endsection
+@section('title') Chat @endsection
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">

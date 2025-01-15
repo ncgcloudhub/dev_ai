@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Edit Roles In Permission ({{ $role->name }}) @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Role & Permission @endslot

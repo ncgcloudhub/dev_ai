@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
 @slot('title') Add Tools @endslot
 @endcomponent
 

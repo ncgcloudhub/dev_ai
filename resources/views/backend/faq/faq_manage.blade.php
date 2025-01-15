@@ -1,16 +1,6 @@
 @extends('admin.layouts.master')
 
-@section('title')
-    {{ $seo->title }}
-@endsection
-
-@section('description')
-    {{ $seo->description }}
-@endsection
-
-@section('keywords')
-    {{ $seo->keywords }}
-@endsection
+@section('title') FAQ @endsection
 
 @section('content')
 @component('admin.components.breadcrumb')

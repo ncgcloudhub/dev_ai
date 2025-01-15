@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') Education Tools @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
 @slot('title') Manage Tools @endslot
 @endcomponent
 

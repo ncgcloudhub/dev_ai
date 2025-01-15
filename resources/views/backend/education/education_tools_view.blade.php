@@ -1,22 +1,20 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') Education Tools | {{$tool->name}} @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Education</a> @endslot
-@slot('title') Manage Tools @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
+@slot('title') {{$tool->name}} @endslot
 @endcomponent
-
 
 <div class="row">
     <div class="col-xxl-3">
         <div class="explore-place-bid-img">
         <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
         </div>
-        
         
         <!--end card-->
         <div class="card mb-3 mt-3 border-color-purple">
@@ -163,7 +161,6 @@
                                         <th scope="col">Prompt</th>
                                         <th scope="col">Content</th>
                                         <th scope="col">Action</th>
-                                      
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -174,30 +171,60 @@
                                                 <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt=""
                                                     class="rounded-circle avatar-xxs">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <a href="pages-profile"
-                                                        class="fw-medium link-secondary">Tool ID: {{ $content->tool_id }}</a>
+                                                    <a href="pages-profile" class="fw-medium link-secondary">Tool ID: {{ $content->tool_id }}</a>
                                                 </div>
                                             </div>
                                         </th>
                                         <td>{{ $content->prompt }}</td>
-                                        <td>{{ $content->content }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-primary" onclick="openToolContentEditorModal({{ $content->id }})">
+                                            {{-- Display truncated content --}}
+                                            {!! Str::words(strip_tags($content->formatted_content), 50, '...') !!}
+                    
+                                            {{-- Read More Button --}}
+                                            <button type="button" class="btn btn-link text-primary p-0" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#viewFullContentModal{{ $content->id }}">
+                                                Read More
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary" 
+                                                    onclick="openToolContentEditorModal({{ $content->id }})">
                                                 Edit
                                             </button>
                                         </td>
-                                        
-                                       
                                     </tr>
+                    
+                                    {{-- Modal for Full Content --}}
+                                    <div class="modal fade" id="viewFullContentModal{{ $content->id }}" tabindex="-1" 
+                                         aria-labelledby="viewFullContentModalLabel{{ $content->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewFullContentModalLabel{{ $content->id }}">
+                                                        Full Content
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{-- Display full formatted content --}}
+                                                    {!! $content->formatted_content !!}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endforeach
                                 </tbody>
                             </table>
                             <!--end table-->
                         </div>
                     </div>
+                    
                     <!--end tab-pane-->
                     <div class="tab-pane" id="profile-1" role="tabpanel">
-                        <h6 class="card-title mb-4 pb-2">Time Entries</h6>
                         <div class="table-responsive table-card">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light text-muted">
@@ -205,7 +232,6 @@
                                         <th scope="col">Tool</th>
                                         <th scope="col">Prompt</th>
                                         <th scope="col">Content</th>
-                                      
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -222,15 +248,47 @@
                                             </div>
                                         </th>
                                         <td>{{ $content->prompt }}</td>
-                                        <td>{{ $content->content }}</td>
-                                       
+                                        <td>
+                                            {{-- Display truncated content --}}
+                                            {!! Str::words(strip_tags($content->formatted_content), 50, '...') !!}
+                    
+                                            {{-- Read More Button --}}
+                                            <button type="button" class="btn btn-link text-primary p-0"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#viewFullContentModalAll{{ $content->id }}">
+                                                Read More
+                                            </button>
+                                        </td>
                                     </tr>
+                    
+                                    {{-- Modal for Full Content --}}
+                                    <div class="modal fade" id="viewFullContentModalAll{{ $content->id }}" tabindex="-1"
+                                         aria-labelledby="viewFullContentModalLabelAll{{ $content->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewFullContentModalLabelAll{{ $content->id }}">
+                                                        Full Content
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{-- Display full formatted content --}}
+                                                    {!! $content->formatted_content !!}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endforeach
                                 </tbody>
                             </table>
                             <!--end table-->
                         </div>
                     </div>
+                    
                     <!--edn tab-pane-->
 
                 </div>

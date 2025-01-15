@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') Block Country @endsection
+@section('title') Edit Block Country @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="{{route('manage.block')}}">Country</a> @endslot

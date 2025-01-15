@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.datatables') @endsection
+@section('title') Send E-Mail Form @endsection
 @section('css')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">

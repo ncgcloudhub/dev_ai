@@ -226,11 +226,15 @@
 <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 
 <!-- dashboard init -->
-<script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}" defer></script>
-<script src="{{ URL::asset('build/js/app.js') }}" defer></script>
-<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}" defer></script>
-<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}" defer></script>
-<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}" defer></script>
+<script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+
+ <!-- Marketplace init -->
+ <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -254,10 +258,7 @@
   });
 </script>
 
- <!-- Marketplace init -->
- <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
 
- <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
     $(document).ready(function() {

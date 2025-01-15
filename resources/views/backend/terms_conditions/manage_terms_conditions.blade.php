@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') Terms & COnditions @endsection
 
 @section('content')
 @component('admin.components.breadcrumb')

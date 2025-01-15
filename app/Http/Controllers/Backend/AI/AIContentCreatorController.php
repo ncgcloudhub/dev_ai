@@ -466,79 +466,79 @@ class AIContentCreatorController extends Controller
     public function AIContentCreatorgenerate(Request $input)
     {
         $template_id = $input->template_id;
-        // Get the currently authenticated user
         $user = auth()->user();
-        // Retrieve the selected model from the `selected_model` field
         $openaiModel = $user->selected_model;
-        Log::info('before: ' . $openaiModel);
         $template = Template::find($template_id);
-        $user = Auth::user();
-
-        $points = 1;
-        $language = 'English';
-
-        $max_result_length_value = 100;
-        $temperature_value = 0;
-        $top_p_value = 1;
-        $frequency_penalty_value = 0;
-        $presence_penalty_value = 0;
-        $tone = 'professional';
-        $creative_level = 'High';
-
-
+        $points = $input->points ?? 1;
+        $language = $input->language ?? 'English';
+        $max_result_length_value = intval($input->max_result_length_value ?? 100);
+        $temperature_value = floatval($input->temperature_value ?? 0);
+        $top_p_value = floatval($input->top_p_value ?? 1);
+        $frequency_penalty_value = floatval($input->frequency_penalty_value ?? 0);
+        $presence_penalty_value = floatval($input->presence_penalty_value ?? 0);
+        $tone = $input->tone ?? 'professional';
+        $creative_level = $input->creative_level ?? 'High';
+        $style = $input->style ?? null;
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
 
-
-        if ($input->points != NULL) {
-            $points = $input->points;
+        // Handle File Upload
+        $fileContent = '';
+        if ($input->hasFile('attachment') && $input->file('attachment')->isValid()) {
+            $file = $input->file('attachment');
+            $allowedExtensions = ['pdf', 'doc', 'docx', 'txt'];
+            
+            if (in_array($file->getClientOriginalExtension(), $allowedExtensions)) {
+                // Read the file content
+                if ($file->getClientOriginalExtension() === 'txt') {
+                    $fileContent = file_get_contents($file->getPathname());
+                } elseif (in_array($file->getClientOriginalExtension(), ['doc', 'docx'])) {
+                    $reader = \PhpOffice\PhpWord\IOFactory::createReader('Word2007');
+                    $phpWord = $reader->load($file->getPathname());
+                    $fileContent = '';
+                    foreach ($phpWord->getSections() as $section) {
+                        foreach ($section->getElements() as $element) {
+                            if (method_exists($element, 'getText')) {
+                                $fileContent .= $element->getText() . " ";
+                            }
+                        }
+                    }
+                } elseif ($file->getClientOriginalExtension() === 'pdf') {
+                    $parser = new \Smalot\PdfParser\Parser();
+                    $pdf = $parser->parseFile($file->getPathname());
+                    $fileContent = $pdf->getText();
+                }
+            } else {
+                return response()->json(['error' => 'Invalid file type. Only PDF, DOC, DOCX, and TXT are allowed.'], 400);
+            }
         }
 
-        if ($input->language != NULL) {
-            $language = $input->language;
+        // Integrate File Content into the Prompt
+        $prompt = $input->prompt;
+
+        // Add language and tone details
+        $prompt .= "\n\nWrite in {$language} language. Creativity level should be {$creative_level}. The tone of voice should be {$tone}.";
+
+        // Add variations if necessary
+        if ($points > 1) {
+            $prompt .= " Write {$points} variations about it. Do not write translations.";
         }
 
-        if ($input->max_result_length_value != NULL) {
-            $max_result_length_value = intval($input->max_result_length_value);
+        // Add style if applicable
+        if (!empty($input->style)) {
+            $prompt .= " The image style should be {$input->style}.";
         }
 
-        if ($input->temperature_value != NULL) {
-            $temperature_value = $input->temperature_value;
-        }
-
-        if ($input->top_p_value != NULL) {
-            $top_p_value = $input->top_p_value;
-        }
-
-        if ($input->frequency_penalty_value != NULL) {
-            $frequency_penalty_value = $input->frequency_penalty_value;
-        }
-
-        if ($input->presence_penalty_value != NULL) {
-            $presence_penalty_value = $input->presence_penalty_value;
-        }
-
-        if ($input->tone != NULL) {
-            $tone = $input->tone;
-        }
-
-        if ($input->creative_level != NULL) {
-            $creative_level = $input->creative_level;
-        }
-
-        if ($input->style != NULL) {
-            $style = $input->style;
-        }
-
-        $prompt =  $input->prompt;
-
+        // Add emoji usage if enabled
         if ($input->emoji == 1) {
-            $prompt .= 'Use proper emojis and write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' variations about it. Do not write translations. ';
-        } elseif (isset($input->style) && $input->style != "") {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. The image style should be ' . $style . '. Write '. $points . ' variations about it. Do not write translations. ';
-        } else {
-            $prompt .= 'Write in ' . $language . ' language. Creativity level should be ' . $creative_level . '. The tone of voice should be ' . $tone . '. Write '. $points . ' variations about it. Do not write translations. ';
+            $prompt .= " Use proper emojis.";
         }
+
+        // Only append file content if available
+        if (!empty($fileContent)) {
+            $prompt .= "\n\nAnalyze the following file content and generate insights:\n" . $fileContent;
+        }
+
 
 
         foreach ($input->all() as $name => $inpVal) {
@@ -586,83 +586,83 @@ class AIContentCreatorController extends Controller
         ];
 
         // Initialize the OpenAI client and request parameters
-    $result = $client->chat()->create([
-        "model" => $openaiModel,
-        "temperature" => floatval($temperature_value),
-        "top_p" => floatval($top_p_value),
-        "frequency_penalty" => floatval($frequency_penalty_value),
-        "presence_penalty" => floatval($presence_penalty_value),
-        'max_tokens' => $maxTokens,
-        'messages' => $messages,
-    ]);
-
-    $completionTokens = $result->usage->completionTokens;
-    $totalTokens = $result->usage->totalTokens;
-
-    // Process the response
-    $content = trim($result['choices'][0]['message']['content']);
-    $char_count = strlen($content);
-    $num_tokens = ceil($char_count / 4);
-    $num_words = str_word_count($content);
-    $num_characters = strlen($content);
-
-    if ($user->tokens_left <= 0) {
-        return response()->json(0);
-    } else {
-        deductUserTokensAndCredits($totalTokens);
-
-        Template::where('id', $template->id)->update([
-            'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
+        $result = $client->chat()->create([
+            "model" => $openaiModel,
+            "temperature" => floatval($temperature_value),
+            "top_p" => floatval($top_p_value),
+            "frequency_penalty" => floatval($frequency_penalty_value),
+            "presence_penalty" => floatval($presence_penalty_value),
+            'max_tokens' => $maxTokens,
+            'messages' => $messages,
         ]);
 
-        // Limit the saved generated contents per template
-        $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)
-            ->where('template_id', $template_id)
-            ->count();
+        $completionTokens = $result->usage->completionTokens;
+        $totalTokens = $result->usage->totalTokens;
 
-        if ($userGeneratedContentsCount >= 3) {
-            TemplateGeneratedContent::where('user_id', $user->id)
+        // Process the response
+        $content = trim($result['choices'][0]['message']['content']);
+        $char_count = strlen($content);
+        $num_tokens = ceil($char_count / 4);
+        $num_words = str_word_count($content);
+        $num_characters = strlen($content);
+
+        if ($user->tokens_left <= 0) {
+            return response()->json(0);
+        } else {
+            deductUserTokensAndCredits($totalTokens);
+
+            Template::where('id', $template->id)->update([
+                'total_word_generated' => DB::raw('total_word_generated + ' . $num_words),
+            ]);
+
+            // Limit the saved generated contents per template
+            $userGeneratedContentsCount = TemplateGeneratedContent::where('user_id', $user->id)
                 ->where('template_id', $template_id)
-                ->orderBy('created_at', 'asc')
-                ->first()
-                ->delete();
-        }
+                ->count();
 
-        // Save the new entry
-        TemplateGeneratedContent::create([
-            'user_id' => $user->id,
-            'template_id' => $template_id,
-            'prompt' => $prompt,
-            'generated_content' => $content,
-        ]);
-
-        // Log the activity
-        logActivity('AI Content Creator', 'generated content from template: ' . $template->template_name);
-
-        // Stream the response
-        return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens, $totalTokens) {
-            $chunks = explode("\n", $content); // Split the content into chunks
-            $parsedown = new Parsedown(); // Initialize Parsedown
-            
-            // Stream each chunk
-            foreach ($chunks as $chunk) {
-                $htmlChunk = $parsedown->text($chunk);
-                echo $htmlChunk;
-                ob_flush(); // Flush the output buffer
-                flush();     // Flush the system output buffer
-                sleep(1);    // Simulate delay between chunks (optional)
+            if ($userGeneratedContentsCount >= 3) {
+                TemplateGeneratedContent::where('user_id', $user->id)
+                    ->where('template_id', $template_id)
+                    ->orderBy('created_at', 'asc')
+                    ->first()
+                    ->delete();
             }
 
-            // Send the stats after content
-            echo json_encode([
-                'num_tokens' => $num_tokens,
-                'num_words' => $num_words,
-                'num_characters' => $num_characters,
-                'completionTokens' => $completionTokens,
-                'totalTokens' => $totalTokens,
+            // Save the new entry
+            TemplateGeneratedContent::create([
+                'user_id' => $user->id,
+                'template_id' => $template_id,
+                'prompt' => $prompt,
+                'generated_content' => $content,
             ]);
-        });
-    }
+
+            // Log the activity
+            logActivity('AI Content Creator', 'generated content from template: ' . $template->template_name);
+
+            // Stream the response
+            return response()->stream(function () use ($content, $num_tokens, $num_words, $num_characters, $completionTokens, $totalTokens) {
+                $chunks = explode("\n", $content); // Split the content into chunks
+                $parsedown = new Parsedown(); // Initialize Parsedown
+                
+                // Stream each chunk
+                foreach ($chunks as $chunk) {
+                    $htmlChunk = $parsedown->text($chunk);
+                    echo $htmlChunk;
+                    ob_flush(); // Flush the output buffer
+                    flush();     // Flush the system output buffer
+                    sleep(1);    // Simulate delay between chunks (optional)
+                }
+
+                // Send the stats after content
+                echo json_encode([
+                    'num_tokens' => $num_tokens,
+                    'num_words' => $num_words,
+                    'num_characters' => $num_characters,
+                    'completionTokens' => $completionTokens,
+                    'totalTokens' => $totalTokens,
+                ]);
+            });
+        }
     }
 
 

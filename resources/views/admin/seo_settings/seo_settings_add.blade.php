@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') SEO Settings @endsection
 
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1')  SEO Settings @endslot
-@slot('title') Add @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
+@slot('title') SEO Settings @endslot
 @endcomponent
 
 <div class="col-xxl-6">

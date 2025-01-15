@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') AI Expert Edit @endsection
 @section('css')
 <link href="/assets/libs/jsvectormap/jsvectormap.min.css" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('/build/libs/dropzone/dropzone.min.css') }}" rel="stylesheet">

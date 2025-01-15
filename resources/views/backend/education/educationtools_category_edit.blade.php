@@ -1,8 +1,8 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Education Tools Category Edit  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('manage.education.tools')}}">Education Tools</a> @endslot
 @slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
 

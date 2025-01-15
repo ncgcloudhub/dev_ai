@@ -28,7 +28,7 @@
                             @csrf
                             <div class="col-lg-12">
                                 <div class="hstack gap-2 justify-content-end">
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="btn gradient-btn-save">Update</button>
                                 </div>
                                 <div class="profile-user position-relative d-inline-block mx-auto mb-4">
                                     <img src="{{ Auth::user()->photo ? asset('backend/uploads/user/' . Auth::user()->photo) : asset('build/images/users/avatar-1.jpg') }}" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image" width="200" height="200">
@@ -227,7 +227,7 @@
         <div class="col-xxl-9">
             <div class="card mt-xxl-n5">
                 <div class="card-header">
-                    <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <ul class="nav nav-pills nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
                                 <i class="fas fa-home"></i>
@@ -314,7 +314,7 @@
                                 <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
-                                            <button type="submit" class="btn btn-primary">Update</button>
+                                            <button type="submit" class="btn gradient-btn-save">Update</button>
                                             <button type="button" class="btn btn-soft-secondary">Cancel</button>
                                         </div>
                                     </div>
@@ -364,7 +364,7 @@
                                     <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="text-end">
-                                            <button type="submit" class="btn btn-primary">Change
+                                            <button type="submit" class="btn gradient-btn-save">Change
                                                 Password</button>
                                                 @if (session('status') === 'password-updated')
                                                 <p

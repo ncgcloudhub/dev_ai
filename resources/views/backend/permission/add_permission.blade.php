@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Add Permission  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Role & Permission @endslot

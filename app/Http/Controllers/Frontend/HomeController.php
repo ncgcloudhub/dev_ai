@@ -186,7 +186,7 @@ class HomeController extends Controller
                     'messages' => [
                         [
                             "role" => "system",
-                            "content" => "You are an Comedian."
+                            "content" => "You are a witty and hilarious comedian, known for cracking side-splitting jokes that bring laughter to everyone."
                         ],
                         [
                             "role" => "user",
