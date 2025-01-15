@@ -15,11 +15,8 @@
 
 
 <div class="row">
-
-
     <div class="col-xxl-6">
         <div class="card">
-    
                 <div class="card-body">
                     <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                         <thead>
@@ -68,7 +65,7 @@
     <div class="col-xxl-6">
         <form method="POST" action="{{ route('jokes.store') }}" class="row g-3">
             @csrf
-            <div class="card">
+            <div class="card border-color-purple">
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Add Joke</h4>
                 </div><!-- end card header -->
@@ -105,23 +102,21 @@
                         </div>
                         
                         <!-- Joke content input -->
-                        <div class="mb-3">
+                        <div>
                             <label for="content" class="form-label">Joke Content</label>
-                            <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+                            <textarea class="form-control" id="content" name="content" rows="3"></textarea>
                         </div>
                     </div>
                 </div><!-- end card body -->
                 
                 <div class="card-footer">
-                    <button type="button" class="btn btn-info" id="aiGenerateBtn">AI Generate</button>
-                    <button type="submit" class="btn gradient-btn-save">Save Joke</button>
+                    <button type="button" class="btn gradient-btn-save" id="aiGenerateBtn">AI Generate</button>
                 </div><!-- end card footer -->
             </div><!-- end card -->
         </form>
-    </div>
 
-    {{-- List Of Jokes (After Output) --}}
-    <form id="jokeForm" style="display: none;">
+         {{-- List Of Jokes (After Output) --}}
+    <form id="jokeForm border-color-purple" style="display: none;">
         @csrf
         <input type="hidden" id="joke_content_input" value="">
 
@@ -129,9 +124,9 @@
             <label for="joke_points">Select Joke Points:</label>
             <div id="jokePointsContainer"></div>
         </div>
-        <button type="submit" class="btn btn-success">Save Joke</button>
+        <button type="submit" class="btn gradient-btn-save">Save Joke</button>
     </form>
-
+    </div>
     </div>
 
 <!-- Edit Joke Modal -->
