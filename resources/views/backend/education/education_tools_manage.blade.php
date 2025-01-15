@@ -16,26 +16,61 @@
     @endcan
 @endif
 
-<section class="py-5 gradient-background-1 position-relative">
+<section class="py-2 gradient-background-1 position-relative">
     <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
     <div class="container">
         <div class="row align-items-center gy-4">
             <div class="col-sm">
                 <div>
-                    <h4 class="text-white mb-0 fw-semibold text-center">Empower Your Classroom with AI-Driven Tools</h4>
+                    <h4 class="text-white mb-0 fw-semibold text-center mb-2">Empower Your Classroom with AI-Driven Tools</h4>
+                    <p class="text-white
+text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="section bg-light" id="marketplace">
     <div class="container">
         <div class="row justify-content-center">
+            <form>
+                <div class="row g-3 justify-content-center my-3">
+                    <div class="col">
+                        <div class="search-box" id="search-tour">
+                            <input type="text" class="form-control search border-color-purple"
+                                placeholder="Search for Templates">
+                            <i class="ri-search-line search-icon color-purple"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    
+                </div>
+                <!--end row-->
+            </form>
+
+            <div class="noresult my-2" style="display: none">
+                <div class="text-center">
+                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                        trigger="loop" colors="primary:#405189,secondary:#0ab39c"
+                        style="width:75px;height:75px">
+                    </lord-icon>
+                    <h5 class="mt-2">Sorry! No Tools Found</h5>
+                    <p class="text-muted">We've searched all tools related to education. We did not find any tools matching your search.</p>
+
+                    <form action="{{ route('template.module.feedback') }}" method="POST">
+                        @csrf
+                        <div class="form-group d-flex gap-2">
+                            <input type="text" class="form-control border-color-purple" id="feedbackText" name="text" placeholder="Enter your feedback" required>
+                            <button type="submit" class="btn gradient-btn-3">Submit</button>
+                        </div>
+                        
+                    </form>
+                    
+                </div>
+            </div>
+
             <div class="col-lg-8">
-                <div class="text-center mb-5">
-                   
-                    <p class="text-muted mb-4">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
+                <div class="text-center mb-3">
                     
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -53,7 +88,7 @@
 
         <div class="row">
             @foreach($tools as $tool)
-            <div class="col-lg-4 product-item {{ Str::slug($tool->educationtools_category->category_name) }}">
+            <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
                 <div class="card explore-box card-animate">
                     <div class="bookmark-icon position-absolute top-0 end-0 p-2">
                         <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">
@@ -92,7 +127,7 @@
                             <button class="favorite-button" data-id="{{ $tool->id }}" style="border: none; background: none; cursor: pointer;">
                                 <i class="{{ $tool->is_favorited ? 'mdi mdi-heart' : 'mdi mdi-heart-outline' }} text-danger align-middle"></i>
                             </button>
-                            19.29k <!-- This can be dynamically generated if needed -->
+                           
                         </p>
                         <h5 class="mb-1 fs-16">
                             <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
@@ -115,7 +150,6 @@
         
         </div>
     </div>
-</section>
 
 
 <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
@@ -129,6 +163,35 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('.search');
+        const templateCards = document.querySelectorAll('.template-card');
+        const noResultMessage = document.querySelector('.noresult');
+
+        searchInput.addEventListener('keyup', function (event) {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            let found = false;
+
+            templateCards.forEach(function (card) {
+                const searchContent = card.dataset.search;
+                if (searchContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                noResultMessage.style.display = 'block';
+            } else {
+                noResultMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {

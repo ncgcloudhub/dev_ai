@@ -493,5 +493,7 @@
 
 .badge-gradient-purple{
     background:linear-gradient(45deg, #9b00ff, #e900ff);
-    
+}
+.color-purple{
+    color: #be06af !important;
 }
