@@ -1,9 +1,9 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Open AI Settings Add @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Settings @endslot
-@slot('title') Open AI Model  @endslot
+@slot('li_1') <a href="{{route('dashboard')}}">Dashboard</a> @endslot
+@slot('title') Open AI Settings  @endslot
 @endcomponent
 
 

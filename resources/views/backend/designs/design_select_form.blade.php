@@ -1,4 +1,5 @@
 @extends('admin.layouts.master')
+@section('title') Manage Design @endsection
 
 @section('content')
 
