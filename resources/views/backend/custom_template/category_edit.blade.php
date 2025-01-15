@@ -2,7 +2,7 @@
 @section('title') Custom Template Category Edit  @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="{{route('custom.template.manage')}}">Templates</a> @endslot
+@slot('li_1') <a href="{{route('custom.template.manage')}}">Custom AI Content Creator</a> @endslot
 @slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
 

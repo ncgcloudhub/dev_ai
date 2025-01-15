@@ -6,8 +6,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Template @endslot
-@slot('title') Add Custom @endslot
+@slot('li_1') Custom AI Content Creator @endslot
+@slot('title') Add Custom AI Content Creator @endslot
 @endcomponent
 
 <div class="col-xxl-6">

@@ -2,8 +2,8 @@
 @section('title') Custom Template Category Add @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Custom Category  @endslot
+@slot('li_1') Custom AI Content Creator @endslot
+@slot('title') Custom Category Add @endslot
 @endcomponent
 
 <div class="row">

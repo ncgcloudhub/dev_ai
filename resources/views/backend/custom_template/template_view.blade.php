@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') Custom Template View @endsection
+@section('title') Custom Template View | {{ $customTemplate->template_name }} @endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/quill/quill.core.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.bubble.css') }}" rel="stylesheet" type="text/css" />
@@ -8,8 +8,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Dashboards @endslot
-@slot('title') Dashboard @endslot
+@slot('li_1') Custom AI Content Creator @endslot
+@slot('title') {{ $customTemplate->template_name }} @endslot
 @endcomponent
 
 <div class="row">
