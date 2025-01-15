@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.orders') @endsection
+@section('title') Custom Template Manage @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') Templates @endslot
