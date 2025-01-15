@@ -1,12 +1,8 @@
 @extends('admin.layouts.master')
-@section('title', $seo->title)
+@section('title') Greeting Card @endsection
 
-@section('description', $seo->description)
-
-@section('keywords', $seo->keywords)
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-
     <!-- Select2 CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 @endsection

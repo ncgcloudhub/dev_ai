@@ -1,9 +1,6 @@
 @extends('admin.layouts.master')
-@section('title', $seo->title)
+@section('title') Education Wizard @endsection
 
-@section('description', $seo->description)
-
-@section('keywords', $seo->keywords)
 @section('css')
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
