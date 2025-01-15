@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title')
-@lang('translation.team')
+Manage User ({{$user->name}})
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
