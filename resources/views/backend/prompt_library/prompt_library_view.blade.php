@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.dashboards') @endsection
+@section('title') Prompt View | {!! $prompt_library->prompt_name !!}@endsection
 @section('css')
 <link href="{{ URL::asset('build/libs/quill/quill.core.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/quill/quill.bubble.css') }}" rel="stylesheet" type="text/css" />
