@@ -1,9 +1,6 @@
 @extends('admin.layouts.master')
-@section('title', $seo->title)
+@section('title') AI Content Creator Tools @endsection
 
-@section('description', $seo->description)
-
-@section('keywords', $seo->keywords)
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Content Creator Tools</a> @endslot
