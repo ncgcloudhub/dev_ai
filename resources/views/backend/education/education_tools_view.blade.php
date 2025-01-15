@@ -225,7 +225,6 @@
                     
                     <!--end tab-pane-->
                     <div class="tab-pane" id="profile-1" role="tabpanel">
-                        <h6 class="card-title mb-4 pb-2">Time Entries</h6>
                         <div class="table-responsive table-card">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light text-muted">
@@ -233,7 +232,6 @@
                                         <th scope="col">Tool</th>
                                         <th scope="col">Prompt</th>
                                         <th scope="col">Content</th>
-                                      
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -250,15 +248,47 @@
                                             </div>
                                         </th>
                                         <td>{{ $content->prompt }}</td>
-                                        <td>{{ $content->content }}</td>
-                                       
+                                        <td>
+                                            {{-- Display truncated content --}}
+                                            {!! Str::words(strip_tags($content->formatted_content), 50, '...') !!}
+                    
+                                            {{-- Read More Button --}}
+                                            <button type="button" class="btn btn-link text-primary p-0"
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#viewFullContentModalAll{{ $content->id }}">
+                                                Read More
+                                            </button>
+                                        </td>
                                     </tr>
+                    
+                                    {{-- Modal for Full Content --}}
+                                    <div class="modal fade" id="viewFullContentModalAll{{ $content->id }}" tabindex="-1"
+                                         aria-labelledby="viewFullContentModalLabelAll{{ $content->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="viewFullContentModalLabelAll{{ $content->id }}">
+                                                        Full Content
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{-- Display full formatted content --}}
+                                                    {!! $content->formatted_content !!}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endforeach
                                 </tbody>
                             </table>
                             <!--end table-->
                         </div>
                     </div>
+                    
                     <!--edn tab-pane-->
 
                 </div>
