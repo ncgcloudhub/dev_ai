@@ -86,33 +86,39 @@
                     <form action="" method="POST" id="generate-content-form">
                         @csrf
                         <input type="hidden" name="tool_id" value="{{ $tool->id }}">
+                    
+                        <!-- Grade/Class Select Field -->
                         <div class="form-group mb-3">
-                        <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
-                            <option selected="">Select Grade/Class</option>
-                            @foreach($classes as $item)
-                                <option value="{{$item->id}}">{{$item->grade}}</option>
-                            @endforeach
-                        </select>
+                            <select class="form-select" name="grade_id" aria-label="Default select grade" required>
+                                <option selected disabled value="">Select Grade/Class</option>
+                                @foreach($classes as $item)
+                                    <option value="{{ $item->id }}">{{ $item->grade }}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback">Please select a valid grade/class.</div>
                         </div>
-            
-                        <!-- Loop through input types and labels -->
+                    
+                        <!-- Dynamic Input Fields -->
                         @foreach (json_decode($tool->input_types) as $index => $input_type)
                             <div class="form-group mb-3">
                                 <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
-            
+                    
                                 @if ($input_type == 'textarea')
-                                    <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}"></textarea>
+                                    <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" 
+                                        placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required></textarea>
                                 @else
-                                    <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_placeholders)[$index] }}">
+                                    <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" 
+                                        placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required>
                                 @endif
                             </div>
                         @endforeach
-            
+                    
                         <!-- Submit Button -->
                         <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
                             <i class="ri-auction-fill align-bottom me-1"></i>Generate
                         </button>
                     </form>
+                    
                 </div>
                 <div class="col-2">
                     <img src="/build/images/nft/edu_01.png" alt="" class="img-fluid">
