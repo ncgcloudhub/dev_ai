@@ -494,7 +494,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/content/{id}/add-to-library', [EducationController::class, 'addToLibrary'])->name('content.add.library');
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
-        Route::get('/tools', [EducationController::class, 'manageToolsUser'])->name('education.wizard.creator');
         Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('admin.permission:education.library') ;
         Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
         Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
