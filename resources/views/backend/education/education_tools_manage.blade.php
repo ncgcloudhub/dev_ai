@@ -10,21 +10,22 @@
 @slot('title') Manage Tools @endslot
 @endcomponent
 
-@if(Auth::user()->role === 'admin')
-    @can('education.manageTools.add')
-        <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
-    @endcan
-@endif
 
-<section class="py-2 gradient-background-1 position-relative">
-    <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+
+<section class="py-3 gradient-background-1 position-relative">
+    <div class="bg-overlay bg-overlay-pattern opacity-100">
+        @if(Auth::user()->role === 'admin')
+            @can('education.manageTools.add')
+                <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
+            @endcan
+        @endif
+    </div>
     <div class="container">
         <div class="row align-items-center gy-4">
             <div class="col-sm">
                 <div>
                     <h4 class="text-white mb-0 fw-semibold text-center mb-2">Empower Your Classroom with AI-Driven Tools</h4>
-                    <p class="text-white
-text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
+                    <p class="text-white text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
                 </div>
             </div>
         </div>
