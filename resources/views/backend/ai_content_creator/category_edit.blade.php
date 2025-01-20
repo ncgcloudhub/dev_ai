@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') AI Content Creator Category Edit @endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="{{route('aicontentcreator.manage')}}">Content Creator Tools</a> @endslot

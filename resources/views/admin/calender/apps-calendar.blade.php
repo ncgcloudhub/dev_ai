@@ -6,7 +6,7 @@
 @section('content')
     @component('admin.components.breadcrumb')
         @slot('li_1')
-            Home
+            <a href="{{route('dashboard')}}">Home</a>
         @endslot
         @slot('title')
             Calendar

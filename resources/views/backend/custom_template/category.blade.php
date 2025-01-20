@@ -1,9 +1,9 @@
 @extends('admin.layouts.master')
-@section('title') @lang('translation.starter')  @endsection
+@section('title') Custom Template Category Add @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') Pages @endslot
-@slot('title') Custom Category  @endslot
+@slot('li_1') <a href="{{route('custom.template.manage')}}">Custom AI Content Creator</a> @endslot
+@slot('title') Custom Category Add @endslot
 @endcomponent
 
 <div class="row">
