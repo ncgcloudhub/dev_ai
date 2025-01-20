@@ -444,6 +444,7 @@ class PromptLibraryController extends Controller
         }
         
         $prompt = $request->input('message');
+        $prompt_name = $request->input('prompt_name'); // Get the prompt name
 
         // Make API call
         $client = new Client();
@@ -469,9 +470,7 @@ class PromptLibraryController extends Controller
             ],
         ]);
 
-        logActivity('Prompt Library', 'generated content from template');
-
-       
+        logActivity('Prompt Library', 'generated content for prompt: ' . $prompt_name); // Log the prompt name       
       
         $data = json_decode($response->getBody(), true);
         $messageContent = $data['choices'][0]['message']['content'];

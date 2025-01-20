@@ -203,6 +203,7 @@
                             <textarea class="form-control chat-input bg-light border-light auto-expand" id="ask_ai" rows="1" placeholder="Type your message..." autocomplete="off">{{$prompt_library->actual_prompt}}</textarea>
                         </div>
                         <input type="hidden" id="sub_category_instruction" value="{{$prompt_library->subcategory->sub_category_instruction}}">
+                        <input type="hidden" id="prompt_name" value="{{$prompt_library->prompt_name}}"> <!-- Added hidden input -->
 
                         <div class="col-md-3" id="generate-button-tour">
                             <button type="button" id="ask" class="btn gradient-btn-5 disabled-on-load" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
@@ -306,9 +307,9 @@
         $('#ask').click(function() {
             var message = $('#ask_ai').val();
             var sub_category_instruction = $('#sub_category_instruction').val();
+            var prompt_name = $('#prompt_name').val(); // Get the prompt name value
             $('#loader').removeClass('d-none');
             showMagicBall('image'); // Show the magic ball loader
-
 
             $.ajax({
                 url: "{{ route('ask.ai.prompt') }}",
@@ -316,6 +317,7 @@
                 data: {
                     message: message,
                     sub_category_instruction: sub_category_instruction,
+                    prompt_name: prompt_name, // Pass prompt name to controller
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
@@ -333,10 +335,6 @@
                     // Set the HTML content in the div
                     document.getElementById('formattedContentDisplay').innerHTML = formattedContent;
 
-                    // Optionally, handle additional content or statistics here
-                    // Example:
-                    // $('#additionalContent').html('<p>Some additional information</p>');
-
                     // Hide loader
                     $('#loader').addClass('d-none');
                 },
@@ -348,6 +346,7 @@
                 }
             });
         });
+
 
         function formatContent(content) {
         // Set options for marked.js
