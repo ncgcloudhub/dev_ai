@@ -10,6 +10,7 @@ use App\Models\PackageHistory;
 use App\Models\PromptLibrary;
 use App\Models\PromptLibraryCategory;
 use App\Models\PromptLibrarySubCategory;
+use App\Models\SiteSettings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +25,17 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Client as OpenAIClient;
 use OpenAI\Laravel\Facades\OpenAI;
+use Intervention\Image\Facades\Image;
 
 class GenerateImagesController extends Controller
 {
+    protected $siteSettings;
+
+    public function __construct()
+    {
+        $this->siteSettings = SiteSettings::find(1);
+    }
+
     public function AIGenerateImageView(Request $request)
     {
         logActivity('Dall E Image', 'accessed Dall E Image generate page');
@@ -210,48 +219,76 @@ class GenerateImagesController extends Controller
         // DAll-e 3 End
 
         if ($response && $response->successful()) {
-            $responseData = $response->json();
-    
-            foreach ($responseData['data'] as $imageData) {
-                $imageDataBinary = file_get_contents($imageData['url']);
-    
-                // Create image from blob
-                $sourceImage = imagecreatefromstring($imageDataBinary);
-    
-                // Get image dimensions
-                $sourceWidth = imagesx($sourceImage);
-                $sourceHeight = imagesy($sourceImage);
-    
-                // Create new image with the new dimensions
-                $targetImage = imagecreatetruecolor($sourceWidth, $sourceHeight);
-    
-                // Resize and compress the image
-                imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $sourceWidth, $sourceHeight, $sourceWidth, $sourceHeight);
-    
-                ob_start(); // Turn on output buffering
-                imagejpeg($targetImage, null, 80); // Compress and output the image as JPEG
-                $imageDataBinaryCompressed = ob_get_contents(); // Get the compressed image data
-                ob_end_clean(); // Turn off output buffering
-    
-                // Save the compressed image to Azure Blob Storage
-                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-                $imageName = time() . '-' . uniqid() . '.webp';
-                $containerName = config('filesystems.disks.azure.container');
-                $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
-    
-                $imagePath = $imageName;
-    
-                // Save image information to the database
-                $imageModel = new ModelsDalleImageGenerate;
-                $imageModel->image = $imagePath;
-                $imageModel->user_id = auth()->user()->id;
-                $imageModel->status = 'inactive';
-                $imageModel->prompt = $prompt;
-                $imageModel->resolution = $size;
-                $imageModel->style = $userStyleImplode;
-                $imageModel->save();
-            }
-    
+               Log::info('Dalle API Response received', ['response' => $response->json()]);
+
+    $responseData = $response->json();
+
+    foreach ($responseData['data'] as $imageData) {
+        Log::info('Processing image', ['image_url' => $imageData['url']]);
+
+        $imageDataBinary = file_get_contents($imageData['url']);
+        Log::info('Image data loaded from URL', ['url' => $imageData['url']]);
+
+        try {
+            // Create image from blob
+            $sourceImage = Image::make($imageDataBinary);
+            Log::info('Image successfully loaded into memory');
+        } catch (\Exception $e) {
+            Log::error('Error loading image from binary', ['exception' => $e->getMessage()]);
+            continue; // Skip this iteration if image loading fails
+        }
+
+        // Load watermark
+        $watermarkPath = public_path('backend/uploads/site/' . $this->siteSettings->watermark); // Path to your watermark image
+        Log::info('Loading watermark', ['watermark_path' => $watermarkPath]);
+
+        try {
+            $watermark = Image::make($watermarkPath);
+            Log::info('Watermark successfully loaded');
+        } catch (\Exception $e) {
+            Log::error('Error loading watermark', ['exception' => $e->getMessage()]);
+            continue; // Skip if watermark loading fails
+        }
+
+        // Insert watermark at bottom-right corner with a 10px offset
+        $sourceImage->insert($watermark, 'bottom-right', 10, 10);
+        Log::info('Watermark inserted into image');
+
+        // Resize and compress the image
+        $compressedImage = $sourceImage->encode('webp', 80); // Compress and output as webp format
+        Log::info('Image compressed to webp format', ['quality' => 80]);
+
+        // Save the compressed watermarked image to Azure Blob Storage
+        try {
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $imageName = time() . '-' . uniqid() . '.webp';
+            $containerName = config('filesystems.disks.azure.container');
+            $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
+
+            Log::info('Image successfully uploaded to Azure Blob Storage', ['image_name' => $imageName, 'container' => $containerName]);
+        } catch (\Exception $e) {
+            Log::error('Error uploading image to Azure Blob Storage', ['exception' => $e->getMessage()]);
+            continue; // Skip if upload fails
+        }
+
+        $imagePath = $imageName;
+
+        // Save image information to the database
+        try {
+            $imageModel = new ModelsDalleImageGenerate;
+            $imageModel->image = $imagePath;
+            $imageModel->user_id = auth()->user()->id;
+            $imageModel->status = 'inactive';
+            $imageModel->prompt = $prompt;
+            $imageModel->resolution = $size;
+            $imageModel->style = $userStyleImplode;
+            $imageModel->save();
+            
+            Log::info('Image information successfully saved to the database', ['image_model' => $imageModel]);
+        } catch (\Exception $e) {
+            Log::error('Error saving image information to the database', ['exception' => $e->getMessage()]);
+        }
+    }
             // Deduct credits and update the user information
             deductUserTokensAndCredits(0, calculateCredits($size, $quality));
             logActivity('Image Generation', 'Image generated using ' . ($request->dall_e_2 ? 'DALL-E 2' : 'DALL-E 3'));
