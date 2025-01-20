@@ -49,29 +49,30 @@
                 <h5 class="card-title gradient-text-1-bold fs-18 mb-1">Education Tools</h5>
             </div>
             <div class="swiper-wrapper">
-                
+                @foreach ($eduTools as $tool)
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
-                            <img src="https://img.themesbrand.com/velzon/images/img-3.gif" alt=""
+                            <img src="{{ asset('storage/' . $tool->image) }}" alt=""
                                 class="img-fluid card-img-top explore-img" />
                             <div class="bg-overlay"></div>
                             <div class="place-bid-btn">
-                                <a href="#!" class="btn btn-primary"><i
+                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary"><i
                                         class="ri-auction-fill align-bottom me-1"></i>Explore</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                                37.41k </p>
-                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">Walking On Air</a>
+                                Editor's Choice</p>
+                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">{{ $tool->name }}</a>
                             </h5>
-                            <p class="text-muted mb-0">Artwork</p>
+                            <p class="text-muted mb-0">{{ $tool->description }}</p>
                         </div>
                        
                     </div>
                 </div>
-               
+                @endforeach
+              
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Models\EducationTools;
 
 class AdminController extends Controller
 {
@@ -64,8 +65,11 @@ class AdminController extends Controller
         // Calculate the total number of likes
         $totalFav = $favImages->sum('favorites_count');
 
+        $eduTools = EducationTools::inRandomOrder()
+            ->limit(5)->get();
+
         // dd($templates_count);
-        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav'));
+        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav','eduTools'));
     }
 
     public function showChangePasswordForm(User $user)
