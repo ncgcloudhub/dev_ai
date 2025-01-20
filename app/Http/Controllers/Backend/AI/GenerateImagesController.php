@@ -335,6 +335,7 @@ public function ExtractImage(Request $request)
 
     public function ManageFavoriteImage()
     {
+        logActivity('Favourite Image', 'Accessed Favourite Image Page');
         // Retrieve the authenticated user
         $user = Auth::user();
 
