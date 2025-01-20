@@ -81,16 +81,17 @@
         {{-- 1st col 4th row --}}
         <div class="row">
             <div class="col-xl-6 col-md-12"><div class="card" style="border-color: #be06af">
-            <div class="card-body">
-                <div class="d-flex position-relative">
-                    <img src="/build/images/nft/friends.png" class="flex-shrink-0 me-3 avatar-xl rounded" alt="...">
-                    <div>
-                        <h5 class="mt-0 gradient-text-1-bold">Referral Link</h5>
-                        <p>Share this link to your friends to get more Free tokens and credits.</p>
-                        <a onclick="copyText(this)" class="btn gradient-btn-3">{{$user->referral_link}}</a>
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row position-relative">
+                        <img src="/build/images/nft/friends.png" class="flex-shrink-0 mb-3 mb-md-0 me-md-3 avatar-xl rounded" alt="...">
+                        <div>
+                            <h5 class="mt-0 gradient-text-1-bold">Referral Link</h5>
+                            <p>Share this link to your friends to get more Free tokens and credits.</p>
+                            <a onclick="copyText(this)" class="btn gradient-btn-3">{{$user->referral_link}}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+                
         </div></div>
             <div class="col-xl-3 col-md-6"><div class="card" style="border-color: #be06af">
             <div class="card-body">
