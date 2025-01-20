@@ -111,7 +111,10 @@
                 
                 <div class="card-footer">
                     <button type="button" class="btn gradient-btn-save" id="aiGenerateBtn">AI Generate</button>
+<<<<<<< HEAD
+=======
                     <button type="submit" class="btn gradient-btn-save">Save Joke</button>
+>>>>>>> ccd659e0a88ccbf2265c0af82a50b079bfaa08c5
                 </div><!-- end card footer -->
             </div><!-- end card -->
         </form>
