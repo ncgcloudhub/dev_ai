@@ -71,6 +71,11 @@
                         <p class="gradient-text-2">{{$tool->description}}</p></div>
                     <div class="col">  
                         <div class="d-flex justify-content-end gap-2">
+
+                            <button type="button" class="btn gradient-btn-5" title="Go Back" onclick="history.back()">
+                                <i class="las la-arrow-left"></i>
+                            </button>
+
                             <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i>Clear Inputs
                             </button>
