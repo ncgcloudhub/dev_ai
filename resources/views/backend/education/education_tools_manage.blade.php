@@ -13,18 +13,16 @@
 
 
 <section class="py-3 gradient-background-1 position-relative">
-    <div class="bg-overlay bg-overlay-pattern opacity-100">
-        @if(Auth::user()->role === 'admin')
-            @can('education.manageTools.add')
-                <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
-            @endcan
-        @endif
-    </div>
+
     <div class="container">
         <div class="row align-items-center gy-4">
             <div class="col-sm">
                 <div>
-                    <h4 class="text-white mb-0 fw-semibold text-center mb-2">Empower Your Classroom with AI-Driven Tools</h4>
+                    <h4 class="text-white mb-0 fw-semibold text-center mb-2">Empower Your Classroom with AI-Driven Tools @if(Auth::user()->role === 'admin')
+                        @can('education.manageTools.add')
+                            <a href="{{ route('add.education.tools') }}" class="badge badge-gradient-purple">ADD TOOL</a>
+                        @endcan
+                    @endif</h4>
                     <p class="text-white text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
                 </div>
             </div>
@@ -32,8 +30,8 @@
     </div>
 </section>
 
-<div class="d-flex">
-    <div class="col-2 card mb-3 mt-3 border-color-purple">
+<div class="row">
+    <div class="col-xl-2 col-md-12 card mb-3 mt-3 border-color-purple">
         <div class="card-body">
             <div class="d-flex mb-3 align-items-center">
                 <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
@@ -61,7 +59,7 @@
     </div>
     
 
-    <div class="col-8 px-3">
+    <div class="col-xl-8 col-md-12 px-3">
         
         <div class="row justify-content-center">
             <form>
@@ -100,7 +98,8 @@
                 </div>
             </div>
 
-            <div class="col-lg-12">
+            {{-- 2nd Col START--}}
+            <div class="col-xl-12 col-md-12">
                 <div class="text-center mb-3">
                     
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
@@ -115,6 +114,8 @@
                     </ul>
                 </div>
             </div>
+            {{-- 2nd Col END--}}
+
         </div>
 
         <div class="row">
@@ -182,7 +183,7 @@
         </div>
     </div>
 
-    <div class="col-2 card mb-3 mt-3 border-color-purple">
+    <div class="col-xl-2 col-md-12 card mb-3 mt-3 border-color-purple">
         <div class="card-body">
             <div class="d-flex mb-3 align-items-center">
                 <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
