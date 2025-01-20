@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="text-center mb-3">
                     
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
