@@ -717,6 +717,9 @@ public function updateContent(Request $request, $id)
         ],
     ]);
 
+      // Log the activity
+      logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
+
     $content = $response['choices'][0]['message']['content'];
 
     // Get the total tokens used
@@ -838,10 +841,15 @@ public function updateSubject(Request $request, $id)
 
     public function showTool($id)
     {
+       
         $userId = auth()->id();
 
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);
+
+        // Log the activity with the Education Tools name
+        logActivity('Education Tools', 'Accessed Education Tools View for Tool: ' . $tool->name);
+
         $classes = GradeClass::with('subjects')->get();
         $similarTools = EducationTools::where('category', $tool->category)
             ->where('id', '!=', $id)->inRandomOrder()
