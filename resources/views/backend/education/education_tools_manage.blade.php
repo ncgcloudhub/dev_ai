@@ -10,28 +10,59 @@
 @slot('title') Manage Tools @endslot
 @endcomponent
 
-@if(Auth::user()->role === 'admin')
-    @can('education.manageTools.add')
-        <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
-    @endcan
-@endif
 
-<section class="py-2 gradient-background-1 position-relative">
-    <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
+
+<section class="py-3 gradient-background-1 position-relative">
+    <div class="bg-overlay bg-overlay-pattern opacity-100">
+        @if(Auth::user()->role === 'admin')
+            @can('education.manageTools.add')
+                <a href="{{ route('add.education.tools') }}" class="btn btn-lg gradient-btn-3 my-1">Add</a>
+            @endcan
+        @endif
+    </div>
     <div class="container">
         <div class="row align-items-center gy-4">
             <div class="col-sm">
                 <div>
                     <h4 class="text-white mb-0 fw-semibold text-center mb-2">Empower Your Classroom with AI-Driven Tools</h4>
-                    <p class="text-white
-text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
+                    <p class="text-white text-center">A suite of innovative, time-saving tools designed to transform your teaching experience. From crafting comprehensive lesson plans and unpacking educational standards to generating dynamic group activities, these resources are tailored to meet your specific needs. Unlock the potential of AI to foster creativity, improve efficiency, and maximize student engagement—all in one place! </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-    <div class="container">
+<div class="d-flex">
+    <div class="col-2 card mb-3 mt-3 border-color-purple">
+        <div class="card-body">
+            <div class="d-flex mb-3 align-items-center">
+                <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
+                <a href="{{route('manage.education.tools')}}" class="ms-auto">
+                    <span class="badge badge-gradient-purple">More Tools</span>
+                </a>
+            </div>
+            
+            <ul class="list-unstyled vstack gap-3 mb-0">
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <img src="" alt="" class="avatar-xs rounded-3">
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                              
+                                <h6 class="mb-1"><a href="" class="gradient-text-1">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam nemo architecto sit debitis quae maiores soluta corporis, optio explicabo officia aperiam sequi doloribus modi quo facere deserunt a mollitia voluptatibus eos. Inventore iusto esse repellat nobis ullam nesciunt veritatis rerum maxime cum voluptatem perferendis incidunt vitae et repudiandae ut aliquam, quas ea iste, excepturi facilis voluptas. Laborum amet voluptate nulla facere magni, libero vitae molestias, ab nam dicta ratione voluptatem esse tenetur numquam quibusdam, accusamus dolorem. Id facere distinctio, rerum atque, nobis placeat, doloribus dolore laborum officia sit explicabo vero deserunt. Voluptate suscipit facere adipisci quos minus ex optio. Voluptatum!</a></h6>
+                                <p class="text-muted mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim assumenda, at voluptas praesentium adipisci facere sit voluptatibus obcaecati dolorum officiis!</p>
+                            </div>
+                         
+                        </div>
+                    </li>
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="col-8 px-3">
+        
         <div class="row justify-content-center">
             <form>
                 <div class="row g-3 justify-content-center my-3">
@@ -69,7 +100,7 @@ text-center">A suite of innovative, time-saving tools designed to transform your
                 </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="text-center mb-3">
                     
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
@@ -151,7 +182,35 @@ text-center">A suite of innovative, time-saving tools designed to transform your
         </div>
     </div>
 
+    <div class="col-2 card mb-3 mt-3 border-color-purple">
+        <div class="card-body">
+            <div class="d-flex mb-3 align-items-center">
+                <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
+                <a href="{{route('manage.education.tools')}}" class="ms-auto">
+                    <span class="badge badge-gradient-purple">More Tools</span>
+                </a>
+            </div>
+            
+            <ul class="list-unstyled vstack gap-3 mb-0">
+                    <li>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <img src="" alt="" class="avatar-xs rounded-3">
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                              
+                                <h6 class="mb-1"><a href="" class="gradient-text-1">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate quidem exercitationem porro veritatis accusantium dolore reiciendis officiis non, ea eius officia tenetur corrupti, ipsa consequuntur voluptatibus! Rerum accusantium molestias ad. Molestias tempore unde nesciunt officia illo rerum. Dolore reiciendis soluta odit iusto officiis facere illum, quaerat non quibusdam maiores veritatis laudantium libero id tenetur quod ducimus exercitationem ad eum dolores necessitatibus harum quas voluptas. Consectetur sit deleniti, laudantium corporis ab impedit saepe possimus aliquam laborum id vitae minima quo! Incidunt tempora quas consequuntur reprehenderit commodi, dolor explicabo repellat fuga voluptatem adipisci ipsa hic facilis id dolores, optio labore nesciunt corporis!</a></h6>
+                                <p class="text-muted mb-0">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Enim assumenda, at voluptas praesentium adipisci facere sit voluptatibus obcaecati dolorum officiis!</p>
+                            </div>
+                         
+                        </div>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
 
+   
 <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
     <i class="ri-arrow-up-line"></i>
 </button>

@@ -95,7 +95,7 @@
                                     <li class="nav-item">
                                         <a href="{{ route('manage.education.tools') }}" 
                                            class="nav-link sidebar-hover {{ request()->routeIs('manage.education.tools') ? 'active' : '' }}">
-                                            Manage Tools
+                                            Education Tools
                                         </a>
                                     </li>
                                     @endcan
