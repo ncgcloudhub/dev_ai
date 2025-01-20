@@ -17,7 +17,7 @@
 
 <div class="row">
     {{-- First Col --}}
-    <div class="col-8">
+    <div class="col-xl-8 col-md-12">
         <div class="card overflow-hidden" style="border-color: #be06af">
             <div class="card-body bg-marketplace d-flex">
                 <div class="flex-grow-1">
@@ -49,6 +49,7 @@
                 <h5 class="card-title gradient-text-1-bold fs-18 mb-1">Education Tools</h5>
             </div>
             <div class="swiper-wrapper">
+                
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
@@ -70,69 +71,7 @@
                        
                     </div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="card explore-box card-animate rounded">
-                        <div class="explore-place-bid-img">
-                            <img src="{{ URL::asset('build/images/nft/img-03.jpg') }}" alt=""
-                                class="img-fluid card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="#!" class="btn btn-primary"><i
-                                        class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                                19.29k </p>
-                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">Filtered
-                                    Portrait</a></h5>
-                            <p class="text-muted mb-0">Photography</p>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card explore-box card-animate rounded">
-                        <div class="explore-place-bid-img">
-                            <img src="https://img.themesbrand.com/velzon/images/img-1.gif" alt=""
-                                class="img-fluid card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="#!" class="btn btn-primary"><i
-                                        class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                                8.42k </p>
-                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">Patterns Arts &
-                                    Culture</a></h5>
-                            <p class="text-muted mb-0">Artwork</p>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="card explore-box card-animate rounded">
-                        <div class="explore-place-bid-img">
-                            <img src="https://img.themesbrand.com/velzon/images/img-4.gif" alt=""
-                                class="img-fluid card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="#!" class="btn btn-primary"><i
-                                        class="ri-auction-fill align-bottom me-1"></i> Place Bid</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                                15.93k </p>
-                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">Evolved Reality</a>
-                            </h5>
-                            <p class="text-muted mb-0">Video</p>
-                        </div>
-                       
-                    </div>
-                </div>
+               
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
@@ -140,7 +79,7 @@
 
         {{-- 1st col 4th row --}}
         <div class="row">
-            <div class="col-6"><div class="card" style="border-color: #be06af">
+            <div class="col-xl-6 col-md-12"><div class="card" style="border-color: #be06af">
             <div class="card-body">
                 <div class="d-flex position-relative">
                     <img src="/build/images/nft/friends.png" class="flex-shrink-0 me-3 avatar-xl rounded" alt="...">
@@ -152,7 +91,7 @@
                 </div>
             </div>
         </div></div>
-            <div class="col-3"><div class="card" style="border-color: #be06af">
+            <div class="col-xl-3 col-md-6"><div class="card" style="border-color: #be06af">
             <div class="card-body">
                 <div class="d-flex position-relative">
                     <div>
@@ -163,7 +102,7 @@
                 </div>
             </div>
         </div></div>
-            <div class="col-3"><div class="card" style="border-color: #be06af">
+            <div class="col-xl-3 col-md-6"><div class="card" style="border-color: #be06af">
             <div class="card-body">
                 
                     <div>
@@ -179,7 +118,7 @@
     </div> 
 
     {{-- Second Col --}}
-    <div class="col-4">
+    <div class="col-xl-4 col-md-12">
         <div class="card explore-box card-animate">
             <img src="/build/images/nft/das_cc_02.gif" alt="" class="card-img-top explore-img">
         </div>
