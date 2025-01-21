@@ -22,7 +22,6 @@
                 </a>
             </div>
             
-
             <!-- Third Section (Right) -->
             <div class="col-3">
                 <div class="text-sm-end d-none d-sm-block">

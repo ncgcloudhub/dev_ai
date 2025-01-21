@@ -459,6 +459,11 @@
                                     <li class="nav-item">
                                         <a href="{{route('magic.ball.jokes')}}" class="nav-link sidebar-hover {{ request()->routeIs('magic.ball.jokes') ? 'active' : '' }}">Manage Jokes(Magic Ball)</a>
                                     </li>
+                                  
+                                    {{-- @can must be added --}}
+                                    <li class="nav-item">
+                                        <a href="{{route('stats.view')}}" class="nav-link sidebar-hover {{ request()->routeIs('stats.view') ? 'active' : '' }}">Manage Stats</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
