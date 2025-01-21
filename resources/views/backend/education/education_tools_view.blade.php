@@ -76,15 +76,13 @@
                     <div class="col">  
                         <div class="d-flex justify-content-end gap-2">
 
-                           
-
                             <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i>Clear Inputs
                             </button>
                             
-                            <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
+                            {{-- <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
                             <i class="las la-magic"></i>Populate Inputs
-                            </button>
+                            </button> --}}
                     </div></div>
                     </div>
                
