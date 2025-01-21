@@ -36,6 +36,7 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubscriptionController;
 use App\Models\FAQ;
 use App\Models\PromptLibrary;
@@ -532,6 +533,12 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/view/{id}', [CustomTemplateController::class, 'CustomTemplateView'])->name('custom.template.view');
 
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
+    });
+
+    // Stats
+    Route::prefix('statistics')->group(function () {
+        Route::get('/view', [StatsController::class, 'StatsView'])->name('stats.view');
+    
     });
 
     // Template Rating
