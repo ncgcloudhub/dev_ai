@@ -8,7 +8,6 @@
 @endsection
 @section('content')
 
-
 <div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
     <div class="chat-leftsidebar border">
         <div class="px-4 pt-4">
@@ -16,9 +15,7 @@
                 <div class="flex-grow-1">
                     <h5 class="mb-1">Chats</h5>
                 </div>
-             
             </div>
-         
         </div> <!-- .p-4 -->
 
         <ul class="nav nav-tabs nav-tabs-custom nav-info nav-justified" role="tablist">
@@ -27,7 +24,6 @@
                     Chats
                 </a>
             </li>
-          
         </ul>
 
         <div class="tab-content text-muted">
@@ -47,9 +43,7 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="chat-message-list">
-
                         <ul class="list-unstyled chat-list chat-user-list" id="userList">
                             @foreach ($experts as $item)
                             <li class="{{ $expert_selected_id == $item->id ? 'active' : '' }}" 
@@ -76,12 +70,9 @@
                             </li>
                             @endforeach
                         </ul>
-                        
-                        
                         <input type="hidden" name="expert_id_selected" id="expert_id_selected" value="{{$expert_selected_id}}">
                     </div>
 
- 
                     <!-- End chat-message-list -->
                 </div>
             </div>
@@ -98,8 +89,6 @@
             <div class="w-100 overflow-hidden position-relative">
                 <!-- conversation user -->
                 <div class="position-relative">
-
-
                     <div class="position-relative" id="users-chat">
                         <div class="p-3 user-chat-topbar">
                             <div class="row align-items-center">
@@ -124,7 +113,6 @@
                                 </div>
                                 <div class="col-sm-8 col-4">
                                     <ul class="list-inline user-chat-nav text-end mb-0">
-                             
                                         <li class="list-inline-item d-none d-lg-inline-block m-0">
                                             <button type="button" class="btn btn-ghost-secondary btn-icon" onclick="deleteConversation({{ $user->id }}, {{ $expert_selected_id }})">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 icon-sm">
@@ -135,14 +123,9 @@
                                                 </svg>
                                             </button>
                                         </li>
-                                        
-
-                                    
                                     </ul>
                                 </div>
-                             
                             </div>
-
                         </div>
                         <!-- end chat user head -->
                         <div class="chat-conversation p-3 p-lg-4 " id="chat-conversation" data-simplebar>
@@ -168,14 +151,11 @@
                     </div>
                     <!-- end chat-conversation -->
 
-
                     <div class="chat-input-section p-3 p-lg-4">
-
                             <div class="row g-0 align-items-center">
                                {{-- File Selected Show --}}
                                <div id="file_name_display"></div>
 
-                               
                                <div class="col-auto">
                                    <div class="chat-input-links me-2">
                                        <div class="links-list-item"> 
@@ -205,10 +185,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-
                             </div>
-                        
                     </div>
 
                     <div class="replyCard">
@@ -235,23 +212,13 @@
 </div>
 <!-- end chat-wrapper -->
 
-
 @endsection
-
-
-
 
 @section('script')
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
-
     <script src="{{ URL::asset('build/libs/fg-emoji-picker/fgEmojiPicker.js') }}"></script>
-
     <script src="{{ URL::asset('build/js/pages/chat.init.js') }}"></script>
-
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
-
-    
 
     <!-- fgEmojiPicker js -->
     <script src="{{ URL::asset('build/libs/fg-emoji-picker/fgEmojiPicker.js') }}"></script>
@@ -273,8 +240,6 @@
         // Initialize highlight.js
         hljs.highlightAll();
     </script>
-
-
 
     @include('admin.layouts.expert_chat_script')
 
