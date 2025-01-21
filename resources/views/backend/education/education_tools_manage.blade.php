@@ -13,8 +13,6 @@
 
 
 <section class="py-3 gradient-background-1 position-relative">
-
-  
         <div class="row align-items-center">
             <div class="col-sm">
                 <div>
@@ -27,7 +25,6 @@
                 </div>
             </div>
         </div>
-  
 </section>
 
 <div class="row">
@@ -35,12 +32,8 @@
         <div class="card mb-3 mt-3">
             <div class="card-body">
                 <div class="d-flex mb-3 align-items-center">
-                    <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Similar Tools</h6>
-                    <a href="{{route('manage.education.tools')}}" class="ms-auto">
-                        <span class="badge badge-gradient-purple">More Tools</span>
-                    </a>
+                    <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">New Tools</h6>
                 </div>
-                
                 <ul class="list-unstyled vstack gap-3 mb-0">
                     @foreach ($newTools as $newTool)
                         <li>
@@ -61,10 +54,8 @@
             </div>
         </div>
     </div>
-    
 
     <div class="col-xl-8 col-md-12 px-3">
-        
         <div class="row justify-content-center">
             <form>
                 <div class="row g-3 justify-content-center my-3">
@@ -76,7 +67,6 @@
                         </div>
                     </div>
                     <!--end col-->
-                    
                 </div>
                 <!--end row-->
             </form>
@@ -96,7 +86,6 @@
                             <input type="text" class="form-control border-color-purple" id="feedbackText" name="text" placeholder="Enter your feedback" required>
                             <button type="submit" class="btn gradient-btn-3">Submit</button>
                         </div>
-                        
                     </form>
                     
                 </div>
@@ -105,7 +94,6 @@
             {{-- 2nd Col START--}}
             <div class="col-xl-12 col-md-12">
                 <div class="text-center mb-3">
-                    
                     <ul class="nav nav-pills filter-btns justify-content-center" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link fw-medium active" type="button" data-filter="all">All Items</button>
@@ -119,7 +107,6 @@
                 </div>
             </div>
             {{-- 2nd Col END--}}
-
         </div>
 
         <div class="row">
@@ -182,8 +169,6 @@
                 </div>
             </div>
         @endforeach
-        
-        
         </div>
     </div>
 
@@ -192,9 +177,6 @@
             <div class="card-body">
                 <div class="d-flex mb-3 align-items-center">
                     <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Popular Tools</h6>
-                    <a href="{{route('manage.education.tools')}}" class="ms-auto">
-                        <span class="badge badge-gradient-purple">More Tools</span>
-                    </a>
                 </div>
                 
                 <ul class="list-unstyled vstack gap-3 mb-0">
@@ -219,11 +201,9 @@
     </div>
 </div>
 
-   
 <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
     <i class="ri-arrow-up-line"></i>
 </button>
-
 
 @endsection
 
