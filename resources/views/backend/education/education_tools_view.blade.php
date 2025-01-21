@@ -11,7 +11,11 @@
 @endcomponent
 
 <div class="row">
+    
     <div class="col-xxl-3">
+        <button type="button" class="btn gradient-btn-5 mb-3" title="Go Back" onclick="history.back()">
+            <i class="las la-arrow-left"></i>
+        </button>
         <div class="explore-place-bid-img">
         <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
         </div>
@@ -72,9 +76,7 @@
                     <div class="col">  
                         <div class="d-flex justify-content-end gap-2">
 
-                            <button type="button" class="btn gradient-btn-5" title="Go Back" onclick="history.back()">
-                                <i class="las la-arrow-left"></i>
-                            </button>
+                           
 
                             <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i>Clear Inputs
