@@ -94,9 +94,7 @@ class ExpertController extends Controller
     {
         // Get user input from the request
         $userInput = $request->input('message');
-
         $file = $request->file('file');
-
         // Fetch expert details
         $expertId = $request->input('expert');
         $expert = Expert::findOrFail($expertId);
@@ -105,10 +103,8 @@ class ExpertController extends Controller
         // Fetch the system instruction from the database
         $expertInstruction = $expert->expertise;
 
-
         $openaiModel = Auth::user()->selected_model;
         
-
         // Check if the expert instruction is empty
         if (empty($expertInstruction)) {
             // If no instruction is provided, use the default instruction
@@ -263,7 +259,6 @@ class ExpertController extends Controller
             }
         }
 
-
         array_walk_recursive($messages, function (&$item, $key) {
             if (is_string($item)) {
                 $item = mb_convert_encoding($item, 'UTF-8', mb_detect_encoding($item));
@@ -273,108 +268,108 @@ class ExpertController extends Controller
         Log::info('Messages to send to API: ', $messages);
 
         // Initialize HTTP client
-    $client = new Client();
+        $client = new Client();
 
-    // Make a request to the OpenAI API with streaming enabled
-    $response = $client->post('https://api.openai.com/v1/chat/completions', [
-        'headers' => [
-            'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-            'Content-Type' => 'application/json',
-        ],
-        'json' => [
-            'model' => $openaiModel, // Use the appropriate model name
-            'messages' => $messages,
-            'temperature' => 0,
-            'top_p' => 1,
-            'frequency_penalty' => 0,
-            'presence_penalty' => 0,
+        // Make a request to the OpenAI API with streaming enabled
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => $openaiModel, // Use the appropriate model name
+                'messages' => $messages,
+                'temperature' => 0,
+                'top_p' => 1,
+                'frequency_penalty' => 0,
+                'presence_penalty' => 0,
+                'stream' => true,
+            ],
             'stream' => true,
-        ],
-        'stream' => true,
-    ]);
+        ]);
 
-    // Log the start of streaming
-    Log::info('Expert Chat Streaming Response Started', [
-        'model' => $openaiModel,
-        'messages' => $messages,
-        'expert_id' => $expertId,
-    ]);
-
-    // Return a StreamedResponse to send data incrementally to the client
-    return new StreamedResponse(function() use ($response, $expertId, $userInput, $expertInstruction, $expertImage) {
-        header('Content-Type: text/event-stream');
-        header('Cache-Control: no-cache');
-        header('Connection: keep-alive');
-
-        $body = $response->getBody();
-        $messageContent = '';
-        $buffer = '';
-
-        Log::info('Streaming Response Initialized for Expert Chat', [
+        // Log the start of streaming
+        Log::info('Expert Chat Streaming Response Started', [
+            'model' => $openaiModel,
+            'messages' => $messages,
             'expert_id' => $expertId,
         ]);
 
-        // Stream the response chunk by chunk
-        while (!$body->eof()) {
-            $chunk = $body->read(1024);
-            $buffer .= $chunk;
+        // Return a StreamedResponse to send data incrementally to the client
+        return new StreamedResponse(function() use ($response, $expertId, $userInput, $expertInstruction, $expertImage) {
+            header('Content-Type: text/event-stream');
+            header('Cache-Control: no-cache');
+            header('Connection: keep-alive');
 
-            $lines = explode("\n", $buffer);
-            $buffer = array_pop($lines);
+            $body = $response->getBody();
+            $messageContent = '';
+            $buffer = '';
 
-            foreach ($lines as $line) {
-                $line = trim($line);
-                if (strpos($line, 'data:') === 0) {
-                    $data = trim(substr($line, strlen('data:')));
+            Log::info('Streaming Response Initialized for Expert Chat', [
+                'expert_id' => $expertId,
+            ]);
 
-                    if ($data === '[DONE]') {
-                        ExpertConversation::create([
-                            'user_id' => Auth::id(),
-                            'expert_id' => $expertId,
-                            'role' => 'user',
-                            'message' => $userInput,
-                            'file_path' => $filePath ?? null,
-                        ]);
-                    
-                        // After receiving the expert's reply, save it
-                        Log::info('Final expert reply:', ['reply' => $messageContent]);  // Log the final reply
-                    
-                        ExpertConversation::create([
-                            'user_id' => Auth::id(),
-                            'expert_id' => $expertId,
-                            'role' => 'expert',
-                            'message' => $messageContent,  // Save the reply
-                        ]);
+            // Stream the response chunk by chunk
+            while (!$body->eof()) {
+                $chunk = $body->read(1024);
+                $buffer .= $chunk;
 
-                        echo "event: done\n";
-                        echo "data: [DONE]\n\n";
-                        ob_flush();
-                        flush();
-                        break 2;
+                $lines = explode("\n", $buffer);
+                $buffer = array_pop($lines);
 
-                    } else {
-                        try {
-                            $parsedData = json_decode($data, true);
-                            if (isset($parsedData['choices'][0]['delta']['content'])) {
-                                $content = $parsedData['choices'][0]['delta']['content'];
-                                $messageContent .= $content;
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (strpos($line, 'data:') === 0) {
+                        $data = trim(substr($line, strlen('data:')));
 
-                                echo "data: " . json_encode($content) . "\n\n";
-                                ob_flush();
-                                flush();
+                        if ($data === '[DONE]') {
+                            ExpertConversation::create([
+                                'user_id' => Auth::id(),
+                                'expert_id' => $expertId,
+                                'role' => 'user',
+                                'message' => $userInput,
+                                'file_path' => $filePath ?? null,
+                            ]);
+                        
+                            // After receiving the expert's reply, save it
+                            Log::info('Final expert reply:', ['reply' => $messageContent]);  // Log the final reply
+                        
+                            ExpertConversation::create([
+                                'user_id' => Auth::id(),
+                                'expert_id' => $expertId,
+                                'role' => 'expert',
+                                'message' => $messageContent,  // Save the reply
+                            ]);
+
+                            echo "event: done\n";
+                            echo "data: [DONE]\n\n";
+                            ob_flush();
+                            flush();
+                            break 2;
+
+                        } else {
+                            try {
+                                $parsedData = json_decode($data, true);
+                                if (isset($parsedData['choices'][0]['delta']['content'])) {
+                                    $content = $parsedData['choices'][0]['delta']['content'];
+                                    $messageContent .= $content;
+
+                                    echo "data: " . json_encode($content) . "\n\n";
+                                    ob_flush();
+                                    flush();
+                                }
+                            } catch (\Exception $e) {
+                                Log::error('Error parsing JSON data: ' . $e->getMessage());
                             }
-                        } catch (\Exception $e) {
-                            Log::error('Error parsing JSON data: ' . $e->getMessage());
                         }
                     }
                 }
             }
-        }
-    }, 200, [
-        'Content-Type' => 'text/event-stream',
-        'Cache-Control' => 'no-cache',
-        'Connection' => 'keep-alive',
-    ]);
+        }, 200, [
+            'Content-Type' => 'text/event-stream',
+            'Cache-Control' => 'no-cache',
+            'Connection' => 'keep-alive',
+        ]);
     }
 
     public function deleteConversation(Request $request)
