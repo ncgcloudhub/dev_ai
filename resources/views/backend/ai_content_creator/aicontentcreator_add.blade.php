@@ -152,6 +152,7 @@
                     <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example">
                         <option value="text">Input Field</option>
                         <option value="textarea">Textarea Field</option>
+                        <option value="attachment">Attachment</option>
                     </select>
                 </div>
                 <div class="col-md-3">
