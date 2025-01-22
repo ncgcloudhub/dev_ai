@@ -102,7 +102,15 @@
                                         @elseif($type == 'attachment')
                                             <!-- File Input Field -->
                                             <input type="file" name="attachment" class="form-control" id="{{ $inputNames[$key] }}" required>
+                                        @elseif($type == 'select')
+                                            <!-- Select Field -->
+                                            <select class="form-select" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" required>
+                                                @foreach(explode(',', $inputOptions[$key]) as $option)
+                                                    <option value="{{ trim($option) }}">{{ trim($option) }}</option>
+                                                @endforeach
+                                            </select>
                                         @endif
+                                        
                                     </div>
 
                                     <div hidden class="col-md-12" data-prompt="{{ $Template->prompt }}">

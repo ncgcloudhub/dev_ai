@@ -129,3 +129,6 @@ add last_seen, users table, timestamp without timezone Nullable
 
 9/1/25
 watermark siteSettings text
+
+22/01/2025
+in templates, add template_options
