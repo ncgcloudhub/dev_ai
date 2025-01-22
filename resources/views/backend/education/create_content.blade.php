@@ -57,6 +57,34 @@
                                     </span>
                                     Finish
                                 </button>
+
+                                <hr>
+                                <div class="card mb-3 mt-3">
+                                    <div class="card-body">
+                                        <div class="d-flex mb-3 align-items-center">
+                                            <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Last 5 Content</h6>
+                                        </div>
+                                        <ul class="list-unstyled vstack gap-3 mb-0">
+                                            @foreach ($educationContents as $item)
+                                                <li>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0">
+                                                            <img src="{{ asset('backend/giphy1.gif') }}" alt="" class="avatar-xs rounded-3">
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-2">
+                                                          
+                                                            <a href="#" class="text-reset fs-14 mb-0" onclick="fetchContent(event, {{ $item->id }})">
+                                                                <h6 class="mb-1">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h6>
+                                                                <p class="text-muted mb-0">{{$item->topic}}</p>
+                                                            </a>
+                                                        </div>
+                                                     
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             <!-- end nav -->
                         </div> <!-- end col-->
@@ -459,8 +487,7 @@
                                             <p class="text-muted chunkss" id="chunkss"></p>
                                         </div>
 
-                                        <div class="col">
-                <div class="row"> <!-- Add row here -->
+                <div class="row mt-5"> <!-- Add row here -->
                     @foreach ($educationContents as $item)
                         <div class="col-md-4 mb-4"> <!-- Ensure proper grid column -->
                             <div class="card">
@@ -490,8 +517,7 @@
                         </div>
                     @endforeach
                 </div> <!-- End row -->
-            
-    </div>
+
                                
                                     </div>
                                     <!-- end tab pane -->
