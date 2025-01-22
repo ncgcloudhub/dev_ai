@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label for="input_types" class="form-label">Input Type <span class="text-danger">*</span></label>
-                        <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" required onchange="toggleInputOptions(this)">
+                        <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
                             <option value="" disabled selected>Select Input Type</option>
                             <option value="text">Input Field</option>
                             <option value="textarea">Textarea Field</option>
@@ -81,16 +81,13 @@
                         <label for="input_placeholders" class="form-label">Input Placeholder <span class="text-danger">*</span></label>
                         <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                     </div>
-                </div>
-        
-                <!-- Input Options Field (Initially Hidden) -->
-                <div class="row mt-3" id="input-options-field" style="display: none;">
-                    <div class="col-md-3">
-                        <label for="input_options" class="form-label">Input Options (comma-separated) <span class="text-danger">*</span></label>
-                        <input type="text" name="input_options[]" placeholder="Option1,Option2,Option3" class="form-control">
+                    <div class="col-md-3 select-options-field" style="display: none;">
+                        <label for="select_options" class="form-label">Select Options</label>
+                        <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
                     </div>
                 </div>
         
+               
                 <div id="template_info" class="input-informations">
                     <!-- Additional input fields will be appended here -->
                 </div>
@@ -159,7 +156,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <label for="input_types" class="form-label">Input Type</label>
-                    <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleInputOptions(this)">
+                    <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
                         <option value="text">Input Field</option>
                         <option value="textarea">Textarea Field</option>
                         <option value="attachment">Attachment</option>
@@ -178,12 +175,11 @@
                         <label for="input_placeholders" class="form-label">Input Placeholder</label>
                         <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                 </div>
-                <div class="row mt-3" id="input-options-field" style="display: none;">
-                    <div class="col-md-3">
-                        <label for="input_options" class="form-label">Input Options (comma-separated) <span class="text-danger">*</span></label>
-                        <input type="text" name="input_options[]" placeholder="Option1,Option2,Option3" class="form-control">
-                    </div>
+                <div class="col-md-3 select-options-field" style="display: none;">
+                    <label for="select_options" class="form-label">Select Options</label>
+                    <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
                 </div>
+                
                 <div class="col-md-1">
                     <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
                         <div class="d-flex align-items-center">
@@ -198,6 +194,26 @@
 		$("#template_info").append(additionalInputs);
 		
 	  });
+
+        // Show or hide the select options field based on the input type
+      $(document).on('change', 'select[name="input_types[]"]', function() {
+            var row = $(this).closest('.row');
+            if ($(this).val() === 'select') {
+                row.find('.select-options-field').show();
+            } else {
+                row.find('.select-options-field').hide();
+            }
+        });
+
+        window.toggleSelectOptions = function(element) {
+            var row = $(element).closest('.row');
+            if ($(element).val() === 'select') {
+                row.find('.select-options-field').show();
+            } else {
+                row.find('.select-options-field').hide();
+            }
+        };
+
         // Append the additional inputs to the target container
         // document.querySelector('.custom-input-informations').insertAdjacentHTML('beforeend', additionalInputs);
 
@@ -257,16 +273,5 @@ function appendToPrompt(inputName) {
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
-<script>
-    function toggleInputOptions(selectElement) {
-    const inputOptionsField = document.getElementById('input-options-field');
-    
-    if (selectElement.value === 'select') {
-        inputOptionsField.style.display = 'flex'; // Show the Input Options field
-    } else {
-        inputOptionsField.style.display = 'none'; // Hide the Input Options field
-    }
-}
 
-</script>
 @endsection
