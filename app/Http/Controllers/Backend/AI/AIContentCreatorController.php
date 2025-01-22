@@ -205,6 +205,7 @@ class AIContentCreatorController extends Controller
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
             'input_placeholders' => 'required|array',
+            'input_options' => 'nullable|array',
             'prompt' => 'nullable|string',
         ]);
 
@@ -220,6 +221,7 @@ class AIContentCreatorController extends Controller
         $templateInput->input_names = json_encode($validatedData['input_names']);
         $templateInput->input_labels = json_encode($validatedData['input_labels']);
         $templateInput->input_placeholders = json_encode($validatedData['input_placeholders']);
+        $templateInput->input_options = json_encode($validatedData['input_options']);
         $templateInput->prompt = $validatedData['prompt'];
         $templateInput->total_word_generated = '0';
         $templateInput->blog_link = $request->blog_link;
@@ -350,10 +352,11 @@ class AIContentCreatorController extends Controller
         $inputNames = json_decode($Template->input_names, true);
         $inputLabels = json_decode($Template->input_labels, true);
         $inputPlaceholders = json_decode($Template->input_placeholders, true);
+        $inputOptions = json_decode($Template->input_options, true);
 
         $content = '';
 
-        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
+        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'inputOptions', 'content'));
     }
 
     // Extract Image from Prompt
