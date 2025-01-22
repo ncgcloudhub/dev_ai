@@ -360,10 +360,11 @@ class AIContentCreatorController extends Controller
         $inputNames = json_decode($Template->input_names, true);
         $inputLabels = json_decode($Template->input_labels, true);
         $inputPlaceholders = json_decode($Template->input_placeholders, true);
+        $inputOptions = json_decode($Template->input_options, true);
 
         $content = '';
 
-        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
+        return view('backend.ai_content_creator.aicontentcreator_view', compact('Template', 'inputTypes', 'inputOptions', 'inputNames', 'inputLabels', 'inputPlaceholders', 'content'));
     }
 
     // Extract Image from Prompt
