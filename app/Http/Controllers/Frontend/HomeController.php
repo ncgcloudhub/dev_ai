@@ -162,17 +162,30 @@ class HomeController extends Controller
 
         $user = auth()->user();
         $openaiModel = $user->selected_model;
-    
+
         // Get the category and points from the request
         $category = $validated['category'];
         $points = $validated['points'];
-    
-        // Example of how you might structure the message for the AI generation
+
+        // Get the user-provided content, if available (empty string if not provided)
+        $userContent = $request->input('content', '');
+
+        // Start building the AI message
         $aiMessage = "Generate $points jokes based on the category: $category, each joke should be one liner.";
-    
+
+        // If the user has provided custom content, append it to the AI prompt
+        if (!empty($userContent)) {
+            $aiMessage .= " Write about $userContent content.";
+        }
+
+        // Log the final AI message that is sent to the API
+        Log::info('AI Message sent to API:', [
+            'ai_message' => $aiMessage
+        ]);
+
         // Initialize the HTTP client (Guzzle) for making the request to the AI API
         $client = new Client();
-    
+
         try {
             $response = $client->post('https://api.openai.com/v1/chat/completions', [
                 'headers' => [
@@ -193,35 +206,35 @@ class HomeController extends Controller
                     ],
                 ],
             ]);
-    
-        // Decode the JSON response
-        $responseBody = json_decode($response->getBody()->getContents(), true);
 
-        // Extract the joke content from the response
-        $jokeContent = $responseBody['choices'][0]['message']['content'] ?? 'No joke generated';
+            // Decode the JSON response
+            $responseBody = json_decode($response->getBody()->getContents(), true);
 
-        // Log the full response and the generated joke content
-        Log::info('API Response:', [
-            'status' => $response->getStatusCode(),
-            'headers' => $response->getHeaders(),
-            'body' => $responseBody,
-            'joke_content' => $jokeContent
-        ]);
+            // Extract the joke content from the response
+            $jokeContent = $responseBody['choices'][0]['message']['content'] ?? 'No joke generated';
 
-      // Extract the points from the joke content (split by new lines)
-      $points = preg_split('/\r\n|\r|\n/', $jokeContent);
+            // Log the full response and the generated joke content
+            Log::info('API Response:', [
+                'status' => $response->getStatusCode(),
+                'headers' => $response->getHeaders(),
+                'body' => $responseBody,
+                'joke_content' => $jokeContent
+            ]);
 
-      // Send the joke content and points back to the frontend
-      return response()->json([
-          'success' => true,
-          'joke_content' => $jokeContent,
-          'points' => $points,
-      ]);
+            // Extract the points from the joke content (split by new lines)
+            $points = preg_split('/\r\n|\r|\n/', $jokeContent);
+
+            // Send the joke content and points back to the frontend
+            return response()->json([
+                'success' => true,
+                'joke_content' => $jokeContent,
+                'points' => $points,
+            ]);
 
         } catch (\Exception $e) {
             // Handle any errors that occur during the API request
             Log::error('Error generating AI joke: ' . $e->getMessage());
-    
+
             // Return an error response
             return response()->json([
                 'success' => false,
@@ -229,8 +242,6 @@ class HomeController extends Controller
             ]);
         }
     }
-    
-
 
     //Image Gallery Front End Page
     public function ContactUs()

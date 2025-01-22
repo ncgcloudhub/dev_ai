@@ -182,7 +182,7 @@
                                                 <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt=""
                                                     class="rounded-circle avatar-xxs">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <a href="pages-profile" class="fw-medium link-secondary">Tool Name: {{ $content->tool->name }}</a>
+                                                    <a href="pages-profile" class="fw-medium link-secondary">{{ $content->tool->name }}</a>
                                                 </div>
                                             </div>
                                         </th>
@@ -203,30 +203,31 @@
                                                     onclick="openToolContentEditorModal({{ $content->id }})">
                                                 Edit
                                             </button>
-                                        </td>
-                                    </tr>
-                    
-                                    {{-- Modal for Full Content --}}
-                                    <div class="modal fade" id="viewFullContentModal{{ $content->id }}" tabindex="-1" 
-                                         aria-labelledby="viewFullContentModalLabel{{ $content->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="viewFullContentModalLabel{{ $content->id }}">
-                                                        Full Content
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{-- Display full formatted content --}}
-                                                    {!! $content->formatted_content !!}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            {{-- Modal for Full Content --}}
+                                            <div class="modal fade" id="viewFullContentModal{{ $content->id }}" tabindex="-1" 
+                                                aria-labelledby="viewFullContentModalLabel{{ $content->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="viewFullContentModalLabel{{ $content->id }}">
+                                                            Full Content
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{-- Display full formatted content --}}
+                                                        {!! $content->formatted_content !!}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        </td>
+                                    </tr>
+                    
+                                    
                                     @endforeach
                                 </tbody>
                             </table>
@@ -254,7 +255,7 @@
                                                     class="rounded-circle avatar-xxs">
                                                 <div class="flex-grow-1 ms-2">
                                                     <a href="pages-profile"
-                                                        class="fw-medium link-secondary">Tool Name: {{ $content->tool->name }}</a>
+                                                        class="fw-medium link-secondary">{{ $content->tool->name }}</a>
                                                 </div>
                                             </div>
                                         </th>
@@ -269,30 +270,31 @@
                                                     data-bs-target="#viewFullContentModalAll{{ $content->id }}">
                                                 Read More
                                             </button>
-                                        </td>
-                                    </tr>
-                    
-                                    {{-- Modal for Full Content --}}
-                                    <div class="modal fade" id="viewFullContentModalAll{{ $content->id }}" tabindex="-1"
-                                         aria-labelledby="viewFullContentModalLabelAll{{ $content->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="viewFullContentModalLabelAll{{ $content->id }}">
-                                                        Full Content
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{-- Display full formatted content --}}
-                                                    {!! $content->formatted_content !!}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            {{-- Modal for Full Content --}}
+                                            <div class="modal fade" id="viewFullContentModalAll{{ $content->id }}" tabindex="-1"
+                                                aria-labelledby="viewFullContentModalLabelAll{{ $content->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="viewFullContentModalLabelAll{{ $content->id }}">
+                                                            Full Content
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{-- Display full formatted content --}}
+                                                        {!! $content->formatted_content !!}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        </td>
+                                    </tr>
+                    
+                                  
                                     @endforeach
                                 </tbody>
                             </table>
