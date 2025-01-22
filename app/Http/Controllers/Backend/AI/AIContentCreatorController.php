@@ -835,7 +835,9 @@ class AIContentCreatorController extends Controller
         // Fetch all matching records for the given template and user
         $contents = TemplateGeneratedContent::where('template_id', $id)
             ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc') // Order by 'created_at' in descending order
             ->get();
+
     
         // If no records are found, return an error response
         if ($contents->isEmpty()) {
