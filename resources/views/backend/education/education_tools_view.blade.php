@@ -182,7 +182,7 @@
                                                 <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt=""
                                                     class="rounded-circle avatar-xxs">
                                                 <div class="flex-grow-1 ms-2">
-                                                    <a href="pages-profile" class="fw-medium link-secondary">Tool Name: {{ $content->tool->name }}</a>
+                                                    <a href="pages-profile" class="fw-medium link-secondary">{{ $content->tool->name }}</a>
                                                 </div>
                                             </div>
                                         </th>
@@ -255,7 +255,7 @@
                                                     class="rounded-circle avatar-xxs">
                                                 <div class="flex-grow-1 ms-2">
                                                     <a href="pages-profile"
-                                                        class="fw-medium link-secondary">Tool Name: {{ $content->tool->name }}</a>
+                                                        class="fw-medium link-secondary">{{ $content->tool->name }}</a>
                                                 </div>
                                             </div>
                                         </th>
