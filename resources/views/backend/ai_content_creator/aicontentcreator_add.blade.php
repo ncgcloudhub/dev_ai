@@ -214,11 +214,6 @@
             }
         };
 
-        // Append the additional inputs to the target container
-        // document.querySelector('.custom-input-informations').insertAdjacentHTML('beforeend', additionalInputs);
-
-        // Move the "Add More" button to the end
-        // document.getElementById('inputRow').appendChild(document.getElementById('inputrow'));
     });
 
 function removeRow(button) {

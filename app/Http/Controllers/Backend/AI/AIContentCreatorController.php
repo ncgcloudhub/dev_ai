@@ -194,6 +194,8 @@ class AIContentCreatorController extends Controller
 
     public function AIContentCreatorStore(Request $request)
     {
+
+        // dd($request);
         // Validate the incoming request
         $validatedData = $request->validate([
             'template_name' => 'required|string',
@@ -204,7 +206,7 @@ class AIContentCreatorController extends Controller
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
             'input_placeholders' => 'required|array',
-            'input_options' => 'nullable|array', 
+            'select_options' => 'nullable|array', 
             'prompt' => 'nullable|string',
         ]);
 
@@ -221,25 +223,17 @@ class AIContentCreatorController extends Controller
         $templateInput->input_names = json_encode($validatedData['input_names']);
         $templateInput->input_labels = json_encode($validatedData['input_labels']);
         $templateInput->input_placeholders = json_encode($validatedData['input_placeholders']);
-    
-        // Handle input_options: Save only for rows where input_types is "select"
-        $input_options = [];
-        if (isset($validatedData['input_types'])) {
-            foreach ($validatedData['input_types'] as $index => $type) {
-                // Only store options if the input type is 'select'
-                if ($type === 'select' && isset($validatedData['input_options'][$index])) {
-                    $input_options[] = $validatedData['input_options'][$index]; // Add the select options
-                } else {
-                    $input_options[] = null; // No options for other types
-                }
-            }
+
+        // Add input_options for select fields (only if provided)
+        $select_options = [];
+        if (isset($validatedData['select_options'])) {
+            $select_options = $validatedData['select_options']; // Get the options for select input types
         }
-        $templateInput->input_options = json_encode($input_options);  // Save the input options
+        $templateInput->input_options = json_encode($select_options); // Save as JSON
     
         $templateInput->prompt = $validatedData['prompt'];
         $templateInput->total_word_generated = '0';
         $templateInput->blog_link = $request->blog_link;
-        $templateInput->video_link = $request->video_link;
 
         // Save the TemplateInput instance
         $templateInput->save();
