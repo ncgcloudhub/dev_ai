@@ -111,10 +111,7 @@
                 
                 <div class="card-footer">
                     <button type="button" class="btn gradient-btn-save" id="aiGenerateBtn">AI Generate</button>
-<<<<<<< HEAD
-=======
                     <button type="submit" class="btn gradient-btn-save">Save Joke</button>
->>>>>>> ccd659e0a88ccbf2265c0af82a50b079bfaa08c5
                 </div><!-- end card footer -->
             </div><!-- end card -->
         </form>
@@ -286,14 +283,14 @@ $(document).ready(function () {
     });
 });
 
-// Jokes
 $(document).ready(function() {
     $('#aiGenerateBtn').click(function() {
-         // Show the magic ball
-         showMagicBall('image');
- 
+        // Show the magic ball
+        showMagicBall('image');
+
         var category = $('#category').val();
         var points = $('#points').val();
+        var content = $('#content').val(); // Get the content from the textarea
 
         // Check if both category and points are selected
         if (!category || !points) {
@@ -301,38 +298,39 @@ $(document).ready(function() {
             return;
         }
 
-        // Send data via AJAX
+        // Send data via AJAX, including the content
         $.ajax({
             url: '{{ route("jokes.ai.generate") }}', // Route for AI generation
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
                 category: category,
-                points: points
+                points: points,
+                content: content  // Add the content to the AJAX data
             },
             success: function(response) {
                 // Hide the magic ball after content loads
                 hideMagicBall();
                 var pointsContainer = $('#jokePointsContainer');
-                    pointsContainer.empty();  // Clear previous checkboxes
+                pointsContainer.empty();  // Clear previous checkboxes
 
-                    // Loop through the points and create checkboxes
-                    response.points
-                        .filter(point => point.trim() !== '') // Exclude empty lines
-                        .forEach(function(point, index) {
-                            var checkbox = `
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="${point}" id="point${index}" name="points[]">
-                                    <label class="form-check-label" for="point${index}">
-                                        ${point}
-                                    </label>
-                                </div>
-                            `;
-                            pointsContainer.append(checkbox);
-                        });
+                // Loop through the points and create checkboxes
+                response.points
+                    .filter(point => point.trim() !== '') // Exclude empty lines
+                    .forEach(function(point, index) {
+                        var checkbox = `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${point}" id="point${index}" name="points[]">
+                                <label class="form-check-label" for="point${index}">
+                                    ${point}
+                                </label>
+                            </div>
+                        `;
+                        pointsContainer.append(checkbox);
+                    });
 
-                    // Show the form with checkboxes
-                    $('#jokeForm').show();
+                // Show the form with checkboxes
+                $('#jokeForm').show();
             },
             error: function(xhr, status, error) {
                 hideMagicBall();
@@ -343,6 +341,7 @@ $(document).ready(function() {
         });
     });
 });
+
 
 
 // Save the Jokes From Selected List
