@@ -481,7 +481,7 @@
                                                 </lord-icon>
                                             </div>
                                             <h5 id="h55">Standby while we create the content for you!</h5>
-                                            <p class="text-muted chunkss" id="chunkss"></p>
+                                            <p class="chunkss" id="chunkss"></p>
                                             <div id="download-container" class="mt-3"></div>
 
                                         </div>
