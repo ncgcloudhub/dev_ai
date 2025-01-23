@@ -724,10 +724,46 @@
                     console.error("Content ID not returned by the backend");
                 }
 
+                // Step 2: Add Copy Button
+                const copyButton = document.createElement('button');
+copyButton.textContent = "Copy Content";
+copyButton.className = "btn gradient-btn-2 mt-3 ml-2 copy-toast-btn"; // Style for the button
+
+copyButton.addEventListener("click", function () {
+    // Get the content of the #chunkss element
+    const pElement = document.querySelector("#chunkss");
+    const contentToCopy = pElement.innerText; // Only copy the text content
+
+    // Create a temporary textarea element
+    const textArea = document.createElement('textarea');
+    textArea.value = contentToCopy; // Set the text content to the textarea
+    document.body.appendChild(textArea); // Append it to the DOM
+
+    // Select the content of the textarea
+    textArea.select();
+
+    try {
+        // Execute the copy command
+        const successful = document.execCommand('copy');
+        if (successful) {
+            toastr.success('Content copied to clipboard!');
+        } else {
+            alert('Failed to copy content.');
+        }
+    } catch (err) {
+        console.error('Error while copying content:', err);
+    }
+
+    // Remove the textarea from the DOM
+    document.body.removeChild(textArea);
+});
+
+
                 const downloadContainer = document.getElementById('download-container');
                 if (downloadContainer) {
                     downloadContainer.innerHTML = ""; // Clear any existing buttons
                     downloadContainer.appendChild(downloadButton); // Append the new button
+                    downloadContainer.appendChild(copyButton);
                 }
     
                             // Step 2: Fetch and display images after content is streamed

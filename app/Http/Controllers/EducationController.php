@@ -548,7 +548,7 @@ public function updateContent(Request $request, $id)
         }
 
         // Finalize prompt
-        $prompt .= 'Please provide comprehensive content based on these details.';
+        $prompt .= 'Please provide in 1 line.';
 
         // Use the prompt to generate content
 
