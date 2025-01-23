@@ -85,10 +85,11 @@
                                             <div class="row input-row">
                                                 <div class="col-md-3">
                                                     <label for="input_types_{{ $index }}" class="form-label">Input Type</label>
-                                                    <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" aria-label="Floating label select example">
+                                                    <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" onchange="toggleSelectOptions(this)">
                                                         <option value="text" {{ $input['type'] == 'text' ? 'selected' : '' }}>Input Field</option>
                                                         <option value="textarea" {{ $input['type'] == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
                                                         <option value="attachment" {{ $input['type'] == 'attachment' ? 'selected' : '' }}>Attachment</option>
+                                                        <option value="select" {{ $input['type'] == 'select' ? 'selected' : '' }}>Select Option</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
@@ -102,6 +103,10 @@
                                                 <div class="col-md-3">
                                                     <label for="input_placeholders_{{ $index }}" class="form-label">Input Placeholder</label>
                                                     <input type="text" name="input_placeholders[]" value="{{ $input['placeholder'] }}" id="input_placeholders_{{ $index }}" placeholder="Type input placeholder" class="form-control" required>
+                                                </div>
+                                                <div class="col-md-3 select-options-field" style="{{ $input['type'] == 'select' ? '' : 'display:none;' }}">
+                                                    <label for="select_options_{{ $index }}" class="form-label">Select Options</label>
+                                                    <input type="text" name="select_options[]" id="select_options_{{ $index }}" value="{{ $input['options'] ?? '' }}" placeholder="Enter options, comma separated" class="form-control">
                                                 </div>
                                                 <div class="col-md-1 d-flex align-items-end">
                                                     <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
@@ -118,7 +123,6 @@
                                                 <!-- Additional input fields will be appended here -->
                                             </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                                 {{-- 2nd Card End --}}
@@ -182,9 +186,7 @@
                                 </div>
                             </form>
                             </div>
-                           
                         </div><!--end tab-pane-->
-
 
                         <div class="tab-pane fade" id="custom-v-pills-profile" role="tabpanel" aria-labelledby="custom-v-pills-profile-tab">
                             <div class="d-flex mb-4">
@@ -192,7 +194,6 @@
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $template->id }}">
                                 
-                                  
                                 <!-- Page Title -->
                                     <div class="col-12">
                                         <label for="page_title" class="form-label">Page Title</label>
@@ -223,9 +224,6 @@
                            
                         </div><!--end tab-pane-->
 
-
-
-
                     </div>
                 </div> <!-- end col-->
             </div> <!-- end row-->
@@ -234,15 +232,9 @@
 </div><!--end col-->
 </div>
 
-
-
-
-
-
 <div class="col-xxl-6">
 
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -254,15 +246,16 @@
 </script>
 
 <script>
-    $(document).ready(function(){
+   $(document).ready(function(){
         var additionalInputs = `
-            <div class="row input-row">
+            <div class="row">
                 <div class="col-md-3">
                     <label for="input_types" class="form-label">Input Type</label>
-                    <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example">
+                    <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
                         <option value="text">Input Field</option>
                         <option value="textarea">Textarea Field</option>
                         <option value="attachment">Attachment</option>
+                         <option value="select">Select Option</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -274,10 +267,15 @@
                     <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" required>
                 </div>
                 <div class="col-md-3">
-                    <label for="input_placeholders" class="form-label">Input Placeholder</label>
-                    <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
+                        <label for="input_placeholders" class="form-label">Input Placeholder</label>
+                        <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                 </div>
-                <div class="col-md-1 d-flex align-items-end">
+                <div class="col-md-3 select-options-field" style="display: none;">
+                    <label for="select_options" class="form-label">Select Options</label>
+                    <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
+                </div>
+                
+                <div class="col-md-1">
                     <button type="button" class="btn btn-link px-0 fw-medium remove-row" onclick="removeRow(this)">
                         <div class="d-flex align-items-center">
                             <i data-feather="minus"></i>
@@ -288,85 +286,104 @@
             </div>`;
 
             $("#add").click(function(){
-                $("#template_info").append(additionalInputs);
-            });
-     
-    });
+		$("#template_info").append(additionalInputs);
+		
+	  });
 
-function removeRow(button) {
-    // Find the parent row and remove it
-    var row = $(button).closest('.row');
-    row.remove();
-}
-
-// TEST
-function generateInputNames() {
-    // Clear previous content
-    $('.input_names_prompts').empty();
-
-    // Loop through each input name and append it to the display div
-    $('input[name="input_names[]"]').each(function() {
-        var inputName = $(this).val();
-        if (inputName.trim() !== "") {
-            var span = $('<span class="badge bg-info"> </span>');
-            span.text(inputName);
-            span.click(function() {
-                appendToPrompt(inputName);
-            });
-            $('.input_names_prompts').append(span);
-        }
-    });
-
-    // Show the hint if there are input names, hide it otherwise
-    var hintDiv = $('.hint');
-    if ($('.input_names_prompts').children().length > 0) {
-        hintDiv.removeClass('d-none');
-    } else {
-        hintDiv.addClass('d-none');
-    }
-}
-
-function appendToPrompt(inputName) {
-    var promptTextarea = $('#VertimeassageInput');
-    var promptText = promptTextarea.val().trim();
-    if (promptText !== "") {
-        promptText += " {" + inputName + "}";
-    } else {
-        promptText = "{" + inputName + "}";
-    }
-    promptTextarea.val(promptText);
-}
-
-
-// SEO with AI
-$(document).ready(function() {
-    $('#populateBtn').on('click', function() {
-        let templateId = $('input[name="id"]').val(); // Get the template ID from the hidden input
-
-        $.ajax({
-            url: '/ai-content-creator/seo/fetch/' + templateId, // Adjust the URL if needed
-            method: 'GET',
-            success: function(response) {
-                if (response.success) {
-                // Populate the form fields with the data from the response
-                $('#page_title').val(response.seo_title);
-                $('#page_description').val(response.seo_description);
-                  $('#page_tagging').val(response.seo_tags);
+        // Show or hide the select options field based on the input type
+      $(document).on('change', 'select[name="input_types[]"]', function() {
+            var row = $(this).closest('.row');
+            if ($(this).val() === 'select') {
+                row.find('.select-options-field').show();
             } else {
-                alert(response.message);
-            }
-            },
-            error: function() {
-                alert('Error fetching the template details.');
+                row.find('.select-options-field').hide();
             }
         });
+
+        window.toggleSelectOptions = function(element) {
+            var row = $(element).closest('.row');
+            if ($(element).val() === 'select') {
+                row.find('.select-options-field').show();
+            } else {
+                row.find('.select-options-field').hide();
+            }
+        };
+
     });
-});
+
+    function removeRow(button) {
+        // Find the parent row and remove it
+        var row = $(button).closest('.row');
+        row.remove();
+    }
+
+    // TEST
+    function generateInputNames() {
+        // Clear previous content
+        $('.input_names_prompts').empty();
+
+        // Loop through each input name and append it to the display div
+        $('input[name="input_names[]"]').each(function() {
+            var inputName = $(this).val();
+            if (inputName.trim() !== "") {
+                var span = $('<span class="badge bg-info"> </span>');
+                span.text(inputName);
+                span.click(function() {
+                    appendToPrompt(inputName);
+                });
+                $('.input_names_prompts').append(span);
+            }
+        });
+
+        // Show the hint if there are input names, hide it otherwise
+        var hintDiv = $('.hint');
+        if ($('.input_names_prompts').children().length > 0) {
+            hintDiv.removeClass('d-none');
+        } else {
+            hintDiv.addClass('d-none');
+        }
+    }
+
+    function appendToPrompt(inputName) {
+        var promptTextarea = $('#VertimeassageInput');
+        var promptText = promptTextarea.val().trim();
+        if (promptText !== "") {
+            promptText += " {" + inputName + "}";
+        } else {
+            promptText = "{" + inputName + "}";
+        }
+        promptTextarea.val(promptText);
+    }
+
+    // SEO with AI
+    $(document).ready(function() {
+        $('#populateBtn').on('click', function() {
+            let templateId = $('input[name="id"]').val(); // Get the template ID from the hidden input
+
+            $.ajax({
+                url: '/ai-content-creator/seo/fetch/' + templateId, // Adjust the URL if needed
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                    // Populate the form fields with the data from the response
+                    $('#page_title').val(response.seo_title);
+                    $('#page_description').val(response.seo_description);
+                    $('#page_tagging').val(response.seo_tags);
+                } else {
+                    alert(response.message);
+                }
+                },
+                error: function() {
+                    alert('Error fetching the template details.');
+                }
+            });
+        });
+    });
 
 </script>
 
 @endsection
 
 @section('script')
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
 @endsection

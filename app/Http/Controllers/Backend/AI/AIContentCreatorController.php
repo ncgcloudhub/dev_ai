@@ -257,6 +257,7 @@ class AIContentCreatorController extends Controller
         $inputNames = json_decode($template->input_names, true);
         $inputLabels = json_decode($template->input_labels, true);
         $inputPlaceholders = json_decode($template->input_placeholders, true);
+        $inputOptions = json_decode($template->input_options, true);
 
         $templateInputsArray = [];
         foreach ($templateInputs as $index => $type) {
@@ -265,6 +266,7 @@ class AIContentCreatorController extends Controller
                 'name' => $inputNames[$index] ?? '',
                 'label' => $inputLabels[$index] ?? '',
                 'placeholder' => $inputPlaceholders[$index] ?? '',
+                'options' => $inputOptions[$index] ?? '',
             ];
         }
         return view('backend.ai_content_creator.aicontentcreator_edit', compact('template', 'categories', 'templateInputsArray'));
@@ -285,6 +287,7 @@ class AIContentCreatorController extends Controller
             'input_names' => 'required|array',
             'input_labels' => 'required|array',
             'input_placeholders' => 'required|array',
+            'select_options' => 'nullable|array', 
             'prompt' => 'nullable|string',
         ]);
 
@@ -297,6 +300,14 @@ class AIContentCreatorController extends Controller
         $template->input_names = json_encode($validatedData['input_names']);
         $template->input_labels = json_encode($validatedData['input_labels']);
         $template->input_placeholders = json_encode($validatedData['input_placeholders']);
+
+         // Add input_options for select fields (only if provided)
+         $select_options = [];
+         if (isset($validatedData['select_options'])) {
+             $select_options = $validatedData['select_options']; // Get the options for select input types
+         }
+         $template->input_options = json_encode($select_options); // Save as JSON
+
         $template->prompt = $validatedData['prompt'];
         $template->blog_link = $request->blog_link;
         $template->video_link = $request->video_link;
