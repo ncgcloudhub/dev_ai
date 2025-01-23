@@ -482,6 +482,8 @@
                                             </div>
                                             <h5 id="h55">Standby while we create the content for you!</h5>
                                             <p class="text-muted chunkss" id="chunkss"></p>
+                                            <div id="download-container" class="mt-3"></div>
+
                                         </div>
 
                                     </div>
@@ -665,8 +667,10 @@
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector(".vertical-navs-step");
             const generateButton = document.querySelector(".generateButton");
-    
+            console.log("Form inside");
+
             generateButton.addEventListener("click", function () {
+                console.log("button clicked");
                 const formData = new FormData(form);
     
                 // Step 1: Fetch and display content stream
@@ -678,11 +682,13 @@
                     body: formData
                 })
                 .then(response => {
+                    console.log("inside response");
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
                     let content = "";  // Variable to store the entire content
     
                     const processStream = ({ done, value }) => {
+                        console.log("insde process stream");
                         if (done) {
                             // Hide loading icon once done
                             const lordIconElement = document.getElementById('almost');
@@ -703,6 +709,26 @@
                             }
     
                             console.log("Stream complete");
+
+                         // Step 2: Add download button for the streamed content
+                const downloadButton = document.createElement('a');
+                downloadButton.textContent = "Download Content";
+                downloadButton.className = "btn gradient-btn-3 mt-3";
+
+                // Create the dynamic download URL (similar to the modal logic)
+                const contentId = response.headers.get('X-Generated-Content-ID'); // Assuming backend 
+                if (contentId) {
+                    const downloadUrl = `{{ url('education/content') }}/${contentId}/download`;
+                    downloadButton.href = downloadUrl;
+                } else {
+                    console.error("Content ID not returned by the backend");
+                }
+
+                const downloadContainer = document.getElementById('download-container');
+                if (downloadContainer) {
+                    downloadContainer.innerHTML = ""; // Clear any existing buttons
+                    downloadContainer.appendChild(downloadButton); // Append the new button
+                }
     
                             // Step 2: Fetch and display images after content is streamed
                             // fetchImages();

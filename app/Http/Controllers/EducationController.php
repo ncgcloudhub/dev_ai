@@ -442,7 +442,6 @@ public function updateContent(Request $request, $id)
 
     public function educationContent(Request $request)
     {
-
         set_time_limit(0);
 
         $data = getUserLastPackageAndModels();
@@ -571,12 +570,12 @@ public function updateContent(Request $request, $id)
             ],
         ]);
  
-        // Get the response content
-        $content = $response['choices'][0]['message']['content'];
+       // Get the response content
+       $content = $response['choices'][0]['message']['content'];
 
-        // Get the total tokens used
-        $totalTokens = $response['usage']['total_tokens'];
-        deductUserTokensAndCredits($totalTokens);
+       // Get the total tokens used
+       $totalTokens = $response['usage']['total_tokens'];
+       deductUserTokensAndCredits($totalTokens);
 
         
         // Initialize $firstImageUrl as null by default
@@ -639,6 +638,8 @@ public function updateContent(Request $request, $id)
             'status' => 'generated' // or any default status you want
         ]);
 
+        $generatedContentId = $educationContent->id;
+
         
             // Stream the response
         return response()->stream(function () use ($content, $images) {
@@ -661,7 +662,10 @@ public function updateContent(Request $request, $id)
             }
         }
 
-            });
+        }, 200, [
+            'Content-Type' => 'text/html', // Adjust content type if necessary
+            'X-Generated-Content-ID' => $generatedContentId, // Include the content ID in headers
+        ]);
     }
    
     
