@@ -15,6 +15,7 @@ use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
 use App\Models\UserActivityLog;
+use App\Models\UserPageTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
@@ -123,13 +124,18 @@ class UserManageController extends Controller
         ->latest()
         ->take(20)
         ->get();
+       
+        $time = UserPageTime::where('user_id', $id)
+        ->latest()
+        ->take(20)
+        ->get();
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
-        return view('backend.user.user_details', compact('user','images', 'logs'));
+        return view('backend.user.user_details', compact('user','images', 'logs','time'));
     }
 
     public function UpdateUserStats(Request $request)

@@ -541,6 +541,8 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     
     });
 
+    Route::post('/save-time', [UserController::class, 'saveTime'])->name('save-time');
+
     // Template Rating
     Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
 

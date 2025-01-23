@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\DalleImageGenerate;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Session;
+use App\Models\UserPageTime;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -123,6 +124,45 @@ class UserController extends Controller
         $user->tour_progress = $request->input('seenTourSteps', []);
         $user->save();
         return response()->json(['success' => true]);
+    }
+
+    public function saveTime(Request $request)
+    {
+        Log::info('Save time method triggered', ['request' => $request->all()]);
+        // Validate the incoming data
+        $data = $request->validate([
+            'time_spent' => 'array', // Expect an array of pages and time
+            'time_spent.*.url' => 'required|string',
+            'time_spent.*.time_spent' => 'required|numeric|min:0',
+        ]);
+
+        Log::info('Validated data', ['data' => $data]);
+
+        $userId = auth()->id(); // Get the logged-in user ID
+
+        foreach ($data['time_spent'] as $pageTime) {
+            // Find existing record for the same user and page (without date filter)
+            $existingRecord = UserPageTime::where('user_id', $userId)
+                ->where('page_url', $pageTime['url'])
+                ->first();
+
+            if ($existingRecord) {
+                // If record exists, update the time spent by adding the new time
+                $existingRecord->update([
+                    'time_spent' => $existingRecord->time_spent + $pageTime['time_spent'],
+                ]);
+            } else {
+                // If no record exists, create a new one
+                UserPageTime::create([
+                    'user_id' => $userId,
+                    'page_url' => $pageTime['url'],
+                    'time_spent' => $pageTime['time_spent'],
+                    'created_at' => now(),
+                ]);
+            }
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
  
