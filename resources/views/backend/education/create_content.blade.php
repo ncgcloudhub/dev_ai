@@ -58,25 +58,22 @@
                                     Finish
                                 </button>
 
-                                <hr>
-                                <div class="card mb-3 mt-3">
+                                <div class="card mb-3 mt-3 border-color-purple">
                                     <div class="card-body">
                                         <div class="d-flex mb-3 align-items-center">
                                             <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Last 5 Content</h6>
                                         </div>
                                         <ul class="list-unstyled vstack gap-3 mb-0">
                                             @foreach ($educationContents as $item)
-                                                <li>
+                                                <li onclick="fetchContent({{ $item->id }})" style="cursor: pointer;">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img src="{{ asset('backend/giphy1.gif') }}" alt="" class="avatar-xs rounded-3">
                                                         </div>
                                                         <div class="flex-grow-1 ms-2">
-                                                          
-                                                            <a href="#" class="text-reset fs-14 mb-0" onclick="fetchContent(event, {{ $item->id }})">
                                                                 <h6 class="mb-1">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h6>
                                                                 <p class="text-muted mb-0">{{$item->topic}}</p>
-                                                            </a>
+                                                            
                                                         </div>
                                                      
                                                     </div>
@@ -487,38 +484,6 @@
                                             <p class="text-muted chunkss" id="chunkss"></p>
                                         </div>
 
-                <div class="row mt-5"> <!-- Add row here -->
-                    @foreach ($educationContents as $item)
-                        <div class="col-md-4 mb-4"> <!-- Ensure proper grid column -->
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="avatar-md mb-3 mx-auto">
-                                      
-                                        <img src="{{ asset('backend/giphy1.gif') }}" 
-                                        alt="Candidate Image" 
-                                        id="candidate-img" 
-                                        class="img-thumbnail rounded-circle shadow-none">
-                     
-                                    </div>
-    
-                                    <h5 id="candidate-name" class="mb-0">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
-                                    <p id="candidate-position" class="text-muted">                                                                    
-                                        <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
-                                    </p>
-
-                                  
-                                    <div>
-                                        <button type="button" class="btn gradient-btn-9 rounded-pill w-sm" onclick="fetchContent({{ $item->id }})">
-                                            <i class="ri-add-fill me-1 align-bottom"></i> View
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div> <!-- End row -->
-
-                               
                                     </div>
                                     <!-- end tab pane -->
                                 </div>
