@@ -58,25 +58,22 @@
                                     Finish
                                 </button>
 
-                                <hr>
-                                <div class="card mb-3 mt-3">
+                                <div class="card mb-3 mt-3 border-color-purple">
                                     <div class="card-body">
                                         <div class="d-flex mb-3 align-items-center">
                                             <h6 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Last 5 Content</h6>
                                         </div>
                                         <ul class="list-unstyled vstack gap-3 mb-0">
                                             @foreach ($educationContents as $item)
-                                                <li>
+                                                <li onclick="fetchContent({{ $item->id }})" style="cursor: pointer;">
                                                     <div class="d-flex align-items-center">
                                                         <div class="flex-shrink-0">
                                                             <img src="{{ asset('backend/giphy1.gif') }}" alt="" class="avatar-xs rounded-3">
                                                         </div>
                                                         <div class="flex-grow-1 ms-2">
-                                                          
-                                                            <a href="#" class="text-reset fs-14 mb-0" onclick="fetchContent(event, {{ $item->id }})">
                                                                 <h6 class="mb-1">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h6>
                                                                 <p class="text-muted mb-0">{{$item->topic}}</p>
-                                                            </a>
+                                                            
                                                         </div>
                                                      
                                                     </div>
@@ -485,40 +482,10 @@
                                             </div>
                                             <h5 id="h55">Standby while we create the content for you!</h5>
                                             <p class="text-muted chunkss" id="chunkss"></p>
+                                            <div id="download-container" class="mt-3"></div>
+
                                         </div>
 
-                <div class="row mt-5"> <!-- Add row here -->
-                    @foreach ($educationContents as $item)
-                        <div class="col-md-4 mb-4"> <!-- Ensure proper grid column -->
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <div class="avatar-md mb-3 mx-auto">
-                                      
-                                        <img src="{{ asset('backend/giphy1.gif') }}" 
-                                        alt="Candidate Image" 
-                                        id="candidate-img" 
-                                        class="img-thumbnail rounded-circle shadow-none">
-                     
-                                    </div>
-    
-                                    <h5 id="candidate-name" class="mb-0">{{$item->gradeClass->grade}} - {{$item->subject->name}}</h5>
-                                    <p id="candidate-position" class="text-muted">                                                                    
-                                        <a href="#" class="text-reset fs-14 mb-0">{{$item->topic}}</a>
-                                    </p>
-
-                                  
-                                    <div>
-                                        <button type="button" class="btn gradient-btn-9 rounded-pill w-sm" onclick="fetchContent({{ $item->id }})">
-                                            <i class="ri-add-fill me-1 align-bottom"></i> View
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div> <!-- End row -->
-
-                               
                                     </div>
                                     <!-- end tab pane -->
                                 </div>
@@ -700,8 +667,10 @@
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector(".vertical-navs-step");
             const generateButton = document.querySelector(".generateButton");
-    
+            console.log("Form inside");
+
             generateButton.addEventListener("click", function () {
+                console.log("button clicked");
                 const formData = new FormData(form);
     
                 // Step 1: Fetch and display content stream
@@ -713,11 +682,13 @@
                     body: formData
                 })
                 .then(response => {
+                    console.log("inside response");
                     const reader = response.body.getReader();
                     const decoder = new TextDecoder();
                     let content = "";  // Variable to store the entire content
     
                     const processStream = ({ done, value }) => {
+                        console.log("insde process stream");
                         if (done) {
                             // Hide loading icon once done
                             const lordIconElement = document.getElementById('almost');
@@ -738,6 +709,62 @@
                             }
     
                             console.log("Stream complete");
+
+                         // Step 2: Add download button for the streamed content
+                const downloadButton = document.createElement('a');
+                downloadButton.textContent = "Download Content";
+                downloadButton.className = "btn gradient-btn-3 mt-3";
+
+                // Create the dynamic download URL (similar to the modal logic)
+                const contentId = response.headers.get('X-Generated-Content-ID'); // Assuming backend 
+                if (contentId) {
+                    const downloadUrl = `{{ url('education/content') }}/${contentId}/download`;
+                    downloadButton.href = downloadUrl;
+                } else {
+                    console.error("Content ID not returned by the backend");
+                }
+
+                // Step 2: Add Copy Button
+                const copyButton = document.createElement('button');
+copyButton.textContent = "Copy Content";
+copyButton.className = "btn gradient-btn-2 mt-3 ml-2 copy-toast-btn"; // Style for the button
+
+copyButton.addEventListener("click", function () {
+    // Get the content of the #chunkss element
+    const pElement = document.querySelector("#chunkss");
+    const contentToCopy = pElement.innerText; // Only copy the text content
+
+    // Create a temporary textarea element
+    const textArea = document.createElement('textarea');
+    textArea.value = contentToCopy; // Set the text content to the textarea
+    document.body.appendChild(textArea); // Append it to the DOM
+
+    // Select the content of the textarea
+    textArea.select();
+
+    try {
+        // Execute the copy command
+        const successful = document.execCommand('copy');
+        if (successful) {
+            toastr.success('Content copied to clipboard!');
+        } else {
+            alert('Failed to copy content.');
+        }
+    } catch (err) {
+        console.error('Error while copying content:', err);
+    }
+
+    // Remove the textarea from the DOM
+    document.body.removeChild(textArea);
+});
+
+
+                const downloadContainer = document.getElementById('download-container');
+                if (downloadContainer) {
+                    downloadContainer.innerHTML = ""; // Clear any existing buttons
+                    downloadContainer.appendChild(downloadButton); // Append the new button
+                    downloadContainer.appendChild(copyButton);
+                }
     
                             // Step 2: Fetch and display images after content is streamed
                             // fetchImages();
