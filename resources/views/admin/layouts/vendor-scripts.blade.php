@@ -213,6 +213,48 @@
 
 </script>
 
+{{-- User Page Time --}}
+<script>
+
+let startTime = Date.now();
+let timeSpent = 0;
+
+window.addEventListener('beforeunload', function () {
+    let endTime = Date.now();
+    timeSpent = (endTime - startTime) / 1000; // Time in seconds
+
+    let pageData = {
+        time_spent: [
+            {
+                url: window.location.href,
+                time_spent: timeSpent,
+            },
+        ],
+    };
+
+         // Use fetch to send data with CSRF token
+    fetch('/save-time', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify(pageData),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Time data sent successfully');
+        } else {
+            console.log('Failed to send time data');
+        }
+    })
+    .catch(error => {
+        console.error('Error sending time data:', error);
+    });
+    });
+</script>
+
+
 
 @yield('script')
 @yield('script-bottom')

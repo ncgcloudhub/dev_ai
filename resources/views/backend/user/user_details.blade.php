@@ -280,6 +280,12 @@ Profile | {{$user->name}}
                             Activity Log
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#userTimeSpent" role="tab">
+                            <i class="fas fa-home"></i>
+                            Time Spent
+                        </a>
+                    </li>
                     @endif
                 </ul>
             </div>
@@ -381,6 +387,30 @@ Profile | {{$user->name}}
                                         <td>{{ $item->action }}</td>
                                         <td>{{ $item->details }}</td>
                                         <td>{{ $item->created_at->diffForHumans() }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!--end tab-pane-->
+                </div>
+
+                 {{-- Time Spent --}}
+                 <div class="tab-content">
+                    <div class="tab-pane active" id="userTimeSpent" role="tabpanel">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="width: 60%;">Url</th>
+                                    <th style="width: 40%;">Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($time as $item)
+                                    <tr>
+                                        <td>{{ $item->page_url }}</td>
+                                        <td>{{ $item->time_spent }} Secs</td>
                                     </tr>
                                 @endforeach
                             </tbody>
