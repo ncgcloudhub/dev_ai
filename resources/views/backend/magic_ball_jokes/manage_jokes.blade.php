@@ -89,13 +89,13 @@
     
                             <!-- Points select dropdown -->
                             <div class="col-md-6 mb-3">
-                                <label for="points" class="form-label">Points</label>
+                                <label for="points" class="form-label">Number of Jokes</label>
                                 <select class="form-control" id="points" name="points" required>
-                                    <option value="">Select Points</option>
-                                    <option value="1">1 Point</option>
-                                    <option value="2">2 Points</option>
-                                    <option value="3">3 Points</option>
-                                    <option value="5">5 Points</option>
+                                    <option value="">Select number of Jokes</option>
+                                    <option value="1">1 Joke</option>
+                                    <option value="2">2 Jokes</option>
+                                    <option value="3">3 Jokes</option>
+                                    <option value="5">5 Jokes</option>
                                     <!-- Add other point values here as needed -->
                                 </select>
                             </div>
