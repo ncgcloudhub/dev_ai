@@ -82,7 +82,7 @@
                                     <div class="card-body custom-input-informations">
                                         <div class="live-preview">
                                             @foreach($templateInputsArray as $index => $input)
-                                            <div class="row input-row">
+                                            <div class="row input-row mb-3">
                                                 <div class="col-md-3">
                                                     <label for="input_types_{{ $index }}" class="form-label">Input Type</label>
                                                     <select class="form-select" name="input_types[]" id="input_types_{{ $index }}" onchange="toggleSelectOptions(this)">
@@ -92,7 +92,7 @@
                                                         <option value="select" {{ $input['type'] == 'select' ? 'selected' : '' }}>Select Option</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-3 mb-2">
                                                     <label for="input_names_{{ $index }}" class="form-label">Input Name</label>
                                                     <input type="text" name="input_names[]" value="{{ $input['name'] }}" id="input_names_{{ $index }}" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
                                                 </div>
@@ -105,7 +105,7 @@
                                                     <input type="text" name="input_placeholders[]" value="{{ $input['placeholder'] }}" id="input_placeholders_{{ $index }}" placeholder="Type input placeholder" class="form-control" required>
                                                 </div>
                                                 <div class="col-md-3 select-options-field" style="{{ $input['type'] == 'select' ? '' : 'display:none;' }}">
-                                                    <label for="select_options_{{ $index }}" class="form-label">Select Options</label>
+                                                    <label for="select_options_{{ $index }}" class="form-label">Select Options <span style="color: red">(First Value will be set by default)</span></label>
                                                     <input type="text" name="select_options[]" id="select_options_{{ $index }}" value="{{ $input['options'] ?? '' }}" placeholder="Enter options, comma separated" class="form-control">
                                                 </div>
                                                 <div class="col-md-1 d-flex align-items-end">
@@ -117,6 +117,7 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <hr>
                                             @endforeach
                                             
                                             <div id="template_info" class="input-informations">
@@ -248,7 +249,8 @@
 <script>
    $(document).ready(function(){
         var additionalInputs = `
-            <div class="row">
+         <hr>
+            <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="input_types" class="form-label">Input Type</label>
                     <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
@@ -258,7 +260,7 @@
                          <option value="select">Select Option</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <label for="input_names" class="form-label">Input Name</label>
                     <input type="text" name="input_names[]" onchange="generateInputNames(true)" placeholder="Type input name" class="form-control" required>
                 </div>
@@ -271,7 +273,7 @@
                         <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                 </div>
                 <div class="col-md-3 select-options-field" style="display: none;">
-                    <label for="select_options" class="form-label">Select Options</label>
+                    <label for="select_options" class="form-label">Select Options <span style="color: red">(First Value will be set by default)</span></label>
                     <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
                 </div>
                 

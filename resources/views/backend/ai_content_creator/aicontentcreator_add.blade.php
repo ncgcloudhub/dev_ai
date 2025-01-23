@@ -59,7 +59,8 @@
         
                 <div class="card-body custom-input-informations">
                     <div class="live-preview">
-                        <div class="row">
+                        
+                        <div class="row mb-3">
                             <div class="col-md-3">
                                 <label for="input_types" class="form-label">Input Type <span class="text-danger">*</span></label>
                                 <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
@@ -70,7 +71,7 @@
                                     <option value="select">Select Option</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mb-2">
                                 <label for="input_names" class="form-label">Input Name <span class="text-danger">*</span></label>
                                 <input type="text" name="input_names[]" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" required>
                             </div>
@@ -83,7 +84,7 @@
                                 <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                             </div>
                             <div class="col-md-3 select-options-field" style="display: none;">
-                                <label for="select_options" class="form-label">Select Options</label>
+                                <label for="select_options" class="form-label">Select Options <span style="color: red">(First Value will be set by default)</span></label>
                                 <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
                             </div>
                         </div>
@@ -154,7 +155,8 @@
 <script>
     $(document).ready(function(){
         var additionalInputs = `
-            <div class="row">
+        <hr>
+            <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="input_types" class="form-label">Input Type</label>
                     <select class="form-select" name="input_types[]" id="input_types" aria-label="Floating label select example" onchange="toggleSelectOptions(this)">
@@ -164,7 +166,7 @@
                          <option value="select">Select Option</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 mb-2">
                     <label for="input_names" class="form-label">Input Name</label>
                     <input type="text" name="input_names[]" onchange="generateInputNames(true)" placeholder="Type input name" class="form-control" required>
                 </div>
@@ -177,7 +179,7 @@
                         <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" required>
                 </div>
                 <div class="col-md-3 select-options-field" style="display: none;">
-                    <label for="select_options" class="form-label">Select Options</label>
+                    <label for="select_options" class="form-label">Select Options <span style="color: red">(First Value will be set by default)</span></label>
                     <input type="text" name="select_options[]" placeholder="Enter options, comma separated" class="form-control">
                 </div>
                 
