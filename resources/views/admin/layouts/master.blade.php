@@ -75,7 +75,6 @@
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-            <button id="testButton">Test Send Beacon</button>
             @include('admin.layouts.footer')
         </div>
         <!-- end main content-->
