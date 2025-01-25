@@ -18,7 +18,7 @@
                     <img src="{{ asset('backend/uploads/site/In.png') }}" width="20px" alt="">
                 </a>
                 <a href="{{$siteSettings->youtube}}" target="_blank" class="mx-1">
-                    <img src="{{ asset('backend/uploads/site/Youtube.png') }}" width="20px" alt="">
+                    <img src="{{ asset('backend/uploads/site/youtube.png') }}" width="20px" alt="">
                 </a>
             </div>
             
