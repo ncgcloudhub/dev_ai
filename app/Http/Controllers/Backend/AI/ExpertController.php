@@ -37,7 +37,6 @@ class ExpertController extends Controller
 
     public function ExpertStore(Request $request)
     {
-
         $imageName = '';
         if ($image = $request->file('image')) {
             $imageName = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
@@ -536,6 +535,54 @@ class ExpertController extends Controller
         );
 
         return redirect()->back()->with($notification);
+    }
+
+
+    // Trasncribe
+    public function transcribeSpeech(Request $request)
+    {
+        try {
+            // Validate uploaded file
+            $request->validate([
+                'audio' => 'required|file|mimes:mp3,wav|max:5120', // Max 5MB
+            ]);
+
+            $audioFile = $request->file('audio');
+            $audioPath = $audioFile->getPathname();
+
+            Log::info('Uploaded File Details', [
+                'Original Name' => $audioFile->getClientOriginalName(),
+                'Mime Type' => $audioFile->getMimeType(),
+                'Size' => $audioFile->getSize()
+            ]);
+
+            // Send file to OpenAI Whisper API
+            $client = new Client();
+            $response = $client->post('https://api.openai.com/v1/audio/transcriptions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                ],
+                'multipart' => [
+                    ['name' => 'model', 'contents' => 'whisper-1'],
+                    ['name' => 'file', 'contents' => fopen($audioPath, 'r'), 'filename' => $audioFile->getClientOriginalName()],
+                    ['name' => 'response_format', 'contents' => 'text'],
+                ],
+            ]);
+
+            $transcription = $response->getBody()->getContents();
+            Log::info('Transcription Response', ['response' => $transcription]);
+
+            return response()->json(['transcription' => $transcription]);
+
+        } catch (\Exception $e) {
+            Log::error('Transcription Error', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Internal Server Error'], 500);
+        }
+    }
+
+public function transcribe()
+    {
+        return view('backend.common.trsnacribe');
     }
 
 
