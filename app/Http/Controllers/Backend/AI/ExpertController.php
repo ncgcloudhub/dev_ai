@@ -542,15 +542,13 @@ class ExpertController extends Controller
     public function transcribeSpeech(Request $request)
     {
         try {
-            // Validate uploaded file
-            $request->validate([
-                'audio' => 'required|file|mimes:mp3,wav|max:5120', // Max 5MB
-            ]);
+            // Check if audio is received
+            if (!$request->hasFile('audio')) {
+                return response()->json(['error' => 'No audio received'], 400);
+            }
 
             $audioFile = $request->file('audio');
-            $audioPath = $audioFile->getPathname();
-
-            Log::info('Uploaded File Details', [
+            Log::info('Received Audio File', [
                 'Original Name' => $audioFile->getClientOriginalName(),
                 'Mime Type' => $audioFile->getMimeType(),
                 'Size' => $audioFile->getSize()
@@ -564,7 +562,7 @@ class ExpertController extends Controller
                 ],
                 'multipart' => [
                     ['name' => 'model', 'contents' => 'whisper-1'],
-                    ['name' => 'file', 'contents' => fopen($audioPath, 'r'), 'filename' => $audioFile->getClientOriginalName()],
+                    ['name' => 'file', 'contents' => fopen($audioFile->getPathname(), 'r'), 'filename' => $audioFile->getClientOriginalName()],
                     ['name' => 'response_format', 'contents' => 'text'],
                 ],
             ]);

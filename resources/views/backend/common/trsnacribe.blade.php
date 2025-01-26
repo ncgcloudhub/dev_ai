@@ -7,29 +7,48 @@
     <title>Document</title>
 </head>
 <body>
-    <form id="audioUploadForm" action="{{ route('transcribe') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="audio">Upload an Audio File (MP3/WAV):</label>
-        <input type="file" name="audio" id="audio" accept=".mp3, .wav" required>
-        <button type="submit">Upload & Transcribe</button>
-    </form>
-    
+    <button id="record">🎙 Start Recording</button>
+    <button id="stop" disabled>🛑 Stop Recording</button>
     <p>Transcription: <span id="transcription">...</span></p>
-
+    
     <script>
-        document.getElementById("audioUploadForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-        
-            let formData = new FormData(this);
-        
-            let response = await fetch(this.action, {
+    let mediaRecorder;
+    let audioChunks = [];
+    
+    document.getElementById("record").addEventListener("click", async () => {
+        let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        document.getElementById("record").disabled = true;
+        document.getElementById("stop").disabled = false;
+    
+        mediaRecorder.ondataavailable = event => {
+            audioChunks.push(event.data);
+        };
+    
+        mediaRecorder.onstop = async () => {
+            let audioBlob = new Blob(audioChunks, { type: "audio/webm" }); // Default recording type
+            let formData = new FormData();
+            formData.append("audio", audioBlob, "recording.webm");
+    
+            let response = await fetch("{{ route('transcribe') }}", {
                 method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}" // Fix for 419 error
+                },
                 body: formData
             });
-        
+    
             let result = await response.json();
             document.getElementById("transcription").innerText = result.transcription ?? "Error transcribing.";
-        });
-        </script>
+        };
+    });
+    
+    document.getElementById("stop").addEventListener("click", () => {
+        mediaRecorder.stop();
+        document.getElementById("record").disabled = false;
+        document.getElementById("stop").disabled = true;
+    });
+    </script>
 </body>
 </html>
