@@ -130,6 +130,9 @@
         <div id="imageModal" class="modal fade" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl">
                 <div class="modal-content border-0 overflow-hidden">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <div class="row g-0">
                     
                         <div class="col-lg-5">
@@ -158,8 +161,12 @@
                     
                     </div>
                     <div class="modal-footer">
-                        <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                        {{-- <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
+                            <i class="ri-close-line me-1 align-middle"></i> Close
+                        </a> --}}
+                        <button type="button" class="btn btn-primary" id="copyPromptButton">Copy Prompt</button>
                     </div>
+                    
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div>

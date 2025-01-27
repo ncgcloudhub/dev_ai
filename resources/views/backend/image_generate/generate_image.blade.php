@@ -504,18 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// COpy Prompt from modal
-document.getElementById("copyPromptButton").addEventListener("click", function() {
-    // Get the prompt text (adjust the selector based on where the prompt is located)
-    var promptText = document.getElementById("imageModalLabel").innerText;
 
-    // Use the Clipboard API to copy the text to the clipboard
-    navigator.clipboard.writeText(promptText).then(function() {
-        console.log("Copied Prompt: ", promptText);
-    }).catch(function(err) {
-        console.error("Failed to copy: ", err);
-    });
-});
 
 
 </script>

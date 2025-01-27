@@ -255,6 +255,21 @@ window.addEventListener('beforeunload', function () {
 </script>
 
 <script>
+// COpy Prompt from modal (Image)
+document.getElementById("copyPromptButton").addEventListener("click", function() {
+    // Get the prompt text (adjust the selector based on where the prompt is located)
+    var promptText = document.getElementById("imageModalLabel").innerText;
+
+    // Use the Clipboard API to copy the text to the clipboard
+    navigator.clipboard.writeText(promptText).then(function() {
+        console.log("Copied Prompt: ", promptText);
+    }).catch(function(err) {
+        console.error("Failed to copy: ", err);
+    });
+});
+</script>
+
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
             alert("Speech Recognition is not supported in this browser.");
