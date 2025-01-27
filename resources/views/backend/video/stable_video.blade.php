@@ -18,7 +18,8 @@
                     @csrf
                     <div class="mb-3">
                         <label for="image" class="form-label">Select Image</label>
-                        <input type="file" name="image" id="image" class="form-control" required>
+                        <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+                        <small class="text-danger d-none" id="resolution-error">Please upload an image with one of the following resolutions: 1024x576, 576x1024, or 768x768.</small>
                     </div>
                     <div class="mb-3">
                         <label for="seed" class="form-label">Seed</label>
@@ -60,6 +61,41 @@
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
+<script>
+    document.getElementById('image').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const errorElement = document.getElementById('resolution-error');
+        
+        if (file) {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = function () {
+                const { width, height } = img;
+
+                // Allowed resolutions
+                const allowedResolutions = [
+                    { width: 1024, height: 576 },
+                    { width: 576, height: 1024 },
+                    { width: 768, height: 768 },
+                ];
+
+                // Check if the resolution matches any of the allowed resolutions
+                const isValid = allowedResolutions.some(
+                    (res) => res.width === width && res.height === height
+                );
+
+                if (!isValid) {
+                    errorElement.classList.remove('d-none');
+                    event.target.value = ''; // Clear the invalid file
+                } else {
+                    errorElement.classList.add('d-none');
+                }
+
+                URL.revokeObjectURL(img.src); // Free memory
+            };
+        }
+    });
+</script>
 
 <script>
     document.getElementById('videoGenerationForm').addEventListener('submit', async (event) => {
