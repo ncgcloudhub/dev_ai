@@ -69,7 +69,9 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12 text-end">
-                                <button type="submit" id="submit" name="send" class="submitBnt btn gradient-btn-5">Send Message</button>
+                                <button type="submit" id="submit" name="send" class="submitBnt btn gradient-btn-5 g-recaptcha"  data-sitekey="6LdVl4EqAAAAAC5LVhDSc5Cx2L6UaV7-uNm7jqRb" 
+                                data-callback="onSubmit" 
+                                data-action="submit" disabled>Send Message</button>
                             </div>
                         </div>
                     </form>

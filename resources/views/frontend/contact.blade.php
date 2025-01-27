@@ -9,6 +9,7 @@
 
 @endsection
 @section('body')
+<script src="https://www.google.com/recaptcha/api.js"></script>
 
 
     <body data-bs-spy="scroll" data-bs-target="#navbar-example">
@@ -39,5 +40,12 @@
     @section('script')
 
         <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+
+        <script>
+            function onSubmit(token) {
+                // Enable the submit button once the user completes reCAPTCHA
+                document.getElementById('submit').disabled = false;
+            }
+        </script>
        
     @endsection
