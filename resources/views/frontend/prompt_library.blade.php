@@ -115,9 +115,13 @@
                     @endforeach
                 </div>
                 <h2 class="noresult text-center" style="display: none;">No results found.</h2>
+               
+                @if (Auth::check())
+                @else
                 <div class="mx-auto d-flex justify-content-center mb-3">
                     <a href="{{ route('register') }}" class="btn gradient-btn-5">Sign Up to Access more Prompt for FREE </a> <!-- Redirect to user.prompt.library if user is a normal user -->
                 </div>
+                @endif
             </div>
         </div>
 
