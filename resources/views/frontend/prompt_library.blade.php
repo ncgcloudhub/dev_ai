@@ -52,7 +52,7 @@
                     </form>
                 </div>
 
-                <div class="card-body border border-dashed border-end-0 border-start-0">
+                {{-- <div class="card-body border border-dashed border-end-0 border-start-0">
                     <form id="filterForm">
                         <div class="row g-3 justify-content-center">
                             <div class="col-xxl-5 col-sm-6">
@@ -81,7 +81,7 @@
                         </div>
                         <!--end row-->
                     </form>
-                </div>
+                </div> --}}
                 
 
                 <div class="row template-row">
@@ -114,10 +114,10 @@
                         </div>
                     @endforeach
                 </div>
-                
-                
                 <h2 class="noresult text-center" style="display: none;">No results found.</h2>
-
+                <div class="mx-auto d-flex justify-content-center mb-3">
+                    <a href="{{ route('register') }}" class="btn gradient-btn-5">Sign Up to Access more Prompt for FREE </a> <!-- Redirect to user.prompt.library if user is a normal user -->
+                </div>
             </div>
         </div>
 
