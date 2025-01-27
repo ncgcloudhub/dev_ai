@@ -254,6 +254,59 @@ window.addEventListener('beforeunload', function () {
     });
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+            alert("Speech Recognition is not supported in this browser.");
+            return;
+        }
+    
+        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognitionAPI();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+    
+        let activeInput = null; // Store reference to the active input field
+        let activeMicIcon = null; // Store reference to the active mic icon
+        let isRecording = false;
+    
+        document.querySelectorAll(".speech-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+                const inputField = this.previousElementSibling; // Get the corresponding textarea/input
+                const micIcon = this.querySelector(".mic-icon");
+    
+                if (!isRecording) {
+                    activeInput = inputField;
+                    activeMicIcon = micIcon;
+                    recognition.start();
+                    isRecording = true;
+                    micIcon.classList.replace("ri-mic-line", "ri-mic-fill");
+                    micIcon.classList.add("text-danger");
+                } else {
+                    recognition.stop();
+                    isRecording = false;
+                    micIcon.classList.replace("ri-mic-fill", "ri-mic-line");
+                    micIcon.classList.remove("text-danger");
+                }
+            });
+        });
+    
+        recognition.onresult = (event) => {
+            if (!activeInput) return;
+            let transcript = "";
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            activeInput.value = transcript;
+            console.log("Transcribed Text:", transcript);
+        };
+    
+        recognition.onerror = (event) => {
+            console.error("Speech Recognition Error:", event.error);
+        };
+    });
+    </script>
 
 
 @yield('script')

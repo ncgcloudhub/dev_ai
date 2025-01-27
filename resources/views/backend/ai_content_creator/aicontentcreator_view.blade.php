@@ -96,9 +96,15 @@
                                         @if($type == 'text')
                                             <!-- Input Field -->
                                             <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
+                                            <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                <i class="mic-icon ri-mic-line fs-4"></i>
+                                            </button>
                                         @elseif($type == 'textarea')
                                             <!-- Textarea Field -->
                                             <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
+                                            <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                <i class="mic-icon ri-mic-line fs-4"></i>
+                                            </button>
                                         @elseif($type == 'attachment')
                                             <!-- File Input Field -->
                                             <input type="file" name="attachment" class="form-control" id="{{ $inputNames[$key] }}" required>
