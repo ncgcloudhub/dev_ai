@@ -1,5 +1,5 @@
 @extends('admin.layouts.master-without-nav')
-@section('title', $page->title)
+@section('title', $page->seo_title)
 
 @section('description', $page->description)
 
