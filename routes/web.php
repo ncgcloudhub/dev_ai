@@ -823,6 +823,9 @@ Route::get('/get-video-result/{generationId}', [StableDifussionController::class
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
 Route::post('/stable-control-sketch', [StableDifussionController::class, 'controlSketch'])->name('stable.control.sketch');
 
+Route::get('/transcribe/view', [ExpertController::class, 'transcribe'])->name('transcribe.view');
+Route::post('/transcribe', [ExpertController::class, 'transcribeSpeech'])->name('transcribe');
+
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])
  ->where('route', '.*') // Matches all routes

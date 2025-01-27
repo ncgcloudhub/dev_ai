@@ -189,6 +189,9 @@
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
+                                                    <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                        <i class="mic-icon ri-mic-line fs-4"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                             
@@ -327,6 +330,9 @@
                                                      <i class="ri-hammer-line"></i>
                                                     </a>
                                                     <textarea class="form-control search" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Image">{{ old('prompt', $content) }}</textarea>
+                                                    <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                        <i class="mic-icon ri-mic-line fs-4"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                             
