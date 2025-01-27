@@ -111,9 +111,15 @@
                                 @if ($input_type == 'textarea')
                                     <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" 
                                         placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required></textarea>
+                                        <button type="button" class="speech-btn btn btn-link">
+                                            <i class="mic-icon ri-mic-line fs-4"></i>
+                                        </button>
                                 @else
                                     <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" 
                                         placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required>
+                                    <button type="button" class="speech-btn btn btn-link">
+                                        <i class="mic-icon ri-mic-line fs-4"></i>
+                                    </button>
                                 @endif
                             </div>
                         @endforeach
