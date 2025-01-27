@@ -37,7 +37,7 @@
                 <ul class="list-unstyled vstack gap-3 mb-0">
                     @foreach ($newTools as $newTool)
                         <li>
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex">
                                 <div class="flex-shrink-0">
                                     <img src="{{ asset('storage/' . $newTool->image) }}" alt="" class="avatar-xs rounded-3">
                                 </div>
@@ -182,7 +182,7 @@
                 <ul class="list-unstyled vstack gap-3 mb-0">
                     @foreach ($popularTools as $popularTool)
                         <li>
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex">
                                 <div class="flex-shrink-0">
                                     <img src="{{ asset('storage/' . $popularTool->image) }}" alt="" class="avatar-xs rounded-3">
                                 </div>
