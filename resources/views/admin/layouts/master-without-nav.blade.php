@@ -3,7 +3,14 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') | {{ $siteSettings->title }}</title>
+    <title>
+      @if (Request::is('/'))
+          {{ $siteSettings->title }}
+      @else
+          @yield('title') | {{ $siteSettings->title }}
+      @endif
+    </title>
+  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     <meta name="description" content="@yield('description', $seo->description)" />
