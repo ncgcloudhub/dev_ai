@@ -774,13 +774,13 @@ class AIContentCreatorController extends Controller
             // Log in the new user
             Auth::login($newUser);
             // Redirect to dashboard or any other page
-            return redirect('/chat');
+            return redirect('/generate/image/view');
         }
 
         // If the user exists, log them in
         Auth::login($user);
         // Redirect to dashboard or any other page
-        return redirect('/chat');
+        return redirect('/generate/image/view');
     }
 
 
@@ -838,14 +838,14 @@ class AIContentCreatorController extends Controller
             Auth::login($newUser);
 
             // Redirect to dashboard or any other page
-            return redirect('/chat');
+            return redirect('/generate/image/view');
         }
 
         // If the user exists, log them in
         Auth::login($user);
 
         // Redirect to dashboard or any other page
-        return redirect('/chat');
+        return redirect('/generate/image/view');
     }
 
     // Get Generated Content by User
