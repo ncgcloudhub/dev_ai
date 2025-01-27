@@ -418,16 +418,18 @@ class HomeController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'subject' => $request->input('subject'),
-            'message' => $request->input('comments')
+            'user_message' => $request->input('comments') // Rename key to 'user_message'
         ];
 
-        Mail::send('admin.layouts.email_test', $data, function ($message) use ($data) {
-            $message->to('clevercreatorai@gmail.com')
+        Mail::send('admin.layouts.email_test', $data, function ($mail) use ($data) {
+            $mail->to('clevercreatorai@gmail.com')
                 ->subject($data['subject']);
         });
 
         return redirect()->back()->with('success', 'Message sent successfully!');
     }
+
+    
 
     public function NewsLetterStore(Request $request)
     {
