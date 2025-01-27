@@ -101,7 +101,8 @@
                                             <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
                                         @elseif($type == 'attachment')
                                             <!-- File Input Field -->
-                                            <input type="file" name="attachment" class="form-control" id="{{ $inputNames[$key] }}" required>
+                                            <input type="file" name="attachment" class="form-control" id="{{ $inputNames[$key] }}" required accept=".pdf,.doc,.docx,.txt" onchange="validateFileType(this)">
+                                            <div id="file-error" style="color: red; display: none;">Only PDF, DOC, DOCX, and TXT files are allowed.</div>
                                         @elseif($type == 'select')
                                             <!-- Select Field -->
                                             <select class="form-select" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" required>
@@ -794,6 +795,20 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
                 });
         });
     });
+</script>
+
+<script>
+    function validateFileType(input) {
+        const allowedExtensions = ['pdf', 'doc', 'docx', 'txt'];
+        const fileName = input.value.split('.').pop().toLowerCase();
+        
+        if (!allowedExtensions.includes(fileName)) {
+            document.getElementById('file-error').style.display = 'block';
+            input.value = ''; // Reset the input field
+        } else {
+            document.getElementById('file-error').style.display = 'none';
+        }
+    }
 </script>
 
 @endsection
