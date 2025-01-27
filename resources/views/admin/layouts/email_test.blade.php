@@ -10,6 +10,6 @@
     <p><strong>Name:</strong> {{ $name }}</p>
     <p><strong>Email:</strong> {{ $email }}</p>
     <p><strong>Subject:</strong> {{ $subject }}</p>
-    {{-- <p><strong>Message:</strong> {{ $message }}</p> --}}
+    <p><strong>Message:</strong> {{ $user_message }}</p> <!-- Use the renamed key -->
 </body>
 </html>
