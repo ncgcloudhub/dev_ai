@@ -1,11 +1,23 @@
 @extends('admin.layouts.master')
-
+@section('title') Edit Dynamic Pages @endsection
+@section('css')
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
+@component('admin.components.breadcrumb')
+@slot('li_1') Dynamic Pages @endslot
+@slot('title') Edit Page ({{$dynamicPage->title}}) @endslot
+@endcomponent
+
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Edit Dynamic Page</div>
+                    <div class="card-header">Edit Dynamic Page ({{$dynamicPage->title}})</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('dynamic-pages.update', $dynamicPage->id) }}">
