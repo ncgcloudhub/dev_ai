@@ -18,8 +18,6 @@
                     <button type="button" class="speech-btn">
                         <i class="mic-icon ri-mic-line fs-4"></i>
                     </button>
-
-                    <button type="button" id="sendText" class="btn btn-primary">Send</button>
                     <audio id="speechAudio"></audio> 
                 </div>
 
@@ -41,24 +39,59 @@ document.getElementById("clearChat").addEventListener("click", function() {
     .then(() => alert("Chat memory cleared!"));
 });
 
+
 document.addEventListener("DOMContentLoaded", function () {
-    console.log(document.getElementById("prompts").value);
-
-    const sendTextBtn = document.getElementById("sendText");
-    const speechAudio = document.getElementById("speechAudio");
-    const promptInput = document.getElementById("prompts");
-
-    if (!sendTextBtn || !promptInput) {
-        console.error("One or more elements not found!");
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+        alert("Speech Recognition is not supported in this browser.");
         return;
     }
 
-    // Send text input when clicking "Send"
-    sendTextBtn.addEventListener("click", function () {
-        console.log("Sending text input to Laravel...");
-        console.log(promptInput.value);
-        sendRequest(promptInput.value);
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognitionAPI();
+    recognition.continuous = false; // Stop when user stops manually
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    let activeInput = document.getElementById("prompts");
+    let micButton = document.querySelector(".speech-btn");
+    let micIcon = micButton.querySelector(".mic-icon");
+    let isRecording = false;
+    let finalTranscript = ""; // Store final transcript
+
+    micButton.addEventListener("click", function () {
+        if (!isRecording) {
+            // Start recording
+            finalTranscript = ""; // Clear old text
+            recognition.start();
+            isRecording = true;
+            micIcon.classList.replace("ri-mic-line", "ri-mic-fill");
+            micIcon.classList.add("text-danger");
+        } else {
+            // Stop recording
+            recognition.stop();
+            isRecording = false;
+            micIcon.classList.replace("ri-mic-fill", "ri-mic-line");
+            micIcon.classList.remove("text-danger");
+
+            // Send text only after stopping
+            if (finalTranscript.trim() !== "") {
+                sendRequest(finalTranscript);
+            }
+        }
     });
+
+    recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        finalTranscript = transcript;
+        activeInput.value = transcript; // Update textarea
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech Recognition Error:", event.error);
+    };
 
     // Function to send request to Laravel
     function sendRequest(text) {
@@ -87,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.speechSynthesis.speak(speech);
     }
 });
+
 
 </script>
 @endsection
