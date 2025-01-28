@@ -377,7 +377,9 @@
                             
                             
                         </div><!-- end card -->
-                        <h4> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link gradient-text-2"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
+                        <iframe src="{{$Template->blog_link}}" width="100%" height="300px" style="border: none; overflow: hidden;"></iframe>
+                        <hr>
+                        <h4 class="mt-2"> Read more details about {{$Template->template_name}}<a href="{{$Template->blog_link}}" target="_blank" class="link gradient-text-2"> Click Here <i class=" ri-arrow-right-s-line"></i></a></h4>
                        
                     </div>
                     <!-- end col -->
