@@ -858,6 +858,10 @@ Route::post('/get-openai-response', function (Request $request) {
 
     return response()->json(['response' => $aiResponse]);
 });
+Route::post('/clear-chat', function () {
+    Session::forget('chat_history');
+    return response()->json(['message' => 'Chat history cleared']);
+});
 
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])

@@ -13,6 +13,7 @@
         <div class="card">
 
                 <div class="card-body">
+                    <button id="clearChat" class="btn btn-danger">Clear Memory</button>
                     <textarea class="form-control search" name="prompts" id="prompts"></textarea>
                     <button type="button" class="speech-btn">
                         <i class="mic-icon ri-mic-line fs-4"></i>
@@ -34,6 +35,12 @@
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script>
+
+document.getElementById("clearChat").addEventListener("click", function() {
+    fetch("/clear-chat", { method: "POST", headers: { "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content } })
+    .then(() => alert("Chat memory cleared!"));
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log(document.getElementById("prompts").value);
 
