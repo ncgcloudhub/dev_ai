@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>
       @if (Request::is('/'))
-          {{ $siteSettings->title }}
+          {{ $seo->title }}
       @else
           @yield('title') | {{ $siteSettings->title }}
       @endif
