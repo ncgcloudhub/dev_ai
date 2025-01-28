@@ -45,6 +45,10 @@ use App\Models\SeoSetting;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Session;
 
 
 Route::get('/', function () {
@@ -825,6 +829,35 @@ Route::post('/stable-control-sketch', [StableDifussionController::class, 'contro
 
 Route::get('/transcribe/view', [ExpertController::class, 'transcribe'])->name('transcribe.view');
 Route::post('/transcribe', [ExpertController::class, 'transcribeSpeech'])->name('transcribe');
+
+// POC Voice
+Route::post('/get-openai-response', function (Request $request) {
+    $prompt = $request->input('prompt');
+    Log::info('Request received', ['prompt' => $prompt]);
+
+    // Retrieve previous chat history from session
+    $chatHistory = Session::get('chat_history', []);
+
+    // Add user message to history
+    $chatHistory[] = ['role' => 'user', 'content' => $prompt];
+
+    // Send conversation history to OpenAI
+    $response = OpenAI::chat()->create([
+        'model' => 'gpt-4o-mini',
+        'messages' => $chatHistory
+    ]);
+
+    // Get AI's response
+    $aiResponse = $response->choices[0]->message->content ?? "Sorry, I couldn't process that.";
+
+    // Add AI response to history
+    $chatHistory[] = ['role' => 'assistant', 'content' => $aiResponse];
+
+    // Save updated history in session
+    Session::put('chat_history', $chatHistory);
+
+    return response()->json(['response' => $aiResponse]);
+});
 
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])
