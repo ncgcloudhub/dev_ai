@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
 @section('title') Education Tools | {{$tool->name}} @endsection
+@section('sidebar-size', 'sm') <!-- This sets the sidebar size for this page -->
 @section('css')
 <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ URL::asset('build/libs/swiper/swiper.min.css') }}" rel="stylesheet" type="text/css" />
