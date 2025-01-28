@@ -187,6 +187,7 @@
                     console.error('Textarea with id="prompt" not found.');
                 }
             });
+            $('#exampleModalScrollable').modal('hide');
         }
         
         // Populate the prompt field with the Examples
