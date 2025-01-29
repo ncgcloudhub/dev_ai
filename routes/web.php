@@ -38,6 +38,7 @@ use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\EducationTools;
 use App\Models\FAQ;
 use App\Models\PromptLibrary;
 use App\Models\SectionDesign;
@@ -60,6 +61,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
+    $tools = EducationTools::inRandomOrder()->limit(6)->get();
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
@@ -80,7 +82,7 @@ Route::get('/', function () {
     $content_creator = SectionDesign::where('section_name', 'content_creator')->value('selected_design');
     $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
 
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
+    return view('frontend.index', compact('images', 'templates', 'tools', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
 })->name('home');
 
 
