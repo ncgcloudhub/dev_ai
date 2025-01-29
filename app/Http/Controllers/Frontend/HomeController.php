@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\EducationTools;
+use App\Models\EducationToolsCategory;
 use App\Models\FavoriteImageDalle;
+use App\Models\GradeClass;
 use App\Models\Job;
 use App\Models\Jokes;
 use App\Models\LikedImagesDalle;
@@ -19,6 +22,7 @@ use App\Models\StableDiffusionGeneratedImage;
 use App\Models\Template;
 use App\Models\TemplateCategory;
 use App\Models\TermsConditions;
+use App\Models\ToolGeneratedContent;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -26,6 +30,8 @@ use Illuminate\Support\Facades\DB;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use Parsedown;
+
 
 class HomeController extends Controller
 {
@@ -365,6 +371,93 @@ class HomeController extends Controller
     });
     }
 
+
+    public function FrontendFreeEducation()
+    {   
+        $tools = EducationTools::get();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+       
+        return view('frontend.education', compact('tools', 'categories'));
+    }
+
+    public function EducationView($slug)
+    {
+        // Retrieve the tool by slug
+        $tool = EducationTools::where('slug', $slug)->firstOrFail();
+    
+        $classes = GradeClass::with('subjects')->get();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+    
+        // Pass the tool to the view
+        return view('frontend.education_tools_view_frontend', compact('tool', 'classes', 'categories'));
+    }
+    
+
+
+    public function EducationGenerate(Request $request)
+    {
+        set_time_limit(0);
+    
+        $toolId = $request->input('tool_id');
+        $tool = EducationTools::find($toolId);  // Assuming 'Tool' is your model
+    
+        if (!$tool) {
+            return response()->json(['error' => 'Tool not found'], 404);
+        }
+    
+        $apiKey = config('app.openai_api_key');
+        $client = OpenAI::client($apiKey);
+    
+        $savedPrompt = $tool->prompt;
+    
+        // Start building the final prompt by appending the saved prompt from the tool
+        $prompt = $savedPrompt . " "; 
+    
+        // Fetch the selected grade from the `grade_id`
+        if ($gradeId = $request->input('grade_id')) {
+            $grade = GradeClass::find($gradeId); // Assuming your model is `Grade`
+            if ($grade) {
+                $prompt .= "Grade: " . $grade->grade . ". "; // Append the actual grade value
+            }
+        }
+    
+        foreach ($request->except(['_token', 'tool_id', 'grade_id']) as $key => $value) {
+            if (!empty($value)) {
+                $escapedValue = addslashes($value);
+                $prompt .= ucfirst(str_replace('_', ' ', $key)) . ": $escapedValue. ";
+            }
+        }
+    
+        // Generate content using OpenAI API
+        $response = $client->chat()->create([
+            "model" => 'gpt-4o-mini',
+            'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+        ]);
+    
+         
+    
+        $content = $response['choices'][0]['message']['content'];
+    
+        // Stream the response
+        return response()->stream(function () use ($content) {
+            $chunks = explode("\n", $content);
+            $parsedown = new Parsedown(); // Initialize Parsedown
+    
+            foreach ($chunks as $chunk) {
+                $htmlChunk = $parsedown->text($chunk);
+                echo $htmlChunk;
+                ob_flush();
+                flush();
+                sleep(1); // Simulate delay between chunks
+            }
+        });
+    }
+
+
+
     //Template Front End Page
     public function FrontendFreePromptLibrary()
     {
@@ -374,6 +467,17 @@ class HomeController extends Controller
         // $count = $prompt_library->count(); 
         return view('frontend.prompt_library', compact('promptLibrary', 'categories'));
     }
+
+     // Frontend
+     public function PromptFrontendView($slug)
+     {
+         // Find the template by slug
+         $prompt_library = PromptLibrary::where('slug', $slug)->firstOrFail();
+         // Get the related examples
+         $prompt_library_examples = $prompt_library->examples;
+ 
+         return view('frontend.prompt_library_details_frontend', compact('prompt_library', 'prompt_library_examples'));
+     }
 
     //All Jobs Front End Page
     public function AllJobs()

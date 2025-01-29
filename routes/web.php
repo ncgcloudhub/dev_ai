@@ -38,6 +38,7 @@ use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\EducationTools;
 use App\Models\FAQ;
 use App\Models\PromptLibrary;
 use App\Models\SectionDesign;
@@ -60,6 +61,7 @@ Route::get('/', function () {
 
     $seo = SeoSetting::find(1);
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
+    $tools = EducationTools::inRandomOrder()->limit(6)->get();
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
@@ -80,7 +82,7 @@ Route::get('/', function () {
     $content_creator = SectionDesign::where('section_name', 'content_creator')->value('selected_design');
     $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
 
-    return view('frontend.index', compact('images', 'templates', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
+    return view('frontend.index', compact('images', 'templates', 'tools', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
 })->name('home');
 
 
@@ -603,7 +605,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/expert/delete-conversation', [ExpertController::class, 'deleteConversation']);
         Route::get('/conversation/{expertId}', [ExpertController::class, 'getConversation']);
 
-
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
 
@@ -665,8 +666,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 
     Route::put('/prompt-examples/{promptExample}', [PromptLibraryController::class, 'updatePromptExample'])->name('prompt_examples.update');
 
-
-
     // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
     // Import Prompt
@@ -677,9 +676,9 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
-    Route::get('greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('admin.permission:greetingCard.menu');
+    Route::get('/greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('admin.permission:greetingCard.menu');
 
-    Route::post('greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
+    Route::post('/greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
 
 
     // GET SUB CATEGORY
@@ -702,10 +701,14 @@ Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemp
 Route::get('/free/ai-content-creator/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.aicontentcreator.view');
 Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.aicontentcreator.generate');
 
+// Frontend Education Tools Page
+Route::get('/free/education-tools', [HomeController::class, 'FrontendFreeEducation'])->name('frontend.free.education');
+Route::get('/free/education-tools/view/{slug}', [HomeController::class, 'EducationView'])->name('frontend.free.education.view');
+Route::post('/free/education-tools/generate', [HomeController::class, 'EducationGenerate'])->name('frontend.free.education.generate');
+
 // Frontend Free Prompt Library Page
 Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
-// Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
-// Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+Route::get('/free/prompt-library/view/{slug}', [HomeController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
 
 // Job Page Frontend
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
@@ -751,11 +754,8 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
-Route::get('prompt/details/{slug}', [PromptLibraryController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
-
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
-
 
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);

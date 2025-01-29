@@ -157,18 +157,9 @@
                         </h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>
-                    
-                    {{-- <div class="card-footer border-top border-top-dashed">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1 fs-14">
-                                <i class="ri-price-tag-3-fill text-warning align-bottom me-1"></i> Highest: <span class="fw-medium">{{ rand(10, 500) }}ETH</span>
-                            </div>
-                            <h5 class="flex-shrink-0 fs-14 text-primary mb-0">{{ rand(5, 450) }} ETH</h5>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
-        @endforeach
+            @endforeach
         </div>
     </div>
 

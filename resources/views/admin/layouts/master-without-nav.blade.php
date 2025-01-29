@@ -41,7 +41,8 @@
   </head>
 
     @yield('body')
-
+ {{-- Magic Ball --}}
+ <x-jokes_common />
     @yield('content')
 
     @include('admin.layouts.vendor-scripts')
