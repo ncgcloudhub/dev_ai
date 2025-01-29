@@ -48,7 +48,7 @@
                 @auth                  
                     <a href="{{ route('manage.education.tools') }}" class="btn gradient-btn-4">Show More</a> <!-- Redirect to prompt.manage if user is admin -->
                 @else
-                    <a href="{{ route('frontend.free.prompt.library') }}" class="btn gradient-btn-4">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
+                    <a href="{{ route('frontend.free.education') }}" class="btn gradient-btn-4">Show More</a> <!-- Redirect to frontend.free.prompt.library if no one is logged in -->
                 @endauth
             </div>
         </div>

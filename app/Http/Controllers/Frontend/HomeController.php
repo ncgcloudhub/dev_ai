@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\EducationTools;
+use App\Models\EducationToolsCategory;
 use App\Models\FavoriteImageDalle;
 use App\Models\Job;
 use App\Models\Jokes;
@@ -363,6 +365,15 @@ class HomeController extends Controller
             'completionTokens' => $completionTokens,
         ]);
     });
+    }
+
+
+    public function FrontendFreeEducation()
+    {   
+        $tools = EducationTools::get();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+       
+        return view('frontend.education', compact('tools', 'categories'));
     }
 
     //Template Front End Page
