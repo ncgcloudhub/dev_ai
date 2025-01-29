@@ -24,9 +24,10 @@
                         <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn gradient-btn-6">
+                            <a href="{{ route('frontend.free.education.view', ['slug' => $tool->slug]) }}" class="btn gradient-btn-6">
                                 <i class="ri-auction-fill align-bottom me-1"></i>Explore
                             </a>
+                            
                         </div>
                     </div>
                     <div class="card-body">
@@ -37,7 +38,7 @@
                            
                         </p>
                         <h5 class="mb-1 fs-16">
-                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
+                            <a href="{{ route('frontend.free.education.view', ['slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
                         </h5>
                         <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
                     </div>

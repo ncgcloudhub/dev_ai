@@ -380,18 +380,18 @@ class HomeController extends Controller
         return view('frontend.education', compact('tools', 'categories'));
     }
 
-    public function EducationView($id, $slug)
+    public function EducationView($slug)
     {
-        // Retrieve the tool by ID
-        $tool = EducationTools::findOrFail($id);
-
-        $classes = GradeClass::with('subjects')->get();
+        // Retrieve the tool by slug
+        $tool = EducationTools::where('slug', $slug)->firstOrFail();
     
+        $classes = GradeClass::with('subjects')->get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
-
+    
         // Pass the tool to the view
         return view('frontend.education_tools_view_frontend', compact('tool', 'classes', 'categories'));
     }
+    
 
 
     public function EducationGenerate(Request $request)

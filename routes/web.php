@@ -703,7 +703,7 @@ Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templa
 
 // Frontend Education Tools Page
 Route::get('/free/education-tools', [HomeController::class, 'FrontendFreeEducation'])->name('frontend.free.education');
-Route::get('/free/education-tools/view/{id}/{slug}', [HomeController::class, 'EducationView'])->name('frontend.free.education.view');
+Route::get('/free/education-tools/view/{slug}', [HomeController::class, 'EducationView'])->name('frontend.free.education.view');
 Route::post('/free/education-tools/generate', [HomeController::class, 'EducationGenerate'])->name('frontend.free.education.generate');
 
 // Frontend Free Prompt Library Page
