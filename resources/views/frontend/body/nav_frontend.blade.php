@@ -67,53 +67,32 @@
                 </li>
 
                 {{-- Mega Menu --}}
-                {{-- <li class="nav-item dropdown">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle fs-15" href="#" id="megamenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Mega Menu
+                        AI Content Creator
                     </a>
-                    <div class="dropdown-menu p-4" aria-labelledby="megamenuDropdown" style="min-width: 600px;">
+                    <div class="dropdown-menu p-4" aria-labelledby="megamenuDropdown" style="min-width: 800px; max-height: 400px; overflow-y: auto;">
                         <div class="row">
                             @php
-                                $items = collect([
-                                    ['name' => 'Career', 'url' => '#'],
-                                    ['name' => 'Contact', 'url' => '#'],
-                                    ['name' => 'Privacy Policy', 'url' => '#'],
-                                    ['name' => 'Terms & Conditions', 'url' => '#'],
-                                    ['name' => 'About Us', 'url' => '#'],
-                                    ['name' => 'Team', 'url' => '#'],
-                                    ['name' => 'Blog', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'News', 'url' => '#'],
-                                    ['name' => 'Events', 'url' => '#'],
-                                    ['name' => 'Events', 'url' => '#'],
-                                    ['name' => 'Events', 'url' => '#'],
-                                    ['name' => 'Events', 'url' => '#'],
-                                    ['name' => 'Events', 'url' => '#'],
-                                    ['name' => 'Support', 'url' => '#']
-                                ]);
+                                use App\Models\Template;
+                
+                                $templates = Template::orderby('id', 'asc')->get(); // Get the templates from the database
+                                $chunks = $templates->chunk(ceil($templates->count() / 3)); // Divide items into 3 roughly equal parts
                             @endphp
-
-                            @php
-                                $chunks = $items->chunk(ceil($items->count() / 3)); // Divide items into 3 roughly equal parts
-                            @endphp
-                    
+                        
                             @foreach ($chunks as $chunk)
                                 <div class="col-md-4">
                                     @foreach ($chunk as $item)
-                                        <a class="dropdown-item" href="{{ $item['url'] ?? '#' }}">{{ $item['name'] ?? 'Default Item' }}</a>
+                                        <a class="dropdown-item" href="{{ route('aicontentcreator.view', ['slug' => $item->slug]) }}">
+                                            {{ $item->template_name ?? 'Default Item' }}
+                                        </a>
                                     @endforeach
                                 </div>
                             @endforeach
                         </div>
                     </div>
-                </li> --}}
+                </li>
+                
 
                 <!-- Menu for Company -->
                 <li class="nav-item dropdown">
@@ -150,22 +129,41 @@
 <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"></div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var dropdowns = document.querySelectorAll(".dropdown");
-
-        dropdowns.forEach(function (dropdown) {
-            dropdown.addEventListener("show.bs.dropdown", function () {
-                // Close all other open dropdowns
-                dropdowns.forEach(function (otherDropdown) {
-                    if (otherDropdown !== dropdown) {
-                        var bsDropdown = bootstrap.Dropdown.getInstance(otherDropdown.querySelector(".dropdown-toggle"));
-                        if (bsDropdown) {
-                            bsDropdown.hide();
-                        }
+document.addEventListener('DOMContentLoaded', function () {
+    var toggler = document.getElementById('navbarToggler');
+    var dropdowns = document.querySelectorAll('.dropdown');
+    
+    // Ensure only one dropdown is open at a time
+    dropdowns.forEach(function (dropdown) {
+        dropdown.addEventListener('show.bs.dropdown', function () {
+            // Close all other open dropdowns
+            dropdowns.forEach(function (otherDropdown) {
+                if (otherDropdown !== dropdown) {
+                    var bsDropdown = bootstrap.Dropdown.getInstance(otherDropdown.querySelector('.dropdown-toggle'));
+                    if (bsDropdown) {
+                        bsDropdown.hide();
                     }
-                });
+                }
             });
         });
     });
+
+    // Prevent navbar from collapsing when clicking inside the dropdown
+    var dropdownMenus = document.querySelectorAll('.dropdown-menu');
+    dropdownMenus.forEach(function (dropdownMenu) {
+        dropdownMenu.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent the click event from propagating to the navbar toggler
+        });
+    });
+
+    // Prevent the toggler from collapsing when clicking on the dropdown button
+    document.querySelectorAll('.navbar-nav .dropdown-toggle').forEach(function (dropdownToggle) {
+        dropdownToggle.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent the click event from collapsing the navbar
+            toggler.setAttribute('aria-expanded', 'true'); // Ensure navbar stays expanded
+        });
+    });
+});
+
 </script>
 
