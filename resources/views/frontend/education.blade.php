@@ -90,7 +90,7 @@
                         <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
-                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary">
+                            <a href="{{ route('frontend.free.education.view', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary">
                                 <i class="ri-auction-fill align-bottom me-1"></i>Explore
                             </a>
                             
