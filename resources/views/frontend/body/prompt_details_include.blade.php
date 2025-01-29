@@ -255,7 +255,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 100;
+        let remainingTokens = parseInt(localStorage.getItem('remainingTokens')) || 2000;
         $('#tokenCount').text(remainingTokens); // Update token count display
 
         // Function to copy text to clipboard
@@ -300,7 +300,7 @@
         let userSignedIn = {{ Auth::check() ? 'true' : 'false' }};
         let tokensUsedToday = parseInt(localStorage.getItem('tokensUsedToday')) || 0;
 
-        if (!userSignedIn && tokensUsedToday >= 100) {
+        if (!userSignedIn && tokensUsedToday >= 2000) {
             $('#loader').addClass('d-none');
             alert('You have reached the daily limit of 100 tokens. Please try again tomorrow.');
             return;
