@@ -706,8 +706,7 @@ Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templa
 
 // Frontend Free Prompt Library Page
 Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
-// Route::get('/free/template/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.template.view');
-// Route::post('/free/template/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.template.generate');
+Route::get('/free/prompt-library/view/{slug}', [HomeController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
 
 // Job Page Frontend
 Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
@@ -753,11 +752,8 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
-Route::get('prompt/details/{slug}', [PromptLibraryController::class, 'PromptFrontendView'])->name('prompt.frontend.view');
-
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
-
 
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
