@@ -605,7 +605,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/expert/delete-conversation', [ExpertController::class, 'deleteConversation']);
         Route::get('/conversation/{expertId}', [ExpertController::class, 'getConversation']);
 
-
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
 
@@ -667,8 +666,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 
     Route::put('/prompt-examples/{promptExample}', [PromptLibraryController::class, 'updatePromptExample'])->name('prompt_examples.update');
 
-
-
     // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
     // Import Prompt
@@ -679,9 +676,9 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::get('/all/user/export1', [UserController::class, 'export1'])->name('user.export1');
 
     // EID Card
-    Route::get('greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('admin.permission:greetingCard.menu');
+    Route::get('/greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('admin.permission:greetingCard.menu');
 
-    Route::post('greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
+    Route::post('/greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
 
 
     // GET SUB CATEGORY
@@ -703,6 +700,11 @@ Route::get('/stable-diffusion', [HomeController::class, 'StableDiffusionPage'])-
 Route::get('/free/ai-content-creator', [HomeController::class, 'FrontendFreeTemplate'])->name('frontend.free.aicontentcreator');
 Route::get('/free/ai-content-creator/view/{slug}', [HomeController::class, 'TemplateView'])->name('frontend.free.aicontentcreator.view');
 Route::post('/free/ai-content-creator/generate', [HomeController::class, 'templategenerate'])->name('frontend.free.aicontentcreator.generate');
+
+// Frontend Education Tools Page
+Route::get('/free/education-tools', [HomeController::class, 'FrontendFreeEducation'])->name('frontend.free.education');
+Route::get('/free/education-tools/view/{slug}', [HomeController::class, 'EducationView'])->name('frontend.free.education.view');
+Route::post('/free/education-tools/generate', [HomeController::class, 'EducationGenerate'])->name('frontend.free.education.generate');
 
 // Frontend Free Prompt Library Page
 Route::get('/free/prompt-library', [HomeController::class, 'FrontendFreePromptLibrary'])->name('frontend.free.prompt.library');
