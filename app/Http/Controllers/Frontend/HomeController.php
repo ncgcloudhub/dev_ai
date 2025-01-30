@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AISettings;
 use Illuminate\Http\Request;
 use App\Models\DalleImageGenerate;
+use App\Models\DynamicPage;
 use App\Models\EducationTools;
 use App\Models\EducationToolsCategory;
 use App\Models\FavoriteImageDalle;
@@ -247,6 +248,12 @@ class HomeController extends Controller
                 'message' => 'There was an error generating the joke.',
             ]);
         }
+    }
+
+    public function Blog()
+    {
+        $blog = DynamicPage::latest()->get();
+        return view('frontend.blog', compact('blog'));
     }
 
     //Image Gallery Front End Page
