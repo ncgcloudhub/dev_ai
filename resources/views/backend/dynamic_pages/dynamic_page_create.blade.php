@@ -1,10 +1,7 @@
 @extends('admin.layouts.master')
 @section('title') Create Dynamic Pages @endsection
 @section('css')
-<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
-<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
-<link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
-<link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
@@ -13,94 +10,147 @@
 @slot('title') Create Page @endslot
 @endcomponent
 
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card">
-                <div class="card-header">Create Dynamic Page</div>
+<form method="POST" action="{{ route('dynamic-pages.store') }}" enctype="multipart/form-data">
+    @csrf
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label" for="project-title-input">Page Title</label>
+                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('dynamic-pages.store') }}">
-                        @csrf
+                    @error('title')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
 
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
+                <div class="form-group mb-3">
+                    <label for="route">Route</label>
+                    <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route') }}" required>
+                    <small id="route-feedback" class="text-danger"></small>
+                    
+                    @error('route')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
 
-                            @error('title')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                    <div class="mt-2">
+                        <label for="category">Choose Category</label>
+                        <!-- Static Keywords -->
+                        <span class="badge bg-primary keyword" data-keyword="blog">Blog</span>
+                        <span class="badge bg-secondary keyword" data-keyword="content">Content</span>
+                        <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
+                        <span class="badge bg-warning keyword" data-keyword="services">Services</span>
+                        <span class="badge bg-danger keyword" data-keyword="products">Products</span>
+                        <span class="badge bg-info keyword" id="dynamic-category"></span>
+                    </div>
+                </div>
 
-                        <div class="form-group">
-                            <label for="route">Route</label>
-                            <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route') }}" required>
-                            <small id="route-feedback" class="text-danger"></small>
-                            
-                            @error('route')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                <div class="mb-3">
+                    <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
+                    <input class="form-control" id="project-thumbnail-img" type="file"
+                        accept="image/png, image/gif, image/jpeg" name="thumbnail_image">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="project-banner-img">Banner Image</label>
+                    <input class="form-control" id="project-banner-img" type="file"
+                        accept="image/png, image/gif, image/jpeg" name="banner_image">
+                </div>
 
-                            <div class="mt-2">
-                                <label for="category">Choose Category</label>
-                                <!-- Static Keywords -->
-                                <span class="badge bg-primary keyword" data-keyword="blog">Blog</span>
-                                <span class="badge bg-secondary keyword" data-keyword="content">Content</span>
-                                <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
-                                <span class="badge bg-warning keyword" data-keyword="services">Services</span>
-                                <span class="badge bg-danger keyword" data-keyword="products">Products</span>
-                                <span class="badge bg-info keyword" id="dynamic-category"></span>
-                            </div>
-                        </div>
-                        
-
-                        <div class="form-group">
-                            <label for="content">Content</label>
+                <div class="mb-3">
+                    <label for="content">Content</label>
                             <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content') }}</textarea>
 
-                            @error('content')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="card border card-border-info mt-3">
-                            <div class="card-body">
-        
-                                   
-                                        <h5 class="mt-0">Page SEO</h5>
-                                        <div class="col-md-12 mt-3">
-                                            <label for="seo_title" class="form-label">Title</label>
-                                            <input type="text" name="seo_title" value="" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
-                                        </div>
-                                    
-                                        <div class="col-md-12 mb-3">
-                                            <label for="keywords" class="form-label">Keywords</label>
-                                            <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="" placeholder="Enter Keywords">
-                                        </div>
-                                    
-                                        <div class="col-md-12">
-                                            <label for="description" class="form-label">Description</label>
-                                            <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
-                                        </div>
-                                   
-                                
-                            </div>
-                        </div>
-                        <button type="button" class="btn gradient-btn-5" id="generateSeoBtn">AI Generate</button>
-                        <button type="submit" class="btn gradient-btn-save">Create Page</button>
-                    </form>
+                    @error('content')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
+            <!-- end card body -->
         </div>
+        <!-- end card -->
+
+        <input name="attached_files" type="file" multiple="multiple">
     </div>
+    <!-- end col -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Privacy</h5>
+            </div>
+            <div class="card-body">
+                <div>
+                    <label for="choices-status-input" class="form-label">Status</label>
+                    <select class="form-select" id="choices-status-input" name="page_status">
+                        <option value="Inprogress" selected>Inprogress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tags</h5>
+            </div>
+            <div class="card-body">
+                <div>
+                    <label for="choices-text-input" class="form-label">Relevant Tags</label>
+                    {{-- <input class="form-control" name="tags" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="Design, Remote"  /> --}}
+                    
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Page SEO</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="seo_title" class="form-label">Title</label>
+                    <input type="text" name="seo_title" value="" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
+                </div>
+                <div class="mb-3">
+                    <label for="keywords" class="form-label">Keywords</label>
+                    <input class="form-control" name="keywords" id="choices-text-unique-values"  type="text" value="" placeholder="Enter Keywords">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
+                    <input type="text" name="status" id="" value="draft" hidden>
+                </div>
+                <button type="button" class="btn gradient-btn-5" id="generateSeoBtn">AI Generate</button>
+
+            </div>
+            <!-- end card body -->
+        </div>
+        <div class="text-end mb-4">
+            <button type="submit" class="btn btn-primary w-sm">Draft</button>
+            <button type="submit" class="btn gradient-btn-save">Create Page</button>
+        </div>
+        <!-- end card -->
+    </div>
+    <!-- end col -->
+</div>
+</form>
+
 @endsection
 
 @section('script')
+<script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
+<script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/project-create.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
