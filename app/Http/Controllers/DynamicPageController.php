@@ -29,7 +29,7 @@ class DynamicPageController extends Controller
      */
     public function create()
     {
-        return view('backend.dynamic_pages.create');
+        return view('backend.dynamic_pages.dynamic_page_create');
     }
 
     /**

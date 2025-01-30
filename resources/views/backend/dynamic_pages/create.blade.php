@@ -71,7 +71,7 @@
                         <div class="card border card-border-info mt-3">
                             <div class="card-body">
         
-                                    <div>
+                                   
                                         <h5 class="mt-0">Page SEO</h5>
                                         <div class="col-md-12 mt-3">
                                             <label for="seo_title" class="form-label">Title</label>
@@ -87,7 +87,7 @@
                                             <label for="description" class="form-label">Description</label>
                                             <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
                                         </div>
-                                    </div>
+                                   
                                 
                             </div>
                         </div>
