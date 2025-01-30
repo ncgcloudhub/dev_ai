@@ -36,6 +36,7 @@
                         @else
                             <li><a class="dropdown-item" href="{{ route('frontend.free.prompt.library') }}">Prompt Library</a></li>
                         @endauth
+                        <li><a class="dropdown-item" href="{{ route('blog') }}">Blog</a></li>
                     </ul>
                 </li>
 

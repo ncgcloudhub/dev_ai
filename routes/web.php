@@ -691,6 +691,9 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 //AI Image Gallery Page
 Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name('ai.image.gallery');
 
+// Blog Page
+Route::get('/blog', [HomeController::class, 'Blog'])->name('blog');
+
 // Contact Us Page
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');
 // Stable Frontend
