@@ -75,7 +75,7 @@
         </div>
         <!-- end card -->
 
-        <input name="attached_files[]" type="file" multiple>
+        {{-- <input name="attached_files[]" type="file" multiple> --}}
     </div>
     <!-- end col -->
     <div class="col-lg-4">
@@ -135,7 +135,6 @@
             <!-- end card body -->
         </div>
         <div class="text-end mb-4">
-            <button type="submit" class="btn btn-primary w-sm">Draft</button>
             <button type="submit" class="btn gradient-btn-save">Create Page</button>
         </div>
         <!-- end card -->

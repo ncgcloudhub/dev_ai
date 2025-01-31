@@ -13,77 +13,153 @@
 @slot('title') Edit Page ({{$dynamicPage->title}}) @endslot
 @endcomponent
 
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-header">Edit Dynamic Page ({{$dynamicPage->title}})</div>
+<form method="POST" action="{{ route('dynamic-pages.update', $dynamicPage->id) }}" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('dynamic-pages.update', $dynamicPage->id) }}">
-                            @csrf
-                            @method('PUT')
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="project-title-input">Page Title</label>
+                        <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $dynamicPage->title) }}" required autofocus>
 
-                            <div class="form-group">
-                                <label for="title">Title</label>
-                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title', $dynamicPage->title) }}" required autofocus>
+                        @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
 
-                                @error('title')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                    <div class="form-group mb-3">
+                        <label for="route">Route</label>
+                        <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route', $dynamicPage->route) }}" required>
+                        <small id="route-feedback" class="text-danger"></small>
+                        
+                        @error('route')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+
+                        <div class="mt-2">
+                            <label for="category">Choose Category</label>
+                            <!-- Static Keywords -->
+                            <span class="badge bg-primary keyword" data-keyword="blog">Blog</span>
+                            <span class="badge bg-secondary keyword" data-keyword="content">Content</span>
+                            <span class="badge bg-success keyword" data-keyword="contact">Contact</span>
+                            <span class="badge bg-warning keyword" data-keyword="services">Services</span>
+                            <span class="badge bg-danger keyword" data-keyword="products">Products</span>
+                            <span class="badge bg-info keyword" id="dynamic-category">{{ old('category', $dynamicPage->category) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
+                        @if($dynamicPage->thumbnail_image)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $dynamicPage->thumbnail_image) }}" class="img-thumbnail" alt="Thumbnail" style="max-width: 150px;">
                             </div>
+                        @endif
+                        <input class="form-control" id="project-thumbnail-img" type="file" accept="image/png, image/gif, image/jpeg" name="thumbnail_image">
+                    </div>
 
-                            <div class="form-group">
-                                <label for="route">Route</label>
-                                <input id="route" type="text" class="form-control @error('route') is-invalid @enderror" name="route" value="{{ old('route', $dynamicPage->route) }}" required>
-
-                                @error('route')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                    <div class="mb-3">
+                        <label class="form-label" for="project-banner-img">Banner Image</label>
+                        @if($dynamicPage->banner_image)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $dynamicPage->banner_image) }}" class="img-thumbnail" alt="Banner" style="max-width: 150px;">
                             </div>
+                        @endif
+                        <input class="form-control" id="project-banner-img" type="file" accept="image/png, image/gif, image/jpeg" name="banner_image">
+                    </div>
 
-                            <div class="form-group">
-                                <label for="content">Content</label>
-                                <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content', $dynamicPage->content) }}</textarea>
+                    <div class="mb-3">
+                        <label for="content">Content</label>
+                        <textarea id="myeditorinstance" class="form-control @error('content') is-invalid @enderror" name="content" required>{{ old('content', $dynamicPage->content) }}</textarea>
 
-                                @error('content')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="card border card-border-info mt-3">
-                                <div class="card-body">
-                                    <div>
-                                        <h5 class="mt-0">Page SEO</h5>
-                                        <div class="col-md-12 mt-3">
-                                            <label for="seo_title" class="form-label">Title</label>
-                                            <input type="text" name="seo_title" value="{{ old('seo_title', $dynamicPage->seo_title) }}" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
-                                        </div>
-
-                                        <div class="col-md-12 mb-3">
-                                            <label for="keywords" class="form-label">Keywords</label>
-                                            <input class="form-control" name="keywords" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="{{ old('keywords', $dynamicPage->keywords) }}" />
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <label for="description" class="form-label">Description</label>
-                                            <input type="text" name="description" value="{{ old('description', $dynamicPage->description) }}" class="form-control mb-3" id="description" placeholder="Enter description">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn gradient-btn-save">Update Page</button>
-                        </form>
+                        @error('content')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                 </div>
+                <!-- end card body -->
             </div>
+            <!-- end card -->
+
+            {{-- <input name="attached_files[]" type="file" multiple> --}}
         </div>
+        <!-- end col -->
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Privacy</h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <label for="choices-status-input" class="form-label">Status</label>
+                        <select class="form-select" id="choices-status-input" name="page_status">
+                            <option value="inprogress" @if($dynamicPage->status == 'inprogress') selected @endif>Inprogress</option>
+                            <option value="completed" @if($dynamicPage->status == 'completed') selected @endif>Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tags</h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <label for="choices-text-input" class="form-label">Relevant Tags</label>
+                        <input type="text" name="tags" class="form-control" value="{{ old('tags', $dynamicPage->tags) }}" placeholder="Enter Tags (Separated by comma)">
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Page SEO</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="seo_title" class="form-label">Title</label>
+                        <input type="text" name="seo_title" value="{{ old('seo_title', $dynamicPage->seo_title) }}" class="form-control mb-3" id="seo_title" placeholder="Enter Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="keywords" class="form-label">Keywords</label>
+                        <input class="form-control" name="keywords" id="choices-text-unique-values" type="text" value="{{ old('keywords', $dynamicPage->keywords) }}" placeholder="Enter Keywords">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" name="description" value="{{ old('description', $dynamicPage->description) }}" class="form-control mb-3" id="description" placeholder="Enter description">
+                        <input type="text" name="status" id="" value="draft" hidden>
+                    </div>
+                    <button type="button" class="btn gradient-btn-5" id="generateSeoBtn">AI Generate</button>
+
+                </div>
+                <!-- end card body -->
+            </div>
+
+            <div class="text-end mb-4">
+                <button type="submit" class="btn btn-primary w-sm">Save Changes</button>
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+</form>
+
+
 @endsection
 
 @section('script')
