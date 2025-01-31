@@ -30,7 +30,8 @@
                         <div class="col-xxl-3 col-lg-6">
                             <div class="card overflow-hidden blog-grid-card">
                                 <div class="position-relative overflow-hidden">
-                                    <img src="{{ URL::asset('build/images/demos/1.jpg') }}" alt="" class="blog-img object-fit-cover">
+                                    <!-- Display the thumbnail image dynamically -->
+                                    <img src="{{ asset('storage/' . $post->thumbnail_image) }}" alt="" class="blog-img object-fit-cover">
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">
@@ -46,6 +47,7 @@
                             </div>
                         </div><!--end col-->
                     @endforeach
+
                 </div><!--end row-->
             </div>
         </section>
