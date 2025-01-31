@@ -80,7 +80,7 @@
 
         {{-- 1st col 4th row --}}
         <div class="row">
-            <div class="col-xl-6 col-md-12"><div class="card" style="border-color: #be06af">
+            <div class="col-xl-6 col-md-12"><div class="card border-color-purple">
                 <div class="card-body">
                     <div class="d-flex flex-column flex-md-row position-relative">
                         <img src="/build/images/nft/friends.png" class="flex-shrink-0 mb-3 mb-md-0 me-md-3 avatar-xl rounded" alt="...">
@@ -117,7 +117,35 @@
         </div></div>
         </div>
 
+            {{-- 1st col 5th row --}}
+    <div class="swiper marketplace-swiper rounded gallery-light">
+        <div class="d-flex pt-2 pb-4">
+            <h5 class="card-title gradient-text-1-bold fs-18 mb-1">Ai Content Creator Tools</h5>
+        </div>
+        <div class="swiper-wrapper">
+            @foreach ($aiContentCreator as $tool)
+            <div class="swiper-slide">
+                <div class="card explore-box card-animate rounded border-color-purple-left">
+                    <div class="card-body">
+                        <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
+                            Editor's Choice</p>
+                        <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">{{ $tool->template_name }}</a>
+                        </h5>
+                        <p class="text-muted mb-0">{{ $tool->description }}</p>
+                    </div>
+                   
+                </div>
+            </div>
+            @endforeach
+          
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
     </div> 
+
+
 
     {{-- Second Col --}}
     <div class="col-xl-4 col-md-12">
@@ -143,17 +171,43 @@
             <div class="col">
                 
                     <img src="/build/images/nft/car.png"  alt="..." class="img-fluid">
-                    <a href="" class="btn gradient-btn-3-square d-grid">Dalle</a>
-            
+                    <a href="" class="btn gradient-btn-3-square d-grid">Dalle</a>   
             </div>
 
-            <div class="col">
-                
-               
+            <div class="col">      
                     <img src="/build/images/nft/dog.png"  alt="..." class="img-fluid">
                     <a href="" class="btn gradient-btn-3-square d-grid">Stable Diffusion</a>
-            
         </div>
+        </div>
+
+        {{-- 2nd col 4th row --}}
+        <div class="card mt-3 border-color-purple">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Prompt Library</h4>
+                <div class="flex-shrink-0">
+                    <div class="dropdown card-header-dropdown">
+                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="btn gradient-btn-3 btn-sm">Show more</span>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- end card header -->
+
+            <div class="card-body p-0">
+                <div data-simplebar="init" style="max-height: 257px;" class="simplebar-scrollable-y"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+                    <ul class="list-group list-group-flush border-dashed px-3">
+                        @foreach ($prompts as $item)
+                        <li class="list-group-item ps-0">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <label class="form-check-label mb-0 ps-2" for="task_one">{{$item->prompt_name}}</label>
+                                </div>
+                            </div>
+                        </li>     
+                        @endforeach
+                    </ul><!-- end ul -->
+                </div></div></div></div><div class="simplebar-placeholder" style="width: 357px; height: 393px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 168px; transform: translate3d(0px, 62px, 0px); display: block;"></div></div></div>
+            </div><!-- end card body -->
         </div>
 
     </div> 

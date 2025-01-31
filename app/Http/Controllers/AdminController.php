@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\EducationTools;
+use App\Models\PromptLibrary;
 
 class AdminController extends Controller
 {
@@ -67,9 +68,15 @@ class AdminController extends Controller
 
         $eduTools = EducationTools::inRandomOrder()
             ->limit(5)->get();
+        
+        $prompts = PromptLibrary::inRandomOrder()
+            ->limit(10)->get();
+       
+        $aiContentCreator = Template::inRandomOrder()
+            ->limit(6)->get();
 
         // dd($templates_count);
-        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav','eduTools'));
+        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav','eduTools','prompts','aiContentCreator'));
     }
 
     public function showChangePasswordForm(User $user)

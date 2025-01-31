@@ -491,6 +491,11 @@
     border-color: #be06af !important;
 }
 
+.border-color-purple-left {
+    border-left: 5px solid #be06af !important;
+}
+
+
 .badge-gradient-purple{
     background:linear-gradient(45deg, #9b00ff, #e900ff);
 }
