@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('dynamic_pages', function (Blueprint $table) {
             $table->string('thumbnail_image')->nullable()->after('content');
             $table->string('banner_image')->nullable()->after('thumbnail_image');
-            $table->string('attached_files')->nullable()->after('banner_image'); // JSON format to store multiple files
+            $table->json('attached_files')->nullable()->after('banner_image'); // JSON format to store multiple files
             $table->enum('status', ['draft', 'published'])->default('draft')->after('attached_files');
             $table->string('tags')->nullable()->after('status'); // JSON for multiple tags
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('cascade')->after('tags'); // Assuming users table exists

@@ -37,47 +37,60 @@ class DynamicPageController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'route' => [
-                'required',
-                'string',
-                'max:255',
-                'unique:dynamic_pages,route', // Ensure route is unique
-            ],
-            'content' => 'required|string',
-            'seo_title' => 'nullable|string|max:255',
-            'keywords' => 'nullable|string',
-            'description' => 'nullable|string',
-        ]);
-
-        // Convert route to lowercase and remove leading/trailing slashes
-        $validated['route'] = Str::lower(trim($validated['route'], '/'));
-
+      
+        $data = $request->all();
+    
+        // Normalize the route
+        $data['route'] = Str::lower(trim($data['route'], '/'));
+    
         // Check if the route conflicts with existing routes in web.php
         $allRoutes = collect(Route::getRoutes())->pluck('uri')->toArray();
-        if (in_array($validated['route'], $allRoutes)) {
+        if (in_array($data['route'], $allRoutes)) {
             return redirect()->back()
                 ->withErrors(['route' => 'The route conflicts with an existing route in the application.'])
                 ->withInput();
         }
-
+    
         // Check if the route already exists in the database
-        $existingPage = DynamicPage::where('route', $validated['route'])->first();
-        if ($existingPage) {
+        if (DynamicPage::where('route', $data['route'])->exists()) {
             return redirect()->back()
                 ->withErrors(['route' => 'The route name already exists.'])
                 ->withInput();
         }
-
-        // Create a new dynamic page
-        $dynamicPage = DynamicPage::create($validated);
-
-        // Redirect to the index or details page with a success message
-        return redirect()->route('dynamic-pages.index', ['dynamic_page' => $dynamicPage->route])
-            ->with('success', 'Dynamic page created successfully.');
+    
+        // Handle file uploads
+        $thumbnailPath = $request->file('thumbnail_image') ? 
+            $request->file('thumbnail_image')->store('dynamic-pages/thumbnails', 'public') : null;
+    
+        $bannerPath = $request->file('banner_image') ? 
+            $request->file('banner_image')->store('dynamic-pages/banners', 'public') : null;
+    
+        // Handle multiple attached files
+        $attachedFiles = [];
+        if ($request->hasFile('attached_files')) {
+            foreach ($request->file('attached_files') as $file) {
+                $path = $file->store('dynamic-pages/attachments', 'public');
+                $attachedFiles[] = $path;
+            }
+        }
+    
+        // Save the page to the database
+        $dynamicPage = DynamicPage::create([
+            'title' => $data['title'],
+            'route' => $data['route'],
+            'thumbnail_image' => $thumbnailPath,
+            'banner_image' => $bannerPath,
+            'content' => $data['content'],
+            'page_status' => $data['page_status'],
+            'seo_title' => $data['seo_title'],
+            'keywords' => $data['keywords'],
+            'description' => $data['description'],
+            'tags' => $data['tags'],
+            'attached_files' => json_encode($attachedFiles), // Store as JSON
+        ]);
+    
+        return redirect()->route('dynamic-pages.index')->with('success', 'Page created successfully.');
     }
-
 
     /**
      * Display the specified resource.
