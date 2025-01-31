@@ -152,15 +152,23 @@
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-    tinymce.init({
+     tinymce.init({
         selector: 'textarea#myeditorinstance',
-        plugins: 'code table lists image media',
-        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | code | image media',
+        branding: false, // Removes "Build with TinyMCE"
+        plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
+        toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
+        autosave_restore_when_empty: true,
         height: 400,
+        statusbar: true, // Keep the status bar for resizing
         setup: function (editor) {
             editor.on('change', function () {
                 tinymce.triggerSave();
             });
+        },
+        init_instance_callback: function (editor) {
+            setTimeout(function () {
+                document.querySelector('.tox-statusbar__path').style.display = 'none'; // Hide <p> indicator
+            }, 100);
         }
     });
 </script>
