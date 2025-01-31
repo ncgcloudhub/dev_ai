@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Storage;
 
 class DynamicPageController extends Controller
 {
@@ -116,26 +116,91 @@ class DynamicPageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        // Validate incoming request data
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'route' => 'required|string|unique:dynamic_pages,route,' . $id,
-            'content' => 'required|string',
-            'seo_title' => 'nullable|string|max:255',
-            'keywords' => 'nullable|string',
-            'description' => 'nullable|string',
-        ]);
-
-        // Find the dynamic page by ID and update it
+        // Find the page by its ID
         $dynamicPage = DynamicPage::findOrFail($id);
-        $dynamicPage->update($validated);
-
-        // Redirect to a relevant page after update
-        return redirect()->route('dynamic-pages.index')
-            ->with('success', 'Dynamic page updated successfully.');
+    
+        $data = $request->all();
+    
+        // Normalize the route
+        $data['route'] = Str::lower(trim($data['route'], '/'));
+    
+        // Check if the route conflicts with existing routes in web.php
+        $allRoutes = collect(Route::getRoutes())->pluck('uri')->toArray();
+        if (in_array($data['route'], $allRoutes) && $dynamicPage->route != $data['route']) {
+            return redirect()->back()
+                ->withErrors(['route' => 'The route conflicts with an existing route in the application.'])
+                ->withInput();
+        }
+    
+        // Check if the route already exists in the database (other than the current one)
+        if (DynamicPage::where('route', $data['route'])->where('id', '!=', $id)->exists()) {
+            return redirect()->back()
+                ->withErrors(['route' => 'The route name already exists.'])
+                ->withInput();
+        }
+    
+        // Handle file uploads
+        if ($request->hasFile('thumbnail_image')) {
+            // Delete the old thumbnail if it exists
+            if ($dynamicPage->thumbnail_image && file_exists(storage_path('app/public/' . $dynamicPage->thumbnail_image))) {
+                unlink(storage_path('app/public/' . $dynamicPage->thumbnail_image));
+            }
+            // Store the new thumbnail
+            $thumbnailPath = $request->file('thumbnail_image')->store('dynamic-pages/thumbnails', 'public');
+            $data['thumbnail_image'] = $thumbnailPath;
+        }
+    
+        if ($request->hasFile('banner_image')) {
+            // Delete the old banner if it exists
+            if ($dynamicPage->banner_image && file_exists(storage_path('app/public/' . $dynamicPage->banner_image))) {
+                unlink(storage_path('app/public/' . $dynamicPage->banner_image));
+            }
+            // Store the new banner
+            $bannerPath = $request->file('banner_image')->store('dynamic-pages/banners', 'public');
+            $data['banner_image'] = $bannerPath;
+        }
+    
+        // Handle multiple attached files (if any)
+        if ($request->hasFile('attached_files')) {
+            // Delete old attached files
+            if ($dynamicPage->attached_files) {
+                $oldFiles = json_decode($dynamicPage->attached_files, true);
+                foreach ($oldFiles as $file) {
+                    if (file_exists(storage_path('app/public/' . $file))) {
+                        unlink(storage_path('app/public/' . $file));
+                    }
+                }
+            }
+    
+            $attachedFiles = [];
+            foreach ($request->file('attached_files') as $file) {
+                $path = $file->store('dynamic-pages/attachments', 'public');
+                $attachedFiles[] = $path;
+            }
+            $data['attached_files'] = json_encode($attachedFiles);
+        }
+    
+        // Update the page in the database
+        $dynamicPage->update([
+            'title' => $data['title'],
+            'route' => $data['route'],
+            'thumbnail_image' => $data['thumbnail_image'] ?? $dynamicPage->thumbnail_image,
+            'banner_image' => $data['banner_image'] ?? $dynamicPage->banner_image,
+            'content' => $data['content'],
+            'page_status' => $data['page_status'],
+            'seo_title' => $data['seo_title'],
+            'keywords' => $data['keywords'],
+            'description' => $data['description'],
+            'tags' => $data['tags'],
+            'attached_files' => $data['attached_files'] ?? $dynamicPage->attached_files, // Keep existing files if none uploaded
+        ]);
+    
+        return redirect()->route('dynamic-pages.index')->with('success', 'Page updated successfully.');
     }
+    
+    
 
     /**
      * Remove the specified resource from storage.
