@@ -74,6 +74,20 @@
         <section class="section" id="contact">
             <div class="container">
                 <div class="row justify-content-center dynamic-content">
+                    <div class="text-center mb-4">
+                        <p class="text-success text-uppercase mb-2">Art &amp; Design</p>
+                        <h4 class="mb-2">{{$page->title}}</h4>
+                        <p class="text-muted mb-4">{{$page->description}}</p>
+                        <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+                            <!-- Dynamically display tags -->
+                            @if($page->tags)
+                                @foreach(explode(',', $page->tags) as $tag)
+                                    <span class="badge bg-primary-subtle text-primary">{{ trim($tag) }}</span>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <img style="height: 400px !important; width: 100% !important" src="{{ asset('storage/' . $page->banner_image) }}" alt="" class="img-thumbnail">
                     {!! $page->content !!}
                 </div>
             </div>
