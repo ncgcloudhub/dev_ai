@@ -1,7 +1,6 @@
 @extends('admin.layouts.master')
 @section('title') Create Dynamic Pages @endsection
 @section('css')
-<link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
@@ -76,7 +75,7 @@
         </div>
         <!-- end card -->
 
-        <input name="attached_files" type="file" multiple="multiple">
+        <input name="attached_files[]" type="file" multiple>
     </div>
     <!-- end col -->
     <div class="col-lg-4">
@@ -88,8 +87,8 @@
                 <div>
                     <label for="choices-status-input" class="form-label">Status</label>
                     <select class="form-select" id="choices-status-input" name="page_status">
-                        <option value="Inprogress" selected>Inprogress</option>
-                        <option value="Completed">Completed</option>
+                        <option value="inprogress" selected>Inprogress</option>
+                        <option value="completed">Completed</option>
                     </select>
                 </div>
             </div>
@@ -104,7 +103,7 @@
             <div class="card-body">
                 <div>
                     <label for="choices-text-input" class="form-label">Relevant Tags</label>
-                    {{-- <input class="form-control" name="tags" id="choices-text-unique-values" data-choices data-choices-text-unique-true type="text" value="Design, Remote"  /> --}}
+                    <input type="text" name="tags" class="form-control" placeholder="Enter Tags (Separated by comma)">
                     
                 </div>
             </div>
@@ -148,8 +147,6 @@
 @endsection
 
 @section('script')
-<script src="{{ URL::asset('build/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') }}"></script>
-<script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/project-create.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
