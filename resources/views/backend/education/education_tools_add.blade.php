@@ -23,13 +23,13 @@
             <div class="live-preview">
                 
                     <div class="form-floating mb-3">
-                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Template Name">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Template Name" required>
                         <label for="name" class="form-label">Tools Name</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example">
-                            <option disabled selected="">Select Category</option>
+                        <select class="form-select" name="category_id" id="category_id" aria-label="Floating label select example" required>
+                            <option value="" disabled selected="">Select Category</option>
                             @foreach ($categories as $item)
                             <option value="{{$item->id}}">{{$item->category_name}}</option>
                             @endforeach
@@ -37,8 +37,8 @@
                         <label for="category_id" class="form-label">Category</label>
                     </div>
   
-                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Template Name">
-                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" ></textarea>
+                    <div class="form-floating mb-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Give a short description of the Education Tool">
+                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" required></textarea>
                         <label for="description">Description</label>
                     </div>
 
@@ -104,7 +104,7 @@
             <div class="live-preview">
                 <label for="custom_prompt" class="form-label">Custom Prompt</label>
                 <div class="col-md-12">
-                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message"></textarea>
+                    <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Write your custom prompt here" required></textarea>
                 </div>
             </div>
         </div>
