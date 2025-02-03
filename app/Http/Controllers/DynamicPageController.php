@@ -115,11 +115,18 @@ class DynamicPageController extends Controller
         ->limit(5)
         ->get();
 
+        $categories = DynamicPage::where('page_status', 'completed')
+        ->select('category')
+        ->distinct()
+        ->limit(5) // Limiting to 5 categories
+        ->get();
+
         // Render the view for the dynamic page
         return view('backend.dynamic_pages.dynamic_page', [
             'page' => $page,
             'recents' => $recents,
-            'relatedPages' => $relatedPages
+            'relatedPages' => $relatedPages,
+            'categories' => $categories,
         ]);
     }
 
