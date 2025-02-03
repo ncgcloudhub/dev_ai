@@ -252,7 +252,7 @@ class HomeController extends Controller
 
     public function Blog()
     {
-        $blog = DynamicPage::latest()->get();
+        $blog = DynamicPage::where('page_status', 'completed')->orderBy('id', 'desc')->get();
         return view('frontend.blog', compact('blog'));
     }
 
