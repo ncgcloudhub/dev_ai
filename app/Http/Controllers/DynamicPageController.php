@@ -136,7 +136,12 @@ class DynamicPageController extends Controller
     public function edit(string $id)
     {
         $dynamicPage = DynamicPage::findOrFail($id);
-        return view('backend.dynamic_pages.dynamic_page_edit', compact('dynamicPage'));
+       // Decode the attached files (if any)
+    $attachments = json_decode($dynamicPage->attached_files, true); 
+
+    // Check if attachments are an array (in case it's empty or not set)
+    $attachments = is_array($attachments) ? $attachments : [];
+        return view('backend.dynamic_pages.dynamic_page_edit', compact('dynamicPage','attachments'));
     }
 
     /**

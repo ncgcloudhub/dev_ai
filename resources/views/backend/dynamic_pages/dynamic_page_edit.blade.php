@@ -90,7 +90,23 @@
             </div>
             <!-- end card -->
 
-            <input name="attached_files[]" type="file" multiple>
+     <!-- Attachments -->
+     <div class="mb-3">
+        <label for="attached_files" class="form-label">Attachments</label>
+        <input name="attached_files[]" type="file" multiple class="form-control" id="attached_files">
+
+        <!-- Display existing attachments if available -->
+        @if(!empty($attachments))
+            <div class="mt-3">
+                <h5>Existing Attachments:</h5>
+                @foreach($attachments as $attachment)
+                    <div class="mb-2">
+                        <a href="{{ asset('storage/' . $attachment) }}" target="_blank">{{ basename($attachment) }}</a>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
         </div>
         <!-- end col -->
 
