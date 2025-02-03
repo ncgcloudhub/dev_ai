@@ -35,20 +35,6 @@ class SiteSettingsController extends Controller
             $updateData['favicon'] = $faviconName;
         }
 
-        if ($request->hasFile('favicon')) {
-            // Unlink the old favicon if it exists
-            $oldFavicon = SiteSettings::findOrFail(1)->favicon;
-            if ($oldFavicon) {
-                unlink(public_path('backend/uploads/site/' . $oldFavicon));
-            }
-
-            $favicon = $request->file('favicon');
-            $faviconName = time() . '-' . uniqid() . '.' . $favicon->getClientOriginalExtension();
-            $favicon->move('backend/uploads/site', $faviconName);
-
-            $updateData['favicon'] = $faviconName;
-        }
-
         if ($request->hasFile('watermark')) {
             $oldwatermark = SiteSettings::findOrFail(1)->watermark;
             if ($oldwatermark) {
@@ -72,6 +58,23 @@ class SiteSettingsController extends Controller
             $header_logo_dark->move('backend/uploads/site', $header_logo_dark_Name);
             $updateData['header_logo_dark'] = $header_logo_dark_Name;
         }
+
+        if ($request->hasFile('header_logo_light')) {
+            // Retrieve the old header logo name from the database
+            $oldHeaderLogoLight = SiteSettings::findOrFail(1)->header_logo_light;
+        
+            // Check if the old header logo exists before trying to unlink it
+            if ($oldHeaderLogoLight && file_exists(public_path('backend/uploads/site/' . $oldHeaderLogoLight))) {
+                unlink(public_path('backend/uploads/site/' . $oldHeaderLogoLight));
+            }
+        
+            $header_logo_light = $request->file('header_logo_light');
+            $header_logo_light_Name = time() . '-' . uniqid() . '.' . $header_logo_light->getClientOriginalExtension();
+            $header_logo_light->move('backend/uploads/site', $header_logo_light_Name);
+        
+            $updateData['header_logo_light'] = $header_logo_light_Name;
+        }
+        
 
         if ($request->hasFile('banner_img')) {
             $oldBannerImg = SiteSettings::findOrFail(1)->banner_img;
