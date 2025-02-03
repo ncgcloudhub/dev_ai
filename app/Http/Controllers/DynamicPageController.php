@@ -104,8 +104,13 @@ class DynamicPageController extends Controller
             return view('errors.404');
         }
 
+        $recents = DynamicPage::where('page_status', 'completed')->limit(5)->get();
+
         // Render the view for the dynamic page
-        return view('backend.dynamic_pages.dynamic_page', ['page' => $page]);
+        return view('backend.dynamic_pages.dynamic_page', [
+            'page' => $page,
+            'recents' => $recents
+        ]);
     }
 
     /**
