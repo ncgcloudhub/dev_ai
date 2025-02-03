@@ -24,7 +24,7 @@
                 <div class="live-preview">
                     <div class="form-floating mb-3">
                         <input type="text" name="name" class="form-control" id="name" placeholder="Enter Template Name" value="{{ $tool->name }}" required>
-                        <label for="name" class="form-label">Tools Name</label>
+                        <label for="name" class="form-label">Tools Name <span class="text-danger">*</span></label>
                     </div>
     
                     <div class="form-floating mb-3">
@@ -34,12 +34,12 @@
                             <option value="{{$item->id}}">{{$item->category_name}}</option>
                             @endforeach
                         </select>
-                        <label for="category_id" class="form-label">Category</label>
+                        <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
                     </div>
     
                     <div class="form-floating mb-3">
                         <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" required>{{ $tool->description }}</textarea>
-                        <label for="description">Description</label>
+                        <label for="description">Description <span class="text-danger">*</span></label>
                     </div>
     
                     <div class="mb-3">
@@ -62,22 +62,22 @@
                         @foreach (json_decode($tool->input_types) as $key => $type)
                         <div class="row input-row">
                             <div class="col-md-3">
-                                <label for="input_types" class="form-label">Input Type</label>
+                                <label for="input_types" class="form-label">Input Type <span class="text-danger">*</span></label>
                                 <select class="form-select" name="input_types[]" aria-label="Floating label select example" required>
                                     <option value="text" {{ $type == 'text' ? 'selected' : '' }}>Input Field</option>
                                     <option value="textarea" {{ $type == 'textarea' ? 'selected' : '' }}>Textarea Field</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label for="input_names" class="form-label">Input Name</label>
+                                <label for="input_names" class="form-label">Input Name <span class="text-danger">*</span></label>
                                 <input type="text" name="input_names[]" placeholder="Type input name" onchange="generateInputNames(true)" class="form-control" value="{{ json_decode($tool->input_names)[$key] }}" required>
                             </div>
                             <div class="col-md-3">
-                                <label for="input_labels" class="form-label">Input Label</label>
+                                <label for="input_labels" class="form-label">Input Label <span class="text-danger">*</span></label>
                                 <input type="text" name="input_labels[]" placeholder="Type input label" class="form-control" value="{{ json_decode($tool->input_labels)[$key] }}" required>
                             </div>
                             <div class="col-md-3">
-                                <label for="input_placeholders" class="form-label">Input Placeholder</label>
+                                <label for="input_placeholders" class="form-label">Input Placeholder <span class="text-danger">*</span></label>
                                 <input type="text" name="input_placeholders[]" placeholder="Type input placeholder" class="form-control" value="{{ json_decode($tool->input_placeholders)[$key] }}" required>
                             </div>
                             <div class="col-md-1 d-flex align-items-end">
@@ -112,7 +112,7 @@
             </div>
             <div class="card-body">
                 <div class="live-preview">
-                    <label for="custom_prompt" class="form-label">Custom Prompt</label>
+                    <label for="custom_prompt" class="form-label">Custom Prompt <span class="text-danger">*</span></label>
                     <div class="col-md-12">
                         <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message" required>{{ $tool->prompt }}</textarea>
                     </div>
