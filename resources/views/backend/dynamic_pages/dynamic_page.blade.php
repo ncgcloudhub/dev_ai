@@ -173,126 +173,29 @@
                         {{-- Category Wise --}}
                         <div class="card">
                             <div class="card-header d-flex align-items-center">
-                                <h5 class="card-title flex-grow-1 mb-0">Popular Creators</h5>
-                                <a href="apps-nft-creators" type="button" class="btn btn-soft-primary btn-sm flex-shrink-0">
-                                    See All <i class="ri-arrow-right-line align-bottom"></i>
-                                </a>
+                                <h5 class="card-title flex-grow-1 mb-0">Similar Blogs</h5>
+                               
                             </div>
                             <div class="card-body">
                                 <div class="swiper collection-slider">
                                     <div class="swiper-wrapper">
+                                        @foreach ($relatedPages as $relevant)
                                         <div class="swiper-slide">
                                             <div class="d-flex">
                                                 <div class="flex-shink-0">
-                                                    <img src="{{ URL::asset('build/images/nft/img-02.jpg') }}" alt=""
+                                                    <img src="{{ asset('storage/' . $relevant->thumbnail_image) }}" alt=""
                                                         class="avatar-sm object-fit-cover rounded">
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
                                                     <a href="pages-profile">
-                                                        <h5 class="mb-1">Alexis Clarke</h5>
+                                                        <h5 class="mb-1">{{$relevant->title}}</h5>
                                                     </a>
                                                     <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
-                                                        81,369 ETH</p>
-                                                </div>
-                                                <div>
-                                                    <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle fs-16"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
-                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
-                                                        </ul>
-                                                    </div>
+                                                        Trending</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="swiper-slide">
-                                            <div class="d-flex">
-                                                <div class="flex-shink-0">
-                                                    <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
-                                                        class="avatar-sm object-fit-cover rounded">
-                                                </div>
-                                                <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile">
-                                                        <h5 class="mb-1">Timothy Smith</h5>
-                                                    </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
-                                                        4,754 ETH</p>
-                                                </div>
-                                                <div>
-                                                    <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle fs-16"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
-                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="d-flex">
-                                                <div class="flex-shink-0">
-                                                    <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
-                                                        class="avatar-sm object-fit-cover rounded">
-                                                </div>
-                                                <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile">
-                                                        <h5 class="mb-1">Herbert Stokes</h5>
-                                                    </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
-                                                        68,945 ETH</p>
-                                                </div>
-                                                <div>
-                                                    <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle fs-16"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
-                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <div class="d-flex">
-                                                <div class="flex-shink-0">
-                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
-                                                        class="avatar-sm object-fit-cover rounded">
-                                                </div>
-                                                <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile">
-                                                        <h5 class="mb-1">Glen Matney</h5>
-                                                    </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
-                                                        49,031 ETH</p>
-                                                </div>
-                                                <div>
-                                                    <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle fs-16"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
-                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                                 <!--end swiper-->
@@ -302,20 +205,15 @@
                         {{-- Similar Blog --}}
                          <div class="card">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
-                                <h4 class="card-title mb-0 flex-grow-1">Relevant Blogs</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Popular Category</h4>
                             </div>
 
                             <div class="card-body">
                                 <div data-simplebar="init" style="height: 235px;" class="mx-n3 px-3 simplebar-scrollable-y"><div class="simplebar-wrapper" style="margin: 0px -16px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 16px;">
                                     <div class="vstack gap-3">
-                                   @foreach ($relatedPages as $relevant)
-                                   <div class="d-flex align-items-center">
-                                    <div class="avatar-xs flex-shrink-0 me-3">
-                                        <img src="{{ asset('storage/' . $relevant->thumbnail_image) }}" alt="blog_thumbnail_image" class="img-fluid rounded-circle">
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">{{$relevant->title}}</a></h5>
-                                    </div>
+                                   @foreach ($categories as $category)
+                                   <div class="align-items-center">
+                                    <a href="">{{$category->category }}</a>
                                 </div>
                                    @endforeach
                                     </div>
