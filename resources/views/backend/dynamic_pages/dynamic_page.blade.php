@@ -6,6 +6,7 @@
 @section('keywords', $page->keywords)
 @section('css')
     <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    
     <style>
         .dynamic-content img {
             max-width: 100%;
@@ -95,55 +96,52 @@
                     </div>
                     <div class="col-xl-3 col-lg-4">
                         {{-- Attachments --}}
+                        @php
+                            $attachments = json_decode($page->attached_files, true); // Decode JSON
+                        @endphp
+
+                        @if($attachments)
                         <div class="card">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
                                 <h4 class="card-title mb-0 flex-grow-1">Attachments</h4>
                             </div>
 
                             <div class="card-body">
-
                                 <div class="vstack gap-2">
                                     <div class="border rounded border-dashed p-2">
-                            @php
-                                $attachments = json_decode($page->attached_files, true); // Decode JSON
-                            @endphp
+                                        @foreach($attachments as $attachment)
+                                            @php
+                                                $fileName = basename($attachment); // Extract file name
+                                                $filePath = 'storage/' . $attachment; // Adjust the path
+                                            @endphp
 
-                            @if($attachments)
-                            @foreach($attachments as $attachment)
-                            @php
-                                $fileName = basename($attachment); // Extract file name
-                                $filePath = 'storage/' . $attachment; // Adjust the path
-                            @endphp
-
-                            <div class="d-flex align-items-center mb-2">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar-sm">
-                                        <div class="avatar-title bg-light text-primary rounded fs-24">
-                                            <i class="ri-folder-zip-line"></i>
-                                        </div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar-sm">
+                                                        <div class="avatar-title bg-light text-primary rounded fs-24">
+                                                            <i class="ri-folder-zip-line"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="fs-13 mb-1">
+                                                        <a href="{{ asset($filePath) }}" target="_blank" class="text-body text-truncate d-block">{{ $fileName }}</a>
+                                                    </h5>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <a href="{{ asset($filePath) }}" download class="btn btn-icon text-muted btn-sm fs-18">
+                                                        <i class="ri-download-2-line"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                </div>
-                                <div class="flex-grow-1 overflow-hidden">
-                                    <h5 class="fs-13 mb-1">
-                                        <a href="{{ asset($filePath) }}" target="_blank" class="text-body text-truncate d-block">{{ $fileName }}</a>
-                                    </h5>
-                                </div>
-                                <div class="flex-shrink-0 ms-2">
-                                    <a href="{{ asset($filePath) }}" download class="btn btn-icon text-muted btn-sm fs-18">
-                                        <i class="ri-download-2-line"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        @endforeach
-                            @else
-                                <p>No attachments available.</p>
-                            @endif
-                                    </div>
-
                                 </div>
                             </div>
                             <!-- end card body -->
                         </div>
+                        @endif
+
 
                         {{-- Recent Blogs --}}
                         <div class="card">
@@ -176,55 +174,30 @@
                         <div class="card">
                             <div class="card-header d-flex align-items-center">
                                 <h5 class="card-title flex-grow-1 mb-0">Popular Creators</h5>
-                                <a href="apps-nft-creators.html" type="button" class="btn btn-soft-primary btn-sm flex-shrink-0">
+                                <a href="apps-nft-creators" type="button" class="btn btn-soft-primary btn-sm flex-shrink-0">
                                     See All <i class="ri-arrow-right-line align-bottom"></i>
                                 </a>
                             </div>
                             <div class="card-body">
-                                <div class="swiper collection-slider swiper-initialized swiper-horizontal swiper-backface-hidden">
-                                    <div class="swiper-wrapper" id="swiper-wrapper-27138b10f86aa6df7" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-810px, 0px, 0px); transition-delay: 0ms;">
-                                        
-                                        
-                                        
-                                        
-                                    <div class="swiper-slide swiper-slide-next" role="group" aria-label="4 / 4" data-swiper-slide-index="3" style="width: 260px; margin-right: 10px;">
+                                <div class="swiper collection-slider">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
                                             <div class="d-flex">
                                                 <div class="flex-shink-0">
-                                                    <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                    <img src="{{ URL::asset('build/images/nft/img-02.jpg') }}" alt=""
+                                                        class="avatar-sm object-fit-cover rounded">
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile.html">
-                                                        <h5 class="mb-1">Glen Matney</h5>
-                                                    </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 49,031 ETH</p>
-                                                </div>
-                                                <div>
-                                                    <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle fs-16"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
-                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
-                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div><div class="swiper-slide" role="group" aria-label="1 / 4" data-swiper-slide-index="0" style="width: 260px; margin-right: 10px;">
-                                            <div class="d-flex">
-                                                <div class="flex-shink-0">
-                                                    <img src="assets/images/nft/img-02.jpg" alt="" class="avatar-sm object-fit-cover rounded">
-                                                </div>
-                                                <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile.html">
+                                                    <a href="pages-profile">
                                                         <h5 class="mb-1">Alexis Clarke</h5>
                                                     </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 81,369 ETH</p>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
+                                                        81,369 ETH</p>
                                                 </div>
                                                 <div>
                                                     <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle fs-16"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
@@ -235,20 +208,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div><div class="swiper-slide swiper-slide-prev" role="group" aria-label="2 / 4" data-swiper-slide-index="1" style="width: 260px; margin-right: 10px;">
+                                        </div>
+                                        <div class="swiper-slide">
                                             <div class="d-flex">
                                                 <div class="flex-shink-0">
-                                                    <img src="assets/images/nft/img-01.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                    <img src="{{ URL::asset('build/images/nft/img-01.jpg') }}" alt=""
+                                                        class="avatar-sm object-fit-cover rounded">
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile.html">
+                                                    <a href="pages-profile">
                                                         <h5 class="mb-1">Timothy Smith</h5>
                                                     </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 4,754 ETH</p>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
+                                                        4,754 ETH</p>
                                                 </div>
                                                 <div>
                                                     <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle fs-16"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
@@ -259,20 +236,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div><div class="swiper-slide swiper-slide-active" role="group" aria-label="3 / 4" data-swiper-slide-index="2" style="width: 260px; margin-right: 10px;">
+                                        </div>
+                                        <div class="swiper-slide">
                                             <div class="d-flex">
                                                 <div class="flex-shink-0">
-                                                    <img src="assets/images/nft/img-04.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                    <img src="{{ URL::asset('build/images/nft/img-04.jpg') }}" alt=""
+                                                        class="avatar-sm object-fit-cover rounded">
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile.html">
+                                                    <a href="pages-profile">
                                                         <h5 class="mb-1">Herbert Stokes</h5>
                                                     </a>
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 68,945 ETH</p>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
+                                                        68,945 ETH</p>
                                                 </div>
                                                 <div>
                                                     <div class="dropdown float-end">
-                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="ri-more-fill align-middle fs-16"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
@@ -283,8 +264,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div></div>
-                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <div class="d-flex">
+                                                <div class="flex-shink-0">
+                                                    <img src="{{ URL::asset('build/images/users/avatar-1.jpg') }}" alt=""
+                                                        class="avatar-sm object-fit-cover rounded">
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <a href="pages-profile">
+                                                        <h5 class="mb-1">Glen Matney</h5>
+                                                    </a>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
+                                                        49,031 ETH</p>
+                                                </div>
+                                                <div>
+                                                    <div class="dropdown float-end">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle fs-16"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
+                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--end swiper-->
                             </div>
                         </div>
@@ -336,7 +346,11 @@
 
 @section('script')
     <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+   
      <!--Swiper slider js-->
      <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+
+     <!-- Marketplace init -->
+     <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>    
+
 @endsection
