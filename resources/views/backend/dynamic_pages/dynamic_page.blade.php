@@ -74,22 +74,61 @@
         <section class="section" id="contact">
             <div class="container">
                 <div class="row justify-content-center dynamic-content">
-                    <div class="text-center mb-4">
-                        <h1 class="mb-2">{{$page->title}}</h1>
-                        <p class="text-muted mb-4">{{$page->description}}</p>
-                       
-                    </div>
-                    @if($page->banner_image)
-                        <img style="height: 400px !important; width: 100% !important" src="{{ asset('storage/' . $page->banner_image) }}" alt="" class="img-thumbnail">
-                    @endif
-                    {!! $page->content !!}
-                    <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
-                        <!-- Dynamically display tags -->
-                        @if($page->tags)
-                            @foreach(explode(',', $page->tags) as $tag)
-                                <span class="badge bg-primary-subtle text-primary">{{ trim($tag) }}</span>
-                            @endforeach
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="text-center mb-4">
+                            <h1 class="mb-2">{{$page->title}}</h1>
+                            <p class="text-muted mb-4">{{$page->description}}</p>
+                        
+                        </div>
+                        @if($page->banner_image)
+                            <img style="height: 400px !important; width: 100% !important" src="{{ asset('storage/' . $page->banner_image) }}" alt="" class="img-thumbnail">
                         @endif
+                        {!! $page->content !!}
+                        <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+                            <!-- Dynamically display tags -->
+                            @if($page->tags)
+                                @foreach(explode(',', $page->tags) as $tag)
+                                    <span class="badge bg-primary-subtle text-primary">{{ trim($tag) }}</span>
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        {{-- Attachments --}}
+                        <div class="card">
+                            <div class="card-header align-items-center d-flex border-bottom-dashed">
+                                <h4 class="card-title mb-0 flex-grow-1">Attachments</h4>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="vstack gap-2">
+                                    <div class="border rounded border-dashed p-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <div class="avatar-title bg-light text-primary rounded fs-24">
+                                                        <i class="ri-folder-zip-line"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <h5 class="fs-13 mb-1"><a href="#" class="text-body text-truncate d-block">App-pages.zip</a></h5>
+                                                <div>2.2MB</div>
+                                            </div>
+                                            <div class="flex-shrink-0 ms-2">
+                                                <div class="d-flex gap-1">
+                                                    <button type="button" class="btn btn-icon text-muted btn-sm fs-18"><i class="ri-download-2-line"></i></button>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
                     </div>
                 </div>
             </div>
