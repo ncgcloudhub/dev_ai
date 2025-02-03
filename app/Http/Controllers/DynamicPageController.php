@@ -98,10 +98,19 @@ class DynamicPageController extends Controller
     public function show($route)
     {
         // Find the dynamic page by route
-        $page = DynamicPage::where('route', $route)->firstOrFail();
+        $page = DynamicPage::where('route', $route)->where('page_status', 'completed')->firstOrFail();
+
+        if (!$page) {
+            return view('errors.404');
+        }
+
+        $recents = DynamicPage::where('page_status', 'completed')->limit(5)->get();
 
         // Render the view for the dynamic page
-        return view('backend.dynamic_pages.dynamic_page', ['page' => $page]);
+        return view('backend.dynamic_pages.dynamic_page', [
+            'page' => $page,
+            'recents' => $recents
+        ]);
     }
 
     /**
