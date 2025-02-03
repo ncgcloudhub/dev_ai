@@ -1030,7 +1030,7 @@ public function updateSubject(Request $request, $id)
     public function updateTools(Request $request, $id)
     {
         $tool = EducationTools::findOrFail($id);
-
+    
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -1044,19 +1044,25 @@ public function updateSubject(Request $request, $id)
             'prompt' => 'nullable|string',
             'popular' => 'nullable|string',
         ]);
-
+    
         // Update the tool's properties
         $tool->name = $validatedData['name'];
         $tool->slug = Str::slug($validatedData['name']);
         $tool->category_id = $validatedData['category_id'];
-
+    
         // Handle image upload if provided
         if ($request->hasFile('image')) {
-            // Optionally delete the old image here
+            // Delete the old image if it exists
+            if ($tool->image && Storage::disk('public')->exists($tool->image)) {
+                Storage::disk('public')->delete($tool->image);
+            }
+    
+            // Store the new image
             $imagePath = $request->file('image')->store('uploads/tools', 'public');
             $tool->image = $imagePath;
         }
-
+    
+        // Update other fields
         $tool->description = $validatedData['description'];
         $tool->input_types = json_encode($validatedData['input_types']);
         $tool->input_names = json_encode($validatedData['input_names']);
@@ -1064,18 +1070,19 @@ public function updateSubject(Request $request, $id)
         $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
         $tool->prompt = $validatedData['prompt'];
         $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
-
+    
         // Save the Tool instance
         $tool->save();
-
+    
         // Success notification
         $notification = [
             'message' => 'Tool Updated Successfully',
             'alert-type' => 'success'
         ];
-
+    
         return redirect()->route('manage.education.tools')->with($notification);
     }
+    
 
     public function getToolContent($id)
     {
