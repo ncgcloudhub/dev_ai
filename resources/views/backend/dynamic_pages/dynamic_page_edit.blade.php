@@ -90,7 +90,7 @@
             </div>
             <!-- end card -->
 
-            {{-- <input name="attached_files[]" type="file" multiple> --}}
+            <input name="attached_files[]" type="file" multiple>
         </div>
         <!-- end col -->
 

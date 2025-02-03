@@ -104,25 +104,40 @@
 
                                 <div class="vstack gap-2">
                                     <div class="border rounded border-dashed p-2">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar-sm">
-                                                    <div class="avatar-title bg-light text-primary rounded fs-24">
-                                                        <i class="ri-folder-zip-line"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="fs-13 mb-1"><a href="#" class="text-body text-truncate d-block">App-pages.zip</a></h5>
-                                                <div>2.2MB</div>
-                                            </div>
-                                            <div class="flex-shrink-0 ms-2">
-                                                <div class="d-flex gap-1">
-                                                    <button type="button" class="btn btn-icon text-muted btn-sm fs-18"><i class="ri-download-2-line"></i></button>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
+    @php
+        $attachments = json_decode($page->attached_files, true); // Decode JSON
+    @endphp
+
+    @if($attachments)
+    @foreach($attachments as $attachment)
+    @php
+        $fileName = basename($attachment); // Extract file name
+        $filePath = 'storage/' . $attachment; // Adjust the path
+    @endphp
+
+    <div class="d-flex align-items-center mb-2">
+        <div class="flex-shrink-0 me-3">
+            <div class="avatar-sm">
+                <div class="avatar-title bg-light text-primary rounded fs-24">
+                    <i class="ri-folder-zip-line"></i>
+                </div>
+            </div>
+        </div>
+        <div class="flex-grow-1 overflow-hidden">
+            <h5 class="fs-13 mb-1">
+                <a href="{{ asset($filePath) }}" target="_blank" class="text-body text-truncate d-block">{{ $fileName }}</a>
+            </h5>
+        </div>
+        <div class="flex-shrink-0 ms-2">
+            <a href="{{ asset($filePath) }}" download class="btn btn-icon text-muted btn-sm fs-18">
+                <i class="ri-download-2-line"></i>
+            </a>
+        </div>
+    </div>
+@endforeach
+    @else
+        <p>No attachments available.</p>
+    @endif
                                     </div>
 
                                 </div>
