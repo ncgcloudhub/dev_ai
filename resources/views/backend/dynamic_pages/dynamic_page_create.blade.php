@@ -75,7 +75,7 @@
         </div>
         <!-- end card -->
 
-        {{-- <input name="attached_files[]" type="file" multiple> --}}
+        <input name="attached_files[]" type="file" multiple>
     </div>
     <!-- end col -->
     <div class="col-lg-4">
@@ -110,6 +110,22 @@
             <!-- end card body -->
         </div>
         <!-- end card -->
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Category</h5>
+            </div>
+            <div class="card-body">
+                <div>
+                    <select class="form-select" id="category" name="category">
+                        @foreach ($template_categories as $category)
+                            <option value="{{$category->category_name}}">{{$category->category_name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
 
         <div class="card">
             <div class="card-header">

@@ -132,3 +132,6 @@ watermark siteSettings text
 
 22/01/2025
 in templates, add template_options
+
+03/02/2025
+in dynamic_pages, add category text

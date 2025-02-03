@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DynamicPage;
+use App\Models\TemplateCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use GuzzleHttp\Client;
@@ -29,7 +30,8 @@ class DynamicPageController extends Controller
      */
     public function create()
     {
-        return view('backend.dynamic_pages.dynamic_page_create');
+        $template_categories = TemplateCategory::latest()->get();
+        return view('backend.dynamic_pages.dynamic_page_create', compact('template_categories'));
     }
 
     /**
@@ -81,6 +83,7 @@ class DynamicPageController extends Controller
             'thumbnail_image' => $thumbnailPath,
             'banner_image' => $bannerPath,
             'content' => $data['content'],
+            'category' => $data['category'],
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
@@ -106,10 +109,17 @@ class DynamicPageController extends Controller
 
         $recents = DynamicPage::where('page_status', 'completed')->limit(5)->get();
 
+        $relatedPages = DynamicPage::where('category', $page->category)
+        ->where('id', '!=', $page->id) // Exclude the current page
+        ->where('page_status', 'completed')
+        ->limit(5)
+        ->get();
+
         // Render the view for the dynamic page
         return view('backend.dynamic_pages.dynamic_page', [
             'page' => $page,
-            'recents' => $recents
+            'recents' => $recents,
+            'relatedPages' => $relatedPages
         ]);
     }
 
