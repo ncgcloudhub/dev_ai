@@ -171,6 +171,150 @@
                             </div>
                             <!-- end card body -->
                         </div>
+
+                        {{-- Category Wise --}}
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <h5 class="card-title flex-grow-1 mb-0">Popular Creators</h5>
+                                <a href="apps-nft-creators.html" type="button" class="btn btn-soft-primary btn-sm flex-shrink-0">
+                                    See All <i class="ri-arrow-right-line align-bottom"></i>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <div class="swiper collection-slider swiper-initialized swiper-horizontal swiper-backface-hidden">
+                                    <div class="swiper-wrapper" id="swiper-wrapper-27138b10f86aa6df7" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-810px, 0px, 0px); transition-delay: 0ms;">
+                                        
+                                        
+                                        
+                                        
+                                    <div class="swiper-slide swiper-slide-next" role="group" aria-label="4 / 4" data-swiper-slide-index="3" style="width: 260px; margin-right: 10px;">
+                                            <div class="d-flex">
+                                                <div class="flex-shink-0">
+                                                    <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <a href="pages-profile.html">
+                                                        <h5 class="mb-1">Glen Matney</h5>
+                                                    </a>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 49,031 ETH</p>
+                                                </div>
+                                                <div>
+                                                    <div class="dropdown float-end">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle fs-16"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
+                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="swiper-slide" role="group" aria-label="1 / 4" data-swiper-slide-index="0" style="width: 260px; margin-right: 10px;">
+                                            <div class="d-flex">
+                                                <div class="flex-shink-0">
+                                                    <img src="assets/images/nft/img-02.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <a href="pages-profile.html">
+                                                        <h5 class="mb-1">Alexis Clarke</h5>
+                                                    </a>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 81,369 ETH</p>
+                                                </div>
+                                                <div>
+                                                    <div class="dropdown float-end">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle fs-16"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
+                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="swiper-slide swiper-slide-prev" role="group" aria-label="2 / 4" data-swiper-slide-index="1" style="width: 260px; margin-right: 10px;">
+                                            <div class="d-flex">
+                                                <div class="flex-shink-0">
+                                                    <img src="assets/images/nft/img-01.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <a href="pages-profile.html">
+                                                        <h5 class="mb-1">Timothy Smith</h5>
+                                                    </a>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 4,754 ETH</p>
+                                                </div>
+                                                <div>
+                                                    <div class="dropdown float-end">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle fs-16"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
+                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><div class="swiper-slide swiper-slide-active" role="group" aria-label="3 / 4" data-swiper-slide-index="2" style="width: 260px; margin-right: 10px;">
+                                            <div class="d-flex">
+                                                <div class="flex-shink-0">
+                                                    <img src="assets/images/nft/img-04.jpg" alt="" class="avatar-sm object-fit-cover rounded">
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <a href="pages-profile.html">
+                                                        <h5 class="mb-1">Herbert Stokes</h5>
+                                                    </a>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i> 68,945 ETH</p>
+                                                </div>
+                                                <div>
+                                                    <div class="dropdown float-end">
+                                                        <button class="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle fs-16"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">View</a></li>
+                                                            <li><a class="dropdown-item" href="javascript:void(0);">Share</a></li>
+                                                            <li><a class="dropdown-item" href="#!">Report</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div></div>
+                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                                <!--end swiper-->
+                            </div>
+                        </div>
+
+                        {{-- Similar Blog --}}
+                         <div class="card">
+                            <div class="card-header align-items-center d-flex border-bottom-dashed">
+                                <h4 class="card-title mb-0 flex-grow-1">Relevant Blogs</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div data-simplebar="init" style="height: 235px;" class="mx-n3 px-3 simplebar-scrollable-y"><div class="simplebar-wrapper" style="margin: 0px -16px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 16px;">
+                                    <div class="vstack gap-3">
+                                   @foreach ($relatedPages as $relevant)
+                                   <div class="d-flex align-items-center">
+                                    <div class="avatar-xs flex-shrink-0 me-3">
+                                        <img src="{{ asset('storage/' . $relevant->thumbnail_image) }}" alt="blog_thumbnail_image" class="img-fluid rounded-circle">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">{{$relevant->title}}</a></h5>
+                                    </div>
+                                </div>
+                                   @endforeach
+                                    </div>
+                                    <!-- end list -->
+                                </div></div></div></div>
+                                <div class="simplebar-placeholder" style="width: 292px; height: 284px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 194px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,4 +336,7 @@
 
 @section('script')
     <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>
+     <!--Swiper slider js-->
+     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
 @endsection
