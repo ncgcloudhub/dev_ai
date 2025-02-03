@@ -196,6 +196,9 @@
   
                                          <select data-choices data-choices-removeItem multiple id="style" class="form-select form-select-sm  mb-3" aria-label=".form-select-sm example" name="open_id_model[]">
                                             {{-- <option selected>Open AI Model</option> --}}
+                                            <option value="o1">o1</option>
+                                            <option value="o1-mini">o1-mini</option>
+                                            <option value="o3-mini">o3-mini</option>
                                             <option value="gpt-4o">gpt-4o</option>
                                             <option value="gpt-4-turbo">gpt-4-turbo</option>
                                             <option value="gpt-4">gpt-4</option>

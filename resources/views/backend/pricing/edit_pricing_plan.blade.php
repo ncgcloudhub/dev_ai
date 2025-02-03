@@ -198,6 +198,9 @@
                                     <div class="flex-grow-1 d-flex align-items-center">
                                         <select data-choices data-choices-removeItem multiple id="style" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="open_id_model[]">
                                             {{-- <option selected>Open AI Model</option> --}}
+                                            <option value="o1" {{ in_array('o1', $selectedModels) ? 'selected' : '' }}>o1</option>
+                                            <option value="o1-mini" {{ in_array('o1-mini', $selectedModels) ? 'selected' : '' }}>o1-mini</option>
+                                            <option value="o3-mini" {{ in_array('o3-mini', $selectedModels) ? 'selected' : '' }}>o3-mini</option>
                                             <option value="gpt-4o" {{ in_array('gpt-4o', $selectedModels) ? 'selected' : '' }}>gpt-4o</option>
                                             <option value="gpt-4o-mini" {{ in_array('gpt-4o-mini', $selectedModels) ? 'selected' : '' }}>gpt-4o-mini</option>
                                             <option value="gpt-4-turbo" {{ in_array('gpt-4-turbo', $selectedModels) ? 'selected' : '' }}>gpt-4-turbo</option>
