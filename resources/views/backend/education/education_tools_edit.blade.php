@@ -38,7 +38,7 @@
                     </div>
     
                     <div class="form-floating mb-3">
-                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description">{{ $tool->description }}</textarea>
+                        <textarea name="description" class="form-control" id="description" rows="3" placeholder="Enter description" required>{{ $tool->description }}</textarea>
                         <label for="description">Description</label>
                     </div>
     
@@ -114,7 +114,7 @@
                 <div class="live-preview">
                     <label for="custom_prompt" class="form-label">Custom Prompt</label>
                     <div class="col-md-12">
-                        <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message">{{ $tool->prompt }}</textarea>
+                        <textarea class="form-control" name="prompt" id="VertimeassageInput" rows="3" placeholder="Enter your message" required>{{ $tool->prompt }}</textarea>
                     </div>
                 </div>
             </div>
