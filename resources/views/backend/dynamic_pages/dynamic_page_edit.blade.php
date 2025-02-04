@@ -222,4 +222,41 @@
         }
     });
 </script>
+
+<script>
+        // Existing SEO Generation Script
+        $(document).ready(function () {
+        $('#generateSeoBtn').on('click', function () {
+            let title = $('#title').val().trim(); // Get the SEO title value
+
+            if (!title) {
+                alert('Please enter a title to generate SEO content.');
+                return;
+            }
+
+            $.ajax({
+                url: '/dynamic-pages/seo/generate', // Adjust the URL to your route
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { title: title },
+                success: function (response) {
+                    if (response.success) {
+                        // Populate the SEO fields
+                        $('#seo_title').val(response.seo_title);
+                        $('#choices-text-unique-values').val(response.seo_tags); // Assuming "keywords" are tags
+                        $('#description').val(response.seo_description);
+                    } else {
+                        alert(response.message || 'Failed to generate SEO content.');
+                    }
+                },
+                error: function () {
+                    alert('Error generating SEO content. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
 @endsection
