@@ -31,7 +31,11 @@
                             <div class="card overflow-hidden blog-grid-card">
                                 <div class="position-relative overflow-hidden">
                                     <!-- Display the thumbnail image dynamically -->
-                                    <img src="{{ asset('storage/' . $post->thumbnail_image) }}" alt="" class="blog-img object-fit-cover">
+                                    @if($post->thumbnail_image)
+                                        <img src="{{ asset('storage/' . $post->thumbnail_image) }}" alt="" class="blog-img object-fit-cover">
+                                    @else
+                                        <img src="{{ asset('build/images/blog.gif') }}" alt="" class="blog-img object-fit-cover" data-src="{{ asset('build/images/blog.gif') }}">
+                                    @endif
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">
