@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Pricing;
 
 use App\Http\Controllers\Controller;
+use App\Models\AISettings;
 use App\Models\PricingPlan;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -31,7 +32,8 @@ class PricingController extends Controller
     public function addPricingPlan()
     {
         $totalTemplates = Template::count();
-        return view('backend.pricing.add_pricing_plan', compact('totalTemplates'));
+        $models = AISettings::latest()->get();
+        return view('backend.pricing.add_pricing_plan', compact('totalTemplates','models'));
     }
 
     public function StorePricingPlan(Request $request)
@@ -107,8 +109,9 @@ class PricingController extends Controller
     public function EditPricing($slug)
     {
         $pricing_plan = PricingPlan::where('slug', $slug)->firstOrFail();
+        $models = AISettings::latest()->get();
 
-        return view('backend.pricing.edit_pricing_plan', compact('pricing_plan'));
+        return view('backend.pricing.edit_pricing_plan', compact('pricing_plan', 'models'));
     }
 
     public function UpdatePricing(Request $request, PricingPlan $pricingPlan)
