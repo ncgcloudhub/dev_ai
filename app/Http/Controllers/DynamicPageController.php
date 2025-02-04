@@ -84,7 +84,7 @@ class DynamicPageController extends Controller
             'banner_image' => $bannerPath,
             'content' => $data['content'],
             'category' => $data['category'],
-            'social' => $data['social'],
+            'social' => $request->has('social') ? 1 : 0, // ✅ FIX: Handle checkbox correctly
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
@@ -226,7 +226,7 @@ class DynamicPageController extends Controller
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
             'category' => $data['category'],
-            'social' => $data['social'],
+            'social' => $request->has('social') ? 1 : 0,
             'description' => $data['description'],
             'tags' => $data['tags'],
             'attached_files' => $data['attached_files'] ?? $dynamicPage->attached_files, // Keep existing files if none uploaded
