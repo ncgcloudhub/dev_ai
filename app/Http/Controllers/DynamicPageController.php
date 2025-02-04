@@ -69,12 +69,17 @@ class DynamicPageController extends Controller
     
         // Handle multiple attached files
         $attachedFiles = [];
-        if ($request->hasFile('attached_files')) {
-            foreach ($request->file('attached_files') as $file) {
-                $path = $file->store('dynamic-pages/attachments', 'public');
-                $attachedFiles[] = $path;
+            if ($request->hasFile('attached_files')) {
+                foreach ($request->file('attached_files') as $file) {
+                    // Get the original filename
+                    $filename = $file->getClientOriginalName();
+                    // Store the file with its original name in the specified directory
+                    $path = $file->storeAs('dynamic-pages/attachments', $filename, 'public');
+                    // Add the path to the array
+                    $attachedFiles[] = $path;
+                }
             }
-        }
+
     
         // Save the page to the database
         $dynamicPage = DynamicPage::create([
@@ -206,14 +211,23 @@ class DynamicPageController extends Controller
                     }
                 }
             }
-    
+
             $attachedFiles = [];
             foreach ($request->file('attached_files') as $file) {
-                $path = $file->store('dynamic-pages/attachments', 'public');
+                // Get the original filename
+                $filename = $file->getClientOriginalName();
+                
+                // Store the file with its original name in the specified directory
+                $path = $file->storeAs('dynamic-pages/attachments', $filename, 'public');
+                
+                // Add the path to the array
                 $attachedFiles[] = $path;
             }
+            
+            // Save the attached files as a JSON-encoded string
             $data['attached_files'] = json_encode($attachedFiles);
         }
+
     
         // Update the page in the database
         $dynamicPage->update([
