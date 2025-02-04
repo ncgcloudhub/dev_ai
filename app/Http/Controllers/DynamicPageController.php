@@ -84,6 +84,7 @@ class DynamicPageController extends Controller
             'banner_image' => $bannerPath,
             'content' => $data['content'],
             'category' => $data['category'],
+            'social' => $data['social'],
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
@@ -137,11 +138,12 @@ class DynamicPageController extends Controller
     {
         $dynamicPage = DynamicPage::findOrFail($id);
        // Decode the attached files (if any)
-    $attachments = json_decode($dynamicPage->attached_files, true); 
+        $attachments = json_decode($dynamicPage->attached_files, true); 
+        $template_categories = TemplateCategory::latest()->get();
 
     // Check if attachments are an array (in case it's empty or not set)
     $attachments = is_array($attachments) ? $attachments : [];
-        return view('backend.dynamic_pages.dynamic_page_edit', compact('dynamicPage','attachments'));
+        return view('backend.dynamic_pages.dynamic_page_edit', compact('dynamicPage','attachments','template_categories'));
     }
 
     /**
@@ -223,6 +225,8 @@ class DynamicPageController extends Controller
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
+            'category' => $data['category'],
+            'social' => $data['social'],
             'description' => $data['description'],
             'tags' => $data['tags'],
             'attached_files' => $data['attached_files'] ?? $dynamicPage->attached_files, // Keep existing files if none uploaded

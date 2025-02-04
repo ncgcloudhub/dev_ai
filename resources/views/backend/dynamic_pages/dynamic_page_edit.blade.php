@@ -144,6 +144,26 @@
 
             <div class="card">
                 <div class="card-header">
+                    <h5 class="card-title mb-0">Category</h5>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <select class="form-select" id="category" name="category">
+                            <option selected value="{{$dynamicPage->category}}">{{$dynamicPage->category}}</option>
+                            @foreach ($template_categories as $category)
+                                <option value="{{$category->category_name}}">{{$category->category_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <label for="">Social</label>
+            <input type="checkbox" name="social" value="1" checked class="form-check-input" id="social">
+
+                <!-- end card body -->
+            </div>
+
+            <div class="card">
+                <div class="card-header">
                     <h5 class="card-title mb-0">Page SEO</h5>
                 </div>
                 <div class="card-body">
