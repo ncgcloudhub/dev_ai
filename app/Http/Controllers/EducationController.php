@@ -833,13 +833,18 @@ public function updateSubject(Request $request, $id)
     public function manageTools()
     {   
         logActivity('Education Tools', 'accessed the education tools');
-
-        $tools = EducationTools::get();
+    
+        $tools = EducationTools::get()->map(function ($tool) {
+            $imagePath = 'public/' . $tool->image;
+            $tool->image_version = Storage::exists($imagePath) ? Storage::lastModified($imagePath) : time();
+            return $tool;
+        });
+    
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
         $newTools = EducationTools::orderBy('id', 'DESC')->limit(5)->get();
         $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();
-
-        return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools','popularTools'));
+    
+        return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
     }
 
     public function showTool($id)
