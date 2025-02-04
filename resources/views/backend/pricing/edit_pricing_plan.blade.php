@@ -193,29 +193,24 @@
                                 @php
                                     $selectedModels = explode(', ', $pricing_plan->open_id_model); // Convert the string to an array
                                 @endphp
-
+                            
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">
                                         <select data-choices data-choices-removeItem multiple id="style" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example" name="open_id_model[]">
-                                            {{-- <option selected>Open AI Model</option> --}}
-                                            <option value="o1" {{ in_array('o1', $selectedModels) ? 'selected' : '' }}>o1</option>
-                                            <option value="o1-mini" {{ in_array('o1-mini', $selectedModels) ? 'selected' : '' }}>o1-mini</option>
-                                            <option value="o3-mini" {{ in_array('o3-mini', $selectedModels) ? 'selected' : '' }}>o3-mini</option>
-                                            <option value="gpt-4o" {{ in_array('gpt-4o', $selectedModels) ? 'selected' : '' }}>gpt-4o</option>
-                                            <option value="gpt-4o-mini" {{ in_array('gpt-4o-mini', $selectedModels) ? 'selected' : '' }}>gpt-4o-mini</option>
-                                            <option value="gpt-4-turbo" {{ in_array('gpt-4-turbo', $selectedModels) ? 'selected' : '' }}>gpt-4-turbo</option>
-                                            <option value="gpt-4" {{ in_array('gpt-4', $selectedModels) ? 'selected' : '' }}>gpt-4</option>
-                                            <option value="gpt-3.5-turbo" {{ in_array('gpt-3.5-turbo', $selectedModels) ? 'selected' : '' }}>gpt-3.5-turbo</option>
-                                            <option value="gpt-3.5-turbo-instruct" {{ in_array('gpt-3.5-turbo-instruct', $selectedModels) ? 'selected' : '' }}>gpt-3.5-turbo-instruct</option>
-                                        </select>
+                                            @foreach($models as $model)
+                                                <option value="{{ $model->openaimodel }}" {{ in_array($model->openaimodel, $selectedModels) ? 'selected' : '' }}>
+                                                    {{ $model->openaimodel }}
+                                                </option>
+                                            @endforeach
+                                        </select> 
                                         <span class="ms-2">Open Ai Model</span>
                                     </div>
                                     <div class="form-check ms-3 align-self-center">
                                         <input class="form-check-input" type="checkbox" id="formCheck6" checked>
                                     </div>
                                 </div>
-                                
                             </li>
+                            
                             <li>
                                 <div class="d-flex">
                                     <div class="flex-grow-1 d-flex align-items-center">

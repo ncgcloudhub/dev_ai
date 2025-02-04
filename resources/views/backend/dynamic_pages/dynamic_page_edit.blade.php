@@ -119,8 +119,8 @@
                     <div>
                         <label for="choices-status-input" class="form-label">Status</label>
                         <select class="form-select" id="choices-status-input" name="page_status">
-                            <option value="inprogress" @if($dynamicPage->status == 'inprogress') selected @endif>Inprogress</option>
-                            <option value="completed" @if($dynamicPage->status == 'completed') selected @endif>Completed</option>
+                            <option value="inprogress" @if($dynamicPage->page_status == 'inprogress') selected @endif>Inprogress</option>
+                            <option value="completed" @if($dynamicPage->page_status == 'completed') selected @endif>Completed</option>
                         </select>
                     </div>
                 </div>
@@ -149,18 +149,22 @@
                 <div class="card-body">
                     <div>
                         <select class="form-select" id="category" name="category">
-                            <option selected value="{{$dynamicPage->category}}">{{$dynamicPage->category}}</option>
+                            <option selected value="{{ $dynamicPage->category }}">{{ $dynamicPage->category }}</option>
                             @foreach ($template_categories as $category)
-                                <option value="{{$category->category_name}}">{{$category->category_name}}</option>
+                                <option value="{{ $category->category_name }}">{{ $category->category_name }}</option>
                             @endforeach
                         </select>
                     </div>
+            
+                    <!-- Social Checkbox -->
+                    <div class="form-check mt-3">
+                        <input type="checkbox" name="social" value="1" class="form-check-input" id="social"
+                            {{ $dynamicPage->social ? 'checked' : '' }}>
+                        <label class="form-check-label" for="social">Social</label>
+                    </div>
                 </div>
-                <label for="">Social</label>
-            <input type="checkbox" name="social" value="1" checked class="form-check-input" id="social">
-
-                <!-- end card body -->
             </div>
+            
 
             <div class="card">
                 <div class="card-header">
@@ -222,4 +226,41 @@
         }
     });
 </script>
+
+<script>
+        // Existing SEO Generation Script
+        $(document).ready(function () {
+        $('#generateSeoBtn').on('click', function () {
+            let title = $('#title').val().trim(); // Get the SEO title value
+
+            if (!title) {
+                alert('Please enter a title to generate SEO content.');
+                return;
+            }
+
+            $.ajax({
+                url: '/dynamic-pages/seo/generate', // Adjust the URL to your route
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { title: title },
+                success: function (response) {
+                    if (response.success) {
+                        // Populate the SEO fields
+                        $('#seo_title').val(response.seo_title);
+                        $('#choices-text-unique-values').val(response.seo_tags); // Assuming "keywords" are tags
+                        $('#description').val(response.seo_description);
+                    } else {
+                        alert(response.message || 'Failed to generate SEO content.');
+                    }
+                },
+                error: function () {
+                    alert('Error generating SEO content. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
 @endsection
