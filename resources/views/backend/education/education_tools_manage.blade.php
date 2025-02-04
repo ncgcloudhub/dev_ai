@@ -119,7 +119,7 @@
                         </button>
                     </div>
                     <div class="explore-place-bid-img">
-                        <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
+                        <img src="{{ asset('storage/' . $tool->image) }}?v={{ filemtime(public_path('storage/' . $tool->image)) }}" alt="" class="card-img-top explore-img" />
                         <div class="bg-overlay"></div>
                         <div class="place-bid-btn">
                             <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary">
