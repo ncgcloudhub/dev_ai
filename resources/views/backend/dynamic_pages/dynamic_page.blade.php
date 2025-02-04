@@ -93,7 +93,35 @@
                                 @endforeach
                             @endif
                         </div>
+                        
+                      @if ($page->social)
+                      <div class="text-center mb-4"><h3 class="gradient-text-1-bold">FOLLOW US!</h3></div> 
+                      <div class="d-flex align-items-center justify-content-center flex-wrap gap-4">
+                          <a href="{{$siteSettings->facebook}}" target="_blank" class="mx-1">
+                              <img src="{{ asset('/backend/uploads/site/fb.png') }}" width="35px" alt="">
+                          </a>
+                          <a href="{{$siteSettings->instagram}}" target="_blank" class="mx-1">
+                              <img src="{{ asset('backend/uploads/site/insta.png') }}" width="35px" alt="">
+                          </a>
+                          <a href="{{$siteSettings->linkedin}}" target="_blank" class="mx-1">
+                              <img src="{{ asset('backend/uploads/site/In.png') }}" width="35px" alt="">
+                          </a>
+                          <a href="{{$siteSettings->youtube}}" target="_blank" class="mx-1">
+                              <img src="{{ asset('backend/uploads/site/youtube.png') }}" width="35px" alt="">
+                          </a>
+                      </div>
+                      @endif
+                        
                     </div>
+
+
+
+
+
+
+
+
+                    {{-- 2nd Col --}}
                     <div class="col-xl-3 col-lg-4">
                         {{-- Attachments --}}
                         @php
@@ -101,9 +129,9 @@
                         @endphp
 
                         @if($attachments)
-                        <div class="card">
+                        <div class="card border-color-purple">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
-                                <h4 class="card-title mb-0 flex-grow-1">Attachments</h4>
+                                <h4 class="card-title mb-0 flex-grow-1 text gradient-text-1-bold">Attachments</h4>
                             </div>
 
                             <div class="card-body">
@@ -130,7 +158,7 @@
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
                                                     <a href="{{ asset($filePath) }}" download class="btn btn-icon text-muted btn-sm fs-18">
-                                                        <i class="ri-download-2-line"></i>
+                                                        <i class="ri-download-2-line gradient-text-1-bold"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -144,9 +172,9 @@
 
 
                         {{-- Recent Blogs --}}
-                        <div class="card">
+                        <div class="card border-color-purple">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
-                                <h4 class="card-title mb-0 flex-grow-1">Recent Blogs</h4>
+                                <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Recent Blogs</h4>
                             </div>
 
                             <div class="card-body">
@@ -171,9 +199,9 @@
                         </div>
 
                         {{-- Category Wise --}}
-                        <div class="card">
+                        <div class="card border-color-purple">
                             <div class="card-header d-flex align-items-center">
-                                <h5 class="card-title flex-grow-1 mb-0">Similar Blogs</h5>
+                                <h5 class="card-title flex-grow-1 mb-0 gradient-text-1-bold">Similar Blogs</h5>
                                
                             </div>
                             <div class="card-body">
@@ -202,10 +230,10 @@
                             </div>
                         </div>
 
-                        {{-- Similar Blog --}}
-                         <div class="card">
+                        {{-- Category --}}
+                         <div class="card border-color-purple">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
-                                <h4 class="card-title mb-0 flex-grow-1">Popular Category</h4>
+                                <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Popular Category</h4>
                             </div>
 
                             <div class="card-body">
@@ -213,8 +241,9 @@
                                     <div class="vstack gap-3">
                                    @foreach ($categories as $category)
                                    <div class="align-items-center">
-                                    <a href="">{{$category->category }}</a>
-                                </div>
+                                    <span class="badge rounded-pill badge-gradient-purple">{{$category->category }}</span>
+                                        <a href=""></a>
+                                    </div>
                                    @endforeach
                                     </div>
                                     <!-- end list -->

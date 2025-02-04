@@ -124,6 +124,10 @@
                     </select>
                 </div>
             </div>
+
+            <label for="">Social</label>
+            <input type="checkbox" name="social" value="1" checked class="form-check-input" id="social">
+
             <!-- end card body -->
         </div>
 
