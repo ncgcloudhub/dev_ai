@@ -11,25 +11,79 @@ class AISettingsController extends Controller
 {
     public function AIsettingsAdd(){
       
-        return view('admin.ai_settings.ai_settings_add');
+		$models = AISettings::latest()->get();
+        return view('admin.ai_settings.ai_settings_add', compact('models'));
     }
 
-    public function AIsettingsStore(Request $request){
+	public function AIsettingsStore(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'openaimodel' => 'required|string',
+        ]);
 
-	  AISettings::findOrFail(1)->update([
-      	
-		'openaimodel' => $request->openaimodel,	
-      	'updated_at' => Carbon::now(),   
+        // Store the item in the database
+        $item = new AISettings();
+      
+        $item->openaimodel = $validatedData['openaimodel'];
 
-      ]);
+        $item->save();
 
-       $notification = array(
-			'message' => 'Settings Changed Successfully',
-			'alert-type' => 'success'
-		);
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'AI Model added successfully!');
+    }
 
-		// return redirect()->route('manage-product')->with($notification);
-		return redirect()->back()->with($notification);
+	public function AIsettingsEdit($id)
+    {
+        $models = AISettings::latest()->get();
+        $model = AISettings::findOrFail($id);
 
-	} // end method
+        return view('admin.ai_settings.ai_settings_edit', compact('model', 'models'));
+    }
+
+
+    public function AIsettingsUpdate(Request $request)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            
+            'openaimodel' => 'required|string',
+           
+        ]);
+
+        // Find the about us record to update
+        $item = AISettings::findOrFail($request->id);
+
+        // Update the text fields
+        $item->openaimodel = $validatedData['openaimodel'];
+      
+        // Save the changes to the about us record
+        $item->save();
+
+        // Redirect the user with a success message
+        $notification = array(
+            'message' => 'Open AI Model updated successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
+    public function AIsettingsDelete($id)
+    {
+
+        // Find the gallery item
+        $item = AISettings::findOrFail($id);
+
+        // Delete the gallery item from the database
+        $item->delete();
+
+        // Redirect back with notification
+        $notification = array(
+            'message' => 'Open AI Model Deleted Successfully',
+            'alert-type' => 'info'
+        );
+
+        return redirect()->back()->with($notification);
+    } // end method
 }
