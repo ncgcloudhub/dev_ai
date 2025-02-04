@@ -28,6 +28,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Route</th>
                             <th scope="col">Content</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -39,7 +40,17 @@
                                 <a href="{{ url($item->route) }}" class="dynamic-page-link">{{ $item->title }}</a>
                             </td>
                             <td>{{ $item->route }}</td>
-                            <td>{{ strip_tags($item->content) }}</td>
+                            <td>{{ Str::limit(strip_tags($item->content), 200) }}</td>
+                            <td>
+                                @if($item->page_status == 'completed')
+                                    <span class="badge bg-success">{{ $item->page_status }}</span>
+                                @elseif($item->page_status == 'inprogress')
+                                    <span class="badge bg-danger">{{ $item->page_status }}</span>
+                                @else
+                                    <span class="badge bg-secondary">{{ $item->page_status }}</span>
+                                @endif
+                            </td>
+                            
                             <td>
                                 <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                     <i class="ri-pencil-fill fs-16"></i> 
