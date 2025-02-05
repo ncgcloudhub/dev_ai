@@ -127,9 +127,9 @@
                                                 <div class="col-lg-12">
                                                     <div class="card">
                                                         <div class="card-header align-items-center d-flex">
-                                                            <h4 class="card-title mb-0  me-2">Recent Activity</h4>
+                                                            <h4 class="card-title mb-0  me-2">Blogs</h4>
                                                             <div class="flex-shrink-0 ms-auto">
-                                                                <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs border-bottom-0"
+                                                                <ul class="nav nav-pills justify-content-end nav-tabs-custom rounded card-header-tabs border-bottom-0"
                                                                     role="tablist">
                                                                     <li class="nav-item">
                                                                         <a class="nav-link active" data-bs-toggle="tab" href="#today"
@@ -169,6 +169,7 @@
                                                                            </div>      
                                                                       </div>    
                                                                     </div>
+                                                                    <br>
                                                                     @endforeach
                                                                 </div>
                                                                 <div class="tab-pane" id="weekly" role="tabpanel">
@@ -180,7 +181,7 @@
                                                                                 <div class="d-flex gap-2">
                                                                                     <div class="flex-shrink-0">                    <div class="avatar-lg rounded">
                                                                                       @if($post->thumbnail_image)
-                                                                                        <img src="assets/images/users/avatar-10.jpg" alt="" class="member-img img-fluid d-block rounded">
+                                                                                        <img src="{{ asset('storage/' . $post->thumbnail_image) }}" alt="" class="member-img img-fluid d-block rounded">
                                                                                       @else
                                                                                       <img src="{{ asset('build/images/blog.gif') }}" alt="" class="member-img img-fluid d-block rounded">
                                                                                       @endif
@@ -199,8 +200,10 @@
                                                                                 </div>
                                                                                
                                                                             </div>
+                                                                            
                                                                             <!-- end card body -->
                                                                             </div>
+                                                                            <br>
                                                                         </div> 
                                                                         @endforeach
                                                                     </div>
