@@ -699,6 +699,7 @@ Route::get('/ai/image/gallery', [HomeController::class, 'AIImageGallery'])->name
 
 // Blog Page
 Route::get('/blog', [HomeController::class, 'Blog'])->name('blog');
+Route::get('/blog/category/{category}', [HomeController::class, 'showByCategory'])->name('category.wise.blog');
 
 // Contact Us Page
 Route::get('/contact-us', [HomeController::class, 'ContactUs'])->name('contact.us');

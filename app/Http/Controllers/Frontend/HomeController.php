@@ -252,8 +252,22 @@ class HomeController extends Controller
 
     public function Blog()
     {
+        $title = 'All Blogs';
         $blog = DynamicPage::where('page_status', 'completed')->orderBy('id', 'desc')->get();
-        return view('frontend.blog', compact('blog'));
+        $categories = DynamicPage::where('page_status', 'completed')
+        ->select('category')
+        ->distinct()
+        ->limit(5) // Limiting to 5 categories
+        ->get();
+        $recents = DynamicPage::where('page_status', 'completed')->limit(5)->get();
+        return view('frontend.blog1', compact('blog','title','categories','recents'));
+    }
+    
+    public function showByCategory($category)
+    {
+        $blog = DynamicPage::where('category', $category)->orderBy('id', 'desc')->get();
+        $title = 'Category | '.$category;
+        return view('frontend.blog', compact('blog','title'));
     }
 
     //Image Gallery Front End Page

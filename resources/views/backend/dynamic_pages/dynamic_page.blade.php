@@ -241,8 +241,10 @@
                                     <div class="vstack gap-3">
                                    @foreach ($categories as $category)
                                    <div class="align-items-center">
-                                    <span class="badge rounded-pill badge-gradient-purple">{{$category->category }}</span>
-                                        <a href=""></a>
+                                    <a href="{{ route('category.wise.blog', $category->category) }}">
+                                        <span class="badge rounded-pill badge-gradient-purple">{{ $category->category }}</span>
+                                    </a>
+                                    
                                     </div>
                                    @endforeach
                                     </div>

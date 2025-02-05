@@ -25,6 +25,8 @@
 
            <section class="section">
             <div class="container">
+                <h2>{{$title}}</h2>
+                <br>
                 <div class="row">
                     @foreach ($blog as $post)
                         <div class="col-xxl-3 col-lg-6">
