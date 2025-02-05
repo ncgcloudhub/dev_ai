@@ -830,11 +830,14 @@ public function updateSubject(Request $request, $id)
 }
 
     // CREATE TOOLS
-    public function manageTools()
-    {   
+    public function manageTools(Request $request)
+    {
         logActivity('Education Tools', 'accessed the education tools');
     
-        $tools = EducationTools::get()->map(function ($tool) {
+        // Get the number of items per page from the request, default to 10 if not set
+        $itemsPerPage = $request->input('items_per_page', 10);
+    
+        $tools = EducationTools::paginate($itemsPerPage)->through(function ($tool) {
             $imagePath = 'public/' . $tool->image;
             $tool->image_version = Storage::exists($imagePath) ? Storage::lastModified($imagePath) : time();
             return $tool;
@@ -846,6 +849,8 @@ public function updateSubject(Request $request, $id)
     
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
     }
+    
+    
 
     public function showTool($id)
     {

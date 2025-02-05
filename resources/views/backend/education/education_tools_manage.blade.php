@@ -109,6 +109,20 @@
             {{-- 2nd Col END--}}
         </div>
 
+        <div class="col-sm-2 mb-3">
+            <!-- Label and Dropdown to select items per page -->
+            <label for="items_per_page" class="form-label">Tools Per Page</label>
+            <form method="GET" class="d-flex justify-content-end">
+                <select id="items_per_page" name="items_per_page" class="form-select" onchange="this.form.submit()">
+                    <option value="10" {{ request('items_per_page') == '10' ? 'selected' : '' }}>10</option>
+                    <option value="20" {{ request('items_per_page') == '20' ? 'selected' : '' }}>20</option>
+                    <option value="50" {{ request('items_per_page') == '50' ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ request('items_per_page') == '100' ? 'selected' : '' }}>100</option>
+                </select>
+            </form>
+        </div><!-- end col -->
+        
+
         <div class="row">
             @foreach($tools as $tool)
             <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
@@ -160,6 +174,41 @@
                 </div>
             </div>
             @endforeach
+            <div class="d-flex justify-content-center mt-4">
+                <div class="row g-0 text-center text-sm-start align-items-center mb-4">
+                    <div class="col-sm-6">
+                        <div>
+                            <p class="mb-sm-0 text-muted">Showing <span class="fw-semibold">{{ $tools->firstItem() }}</span> to <span
+                                    class="fw-semibold">{{ $tools->lastItem() }}</span> of <span class="fw-semibold text-decoration-underline">{{ $tools->total() }}</span>
+                                entries</p>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                    <div class="col-sm-6">
+                        <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
+                            <!-- Previous page link -->
+                            <li class="page-item {{ $tools->onFirstPage() ? 'disabled' : '' }}">
+                                <a href="{{ $tools->previousPageUrl() }}" class="page-link">Previous</a>
+                            </li>
+            
+                            <!-- Page number links -->
+                            @foreach(range(1, $tools->lastPage()) as $page)
+                                <li class="page-item {{ $tools->currentPage() == $page ? 'active' : '' }}">
+                                    <a href="{{ $tools->url($page) }}" class="page-link">{{ $page }}</a>
+                                </li>
+                            @endforeach
+            
+                            <!-- Next page link -->
+                            <li class="page-item {{ $tools->hasMorePages() ? '' : 'disabled' }}">
+                                <a href="{{ $tools->nextPageUrl() }}" class="page-link">Next</a>
+                            </li>
+                        </ul>
+                    </div><!-- end col -->
+
+                  
+                </div><!-- end row -->
+            </div>
+            
         </div>
     </div>
 
