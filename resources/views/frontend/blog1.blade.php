@@ -78,7 +78,7 @@
             
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title mb-4">Skills</h5>
+                                                    <h5 class="card-title mb-4">Category</h5>
                                                     <div class="d-flex flex-wrap gap-2 fs-15">
                                                         @foreach ($categories as $category)
                                                         <a href="{{ route('category.wise.blog', $category->category) }}" class="badge rounded-pill badge-gradient-purple">{{ $category->category }}</a>
@@ -150,8 +150,12 @@
                                                         <div class="card-body">
                                                             <div class="tab-content text-muted">
                                                                 <div class="tab-pane active" id="today" role="tabpanel">
+                                                                    {{-- Search List --}}
+                                                                    <input type="text" class="form-control search"
+                                                                    placeholder="Search for Content Creator Tools">
+                                                                    <br>
                                                                     @foreach ($blog as $post)
-                                                                    <div class="card mb-0">
+                                                                    <div class="card mb-0 template-card" data-search="{{ strtolower($post->title . ' ' . $post->description) }}">
                                                                         <div class="card-body">                <div class="d-lg-flex align-items-center">                    <div class="flex-shrink-0">                        <div class="avatar-sm rounded">
                                                                         @if($post->thumbnail_image)
                                                                             <img src="{{ asset('storage/' . $post->thumbnail_image) }}" alt="" class="member-img img-fluid d-block rounded">
@@ -171,12 +175,17 @@
                                                                     </div>
                                                                     <br>
                                                                     @endforeach
+
                                                                 </div>
                                                                 <div class="tab-pane" id="weekly" role="tabpanel">
                                                                     <div class="row">
+                                                                         {{-- Search List --}}
+                                                                    <input type="text" class="form-control search1"
+                                                                    placeholder="Search for Content Creator Tools">
+                                                                        
                                                                         @foreach ($blog as $post)
                                                                         <div class="col-4">
-                                                                            <div class="card profile-project-card shadow-none profile-project-primary mb-0">
+                                                                            <div class="card profile-project-card1 shadow-none profile-project-primary mb-0 template-card" data-search="{{ strtolower($post->title . ' ' . $post->description) }}">
                                                                             <div class="card-body">
                                                                                 <div class="d-flex gap-2">
                                                                                     <div class="flex-shrink-0">                    <div class="avatar-lg rounded">
@@ -208,13 +217,15 @@
                                                                         @endforeach
                                                                     </div>
                                                                 </div>
+
+                                                            
                                                              
                                                             </div>
                                                         </div><!-- end card body -->
                                                     </div><!-- end card -->
                                                 </div><!-- end col -->
                                             </div><!-- end row -->
-            
+                                           
                                             
                                         </div>
                                         <!--end col-->
@@ -249,4 +260,58 @@
 
     <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>
-    @endsection
+
+    {{-- SEARCH --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('.search');
+        const templateCards = document.querySelectorAll('.template-card');
+        const searchInput1 = document.querySelector('.search1');
+        const templateCards1 = document.querySelectorAll('.template-card1');
+        const noResultMessage = document.querySelector('.noresult');
+
+        searchInput.addEventListener('keyup', function (event) {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            let found = false;
+
+            templateCards.forEach(function (card) {
+                const searchContent = card.dataset.search;
+                if (searchContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                noResultMessage.style.display = 'block';
+            } else {
+                noResultMessage.style.display = 'none';
+            }
+        });
+
+        searchInput1.addEventListener('keyup', function (event) {
+            const searchTerm = event.target.value.trim().toLowerCase();
+            let found = false;
+
+            templateCards1.forEach(function (card) {
+                const searchContent = card.dataset.search;
+                if (searchContent.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                noResultMessage.style.display = 'block';
+            } else {
+                noResultMessage.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+@endsection
