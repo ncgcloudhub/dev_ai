@@ -114,13 +114,6 @@
                         
                     </div>
 
-
-
-
-
-
-
-
                     {{-- 2nd Col --}}
                     <div class="col-xl-3 col-lg-4">
                         {{-- Attachments --}}
@@ -170,7 +163,6 @@
                         </div>
                         @endif
 
-
                         {{-- Recent Blogs --}}
                         <div class="card border-color-purple">
                             <div class="card-header align-items-center d-flex border-bottom-dashed">
@@ -183,10 +175,14 @@
                                    @foreach ($recents as $recent)
                                    <div class="d-flex align-items-center">
                                     <div class="avatar-xs flex-shrink-0 me-3">
-                                        <img src="{{ asset('storage/' . $recent->thumbnail_image) }}" alt="blog_thumbnail_image" class="img-fluid rounded-circle">
+                                        @if($recent->thumbnail_image)
+                                            <img src="{{ asset('storage/' . $recent->thumbnail_image) }}" alt="blog_thumbnail_image" class="img-fluid rounded-circle">
+                                        @else
+                                            <img src="{{ asset('build/images/blog.gif') }}" alt="" class="img-fluid rounded-circle" data-src="{{ asset('build/images/blog.gif') }}">
+                                        @endif
                                     </div>
                                     <div class="flex-grow-1">
-                                        <h5 class="fs-13 mb-0"><a href="#" class="text-body d-block">{{$recent->title}}</a></h5>
+                                        <h5 class="fs-13 mb-0"><a href="{{ url($recent->route) }}" class="text-body d-block">{{$recent->title}}</a></h5>
                                     </div>
                                 </div>
                                    @endforeach
@@ -211,11 +207,15 @@
                                         <div class="swiper-slide">
                                             <div class="d-flex">
                                                 <div class="flex-shink-0">
-                                                    <img src="{{ asset('storage/' . $relevant->thumbnail_image) }}" alt=""
+                                                    @if($relevant->thumbnail_image)
+                                                        <img src="{{ asset('storage/' . $relevant->thumbnail_image) }}" alt=""
                                                         class="avatar-sm object-fit-cover rounded">
+                                                    @else
+                                                        <img src="{{ asset('build/images/blog.gif') }}" alt="" class="avatar-sm object-fit-cover rounded" data-src="{{ asset('build/images/blog.gif') }}">
+                                                    @endif
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
-                                                    <a href="pages-profile">
+                                                    <a href="{{ url($relevant->route) }}">
                                                         <h5 class="mb-1">{{$relevant->title}}</h5>
                                                     </a>
                                                     <p class="text-muted mb-0"><i class="mdi mdi-ethereum text-primary fs-15"></i>
@@ -273,11 +273,8 @@
 
 @section('script')
     <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
-   
      <!--Swiper slider js-->
      <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-
      <!-- Marketplace init -->
-     <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>    
-
+     <script src="{{ URL::asset('build/js/pages/dashboard-nft.init.js') }}"></script>  
 @endsection
