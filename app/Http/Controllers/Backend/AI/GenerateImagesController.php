@@ -414,29 +414,26 @@ public function ExtractImage(Request $request)
     public function GreetingCard()
     {
         logActivity('Greeting Card', 'accessed Greeting Card');
-        $user_id = Auth::user()->id;
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)->where('festival', 'yes')->get();
-
+    
+        $user = Auth::user(); // Get the authenticated user
+        $user_id = $user->id;
+    
+        // Fetch images related to the user and festival
+        $images = ModelsDalleImageGenerate::where('user_id', $user_id)
+            ->where('festival', 'yes')
+            ->get();
+    
+        // Append the full image URL
         foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure.sas_token');
         }
-
-        $check_user = Auth::user()->role;
-
-        if ($check_user == 'admin') {
-            $get_user = User::where('role', 'admin')->where('id', $user_id)->first();
-            $images_count = $get_user->images_generated;
-        } else {
-            $get_user = User::where('role', 'user')->where('id', $user_id)->first();
-            $images_count = $get_user->images_generated;
-        }
-
-        if ($images_count > 500) {
-            return redirect()->route('all.package');
-        } else {
-            return view('backend.image_generate.eid_card', compact('images', 'get_user'));
-        }
+    
+        return view('backend.image_generate.eid_card', compact('images', 'user'));
     }
+    
 
 
     public function GreetingCardGenerate(Request $request)
