@@ -464,12 +464,15 @@ function sendMessage() {
         const decoder = new TextDecoder();
         let receivedText = '';
 
+        messageContent = formatUserMessage(message);
+
+
         const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         let userMessageHTML = `<li class="chat-list right">
     <div class="conversation-list">
         <div class="user-chat-content">
             <div class="ctext-wrap-content">
-                <p class="mb-0 ctext-content">${message || 'Attached/Pasted Images'}</p>
+                <p class="mb-0 ctext-content">${messageContent}</p>
 `;
 
 // Loop through attached files
@@ -856,6 +859,30 @@ document.addEventListener('click', function(event) {
         lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
     });
+
+    function formatUserMessage(content) {
+    // First, sanitize the input to prevent any unwanted HTML injections or XSS
+    content = DOMPurify.sanitize(content);
+
+    // Ensure any Markdown elements like *italic* or **bold** are converted properly
+    const renderer = new marked.Renderer();
+    
+    // Override the renderer for code blocks to display as plain text
+   
+
+    marked.setOptions({
+        renderer: renderer,
+        breaks: true,  // Allow line breaks
+        gfm: true,     // Allow GitHub Flavored Markdown
+    });
+
+    // Use marked.js to convert markdown to HTML
+    let formattedContent = marked.parse(content);
+
+    // Return the sanitized and converted content
+    return formattedContent;
+}
+
 
     function formatContent(content) {
     // Preprocess content to replace triple backticks with code block tags

@@ -487,6 +487,8 @@ class AIContentCreatorController extends Controller
     // Generate Using Open AI
     public function AIContentCreatorgenerate(Request $input)
     {
+        set_time_limit(300); // Increase to 5 minutes
+
         $template_id = $input->template_id;
         $user = auth()->user();
         $openaiModel = $user->selected_model;
