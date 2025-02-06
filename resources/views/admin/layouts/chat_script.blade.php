@@ -2,7 +2,6 @@
     .btn i {
     pointer-events: none;  /* Prevents icon clicks from stopping the button's click */
 }
-
 </style>
 
 <script>
@@ -471,7 +470,7 @@ function sendMessage() {
         let userMessageHTML = `<li class="chat-list right">
     <div class="conversation-list">
         <div class="user-chat-content">
-            <div class="ctext-wrap-content">
+            <div class="ctext-wrap-content text-start">
                 <p class="mb-0 ctext-content">${messageContent}</p>
 `;
 
@@ -746,43 +745,40 @@ document.addEventListener('click', function(event) {
             const { content, role, created_at, file_path, is_image, id: messageId } = message;
 
              // Format the message content
-             const formattedContent = formatContent(content);
+             const formattedContent = formatUserMessage(content);
 
 
              let messageHTML = `
-    <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
-        <div class="conversation-list">
-            ${role !== 'user' ? `
-                <div class="chat-avatar">
-                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
-                </div>
-            ` : ''}
-            <div class="user-chat-content">
-                <div class="ctext-wrap">
-                    <div class="ctext-wrap-content">
-                        ${content ? `<p id="message-content-${messageId}" class="mb-0 ctext-content">${formattedContent}</p>` : ''}
-                        ${is_image ? `
-                            <a href="javascript:void(0);" onclick="showImageModal('/storage/${file_path}')">
-                                <img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">
-                            </a>
+                <li class="chat-list ${role === 'user' ? 'right' : 'left'}">
+                    <div class="conversation-list">
+                        ${role !== 'user' ? `
+                            <div class="chat-avatar">
+                                <img src="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" alt="">
+                            </div>
                         ` : ''}
-                        ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
-                        <button class="btn btn-success btn-sm speech-btn1" data-target="message-content-${messageId}" title="Read aloud or stop">
-                            <i class="ri-volume-up-line"></i> <!-- Initially a 'read' icon -->
-                        </button>
-                        <button class="btn btn-success btn-sm copy-btn1" data-target="message-content-${messageId}" title="Copy to clipboard">
-                            <i class="ri-file-copy-line"></i>
-                        </button>
-                    </div>       
-        </div>
-        <div class="conversation-name">
-            <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>       
-        </div>
-    </li>
-`;
-
-
-
+                        <div class="user-chat-content">
+                            <div class="ctext-wrap">
+                                <div class="ctext-wrap-content text-start">
+                                    ${content ? `<p id="message-content-${messageId}" class="mb-0 ctext-content">${formattedContent}</p>` : ''}
+                                    ${is_image ? `
+                                        <a href="javascript:void(0);" onclick="showImageModal('/storage/${file_path}')">
+                                            <img src="/storage/${file_path}" alt="Image" style="max-width: 20%; height: auto;">
+                                        </a>
+                                    ` : ''}
+                                    ${file_path && !is_image ? `<p class="mb-0 file-name">File: ${file_path.split('/').pop()}</p>` : ''}
+                                    <button class="btn btn-success btn-sm speech-btn1" data-target="message-content-${messageId}" title="Read aloud or stop">
+                                        <i class="ri-volume-up-line"></i> <!-- Initially a 'read' icon -->
+                                    </button>
+                                    <button class="btn btn-success btn-sm copy-btn1" data-target="message-content-${messageId}" title="Copy to clipboard">
+                                        <i class="ri-file-copy-line"></i>
+                                    </button>
+                                </div>       
+                    </div>
+                    <div class="conversation-name">
+                        <small class="text-muted time">${new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>       
+                    </div>
+                </li>
+            `;
 
             chatConversation.insertAdjacentHTML('beforeend', messageHTML);
         });
