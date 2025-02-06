@@ -2,7 +2,6 @@
     .btn i {
     pointer-events: none;  /* Prevents icon clicks from stopping the button's click */
 }
-
 </style>
 
 <script>
@@ -471,7 +470,7 @@ function sendMessage() {
         let userMessageHTML = `<li class="chat-list right">
     <div class="conversation-list">
         <div class="user-chat-content">
-            <div class="ctext-wrap-content">
+            <div class="ctext-wrap-content text-start">
                 <p class="mb-0 ctext-content">${messageContent}</p>
 `;
 
@@ -759,7 +758,7 @@ document.addEventListener('click', function(event) {
                         ` : ''}
                         <div class="user-chat-content">
                             <div class="ctext-wrap">
-                                <div class="ctext-wrap-content">
+                                <div class="ctext-wrap-content text-start">
                                     ${content ? `<p id="message-content-${messageId}" class="mb-0 ctext-content">${formattedContent}</p>` : ''}
                                     ${is_image ? `
                                         <a href="javascript:void(0);" onclick="showImageModal('/storage/${file_path}')">
