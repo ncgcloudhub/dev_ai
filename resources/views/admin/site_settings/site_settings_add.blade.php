@@ -158,6 +158,25 @@
                         <input type="text" name="banner_text" class="form-control mb-3" id="banner_text" value="{{$setting->banner_text}}" placeholder="Enter Role">
                     </div>
 
+                    {{-- Magic Ball --}}
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Magic Bal (Loading Screen)</h4>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                        
+                            <div class="avatar-xl mx-auto">
+                                <input type="file"
+                                class="filepond filepond-input-circle"
+                                name="magic_ball"
+                                accept="image/png, image/jpeg, image/gif"/>
+                            </div>
+
+                        </div>
+                        <!-- end card body -->
+                    </div>
+
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title mb-0">Footer Logo</h4>
@@ -175,6 +194,8 @@
                         </div>
                         <!-- end card body -->
                     </div>
+                    
+                    
 
                     <div class="col-md-12">
                         <label for="footer_text" class="form-label">Footer Text</label>

@@ -138,3 +138,6 @@ in dynamic_pages, add category text
 
 03/02/2025
 in dynamic_pages, add social text
+
+06/02/2025
+in siteSettings, add magic_ball text
