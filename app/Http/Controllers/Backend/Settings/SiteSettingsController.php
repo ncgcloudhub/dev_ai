@@ -18,7 +18,6 @@ class SiteSettingsController extends Controller
 
     public function SitesettingsStore(Request $request)
     {
-
         $updateData = [];
 
         if ($request->hasFile('favicon')) {
@@ -86,6 +85,17 @@ class SiteSettingsController extends Controller
             $banner_img_Name = time() . '-' . uniqid() . '.' . $banner_img->getClientOriginalExtension();
             $banner_img->move('backend/uploads/site', $banner_img_Name);
             $updateData['banner_img'] = $banner_img_Name;
+        }
+
+        if ($request->hasFile('magic_ball')) {
+            $oldmagic_ball = SiteSettings::findOrFail(1)->magic_ball;
+            if ($oldmagic_ball) {
+                unlink(public_path('backend/uploads/site/' . $oldmagic_ball));
+            }
+            $magic_ball = $request->file('magic_ball');
+            $magic_ball_Name = time() . '-' . uniqid() . '.' . $magic_ball->getClientOriginalExtension();
+            $magic_ball->move('backend/uploads/site', $magic_ball_Name);
+            $updateData['magic_ball'] = $magic_ball_Name;
         }
 
         if ($request->hasFile('footer_logo')) {

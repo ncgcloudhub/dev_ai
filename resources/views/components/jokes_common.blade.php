@@ -29,7 +29,10 @@
 <!-- resources/views/components/magic-ball.blade.php -->
 <div id="magic-ball" class="magic-ball-overlay d-none">
     <div class="magic-ball-content">
-        <img src="{{ asset('backend/giphy2.gif') }}" alt="Loading..." class="magic-ball-gif">
+        @if ($siteSettings->magic_ball)
+        <img src="{{ asset('backend/uploads/site/' . $siteSettings->magic_ball) }}" alt="Loading..." class="magic-ball-gif">
+        @endif
+       
         <p id="joke-text">Fetching a joke...</p>
     </div>
 </div>
