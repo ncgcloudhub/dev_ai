@@ -840,9 +840,7 @@ public function updateSubject(Request $request, $id)
         $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();
     
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
-    }
-    
-    
+    }    
 
     public function showTool($id)
     {
