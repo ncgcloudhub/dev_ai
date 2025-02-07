@@ -40,6 +40,10 @@
 
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
+                                    <button class="btn btn-sm {{ $item->status ? 'btn-success' : 'btn-danger' }} toggle-status" 
+                                        data-id="{{ $item->id }}">
+                                    {{ $item->status ? 'Active' : 'Inactive' }}
+                                    </button>
                                     <a href="{{ route('ai.settings.edit', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
                                     <a href="{{ route('ai.settings.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this Model')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
                                 </div>
@@ -104,4 +108,31 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        $('.toggle-status').on('click', function () {
+            var button = $(this);
+            var id = button.data('id');
+    
+            $.ajax({
+                url: "{{ route('ai.settings.toggle-status') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id
+                },
+                success: function (response) {
+                    if (response.success) {
+                        if (response.status) {
+                            button.removeClass('btn-danger').addClass('btn-success').text('Active');
+                        } else {
+                            button.removeClass('btn-success').addClass('btn-danger').text('Inactive');
+                        }
+                    }
+                }
+            });
+        });
+    });
+    </script>
+    
 @endsection

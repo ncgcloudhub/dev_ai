@@ -56,20 +56,35 @@
     </div>
 
     <div class="col-xl-8 col-md-12 px-3">
-        <div class="row justify-content-center">
-            <form>
-                <div class="row g-3 justify-content-center my-3">
-                    <div class="col">
-                        <div class="search-box" id="search-tour">
-                            <input type="text" class="form-control search border-color-purple"
-                                placeholder="Search for Templates">
-                            <i class="ri-search-line search-icon color-purple"></i>
+        <div class="row justify-content-center">  
+            <div class="row g-3 justify-content-center my-3">
+                <div class="col">
+                    <div class="d-flex align-items-center mb-3">
+                        <!-- Items per page dropdown -->
+                        <div class="me-3">
+                            <select id="itemsPerPage" class="form-select w-auto">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="9999">All</option> <!-- Large value for "All" -->
+                            </select>
                         </div>
-                    </div>
-                    <!--end col-->
+            
+                        <!-- Search box takes full width -->
+                        <div class="flex-grow-1 position-relative">
+                            <input id="searchInput" 
+                                   type="text" 
+                                   class="form-control search border-color-purple w-100" 
+                                   placeholder="Search for Templates">
+                            <i class="ri-search-line search-icon color-purple position-absolute top-50 end-0 translate-middle-y me-2"></i>
+                        </div>
+                    </div>               
                 </div>
+                <!--end col-->
+            </div>
+            
                 <!--end row-->
-            </form>
 
             <div class="noresult my-2" style="display: none">
                 <div class="text-center">
@@ -108,108 +123,28 @@
             </div>
             {{-- 2nd Col END--}}
         </div>
-
-        <div class="col-sm-2 mb-3">
-            <!-- Label and Dropdown to select items per page -->
-            <label for="items_per_page" class="form-label">Tools Per Page</label>
-            <form method="GET" class="d-flex justify-content-end">
-                <select id="items_per_page" name="items_per_page" class="form-select" onchange="this.form.submit()">
-                    <option value="10" {{ request('items_per_page') == '10' ? 'selected' : '' }}>10</option>
-                    <option value="20" {{ request('items_per_page') == '20' ? 'selected' : '' }}>20</option>
-                    <option value="50" {{ request('items_per_page') == '50' ? 'selected' : '' }}>50</option>
-                    <option value="100" {{ request('items_per_page') == '100' ? 'selected' : '' }}>100</option>
-                </select>
-            </form>
-        </div><!-- end col -->
         
-
-        <div class="row">
+        <div class="row" id="toolGrid">
             @foreach($tools as $tool)
-            <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
-                <div class="card explore-box card-animate">
-                    <div class="bookmark-icon position-absolute top-0 end-0 p-2">
-                        <button type="button" class="btn btn-icon" data-bs-toggle="button" aria-pressed="true">
-                            <i class="mdi mdi-cards-heart fs-16"></i>
-                        </button>
-                    </div>
-                    <div class="explore-place-bid-img">
-                        <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" alt="" class="card-img-top explore-img" loading="lazy" />
-                        <div class="bg-overlay"></div>
-                        <div class="place-bid-btn">
-                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary">
-                                <i class="ri-auction-fill align-bottom me-1"></i>Explore
-                            </a>
-                            @if(Auth::user()->role === 'admin')
-                                @can('education.manageTools.edit')
-                                    <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
-                                        <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
-                                    </a>
-                                @endcan
-                            
-                                @can('education.manageTools.delete')
-                                    <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                            <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
-                                        </button>
-                                    </form>
-                                @endcan
-                           
-                            @endif
+                <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" 
+                     data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
+                    <div class="card explore-box card-animate">
+                        <div class="explore-place-bid-img">
+                            <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
+                                 alt="" class="card-img-top explore-img" loading="lazy" />
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <p class="fw-medium mb-0 float-end favorite-wrapper">
-                            <button class="favorite-button" data-id="{{ $tool->id }}" style="border: none; background: none; cursor: pointer;">
-                                <i class="{{ $tool->is_favorited ? 'mdi mdi-heart' : 'mdi mdi-heart-outline' }} text-danger align-middle"></i>
-                            </button>
-                           
-                        </p>
-                        <h5 class="mb-1 fs-16">
-                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
-                        </h5>
-                        <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
+                        <div class="card-body">
+                            <h5 class="mb-1 fs-16">
+                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" 
+                                   class="text-body">{{ $tool->name }}</a>
+                            </h5>
+                            <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
             @endforeach
-            <div class="d-flex justify-content-center mt-4">
-                <div class="row g-0 text-center text-sm-start align-items-center mb-4">
-                    <div class="col-sm-6">
-                        <div>
-                            <p class="mb-sm-0 text-muted">Showing <span class="fw-semibold">{{ $tools->firstItem() }}</span> to <span
-                                    class="fw-semibold">{{ $tools->lastItem() }}</span> of <span class="fw-semibold text-decoration-underline">{{ $tools->total() }}</span>
-                                entries</p>
-                        </div>
-                    </div>
-                    <!-- end col -->
-                    <div class="col-sm-6">
-                        <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
-                            <!-- Previous page link -->
-                            <li class="page-item {{ $tools->onFirstPage() ? 'disabled' : '' }}">
-                                <a href="{{ $tools->previousPageUrl() }}" class="page-link">Previous</a>
-                            </li>
-            
-                            <!-- Page number links -->
-                            @foreach(range(1, $tools->lastPage()) as $page)
-                                <li class="page-item {{ $tools->currentPage() == $page ? 'active' : '' }}">
-                                    <a href="{{ $tools->url($page) }}" class="page-link">{{ $page }}</a>
-                                </li>
-                            @endforeach
-            
-                            <!-- Next page link -->
-                            <li class="page-item {{ $tools->hasMorePages() ? '' : 'disabled' }}">
-                                <a href="{{ $tools->nextPageUrl() }}" class="page-link">Next</a>
-                            </li>
-                        </ul>
-                    </div><!-- end col -->
-
-                  
-                </div><!-- end row -->
-            </div>
-            
         </div>
+        
     </div>
 
     <div class="col-xl-2 col-md-12 mb-3 mt-3">
@@ -318,4 +253,42 @@
 });
 
 </script>
+
+
+<script>
+    $(document).ready(function () {
+        let itemsPerPage = 10; // Default items to show
+    
+        function updateGrid() {
+            let searchValue = $("#searchInput").val().toLowerCase();
+            let items = $(".product-item");
+            let visibleCount = 0;
+    
+            items.each(function () {
+                let matchesSearch = $(this).attr("data-search").toLowerCase().includes(searchValue);
+                if (matchesSearch && visibleCount < itemsPerPage) {
+                    $(this).show();
+                    visibleCount++;
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    
+        // Search functionality
+        $("#searchInput").on("keyup", function () {
+            updateGrid();
+        });
+    
+        // Change items per page
+        $("#itemsPerPage").on("change", function () {
+            itemsPerPage = parseInt($(this).val());
+            updateGrid();
+        });
+    
+        // Initialize on page load
+        updateGrid();
+    });
+    </script>
+    
 @endsection

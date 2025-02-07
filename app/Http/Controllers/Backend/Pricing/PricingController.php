@@ -32,7 +32,7 @@ class PricingController extends Controller
     public function addPricingPlan()
     {
         $totalTemplates = Template::count();
-        $models = AISettings::latest()->get();
+        $models = AISettings::where('status', 1)->get();
         return view('backend.pricing.add_pricing_plan', compact('totalTemplates','models'));
     }
 
