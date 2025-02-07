@@ -130,13 +130,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::prefix('settings/OpenAI')->group(function () {
 
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('admin.permission:settings.AISettings');
-
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
-
         Route::get('/edit/{id}', [AISettingsController::class, 'AIsettingsEdit'])->name('ai.settings.edit');
-
         Route::post('/update', [AISettingsController::class, 'AIsettingsUpdate'])->name('ai.settings.update');
-    
+        Route::post('/toggle-status', [AISettingsController::class, 'toggleStatus'])->name('ai.settings.toggle-status');
         Route::get('/delete/{id}', [AISettingsController::class, 'AIsettingsDelete'])->name('ai.settings.delete');
     });
 

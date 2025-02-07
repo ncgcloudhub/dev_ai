@@ -69,6 +69,15 @@ class AISettingsController extends Controller
         return redirect()->back()->with($notification);
     }
 
+    public function toggleStatus(Request $request)
+    {
+        $item = AISettings::findOrFail($request->id);
+        $item->status = !$item->status; // Toggle status
+        $item->save();
+
+        return response()->json(['success' => true, 'status' => $item->status]);
+    }
+
     public function AIsettingsDelete($id)
     {
 
