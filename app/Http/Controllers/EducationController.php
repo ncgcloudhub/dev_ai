@@ -834,15 +834,7 @@ public function updateSubject(Request $request, $id)
     {
         logActivity('Education Tools', 'accessed the education tools');
     
-        // Get the number of items per page from the request, default to 10 if not set
-        $itemsPerPage = $request->input('items_per_page', 10);
-    
-        $tools = EducationTools::paginate($itemsPerPage)->through(function ($tool) {
-            $imagePath = 'public/' . $tool->image;
-            $tool->image_version = Storage::exists($imagePath) ? Storage::lastModified($imagePath) : time();
-            return $tool;
-        });
-    
+        $tools = EducationTools::latest()->get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
         $newTools = EducationTools::orderBy('id', 'DESC')->limit(5)->get();
         $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();

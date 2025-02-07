@@ -63,8 +63,8 @@
                         <!-- Items per page dropdown -->
                         <div class="me-3">
                             <select id="itemsPerPage" class="form-select w-auto">
-                                <option value="10" selected>10</option>
-                                <option value="20">20</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                                 <option value="9999">All</option> <!-- Large value for "All" -->
@@ -187,7 +187,7 @@
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/pages/nft-landing.init.js') }}"></script>
 
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.querySelector('.search');
         const templateCards = document.querySelectorAll('.template-card');
@@ -214,7 +214,7 @@
             }
         });
     });
-</script>
+</script> --}}
 
 <script>
     $(document).ready(function() {
@@ -257,7 +257,7 @@
 
 <script>
     $(document).ready(function () {
-        let itemsPerPage = 10; // Default items to show
+        let itemsPerPage = 1; // Default items to show
     
         function updateGrid() {
             let searchValue = $("#searchInput").val().toLowerCase();
