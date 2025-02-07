@@ -144,6 +144,9 @@
                 </div>
             @endforeach
         </div>
+        <div id="paginationControls" class="pagination justify-content-center mt-3">
+            <!-- Pagination buttons will be dynamically inserted here -->
+        </div>
         
     </div>
 
@@ -256,39 +259,82 @@
 
 
 <script>
-    $(document).ready(function () {
-        let itemsPerPage = 1; // Default items to show
-    
-        function updateGrid() {
-            let searchValue = $("#searchInput").val().toLowerCase();
-            let items = $(".product-item");
-            let visibleCount = 0;
-    
-            items.each(function () {
-                let matchesSearch = $(this).attr("data-search").toLowerCase().includes(searchValue);
-                if (matchesSearch && visibleCount < itemsPerPage) {
+   $(document).ready(function () {
+    let itemsPerPage = 1; // Default items to show
+    let currentPage = 1; // Current page
+
+    function updateGrid() {
+        let searchValue = $("#searchInput").val().toLowerCase();
+        let items = $(".product-item");
+        let totalVisibleItems = 0;
+
+        // Hide all items first
+        items.hide();
+
+        // Filter items based on search
+        items.each(function () {
+            let matchesSearch = $(this).attr("data-search").toLowerCase().includes(searchValue);
+            if (matchesSearch) {
+                totalVisibleItems++; // Count total visible items for pagination
+            }
+        });
+
+        // Calculate the range of items to show for the current page
+        let startIndex = (currentPage - 1) * itemsPerPage;
+        let endIndex = startIndex + itemsPerPage;
+        let visibleCount = 0;
+
+        // Show items within the current page range
+        items.each(function () {
+            if ($(this).attr("data-search").toLowerCase().includes(searchValue)) {
+                if (visibleCount >= startIndex && visibleCount < endIndex) {
                     $(this).show();
-                    visibleCount++;
-                } else {
-                    $(this).hide();
                 }
-            });
+                visibleCount++;
+            }
+        });
+
+        // Update pagination controls
+        updatePaginationControls(totalVisibleItems);
+    }
+
+    function updatePaginationControls(totalVisibleItems) {
+        let totalPages = Math.ceil(totalVisibleItems / itemsPerPage);
+        let paginationHtml = '';
+
+        if (totalPages > 1) {
+            paginationHtml += `<button class="page-item page-link" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">Previous</button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `<button class="page-item page-link ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            paginationHtml += `<button class="page-item page-link" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">Next</button>`;
         }
-    
-        // Search functionality
-        $("#searchInput").on("keyup", function () {
-            updateGrid();
-        });
-    
-        // Change items per page
-        $("#itemsPerPage").on("change", function () {
-            itemsPerPage = parseInt($(this).val());
-            updateGrid();
-        });
-    
-        // Initialize on page load
+
+        $("#paginationControls").html(paginationHtml);
+    }
+
+    // Change page function
+    window.changePage = function (page) {
+        currentPage = page;
+        updateGrid();
+    };
+
+    // Search functionality
+    $("#searchInput").on("keyup", function () {
+        currentPage = 1; // Reset to first page on search
         updateGrid();
     });
+
+    // Change items per page
+    $("#itemsPerPage").on("change", function () {
+        itemsPerPage = parseInt($(this).val());
+        currentPage = 1; // Reset to first page on items per page change
+        updateGrid();
+    });
+
+    // Initialize on page load
+    updateGrid();
+});
     </script>
     
 @endsection
