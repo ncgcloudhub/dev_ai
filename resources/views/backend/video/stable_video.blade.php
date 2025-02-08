@@ -7,126 +7,83 @@
 @slot('title') Generate Animated Video @endslot
 @endcomponent
 
-<div class="row">
-    <div class="col-xxl-6">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Image to Video Generation</h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Select Image</label>
-                        <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
-                        <small class="text-danger d-none" id="resolution-error">Please upload an image with one of the following resolutions: 1024x576, 576x1024, or 768x768.</small>
-                    </div>
-                    <div class="mb-3">
-                        <label for="seed" class="form-label">Seed</label>
-                        <input type="number" name="seed" id="seed" class="form-control" value="0">
-                    </div>
-                    <div class="mb-3">
-                        <label for="cfg_scale" class="form-label">CFG Scale</label>
-                        <input type="number" name="cfg_scale" id="cfg_scale" class="form-control" value="1.8" step="0.1">
-                    </div>
-                    <div class="mb-3">
-                        <label for="motion_bucket_id" class="form-label">Motion Bucket ID</label>
-                        <input type="number" name="motion_bucket_id" id="motion_bucket_id" class="form-control" value="127">
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-rounded gradient-btn-save">Generate Video</button>
-                    </div>
-                </form>
-              
-            </div>
+<style>
+    body {
+        background: linear-gradient(to right, #1a0a24, #3a0750);
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+</style>
+
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="text-white"><strong>Text/Image to Video</strong></h1>
+                <h2 class="gradient-text-3">Transform your Text & Images into stunning videos</h2>
+                <p>Elevate your creativity with our AI tool that converts text and images into high-quality videos. Effortlessly generate engaging video content for presentations, social media, and more.</p>
+        <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
+            @csrf
+            <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Video"></textarea><br>
+            <button type="submit" class="btn gradient-btn-3">Generate</button>
+        </form>
+        </div>
+        <div class="col-md-6">
+            <img src="https://img.freepik.com/free-photo/bright-neon-colors-shining-wild-chameleon_23-2151682784.jpg" alt="Before and After" class="before-after">
         </div>
     </div>
-
-    <div class="col-xxl-6">
-        <div class="card">
-            <div id="videoContainer" style="margin-top: 20px; display: none;">
-                <h5>Generated Video</h5>
-                <video id="generatedVideo" controls>
-                    <source id="videoSource" src="" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+    <div class="text-center mt-5">
+        <h3 class="text-white">Use Cases</h3>
+        <p>Attain heightened levels of clarity and intricacy in your AI creations, photographs, and illustrations.</p>
+        <div class="d-flex justify-content-center flex-wrap">
+            <button class="use-case-btn">Portraits</button>
+            <button class="use-case-btn">Illustration</button>
+            <button class="use-case-btn">Landscapes</button>
+            <button class="use-case-btn">Design</button>
+            <button class="use-case-btn">Food</button>
+            <button class="use-case-btn">More</button>
         </div>
     </div>
-
 </div>
 @endsection
 
 @section('script')
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
-
 <script>
-    document.getElementById('image').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        const errorElement = document.getElementById('resolution-error');
-        
-        if (file) {
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = function () {
-                const { width, height } = img;
 
-                // Allowed resolutions
-                const allowedResolutions = [
-                    { width: 1024, height: 576 },
-                    { width: 576, height: 1024 },
-                    { width: 768, height: 768 },
-                ];
-
-                // Check if the resolution matches any of the allowed resolutions
-                const isValid = allowedResolutions.some(
-                    (res) => res.width === width && res.height === height
-                );
-
-                if (!isValid) {
-                    errorElement.classList.remove('d-none');
-                    event.target.value = ''; // Clear the invalid file
-                } else {
-                    errorElement.classList.add('d-none');
-                }
-
-                URL.revokeObjectURL(img.src); // Free memory
-            };
-        }
-    });
-</script>
-
-<script>
-    document.getElementById('videoGenerationForm').addEventListener('submit', async (event) => {
+    const apiKey = @json($apiKey); // Loaded from environment variable
+    
+    
+        document.querySelector('form').addEventListener('submit', async (event) => {
         event.preventDefault();
-        
-        const form = event.target;
-        const formData = new FormData(form);
-
+        const formData = new FormData(event.target);
+    
         try {
-            const response = await fetch("{{ route('generate.video') }}", {
+            const response = await fetch("{{ route('generate.image_to_video') }}", {
                 method: "POST",
                 body: formData,
             });
-
             const result = await response.json();
-
-            if (response.ok && result.id) {
-                fetchVideo(result.id);
+    
+            if (response.ok) {
+                console.log('video generated id:', result.generation_id);
+    
+                // Poll for video result
+                fetchVideo(result.generation_id);
             } else {
-                alert('Error: ' + (result.error?.message || 'Unknown error occurred'));
+                console.error('Error:', result.error);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Request failed:', error);
         }
     });
-
-    const apiKey = @json($apiKey);
-
+    
     function fetchVideo(generationId) {
-        const pollingInterval = 10000;
-
+        // Polling interval (in milliseconds)
+        const pollingInterval = 10000; // 10 seconds
+    
+        // Start polling
         const pollForVideo = setInterval(() => {
             fetch(`https://api.stability.ai/v2beta/image-to-video/result/${generationId}`, {
                 method: 'GET',
@@ -137,20 +94,23 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.finish_reason === 'SUCCESS') {
+                // Handle case when the video is ready
+                if (data && data.finish_reason === 'SUCCESS') {
+                    console.log('Video is ready! Base64 video data:', data.video);
+    
+                    // Decode the base64 video and display or download it
                     const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
                     const videoUrl = URL.createObjectURL(videoBlob);
-
-                    const videoElement = document.getElementById('generatedVideo');
-                    const videoContainer = document.getElementById('videoContainer');
-                    const videoSource = document.getElementById('videoSource');
-
-                    videoSource.src = videoUrl;
-                    videoElement.load();
-                    videoContainer.style.display = 'block';
-
+    
+                    // Display video in the browser (you can adjust this as needed)
+                    const videoElement = document.createElement('video');
+                    videoElement.src = videoUrl;
+                    videoElement.controls = true;
+                    document.body.appendChild(videoElement);
+    
+                    // Stop polling after success
                     clearInterval(pollForVideo);
-                } else if (data.status === 'in-progress') {
+                } else if (data && data.status === 'in-progress') {
                     console.log('Video generation still in progress...');
                 } else {
                     console.error('Error fetching video:', data);
@@ -163,5 +123,7 @@
             });
         }, pollingInterval);
     }
-</script>
+    
+    </script>
+
 @endsection
