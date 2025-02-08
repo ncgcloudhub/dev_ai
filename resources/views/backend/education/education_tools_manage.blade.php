@@ -63,8 +63,8 @@
                         <!-- Items per page dropdown -->
                         <div class="me-3">
                             <select id="itemsPerPage" class="form-select w-auto">
-                                <option value="1" selected>1</option>
-                                <option value="2">2</option>
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                                 <option value="9999">All</option> <!-- Large value for "All" -->
@@ -260,7 +260,7 @@
 
 <script>
    $(document).ready(function () {
-    let itemsPerPage = 1; // Default items to show
+    let itemsPerPage = 10; // Default items to show
     let currentPage = 1; // Current page
 
     function updateGrid() {
