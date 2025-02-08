@@ -503,3 +503,15 @@
     color: #be06af !important;
 }
 
+.use-case-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 5px;
+}
+.use-case-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
