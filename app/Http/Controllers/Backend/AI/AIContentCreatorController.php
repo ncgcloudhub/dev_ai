@@ -612,7 +612,7 @@ class AIContentCreatorController extends Controller
         // Initialize the OpenAI client and request parameters
         $result = $client->chat()->create([
             "model" => $openaiModel,
-            "temperature" => floatval($temperature_value),
+            // "temperature" => floatval($temperature_value),
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
