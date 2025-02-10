@@ -32,11 +32,15 @@
     <link rel="shortcut icon" href="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}">
 
     <!-- Open Graph meta tags for sharing -->
-    <meta property="og:title" content="Clever Creator" />
-    <meta property="og:description" content="Clever Creator" />
+    <meta property="og:title" content="Clever Creator AI" />
+    <meta property="og:site_name" content="Clever Creator AI">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://clevercreator.ai/">
+    <meta property="og:description" content="Clever Creator AI" />
     <meta property="og:image" content="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" />
     
 
+    
     @include('admin.layouts.head-css')
   </head>
 
