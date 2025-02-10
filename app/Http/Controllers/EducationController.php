@@ -376,7 +376,6 @@ public function updateContent(Request $request, $id)
 
     return $pdf->download($fileName);
 }
-
     
     
     public function markAsComplete(Request $request, $id)
@@ -1083,6 +1082,26 @@ public function updateSubject(Request $request, $id)
         return redirect()->route('manage.education.tools')->with($notification);
     }
     
+    public function EduToolsSEOUpdate(Request $request)
+    {
+        $id = $request->id;
+
+        $validatedData = $request->validate([
+            'page_title' => 'nullable|string',          
+            'page_description' => 'nullable|string', 
+            'page_tagging' => 'nullable|string', 
+        ]);
+
+        $tool = EducationTools::findOrFail($id);
+      
+        $tool->page_title = $validatedData['page_title'] ?? null;
+        $tool->page_description = $validatedData['page_description'] ?? null;
+        $tool->page_tagging = $validatedData['page_tagging'] ?? null;        
+        $tool->save();
+
+        return redirect()->back()->with('success', 'Tools SEO updated successfully');
+    } // end method 
+
 
     public function getToolContent($id)
     {

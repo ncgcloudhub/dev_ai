@@ -382,6 +382,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
 
+        Route::post('/seo/update', [EducationController::class, 'EduToolsSEOUpdate'])->name('edu.tools.seo.update');
+
         // Education Tools Category
 
         Route::get('/tools/category/add', [EducationController::class, 'EducationToolsCategoryAdd'])->name('education.tools.category.add');
