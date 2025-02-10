@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Models\ButtonStyle;
 use Illuminate\Http\Request;
 use App\Models\SiteSettings;
 use Illuminate\Support\Carbon;
@@ -12,8 +13,9 @@ class SiteSettingsController extends Controller
     public function SitesettingsAdd()
     {
         $setting = SiteSettings::find(1);
+        $buttonStyles = ButtonStyle::all();
 
-        return view('admin.site_settings.site_settings_add', compact('setting'));
+        return view('admin.site_settings.site_settings_add', compact('setting','buttonStyles'));
     }
 
     public function SitesettingsStore(Request $request)
