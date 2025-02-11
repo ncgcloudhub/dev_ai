@@ -111,7 +111,7 @@
                     videoElement.controls = true;
                     videoElement.autoplay = true;
                     videoElement.style.width = imgElement.clientWidth + 'px';
-                    videoElement.style.height = imgElement.clientHeight + 'px';
+                    videoElement.style.height = 'auto'; // Maintain aspect ratio 
 
                     // Replace the image with the video
                     imgElement.replaceWith(videoElement);
