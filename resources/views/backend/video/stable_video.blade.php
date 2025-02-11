@@ -101,12 +101,21 @@
                     // Decode the base64 video and display or download it
                     const videoBlob = new Blob([new Uint8Array(atob(data.video).split("").map(c => c.charCodeAt(0)))], { type: 'video/mp4' });
                     const videoUrl = URL.createObjectURL(videoBlob);
-    
-                    // Display video in the browser (you can adjust this as needed)
+                    
+                    const imgElement = document.querySelector('.before-after');
+
+                  if (imgElement) {
+                    // Create a new video element
                     const videoElement = document.createElement('video');
                     videoElement.src = videoUrl;
                     videoElement.controls = true;
-                    document.body.appendChild(videoElement);
+                    videoElement.autoplay = true;
+                    videoElement.style.width = imgElement.clientWidth + 'px';
+                    videoElement.style.height = imgElement.clientHeight + 'px';
+
+                    // Replace the image with the video
+                    imgElement.replaceWith(videoElement);
+                }
     
                     // Stop polling after success
                     clearInterval(pollForVideo);
