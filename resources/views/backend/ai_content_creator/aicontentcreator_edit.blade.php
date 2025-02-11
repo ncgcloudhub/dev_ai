@@ -194,6 +194,7 @@
                                 <form method="POST" action="{{ route('aicontentcreator.seo.update') }}" class="row g-3">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $template->id }}">
+                                    <input type="hidden" id="modelType" value="aicontent">
                                 
                                 <!-- Page Title -->
                                     <div class="col-12">
@@ -360,10 +361,11 @@
     // SEO with AI
     $(document).ready(function() {
         $('#populateBtn').on('click', function() {
-            let templateId = $('input[name="id"]').val(); // Get the template ID from the hidden input
+            let modelType = $('#modelType').val(); // Dynamically get model type
+            let recordId = $('input[name="id"]').val(); 
 
-            $.ajax({
-                url: '/ai-content-creator/seo/fetch/' + templateId, // Adjust the URL if needed
+        $.ajax({
+            url: '/ai-content-creator/seo/fetch/' + recordId + '/' + modelType,
                 method: 'GET',
                 success: function(response) {
                     if (response.success) {

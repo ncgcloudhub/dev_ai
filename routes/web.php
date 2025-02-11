@@ -218,7 +218,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
 
-        Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
+        Route::get('/seo/fetch/{id}/{modelType}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
         Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign')->middleware('admin.permission:settings.frontEndDesign');
 
