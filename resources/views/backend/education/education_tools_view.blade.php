@@ -110,17 +110,21 @@
                                 <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
                     
                                 @if ($input_type == 'textarea')
-                                    <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" 
+                                <div class="position-relative">
+                                    <textarea class="form-control pe-5" id="input_{{ $index }}" name="input_{{ $index }}" rows="4"
                                         placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required></textarea>
-                                        <button type="button" class="speech-btn btn btn-link">
-                                            <i class="mic-icon ri-mic-line fs-4"></i>
-                                        </button>
-                                @else
-                                    <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" 
-                                        placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required>
-                                    <button type="button" class="speech-btn btn btn-link">
+                                    <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
                                         <i class="mic-icon ri-mic-line fs-4"></i>
                                     </button>
+                                </div>
+                                @else
+                                <div class="position-relative">
+                                    <input type="{{ $input_type }}" class="form-control pe-5" id="input_{{ $index }}" name="input_{{ $index }}"
+                                        placeholder="{{ json_decode($tool->input_placeholders)[$index] }}" required>
+                                    <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                        <i class="mic-icon ri-mic-line fs-4"></i>
+                                    </button>
+                                </div>
                                 @endif
                             </div>
                         @endforeach

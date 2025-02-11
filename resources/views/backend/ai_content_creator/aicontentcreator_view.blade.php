@@ -95,10 +95,14 @@
                                         
                                         @if($type == 'text')
                                             <!-- Input Field -->
-                                            <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
-                                            <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
-                                                <i class="mic-icon ri-mic-line fs-4"></i>
-                                            </button>
+                                            <div class="position-relative">
+                                                <input type="text" name="{{ $inputNames[$key] }}" class="form-control pe-5" id="{{ $inputNames[$key] }}" 
+                                                    placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
+                                                <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                    <i class="mic-icon ri-mic-line fs-4"></i>
+                                                </button>
+                                            </div>
+                                            
                                         @elseif($type == 'textarea')
                                             <!-- Textarea Field -->
                                             <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
