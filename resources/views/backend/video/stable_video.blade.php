@@ -191,7 +191,7 @@
             toggleButton.addEventListener("click", function() {
                 if (isTextToVideo) {
                     headingText.textContent = "Image to Video"; // Change heading text
-                    subheadingText.textContent = "Transform your Text into stunning videos";
+                    subheadingText.textContent = "Transform your Images into stunning videos";
                     pText.textContent = "Please upload an image with one of the following resolutions: 1024x576, 576x1024, or 768x768."; 
                     toggleButton.textContent = "Text to Video";
                     textVideoForm.style.display = "none"; // Hide Text to Video form
