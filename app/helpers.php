@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ButtonStyle;
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\RequestModuleFeedback;
@@ -331,6 +332,12 @@ if (!function_exists('logActivity')) {
     }
 }
 
+if (!function_exists('getButtonClass')) {
+    function getButtonClass($type)
+    {
+        return ButtonStyle::where('button_type', $type)->where('is_selected', true)->value('class_name') ?? 'btn btn-default';
+    }
+}
 
     
 

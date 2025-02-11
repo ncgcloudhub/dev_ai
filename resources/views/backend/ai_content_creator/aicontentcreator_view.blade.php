@@ -19,7 +19,6 @@
 </button>
 
 <button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
-<button id="generatedContents" type="button" class="btn gradient-btn-6 text-white my-2" data-bs-toggle="modal" data-bs-target="#subscribeModals">{{$Template->template_name}} Contents</button>
 
 <div class="row">
    
@@ -95,10 +94,14 @@
                                         
                                         @if($type == 'text')
                                             <!-- Input Field -->
-                                            <input type="text" name="{{ $inputNames[$key] }}" class="form-control" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
-                                            <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
-                                                <i class="mic-icon ri-mic-line fs-4"></i>
-                                            </button>
+                                            <div class="position-relative">
+                                                <input type="text" name="{{ $inputNames[$key] }}" class="form-control pe-5" id="{{ $inputNames[$key] }}" 
+                                                    placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" required>
+                                                <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                                                    <i class="mic-icon ri-mic-line fs-4"></i>
+                                                </button>
+                                            </div>
+                                            
                                         @elseif($type == 'textarea')
                                             <!-- Textarea Field -->
                                             <textarea class="form-control" name="{{ $inputNames[$key] }}" id="{{ $inputNames[$key] }}" placeholder="{{ $inputPlaceholders[$key] ?? $inputLabels[$key] }}" rows="3" required></textarea>
@@ -289,23 +292,29 @@
 
            <div class="col">
                <!-- Wrapper to place buttons side by side -->
-                <div class="d-flex">
-                    <!-- Copy Content Button -->
-                    <button id="copyButton" class="btn text-white gradient-btn-5 mx-1 copy-toast-btn" title="Copy the generated Content">
-                        <i class="las la-copy"></i>
+               <div class="d-flex align-items-center gap-2 flex-wrap">
+                <!-- Copy Content Button -->
+                <button id="copyButton" class="btn text-white gradient-btn-5 copy-toast-btn" title="Copy the generated Content">
+                    <i class="las la-copy"></i>
+                </button>
+            
+                <!-- Dropdown for file type selection -->
+                <div class="dropdown">
+                    <button id="downloadButton" class="btn text-white gradient-btn-5 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Download the generated Content">
+                        <i class="las la-download"></i>
                     </button>
-
-                    <!-- Dropdown for file type selection -->
-                    <div class="dropdown">
-                        <button id="downloadButton" class="btn text-white gradient-btn-5 mx-1 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Download the generated Content">
-                            <i class="las la-download"></i>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="downloadButton">
-                            <li><a class="dropdown-item" href="#" id="downloadAsPdf">Download As PDF</a></li>
-                            <li><a class="dropdown-item" href="#" id="downloadAsDoc">Download As DOC</a></li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="downloadButton">
+                        <li><a class="dropdown-item" href="#" id="downloadAsPdf">Download As PDF</a></li>
+                        <li><a class="dropdown-item" href="#" id="downloadAsDoc">Download As DOC</a></li>
+                    </ul>
                 </div>
+            
+                <!-- History Button -->
+                <button id="generatedContents" type="button" class="btn gradient-btn-6 text-white" data-bs-toggle="modal" data-bs-target="#subscribeModals">
+                    {{$Template->template_name}} History
+                </button>
+            </div>
+            
 
 
                  {{-- Generated Contents Modal --}}

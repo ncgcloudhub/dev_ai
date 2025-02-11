@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\TemplateCategory;
 use App\Models\Template;
 use App\Models\AISettings;
+use App\Models\EducationTools;
 use App\Models\NewsLetter;
 use App\Models\RatingTemplate;
 use App\Models\Referral;
@@ -407,12 +408,42 @@ class AIContentCreatorController extends Controller
 
 
     // SEO AUTO FILL with AI
-    public function fetchTemplate(Request $request, $id)
+    public function fetchTemplate(Request $request, $id, $modelType)
     { 
-        // Fetch the template details by ID
-        $template = Template::find($id);
-        $template_name = $template->template_name;
-        $description = $template->description;
+        // Define the allowed models and their field mappings
+        $allowedModels = [
+            'aicontent' => [
+                'class' => Template::class,
+                'name_field' => 'template_name',
+                'description_field' => 'description',
+            ],
+            'education' => [
+                'class' => EducationTools::class,
+                'name_field' => 'name',
+                'description_field' => 'details',
+            ],
+        ];
+
+        // Validate if the provided model type exists
+        if (!isset($allowedModels[$modelType])) {
+            return response()->json(['success' => false, 'message' => 'Invalid model type.'], 400);
+        }
+
+        // Fetch the record dynamically
+        $modelConfig = $allowedModels[$modelType];
+        $modelClass = $modelConfig['class'];
+        $record = $modelClass::find($id);
+
+        if (!$record) {
+            return response()->json(['success' => false, 'message' => 'Record not found.'], 404);
+        }
+
+        // Extract relevant fields dynamically based on the model type
+        $nameField = $modelConfig['name_field'];
+        $descriptionField = $modelConfig['description_field'];
+
+        $template_name = $record->$nameField ?? 'Unknown Name';
+        $description = $record->$descriptionField ?? 'No description available';
        
         $user = auth()->user();
         $openaiModel = $user->selected_model;

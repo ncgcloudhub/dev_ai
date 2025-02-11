@@ -31,6 +31,7 @@ use App\Http\Controllers\Backend\RatingController;
 use App\Http\Controllers\Backend\SEO\PageSeoController;
 use App\Http\Controllers\Backend\Settings\SEOController;
 use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\ButtonStyleController;
 use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\EventController;
@@ -217,12 +218,15 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
         Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
 
-        Route::get('/seo/fetch/{id}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
+        Route::get('/seo/fetch/{id}/{modelType}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
 
         Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign')->middleware('admin.permission:settings.frontEndDesign');
 
         Route::post('/update-design', [AIContentCreatorController::class, 'updateDesign'])->name('user.update_design');
     });
+
+    Route::get('/admin/button-styles', [ButtonStyleController::class, 'index'])->name('admin.button-styles');
+    Route::post('/admin/button-styles/update', [ButtonStyleController::class, 'update'])->name('admin.button-styles.update');
 
     //  Permission
     Route::controller(RoleController::class)->group(function () {
