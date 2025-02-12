@@ -593,8 +593,8 @@ chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
 
                         try {
                             const content = JSON.parse(data);
-                            if (content) {
-                                assistantMessageContent += content;
+                            if (content.content) {
+                                assistantMessageContent += content.content;
                                 scheduleUpdate();
 
                                 let conversationList = document.getElementById('users-conversation');
