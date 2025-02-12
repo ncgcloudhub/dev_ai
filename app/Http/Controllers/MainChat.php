@@ -422,19 +422,30 @@ foreach ($messagesFromDb as $message) {
 
         // Log::info('Messages to send to API: ', $messages);
 
-        $client = new Client();
-        $response = $client->post('https://api.openai.com/v1/chat/completions', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . config('app.openai_api_key'),
-                'Content-Type' => 'application/json',
-            ],
-            'json' => [
-                'model' => $openaiModel,
-                'messages' => $messages,
-                'stream' => true,
-            ],
-            'stream' => true,
+    
+        $response = OpenAI::chat()->create([
+            "model" => $openaiModel,
+            "messages" => $messages,
         ]);
+
+        $totalTokens = $response['usage']['total_tokens'];
+        deductUserTokensAndCredits($totalTokens);
+        
+        Log::info('432 OpenAI API Response:', $response->toArray());
+
+        // $client = new Client();
+        // $response = $client->post('https://api.openai.com/v1/chat/completions', [
+        //     'headers' => [
+        //         'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+        //         'Content-Type' => 'application/json',
+        //     ],
+        //     'json' => [
+        //         'model' => $openaiModel,
+        //         'messages' => $messages,
+        //         'stream' => true,
+        //     ],
+        //     'stream' => true,
+        // ]);
         logActivity('Chattermate', 'interacted with Chattermate');
         
         $user = Auth::user();
@@ -449,82 +460,68 @@ foreach ($messagesFromDb as $message) {
         // ]);
         
         // Return a StreamedResponse to send data incrementally to the client
-        return new StreamedResponse(function() use ($response, $user, $sessionId, $title) {
+        return response()->stream(function () use ($response, $user, $sessionId, $title) {
             header('Content-Type: text/event-stream');
             header('Cache-Control: no-cache');
             header('Connection: keep-alive');
+        
+            Log::info('Streaming Response Initialized', ['session_id' => $sessionId]);
+        
+            // Convert OpenAI response to an array
+            $responseArray = $response->toArray();
             
-            $body = $response->getBody();
-            $messageContent = '';
-            $buffer = '';
-
-            Log::info('Streaming Response Initialized', [
+            // Extract relevant data
+            $messageContent = $responseArray['choices'][0]['message']['content'] ?? '';
+            $tokenUsage = $responseArray['usage'] ?? [];
+        
+            // Split message into lines to stream gradually
+            $lines = explode("\n", $messageContent);
+        
+            foreach ($lines as $line) {
+                $data = json_encode(['content' => $line]);
+                echo "data: {$data}\n\n";
+                ob_flush();
+                flush();
+                usleep(500000); // 0.5 sec delay to simulate real-time streaming
+            }
+        
+            // Save message to the database
+            Message::create([
                 'session_id' => $sessionId,
+                'user_id' => $user->id,
+                'message' => null,
+                'reply' => $messageContent,
             ]);
         
-            while (!$body->eof()) {
-                $chunk = $body->read(1024);
-                $buffer .= $chunk;
-        
-                $lines = explode("\n", $buffer);
-                $buffer = array_pop($lines);
-        
-                foreach ($lines as $line) {
-                    $line = trim($line);
-                    if (strpos($line, 'data:') === 0) {
-                        $data = trim(substr($line, strlen('data:')));
-
-                        if ($data === '[DONE]') {
-                            // Save the AI's reply to the database
-                            Message::create([
-                                'session_id' => $sessionId,
-                                'user_id' => $user->id,
-                                'message' => null,
-                                'reply' => $messageContent, // Encode newlines and special characters
-                            ]);
-        
-                            if ($title) {
-                                $session = ModelsSession::find($sessionId);
-                                if (empty($session->title)) {
-                                    $session->title = $title;
-                                    $session->save();
-                                }
-                            }
-
-                            Log::info('Streaming Response Completed', [
-                                'session_id' => $sessionId,
-                                'final_reply' => $messageContent,
-                            ]);
-        
-                            echo "event: done\n";
-                            echo "data: [DONE]\n\n";
-                            ob_flush();
-                            flush();
-                            break 2;
-                        } else {
-                            try {
-                                $parsedData = json_decode($data, true);
-                                Log::info('Parsed JSON Data', ['data' => $parsedData]);
-                                if (isset($parsedData['choices'][0]['delta']['content'])) {
-                                    $content = $parsedData['choices'][0]['delta']['content'];
-                                    $messageContent .= $content;
-        
-                                    echo "data: " . json_encode($content) . "\n\n";
-                                    ob_flush();
-                                    flush();
-                                }
-                            } catch (\Exception $e) {
-                                Log::error('Error parsing JSON data: ' . $e->getMessage());
-                            }
-                        }
-                    }
+            if ($title) {
+                $session = ModelsSession::find($sessionId);
+                if (empty($session->title)) {
+                    $session->title = $title;
+                    $session->save();
                 }
             }
+        
+            Log::info('Streaming Response Completed', [
+                'session_id' => $sessionId,
+                'final_reply' => $messageContent,
+                'token_usage' => $tokenUsage,
+            ]);
+        
+            // Send final token usage data
+            echo "data: " . json_encode(['token_usage' => $tokenUsage]) . "\n\n";
+        
+            // Send final completion event
+            echo "event: done\n";
+            echo "data: [DONE]\n\n";
+            ob_flush();
+            flush();
         }, 200, [
             'Content-Type' => 'text/event-stream',
             'Cache-Control' => 'no-cache',
             'Connection' => 'keep-alive',
         ]);
+        
+        
              
 
     }
