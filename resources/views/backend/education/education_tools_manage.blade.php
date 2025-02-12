@@ -132,7 +132,26 @@
                         <div class="explore-place-bid-img">
                             <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
                                  alt="" class="card-img-top explore-img" loading="lazy" />
+                                 @if(Auth::user()->role === 'admin')
+                                 @can('education.manageTools.edit')
+                                     <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
+                                         <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
+                                     </a>
+                                 @endcan
+                             
+                                 @can('education.manageTools.delete')
+                                     <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
+                                         @csrf
+                                         @method('DELETE')
+                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                             <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
+                                         </button>
+                                     </form>
+                                 @endcan
+                            
+                             @endif
                         </div>
+                       
                         <div class="card-body">
                             <h5 class="mb-1 fs-16">
                                 <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" 
