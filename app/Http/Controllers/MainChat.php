@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use OpenAI\Laravel\Facades\OpenAI;
+use Parsedown;
 use Smalot\PdfParser\Parser as PdfParser;
 use PhpOffice\PhpWord\IOFactory as WordIOFactory;
 use PhpOffice\PhpWord\Element\TextRun;
@@ -459,31 +460,40 @@ foreach ($messagesFromDb as $message) {
         //     'messages' => $messages,
         // ]);
         
-        // Return a StreamedResponse to send data incrementally to the client
+       // Return a StreamedResponse to send data incrementally to the client
         return response()->stream(function () use ($response, $user, $sessionId, $title) {
             header('Content-Type: text/event-stream');
             header('Cache-Control: no-cache');
             header('Connection: keep-alive');
-        
+
             Log::info('Streaming Response Initialized', ['session_id' => $sessionId]);
-        
+
             // Convert OpenAI response to an array
             $responseArray = $response->toArray();
             
             // Extract relevant data
             $messageContent = $responseArray['choices'][0]['message']['content'] ?? '';
             $tokenUsage = $responseArray['usage'] ?? [];
-        
+
+            // Initialize Parsedown
+            $parsedown = new Parsedown();
+
             // Split message into lines to stream gradually
             $lines = explode("\n", $messageContent);
-        
+
             foreach ($lines as $line) {
-                $data = json_encode(['content' => $line]);
+                // Convert Markdown to HTML
+                $htmlLine = $parsedown->text($line);
+                
+                // Stream the formatted content
+                $data = json_encode(['content' => $htmlLine]);
                 echo "data: {$data}\n\n";
+                
                 ob_flush();
                 flush();
                 usleep(500000); // 0.5 sec delay to simulate real-time streaming
             }
+
         
             // Save message to the database
             Message::create([

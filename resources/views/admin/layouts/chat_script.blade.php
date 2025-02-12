@@ -1134,8 +1134,8 @@ function regenerateMessage(messageId, originalMessage) {
 
                     try {
                         const json = JSON.parse(data);
-                        if (json) {
-                            fullContent += json; // Accumulate the content
+                        if (json.content) {
+                            fullContent += json.content; // Accumulate the content
                             // Optionally update the UI for a "live preview"
                             const formattedPreview = formatContent(fullContent);
                             messageElement.innerHTML = formattedPreview;
