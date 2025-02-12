@@ -339,6 +339,21 @@ if (!function_exists('getButtonClass')) {
     }
 }
 
+// Chwck if the user has tokens
+if (!function_exists('userHasTokensLeft')) {
+    function userHasTokensLeft()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return false; // No user logged in
+        }
+        
+        // Check if the user has an active package and tokens left
+        return $user->tokens_left > 0;
+    }
+}
+
     
 
 }

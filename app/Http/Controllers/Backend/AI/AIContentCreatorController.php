@@ -518,6 +518,11 @@ class AIContentCreatorController extends Controller
     // Generate Using Open AI
     public function AIContentCreatorgenerate(Request $input)
     {
+
+        if (!userHasTokensLeft()) {
+            return response()->json(['error' => 'You have no tokens left.'], 403);
+        }
+
         set_time_limit(300); // Increase to 5 minutes
 
         $template_id = $input->template_id;
@@ -611,11 +616,6 @@ class AIContentCreatorController extends Controller
                     return $data;
                 }
             }
-        }
-
-        if ($user->tokens_left <= 0) {
-            $data = 0;
-            return $data;
         }
 
         // Estimate the number of tokens in the prompt
