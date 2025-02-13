@@ -16,6 +16,15 @@ class DynamicPageController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware('admin.permission:managePage.menu')->only('index');
+        $this->middleware('admin.permission:managePage.add')->only(['create', 'store']);
+        $this->middleware('admin.permission:managePage.edit')->only(['edit', 'update']);
+        $this->middleware('admin.permission:managePage.delete')->only('destroy');
+    }
+
     public function index()
     {
         $dynamicPage = DynamicPage::latest()->get(); // Fetch a specific dynamic page or however you retrieve it

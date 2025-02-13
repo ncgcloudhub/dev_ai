@@ -582,11 +582,13 @@
                 </li>
                 @endcan
              
+                @can('managePage.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('dynamic-pages.*') ? 'active' : '' }}" href="{{ route('dynamic-pages.index') }}">
                         <i class="lab la-wpforms"></i> <span >Manage Page</span>
                     </a>
                 </li>
+                @endcan
              
                 {{-- JOB --}}
                 @can('jobs.menu')
