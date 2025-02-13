@@ -237,11 +237,16 @@ class RoleController extends Controller
         $permissions = $request->permission;
     
         if (!empty($permissions)) {
-            // Sync permissions by name
+            // Sync role permissions
             $role->syncPermissions($permissions);
         } else {
-            // If no permissions are selected, remove all permissions
-            $role->syncPermissions([]);
+            $role->syncPermissions([]); // Remove all permissions if none selected
+        }
+    
+        // Get all users who have this role and sync their permissions
+        $users = User::role($role->name)->get();
+        foreach ($users as $user) {
+            $user->syncPermissions($role->permissions);
         }
     
         $notification = [
@@ -251,6 +256,7 @@ class RoleController extends Controller
     
         return redirect()->route('all.roles.permission')->with($notification);
     }
+    
 
     public function AdminDeleteRoles($id){
 
