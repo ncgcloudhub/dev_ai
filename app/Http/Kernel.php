@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'admin.permission' => \App\Http\Middleware\AdminPermissionMiddleware::class, // Add this line
+        'hex.auth' => \App\Http\Middleware\HexAuthMiddleware::class,
     ];
 }
  

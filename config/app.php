@@ -129,6 +129,9 @@ return [
 
     'openai_api_key' => env('OPENAI_API_KEY'),
 
+    'api_hex_key' => env('API_HEX_KEY', ''),
+
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver
