@@ -17,7 +17,9 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11">Create Page</a>
+                @can('managePage.add')
+                    <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11">Create Page</a>    
+                @endcan            
             </div>
             
             <div class="card-body">
@@ -52,16 +54,22 @@
                             </td>
                             
                             <td>
-                                <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                    <i class="ri-pencil-fill fs-16"></i> 
-                                </a>
-                                <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i> 
-                                    </button>
-                                </form>
+                                @can('managePage.edit')
+                                    <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <i class="ri-pencil-fill fs-16"></i> 
+                                    </a>
+                                @endcan
+                               
+                                @can('managePage.delete')
+                                    <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                            <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                        </button>
+                                    </form>    
+                                @endcan
+                                
                             </td>
                             
                         </tr>
