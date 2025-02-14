@@ -120,36 +120,39 @@ if (!function_exists('deductUserTokensAndCredits')) {
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
 
-        if ($user) {
-            // Check if the user has enough tokens or credits
-            if ($user->tokens_left < $tokens) {
-                return "no-tokens";
-            }
-
-            if ($user->credits_left < $credits) {
-                return "no-credits";
-            }
-
-            // Deduct the tokens and credits
-            $user->tokens_left = max(0, $user->tokens_left - $tokens);
-            $user->tokens_used = max(0, $user->tokens_used + $tokens);
-            $user->credits_left = max(0, $user->credits_left - $credits);
-            $user->credits_used = max(0, $user->credits_used + $credits);
-            // Increment images_generated only if credits are used
-            if ($credits > 0) {
-                $user->images_generated += 1;
-            }
-
-
-            // Save the changes to the database
-            $user->save();
-
-            return "deducted-successfully";
+        if (!$user) {
+            return "User not authenticated";
         }
 
-        return "User not found";
+        // If the user has tokens, deduct normally
+        if ($user->tokens_left >= $tokens) {
+            $user->tokens_left = max(0, $user->tokens_left - $tokens);
+            $user->tokens_used = max(0, $user->tokens_used + $tokens);
+        } else {
+            // If the user has no tokens, track free generations instead
+            $user->free_tokens_used += $tokens;
+        }
+
+        // Deduct credits if required
+        if ($user->credits_left < $credits) {
+            return "no-credits";
+        }
+
+        $user->credits_left = max(0, $user->credits_left - $credits);
+        $user->credits_used = max(0, $user->credits_used + $credits);
+
+        // Increment images_generated only if credits are used
+        if ($credits > 0) {
+            $user->images_generated += 1;
+        }
+
+        // Save changes
+        $user->save();
+
+        return "deducted-successfully";
     }
 }
+
 
 
 if (!function_exists('get_days_until_next_reset')) {
@@ -349,7 +352,6 @@ if (!function_exists('userHasTokensLeft')) {
             return false; // No user logged in
         }
         
-        // Check if the user has an active package and tokens left
         return $user->tokens_left > 0;
     }
 }
