@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\PromptLibraryController;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +23,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/prompt/manage', [PromptLibraryController::class, 'PromptManageApi'])
     ->middleware('hex.auth'); 
+
+Route::post('/register', function (Request $request) {
+        // Validate request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed', // Ensures `password_confirmation` is required
+        ]);
+    
+        // Create the user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+    
+        // Return success response
+        return response()->json([
+            'success' => true,
+            'message' => 'User registered successfully',
+            'user' => $user
+        ], 201);
+    });
