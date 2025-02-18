@@ -25,8 +25,8 @@
                     <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                     <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                     <div class="d-flex gap-3 mt-4">
-                        <a href="" class="{{ getButtonClass('save') }}">Chat Now</a>
-                        <a href="" class="btn gradient-btn-2">Create Your Imagination</a>
+                        <a href="{{route('main.chat.form')}}" class="{{ getButtonClass('save') }}">Chat Now</a>
+                        <a href="{{route('generate.image.view')}}" class="btn gradient-btn-2">Create Your Imagination</a>
                     </div>
                 </div>
                 
@@ -127,9 +127,8 @@
             <div class="swiper-slide">
                 <div class="card explore-box card-animate rounded border-color-purple-left">
                     <div class="card-body">
-                        <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                            Editor's Choice</p>
-                        <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">{{ $tool->template_name }}</a>
+                       
+                        <h5 class="mb-1"><a href="{{ route('aicontentcreator.view', ['slug' => $tool->slug]) }}" class="text-body">{{ $tool->template_name }}</a>
                         </h5>
                         <p class="text-muted mb-0">{{ $tool->description }}</p>
                     </div>
@@ -161,7 +160,7 @@
                     <div>
                         <h5 class="mt-0 gradient-text-1-bold">AI Content Creator</h5>
                         <p>AI content creator tools provide ready-to-use templates, making it effortless to generate captivating content, saving time while ensuring creativity and consistency across various formats.</p>
-                        <a href="javascript:void(0);" class="btn gradient-btn-3">Generate Content</a>
+                        <a href="{{route('aicontentcreator.manage')}}" class="btn gradient-btn-3">Generate Content</a>
                     </div>
                 </div>
             </div>
@@ -171,12 +170,12 @@
             <div class="col">
                 
                     <img src="/build/images/nft/car.png"  alt="..." class="img-fluid">
-                    <a href="" class="btn gradient-btn-3-square d-grid">Dalle</a>   
+                    <a href="{{route('generate.image.view')}}" class="btn gradient-btn-3-square d-grid">Dalle</a>   
             </div>
 
             <div class="col">      
                     <img src="/build/images/nft/dog.png"  alt="..." class="img-fluid">
-                    <a href="" class="btn gradient-btn-3-square d-grid">Stable Diffusion</a>
+                    <a href="{{route('stable.form')}}" class="btn gradient-btn-3-square d-grid">Stable Diffusion</a>
         </div>
         </div>
 
@@ -186,7 +185,7 @@
                 <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">Prompt Library</h4>
                 <div class="flex-shrink-0">
                     <div class="dropdown card-header-dropdown">
-                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="text-reset dropdown-btn" href="{{route('prompt.manage')}}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="btn gradient-btn-3 btn-sm">Show more</span>
                         </a>
                     </div>
@@ -200,7 +199,9 @@
                         <li class="list-group-item ps-0">
                             <div class="d-flex align-items-start">
                                 <div class="flex-grow-1">
-                                    <label class="form-check-label mb-0 ps-2" for="task_one">{{$item->prompt_name}}</label>
+                                    <a href="{{ route('prompt.view', ['slug' => $item->slug]) }}" class="gradient-text-2">
+                                        <label class="form-check-label mb-0 ps-2">{{ $item->prompt_name }}</label>
+                                    </a>
                                 </div>
                             </div>
                         </li>     
