@@ -66,4 +66,13 @@ class ButtonStyleController extends Controller
     {
         return ButtonStyle::where('is_selected', true)->get();
     }
+
+    public function destroy($id)
+    {
+        $button = ButtonStyle::findOrFail($id);
+        $button->delete();
+
+        return back()->with('success', 'Button style deleted successfully.');
+    }
+
 }

@@ -58,6 +58,12 @@
                                         <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $style->id }}">
                                             Edit
                                         </button>
+                                         <!-- Delete Button -->
+                                        <form action="{{ route('admin.button-styles.delete', $style->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this button style?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
 
