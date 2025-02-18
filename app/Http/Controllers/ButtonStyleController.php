@@ -10,7 +10,7 @@ class ButtonStyleController extends Controller
     public function index()
     {
         $buttonStyles = ButtonStyle::all();
-        return view('admin.button_styles.index', compact('buttonStyles'));
+        return view('backend.dynamic_buttons.dynamic_button_manage', compact('buttonStyles'));
     }
 
     public function update(Request $request)
