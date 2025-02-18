@@ -13,6 +13,38 @@ class ButtonStyleController extends Controller
         return view('backend.dynamic_buttons.dynamic_button_manage', compact('buttonStyles'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'button_type' => 'required|string',
+            'class_name' => 'required|string'
+        ]);
+
+        ButtonStyle::create([
+            'button_type' => $request->button_type,
+            'class_name' => $request->class_name,
+            'is_selected' => false, // Newly added buttons won't be selected by default
+        ]);
+
+        return back()->with('success', 'New button added successfully.');
+    }
+
+    public function edit(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:button_styles,id',
+            'class_name' => 'required|string'
+        ]);
+
+        $button = ButtonStyle::findOrFail($request->id);
+        $button->update([
+            'class_name' => $request->class_name
+        ]);
+
+        return back()->with('success', 'Button style updated successfully.');
+    }
+
+
     public function update(Request $request)
     {
         $request->validate([
