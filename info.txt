@@ -144,3 +144,6 @@ in siteSettings, add magic_ball text
 
 07/02/2025
 in AISettings, add status text default=1
+
+14/02/2025
+in USER, add free_tokens_used integer default=0

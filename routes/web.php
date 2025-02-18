@@ -44,6 +44,7 @@ use App\Models\FAQ;
 use App\Models\PromptLibrary;
 use App\Models\SectionDesign;
 use App\Models\SeoSetting;
+use App\Models\SiteSettings;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
@@ -413,6 +414,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy')->middleware('admin.permission:education.manageTools.delete');
 
     });
+
+    Route::post('/generate-hex-pass', [SiteSettingsController::class, 'storeHex'])->name('hexPass.store');
+
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('admin.permission:settings.FAQ');

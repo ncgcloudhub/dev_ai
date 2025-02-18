@@ -7,6 +7,8 @@ use App\Models\ButtonStyle;
 use Illuminate\Http\Request;
 use App\Models\SiteSettings;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 class SiteSettingsController extends Controller
 {
@@ -146,5 +148,42 @@ class SiteSettingsController extends Controller
         SiteSettings::findOrFail(1)->update($updateData);
 
         return redirect()->back()->with('success', 'Settings updated Successfully');
+    }
+
+    // HEX STore
+    public function storeHex(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'hex_pass' => 'required|string|size:16',
+        ]);
+
+        // Save hex_pass to the database
+        $siteSettings = SiteSettings::first(); // Or create a new record if needed
+        $siteSettings->hex_pass = $request->input('hex_pass');
+        $siteSettings->save();
+
+       // Update .env file safely
+    $envPath = base_path('.env');
+    $envContent = File::get($envPath);
+
+    if (strpos($envContent, 'API_HEX_KEY=') !== false) {
+        // Replace existing API_HEX_KEY value
+        $envContent = preg_replace(
+            "/API_HEX_KEY=.*/",
+            "API_HEX_KEY=" . $request->input('hex_pass'),
+            $envContent
+        );
+    } else {
+        // Append the key if it doesn't exist
+        $envContent .= "\nAPI_HEX_KEY=" . $request->input('hex_pass');
+    }
+
+    File::put($envPath, $envContent);
+
+    // Clear configuration cache so new .env values are used immediately
+    Artisan::call('config:clear');
+
+    return redirect()->back()->with('success', 'Hex Password generated and saved successfully!');
     }
 }

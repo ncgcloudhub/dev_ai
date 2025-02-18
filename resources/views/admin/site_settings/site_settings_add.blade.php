@@ -244,6 +244,37 @@
 
 
 <div class="col-xxl-6">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Generate Hex Password</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('hexPass.store') }}">
+                @csrf
+
+                <!-- HexPass Input -->
+                <div class="mb-3">
+                    <label for="hex_pass" class="form-label">Hex Password</label>
+                    <input type="text" class="form-control" id="hex_pass" name="hex_pass" value="{{ $setting->hex_pass }}">
+                    @error('hex_pass')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Generate HexPass Button -->
+                <button type="button" class="btn btn-rounded gradient-btn-1" id="generateHexPassBtn">Generate</button>
+
+                <button type="submit" class="btn btn-rounded gradient-btn-save">Save</button>
+            </form>
+        </div><!-- end card-body -->
+    </div><!-- end card -->
+
+
     <h2>Select Button Designs</h2>
 
     @foreach(['save', 'add', 'edit'] as $type)
@@ -309,5 +340,23 @@
             option.querySelector('input').checked = true;
         });
     });
+</script>
+
+{{-- HEX PAss Generator --}}
+<script>
+    document.getElementById('generateHexPassBtn').addEventListener('click', function() {
+        const hex = generateHexPassword();
+        document.getElementById('hex_pass').value = hex;
+    });
+
+    function generateHexPassword() {
+        let hex = '';
+        const characters = 'abcdef0123456789';
+        for (let i = 0; i < 16; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            hex += characters[randomIndex];
+        }
+        return hex;
+    }
 </script>
 @endsection

@@ -306,6 +306,7 @@ class PromptLibraryController extends Controller
         return view('backend.prompt_library.prompt_library_manage', compact('prompt_library', 'prompt_library_category', 'categories','count'));
     }
 
+
     public function PromptView($slug)
     {
         
@@ -680,6 +681,45 @@ public function saveToLibrary(Request $request)
     return response()->json(['message' => 'Prompt saved successfully!']);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// API Controller
+public function PromptManageApi()
+{
+    try {
+        logActivity('Prompt Library API', 'accessed prompt library manage API');
+
+        $prompt_library = PromptLibrary::orderby('id', 'asc')->get();
+        $categories = PromptLibraryCategory::latest()->get();
+        $count = $prompt_library->count();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'prompts' => $prompt_library,
+                'categories' => $categories,
+                'count' => $count
+            ]
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to fetch prompt data',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
 
 
 }
