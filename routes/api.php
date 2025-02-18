@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\PromptLibraryController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\EducationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +48,6 @@ Route::post('/register', function (Request $request) {
             'user' => $user
         ], 201);
     });
+
+Route::get('/education/manage/tools', [EducationController::class, 'manageToolsapi'])->middleware('hex.auth');
+

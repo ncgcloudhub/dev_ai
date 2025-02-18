@@ -412,6 +412,10 @@
                                         <a href="{{route('site.settings.add')}}" class="nav-link sidebar-hover {{ request()->routeIs('site.settings.add') ? 'active' : '' }}" >Site Settings</a>
                                     </li>
                                     @endcan
+
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.button-styles')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.button-styles') ? 'active' : '' }}" >Dynamic Buttons</a>
+                                    </li>
                                    
                                     @can('settings.SEOSettings')
                                     <li class="nav-item">
