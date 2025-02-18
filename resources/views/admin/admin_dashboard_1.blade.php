@@ -63,10 +63,14 @@
                         </div>
                         <div class="card-body">
                             <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
-                                Editor's Choice</p>
-                            <h5 class="mb-1"><a href="apps-nft-item-details" class="text-body">{{ $tool->name }}</a>
+                               </p>
+                            <h5 class="mb-1 text-truncate" style="max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="text-body">{{ $tool->name }}</a>
                             </h5>
-                            <p class="text-muted mb-0">{{ $tool->description }}</p>
+                            <p class="text-muted mb-0" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                {{ $tool->description }}
+                            </p>
+                            
                         </div>
                        
                     </div>
