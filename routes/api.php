@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\PromptLibraryController;
+use App\Http\Controllers\EducationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/prompt/manage', [PromptLibraryController::class, 'PromptManageApi'])
     ->middleware('hex.auth'); 
+
+Route::get('/education/manage/tools', [EducationController::class, 'manageToolsapi'])->middleware('hex.auth');

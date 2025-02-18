@@ -841,6 +841,23 @@ public function updateSubject(Request $request, $id)
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
     }    
 
+    public function manageToolsapi(Request $request)
+    {
+        logActivity('Education Tools', 'accessed the education tools');
+    
+        $tools = EducationTools::latest()->get();
+        $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
+        $newTools = EducationTools::orderBy('id', 'DESC')->limit(5)->get();
+        $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();
+    
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'categories' => $categories,
+            ]
+        ], 200);
+    }    
+
     public function showTool($id)
     {
        
