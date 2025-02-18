@@ -108,8 +108,6 @@
                         <!-- end card body -->
                     </div>
 
-            
-
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title mb-0">Header Logo when Background is Dark</h4>
@@ -196,8 +194,6 @@
                         <!-- end card body -->
                     </div>
                     
-                    
-
                     <div class="col-md-12">
                         <label for="footer_text" class="form-label">Footer Text</label>
                         <input type="text" name="footer_text" class="form-control mb-3" id="footer_text" value="{{$setting->footer_text}}" placeholder="Enter Role">
@@ -232,8 +228,6 @@
         </div>
     </div>
 
-
-    
     <div class="col-12">
         <div class="text-end">
             <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
@@ -241,7 +235,6 @@
     </div>
 </form>
 </div>
-
 
 <div class="col-xxl-6">
     <div class="card">
@@ -273,47 +266,9 @@
             </form>
         </div><!-- end card-body -->
     </div><!-- end card -->
-
-
-    <h2>Select Button Designs</h2>
-
-    @foreach(['save', 'add', 'edit'] as $type)
-        <form action="{{ route('admin.button-styles.update') }}" method="POST">
-            @csrf
-            <input type="hidden" name="button_type" value="{{ $type }}">
-
-            <div class="mb-3">
-                <label>{{ ucfirst($type) }} Button</label>
-                <div class="d-flex gap-3 flex-wrap">
-                    @foreach($buttonStyles->where('button_type', $type) as $style)
-                        <label class="btn-option">
-                            <input type="radio" name="class_name" value="{{ $style->class_name }}" 
-                                {{ $style->is_selected ? 'checked' : '' }} hidden>
-                            <button type="button" class="{{ $style->class_name }} btn-lg preview-btn">
-                                {{ ucfirst($type) }}
-                            </button>
-                        </label>
-                    @endforeach
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-3">Update</button>
-        </form>
-    @endforeach
 </div>
 </div>
 @endsection
-
-<style>
-    .btn-option {
-        cursor: pointer;
-    }
-    .btn-option input:checked + .preview-btn {
-        border: 3px solid black; /* Highlight selected */
-    }
-</style>
-
-
 
 
 @section('script')
@@ -334,13 +289,7 @@
 
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.3/mammoth.browser.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-<script>
-    document.querySelectorAll('.btn-option').forEach(option => {
-        option.addEventListener('click', () => {
-            option.querySelector('input').checked = true;
-        });
-    });
-</script>
+
 
 {{-- HEX PAss Generator --}}
 <script>
