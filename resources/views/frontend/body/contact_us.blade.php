@@ -68,12 +68,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 text-end">
-                                <button type="submit" id="submit" name="send" class="submitBnt btn gradient-btn-5 g-recaptcha"  data-sitekey="6LdVl4EqAAAAAC5LVhDSc5Cx2L6UaV7-uNm7jqRb" 
-                                data-callback="onSubmit" 
-                                data-action="submit" disabled>Send Message</button>
+                            <div class="col-lg-12">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="agreeCheckbox">
+                                    <label class="form-check-label" for="agreeCheckbox">
+                                        I agree to the <a href="#">Terms and Conditions</a> & I am not a robot.
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 text-end">
+                                <button type="submit" id="submitBtn" name="send" class="submitBnt btn gradient-btn-5"  
+                                    data-sitekey="6LdVl4EqAAAAAC5LVhDSc5Cx2L6UaV7-uNm7jqRb" 
+                                    data-callback="onSubmit" 
+                                    data-action="submit" disabled>
+                                    Send Message
+                                </button>
+                            </div>
                     </form>
                 </div>
             </div>
@@ -82,4 +94,19 @@
         <!-- end row -->
     </div>
     <!-- end container -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkbox = document.getElementById('agreeCheckbox');
+            const submitButton = document.getElementById('submitBtn');
+    
+            // Initially disable the button
+            submitButton.disabled = true;
+    
+            // Enable/disable button based on checkbox
+            checkbox.addEventListener('change', function () {
+                submitButton.disabled = !this.checked;
+            });
+        });
+    </script>
 </section>

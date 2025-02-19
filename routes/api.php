@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ImageGenerationController;
+use App\Http\Controllers\Backend\AI\GenerateImagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\PromptLibraryController;
@@ -51,3 +53,4 @@ Route::post('/register', function (Request $request) {
 
 Route::get('/education/manage/tools', [EducationController::class, 'manageToolsapi'])->middleware('hex.auth');
 
+Route::post('/image', [ImageGenerationController::class, 'generateImage'])->name('generate.image')->middleware('hex.auth');
