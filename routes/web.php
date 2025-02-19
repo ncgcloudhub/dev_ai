@@ -228,6 +228,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     Route::get('/admin/button-styles', [ButtonStyleController::class, 'index'])->name('admin.button-styles');
     Route::post('/admin/button-styles/update', [ButtonStyleController::class, 'update'])->name('admin.button-styles.update');
+    Route::post('/admin/button-styles/store', [ButtonStyleController::class, 'store'])->name('admin.button-styles.store');
+    Route::post('/admin/button-styles/edit', [ButtonStyleController::class, 'edit'])->name('admin.button-styles.edit');
+    Route::delete('/admin/button-styles/{id}', [ButtonStyleController::class, 'destroy'])->name('admin.button-styles.delete');
+
+
 
     //  Permission
     Route::controller(RoleController::class)->group(function () {
