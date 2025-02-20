@@ -275,22 +275,22 @@ document.getElementById("copyPromptButton").addEventListener("click", function()
             alert("Speech Recognition is not supported in this browser.");
             return;
         }
-    
+
         const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognitionAPI();
-        recognition.continuous = true;
-        recognition.interimResults = true;
+        recognition.continuous = true; 
+        recognition.interimResults = false; // Final results only
         recognition.lang = "en-US";
-    
-        let activeInput = null; // Store reference to the active input field
-        let activeMicIcon = null; // Store reference to the active mic icon
-        let isRecording = false;
-    
+
+        let activeInput = null; 
+        let activeMicIcon = null; 
+        let isRecording = false; 
+
         document.querySelectorAll(".speech-btn").forEach((button) => {
             button.addEventListener("click", function () {
-                const inputField = this.previousElementSibling; // Get the corresponding textarea/input
+                const inputField = this.previousElementSibling; 
                 const micIcon = this.querySelector(".mic-icon");
-    
+
                 if (!isRecording) {
                     activeInput = inputField;
                     activeMicIcon = micIcon;
@@ -306,22 +306,25 @@ document.getElementById("copyPromptButton").addEventListener("click", function()
                 }
             });
         });
-    
+
         recognition.onresult = (event) => {
             if (!activeInput) return;
-            let transcript = "";
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
-            }
-            activeInput.value = transcript;
-            console.log("Transcribed Text:", transcript);
+            let transcript = event.results[event.results.length - 1][0].transcript; // Get the latest result
+            activeInput.value += " " + transcript.trim(); // Append the new text
         };
-    
+
+        recognition.onend = () => {
+            if (isRecording) {
+                recognition.start(); // Restart if still active
+            }
+        };
+
         recognition.onerror = (event) => {
             console.error("Speech Recognition Error:", event.error);
         };
     });
-    </script>
+</script>
+
 
 
 @yield('script')
