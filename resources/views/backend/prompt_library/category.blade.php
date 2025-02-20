@@ -88,6 +88,7 @@
     
 </div>
 
+@include('admin.layouts.datatables')
 
 
 @endsection

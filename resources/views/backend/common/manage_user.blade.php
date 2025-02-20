@@ -127,6 +127,7 @@
         </div>
     </form>
 </div>
+@include('admin.layouts.datatables')
 
 
 <script>

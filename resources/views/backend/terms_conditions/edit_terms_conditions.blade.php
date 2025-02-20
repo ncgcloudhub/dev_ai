@@ -77,6 +77,7 @@
 
 @endsection
 
+@include('admin.layouts.datatables')
 
 
 @section('script')
