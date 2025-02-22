@@ -38,14 +38,14 @@
                                 <div class="mb-4">
                                     <label for="name" class="form-label fs-13">Name</label>
                                     <input name="name" id="name" type="text"
-                                        class="form-control bg-light border-light" placeholder="Your name*">
+                                        class="form-control bg-light border-light" placeholder="Your name*" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label for="email" class="form-label fs-13">Email</label>
                                     <input name="email" id="email" type="email"
-                                        class="form-control bg-light border-light" placeholder="Your email*">
+                                        class="form-control bg-light border-light" placeholder="Your email*" required>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                 <div class="mb-4">
                                     <label for="subject" class="form-label fs-13">Subject</label>
                                     <input type="text" class="form-control bg-light border-light" id="subject"
-                                        name="subject" placeholder="Your Subject.." />
+                                        name="subject" placeholder="Your Subject.." required />
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                 <div class="mb-3">
                                     <label for="comments" class="form-label fs-13">Message</label>
                                     <textarea name="comments" id="comments" rows="3" class="form-control bg-light border-light"
-                                        placeholder="Your message..."></textarea>
+                                        placeholder="Your message..." required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -94,19 +94,21 @@
         <!-- end row -->
     </div>
     <!-- end container -->
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const checkbox = document.getElementById('agreeCheckbox');
             const submitButton = document.getElementById('submitBtn');
+            const form = document.querySelector("form");
     
-            // Initially disable the button
-            submitButton.disabled = true;
+            submitButton.disabled = false; // Always enabled
     
-            // Enable/disable button based on checkbox
-            checkbox.addEventListener('change', function () {
-                submitButton.disabled = !this.checked;
+            form.addEventListener("submit", function (event) {
+                if (!checkbox.checked) {
+                    event.preventDefault(); // Prevent form submission
+                    alert("Please agree to the Terms and Conditions before proceeding.");
+                }
             });
         });
     </script>
+    
 </section>
