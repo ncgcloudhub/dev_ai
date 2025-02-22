@@ -24,5 +24,15 @@
         <input type="text" id="buttonText-{{ $buttonId }}" class="form-control" value="{{ ucfirst($buttonId) }}" data-button="{{ $buttonId }}">
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">Select Icon</label>
+        <select id="icon-{{ $buttonId }}" class="form-select" data-button="{{ $buttonId }}">
+            <option value="fa-save">Save (💾)</option>
+            <option value="fa-edit">Edit (✏️)</option>
+            <option value="fa-trash">Delete (🗑️)</option>
+            <option value="fa-times">Cancel (❌)</option>
+        </select>
+    </div>
+
     <button type="button" class="btn btn-primary save-button-style" data-button="{{ $buttonId }}">Save Style</button>
 </form>

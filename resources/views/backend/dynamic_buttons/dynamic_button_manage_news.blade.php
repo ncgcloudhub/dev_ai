@@ -98,29 +98,68 @@ document.addEventListener("DOMContentLoaded", function() {
         let borderRadius = document.getElementById(`borderRadius-${buttonId}`).value;
         let shadowIntensity = document.getElementById(`shadowIntensity-${buttonId}`).value;
         let buttonText = document.getElementById(`buttonText-${buttonId}`).value;
+        let icon = document.getElementById(`icon-${buttonId}`).value;
         let previewButton = document.getElementById(`previewButton-${buttonId}`);
 
         previewButton.style.background = `linear-gradient(45deg, ${bgColor}, ${gradientColor})`;
         previewButton.style.borderRadius = `${borderRadius}px`;
         previewButton.style.boxShadow = `0 4px ${shadowIntensity}px rgba(0, 0, 0, 0.2)`;
-        previewButton.textContent = buttonText;
+        previewButton.innerHTML = `<i class="fa ${icon}"></i> ${buttonText}`;
         previewButton.style.color = "white";
         previewButton.style.border = "none";
         previewButton.style.padding = "10px 20px";
         previewButton.style.transition = "box-shadow 0.3s ease, transform 0.3s ease";
     }
 
-    document.querySelectorAll("input").forEach(input => {
+    // Update button style on input change
+    document.querySelectorAll("input, select").forEach(input => {
         input.addEventListener("input", function() {
             let buttonId = this.dataset.button;
             updateButtonStyle(buttonId);
         });
     });
 
+    // Save button style
     document.querySelectorAll(".save-button-style").forEach(button => {
         button.addEventListener("click", function() {
-            alert(`Button style for ${this.dataset.button} saved!`);
-            // Here, you can use AJAX to save the button styles in the database
+            let buttonId = this.dataset.button;
+
+            let bgColor = document.getElementById(`bgColor-${buttonId}`).value;
+            let gradientColor = document.getElementById(`gradientColor-${buttonId}`).value;
+            let borderRadius = document.getElementById(`borderRadius-${buttonId}`).value;
+            let shadowIntensity = document.getElementById(`shadowIntensity-${buttonId}`).value;
+            let buttonText = document.getElementById(`buttonText-${buttonId}`).value;
+            let icon = document.getElementById(`icon-${buttonId}`).value;
+
+            let classes = JSON.stringify({
+                background: `linear-gradient(45deg, ${bgColor}, ${gradientColor})`,
+                borderRadius: `${borderRadius}px`,
+                boxShadow: `0 4px ${shadowIntensity}px rgba(0, 0, 0, 0.2)`,
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                transition: "box-shadow 0.3s ease, transform 0.3s ease",
+            });
+
+            fetch('/button-styles/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: JSON.stringify({
+                    button_type: buttonId,
+                    icon: icon,
+                    classes: classes,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     });
 
