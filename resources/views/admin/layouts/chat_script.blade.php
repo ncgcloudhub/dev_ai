@@ -967,10 +967,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 chatConversation.innerHTML = '';  // Clear the chat content
                 // Check if there are any remaining sessions
                 const remainingSessions = document.querySelectorAll('#session-list li');
-                            if (remainingSessions.length === 0) {
-                                // Trigger the "New Chat" button click
-                                document.getElementById('main_new_session_btn').click();
-                            }
+                
+                if (remainingSessions.length > 0) {
+                // Click the latest session (first one in descending order)
+                remainingSessions[0].click();
+                } else {
+                    // If no session exists, trigger the "New Chat" button
+                    document.getElementById('main_new_session_btn').click();
+                }
 
             } else {
                 console.error('Failed to delete session');
