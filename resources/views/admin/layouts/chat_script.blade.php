@@ -965,9 +965,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Clear the chat conversation
                 chatConversation.innerHTML = '';  // Clear the chat content
+                // Check if there are any remaining sessions
+                const remainingSessions = document.querySelectorAll('#session-list li');
+                            if (remainingSessions.length === 0) {
+                                // Trigger the "New Chat" button click
+                                document.getElementById('main_new_session_btn').click();
+                            }
 
-                // Optionally, you can reset any other related UI elements here
-                console.log('Session deleted successfully');
             } else {
                 console.error('Failed to delete session');
             }
