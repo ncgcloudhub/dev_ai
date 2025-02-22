@@ -928,76 +928,91 @@ document.addEventListener('click', function(event) {
   
 {{-- DELETE SESSION --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const sessionList = document.getElementById('session-list');
+document.addEventListener('DOMContentLoaded', function () {
+    const sessionList = document.getElementById('session-list');
+    const chatConversation = document.getElementById('users-conversation');  // Added to clear chat content
 
-        // Add event listener for delete buttons
-        sessionList.addEventListener('click', function (event) {
-            const deleteButton = event.target.closest('.delete-session-btn');
-            if (deleteButton) {
-                const sessionId = deleteButton.getAttribute('data-session-id');
-                
-                // Show confirmation dialog before deletion
-                if (confirm("Are you sure you want to delete this session?")) {
-                    deleteSession(sessionId);
+    // Add event listener for delete buttons
+    sessionList.addEventListener('click', function (event) {
+        const deleteButton = event.target.closest('.delete-session-btn');
+        if (deleteButton) {
+            const sessionId = deleteButton.getAttribute('data-session-id');
+            
+            // Show confirmation dialog before deletion
+            if (confirm("Are you sure you want to delete this session?")) {
+                deleteSession(sessionId);
+            }
+        }
+
+        const editButton = event.target.closest('.edit-session-btn');
+        if (editButton) {
+            const sessionId = editButton.getAttribute('data-session-id');
+            editSession(sessionId);
+        }
+    });
+
+    function deleteSession(sessionId) {
+        axios.post(`/main/session/delete`, {
+            session_id: sessionId
+        })
+        .then(response => {
+            if (response.data.success) {
+                // Remove the session item from the UI
+                const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+                if (sessionItem) {
+                    sessionItem.remove();
                 }
-            }
 
-            const editButton = event.target.closest('.edit-session-btn');
-            if (editButton) {
-                const sessionId = editButton.getAttribute('data-session-id');
-                editSession(sessionId);
+                // Clear the chat conversation
+                chatConversation.innerHTML = '';  // Clear the chat content
+                // Check if there are any remaining sessions
+                const remainingSessions = document.querySelectorAll('#session-list li');
+                
+                if (remainingSessions.length > 0) {
+                // Click the latest session (first one in descending order)
+                remainingSessions[0].click();
+                } else {
+                    // If no session exists, trigger the "New Chat" button
+                    document.getElementById('main_new_session_btn').click();
+                }
+
+            } else {
+                console.error('Failed to delete session');
             }
+        })
+        .catch(error => {
+            console.error('Error deleting session:', error);
         });
+    }
 
-        function deleteSession(sessionId) {
-            axios.post(`/main/session/delete`, {
-                session_id: sessionId
+    function editSession(sessionId) {
+        // Get the current session item and title
+        const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
+        const sessionTitle = sessionItem.querySelector('p').textContent;
+        console.error(sessionTitle);
+
+        // Open a prompt to edit the session title
+        const newTitle = prompt("Edit Session Title:", sessionTitle);
+        if (newTitle) {
+            axios.post(`/main/session/edit`, {
+                session_id: sessionId,
+                new_title: newTitle
             })
             .then(response => {
                 if (response.data.success) {
-                    // Remove the session item from the UI
-                    const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
-                    if (sessionItem) {
-                        sessionItem.remove();
-                    }
+                    // Update the session title in the UI
+                    sessionItem.querySelector('p').textContent = newTitle;
                 } else {
-                    console.error('Failed to delete session');
+                    console.error('Failed to edit session');
                 }
             })
             .catch(error => {
-                console.error('Error deleting session:', error);
+                console.error('Error editing session:', error);
             });
         }
+    }
+});
 
-
-        function editSession(sessionId) {
-            // Get the current session item and title
-            const sessionItem = document.querySelector(`li[data-session-id='${sessionId}']`);
-            const sessionTitle = sessionItem.querySelector('p').textContent;
-            console.error(sessionTitle);
-
-            // Open a prompt to edit the session title
-            const newTitle = prompt("Edit Session Title:", sessionTitle);
-            if (newTitle) {
-                axios.post(`/main/session/edit`, {
-                    session_id: sessionId,
-                    new_title: newTitle
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        // Update the session title in the UI
-                        sessionItem.querySelector('p').textContent = newTitle;
-                    } else {
-                        console.error('Failed to edit session');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error editing session:', error);
-                });
-            }
-        }
-    });
 
 
     document.addEventListener('click', function(event) {
