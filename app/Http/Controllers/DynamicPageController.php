@@ -48,12 +48,11 @@ class DynamicPageController extends Controller
      */
     public function store(Request $request)
     {
-      
         $data = $request->all();
-    
+
         // Normalize the route
         $data['route'] = Str::lower(trim($data['route'], '/'));
-    
+
         // Check if the route conflicts with existing routes in web.php
         $allRoutes = collect(Route::getRoutes())->pluck('uri')->toArray();
         if (in_array($data['route'], $allRoutes)) {
@@ -61,42 +60,55 @@ class DynamicPageController extends Controller
                 ->withErrors(['route' => 'The route conflicts with an existing route in the application.'])
                 ->withInput();
         }
-    
+
         // Check if the route already exists in the database
         if (DynamicPage::where('route', $data['route'])->exists()) {
             return redirect()->back()
                 ->withErrors(['route' => 'The route name already exists.'])
                 ->withInput();
         }
-    
+
         // Handle file uploads
         $thumbnailPath = $request->file('thumbnail_image') ? 
             $request->file('thumbnail_image')->store('dynamic-pages/thumbnails', 'public') : null;
-    
+
         $bannerPath = $request->file('banner_image') ? 
             $request->file('banner_image')->store('dynamic-pages/banners', 'public') : null;
-    
+
         // Handle multiple attached files
         $attachedFiles = [];
-            if ($request->hasFile('attached_files')) {
-                foreach ($request->file('attached_files') as $file) {
-                    // Get the original filename
-                    $filename = $file->getClientOriginalName();
-                    // Store the file with its original name in the specified directory
-                    $path = $file->storeAs('dynamic-pages/attachments', $filename, 'public');
-                    // Add the path to the array
-                    $attachedFiles[] = $path;
-                }
+        if ($request->hasFile('attached_files')) {
+            foreach ($request->file('attached_files') as $file) {
+                // Get the original filename
+                $filename = $file->getClientOriginalName();
+                // Store the file with its original name in the specified directory
+                $path = $file->storeAs('dynamic-pages/attachments', $filename, 'public');
+                // Add the path to the array
+                $attachedFiles[] = $path;
             }
+        }
 
-    
+        // Get the base URL from .env
+        $baseUrl = config('app.custom_url');
+
+        // Ensure all URLs in content are absolute
+        $content = $data['content'];
+        $content = preg_replace_callback('/href="([^"]*)"/', function ($matches) use ($baseUrl) {
+            $url = $matches[1];
+            // If the URL is relative, prepend the base URL
+            if (!preg_match('/^https?:\/\//', $url)) {
+                $url = $baseUrl . '/' . ltrim($url, '/');
+            }
+            return 'href="' . $url . '"';
+        }, $content);
+
         // Save the page to the database
         $dynamicPage = DynamicPage::create([
             'title' => $data['title'],
             'route' => $data['route'],
             'thumbnail_image' => $thumbnailPath,
             'banner_image' => $bannerPath,
-            'content' => $data['content'],
+            'content' => $content, // Use the modified content
             'category' => $data['category'],
             'social' => $request->has('social') ? 1 : 0, // ✅ FIX: Handle checkbox correctly
             'page_status' => $data['page_status'],
@@ -106,7 +118,7 @@ class DynamicPageController extends Controller
             'tags' => $data['tags'],
             'attached_files' => json_encode($attachedFiles), // Store as JSON
         ]);
-    
+
         return redirect()->route('dynamic-pages.index')->with('success', 'Page created successfully.');
     }
 
@@ -220,7 +232,7 @@ class DynamicPageController extends Controller
                     }
                 }
             }
-
+    
             $attachedFiles = [];
             foreach ($request->file('attached_files') as $file) {
                 // Get the original filename
@@ -236,7 +248,20 @@ class DynamicPageController extends Controller
             // Save the attached files as a JSON-encoded string
             $data['attached_files'] = json_encode($attachedFiles);
         }
-
+    
+        // Get the base URL from .env
+        $baseUrl = config('app.custom_url');
+    
+        // Ensure all URLs in content are absolute
+        $content = $data['content'];
+        $content = preg_replace_callback('/href="([^"]*)"/', function ($matches) use ($baseUrl) {
+            $url = $matches[1];
+            // If the URL is relative, prepend the base URL
+            if (!preg_match('/^https?:\/\//', $url)) {
+                $url = $baseUrl . '/' . ltrim($url, '/');
+            }
+            return 'href="' . $url . '"';
+        }, $content);
     
         // Update the page in the database
         $dynamicPage->update([
@@ -244,7 +269,7 @@ class DynamicPageController extends Controller
             'route' => $data['route'],
             'thumbnail_image' => $data['thumbnail_image'] ?? $dynamicPage->thumbnail_image,
             'banner_image' => $data['banner_image'] ?? $dynamicPage->banner_image,
-            'content' => $data['content'],
+            'content' => $content, // Use the modified content
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
