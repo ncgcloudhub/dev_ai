@@ -107,6 +107,9 @@
 <script>
     tinymce.init({
         selector: 'textarea#myeditorinstance',
+        relative_urls: false, 
+        remove_script_host: false,
+        convert_urls: false, 
         branding: false, // Removes "Build with TinyMCE"
         plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
         toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
