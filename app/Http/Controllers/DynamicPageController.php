@@ -232,7 +232,7 @@ class DynamicPageController extends Controller
                     }
                 }
             }
-
+    
             $attachedFiles = [];
             foreach ($request->file('attached_files') as $file) {
                 // Get the original filename
@@ -248,7 +248,20 @@ class DynamicPageController extends Controller
             // Save the attached files as a JSON-encoded string
             $data['attached_files'] = json_encode($attachedFiles);
         }
-
+    
+        // Get the base URL from .env
+        $baseUrl = config('app.custom_url');
+    
+        // Ensure all URLs in content are absolute
+        $content = $data['content'];
+        $content = preg_replace_callback('/href="([^"]*)"/', function ($matches) use ($baseUrl) {
+            $url = $matches[1];
+            // If the URL is relative, prepend the base URL
+            if (!preg_match('/^https?:\/\//', $url)) {
+                $url = $baseUrl . '/' . ltrim($url, '/');
+            }
+            return 'href="' . $url . '"';
+        }, $content);
     
         // Update the page in the database
         $dynamicPage->update([
@@ -256,7 +269,7 @@ class DynamicPageController extends Controller
             'route' => $data['route'],
             'thumbnail_image' => $data['thumbnail_image'] ?? $dynamicPage->thumbnail_image,
             'banner_image' => $data['banner_image'] ?? $dynamicPage->banner_image,
-            'content' => $data['content'],
+            'content' => $content, // Use the modified content
             'page_status' => $data['page_status'],
             'seo_title' => $data['seo_title'],
             'keywords' => $data['keywords'],
