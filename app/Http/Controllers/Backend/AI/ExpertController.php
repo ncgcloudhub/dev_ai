@@ -278,10 +278,7 @@ class ExpertController extends Controller
             'json' => [
                 'model' => $openaiModel, // Use the appropriate model name
                 'messages' => $messages,
-                'temperature' => 0,
-                'top_p' => 1,
-                'frequency_penalty' => 0,
-                'presence_penalty' => 0,
+              
                 'stream' => true,
             ],
             'stream' => true,
