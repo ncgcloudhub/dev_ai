@@ -1057,23 +1057,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Check if the clicked element is the copy button
-    if (event.target.closest('.copy-btn1')) {
+   if (event.target.closest('.copy-btn1')) {
         const targetId = event.target.closest('.copy-btn1').getAttribute('data-target');
         const messageElement = document.getElementById(targetId);
 
-        let messageText = '';
-        if (messageElement) {
-            const siblingParagraph = messageElement.nextElementSibling;
-            if (siblingParagraph) {
-                messageText = siblingParagraph.innerText;
-            }
-        }
+        if (!messageElement) return;
+
+        // Get the entire content inside .ctext-wrap-content
+        const fullMessage = messageElement.closest('.ctext-wrap-content').innerText.trim();
 
         console.log("Copy button clicked for Target ID:", targetId);
-        console.log("Message Text to Copy:", messageText);
+        console.log("Message Text to Copy:", fullMessage);
 
         // Copy to clipboard
-        navigator.clipboard.writeText(messageText).then(function() {
+        navigator.clipboard.writeText(fullMessage).then(function() {
             toastr.success('Content copied to clipboard!');
         }).catch(function(err) {
             console.error('Failed to copy text: ', err);
