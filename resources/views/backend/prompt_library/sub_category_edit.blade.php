@@ -101,6 +101,7 @@
     
     </div>
 </div>
+@include('admin.layouts.datatables')
 
 @endsection
 @section('script')

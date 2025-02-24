@@ -55,7 +55,13 @@ use Illuminate\Support\Facades\Session;
 
 
 Route::get('/', function () {
-    $images = DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
+    $images = DalleImageGenerate::where('status', 'active')
+        ->where(function ($query) {
+            $query->where('image', 'like', '%.webp');
+        })
+        ->inRandomOrder()
+        ->limit(16)
+        ->get();
 
     foreach ($images as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
@@ -65,7 +71,14 @@ Route::get('/', function () {
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $tools = EducationTools::inRandomOrder()->limit(6)->get();
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
-    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
+    $images_slider = DalleImageGenerate::where('resolution', '1024x1024')
+        ->where('status', 'active')
+        ->where(function ($query) {
+            $query->where('image', 'like', '%.webp');
+        })
+        ->inRandomOrder()
+        ->limit(14)
+        ->get();
 
     foreach ($images_slider as $image) {
         $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');

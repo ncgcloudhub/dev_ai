@@ -440,65 +440,65 @@ border: 1px solid rgba(255, 255, 255, 0.99);
         </div>
         <!-- end layout wrapper -->
     @endsection
-    @section('script')
+@section('script')
 
-    <script>
-        $(document).ready(function(){
-            $('.banner-slider').slick({
-                autoplay: true,
-                autoplaySpeed: 5000,
-                arrows: false,
-                dots: true,
-                fade: true,
-                infinite: true,
-                speed: 1000,
-                slidesToShow: 1,
-                adaptiveHeight: true
-            });
+<script>
+    $(document).ready(function(){
+        $('.banner-slider').slick({
+            autoplay: true,
+            autoplaySpeed: 5000,
+            arrows: false,
+            dots: true,
+            fade: true,
+            infinite: true,
+            speed: 1000,
+            slidesToShow: 1,
+            adaptiveHeight: true
         });
-    </script>
+    });
+</script>
 
 
-        <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/swiper.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/pages/job-lading.init.js') }}"></script>
-        <script src="{{ URL::asset('build/js/all.js') }}"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/libs/isotope-layout/isotope.pkgd.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
+<script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+<script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/swiper.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/landing.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/job-lading.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/all.js') }}"></script>
 
        
-       {{-- Parallex --}}
-       <script>
-        window.addEventListener('scroll', function() {
-            let stones = document.getElementById("stones");
-            let footer = document.querySelector('.custom-footer'); // Ensure this matches your footer's class or ID
-        
-            // Get the positions
-            let scrollTop = window.scrollY;
-            let stonesHeight = stones.offsetHeight;
-            let stonesWidth = stones.offsetWidth;
-            let footerTop = footer.offsetTop;
-            let windowHeight = window.innerHeight;
-        
-            // Zoom effect parameters
-            let zoomFactor = 1 + (scrollTop / 1000); // Adjust zoom speed here
-            stones.style.transform = `scale(${zoomFactor})`;
-        
-            // Calculate the bottom position of the stones image relative to the document
-            let stonesBottom = scrollTop + stonesHeight * zoomFactor;
-        
-            // Check if the stones image should stop at the footer
-            if (stonesBottom > footerTop) {
-                // Calculate the adjusted top position considering zoom
-                stones.style.top = (footerTop - stonesHeight * zoomFactor) + 'px';
-            } else {
-                stones.style.top = scrollTop + 'px';
-            }
-        });
-        </script>
+{{-- Parallex --}}
+<script>
+    window.addEventListener('scroll', function() {
+        let stones = document.getElementById("stones");
+        let footer = document.querySelector('.custom-footer'); // Ensure this matches your footer's class or ID
+
+        // Get the positions
+        let scrollTop = window.scrollY;
+        let stonesHeight = stones.offsetHeight;
+        let stonesWidth = stones.offsetWidth;
+        let footerTop = footer.offsetTop;
+        let windowHeight = window.innerHeight;
+
+        // Zoom effect parameters
+        let zoomFactor = 1 + (scrollTop / 1000); // Adjust zoom speed here
+        stones.style.transform = `scale(${zoomFactor})`;
+
+        // Calculate the bottom position of the stones image relative to the document
+        let stonesBottom = scrollTop + stonesHeight * zoomFactor;
+
+        // Check if the stones image should stop at the footer
+        if (stonesBottom > footerTop) {
+            // Calculate the adjusted top position considering zoom
+            stones.style.top = (footerTop - stonesHeight * zoomFactor) + 'px';
+        } else {
+            stones.style.top = scrollTop + 'px';
+        }
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -538,7 +538,5 @@ border: 1px solid rgba(255, 255, 255, 0.99);
         }
     });
 </script>
-
-
-        
-    @endsection
+   
+@endsection

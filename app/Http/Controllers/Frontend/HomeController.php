@@ -348,23 +348,36 @@ class HomeController extends Controller
             }
         }
 
+        $messages = 
+        [
+            [
+                'role' => 'system', 
+                'content' => 'You are a helpful assistant.'
+            ],
+
+            [
+                'role' => 'user', 
+                'content' => $prompt
+            ],
+        ];
+
         $apiKey = config('app.openai_api_key');
         $client = OpenAI::client($apiKey);
 
 
 
-        $result = $client->completions()->create([
-            "model" => 'gpt-3.5-turbo-instruct',
+        $result = $client->chat()->create([
+            "model" => 'gpt-4o-mini',
             "temperature" => $temperature_value,
             "top_p" => $top_p_value,
             "frequency_penalty" => $frequency_penalty_value,
             "presence_penalty" => $presence_penalty_value,
             'max_tokens' => $max_result_length_value,
-            'prompt' => $prompt,
+            'messages' => $messages,
         ]);
 
         $completionTokens = $result->usage->completionTokens;
-        $content = trim($result['choices'][0]['text']);
+        $content = trim($result['choices'][0]['message']['content']);
         $char_count = strlen($content);
         $num_tokens = ceil($char_count / 4);
         $num_words = str_word_count($content);
