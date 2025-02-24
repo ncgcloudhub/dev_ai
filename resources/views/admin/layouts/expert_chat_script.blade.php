@@ -258,7 +258,7 @@ function sendMessage() {
         let receivedText = '';
 
         const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let usermsg = formatContent(message);
+        let usermsg = formatUserMessage(message);
         let userMessageHTML = `<li class="chat-list right">
             <div class="conversation-list">
                 <div class="user-chat-content">
@@ -443,6 +443,29 @@ function resetButton() {
 
 {{-- GET/LOAD MESSAGES FROM SESSION --}}
 <script>
+
+function formatUserMessage(content) {
+    // First, sanitize the input to prevent any unwanted HTML injections or XSS
+    content = DOMPurify.sanitize(content);
+
+    // Ensure any Markdown elements like *italic* or **bold** are converted properly
+    const renderer = new marked.Renderer();
+    
+    // Override the renderer for code blocks to display as plain text
+   
+
+    marked.setOptions({
+        renderer: renderer,
+        breaks: true,  // Allow line breaks
+        gfm: true,     // Allow GitHub Flavored Markdown
+    });
+
+    // Use marked.js to convert markdown to HTML
+    let formattedContent = marked.parse(content);
+
+    // Return the sanitized and converted content
+    return formattedContent;
+}
    
    function formatContent(content) {
     // Preprocess content to replace triple backticks with code block tags
@@ -522,6 +545,10 @@ function resetButton() {
         success: function(response) {
             // Assuming response contains an array of messages
             response.messages.forEach(function(message) {
+
+                // Format the message content before appending
+                const formattedContent = formatUserMessage(message.message);
+
     let messageHtml = `
         <li class="chat-list ${message.role === 'user' ? 'right' : 'left'}">
             <div class="conversation-list">
@@ -534,8 +561,8 @@ function resetButton() {
 
                 <div class="user-chat-content">
                     <div class="ctext-wrap">
-                        <div class="ctext-wrap-content">
-                            <p class="mb-0 ctext-content">${message.message}</p>
+                        <div class="ctext-wrap-content text-start">
+                            <p class="mb-0 ctext-content">${formattedContent}</p>
                         </div>
                     </div>
                     <div class="conversation-name">
