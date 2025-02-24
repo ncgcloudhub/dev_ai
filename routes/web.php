@@ -810,7 +810,7 @@ Route::post('/increment-stable-download/{id}', [StableDifussionController::class
 
 // Stable Text to Video
 Route::get('/stable-text-video-form', [StableDifussionController::class, 'TextVideoindex'])->name('stable.text.video.form');
-Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.image_to_video');
+Route::post('/generate-text-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.text_to_video');
 Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 
@@ -853,7 +853,7 @@ Route::post('/check-generation-status', [StableDifussionController::class, 'chec
 
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
-Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
+Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
 // Stable Diffusion Control(Sketch)
