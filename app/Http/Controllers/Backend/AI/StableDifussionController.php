@@ -175,7 +175,10 @@ public function generateVideo(Request $request)
             'generation_id' => $generationId,
         ]);
         // Return the generation ID in the response
-        return response()->json(['id' => $generationId], 200);
+        return response()->json([
+            'message' => 'Video generation started',
+            'generation_id' => $generationId,
+        ]);
     } else {
 
         Log::error('Video Generation Failed', [

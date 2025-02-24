@@ -53,4 +53,4 @@ Route::post('/register', function (Request $request) {
 
 Route::get('/education/manage/tools', [EducationController::class, 'manageToolsapi'])->middleware('hex.auth');
 
-Route::post('/image', [ImageGenerationController::class, 'generateImage'])->name('generate.image')->middleware('hex.auth');
+Route::post('/image', [ImageGenerationController::class, 'generateImage'])->name('generate.images')->middleware('hex.auth');

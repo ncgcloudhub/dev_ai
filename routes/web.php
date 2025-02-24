@@ -240,10 +240,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     Route::get('/admin/button-styles', [ButtonStyleController::class, 'index'])->name('admin.button-styles');
-    Route::post('/admin/button-styles/update', [ButtonStyleController::class, 'update'])->name('admin.button-styles.update');
-    Route::post('/admin/button-styles/store', [ButtonStyleController::class, 'store'])->name('admin.button-styles.store');
-    Route::post('/admin/button-styles/edit', [ButtonStyleController::class, 'edit'])->name('admin.button-styles.edit');
-    Route::delete('/admin/button-styles/{id}', [ButtonStyleController::class, 'destroy'])->name('admin.button-styles.delete');
+    Route::post('/button-styles/store', [ButtonStyleController::class, 'store'])->name('button.styles.store');
+    Route::delete('/button-styles/{id}', [ButtonStyleController::class, 'destroy'])->name('button.styles.destroy');
 
 
 
@@ -812,7 +810,7 @@ Route::post('/increment-stable-download/{id}', [StableDifussionController::class
 
 // Stable Text to Video
 Route::get('/stable-text-video-form', [StableDifussionController::class, 'TextVideoindex'])->name('stable.text.video.form');
-Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.image_to_video');
+Route::post('/generate-text-to-video', [StableDifussionController::class, 'generateImageToVideo'])->name('generate.text_to_video');
 Route::get('/video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 Route::get('/test-resize', [StableDifussionController::class, 'testResize']);
 
@@ -855,7 +853,7 @@ Route::post('/check-generation-status', [StableDifussionController::class, 'chec
 
 // Stable Video
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
-Route::post('/generate-video', [StableDifussionController::class, 'generateVideo'])->name('generate.video');
+Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
 // Stable Diffusion Control(Sketch)

@@ -25,14 +25,14 @@
             </h1>            
                 <h2 id="subheadingText" class="gradient-text-3">Transform your Text into stunning videos</h2>
                 <p id="pText">Elevate your creativity with our AI tool that converts text and images into high-quality videos. Effortlessly generate engaging video content for presentations, social media, and more.</p>
-        <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
+        <form action="{{ route('generate.text_to_video') }}" method="POST" enctype="multipart/form-data" id="videoGenerationForm">
             @csrf
             <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Video"></textarea><br>
             <button type="submit" class="btn gradient-btn-3">Generate</button>
         </form>
 
         <!-- Image to Video Form (Initially Hidden) -->
-        <form action="{{ route('generate.video') }}" method="POST" enctype="multipart/form-data" id="imageVideoForm" style="display: none;">
+        <form action="{{ route('generate.image_to_video') }}" method="POST" enctype="multipart/form-data" id="imageVideoForm" style="display: none;">
             @csrf
                 <input type="file" name="image" id="image" class="form-control ps-5 mt-1 mb-3" accept="image/*" required>
                 <small class="text-danger d-none" id="resolution-error">Please upload an image with one of the following resolutions: 1024x576, 576x1024, or 768x768.</small>
@@ -74,17 +74,17 @@
         
         const form = event.target;
         const formData = new FormData(form);
-
+       
         try {
-            const response = await fetch("{{ route('generate.video') }}", {
+            const response = await fetch("{{ route('generate.text_to_video') }}", {
                 method: "POST",
                 body: formData,
             });
 
             const result = await response.json();
 
-            if (response.ok && result.id) {
-                fetchVideo(result.id);
+            if (response.ok && result.generation_id) {
+                fetchVideo(result.generation_id);
             } else {
                 alert('Error: ' + (result.error?.message || 'Unknown error occurred'));
             }
@@ -95,27 +95,27 @@
 
 
     // Generate Image to VIDEO
-        document.querySelector('form').addEventListener('submit', async (event) => {
+    document.getElementById('imageVideoForm').addEventListener('submit', async (event) => {
         event.preventDefault();
-        const formData = new FormData(event.target);
-    
+        
+        const form = event.target;
+        const formData = new FormData(form);
+
         try {
             const response = await fetch("{{ route('generate.image_to_video') }}", {
                 method: "POST",
                 body: formData,
             });
+
             const result = await response.json();
-    
-            if (response.ok) {
-                console.log('video generated id:', result.generation_id);
-    
-                // Poll for video result
+
+            if (response.ok && result.generation_id) {
                 fetchVideo(result.generation_id);
             } else {
-                console.error('Error:', result.error);
+                alert('Error: ' + (result.error?.message || 'Unknown error occurred'));
             }
         } catch (error) {
-            console.error('Request failed:', error);
+            console.error('Error:', error);
         }
     });
     

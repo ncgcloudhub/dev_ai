@@ -1,4 +1,4 @@
-<form action="{{ route('generate.image_to_video') }}" method="POST">
+<form action="{{ route('generate.text_to_video') }}" method="POST">
     @csrf
     <label for="prompt">Text Prompt:</label>
     <input type="text" name="prompt" id="prompt" required>
@@ -34,7 +34,7 @@ const apiKey = @json($apiKey); // Loaded from environment variable
     const formData = new FormData(event.target);
 
     try {
-        const response = await fetch("{{ route('generate.image_to_video') }}", {
+        const response = await fetch("{{ route('generate.text_to_video') }}", {
             method: "POST",
             body: formData,
         });
