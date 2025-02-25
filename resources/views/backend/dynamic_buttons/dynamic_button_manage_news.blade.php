@@ -82,10 +82,10 @@
         <!-- Button Preview Section -->
         <div class="col-md-6">
             <h4>Button Previews</h4>
-            <button id="previewButton-save" class="btn">Save</button>
-            <button id="previewButton-edit" class="btn">Edit</button>
-            <button id="previewButton-delete" class="btn">Delete</button>
-            <button id="previewButton-cancel" class="btn">Cancel</button>
+            <button id="previewButton-save" class="btn-save">Save</button>
+            <button id="previewButton-edit" class="btn-edit">Edit</button>
+            <button id="previewButton-delete" class="btn-delete">Delete</button>
+            <button id="previewButton-cancel" class="btn-cancel">Cancel</button>
         </div>
     </div>
 </div>
@@ -132,14 +132,15 @@ document.addEventListener("DOMContentLoaded", function() {
             let icon = document.getElementById(`icon-${buttonId}`).value;
 
             let classes = JSON.stringify({
-                background: `linear-gradient(45deg, ${bgColor}, ${gradientColor})`,
-                borderRadius: `${borderRadius}px`,
-                boxShadow: `0 4px ${shadowIntensity}px rgba(0, 0, 0, 0.2)`,
-                color: "white",
-                border: "none",
-                padding: "10px 20px",
-                transition: "box-shadow 0.3s ease, transform 0.3s ease",
+                "background": `linear-gradient(45deg, ${bgColor}, ${gradientColor})`,
+                "border-radius": `${borderRadius}px`,  // ✅ Correct (kebab-case)
+                "box-shadow": `0 4px ${shadowIntensity}px rgba(0, 0, 0, 0.2)`,
+                "color": "white",
+                "border": "none",
+                "padding": "10px 20px",
+                "transition": "box-shadow 0.3s ease, transform 0.3s ease",
             });
+
 
             fetch('/button-styles/store', {
                 method: 'POST',
