@@ -14,3 +14,19 @@
 
 
 <link href="{{ URL::asset('vendor/flasher/flasher.min.css') }}" rel="stylesheet">
+
+@php
+    $cssRules = '';
+    foreach ($buttons as $button) {
+        $classes = json_decode($button->classes, true);
+        $cssRules .= ".btn-{$button->button_type} { ";
+        foreach ($classes as $property => $value) {
+            $cssRules .= "{$property}: {$value}; ";
+        }
+        $cssRules .= "} ";
+    }
+@endphp
+
+<style>
+    {!! $cssRules !!}
+</style>

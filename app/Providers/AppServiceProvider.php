@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ButtonDesign;
 use App\Models\Page;
 use App\Models\SiteSettings;
 use Illuminate\Support\ServiceProvider;
@@ -54,6 +55,12 @@ class AppServiceProvider extends ServiceProvider
             $data = getUserLastPackageAndModels();
             $selectedAiModel = Session::get('selectedAiModel');
             $view->with(array_merge($data, compact('selectedAiModel')));
+        });
+
+         // Pass dynamic buttons to all views
+        View::composer('*', function ($view) {
+            $buttons = ButtonDesign::all(); // Fetch all buttons from the database
+            $view->with('buttons', $buttons);
         });
 
     }
