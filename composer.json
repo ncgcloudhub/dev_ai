@@ -11,6 +11,7 @@
         "erusev/parsedown": "^1.7",
         "guzzlehttp/guzzle": "^7.8",
         "intervention/image": "^2",
+        "laravel/cashier": "^15.6",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.12",
