@@ -14,7 +14,7 @@ class CheckoutController extends Controller
               return $request->user()
                 ->newSubscription('prod_Rpzyi6JwMveusr', $plan)
                 ->checkout([
-                    'success_url' => route('success'),
+                    'success_url' => route('user.dashboard'),
                     'cancel_url' => route('user.dashboard'),
                 ]);
     }
