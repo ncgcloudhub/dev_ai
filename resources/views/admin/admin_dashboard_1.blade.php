@@ -25,7 +25,7 @@
                     <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                     <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                     <div class="d-flex gap-3 mt-4">
-                        <a href="{{route('main.chat.form')}}" class="{{ getButtonClass('save') }}">Chat Now</a>
+                        <a href="{{route('main.chat.form')}}" class="btn-save">Chat Now</a>
                         <a href="{{route('generate.image.view')}}" class="btn gradient-btn-2">Create Your Imagination</a>
                     </div>
                 </div>
