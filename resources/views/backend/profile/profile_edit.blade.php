@@ -488,39 +488,42 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Plan</th>
-                                            <th>Amount</th>
-                                            <th>Interval</th>
+                                            <th>Plan Name</th>
+                                            <th>Price</th>
                                             <th>Status</th>
                                             <th>Start Date</th>
-                                            <th>End Date</th>
+                                            <th>Next Billing Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($subscriptions->data as $subscription)
-                    <tr>
-                        <td>
-                            {{ $subscription->items->data[0]->plan->nickname ?? 
-                               $subscription->items->data[0]->plan->id }}
-                        </td>
-                        <td>
-                            {{ $subscription->items->data[0]->plan->amount / 100 }} 
-                            {{ strtoupper($subscription->items->data[0]->plan->currency) }}
-                        </td>
-                        <td>
-                            {{ ucfirst($subscription->items->data[0]->plan->interval) }}
-                        </td>
-                        <td>
-                            {{ ucfirst($subscription->status) }}
-                        </td>
-                        <td>
-                            {{ date('Y-m-d', $subscription->current_period_start) }}
-                        </td>
-                        <td>
-                            {{ date('Y-m-d', $subscription->current_period_end) }}
-                        </td>
-                    </tr>
-                @endforeach
+                                        @foreach ($subscriptions as $subscription)
+                                        @php
+                                            $product = \Stripe\Product::retrieve($subscription->items->data[0]->price->product);
+                                            $price = \Stripe\Price::retrieve($subscription->items->data[0]->price->id);
+                                            $amount = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $product->name }}</td>
+                                            <td>{{ $amount }}</td>
+                                            <td>
+                                                @if ($subscription->status === 'active')
+                                                    <span class="badge bg-success">Active</span>
+                                                @elseif ($subscription->status === 'canceled')
+                                                    <span class="badge bg-danger">Canceled</span>
+                                                @else
+                                                    <span class="badge bg-warning">{{ ucfirst($subscription->status) }}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ \Carbon\Carbon::createFromTimestamp($subscription->created)->format('d M Y') }}</td>
+                                            <td>
+                                                @if ($subscription->current_period_end)
+                                                    {{ \Carbon\Carbon::createFromTimestamp($subscription->current_period_end)->format('d M Y') }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             @else
