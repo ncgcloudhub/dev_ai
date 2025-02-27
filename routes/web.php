@@ -664,6 +664,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
 
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
+        Route::get('download-invoice/{invoiceId}', [ProfileEditController::class, 'download'])->name('download.invoice');
 
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
 

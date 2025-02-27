@@ -241,6 +241,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#stripeHistory" role="tab">
+                                <i class="fas fa-home"></i>
+                                Stripe Subscriptions
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
                                 <i class="far fa-user"></i>
                                 Change Password
@@ -474,7 +480,84 @@
                             </div>
                             @endif
                         </div>
+
+                        {{-- Stripe --}}
+                        <div class="tab-pane" id="stripeHistory" role="tabpanel">
+                            <h2>My Subscriptions</h2>
+                            @if ($subscriptions->count() > 0)
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Plan</th>
+                                            <th>Amount</th>
+                                            <th>Interval</th>
+                                            <th>Status</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($subscriptions->data as $subscription)
+                    <tr>
+                        <td>
+                            {{ $subscription->items->data[0]->plan->nickname ?? 
+                               $subscription->items->data[0]->plan->id }}
+                        </td>
+                        <td>
+                            {{ $subscription->items->data[0]->plan->amount / 100 }} 
+                            {{ strtoupper($subscription->items->data[0]->plan->currency) }}
+                        </td>
+                        <td>
+                            {{ ucfirst($subscription->items->data[0]->plan->interval) }}
+                        </td>
+                        <td>
+                            {{ ucfirst($subscription->status) }}
+                        </td>
+                        <td>
+                            {{ date('Y-m-d', $subscription->current_period_start) }}
+                        </td>
+                        <td>
+                            {{ date('Y-m-d', $subscription->current_period_end) }}
+                        </td>
+                    </tr>
+                @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>You have no active subscriptions.</p>
+                            @endif
                         
+                            <h2>My Invoices</h2>
+                            @if ($invoices->count() > 0)
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice Number</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Download</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($invoices->data as $invoice)
+                                            <tr>
+                                                <td>{{ $invoice->number }}</td>
+                                                <td>{{ $invoice->currency }} {{ $invoice->amount_paid / 100 }}</td>
+                                                <td>{{ date('Y-m-d', $invoice->created) }}</td>
+                                                <td>
+                                                    <a href="{{ route('download.invoice', $invoice->id) }}" class="btn btn-sm btn-primary">
+                                                        Download
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>You have no invoices.</p>
+                            @endif
+                        </div>
+
                         {{-- History END --}}
                     </div>
                 </div>

@@ -11,11 +11,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Subscription;
+use Stripe\Invoice;
 
 class ProfileEditController extends Controller
 {
     
-    public function ProfileEdit()
+    public function ProfileEdit(Request $request)
     {
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
@@ -51,9 +54,51 @@ class ProfileEditController extends Controller
                 $renewalDate = $nextResetDate->format('d M Y'); // Calculate the renewal date
             }
         }
+
+        // STRIPE DASHBOARD
+        // Set the Stripe API key from the .env file
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Fetch the user's Stripe customer ID
+        $stripeCustomerId = $user->stripe_id; // Ensure this field exists in your users table
+
+        // Fetch subscriptions
+        $subscriptions = [];
+        if ($stripeCustomerId) {
+            $subscriptions = Subscription::all([
+                'customer' => $stripeCustomerId,
+                'status' => 'all', // or 'active', 'past_due', 'canceled', etc.
+            ]);
+        }
+
+        // Fetch invoices
+        $invoices = [];
+        if ($stripeCustomerId) {
+            $invoices = Invoice::all([
+                'customer' => $stripeCustomerId,
+            ]);
+        }
     
-        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset','renewalDate'));
+        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset','renewalDate','subscriptions','invoices'));
     }
+
+    public function download($invoiceId)
+{
+    // Set the Stripe API key from the .env file
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    // Fetch the invoice
+    $invoice = Invoice::retrieve($invoiceId);
+
+    // Get the invoice PDF URL
+    $invoicePdfUrl = $invoice->invoice_pdf;
+
+    // Redirect the user to the PDF URL
+    return redirect($invoicePdfUrl);
+}
     
 
     public function ProfileUpdate (Request $request){
