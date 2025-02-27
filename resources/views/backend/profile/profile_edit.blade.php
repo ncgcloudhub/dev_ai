@@ -493,6 +493,7 @@
                                             <th>Status</th>
                                             <th>Start Date</th>
                                             <th>Next Billing Date</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -532,6 +533,18 @@
                                                     {{ \Carbon\Carbon::createFromTimestamp($subscription->current_period_end)->format('d M Y') }}
                                                 @else
                                                     N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($subscription->status === 'active')
+                                                    <form action="{{ route('subscription.cancel', $subscription->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this subscription?');">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <button class="btn btn-secondary btn-sm" disabled>Canceled</button>
                                                 @endif
                                             </td>
                                         </tr>

@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\Stripe;
+use Stripe\Subscription;
 
 class CheckoutController extends Controller
 {
@@ -50,5 +52,20 @@ class CheckoutController extends Controller
             'message' => 'Your package has been successfully purchased',
             'alert-type' => 'success'
         ]);
+    }
+
+    public function cancelSubscription(Request $request, $subscriptionId)
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+            // Retrieve and cancel the subscription
+            $subscription = Subscription::retrieve($subscriptionId);
+            $subscription->cancel();
+
+            return redirect()->back()->with('success', 'Subscription canceled successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to cancel subscription: ' . $e->getMessage());
+        }
     }
 }

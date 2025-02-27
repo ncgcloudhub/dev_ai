@@ -52,21 +52,6 @@ class ProfileEditController extends Controller
     
         return view('backend.profile.profile_edit', compact('user','subscriptions','invoices'));
     }
-
-    public function download($invoiceId)
-{
-    // Set the Stripe API key from the .env file
-    Stripe::setApiKey(config('services.stripe.secret'));
-
-    // Fetch the invoice
-    $invoice = Invoice::retrieve($invoiceId);
-
-    // Get the invoice PDF URL
-    $invoicePdfUrl = $invoice->invoice_pdf;
-
-    // Redirect the user to the PDF URL
-    return redirect($invoicePdfUrl);
-}
     
 
     public function ProfileUpdate (Request $request){

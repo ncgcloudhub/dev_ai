@@ -664,7 +664,6 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
 
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
-        Route::get('download-invoice/{invoiceId}', [ProfileEditController::class, 'download'])->name('download.invoice');
 
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
 
@@ -901,6 +900,7 @@ Route::post('/clear-chat', function () {
 // STRIPE
 Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
 Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
+Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
 Route::view('success', 'backend.subscription.success')->name('success');
 
  // Catch-all dynamic page route (must be at the end)
