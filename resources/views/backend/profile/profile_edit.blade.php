@@ -234,12 +234,12 @@
                                 Personal Details
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#purchaseHistory" role="tab">
                                 <i class="fas fa-home"></i>
                                 Purchase History
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#stripeHistory" role="tab">
                                 <i class="fas fa-home"></i>
@@ -392,7 +392,7 @@
                         <!--end tab-pane-->
                       
                         {{-- Purchase History --}}
-                        <div class="tab-pane" id="purchaseHistory" role="tabpanel">
+                        {{-- <div class="tab-pane" id="purchaseHistory" role="tabpanel">
                             @if($packageHistory->isNotEmpty())
                             <div class="row">
                                 <div class="col-xxl-8">
@@ -479,7 +479,7 @@
                                 </div> <!-- end card-body-->
                             </div>
                             @endif
-                        </div>
+                        </div> --}}
 
                         {{-- Stripe --}}
                         <div class="tab-pane" id="stripeHistory" role="tabpanel">
@@ -497,13 +497,25 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($subscriptions as $subscription)
-                                        @php
+                                        @php      
                                             $product = \Stripe\Product::retrieve($subscription->items->data[0]->price->product);
                                             $price = \Stripe\Price::retrieve($subscription->items->data[0]->price->id);
                                             $amount = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
+
+                                            // Find the invoice related to this subscription
+                                            $invoice = collect($invoices)->firstWhere('subscription', $subscription->id);
                                         @endphp
+                                       
                                         <tr>
-                                            <td>{{ $product->name }}</td>
+                                            <td>
+                                                @if ($invoice && $invoice->hosted_invoice_url)
+                                                    <a href="{{ $invoice->hosted_invoice_url }}" target="_blank">
+                                                        {{ $product->name }}
+                                                    </a>
+                                                @else
+                                                    {{ $product->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $amount }}</td>
                                             <td>
                                                 @if ($subscription->status === 'active')
@@ -530,35 +542,6 @@
                                 <p>You have no active subscriptions.</p>
                             @endif
                         
-                            <h2>My Invoices</h2>
-                            @if ($invoices->count() > 0)
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Invoice Number</th>
-                                            <th>Amount</th>
-                                            <th>Date</th>
-                                            <th>Download</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($invoices->data as $invoice)
-                                            <tr>
-                                                <td>{{ $invoice->number }}</td>
-                                                <td>{{ $invoice->currency }} {{ $invoice->amount_paid / 100 }}</td>
-                                                <td>{{ date('Y-m-d', $invoice->created) }}</td>
-                                                <td>
-                                                    <a href="{{ route('download.invoice', $invoice->id) }}" class="btn btn-sm btn-primary">
-                                                        Download
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            @else
-                                <p>You have no invoices.</p>
-                            @endif
                         </div>
 
                         {{-- History END --}}
