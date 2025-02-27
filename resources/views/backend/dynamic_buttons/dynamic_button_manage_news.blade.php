@@ -76,6 +76,21 @@
                         </div>
                     </div>
                 </div>
+
+                  <!-- Generate Button Card -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#generateButtonCard">
+                            Generate Button
+                        </button>
+                    </h2>
+                    <div id="generateButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'generate'])
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -86,6 +101,7 @@
             <button id="previewButton-edit" class="btn-edit">Edit</button>
             <button id="previewButton-delete" class="btn-delete">Delete</button>
             <button id="previewButton-cancel" class="btn-cancel">Cancel</button>
+            <button id="previewButton-generate" class="btn-generate">Generate</button>
         </div>
     </div>
 </div>
@@ -165,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Initialize button styles
-    ["save", "edit", "delete", "cancel"].forEach(buttonId => updateButtonStyle(buttonId));
+    ["save", "edit", "delete", "cancel", "generate"].forEach(buttonId => updateButtonStyle(buttonId));
 });
 </script>
 @endsection
