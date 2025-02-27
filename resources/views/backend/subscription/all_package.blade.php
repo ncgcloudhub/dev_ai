@@ -250,9 +250,13 @@
                                 <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
                             @else
                                 @if ($item->active === "active")
-                                    <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
-                                        <i class="ri-shopping-cart-fill"></i> Buy Package
-                                    </a>
+                                <a href="{{ route('checkout', [
+                                    'id' => $item->id,
+                                    'prod_id' => $item->stripe_prod_id ?? 'prod_Rpzyi6JwMveusr',
+                                    'price_id' => $item->stripe_price_id ?? 'price_1QwJyoFLEYsrNPjMzmjyYXVx'
+                                ]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
+                                    <i class="ri-shopping-cart-fill"></i> Buy Package
+                                </a>
                                 @else
                                     <a href="#" class="btn btn-secondary w-100 me-2 buy-package-btn" disabled>
                                         <i class="ri-shopping-cart-fill"></i> Inactive Package</a>
@@ -476,9 +480,13 @@
                             <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
                         @else
                             @if ($item->active === "active")
-                                <a href="{{ route('purchase.package', ['pricingPlanId' => $item->id]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
-                                    <i class="ri-shopping-cart-fill"></i> Buy Package
-                                </a>
+                            <a href="{{ route('checkout', [
+                                'id' => $item->id,
+                                'prod_id' => $item->stripe_prod_id ?? 'prod_Rpzyi6JwMveusr',
+                                'price_id' => $item->stripe_price_id ?? 'price_1QwJyoFLEYsrNPjMzmjyYXVx'
+                            ]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
+                                <i class="ri-shopping-cart-fill"></i> Buy Package
+                            </a>
                             @else
                                 <a href="#" class="btn btn-primary w-100 me-2 buy-package-btn" disabled>
                                     <i class="ri-shopping-cart-fill"></i>Inactive Package

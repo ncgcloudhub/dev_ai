@@ -234,10 +234,16 @@
                                 Personal Details
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#purchaseHistory" role="tab">
                                 <i class="fas fa-home"></i>
                                 Purchase History
+                            </a>
+                        </li> --}}
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#stripeHistory" role="tab">
+                                <i class="fas fa-home"></i>
+                                Stripe Subscriptions
                             </a>
                         </li>
                         <li class="nav-item">
@@ -386,7 +392,7 @@
                         <!--end tab-pane-->
                       
                         {{-- Purchase History --}}
-                        <div class="tab-pane" id="purchaseHistory" role="tabpanel">
+                        {{-- <div class="tab-pane" id="purchaseHistory" role="tabpanel">
                             @if($packageHistory->isNotEmpty())
                             <div class="row">
                                 <div class="col-xxl-8">
@@ -473,8 +479,84 @@
                                 </div> <!-- end card-body-->
                             </div>
                             @endif
-                        </div>
+                        </div> --}}
+
+                        {{-- Stripe --}}
+                        <div class="tab-pane" id="stripeHistory" role="tabpanel">
+                            <h2>My Subscriptions</h2>
+                            @if ($subscriptions->count() > 0)
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Plan Name</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Start Date</th>
+                                            <th>Next Billing Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($subscriptions as $subscription)
+                                        @php      
+                                            $product = \Stripe\Product::retrieve($subscription->items->data[0]->price->product);
+                                            $price = \Stripe\Price::retrieve($subscription->items->data[0]->price->id);
+                                            $amount = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
+
+                                            // Find the invoice related to this subscription
+                                            $invoice = collect($invoices)->firstWhere('subscription', $subscription->id);
+                                        @endphp
+                                       
+                                        <tr>
+                                            <td>
+                                                @if ($invoice && $invoice->hosted_invoice_url)
+                                                    <a href="{{ $invoice->hosted_invoice_url }}" target="_blank">
+                                                        {{ $product->name }}
+                                                    </a>
+                                                @else
+                                                    {{ $product->name }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $amount }}</td>
+                                            <td>
+                                                @if ($subscription->status === 'active')
+                                                    <span class="badge bg-success">Active</span>
+                                                @elseif ($subscription->status === 'canceled')
+                                                    <span class="badge bg-danger">Canceled</span>
+                                                @else
+                                                    <span class="badge bg-warning">{{ ucfirst($subscription->status) }}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ \Carbon\Carbon::createFromTimestamp($subscription->created)->format('d M Y') }}</td>
+                                            <td>
+                                                @if ($subscription->current_period_end)
+                                                    {{ \Carbon\Carbon::createFromTimestamp($subscription->current_period_end)->format('d M Y') }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($subscription->status === 'active')
+                                                    <form action="{{ route('subscription.cancel', $subscription->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this subscription?');">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <button class="btn btn-secondary btn-sm" disabled>Canceled</button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <p>You have no active subscriptions.</p>
+                            @endif
                         
+                        </div>
+
                         {{-- History END --}}
                     </div>
                 </div>

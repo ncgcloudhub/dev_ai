@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\ButtonStyleController;
 use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
@@ -895,6 +896,12 @@ Route::post('/clear-chat', function () {
     Session::forget('chat_history');
     return response()->json(['message' => 'Chat history cleared']);
 });
+
+// STRIPE
+Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
+Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
+Route::view('success', 'backend.subscription.success')->name('success');
 
  // Catch-all dynamic page route (must be at the end)
  Route::get('/{route}', [DynamicPageController::class, 'show'])
