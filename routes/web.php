@@ -899,6 +899,7 @@ Route::post('/clear-chat', function () {
 
 // STRIPE
 Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
 Route::view('success', 'backend.subscription.success')->name('success');
 
  // Catch-all dynamic page route (must be at the end)
