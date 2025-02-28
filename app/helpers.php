@@ -356,6 +356,46 @@ if (!function_exists('userHasTokensLeft')) {
     }
 }
 
+
+// FOR API HELPERS
+if (!function_exists('deductUserTokensAndCreditsAPI')) {
+    function deductUserTokensAndCreditsAPI($user, int $tokens = 0, int $credits = 0)
+    {
+
+        Log::info('Inside Deducat API 356');
+        if (!$user) {
+            return "User not authenticated";
+        }
+
+        // If the user has tokens, deduct normally
+        if ($user->tokens_left >= $tokens) {
+            $user->tokens_left = max(0, $user->tokens_left - $tokens);
+            $user->tokens_used = max(0, $user->tokens_used + $tokens);
+        } else {
+            // If the user has no tokens, track free generations instead
+            $user->free_tokens_used += $tokens;
+        }
+
+        // Deduct credits if required
+        if ($user->credits_left < $credits) {
+            return "no-credits";
+        }
+
+        $user->credits_left = max(0, $user->credits_left - $credits);
+        $user->credits_used = max(0, $user->credits_used + $credits);
+
+        // Increment images_generated only if credits are used
+        if ($credits > 0) {
+            $user->images_generated += 1;
+        }
+
+        // Save changes
+        $user->save();
+
+        return "deducted-successfully";
+    }
+}
+
     
 
 }

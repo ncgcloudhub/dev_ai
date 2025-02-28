@@ -85,5 +85,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     });
 
 Route::get('/education/manage/tools', [EducationController::class, 'manageToolsapi'])->middleware('hex.auth');
+Route::get('/tool/{id}/{slug}', [ImageGenerationController::class, 'showTool'])->name('tool.show.api');
+Route::post('/tools/generate-content', [ImageGenerationController::class, 'ToolsGenerateContent'])->name('tools.generate.content.api')->middleware('auth:sanctum');
 
 Route::post('/image', [ImageGenerationController::class, 'generateImage'])->name('generate.images')->middleware('hex.auth');
