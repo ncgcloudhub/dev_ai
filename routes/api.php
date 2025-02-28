@@ -40,6 +40,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'role' => 'user',
+                'status' => 'active',
+                'credits_left' => 100,
+                'tokens_left' => 5000,
             ]);
         
             // Return success response
