@@ -49,5 +49,12 @@ return [
         'api_url' => env('STABLE_DIFFUSION_API_URL'),
     ],
 
+    'stripe' => [
+    'key' => env('STRIPE_KEY'),
+    'secret' => env('STRIPE_SECRET'),
+    'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+    
+],
+
 
 ];

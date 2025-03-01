@@ -24,6 +24,7 @@
         "smalot/pdfparser": "^2.10",
         "spatie/laravel-permission": "^6.9",
         "stevebauman/location": "^7.3",
+        "stripe/stripe-php": "^16.6",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {

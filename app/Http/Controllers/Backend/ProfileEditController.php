@@ -11,48 +11,46 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Subscription;
+use Stripe\Invoice;
 
 class ProfileEditController extends Controller
 {
     
-    public function ProfileEdit()
+    public function ProfileEdit(Request $request)
     {
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
-        $packageHistory = $user->packageHistory()->with('package')->get();
-        
-        $freePricingPlan = null;
-        $daysUntilNextReset = null;
-        $renewalDate = null;
-        
-        if ($packageHistory->isEmpty()) {
-            // Free plan case
-            $freePricingPlan = PricingPlan::where('package_type', 'monthly')
-            ->where('slug', 'like', '%free%')
-            ->first();
-            
-            // Calculate the next reset date for free plan
-            $now = Carbon::now();
-            $registrationDate = $user->created_at;
-            $nextResetDate = $registrationDate->copy()->addMonths($registrationDate->diffInMonths($now) + 1);
-            $daysUntilNextReset = $now->diffInDays($nextResetDate);
-            $renewalDate = $nextResetDate->format('d M Y'); // Calculate the renewal date
 
-        } else {
-            // Paid plan case, handle only the last paid package
-            $firstPaidPackage = $packageHistory->last();
-            
-            if ($firstPaidPackage) {
-                // Calculate the next reset date for the first paid package
-                $now = Carbon::now();
-                $startDate = $firstPaidPackage->created_at;
-                $nextResetDate = $startDate->copy()->addMonths($startDate->diffInMonths($now) + 1);
-                $daysUntilNextReset = $now->diffInDays($nextResetDate);
-                $renewalDate = $nextResetDate->format('d M Y'); // Calculate the renewal date
-            }
+        // STRIPE DASHBOARD
+        // Set the Stripe API key from the .env file
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        // Get the authenticated user
+        $user = $request->user();
+
+        // Fetch the user's Stripe customer ID
+        $stripeCustomerId = $user->stripe_id; // Ensure this field exists in your users table
+
+        // Fetch subscriptions
+        $subscriptions = [];
+        if ($stripeCustomerId) {
+            $subscriptions = Subscription::all([
+                'customer' => $stripeCustomerId,
+                'status' => 'all', // or 'active', 'past_due', 'canceled', etc.
+            ]);
+        }
+
+        // Fetch invoices
+        $invoices = [];
+        if ($stripeCustomerId) {
+            $invoices = Invoice::all([
+                'customer' => $stripeCustomerId,
+            ]);
         }
     
-        return view('backend.profile.profile_edit', compact('user', 'packageHistory', 'freePricingPlan', 'daysUntilNextReset','renewalDate'));
+        return view('backend.profile.profile_edit', compact('user','subscriptions','invoices'));
     }
     
 
