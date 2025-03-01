@@ -250,6 +250,7 @@
                                 <a href="javascript:void(0);" class="btn btn-success w-100" disabled>Your Current Plan</a>
                             @else
                                 @if ($item->active === "active")
+
                                 <a href="{{ route('checkout', [
                                     'id' => $item->id,
                                     'prod_id' => $item->stripe_prod_id ?? 'prod_Rpzyi6JwMveusr',
@@ -257,6 +258,7 @@
                                 ]) }}" class="btn btn-primary w-100 me-2 buy-package-btn">
                                     <i class="ri-shopping-cart-fill"></i> Buy Package
                                 </a>
+
                                 @else
                                     <a href="#" class="btn btn-secondary w-100 me-2 buy-package-btn" disabled>
                                         <i class="ri-shopping-cart-fill"></i> Inactive Package</a>

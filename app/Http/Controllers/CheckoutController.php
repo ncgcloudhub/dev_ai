@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\User;
@@ -12,11 +13,13 @@ use Illuminate\Support\Facades\DB;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
+
 class CheckoutController extends Controller
 {
     /**
      * Handle the incoming request.
      */
+
     public function __invoke(Request $request, $id, $prod_id, $price_id)
     {
         return $request->user()
@@ -67,5 +70,6 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to cancel subscription: ' . $e->getMessage());
         }
+
     }
 }
