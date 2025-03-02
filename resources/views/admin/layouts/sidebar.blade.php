@@ -405,6 +405,11 @@
                                         <a href="{{route('stripe.balance.report')}}" class="nav-link sidebar-hover {{ request()->routeIs('stripe.balance.report') ? 'active' : '' }}" >Report Stripe</a>
                                     </li>
                                     @endcan
+                                    @can('settings.pageSEOAdd')
+                                    <li class="nav-item">
+                                        <a href="{{route('stripe.admin.subscriptions.summary')}}" class="nav-link sidebar-hover {{ request()->routeIs('stripe.admin.subscriptions.summary') ? 'active' : '' }}" >Stripe Subscriptions</a>
+                                    </li>
+                                    @endcan
                                  
                                     @can('settings.AISettings')
                                     <li class="nav-item">
