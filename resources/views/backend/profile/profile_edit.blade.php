@@ -544,7 +544,19 @@
                                                         </button>
                                                     </form>
                                                 @else
-                                                    <button class="btn btn-secondary btn-sm" disabled>Canceled</button>
+                                                    {{-- Fetch product & price ID for repurchasing --}}
+                                                    @php
+                                                        $priceId = $subscription->items->data[0]->price->id ?? 'default_price_id';
+                                                        $productId = $subscription->items->data[0]->price->product ?? 'default_product_id';
+                                                    @endphp
+                                                  
+                                                    <a href="{{ route('checkout', [
+                                                        'id' => $subscription->id,
+                                                        'prod_id' => $productId,
+                                                        'price_id' => $priceId
+                                                    ]) }}" class="btn btn-primary btn-sm">
+                                                        Buy Again
+                                                    </a>
                                                 @endif
                                             </td>
                                         </tr>
