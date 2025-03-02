@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\BalanceTransaction;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -70,6 +71,30 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to cancel subscription: ' . $e->getMessage());
         }
-
     }
+
+    public function getBalanceReport(Request $request)
+{
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    // Get the selected date range from request
+    $startDate = strtotime($request->start_date . ' 00:00:00'); // Convert to timestamp
+    $endDate = strtotime($request->end_date . ' 23:59:59');
+
+    try {
+        // Fetch transactions within the selected date range
+        $transactions = BalanceTransaction::all([
+            'created' => [
+                'gte' => $startDate, // greater than or equal to start date
+                'lte' => $endDate,   // less than or equal to end date
+            ],
+            'limit' => 100, // Adjust the limit as needed
+        ]);
+
+        return view('backend.subscription.report', compact('transactions', 'startDate', 'endDate'));
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error fetching balance report: ' . $e->getMessage());
+    }
+}
+
 }
