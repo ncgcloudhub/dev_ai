@@ -148,3 +148,7 @@ in AISettings, add status text default=1
 14/02/2025
 in USER, add free_tokens_used integer default=0
 In siteSettings, add hex_pass text
+
+14/02/2025
+in PricingPlan, add stripe_prod_id character_varying
+in PricingPlan, add stripe_price_id character_varying

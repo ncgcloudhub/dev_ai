@@ -898,10 +898,13 @@ Route::post('/clear-chat', function () {
 });
 
 // STRIPE
-
 Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
 Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
 Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
+Route::get('/stripe/balance-report', [CheckoutController::class, 'getBalanceReport'])->name('stripe.balance.report');
+Route::get('/admin/subscriptions-summary', [CheckoutController::class, 'subscriptionSummary'])->name('stripe.admin.subscriptions.summary');
+
+
 
 Route::view('success', 'backend.subscription.success')->name('success');
 

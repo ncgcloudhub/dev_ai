@@ -10,6 +10,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\BalanceTransaction;
+use Stripe\Price;
+use Stripe\Product;
 use Stripe\Stripe;
 use Stripe\Subscription;
 
@@ -70,6 +73,81 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to cancel subscription: ' . $e->getMessage());
         }
-
     }
+
+    public function getBalanceReport(Request $request)
+{
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    // Get the selected date range from request
+    $startDate = strtotime($request->start_date . ' 00:00:00'); // Convert to timestamp
+    $endDate = strtotime($request->end_date . ' 23:59:59');
+
+    try {
+        // Fetch transactions within the selected date range
+        $transactions = BalanceTransaction::all([
+            'created' => [
+                'gte' => $startDate, // greater than or equal to start date
+                'lte' => $endDate,   // less than or equal to end date
+            ],
+            'limit' => 100, // Adjust the limit as needed
+        ]);
+
+        return view('backend.subscription.report', compact('transactions', 'startDate', 'endDate'));
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error fetching balance report: ' . $e->getMessage());
+    }
+}
+
+public function subscriptionSummary()
+{
+    Stripe::setApiKey(config('services.stripe.secret'));
+
+    // Get all users with subscriptions
+    $users = User::whereNotNull('stripe_id')->get();
+    $summary = [];
+
+    foreach ($users as $user) {
+        // Fetch subscriptions for each user
+        $subscriptions = Subscription::all([
+            'customer' => $user->stripe_id,
+        ]);
+
+        // Filter active subscriptions
+        $activeSubscription = collect($subscriptions->data)->where('status', 'active')->first();
+
+        // Extract details
+        $totalSubscriptions = count($subscriptions->data);
+        $renewCount = max(0, $totalSubscriptions - 1);
+        $endDate = $activeSubscription ? date('Y-m-d', $activeSubscription->current_period_end) : 'N/A';
+        $packageName = 'N/A';
+        $packagePrice = 'N/A';
+
+        if ($activeSubscription && isset($activeSubscription->items->data[0])) {
+            $priceId = $activeSubscription->items->data[0]->price->id;
+
+            // Fetch price details
+            $price = Price::retrieve($priceId);
+            $packagePrice = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
+
+            // Fetch product details
+            $product = Product::retrieve($price->product);
+            $packageName = $product->name;
+        }
+
+        // Store in summary
+        $summary[] = [
+            'user' => $user,
+            'total_subscriptions' => $totalSubscriptions,
+            'active_subscriptions' => $activeSubscription ? 1 : 0,
+            'renew_count' => $renewCount,
+            'end_date' => $endDate,
+            'package_name' => $packageName,
+            'package_price' => $packagePrice,
+        ];
+    }
+
+    return view('backend.subscription.manage_stripe_subscription_admin', compact('summary'));
+}
+
 }
