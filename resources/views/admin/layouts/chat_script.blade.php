@@ -311,7 +311,7 @@ messageInput.addEventListener('paste', handleImagePaste);
                     const messageElement = document.getElementById(assistantMessageId);
 
                     if (messageElement) {
-                        const messageContent = messageElement.textContent;
+                        const messageContent = messageElement.innerHTML; // Use innerHTML to retain formatting
 
                         // Ask the user for the target language
                         const targetLang = prompt(
@@ -321,12 +321,18 @@ messageInput.addEventListener('paste', handleImagePaste);
                         if (targetLang) {
                             translateWithOpenAI(messageContent, targetLang)
                                 .then((translatedText) => {
-                                    messageElement.innerHTML = ` <div class="original-text">
-                                <p class="mb-0 ctext-content"><strong>Original:</strong> ${messageContent}</p>
-                            </div>
-                            <div class="translated-text">
-                                <p class="mb-0 ctext-content"><strong>Translated (${targetLang}):</strong> ${translatedText}</p>
-                            </div>`;
+                                    const formattedOriginal = formatUserMessage(messageContent);
+                                    const formattedTranslated = formatUserMessage(translatedText);
+
+                                    messageElement.innerHTML = `
+                                        <div class="original-text">
+                                            <p class="mb-0 ctext-content"><strong>Original:</strong></p>
+                                            ${formattedOriginal} <!-- Original text retains paragraphs -->
+                                        </div>
+                                        <div class="translated-text">
+                                            <p class="mb-0 ctext-content"><strong>Translated (${targetLang}):</strong></p>
+                                            ${formattedTranslated} <!-- Translated text retains paragraphs -->
+                                        </div>`;
                                 })
                                 .catch((error) => {
                                     console.error("Translation error:", error);
@@ -336,7 +342,6 @@ messageInput.addEventListener('paste', handleImagePaste);
                     }
                 }
             });
-
 
             // Function to toggle reading aloud and stopping
             function toggleReadAloud(button, targetId) {
