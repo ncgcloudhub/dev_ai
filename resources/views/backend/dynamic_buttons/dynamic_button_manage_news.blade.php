@@ -189,6 +189,62 @@
                     </div>
                 </div>
 
+                 <!-- Tour Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#tourButtonCard">
+                            Tour Button
+                        </button>
+                    </h2>
+                    <div id="tourButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'tour'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Search Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#searchButtonCard">
+                            Search Button
+                        </button>
+                    </h2>
+                    <div id="searchButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'search'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Filter Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#filterButtonCard">
+                            Filter Button
+                        </button>
+                    </h2>
+                    <div id="filterButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'filter'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Others Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#othersButtonCard">
+                            Others Button
+                        </button>
+                    </h2>
+                    <div id="othersButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'others'])
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -210,6 +266,11 @@
                 <div class="col-3 mb-2"><button id="previewButton-download" class="btn btn-success w-100">Download</button></div>
                 <div class="col-3 mb-2"><button id="previewButton-import" class="btn btn-secondary w-100">Import</button></div>
                 <div class="col-3 mb-2"><button id="previewButton-export" class="btn btn-warning w-100">Export</button></div>
+
+                <div class="col-3 mb-2"><button id="previewButton-tour" class="btn btn-info w-100">Tour</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-search" class="btn btn-success w-100">Search</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-filter" class="btn btn-secondary w-100">Filter</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-others" class="btn btn-warning w-100">Others</button></div>
             </div>
         </div>
         
@@ -291,7 +352,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Initialize button styles
-    ["save", "edit", "view", "delete", "cancel", "generate", "add", "remove", "copy", "download", "import", "export"].forEach(buttonId => updateButtonStyle(buttonId));
+    ["save", "edit", "view", "delete", "cancel", "generate", "add", "remove", "copy", "download", "import", "export", "tour", "search", "filter", "others"].forEach(buttonId => updateButtonStyle(buttonId));
 });
 </script>
 @endsection

@@ -87,7 +87,7 @@
                        {{-- Added New text to branc 1 --}}
                         <div class="col-xxl-1 col-sm-4">
                             <div>
-                                <button type="submit" class="btn text-white gradient-btn-11 mx-2 "> 
+                                <button type="submit" class="btn text-white gradient-btn-filter mx-2 "> 
                                     <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
                                 </button>
                             </div>

@@ -34,7 +34,7 @@
 
 <div class="row">
     <div class="col-xxl-6">
-        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white mb-3">Tour</button>
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-tour text-white mb-3">Tour</button>
 
         <div class="card">
             <div class="card-body"> 

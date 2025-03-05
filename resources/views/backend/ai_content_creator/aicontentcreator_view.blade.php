@@ -14,11 +14,11 @@
 @endcomponent
 
 
-<button type="button" class="btn gradient-btn-5" onclick="history.back()">
+<button type="button" class="btn gradient-btn-cancel" onclick="history.back()">
     <i class="las la-arrow-left"></i>
 </button>
 
-<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
+<button id="templateDetailsTourButton" class="btn gradient-btn-tour text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
 
 <div class="row">
    
@@ -310,7 +310,7 @@
                 </div>
             
                 <!-- History Button -->
-                <button id="generatedContents" type="button" class="btn gradient-btn-6 text-white" data-bs-toggle="modal" data-bs-target="#subscribeModals">
+                <button id="generatedContents" type="button" class="btn gradient-btn-others text-white" data-bs-toggle="modal" data-bs-target="#subscribeModals">
                     {{$Template->template_name}} History
                 </button>
             </div>
@@ -399,7 +399,7 @@
                     @if($Template->slug == 'image-prompt-idea')
                     <a href="{{ route('generate.image.view') }}" 
                        id="generateBtnCopyContext" 
-                       class="btn gradient-btn-6"
+                       class="btn gradient-btn-generate"
                        data-content="{{ $content ?? '' }}">Generate Image Now</a>
                     @endif
                 
