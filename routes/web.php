@@ -857,6 +857,8 @@ Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'
 Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
+Route::get('/images-form', [StableDifussionController::class, 'imageIndex'])->name('images.form');
+
 // Stable Diffusion Control(Sketch)
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
 Route::post('/stable-control-sketch', [StableDifussionController::class, 'controlSketch'])->name('stable.control.sketch');
