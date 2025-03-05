@@ -49,6 +49,20 @@
                     </div>
                 </div>
 
+                <!-- View Button Card -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#viewButtonCard">
+                            View Button
+                        </button>
+                    </h2>
+                    <div id="viewButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'view'])
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Delete Button Card -->
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -91,18 +105,114 @@
                     </div>
                 </div>
 
+                 <!-- Add Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#addButtonCard">
+                            Add Button
+                        </button>
+                    </h2>
+                    <div id="addButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'add'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Remove Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#removeButtonCard">
+                            Remove Button
+                        </button>
+                    </h2>
+                    <div id="removeButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'remove'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Copy Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#copyButtonCard">
+                            Copy Button
+                        </button>
+                    </h2>
+                    <div id="copyButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'copy'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Download Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#downloadButtonCard">
+                            Download Button
+                        </button>
+                    </h2>
+                    <div id="downloadButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'download'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Import Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#importButtonCard">
+                            Import Button
+                        </button>
+                    </h2>
+                    <div id="importButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'import'])
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Export Button Card -->
+                 <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#exportButtonCard">
+                            Export Button
+                        </button>
+                    </h2>
+                    <div id="exportButtonCard" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            @include('backend.dynamic_buttons.partial_button_form', ['buttonId' => 'export'])
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <!-- Button Preview Section -->
         <div class="col-md-6">
             <h4>Button Previews</h4>
-            <button id="previewButton-save" class="btn-save">Save</button>
-            <button id="previewButton-edit" class="btn-edit">Edit</button>
-            <button id="previewButton-delete" class="btn-delete">Delete</button>
-            <button id="previewButton-cancel" class="btn-cancel">Cancel</button>
-            <button id="previewButton-generate" class="btn-generate">Generate</button>
+            <div class="row">
+                <div class="col-3 mb-2"><button id="previewButton-save" class="btn btn-primary w-100">Save</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-edit" class="btn btn-warning w-100">Edit</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-view" class="btn btn-info w-100">View</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-delete" class="btn btn-danger w-100">Delete</button></div>
+        
+                <div class="col-3 mb-2"><button id="previewButton-cancel" class="btn btn-secondary w-100">Cancel</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-generate" class="btn btn-success w-100">Generate</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-add" class="btn btn-primary w-100">Add</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-remove" class="btn btn-dark w-100">Remove</button></div>
+        
+                <div class="col-3 mb-2"><button id="previewButton-copy" class="btn btn-info w-100">Copy</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-download" class="btn btn-success w-100">Download</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-import" class="btn btn-secondary w-100">Import</button></div>
+                <div class="col-3 mb-2"><button id="previewButton-export" class="btn btn-warning w-100">Export</button></div>
+            </div>
         </div>
+        
     </div>
 </div>
 
@@ -181,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Initialize button styles
-    ["save", "edit", "delete", "cancel", "generate"].forEach(buttonId => updateButtonStyle(buttonId));
+    ["save", "edit", "view", "delete", "cancel", "generate", "add", "remove", "copy", "download", "import", "export"].forEach(buttonId => updateButtonStyle(buttonId));
 });
 </script>
 @endsection
