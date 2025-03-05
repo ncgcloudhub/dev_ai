@@ -34,7 +34,7 @@
 
 <div class="row">
     <div class="col-xxl-6">
-        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-9 text-white mb-3">Tour</button>
+        <button id="promptLibraryDetailsTourButton" class="btn gradient-btn-tour text-white mb-3">Tour</button>
 
         <div class="card">
             <div class="card-body"> 
@@ -206,7 +206,7 @@
                         <input type="hidden" id="prompt_name" value="{{$prompt_library->prompt_name}}"> <!-- Added hidden input -->
 
                         <div class="col-md-3" id="generate-button-tour">
-                            <button type="button" id="ask" class="btn gradient-btn-5 disabled-on-load" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            <button type="button" id="ask" class="btn gradient-btn-generate disabled-on-load" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
                         </div>
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">

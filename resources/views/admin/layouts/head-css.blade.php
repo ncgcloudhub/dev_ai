@@ -32,7 +32,7 @@
             }
         }
 
-        $cssRules .= ".btn-{$button->button_type} { ";
+        $cssRules .= ".gradient-btn-{$button->button_type} { ";
         foreach ($classes as $property => $value) {
             $cssRules .= "{$property}: {$value}; ";
         }
@@ -40,9 +40,10 @@
 
         // Adding hover effect by swapping background colors
         if ($bgColor && $gradientColor) {
-            $cssRules .= ".btn-{$button->button_type}:hover { ";
+            $cssRules .= ".gradient-btn-{$button->button_type}:hover { ";
             $cssRules .= "background: linear-gradient(45deg, {$gradientColor}, {$bgColor}); ";
             $cssRules .= "transform: scale(1.05); ";
+            $cssRules .= "color: white; ";
             $cssRules .= "box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); ";
             $cssRules .= "} ";
         }

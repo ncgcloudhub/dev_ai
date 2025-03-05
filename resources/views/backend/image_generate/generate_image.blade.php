@@ -33,8 +33,8 @@
         <h4 class="card-title mb-0">Generate Image</h4>
 
         <div class="d-flex flex-column flex-sm-row">
-            <button id="imageGenerateTourButton" class="btn gradient-btn-8 text-white">Image Tour</button>
-            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-2 mb-sm-0 me-sm-2">
+            <button id="imageGenerateTourButton" class="btn gradient-btn-tour text-white">Image Tour</button>
+            <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-others btn-load mb-2 mb-sm-0 me-sm-2">
                 <span class="d-flex align-items-center">
                     <span class="spinner-grow" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -44,7 +44,7 @@
                     </span>
                 </span>
             </a>
-            <button type="button" class="btn gradient-btn-5" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+            <button type="button" class="btn gradient-btn-others" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
                 Prompt Library
             </button>
         </div>
@@ -63,7 +63,7 @@
                 <div class="col-xxl-12 justify-content-center">
                    
                     <div class="card">
-                        <button disabled type="button" class="btn gradient-btn-5 waves-effect waves-light col-md-2 m-2 @if($get_user->credits_left <= 0) btn-danger @else btn-primary @endif">
+                        <button disabled type="button" class="btn gradient-btn-others waves-effect waves-light col-md-2 m-2 @if($get_user->credits_left <= 0) btn-danger @else btn-primary @endif">
                             Credits Left <span class="credit-left badge ms-1 @if($get_user->credits_left <= 0) bg-dark @else bg-danger @endif">{{ $get_user->credits_left }}</span>
                         </button>
                         <div class="card-body">
@@ -199,7 +199,7 @@
                                                 
                                             <div class="col-xxl-1 col-sm-4">
                                                     <div>
-                                                        <button class="btn btn-rounded gradient-btn-5 mb-2">Generate</button>
+                                                        <button class="btn btn-rounded gradient-btn-generate mb-2">Generate</button>
                                                     </div>
                                             </div>
                                                 <!--end col-->
@@ -341,7 +341,7 @@
                                             <div class="col-xxl-1 col-sm-4 d-flex align-items-center">
                                                 <div>
                                                     <!-- Disable the button initially and include the spinner inside -->
-                                                    <button id="generate-button-tour" class="btn btn-rounded gradient-btn-5 mb-2" disabled>
+                                                    <button id="generate-button-tour" class="btn btn-rounded gradient-btn-generate mb-2" disabled>
                                                         <span id="generate-button-text">Generate</span>
                                                         {{-- <div id="loading-spinner" class="spinner-border spinner-border-sm text-light ms-2" role="status" style="display: none;">
                                                             <span class="visually-hidden">Loading...</span>

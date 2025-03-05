@@ -6,7 +6,7 @@
 @slot('title') Category Edit | {{$category->category_name}} @endslot
 @endcomponent
 
-<a href="{{ route('aicontentcreator.category.add') }}" class="btn waves-effect waves-light gradient-btn-11 mb-3">Add Category
+<a href="{{ route('aicontentcreator.category.add') }}" class="btn waves-effect waves-light gradient-btn-add mb-3">Add Category
 </a>
 
 <div class="row">

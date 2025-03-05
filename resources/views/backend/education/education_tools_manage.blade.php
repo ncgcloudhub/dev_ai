@@ -134,8 +134,8 @@
                                  alt="" class="card-img-top explore-img" loading="lazy" />
                                  @if(Auth::user()->role === 'admin')
                                  @can('education.manageTools.edit')
-                                     <a href="{{ route('tools.edit', $tool->id) }}" class="btn btn-warning">
-                                         <i class="ri-edit-2-fill align-bottom me-1"></i>Edit
+                                     <a href="{{ route('tools.edit', $tool->id) }}" class="gradient-btn-edit">
+                                         Edit
                                      </a>
                                  @endcan
                              
@@ -143,8 +143,8 @@
                                      <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
                                          @csrf
                                          @method('DELETE')
-                                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                             <i class="ri-delete-bin-5-fill align-bottom me-1"></i>Delete
+                                         <button type="submit" class="gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                            Delete
                                          </button>
                                      </form>
                                  @endcan

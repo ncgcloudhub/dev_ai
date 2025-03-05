@@ -14,11 +14,11 @@
 @endcomponent
 
 
-<button type="button" class="btn gradient-btn-5" onclick="history.back()">
+<button type="button" class="btn gradient-btn-cancel" onclick="history.back()">
     <i class="las la-arrow-left"></i>
 </button>
 
-<button id="templateDetailsTourButton" class="btn gradient-btn-6 text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
+<button id="templateDetailsTourButton" class="btn gradient-btn-tour text-white my-2" title="Get a Tour of this page to know it better">Content Creator Tools Tour</button>
 
 <div class="row">
    
@@ -27,7 +27,7 @@
                
                 <div class="card-body">
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
+                        <button type="button" class="btn gradient-btn-cancel" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i> Clear Inputs
                         </button>
                         {{-- <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
@@ -275,7 +275,7 @@
 
                     <div class="col-12">
                         <div class="text-end">
-                            <button id="generateButton" class="btn btn-rounded text-white gradient-btn-5 mx-1 mb-4 disabled-on-load" disabled>Generate</button>
+                            <button id="generateButton" class="btn btn-rounded text-white gradient-btn-generate mx-1 mb-4 disabled-on-load" disabled>Generate</button>
                             {{-- <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Generate"> --}}
                         </div>
                     </div>
@@ -294,13 +294,13 @@
                <!-- Wrapper to place buttons side by side -->
                <div class="d-flex align-items-center gap-2 flex-wrap">
                 <!-- Copy Content Button -->
-                <button id="copyButton" class="btn text-white gradient-btn-5 copy-toast-btn" title="Copy the generated Content">
+                <button id="copyButton" class="btn text-white gradient-btn-copy copy-toast-btn" title="Copy the generated Content">
                     <i class="las la-copy"></i>
                 </button>
             
                 <!-- Dropdown for file type selection -->
                 <div class="dropdown">
-                    <button id="downloadButton" class="btn text-white gradient-btn-5 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Download the generated Content">
+                    <button id="downloadButton" class="btn text-white gradient-btn-download dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Download the generated Content">
                         <i class="las la-download"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="downloadButton">
@@ -310,7 +310,7 @@
                 </div>
             
                 <!-- History Button -->
-                <button id="generatedContents" type="button" class="btn gradient-btn-6 text-white" data-bs-toggle="modal" data-bs-target="#subscribeModals">
+                <button id="generatedContents" type="button" class="btn gradient-btn-others text-white" data-bs-toggle="modal" data-bs-target="#subscribeModals">
                     {{$Template->template_name}} History
                 </button>
             </div>
@@ -399,7 +399,7 @@
                     @if($Template->slug == 'image-prompt-idea')
                     <a href="{{ route('generate.image.view') }}" 
                        id="generateBtnCopyContext" 
-                       class="btn gradient-btn-6"
+                       class="btn gradient-btn-generate"
                        data-content="{{ $content ?? '' }}">Generate Image Now</a>
                     @endif
                 

@@ -17,11 +17,11 @@
                 <div class="card-header align-items-center d-flex flex-column flex-md-row">
                     <h4 class="card-title mb-2 mb-md-0 flex-grow-1 text-md-left">
                         Manage Prompt Library 
-                        <a href="{{ route('prompt.category.add') }}" class="btn text-white gradient-btn-5 mx-1 my-1 my-md-0">Category</a> 
-                        <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white gradient-btn-5 mx-1 my-1 my-md-0">Sub-Category</a>
+                        <a href="{{ route('prompt.category.add') }}" class="btn text-white gradient-btn-view mx-1 my-1 my-md-0">Category</a> 
+                        <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white gradient-btn-view mx-1 my-1 my-md-0">Sub-Category</a>
 
                     </h4>
-                    <a href="{{ route('prompt.export') }}" class="btn text-white gradient-btn-2 mx-2 ">Export</a>
+                    <a href="{{ route('prompt.export') }}" class="btn text-white gradient-btn-export mx-2 ">Export</a>
                     <div class="flex-shrink-0 d-flex align-items-center">
                         <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
                             @csrf
@@ -31,7 +31,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn text-white gradient-btn-3">Import</button>
+                            <button type="submit" class="btn text-white gradient-btn-import">Import</button>
                         </form>
                         
                         @if(session('success'))
@@ -87,7 +87,7 @@
                        {{-- Added New text to branc 1 --}}
                         <div class="col-xxl-1 col-sm-4">
                             <div>
-                                <button type="submit" class="btn text-white gradient-btn-11 mx-2 "> 
+                                <button type="submit" class="btn text-white gradient-btn-filter mx-2 "> 
                                     <i class="ri-equalizer-fill me-1 align-bottom"></i> Filter
                                 </button>
                             </div>

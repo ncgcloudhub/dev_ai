@@ -295,70 +295,7 @@
     transform: scale(0.98);
 }
 
-  /* Gradient Button for Add */
-  .gradient-btn-add {
-    background: linear-gradient(to right, #2196f3, #42a5f5, #64b5f6);
-    color: white;
-    border: none;
-}
-
-.gradient-btn-add:hover {
-    background: linear-gradient(to right, #1976d2, #1e88e5, #42a5f5);
-    color: white;
-}
-
-/* Gradient Button for Remove */
-.gradient-btn-remove {
-    background: linear-gradient(to right, #f44336, #e57373, #ef9a9a);
-    color: white;
-    border: none;
-}
-
-.gradient-btn-remove:hover {
-    background: linear-gradient(to right, #d32f2f, #e53935, #f44336);
-    color: white;
-}
-
-/* Gradient Button for Save */
-.gradient-btn-save {
-    background: linear-gradient(45deg, #74068f, #f753a5);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.gradient-btn-save:hover {
-    background: linear-gradient(45deg, #cf54c9, #7e0646);
-    color: white;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    transform: scale(1.05);
-}
-
- /* Darker Gradient Button for Copy */
- .gradient-btn-copy {
-    background: linear-gradient(to right, #00796b, #004d40, #00332d);
-    color: white;
-    border: none;
-}
-
-.gradient-btn-copy:hover {
-    background: linear-gradient(to right, #004d40, #00796b, #004c47);
-    color: white;
-}
-
-/* Darker Gradient Button for Download */
-.gradient-btn-download {
-    background: linear-gradient(to right, #512da8, #4527a0, #311b92);
-    color: white;
-    border: none;
-}
-
-.gradient-btn-download:hover {
-    background: linear-gradient(to right, #4527a0, #5e35b1, #311b92);
-    color: white;
-}
+ 
 
 
 

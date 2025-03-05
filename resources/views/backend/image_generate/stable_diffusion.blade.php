@@ -31,7 +31,7 @@
             <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <h4 class="card-title mb-2 mb-md-0">Generate Image</h4>
                 <div class="d-flex flex-column flex-sm-row">
-                    <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-6 btn-load mb-3">
+                    <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-others btn-load mb-3">
                         <span class="d-flex align-items-center">
                             <span class="spinner-grow" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -39,7 +39,7 @@
                             <span>Get Image Prompt Ideas</span>
                         </span>
                     </a>
-                    <button type="button" class="btn gradient-btn-5 mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                    <button type="button" class="btn gradient-btn-others mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
                         Prompt Library
                     </button>
                 </div>
@@ -77,7 +77,7 @@
                             <button 
                             onclick="syncOffcanvasInput()" 
                             type="submit" 
-                            class="btn gradient-btn-7 btn-lg waves-effect waves-light w-100 disabled-on-load" 
+                            class="btn gradient-btn-generate btn-lg waves-effect waves-light w-100 disabled-on-load" 
                             disabled>
                             <i class="mdi mdi-magnify me-1"></i> Generate
                         </button>

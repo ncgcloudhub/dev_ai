@@ -252,7 +252,7 @@
                             <!-- Send Button -->
                             <div class="col-auto">
                                 <div class="chat-input-links ms-2">
-                                    <button type="button" id="main_send_message_btn" class="btn gradient-btn-5 chat-send waves-effect waves-light fs-13">
+                                    <button type="button" id="main_send_message_btn" class="btn gradient-btn-generate chat-send waves-effect waves-light fs-13">
                                         <i class="ri-send-plane-2-fill align-bottom"></i>
                                     </button>
                                 </div>

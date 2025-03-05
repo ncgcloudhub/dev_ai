@@ -28,7 +28,7 @@
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">Content Creator Tools</h5>
                    
-                   <button id="templateManageTourButton" class="btn gradient-btn-7 text-white">Content Creator Tools Tour</button>
+                   <button id="templateManageTourButton" class="btn gradient-btn-tour text-white">Content Creator Tools Tour</button>
 
                 </div>
             </div>
@@ -46,7 +46,7 @@
                         
                         <div class="col-xxl-1 col-sm-4">
                             <div>
-                                <button type="button" class="btn gradient-btn-5 w-100" id="enter-button"
+                                <button type="button" class="btn gradient-btn-search w-100" id="enter-button"
                                     onclick="SearchData();"> <i
                                         class="ri-search-fill me-1 align-bottom"></i>
                                     Search
