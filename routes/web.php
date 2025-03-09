@@ -788,6 +788,8 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
+Route::post('/single/images', [GenerateImagesController::class, 'generateImageSdDalle'])->name('generate.image.sd.dalle');
+
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
 

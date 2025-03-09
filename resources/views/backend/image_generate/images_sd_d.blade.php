@@ -14,6 +14,12 @@
         font-family: Arial, sans-serif;
     }
 
+    .image-box.selected {
+    border: 2px solid #96004b; /* Blue border */
+    background-color: rgba(0, 123, 255, 0.1);
+    }
+
+
 </style>
 
 <div class="container py-5">
@@ -24,7 +30,7 @@
             </h1>            
                 <h2 id="subheadingText" class="gradient-text-3">Transform your Text into stunning images</h2>
                 <p id="pText">Elevate your creativity with our AI tool that converts text and images into high-quality videos. Effortlessly generate engaging video content for presentations, social media, and more.</p>
-                <form action="" method="POST" enctype="multipart/form-data" id="imageGenerationForm">
+                <form action="{{ route('generate.image.sd.dalle')}}" method="POST" enctype="multipart/form-data" id="imageGenerationForm">
                     @csrf
                     <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="prompt" placeholder="Write prompt to generate Video"></textarea>
                 
@@ -34,6 +40,7 @@
                     <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                     <input type="hidden" name="hiddenQuality" id="hiddenQuality">
                     <input type="hidden" name="hiddenResolution" id="hiddenResolution">
+                    <input type="hidden" id="hiddenStyleCommon" name="hiddenstyleCommon" value="">
                 
                     <br>
                     <button type="submit" class="btn gradient-btn-3">Generate</button>
@@ -215,7 +222,21 @@
     syncSelection("style", "hiddenStyle");
     syncSelection("quality", "hiddenQuality");
     syncSelection("image_res", "hiddenResolution");
+
 });
+
+function selectStyle(style, element) {
+    // Update hidden input field with selected style
+    document.getElementById("hiddenStyleCommon").value = style;
+
+    // Remove 'selected' class from all image boxes
+    document.querySelectorAll(".image-box").forEach(box => {
+        box.classList.remove("selected");
+    });
+
+    // Add 'selected' class to the clicked image box
+    element.classList.add("selected");
+    }
 
 </script>
 

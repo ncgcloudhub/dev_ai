@@ -300,9 +300,9 @@ class GenerateImagesController extends Controller
     }
 
 
-    public function generate(Request $request)
+    public function generateImageSdDalle(Request $request)
 {
-    Log::info('Request Data:', $request->all());
+    dd($request->all());
 
     $prompt = $request->input('prompt');
     $style = $request->input('hiddenStyle');
@@ -310,8 +310,6 @@ class GenerateImagesController extends Controller
     $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
     $quality = $request->input('hiddenQuality');
     $resolution = $request->input('hiddenResolution');
-
-    Log::info("Selected Model: $modelVersion, Style: $style, Format: $imageFormat, Quality: $quality, Resolution: $resolution");
 
     // Now use these values in your Stable Diffusion or DALL·E API calls
 }
