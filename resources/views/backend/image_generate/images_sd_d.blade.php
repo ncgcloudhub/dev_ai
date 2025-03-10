@@ -26,7 +26,7 @@
     <div class="row align-items-center">
         <div class="col-md-6">
             <!-- DALL-E Form -->
-            <form action="{{route('generate.image')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
+            <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
@@ -34,6 +34,7 @@
                 </h1>
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
+                {{-- Fields Dalle--}}
                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
                 <br>
                 <button type="submit" class="btn gradient-btn-3">Generate</button>
@@ -50,6 +51,12 @@
                 </h1>
                 <h2 id="sdSubheading" class="gradient-text-3">Transform your Text into stunning images with Stable Diffusion</h2>
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
+                
+                {{-- Fields SD--}}
+                <input type="hidden" name="hiddenStyle" id="hiddenStyle">
+                <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
+                <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
+                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
                 <br>
                 <button type="submit" class="btn gradient-btn-3">Generate</button>
@@ -255,5 +262,75 @@
         });
     });
 </script>
+
+{{-- Dalle SCRIPTS Start--}}
+<script>
+    $(document).ready(function() {
+
+        $('#dalleForm').submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+             // Show the magic ball
+             showMagicBall('image');
+
+        
+            // Create a FormData object
+            var formData = new FormData(this);
+
+            // Manually append the offcanvas input values
+            formData.append('quality', $('#quality').val());
+            formData.append('image_res', $('#image_res').val());
+
+            // For multiple select (style[])
+            var selectedStyles = $('#style').val();
+            if (selectedStyles) {
+                selectedStyles.forEach(function(style) {
+                    formData.append('style[]', style);
+                });
+            }
+
+            // Send AJAX request
+            $.ajax({
+                type: 'POST',
+                url: '/image/generate/dalle',
+                data: formData,
+                processData: false, // Prevent jQuery from automatically processing the data
+                contentType: false,
+                success: function(response) {
+                   // Hide the magic ball after content loads
+                   hideMagicBall();
+
+                    console.log(response);
+                 
+                    response.data.forEach(function(imageData) {
+                        // Update the `src` of the existing image
+                        $('.before-after').attr('src', imageData.url);
+                    });
+
+                    // Initialize Glightbox
+                    $(document).ready(function() {
+                        const lightbox = GLightbox({
+                            selector: '.image-popup',
+                            touchNavigation: true,
+                            loop: true
+                        });
+                    });
+              
+                         var credits_left = response.credit_left;
+                         $('.credit-left').text(credits_left);
+
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                     // Hide the magic ball after content loads
+                    hideMagicBall();
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+{{-- Dalle SCRIPTS END--}}
 
 @endsection

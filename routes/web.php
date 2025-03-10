@@ -860,7 +860,7 @@ Route::get('/get-video-result/{generationId}', [StableDifussionController::class
 
 // Collage Image Generator
 Route::get('/images-form', [ImageController::class, 'imageIndex'])->name('images.form');
-Route::post('/single/images', [ImageController::class, 'generateImageSdDalle'])->name('generate.image.sd.dalle');
+Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 
 // Stable Diffusion Control(Sketch)
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
