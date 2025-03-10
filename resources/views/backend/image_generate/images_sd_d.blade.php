@@ -26,7 +26,7 @@
     <div class="row align-items-center">
         <div class="col-md-6">
             <!-- DALL-E Form -->
-            <form action="" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
+            <form action="{{route('generate.image')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
@@ -37,10 +37,12 @@
                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
                 <br>
                 <button type="submit" class="btn gradient-btn-3">Generate</button>
+
+                
             </form>
 
             <!-- Stable Diffusion Form (Hidden by Default) -->
-            <form action="" method="POST" enctype="multipart/form-data" id="sdForm" class="image-form" style="display: none;">
+            <form action="{{ route('stable.image') }}" method="POST" enctype="multipart/form-data" id="sdForm" class="image-form" style="display: none;">
                 @csrf
                 <h1 id="sdHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | Stable Diffusion</strong>
@@ -78,17 +80,50 @@
             </div>
             <div class="offcanvas-body">
                 <!-- DALL-E specific options -->
+                <select name="style[]" class="form-select" data-choices data-choices-removeItem multiple id="style">                                                   
+                    <option value="natural">Natural</option>
+                    <option value="vivid">Vivid</option>
+                    <option value="none">NONE</option>
+                    <option value="cinematic">CINEMATIC</option>
+                    <option value="analog-film">ANALOG FILM</option>
+                    <option value="animation">ANIMATION</option>
+                    <option value="comic">COMIC</option>
+                    <option value="craft-clay">CRAFT CLAY</option>
+                    <option value="fantasy">FANTASY</option>
+                    <option value="line-art">LINE ART</option>
+                    <option value="cyberpunk">CYBERPUNK</option>
+                    <option value="pixel-art">PIXEL ART</option>
+                    <option value="photograph">PHOTOGRAPH</option>
+                    <option value="graffiti">GRAFFITI</option>
+                    <option value="game-gta">GAME GTA</option>
+                    <option value="3d-character">3D CHARACTER</option>
+                    <option value="baroque">BAROQUE</option>
+                    <option value="caricature">CARICATURE</option>
+                    <option value="colored-pencil">COLORED PENCIL</option>
+                    <option value="doddle-art">DODDLE ART</option>
+                    <option value="futurism">FUTURISM</option>
+                    <option value="sketch">SKETCH</option>
+                    <option value="surrealism">SURREALISM</option>
+                    <option value="sticker-designs">STICKER DESIGNS</option>
+                </select>
+
                 <select name="quality" class="form-select" id="quality" data-choices>
-                    <option disabled selected value="">Enter Image Quality</option>
+                    <option disabled selected="">Enter Image Quality</option>
                     <option value="standard">Standard</option>
                     <option value="hd">HD</option>
                 </select>
-                <select name="image_res" class="form-select" id="image_res" data-choices>
-                    <option disabled selected value="">Enter Image Resolution</option>
-                    <option value="256x256">256x256</option>
-                    <option value="512x512">512x512</option>
+
+                <select name="image_res" class="form-select upgrade_option" id="image_res" data-choices>
+                    <option disabled selected="">Enter Image Resolution</option>
                     <option value="1024x1024">1024x1024</option>
+                    @if ($lastPackageId)
+                        <option value="1792x1024">1792x1024</option>
+                        <option value="1024x1792">1024x1792</option>
+                    @else
+                        <option value="upgrade">Upgrade to access more options</option>
+                    @endif
                 </select>
+
             </div>
         </div>
 
@@ -100,19 +135,92 @@
             </div>
             <div class="offcanvas-body">
                 <!-- Stable Diffusion specific options -->
-                <select name="imageFormat" id="imageFormat" class="form-select" data-choices>
+                <select name="modelVersion" id="modelVersion" class="form-select" data-choices onchange="syncModelVersion()">
+                    <option value="" disabled selected>Select Model</option>
+                    <option value="sd3-medium">sd3-medium</option>
+                    <option value="sd3-large-turbo">sd3-large-turbo</option>
+                    <option value="sd3-large">sd3-large</option>
+                    <option value="sd3.5-medium">sd3.5-medium</option>
+                    <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
+                    <option value="sd3.5-large">sd3.5-large</option>
+                    <option value="sd-ultra">SD Ultra</option>
+                    <option value="sd-core">SD Core</option>
+                </select>
+
+                <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
                     <option value="" disabled selected>Select format</option>
                     <option value="jpeg">JPEG</option>
                     <option value="png">PNG</option>
                     <option value="webp">WEBP</option>
                 </select>
-                <select name="style" class="form-select" id="style" data-choices>
-                    <option disabled selected value="">Select Style</option>
-                    <option value="natural">Natural</option>
-                    <option value="vivid">Vivid</option>
-                    <option value="none">NONE</option>
-                    <option value="cinematic">CINEMATIC</option>
-                </select>
+
+                {{-- Style --}}
+                <div class="d-flex flex-wrap justify-content-between">
+                    <!-- Image Box 1 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Animation</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 2 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Cinematic</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 3 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Comic</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 4 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Cyberpunk</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 5 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Futurism</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 6 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Doodle Art</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 7 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Graffiti</p>
+                        </div>
+                    </div>
+            
+                    <!-- Image Box 8 -->
+                    <div class="col-3 mb-3">
+                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch', this)" style="height: 150px;">
+                            <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
+                            <p class="mb-0 gradient-text-1-bold">Sketch</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\PackageHistory;
 use Illuminate\Support\Facades\Log;
 
 class ImageController extends Controller
@@ -21,7 +22,13 @@ class ImageController extends Controller
     public function imageIndex()
     {
         $apiKey = config('services.stable_diffusion.api_key');
-        return view('backend.image_generate.images_sd_d',compact('apiKey'));
+        $user_id = Auth::user()->id;
+        $lastPackageHistory = PackageHistory::where('user_id', $user_id)
+        ->latest()
+        ->first();
+        $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
+
+        return view('backend.image_generate.images_sd_d',compact('apiKey','lastPackageId'));
     }
     
 
