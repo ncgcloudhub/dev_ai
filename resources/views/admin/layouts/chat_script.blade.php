@@ -311,7 +311,12 @@ messageInput.addEventListener('paste', handleImagePaste);
                     const messageElement = document.getElementById(assistantMessageId);
 
                     if (messageElement) {
-                        const messageContent = messageElement.innerHTML; // Use innerHTML to retain formatting
+                        // Store original text if not already stored
+                        if (!messageElement.dataset.originalText) {
+                            messageElement.dataset.originalText = messageElement.innerHTML;
+                        }
+
+                        const originalText = messageElement.dataset.originalText; // Always use the stored original text
 
                         // Ask the user for the target language
                         const targetLang = prompt(
@@ -319,19 +324,19 @@ messageInput.addEventListener('paste', handleImagePaste);
                         );
 
                         if (targetLang) {
-                            translateWithOpenAI(messageContent, targetLang)
+                            translateWithOpenAI(originalText, targetLang)
                                 .then((translatedText) => {
-                                    const formattedOriginal = formatUserMessage(messageContent);
+                                    const formattedOriginal = formatUserMessage(originalText);
                                     const formattedTranslated = formatUserMessage(translatedText);
 
                                     messageElement.innerHTML = `
                                         <div class="original-text">
                                             <p class="mb-0 ctext-content"><strong>Original:</strong></p>
-                                            ${formattedOriginal} <!-- Original text retains paragraphs -->
+                                            ${formattedOriginal} <!-- Always show the original text -->
                                         </div>
                                         <div class="translated-text">
                                             <p class="mb-0 ctext-content"><strong>Translated (${targetLang}):</strong></p>
-                                            ${formattedTranslated} <!-- Translated text retains paragraphs -->
+                                            ${formattedTranslated} <!-- Display translated text -->
                                         </div>`;
                                 })
                                 .catch((error) => {
@@ -342,6 +347,7 @@ messageInput.addEventListener('paste', handleImagePaste);
                     }
                 }
             });
+
 
             // Function to toggle reading aloud and stopping
             function toggleReadAloud(button, targetId) {
