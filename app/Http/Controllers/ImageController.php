@@ -7,15 +7,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\SiteSettings;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 class ImageController extends Controller
 {
     protected $stableDiffusionService;
+    protected $siteSettings;
+
 
     public function __construct(StableDiffusionService $stableDiffusionService)
     {
         $this->stableDiffusionService = $stableDiffusionService;
+        $this->siteSettings = SiteSettings::find(1);
     }
     
     public function imageIndex()
@@ -152,7 +159,53 @@ class ImageController extends Controller
             'images' => $savedImages
         ]);
     }
-    
+
+    private function applyWatermarkAndCompress($imageDataBinary)
+    {
+        try {
+            // Create image from blob
+            $sourceImage = Image::make($imageDataBinary);
+            Log::info('Image successfully loaded into memory');
+
+            // Load watermark
+            $watermarkPath = public_path('backend/uploads/site/' . $this->siteSettings->watermark); // Path to watermark
+            Log::info('Loading watermark', ['watermark_path' => $watermarkPath]);
+
+            $watermark = Image::make($watermarkPath);
+            Log::info('Watermark successfully loaded');
+
+            // Insert watermark
+            $sourceImage->insert($watermark, 'bottom-right', 10, 10);
+            Log::info('Watermark inserted into image');
+
+            // Resize and compress the image to WebP format
+            $compressedImage = $sourceImage->encode('webp', 80);
+            Log::info('Image compressed to webp format', ['quality' => 80]);
+
+            return $compressedImage;
+        } catch (\Exception $e) {
+            Log::error('Error processing image', ['exception' => $e->getMessage()]);
+            return null;
+        }
+    }
+
+    private function uploadToAzure($compressedImage)
+    {
+        try {
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $containerName = config('filesystems.disks.azure.container');
+            $imageName = time() . '-' . uniqid() . '.webp';
+
+            $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
+
+            Log::info('Image uploaded to Azure', ['image_name' => $imageName]);
+            return $imageName;
+        } catch (\Exception $e) {
+            Log::error('Azure upload failed', ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+        
 
 
 
