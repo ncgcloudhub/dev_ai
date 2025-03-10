@@ -772,7 +772,7 @@ class AIContentCreatorController extends Controller
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
                 'status' => 'active',
-                'credits_left' => 100,
+                'credits_left' => 30,
                 'tokens_left' => 5000,
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
@@ -853,7 +853,7 @@ class AIContentCreatorController extends Controller
                 'name' => $name,
                 'email' => $githubUser->email,
                 'status' => 'active',
-                'credits_left' => 100,
+                'credits_left' => 30,
                 'tokens_left' => 5000,
                 'role' => 'user', // You might want to adjust the role here
                 'password' => '', // Since this is a social login, you don't need a password
