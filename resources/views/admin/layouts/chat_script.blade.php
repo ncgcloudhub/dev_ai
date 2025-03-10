@@ -311,7 +311,12 @@ messageInput.addEventListener('paste', handleImagePaste);
                     const messageElement = document.getElementById(assistantMessageId);
 
                     if (messageElement) {
-                        const messageContent = messageElement.innerHTML; // Use innerHTML to retain formatting
+                        // Store original text if not already stored
+                        if (!messageElement.dataset.originalText) {
+                            messageElement.dataset.originalText = messageElement.innerHTML;
+                        }
+
+                        const originalText = messageElement.dataset.originalText; // Always use the stored original text
 
                         // Ask the user for the target language
                         const targetLang = prompt(
@@ -319,19 +324,19 @@ messageInput.addEventListener('paste', handleImagePaste);
                         );
 
                         if (targetLang) {
-                            translateWithOpenAI(messageContent, targetLang)
+                            translateWithOpenAI(originalText, targetLang)
                                 .then((translatedText) => {
-                                    const formattedOriginal = formatUserMessage(messageContent);
+                                    const formattedOriginal = formatUserMessage(originalText);
                                     const formattedTranslated = formatUserMessage(translatedText);
 
                                     messageElement.innerHTML = `
                                         <div class="original-text">
                                             <p class="mb-0 ctext-content"><strong>Original:</strong></p>
-                                            ${formattedOriginal} <!-- Original text retains paragraphs -->
+                                            ${formattedOriginal} <!-- Always show the original text -->
                                         </div>
                                         <div class="translated-text">
                                             <p class="mb-0 ctext-content"><strong>Translated (${targetLang}):</strong></p>
-                                            ${formattedTranslated} <!-- Translated text retains paragraphs -->
+                                            ${formattedTranslated} <!-- Display translated text -->
                                         </div>`;
                                 })
                                 .catch((error) => {
@@ -342,6 +347,7 @@ messageInput.addEventListener('paste', handleImagePaste);
                     }
                 }
             });
+
 
             // Function to toggle reading aloud and stopping
             function toggleReadAloud(button, targetId) {
@@ -409,8 +415,7 @@ messageInput.addEventListener('paste', handleImagePaste);
                     });
             }
 
-
-function sendMessage() {
+            function sendMessage() {
     const message = messageInput.value.trim();
     const file = fileInput.files[0];
 
@@ -442,9 +447,12 @@ function sendMessage() {
     }
 
     // Disable the button, change the text to "Stop", and store the generating state
-    sendMessageBtn.disabled = false; // Disable send button to prevent double sending
+    sendMessageBtn.disabled = true; // Disable send button to prevent double sending
     sendMessageBtn.innerHTML = 'Stop';
     sendMessageBtn.dataset.state = 'generating';
+
+    // Disable the "Enter" key in the message input
+    messageInput.removeEventListener('keydown', handleEnterKey);
 
     // Create an AbortController instance
     abortController = new AbortController();
@@ -470,39 +478,36 @@ function sendMessage() {
 
         messageContent = formatUserMessage(message);
 
-
         const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         let userMessageHTML = `<li class="chat-list right">
-    <div class="conversation-list">
-        <div class="user-chat-content">
-            <div class="ctext-wrap-content text-start">
-                <p class="mb-0 ctext-content">${messageContent}</p>
-`;
+            <div class="conversation-list">
+                <div class="user-chat-content">
+                    <div class="ctext-wrap-content text-start">
+                        <p class="mb-0 ctext-content">${messageContent}</p>`;
 
-// Loop through attached files
-if (fileInput.files.length > 0) {
-    Array.from(fileInput.files).forEach((file) => {
-        userMessageHTML += `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
-    });
-}
+            // Loop through attached files
+            if (fileInput.files.length > 0) {
+                Array.from(fileInput.files).forEach((file) => {
+                    userMessageHTML += `<img src="${URL.createObjectURL(file)}" alt="Attached Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
+                });
+            }
 
-// Handle pasted image if any
-if (pastedImageFile) {
-    userMessageHTML += `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
-}
+            // Handle pasted image if any
+            if (pastedImageFile) {
+                userMessageHTML += `<img src="${URL.createObjectURL(pastedImageFile)}" alt="Pasted Image" style="max-width: 200px; max-height: 200px; margin: 5px;">`;
+            }
 
-userMessageHTML += `
-            </div>
-            <div class="conversation-name">
-                <small class="text-muted time">${currentTime}</small>
-            </div>
-        </div>
-    </div>
-</li>`;
+            userMessageHTML += `
+                        </div>
+                        <div class="conversation-name">
+                            <small class="text-muted time">${currentTime}</small>
+                        </div>
+                    </div>
+                </div>
+            </li>`;
 
-// Append the generated HTML to the chat conversation
-chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
-
+        // Append the generated HTML to the chat conversation
+        chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
 
         const assistantMessageId = `assistant-message-${Date.now()}`;
         let assistantMessageHTML = `
@@ -550,12 +555,12 @@ chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
         let debounceTimer;
         const DEBOUNCE_DELAY = 100;
 
-    function scheduleUpdate() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            updateAssistantMessage();
-        }, DEBOUNCE_DELAY);
-    }
+        function scheduleUpdate() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                updateAssistantMessage();
+            }, DEBOUNCE_DELAY);
+        }
 
         function updateAssistantMessage() {
             try {
@@ -621,6 +626,9 @@ chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
                     }
                 }
 
+                // Enable the stop button once the response starts streaming
+                sendMessageBtn.disabled = false;
+                messageInput.addEventListener('keydown', handleEnterKey);
                 read();
             });
         }
@@ -653,23 +661,27 @@ chatConversation.insertAdjacentHTML('beforeend', userMessageHTML);
     });
 }
 
-
-
 // Function to reset the send button back to its original state
 function resetButton() {
     sendMessageBtn.innerHTML = '<i class="ri-send-plane-2-fill align-bottom"></i>';
     sendMessageBtn.dataset.state = 'idle';  // Reset state
     abortController = null;  // Clear the AbortController
+    sendMessageBtn.disabled = false;  // Enable the button
+
+    // Re-enable the "Enter" key in the message input
+    messageInput.addEventListener('keydown', handleEnterKey);
 }
 
+// Handle "Enter" key press
+function handleEnterKey(event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+}
 
-    sendMessageBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-        }
-    });
+sendMessageBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keydown', handleEnterKey);
     });
 
 </script>

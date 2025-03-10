@@ -138,6 +138,7 @@
 <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}" defer></script>
 <script src="{{ URL::asset('build/js/app.js') }}" defer></script>
 
+
 <script>
 $(document).ready(function() {
     if (!$.fn.DataTable.isDataTable('#alternative-pagination')) {
@@ -153,42 +154,36 @@ $(document).ready(function() {
             ]
         });
     }
+});
 
-    // Event delegation for the toggle button
-    $(document).on('click', '.active_button', function() {
+  // Bind click event to all checkboxes with the class "active_button"
+  $('.active_button').on('click', function(){
         var imageId = $(this).data('image-id');
         var toggleSwitch = $(this);
-
+        console.log(toggleSwitch);
+        console.log(imageId);
+        
         // Send AJAX request to update the image status
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            type: 'POST',
-            url: '/update/image/status',
-            data: {
-                image_id: imageId
-            },
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: function(response) {
-                // Handle success response
-                console.log(response);
-
-                // Update the status text in the table cell
-                if (toggleSwitch.is(':checked')) {
-                    toggleSwitch.closest('td').prev().text('active');
-                } else {
-                    toggleSwitch.closest('td').prev().text('inactive');
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                console.error(error);
-                console.log('inside Error');
+          type: 'POST',
+          url: '/update/image/status',
+          data: { image_id: imageId },
+          headers: { 'X-CSRF-TOKEN': csrfToken },
+          success: function(response) {
+            console.log(response);
+            // Update the status text in the table cell
+            if (toggleSwitch.is(':checked')) {
+              toggleSwitch.closest('td').prev().text('active');
+            } else {
+              toggleSwitch.closest('td').prev().text('inactive');
             }
+          },
+          error: function(xhr, status, error) {
+            console.error(error);
+          }
         });
-    });
-});
+      });
 
 </script>
 
