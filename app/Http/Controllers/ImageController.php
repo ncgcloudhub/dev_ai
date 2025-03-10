@@ -56,20 +56,25 @@ class ImageController extends Controller
     
         $response = null;
     
+        // Determine the service type based on modelVersion
         if (strpos($modelVersion, 'dalle') !== false) {
             Log::info("Dalle Image Inside before");
             $response = $this->generateDalleImage($prompt, $resolution, $quality, $noOfResults);
+            $serviceType = 'dalle';  // Set serviceType to 'dalle'
             Log::info("Dalle Image Inside After");
         } else {
             $mode = $request->input('mode') ?? 'text-to-image';
             $baseImage = $request->file('base_image');
             $strength = $request->input('strength');
-    
+
             $response = $this->generateStableDiffusionImage($prompt, $style, $imageFormat, $modelVersion, $mode, $baseImage, $strength);
+            $serviceType = 'sd';  // Set serviceType to 'sd' for Stable Diffusion
         }
-    
-        return $this->handleApiResponse($response, $prompt, $resolution, $styleCommon);
-    }
+
+        // Pass the serviceType to the handleApiResponse method
+        return $this->handleApiResponse($response, $prompt, $resolution, $styleCommon, $serviceType);
+        }
+
 
     // Helper function to generate DALL-E image
     private function generateDalleImage($prompt, $resolution, $quality, $noOfResults)
@@ -106,7 +111,7 @@ class ImageController extends Controller
             $prompt .= " in " . $style;
         }
 
-        return $this->stableDiffusionService->generateImage(
+        return $this->stableDiffusionService->generateImageSD(
             $endpoint,
             $prompt,
             $imageFormat,
@@ -117,23 +122,35 @@ class ImageController extends Controller
         );
     }
 
-    private function handleApiResponse($response, $prompt, $resolution, $style)
-    {
-        if (!$response || !$response->successful()) {
-            logActivity('Image Generation Error', 'Failed to generate image');
-            return response()->json(['error' => 'Failed to generate image'], 500);
-        }
-    
-        $responseData = $response->json();
-        $savedImages = [];
-    
-        foreach ($responseData['data'] as $imageData) {
-            $imageUrl = $imageData['url'] ?? null;
-            if (!$imageUrl) continue;
-    
-            $compressedImage = $this->applyWatermarkAndCompress($imageUrl);
+  private function handleApiResponse($response, $prompt, $resolution, $style, $serviceType)
+{
+    // Check if the response is an HTTP response (it will not be if it's an SD response)
+    if (is_array($response)) {
+        // This means the response is not an HTTP response object but raw image data
+        $responseData = $response; // Directly use the response data
+    } elseif ($response->successful()) {
+        // If it's a successful HTTP response
+        $responseData = $response->json(); // Assuming the response is JSON
+    } else {
+        logActivity('Image Generation Error', 'Failed to generate image');
+        return response()->json(['error' => 'Failed to generate image'], 500);
+    }
+
+    // Initialize the array to store the saved images
+    $savedImages = [];
+
+    // Handle the response based on the service type (Stable Diffusion or DALL-E)
+    if ($serviceType === 'sd') {
+        // Handle binary response for Stable Diffusion
+        $imageContent = $responseData['body'] ?? null;  // Use the raw binary content from SD response
+        
+        if ($imageContent) {
+            // Apply watermark and compression
+            $compressedImage = $this->applyWatermarkAndCompress($imageContent);
+
+            // Upload image to Azure
             $imagePath = $this->uploadToAzure($compressedImage);
-    
+
             // Save image in the database
             $imageModel = new ModelsDalleImageGenerate;
             $imageModel->image = $imagePath;
@@ -143,22 +160,58 @@ class ImageController extends Controller
             $imageModel->resolution = $resolution;
             $imageModel->style = $style;
             $imageModel->save();
-    
+
+            // Store the saved image URL for response
+            $savedImages[] = $imagePath;
+            Log::info("Saved Image Path: " . $imagePath);
+        } else {
+            logActivity('Image Generation Error', 'No image content returned for SD');
+            return response()->json(['error' => 'No image content found'], 500);
+        }
+    } elseif ($serviceType === 'dalle') {
+        // Handle URL response for DALL-E
+        foreach ($responseData['data'] as $imageData) {
+            // Get the image URL
+            $imageUrl = $imageData['url'] ?? null;
+            if (!$imageUrl) continue;
+
+            // Apply watermark and compress image
+            $compressedImage = $this->applyWatermarkAndCompress($imageUrl);
+
+            // Upload image to Azure
+            $imagePath = $this->uploadToAzure($compressedImage);
+
+            // Save image in the database
+            $imageModel = new ModelsDalleImageGenerate;
+            $imageModel->image = $imagePath;
+            $imageModel->user_id = auth()->user()->id;
+            $imageModel->status = 'inactive';
+            $imageModel->prompt = $prompt;
+            $imageModel->resolution = $resolution;
+            $imageModel->style = $style;
+            $imageModel->save();
+
             // Store the saved image URL for response
             $savedImages[] = $imagePath;
             Log::info("Saved Image Path: " . $imagePath);
         }
-    
-        Log::info("All Saved Images: ", $savedImages);
-
-        deductUserTokensAndCredits(0, calculateCredits($resolution, 'standard'));
-    
-        // Return the saved image URLs in the response
-        return response()->json([
-            'message' => 'Image generated successfully',
-            'images' => $savedImages
-        ]);
+    } else {
+        return response()->json(['error' => 'Unknown service type'], 400);
     }
+
+    Log::info("All Saved Images: ", $savedImages);
+
+    // Deduct user tokens and credits
+    deductUserTokensAndCredits(0, calculateCredits($resolution, 'standard'));
+
+    // Return the saved image URLs in the response
+    return response()->json([
+        'message' => 'Image generated successfully',
+        'images' => $savedImages
+    ]);
+}
+
+    
 
     private function applyWatermarkAndCompress($imageDataBinary)
     {

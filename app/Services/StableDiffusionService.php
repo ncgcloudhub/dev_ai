@@ -133,5 +133,79 @@ class StableDiffusionService
             
     }
 
+    // New SD method to generate image
+    public function generateImageSD($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null)
+{
+    // Set up headers and payload similar to your Python request
+    $headers = [
+        'Authorization' => 'Bearer ' . $this->apiKey,
+        'Accept' => 'image/*'
+    ];
+
+    // Prepare the data payload
+    $data = [
+        'prompt' => $prompt,
+        'output_format' => $imageFormat,
+        'model' => $modelVersion,
+        'mode' => $mode,
+    ];
+
+    // Include base image and strength only if mode is 'image-to-image'
+    if ($mode === 'image-to-image') {
+        if ($baseImage) {
+            $data['baseImage'] = $baseImage;
+        }
+        if ($strength !== null) {
+            $data['strength'] = $strength;
+        }
+    }
+
+    Log::info('Service Data:', $data);
+
+    // Send the request to the Stable Diffusion API
+    if ($mode === 'image-to-image') {
+        if (!$baseImage) {
+            throw new \Exception('Base image is required for image-to-image generation.');
+        }
+        if (!$strength) {
+            throw new \Exception('Strength is required for image-to-image generation.');
+        }
+
+        // Add the base image to the request
+        $response = Http::withHeaders($headers)
+            ->asMultipart()
+            ->attach('image', file_get_contents($baseImage->getRealPath()), $baseImage->getClientOriginalName())
+            ->post($endpoint, $data);
+    } else {
+        // For text-to-image
+        $response = Http::withHeaders($headers)
+            ->asMultipart()
+            ->post($endpoint, $data);
+    }
+
+    Log::info('Stable Diffusion API Response:', [
+        'status' => $response->status(),
+        'response_preview' => substr($response->body(), 0, 100) // Log the first 100 characters only
+    ]);
+
+    // Log the full response headers for inspection
+    Log::info('Stable Diffusion API Response Headers:', $response->headers());
+
+    // Extract the seed from headers if it exists
+    $seedId = $response->header('seed') ?? null;
+
+    if ($response->status() == 200) {
+        // Return the raw response body (image binary data)
+        return [
+            'image_binary' => $response->body(),  // Return raw image data
+            'seed' => $seedId,  // Return the seed ID along with the image binary
+        ];
+    } else {
+        return response()->json([
+            'error' => $response->json() ?? 'An error occurred during image generation.'
+        ], $response->status());
+    }
+}
+
 
 }
