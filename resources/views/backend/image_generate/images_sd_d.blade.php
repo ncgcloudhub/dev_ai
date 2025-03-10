@@ -132,13 +132,7 @@
                         </div>
                     </div>
                     <!-- Image Box 1 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Animation</p>
-                        </div>
-                    </div>
-            
+                  
                     <!-- Image Box 2 -->
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">

@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
@@ -788,8 +789,6 @@ Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name
 // Frontend Single Image
 Route::post('/single/image', [GenerateImagesController::class, 'generateSingleImage'])->name('generate.single.image');
 
-Route::post('/single/images', [GenerateImagesController::class, 'generateImageSdDalle'])->name('generate.image.sd.dalle');
-
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
 
@@ -859,7 +858,9 @@ Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'
 Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
-Route::get('/images-form', [StableDifussionController::class, 'imageIndex'])->name('images.form');
+// Collage Image Generator
+Route::get('/images-form', [ImageController::class, 'imageIndex'])->name('images.form');
+Route::post('/single/images', [ImageController::class, 'generateImageSdDalle'])->name('generate.image.sd.dalle');
 
 // Stable Diffusion Control(Sketch)
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
