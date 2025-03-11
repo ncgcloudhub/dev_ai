@@ -1,6 +1,8 @@
 @extends('admin.layouts.master')
 @section('title') Image to Video @endsection
-
+@section('css')
+    <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+@endsection
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="#">Image to Video Generation</a> @endslot
@@ -64,9 +66,13 @@
                             
 
         </div>
-        <div class="col-md-6">
-            <img src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg" alt="Before and After" class="before-after">
+        <div class="col-md-6" id="image-container">    
+                <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
+                    alt="Before and After"
+                    class="before-after img-fluid rounded shadow-sm"
+                    style="max-width: 100%; height: auto;">
         </div>
+        
     </div>
     <div class="text-center mt-5">
         <h3 class="text-white">Use Cases</h3>
@@ -237,7 +243,9 @@
 
 @section('script')
 
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 <!-- JavaScript to Toggle Forms -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -302,9 +310,24 @@
 
                     console.log(response);
                  
+                    $('#image-container').empty(); // Clear previous images if any
                     response.data.forEach(function(imageData) {
-                        // Update the `src` of the existing image
-                        $('.before-after').attr('src', imageData.url);
+                        // Create an image element
+                        var temp = `<a class="image-popup" href="${imageData.url}" title="">
+                                        <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
+                                    </a>`;
+
+                        // Append the image to the container
+                        $('#image-container').append(temp);
+                    });
+
+                    // Initialize Glightbox
+                    $(document).ready(function() {
+                        const lightbox = GLightbox({
+                            selector: '.image-popup',
+                            touchNavigation: true,
+                            loop: true
+                        });
                     });
 
                     // Initialize Glightbox
