@@ -15,15 +15,18 @@
         color: white;
         font-family: Arial, sans-serif;
     }
-
-    .image-box.selected {
-    border: 2px solid #96004b; /* Blue border */
-    background-color: rgba(0, 123, 255, 0.1);
+    
+    .offcanvas {
+        background: linear-gradient(to right, #1a0a24, #3a0750);
     }
 
+    /* .image-box.selected {
+    border: 2px solid #96004b; 
+    background-color: rgba(0, 123, 255, 0.1);
+    } */
+
     .selected-background {
-            background: linear-gradient(45deg, #9293e0, #db9dd4); /* Choose a color you like for the selected card */
-            color: #e0e0e0; /* Adjust the text color if needed for better contrast */
+        background: linear-gradient(to right, #700000, #3a0750); /* Choose a color you like for the selected card */
     }
 </style>
 
@@ -90,7 +93,7 @@
         {{-- Offcanvas Dalle--}}
         <div class="offcanvas offcanvas-start" tabindex="-1" id="dalleOffcanvas" aria-labelledby="dalleOffcanvasLabel">
             <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title" id="dalleOffcanvasLabel">DALL-E Options</h5>
+                <h5 class="offcanvas-title text-white" id="dalleOffcanvasLabel">DALL-E Options</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -145,7 +148,7 @@
         {{-- Offcanvas SD --}}
         <div class="offcanvas offcanvas-start" tabindex="-1" id="sdOffcanvas" aria-labelledby="sdOffcanvasLabel">
             <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title" id="sdOffcanvasLabel">Stable Diffusion Options</h5>
+                <h5 class="offcanvas-title text-white" id="sdOffcanvasLabel">Stable Diffusion Options</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -170,12 +173,12 @@
                 </select>
 
                 {{-- Style SD--}}
-                <div class="d-flex flex-wrap justify-content-between">
+                <div class="d-flex flex-wrap justify-content-between gap-1">
                     <!-- Image Box 1 -->
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Animation</p>
+                            <p class="mb-0 text-white">Animation</p>
                         </div>
                     </div>
             
@@ -183,7 +186,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Cinematic</p>
+                            <p class="mb-0 text-white">Cinematic</p>
                         </div>
                     </div>
             
@@ -191,7 +194,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Comic</p>
+                            <p class="mb-0 text-white">Comic</p>
                         </div>
                     </div>
             
@@ -199,7 +202,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Cyberpunk</p>
+                            <p class="mb-0 text-white">Cyberpunk</p>
                         </div>
                     </div>
             
@@ -207,7 +210,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Futurism</p>
+                            <p class="mb-0 text-white">Futurism</p>
                         </div>
                     </div>
             
@@ -215,7 +218,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Doodle Art</p>
+                            <p class="mb-0 text-white">Doodle Art</p>
                         </div>
                     </div>
             
@@ -223,7 +226,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Graffiti</p>
+                            <p class="mb-0 text-white">Graffiti</p>
                         </div>
                     </div>
             
@@ -231,7 +234,7 @@
                     <div class="col-3 mb-3">
                         <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch', this)" style="height: 150px;">
                             <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 gradient-text-1-bold">Sketch</p>
+                            <p class="mb-0 text-white">Sketch</p>
                         </div>
                     </div>
                 </div>
