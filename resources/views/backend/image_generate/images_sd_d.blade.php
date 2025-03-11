@@ -314,7 +314,7 @@
                     response.data.forEach(function(imageData) {
                         // Create an image element
                         var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                                        <img class="gallery-img img-fluid mx-auto" style="height: 512px; width:512px" src="${imageData.url}" alt="" />
+                                        <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${imageData.url}" alt="" />
                                     </a>`;
 
                         // Append the image to the container
@@ -353,7 +353,6 @@
         });
     });
 </script>
-
 {{-- Dalle SCRIPTS END--}}
 
 @endsection
