@@ -58,7 +58,9 @@
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
                 
                 {{-- Fields SD--}}
+               
                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
+                <input type="hidden" name="mode" id="mode" value="text-to-image">
                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
                 <br>
                 <button type="submit" class="btn gradient-btn-3">Generate</button>
@@ -329,18 +331,9 @@
                             loop: true
                         });
                     });
-
-                    // Initialize Glightbox
-                    $(document).ready(function() {
-                        const lightbox = GLightbox({
-                            selector: '.image-popup',
-                            touchNavigation: true,
-                            loop: true
-                        });
-                    });
               
-                         var credits_left = response.credit_left;
-                         $('.credit-left').text(credits_left);
+                    var credits_left = response.credit_left;
+                    $('.credit-left').text(credits_left);
 
                 },
                 error: function(xhr, status, error) {
@@ -385,18 +378,37 @@
                     var promptValue = $('#prompt').val();
                     $('#promptDisplay').text(promptValue); 
                     
-                    // Display the image based on image_url or image_base64
+                    // Clear previous images
+                    $('#image-container').empty();
+
                     if (response.image_url) {
-                        $('#imageContainer').html(`
-                            <img src="${response.image_url}" alt="Generated Image" style="max-width:100%;">
+                        // Append the image with GLightbox support
+                        var imageElement = `
+                            <a class="image-popup" href="${response.image_url}" title="Generated Image">
+                                <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${response.image_url}" alt="Generated Image" />
+                            </a>
                             <p>${response.prompt}</p>
-                        `);
-                            
-    
+                        `;
+                        $('#image-container').append(imageElement);
+
                     } else if (response.image_base64) {
                         hideMagicBall();
-                        $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');
+                        
+                        var base64Image = `data:image/jpeg;base64,${response.image_base64}`;
+                        var imageElement = `
+                            <a class="image-popup" href="${base64Image}" title="Generated Image">
+                                <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${base64Image}" alt="Generated Image" />
+                            </a>
+                            <p>${response.prompt}</p>
+                        `;
+                        $('#image-container').append(imageElement);
                     }
+                    // Initialize GLightbox (Reinitialize after new images are added)
+                    const lightbox = GLightbox({
+                        selector: '.image-popup',
+                        touchNavigation: true,
+                        loop: true
+                    });
                 },
     
                 error: function(xhr) {
