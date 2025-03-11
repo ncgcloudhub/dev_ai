@@ -21,7 +21,10 @@
     background-color: rgba(0, 123, 255, 0.1);
     }
 
-
+    .selected-background {
+            background: linear-gradient(45deg, #9293e0, #db9dd4); /* Choose a color you like for the selected card */
+            color: #e0e0e0; /* Adjust the text color if needed for better contrast */
+    }
 </style>
 
 <div class="container py-5">
@@ -56,9 +59,6 @@
                 
                 {{-- Fields SD--}}
                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
-                <input type="hidden" name="hiddenImageFormat" id="hiddenImageFormat">
-                <input type="hidden" name="hiddenModelVersion" id="hiddenModelVersion">
-                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
                 <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
                 <br>
                 <button type="submit" class="btn gradient-btn-3">Generate</button>
@@ -167,7 +167,7 @@
                     <option value="webp">WEBP</option>
                 </select>
 
-                {{-- Style --}}
+                {{-- Style SD--}}
                 <div class="d-flex flex-wrap justify-content-between">
                     <!-- Image Box 1 -->
                     <div class="col-3 mb-3">
@@ -354,5 +354,74 @@
     });
 </script>
 {{-- Dalle SCRIPTS END--}}
+
+{{-- SD SCRIPTS Start --}}
+<script>
+    $(document).ready(function() {
+    
+        $('#sdForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+    
+             // Show the magic ball
+             showMagicBall('Image');
+
+            var formData = new FormData(this);
+            // Manually append the offcanvas input values
+            formData.append('modelVersion', $('#modelVersion').val());
+            formData.append('imageFormat', $('#imageFormat').val());
+            
+            
+            $.ajax({
+                url: $(this).attr('action'), // Use the form's action URL
+                type: 'POST',
+                data: formData, // Send FormData
+                processData: false, // Prevent jQuery from processing the data
+                contentType: false, // Ensure the correct content type for files
+                
+                success: function(response) {
+                    
+                    hideMagicBall();
+                    
+                    var promptValue = $('#prompt').val();
+                    $('#promptDisplay').text(promptValue); 
+                    
+                    // Display the image based on image_url or image_base64
+                    if (response.image_url) {
+                        $('#imageContainer').html(`
+                            <img src="${response.image_url}" alt="Generated Image" style="max-width:100%;">
+                            <p>${response.prompt}</p>
+                        `);
+                            
+    
+                    } else if (response.image_base64) {
+                        hideMagicBall();
+                        $('#imageContainer').html('<img src="data:image/jpeg;base64,' + response.image_base64 + '" alt="Generated Image" style="max-width:100%;">');
+                    }
+                },
+    
+                error: function(xhr) {
+                    hideMagicBall();
+                    // Handle errors
+                    $('#responseMessage').html('<p>Error generating image. Please try again.</p>');
+                }
+            });
+        });
+    });
+
+    // SD Style Selection
+    function selectStyle(styleName, element) {
+    // Set the selected style value in the hidden input field
+    document.getElementById('hiddenStyle').value = styleName;
+    console.log('Selected Style: ' + styleName); // You can log it to see the selected style
+    
+    // Remove 'selected-border' class from all image boxes
+    const imageBoxes = document.querySelectorAll('.image-box');
+    imageBoxes.forEach(box => box.classList.remove('selected-background'));
+    
+    // Add 'selected-border' class to the clicked element only
+    element.classList.add('selected-background');
+    }
+    </script>
+{{-- SD SCRIPTS END --}}
 
 @endsection
