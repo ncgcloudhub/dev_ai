@@ -30,7 +30,7 @@
     }
 </style>
 
-<div class="container py-5">
+<div class="container-fluid py-5 px-5">
     <div class="row align-items-center">
         <div class="col-md-6">
             <!-- DALL-E Form -->
@@ -43,9 +43,12 @@
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
                 {{-- Fields Dalle--}}
-                <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
+                <div class="d-flex align-items-center gap-2">
+                    <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
+                    <button type="submit" class="btn gradient-btn-3">Generate</button>
+                </div>
+                
                 <br>
-                <button type="submit" class="btn gradient-btn-3">Generate</button>
 
                 
             </form>
@@ -64,31 +67,45 @@
                
                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                 <input type="hidden" name="mode" id="mode" value="text-to-image">
-                <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
+                <div class="d-flex align-items-center gap-2">
+                    <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
+                    <button type="submit" class="btn gradient-btn-3">Generate</button>
+                </div>
+                
                 <br>
-                <button type="submit" class="btn gradient-btn-3">Generate</button>
+                
             </form>
-                            
+                     
+            
+            {{-- USE CASES --}}
+            <h3 class="text-white">Use Cases</h3>
+            <p>Attain heightened levels of clarity and intricacy in your AI creations, photographs, and illustrations.</p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <button class="use-case-btn" data-target="dalleForm">DALL-E</button>
+                <button class="use-case-btn" data-target="sdForm">Stable Diffusion</button>
+                <button class="use-case-btn" data-target="designForm">Design</button>
+                <button class="use-case-btn" data-target="foodForm">Food</button>
+                <button class="use-case-btn" data-target="moreForm">More</button>
+            </div>
 
         </div>
+
         <div class="col-md-6" id="image-container">    
                 <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
                     alt="Before and After"
                     class="before-after img-fluid rounded shadow-sm"
                     style="max-width: 100%; height: auto;">
+                    <br><br>
+                    <blockquote class="blockquote rounded mb-0">
+                        <p class="text-white mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum voluptatibus dolores excepturi odio, laudantium fugit illum odit cum! Eos, earum.</p>
+                        <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
+                    </blockquote>
         </div>
         
     </div>
+
+
     <div class="text-center mt-5">
-        <h3 class="text-white">Use Cases</h3>
-        <p>Attain heightened levels of clarity and intricacy in your AI creations, photographs, and illustrations.</p>
-        <div class="d-flex justify-content-center flex-wrap">
-            <button class="use-case-btn" data-target="dalleForm">DALL-E</button>
-            <button class="use-case-btn" data-target="sdForm">Stable Diffusion</button>
-            <button class="use-case-btn" data-target="designForm">Design</button>
-            <button class="use-case-btn" data-target="foodForm">Food</button>
-            <button class="use-case-btn" data-target="moreForm">More</button>
-        </div>
 
         {{-- Offcanvas Dalle--}}
         <div class="offcanvas offcanvas-start" tabindex="-1" id="dalleOffcanvas" aria-labelledby="dalleOffcanvasLabel">
@@ -320,7 +337,8 @@
                         // Create an image element
                         var temp = `<a class="image-popup" href="${imageData.url}" title="">
                                         <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${imageData.url}" alt="" />
-                                    </a>`;
+                                    </a>
+                                    `;
 
                         // Append the image to the container
                         $('#image-container').append(temp);
