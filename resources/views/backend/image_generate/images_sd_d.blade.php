@@ -43,9 +43,19 @@
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
                 {{-- Fields Dalle--}}
-                <div class="d-flex align-items-center gap-2">
-                    <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
-                    <button type="submit" class="btn gradient-btn-3">Generate</button>
+                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle3">
+                <div class="d-flex gap-2 align-items-center w-100">
+                    <div class="search-box position-relative flex-grow-1">
+                        <a title="Optimize Prompt" class="btn btn-optimize position-absolute top-50 translate-middle-y"
+                        onclick="toggleOptimize('dalle3')" id="optimizeIcon_dalle3">
+                            <i class="ri-hammer-line fs-4"></i>
+                        </a>
+                        <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
+                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                            <i class="mic-icon ri-mic-line fs-4"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
                 
                 <br>
