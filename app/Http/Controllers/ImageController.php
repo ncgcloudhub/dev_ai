@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\PackageHistory;
 use App\Models\SiteSettings;
+use App\Models\StableDiffusionGeneratedImage;
 use Illuminate\Support\Facades\Log;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
@@ -33,8 +34,9 @@ class ImageController extends Controller
         ->latest()
         ->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
+        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
 
-        return view('backend.image_generate.images_sd_d',compact('apiKey','lastPackageId'));
+        return view('backend.image_generate.images_sd_d',compact('apiKey','lastPackageId','images'));
     }
 
     // Dalle Image Generate

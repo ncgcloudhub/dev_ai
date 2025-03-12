@@ -31,7 +31,7 @@
 </style>
 
 <div class="container-fluid py-5 px-5">
-    <div class="row align-items-center">
+    <div class="row">
         <div class="col-md-6">
             <!-- DALL-E Form -->
             <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
@@ -107,7 +107,10 @@
                 <button class="use-case-btn" data-target="moreForm">More</button>
             </div>
 
+            <br>
         </div>
+
+       
 
         <div class="col-md-6" id="image-container">    
                 <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
@@ -120,6 +123,53 @@
                         <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
                     </blockquote>
         </div>
+
+    <div class="col">
+         {{-- Gallery Loaded START --}}
+         <h3 class="text-white">Generated Images</h3>
+         <div class="gallery-light">
+             <div class="row">
+                 @foreach($images as $item)
+                     <div class="col-xl-2 col-lg-4 col-sm-6">
+                     <div class="gallery-box card">
+                         <div class="gallery-container">
+                             <a class="image-popup" href="{{ $item->image_url }}" title="">
+                                 <img class="gallery-img img-fluid mx-auto"
+                                     src="{{ $item->image_url }}" alt="" loading="lazy" />
+                                 <div class="gallery-overlay">
+                                     <h5 class="overlay-caption">{{ $item->prompt }}</h5>
+                                 </div>
+                             </a>
+                         </div>
+                         <div class="box-content">
+                             <div class="d-flex align-items-center mt-2">
+                              
+                                 <div class="flex-shrink-0">
+                                     <div class="d-flex gap-3">
+                                     <button type="button"
+                                         class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 like-button"
+                                         data-image-id="{{ $item->id }}">
+                                         <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
+                                         <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
+                                     </button>
+                                     <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}"
+                                         class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button"
+                                         onclick="incrementDownloadCount({{ $item->id }})">
+                                          <i class="ri-download-fill text-muted align-bottom me-1"></i> <span class="download-count">{{ $item->downloads }} </span>
+                                      </a>
+                                      
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     </div>
+                 @endforeach
+             </div>
+             <!--end row-->
+         </div>
+         {{-- Gallery Loaded END --}}
+    </div>
         
     </div>
 
