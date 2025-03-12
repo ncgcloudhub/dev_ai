@@ -64,12 +64,21 @@
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
                 
                 {{-- Fields SD--}}
-               
+                <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
                 <input type="hidden" name="mode" id="mode" value="text-to-image">
-                <div class="d-flex align-items-center gap-2">
-                    <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
-                    <button type="submit" class="btn gradient-btn-3">Generate</button>
+                <div class="d-flex gap-2 align-items-center w-100">
+                    <div class="search-box position-relative flex-grow-1">
+                        <a title="Optimize Prompt" class="btn btn-optimize position-absolute top-50 translate-middle-y"
+                        onclick="toggleOptimize('sd')" id="optimizeIcon_sd">
+                            <i class="ri-hammer-line fs-4"></i>
+                        </a>
+                        <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
+                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                            <i class="mic-icon ri-mic-line fs-4"></i>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
                 
                 <br>
