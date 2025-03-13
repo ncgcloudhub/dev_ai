@@ -671,6 +671,25 @@ public function updateContent(Request $request, $id)
         return response()->json($subjects);
     }
 
+    // Function to generate images using DALL·E
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '256x256', $style = 'vivid', $quality = 'standard', $n = 1) {
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $apiKey,
+        'Content-Type' => 'application/json',
+    ])->post('https://api.openai.com/v1/images/generations', [
+        'prompt' => $prompt,
+        'size' => $size,
+        'style' => $style,
+        'quality' => $quality,
+        'n' => $n,
+    ]);
+
+    Log::info('OpenAI Image Generation Response', ['response' => $response->json()]);
+
+    // Extract and return the image URL
+    $data = $response->json();
+    return $data['data'][0]['url'] ?? null;
+}
 
     public function ToolsGenerateContent(Request $request)
 {
@@ -723,16 +742,29 @@ public function updateContent(Request $request, $id)
     logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
     
     $content = $response['choices'][0]['message']['content'];
-    
-    // Image URL to append
-    $imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStr6oEDmBx-rgpxFbVj5QfF70kPVvqmcXwEQ&s";
 
-    // Ensure image is added right after each "Image Prompt:"
-    $processedContent = preg_replace_callback('/(\*Image Prompt:.*?\*)/i', function ($matches) use ($imageUrl) {
-        return $matches[0] . "\n\n![Generated Image](" . $imageUrl . ")\n";
-    }, $content);
+// Log the content before processing
+Log::info('Content Before Image Extraction', ['content' => $content]);
 
-    Log::info('Processed Content', ['content' => $processedContent]);
+$processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
+    $imagePrompt = trim($matches[1]); // Capture and clean the prompt
+    Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);  // Log the prompt
+
+    // If the prompt is valid, generate the image
+    if (!empty($imagePrompt)) {
+        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+        
+        if ($generatedImageUrl) {
+            return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
+        } else {
+            return $matches[0]; // Keep original text if image generation fails
+        }
+    }
+
+    return $matches[0]; // Keep the original text if no valid image prompt
+}, $content);
+
+Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
     
     // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
