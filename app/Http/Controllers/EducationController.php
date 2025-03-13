@@ -716,28 +716,41 @@ public function updateContent(Request $request, $id)
             ['role' => 'user', 'content' => $prompt],
         ],
     ]);
-
-      // Log the activity
-      logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
-
+    
+    Log::info('OpenAI Response Edu', ['response' => $response]);
+    
+    // Log the activity
+    logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
+    
     $content = $response['choices'][0]['message']['content'];
+    
+    // Image URL to append
+    $imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStr6oEDmBx-rgpxFbVj5QfF70kPVvqmcXwEQ&s";
 
-    // Get the total tokens used
+    // Ensure image is added right after each "Image Prompt:"
+    $processedContent = preg_replace_callback('/(\*Image Prompt:.*?\*)/i', function ($matches) use ($imageUrl) {
+        return $matches[0] . "\n\n![Generated Image](" . $imageUrl . ")\n";
+    }, $content);
+
+    Log::info('Processed Content', ['content' => $processedContent]);
+    
+    // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
-
-    $toolContent = new ToolGeneratedContent();  // Assuming you have a model named ToolContent
+    
+    // Save the processed content (with images) to the database
+    $toolContent = new ToolGeneratedContent();
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
     $toolContent->prompt = $prompt;
-    $toolContent->content = $content;
+    $toolContent->content = $processedContent;  // Store modified content
     $toolContent->save();
-
-    // Stream the response
-    return response()->stream(function () use ($content) {
-        $chunks = explode("\n", $content);
+    
+    // Stream the processed content (with images) to the view
+    return response()->stream(function () use ($processedContent) {
+        $chunks = explode("\n", $processedContent);
         $parsedown = new Parsedown(); // Initialize Parsedown
-
+    
         foreach ($chunks as $chunk) {
             $htmlChunk = $parsedown->text($chunk);
             echo $htmlChunk;
