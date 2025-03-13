@@ -24,14 +24,23 @@ class StableDifussionController extends Controller
     }
 
     public function index()
-    {
-        $prompt_library = PromptLibrary::whereHas('category', function ($query) {
-            $query->where('category_name', 'Image');
-        })->orderby('id', 'asc')->limit(50)->get();
+{
+    $prompt_library = PromptLibrary::whereHas('category', function ($query) {
+        $query->where('category_name', 'Image');
+    })->orderby('id', 'asc')->limit(50)->get();
 
-        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
-        return view('backend.image_generate.stable_diffusion', compact('images','prompt_library'));
+    $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
+
+    // Append the full Azure URL to each image
+    foreach ($images as $image) {
+        $image->image_url = config('filesystems.disks.azure.url') 
+            . config('filesystems.disks.azure.container') 
+            . '/' . $image->image_url 
+            . '?' . config('filesystems.disks.azure.sas_token');
     }
+
+    return view('backend.image_generate.stable_diffusion', compact('images', 'prompt_library'));
+}
 
     public function generate(Request $request)
 {
