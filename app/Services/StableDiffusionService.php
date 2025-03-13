@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 class StableDiffusionService
 {
@@ -25,113 +27,116 @@ class StableDiffusionService
 
     public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null)
     {
-        // Set up headers and payload similar to your Python request
+        // Set up headers and payload
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
             'Accept' => 'image/*'
         ];
-
+    
         // Prepare the data payload
-    $data = [
-        'prompt' => $prompt,
-        'output_format' => $imageFormat,
-        'model' => $modelVersion,
-        'mode' => $mode,
-    ];
+        $data = [
+            'prompt' => $prompt,
+            'output_format' => $imageFormat,
+            'model' => $modelVersion,
+            'mode' => $mode,
+        ];
+    
+        // Include base image and strength for image-to-image mode
 
-    // Include base image and strength only if mode is 'image-to-image'
-    if ($mode === 'image-to-image') {
-        if ($baseImage) {
-            $data['baseImage'] = $baseImage;
-        }
-        if ($strength !== null) {
-            $data['strength'] = $strength;
-        }
-    }
-
-        Log::info('Service Data:', $data);
-
+        // if ($mode === 'image-to-image') {
+        //     if ($baseImage) {
+        //         $data['baseImage'] = $baseImage;
+        //     }
+        //     if ($strength !== null) {
+        //         $data['strength'] = $strength;
+        //     }
+        // }
+    
+        //     Log::info('Service Data:', $data);
         
-      // Add image-to-image specific parameters
-    if ($mode === 'image-to-image') {
-        if (!$baseImage) {
-            throw new \Exception('Base image is required for image-to-image generation.');
-        }
-        if (!$strength) {
-            throw new \Exception('Strength is required for image-to-image generation.');
-        }
-
-        $data['strength'] = $strength;
-
-        // Add the base image to the request
-        $response = Http::withHeaders($headers)
-            ->asMultipart()
-            ->attach('image', file_get_contents($baseImage->getRealPath()), $baseImage->getClientOriginalName())
-            ->post($endpoint, $data);
-    } else {
-        // For text-to-image
-        $response = Http::withHeaders($headers)
-            ->asMultipart()
-            ->post($endpoint, $data);
-    }
-
-
-            Log::info('Stable Diffusion API Response:', [
-                'status' => $response->status(),
-                'response_preview' => substr($response->body(), 0, 100) // Log the first 100 characters only
-            ]);
-
-             // Log the full response headers for inspection
-            Log::info('Stable Diffusion API Response Headers:', $response->headers());
-
-            // Extract the seed from headers if it exists
-            $seedId = $response->header('seed') ?? null;
-
-            if ($response->status() == 200) {
-                // Use selected output format as file extension
-                $extension = strtolower($imageFormat); // Convert format to lowercase to ensure compatibility
-                // Save the binary content as an image
-                $imageName = 'user_' . auth()->id() . '_image_' . time() . '.' . $extension;
-            
-                 // Create an instance of Intervention Image from the response content
-                $image = Image::make($response->body());
-                
-                // Define the watermark path
-                $watermarkPath = public_path('backend/uploads/site/' .$this->siteSettings->watermark);
-                
-                // Adjust path as necessary
-                $watermark = Image::make($watermarkPath); // Create an instance of the watermark image
-
-                // Apply watermark at the bottom-right corner with 10px offset
-                $image->insert($watermark, 'bottom-right', 10, 10);
-                
-                // Save the watermarked image to the storage
-                $watermarkedImagePath = storage_path('app/public/' . $imageName);
-                $image->save($watermarkedImagePath);
-
-                // Save the image data to the database
-                StableDiffusionGeneratedImage::create([
-                    'user_id' => auth()->id(),
-                    'prompt' => $prompt,
-                    'status' => 'generated', // Set the status as needed
-                    'in_frontend' => false, // Set to true if you want to show in frontend
-                    'image_url' => asset('storage/' . $imageName),
-                    'seed' => $seedId,  // Store the seed ID if it exists
-
-                ]);
-            
-                return [
-                    'image_url' => asset('storage/' . $imageName), // Return the generated image URL
-                    'seed' => $seedId,  // Return the seed ID along with the image URL
-
-                ];
-            } else {
-                return response()->json([
-                    'error' => $response->json() ?? 'An error occurred during image generation.'
-                ], $response->status());
+        if ($mode === 'image-to-image') {
+            if (!$baseImage) {
+                throw new \Exception('Base image is required for image-to-image generation.');
             }
-            
+            if (!$strength) {
+                throw new \Exception('Strength is required for image-to-image generation.');
+            }
+    
+            $data['strength'] = $strength;
+    
+            // Add the base image to the request
+            $response = Http::withHeaders($headers)
+                ->asMultipart()
+                ->attach('image', file_get_contents($baseImage->getRealPath()), $baseImage->getClientOriginalName())
+                ->post($endpoint, $data);
+        } else {
+            // For text-to-image
+            $response = Http::withHeaders($headers)
+                ->asMultipart()
+                ->post($endpoint, $data);
+        }
+    
+        // Log the response
+        Log::info('Stable Diffusion API Response:', [
+            'status' => $response->status(),
+            'response_preview' => substr($response->body(), 0, 100) // Log the first 100 characters
+        ]);
+    
+        // Extract the seed from headers if it exists
+        $seedId = $response->header('seed') ?? null;
+    
+        if ($response->status() == 200) {
+            // Generate the image name in the desired format
+            $imageName = time() . '-' . uniqid() . '.webp';
+            $imagePath = $imageName;
+    
+            // Create an instance of Intervention Image from the response content
+            $image = Image::make($response->body());
+    
+            // Define the watermark path
+            $watermarkPath = public_path('backend/uploads/site/' . $this->siteSettings->watermark);
+            $watermark = Image::make($watermarkPath); // Create an instance of the watermark image
+    
+            // Apply watermark at the bottom-right corner with 10px offset
+            $image->insert($watermark, 'bottom-right', 10, 10);
+    
+            // Save the watermarked image to a temporary file
+            $tempImagePath = tempnam(sys_get_temp_dir(), 'img') . '.jpg';
+            $image->save($tempImagePath);
+    
+            // Upload the image to Azure Blob Storage
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $containerName = config('filesystems.disks.azure.container');
+            $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($tempImagePath), new CreateBlockBlobOptions());
+    
+            // Save the image data to the database
+            $imageModel = StableDiffusionGeneratedImage::create([
+                'user_id' => auth()->id(),
+                'prompt' => $prompt,
+                'status' => 'generated',
+                'in_frontend' => false,
+                'image_url' => $imagePath, // Save only the image name
+                'seed' => $seedId,
+            ]);
+    
+            // Clean up the temporary file
+            unlink($tempImagePath);
+    
+            // Construct the full Azure URL for the response
+            $imageUrl = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $imageName 
+                . '?' . config('filesystems.disks.azure.sas_token');
+    
+            return [
+                'image_url' => $imageUrl, // Return the full Azure URL
+                'seed' => $seedId,  // Return the seed ID
+            ];
+        } else {
+            return response()->json([
+                'error' => $response->json() ?? 'An error occurred during image generation.'
+            ], $response->status());
+        }
     }
-
 
 }
