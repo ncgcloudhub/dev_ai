@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
@@ -857,7 +858,9 @@ Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'
 Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
-Route::get('/images-form', [StableDifussionController::class, 'imageIndex'])->name('images.form');
+// Collage Image Generator
+Route::get('/images-form', [ImageController::class, 'imageIndex'])->name('images.form');
+Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 
 // Stable Diffusion Control(Sketch)
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);

@@ -149,12 +149,6 @@ public function Videoindex()
     return view('backend.video.stable_video',compact('apiKey'));
 }
 
-public function imageIndex()
-{
-    $apiKey = config('services.stable_diffusion.api_key');
-    return view('backend.image_generate.images_sd_d',compact('apiKey'));
-}
-
 
 public function generateVideo(Request $request)
 {

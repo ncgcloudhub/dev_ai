@@ -300,23 +300,6 @@ class GenerateImagesController extends Controller
     }
 
 
-    public function generate(Request $request)
-{
-    Log::info('Request Data:', $request->all());
-
-    $prompt = $request->input('prompt');
-    $style = $request->input('hiddenStyle');
-    $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
-    $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
-    $quality = $request->input('hiddenQuality');
-    $resolution = $request->input('hiddenResolution');
-
-    Log::info("Selected Model: $modelVersion, Style: $style, Format: $imageFormat, Quality: $quality, Resolution: $resolution");
-
-    // Now use these values in your Stable Diffusion or DALL·E API calls
-}
-
-
    // Extract Prompt From Image
 public function ExtractImage(Request $request)
 {
