@@ -671,6 +671,25 @@ public function updateContent(Request $request, $id)
         return response()->json($subjects);
     }
 
+    // Function to generate images using DALL·E
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '256x256', $style = 'vivid', $quality = 'standard', $n = 1) {
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $apiKey,
+        'Content-Type' => 'application/json',
+    ])->post('https://api.openai.com/v1/images/generations', [
+        'prompt' => $prompt,
+        'size' => $size,
+        'style' => $style,
+        'quality' => $quality,
+        'n' => $n,
+    ]);
+
+    Log::info('OpenAI Image Generation Response', ['response' => $response->json()]);
+
+    // Extract and return the image URL
+    $data = $response->json();
+    return $data['data'][0]['url'] ?? null;
+}
 
     public function ToolsGenerateContent(Request $request)
 {
@@ -716,28 +735,54 @@ public function updateContent(Request $request, $id)
             ['role' => 'user', 'content' => $prompt],
         ],
     ]);
-
-      // Log the activity
-      logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
-
+    
+    Log::info('OpenAI Response Edu', ['response' => $response]);
+    
+    // Log the activity
+    logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
+    
     $content = $response['choices'][0]['message']['content'];
 
-    // Get the total tokens used
+// Log the content before processing
+Log::info('Content Before Image Extraction', ['content' => $content]);
+
+$processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
+    $imagePrompt = trim($matches[1]); // Capture and clean the prompt
+    Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);  // Log the prompt
+
+    // If the prompt is valid, generate the image
+    if (!empty($imagePrompt)) {
+        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+        
+        if ($generatedImageUrl) {
+            return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
+        } else {
+            return $matches[0]; // Keep original text if image generation fails
+        }
+    }
+
+    return $matches[0]; // Keep the original text if no valid image prompt
+}, $content);
+
+Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
+    
+    // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
-
-    $toolContent = new ToolGeneratedContent();  // Assuming you have a model named ToolContent
+    
+    // Save the processed content (with images) to the database
+    $toolContent = new ToolGeneratedContent();
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
     $toolContent->prompt = $prompt;
-    $toolContent->content = $content;
+    $toolContent->content = $processedContent;  // Store modified content
     $toolContent->save();
-
-    // Stream the response
-    return response()->stream(function () use ($content) {
-        $chunks = explode("\n", $content);
+    
+    // Stream the processed content (with images) to the view
+    return response()->stream(function () use ($processedContent) {
+        $chunks = explode("\n", $processedContent);
         $parsedown = new Parsedown(); // Initialize Parsedown
-
+    
         foreach ($chunks as $chunk) {
             $htmlChunk = $parsedown->text($chunk);
             echo $htmlChunk;
