@@ -100,6 +100,7 @@ class HomeController extends Controller
      // Log the split points for debugging
      Log::info('Split Points:', ['points' => $points]);
      $category = $request->category ?? 'General';
+     $type = $request->type;
 
     // Loop through the points array and store each point as a separate entry in the database
     foreach ($points as $point) {
@@ -109,6 +110,7 @@ class HomeController extends Controller
         $point = trim($point);
         if ($point) {
             Jokes::create([
+                'type' => $type, 
                 'category' => $category, 
                 'content' => $point,  
             ]);
@@ -164,6 +166,7 @@ class HomeController extends Controller
     public function generateAiJoke(Request $request)
     {   
         $validated = $request->validate([
+            'type' => 'required|string',
             'category' => 'required|string',
             'points' => 'required|integer',
         ]);
@@ -172,6 +175,7 @@ class HomeController extends Controller
         $openaiModel = $user->selected_model;
 
         // Get the category and points from the request
+        $type = $validated['type'];
         $category = $validated['category'];
         $points = $validated['points'];
 
@@ -179,7 +183,7 @@ class HomeController extends Controller
         $userContent = $request->input('content', '');
 
         // Start building the AI message
-        $aiMessage = "Generate $points jokes based on the category: $category, each joke should be one liner.";
+        $aiMessage = "Generate $points $type based on the category: $category, each $type should be one liner.";
 
         // If the user has provided custom content, append it to the AI prompt
         if (!empty($userContent)) {
@@ -205,7 +209,7 @@ class HomeController extends Controller
                     'messages' => [
                         [
                             "role" => "system",
-                            "content" => "You are a witty and hilarious comedian, known for cracking side-splitting jokes that bring laughter to everyone."
+                            "content" => "You are a helpful assistant."
                         ],
                         [
                             "role" => "user",

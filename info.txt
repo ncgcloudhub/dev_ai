@@ -152,3 +152,6 @@ In siteSettings, add hex_pass text
 14/02/2025
 in PricingPlan, add stripe_prod_id character_varying
 in PricingPlan, add stripe_price_id character_varying
+
+17/03/25
+in jokes, add type field, and type will be text
