@@ -1027,7 +1027,7 @@ public function updateSubject(Request $request, $id)
         $validatedData = $request->validate([
             'name' => 'required|string',
             'category_id' => 'required|int',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
             'input_names' => 'required|array',
@@ -1093,7 +1093,7 @@ public function updateSubject(Request $request, $id)
         $validatedData = $request->validate([
             'name' => 'required|string',
             'category_id' => 'required|int',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'nullable|string',
             'input_types' => 'required|array',
             'input_names' => 'required|array',

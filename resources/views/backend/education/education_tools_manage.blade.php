@@ -126,41 +126,44 @@
         
         <div class="row" id="toolGrid">
             @foreach($tools as $tool)
-                <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" 
-                     data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
-                    <div class="card explore-box card-animate">
-                        <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
-                                 alt="" class="card-img-top explore-img" loading="lazy" />
-                                 @if(Auth::user()->role === 'admin')
-                                 @can('education.manageTools.edit')
-                                     <a href="{{ route('tools.edit', $tool->id) }}" class="gradient-btn-edit">
-                                         Edit
-                                     </a>
-                                 @endcan
-                             
-                                 @can('education.manageTools.delete')
-                                     <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
-                                         @csrf
-                                         @method('DELETE')
-                                         <button type="submit" class="gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                            Delete
-                                         </button>
-                                     </form>
-                                 @endcan
-                            
-                             @endif
-                        </div>
+            <div class="col-lg-4 product-item template-card {{ Str::slug($tool->educationtools_category->category_name) }}" 
+                data-search="{{ strtolower($tool->name . ' ' . $tool->description) }}">
+               <div class="card explore-box card-animate">
+                   <div class="explore-place-bid-img">
+                       <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
+                           <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
+                                alt="" class="card-img-top explore-img" loading="lazy" />
+                       </a>
+           
+                       @if(Auth::user()->role === 'admin')
+                           @can('education.manageTools.edit')
+                               <a href="{{ route('tools.edit', $tool->id) }}" class="gradient-btn-edit">
+                                   Edit
+                               </a>
+                           @endcan
                        
-                        <div class="card-body">
-                            <h5 class="mb-1 fs-16">
-                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" 
-                                   class="text-body">{{ $tool->name }}</a>
-                            </h5>
-                            <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
-                        </div>
-                    </div>
-                </div>
+                           @can('education.manageTools.delete')
+                               <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
+                                   @csrf
+                                   @method('DELETE')
+                                   <button type="submit" class="gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                       Delete
+                                   </button>
+                               </form>
+                           @endcan
+                       @endif
+                   </div>
+           
+                   <div class="card-body">
+                       <h5 class="mb-1 fs-16">
+                           <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" 
+                              class="text-body">{{ $tool->name }}</a>
+                       </h5>
+                       <p class="text-muted fs-14 mb-0">{{ $tool->description }}</p>
+                   </div>
+               </div>
+           </div>
+           
             @endforeach
         </div>
         <div id="paginationControls" class="pagination justify-content-center mt-3">
