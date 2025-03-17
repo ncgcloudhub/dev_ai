@@ -99,6 +99,7 @@ class HomeController extends Controller
 
      // Log the split points for debugging
      Log::info('Split Points:', ['points' => $points]);
+     $category = $request->category ?? 'General';
 
     // Loop through the points array and store each point as a separate entry in the database
     foreach ($points as $point) {
@@ -108,7 +109,7 @@ class HomeController extends Controller
         $point = trim($point);
         if ($point) {
             Jokes::create([
-                'category' => 'Magic Ball', 
+                'category' => $category, 
                 'content' => $point,  
             ]);
         }

@@ -75,11 +75,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="category" class="form-label">Category</label>
                                 <select class="form-control" id="category" name="category" required>
-                                    <option value="">Select Category</option>
-                                    <option value="general">General</option>
+                                    <option selected value="general">General</option>
                                     <option value="programming">Programming</option>
                                     <option value="funny">Funny</option>
                                     <option value="tech">Tech</option>
+                                    <option value="image">Image</option>
+                                    <option value="education">Education</option>
                                     <!-- Add other categories here as needed -->
                                 </select>
                             </div>
@@ -88,11 +89,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="points" class="form-label">Number of Jokes</label>
                                 <select class="form-control" id="points" name="points" required>
-                                    <option value="">Select number of Jokes</option>
-                                    <option value="1">1 Joke</option>
+                                    <option selected value="1">1 Joke</option>
                                     <option value="2">2 Jokes</option>
                                     <option value="3">3 Jokes</option>
                                     <option value="5">5 Jokes</option>
+                                    <option value="7">7 Jokes</option>
+                                    <option value="10">10 Jokes</option>
                                     <!-- Add other point values here as needed -->
                                 </select>
                             </div>
@@ -351,12 +353,15 @@ $(document).ready(function() {
     // Set the hidden input value with the combined joke content
     $('#joke_content_input').val(jokeContent);
 
+    var selectedCategory = $('#category').val();
+
         // Send selected points via AJAX to store in the database
         $.ajax({
             url: '{{ route("jokes.store") }}', // Route to store the joke
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
+                category: selectedCategory,
                 points: selectedPoints,
                 joke_content: jokeContent,
             },
