@@ -331,6 +331,9 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // Dalle Manage Image
     Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin')->middleware('admin.permission:cleverImageCreator.manage');
+    Route::post('/prompt/generate/bulk-details', [GenerateImagesController::class, 'fetchBulkDetails']);
+    Route::post('/prompt/add/bulk-library', [GenerateImagesController::class, 'saveBulkPrompts']);
+
 
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
 

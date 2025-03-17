@@ -18,7 +18,6 @@
             </div>
             <div class="card-body">
 
-                {{-- Modal --}}
 <!-- Modal -->
 <div class="modal fade" id="promptModal" tabindex="-1" aria-labelledby="promptModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -70,6 +69,7 @@
                 <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
                             <th>SR No.</th>
                             <th>Image</th>
                             <th>Prompt</th>
@@ -81,6 +81,9 @@
                     <tbody>
                         @foreach ($images as $index => $item)
                         <tr>
+                            <td>
+                                <input type="checkbox" class="prompt-checkbox" value="{{ $item->id }}" data-prompt="{{ $item->prompt }}">
+                            </td>
                             <td>{{ $index + 1 }}</td>
                             <td>
                                 <a class="image-popup" href="{{ asset($item->image_url) }}" title="">
@@ -122,6 +125,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                <button type="button" id="bulkFetchSaveButton" class="btn btn-warning">Bulk Fetch & Save</button>
+
             </div>
         </div>
     </div>
@@ -241,6 +246,72 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// Bulk fetch and save
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('promptModal'));
+
+    // Select all checkboxes
+    document.getElementById('selectAll').addEventListener('change', function () {
+        document.querySelectorAll('.prompt-checkbox').forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+    // Bulk Fetch & Save
+    document.getElementById('bulkFetchSaveButton').addEventListener('click', function () {
+        const selectedPrompts = [];
+        document.querySelectorAll('.prompt-checkbox:checked').forEach(checkbox => {
+            selectedPrompts.push({
+                id: checkbox.value,
+                prompt: checkbox.dataset.prompt
+            });
+        });
+
+        if (selectedPrompts.length === 0) {
+            alert('Please select at least one prompt.');
+            return;
+        }
+
+        // Step 1: Fetch Details for all selected prompts
+        fetch(`/prompt/generate/bulk-details`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ prompts: selectedPrompts.map(p => p.prompt) }) // Send only prompt texts
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Step 2: Save all prompts with fetched details
+            const promptsWithDetails = selectedPrompts.map((p, index) => ({
+                id: p.id,
+                prompt: p.prompt,
+                details: data[index].details,  // Assuming API returns details in order
+                prompt_name: data[index].promptName, 
+                category: document.getElementById('category').value,
+                subcategory: document.getElementById('subcategory').value
+            }));
+
+            return fetch(`/prompt/add/bulk-library`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ prompts: promptsWithDetails })
+            });
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('All prompts have been saved successfully!');
+                location.reload(); // Reload to reflect changes
+            }
+        });
+    });
+});
+
 
 </script>
 
