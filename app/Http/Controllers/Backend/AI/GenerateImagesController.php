@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Log;
 use OpenAI\Client as OpenAIClient;
 use OpenAI\Laravel\Facades\OpenAI;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
 
 class GenerateImagesController extends Controller
 {
@@ -651,5 +652,96 @@ public function ExtractImage(Request $request)
         return response()->json(['success' => true, 'favorited' => $favorited]);
     }
 
+    // Bulk Image
+    public function fetchBulkDetails(Request $request)
+    {
+        $prompts = $request->input('prompts');
+        $user = auth()->user();
+        $openaiModel = $user->selected_model;
+        $client = new \GuzzleHttp\Client();
+    
+        $results = [];
+    
+        foreach ($prompts as $prompt) {
+            try {
+                $response = $client->post('https://api.openai.com/v1/chat/completions', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . config('app.openai_api_key'),
+                        'Content-Type' => 'application/json',
+                    ],
+                    'json' => [
+                        'model' => $openaiModel,
+                        'messages' => [
+                            [
+                                "role" => "system",
+                                "content" => "You are a helpful assistant."
+                            ],
+                            [
+                                "role" => "user",
+                                "content" => "Generate a brief description and a suggested prompt name for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. Format the response with two distinct sections: '**Prompt Name:**' followed by the name and '**Details:**' followed by the description."
+                            ]
+                        ],
+                    ],
+                ]);
+    
+                $responseBody = json_decode($response->getBody()->getContents(), true);
+                $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
+    
+                // Extract Prompt Name
+                $promptNamePattern = '/\*\*Prompt Name:\*\*\s*(.*?)\s*\*\*Details:\*\*/s';
+                $detailsPattern = '/\*\*Details:\*\*\s*(.+)/s';
+    
+                $promptName = '';
+                $details = '';
+    
+                if (preg_match($promptNamePattern, $assistantContent, $matches)) {
+                    $promptName = trim($matches[1]);
+                    $promptName = str_replace('-', ' ', $promptName);
+                    $promptName = ucwords($promptName);
+                }
+    
+                if (preg_match($detailsPattern, $assistantContent, $matches)) {
+                    $details = trim($matches[1]);
+                }
+    
+                $results[] = [
+                    'prompt' => $prompt,
+                    'details' => $details,
+                    'promptName' => $promptName
+                ];
+    
+            } catch (\Exception $e) {
+                Log::error("Error fetching prompt details: " . $e->getMessage());
+                $results[] = [
+                    'prompt' => $prompt,
+                    'details' => 'Error generating details',
+                    'promptName' => 'Error'
+                ];
+            }
+        }
+    
+        return response()->json($results);
+    }
+    
+    public function saveBulkPrompts(Request $request)
+    {
+        $prompts = $request->input('prompts');
+    
+        foreach ($prompts as $promptData) {
+            $slug = Str::slug($promptData['prompt_name']);
+
+            PromptLibrary::create([
+                'actual_prompt' => $promptData['prompt'],  // Matches single insert
+                'category_id' => $promptData['category'],
+                'sub_category_id' => $promptData['subcategory'], // Fix: changed 'subcategory_id' to 'sub_category_id'
+                'description' => $promptData['details'], // Fix: changed 'details' to 'description'
+                'prompt_name' => $promptData['prompt_name'],
+                'slug' => $slug
+            ]);
+        }
+    
+        return response()->json(['success' => true]);
+    }
+    
    
 }
