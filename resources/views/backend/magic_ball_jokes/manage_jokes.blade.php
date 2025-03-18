@@ -179,6 +179,7 @@
 
 <script>
 $(document).ready(function () {
+
     // Check if DataTable is already initialized
     if ($.fn.DataTable.isDataTable('#alternative-pagination')) {
         $('#alternative-pagination').DataTable().destroy(); // Destroy the existing instance
@@ -285,7 +286,7 @@ $(document).ready(function () {
 $(document).ready(function() {
     $('#aiGenerateBtn').click(function() {
         // Show the magic ball
-        showMagicBall('image');
+        showMagicBall();       // ✅ All
 
         var type = $('#type').val();
         var category = $('#category').val();

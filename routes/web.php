@@ -656,7 +656,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     // Calender
     Route::get('/calender', [FAQController::class, 'calender'])->name('calender')->middleware('admin.permission:calender.menu');
     
-    Route::get('/fetch-joke/{category}', [FAQController::class, 'fetchRandomJoke'])->name('jokes');
+    Route::get('/fetch-content/{type?}/{category?}', [FAQController::class, 'fetchRandomContent'])->name('fetch-content');
 
     Route::prefix('generate')->middleware(['check.status'])->group(function () {
     Route::get('/image/view', [GenerateImagesController::class, 'AIGenerateImageView'])->name('generate.image.view');
