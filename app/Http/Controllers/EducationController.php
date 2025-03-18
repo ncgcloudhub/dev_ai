@@ -755,13 +755,22 @@ $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)
         $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
         
         if ($generatedImageUrl) {
-            return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
-        } else {
-            return $matches[0]; // Keep original text if image generation fails
+            // Download the image and save it to persistent storage
+            $imageContent = file_get_contents($generatedImageUrl);
+            if ($imageContent) {
+                $fileName = 'images/' . uniqid('dalle_', true) . '.png'; // Unique filename
+                Storage::disk('public')->put($fileName, $imageContent); // Save to public storage
+
+                // Generate the permanent URL for the saved image
+                $permanentImageUrl = url('storage/' . $fileName);
+
+                // Replace the temporary URL with the permanent URL
+                return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$permanentImageUrl})\n";
+            }
         }
     }
 
-    return $matches[0]; // Keep the original text if no valid image prompt
+    return $matches[0]; // Keep the original text if no valid image prompt or generation fails
 }, $content);
 
 Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
