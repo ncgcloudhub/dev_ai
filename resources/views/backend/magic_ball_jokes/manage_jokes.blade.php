@@ -6,7 +6,7 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="#">Jokes</a> @endslot
+@slot('li_1') <a href="#">Jokes/Facts</a> @endslot
 @slot('title')Manage @endslot
 @endcomponent
 
@@ -19,6 +19,7 @@
                         <thead>
                             <tr>
                                 <th>Sl.</th>
+                                <th>Type</th>
                                 <th>Category</th>
                                 <th>Joke</th>
                                 <th>Action</th>
@@ -28,6 +29,7 @@
                             @foreach ($jokes as $joke)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>{{ $joke->type }}</td>
                             <td> <span class="badge bg-info">{{ $joke->category }}</span></td>
                             <td>{{ $joke->content }}</td>
                             <td>
@@ -64,7 +66,7 @@
             @csrf
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Add Joke</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Add Joke/Facts</h4>
                 </div><!-- end card header -->
     
                 <div class="card-body">
@@ -73,7 +75,7 @@
                         <div class="row">
                             <!-- Category select dropdown -->
                             <div class="col-md-4 mb-3">
-                                <label for="type" class="form-label">Category</label>
+                                <label for="type" class="form-label">Type</label>
                                 <select class="form-control" id="type" name="type" required>
                                     <option selected value="Jokes">Jokes</option>
                                     <option value="Facts">Facts</option>
@@ -111,7 +113,7 @@
                         
                         <!-- Joke content input -->
                         <div class="mb-3">
-                            <label for="content" class="form-label">Content</label>
+                            <label for="content" class="form-label">Details you want in your content (Not mandatory)</label>
                             <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                         </div>
                     </div>
@@ -133,7 +135,7 @@
             <label for="joke_points">Select Joke Points:</label>
             <div id="jokePointsContainer"></div>
         </div>
-        <button type="submit" class="btn gradient-btn-save">Save Joke</button>
+        <button type="submit" class="btn gradient-btn-save">Save</button>
     </form>
     </div>
     </div>
