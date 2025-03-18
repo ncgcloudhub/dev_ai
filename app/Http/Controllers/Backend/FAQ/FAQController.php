@@ -17,12 +17,23 @@ class FAQController extends Controller
         return view('backend.faq.faq_manage', compact('faqs'));
     }
 
-    // In your controller
-    public function fetchRandomJoke($category) {
-        $joke = Jokes::where('category', $category)->inRandomOrder()->first();
-        return response()->json(['joke' => $joke->content ?? 'No jokes available in this category.']);
+    public function fetchRandomContent($type = null, $category = null) {
+        $query = Jokes::query();
+    
+        if ($type && $type !== 'null') {  // Ensure type is not empty or 'null'
+            $query->where('type', $type);
+        }
+        
+        if ($category && $category !== 'null') {  // Ensure category is not empty or 'null'
+            $query->where('category', $category);
+        }
+    
+        $content = $query->inRandomOrder()->first();
+    
+        return response()->json([
+            'content' => $content->content ?? 'No content available for this selection.'
+        ]);
     }
-
     
 
     public function StoreFAQ(Request $request)

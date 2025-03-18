@@ -38,22 +38,32 @@
 </div>
 
 <script>
-    function fetchJoke(category) {
-        $.ajax({
-            type: 'GET',
-            url: `/fetch-joke/${category}`,
-            success: function(response) {
-                $('#joke-text').text(response.joke);
-            }
-        });
+function fetchContent(type = '', category = '') {
+    let url = '/fetch-content';
+
+    if (type || category) {
+        let typeParam = type ? encodeURIComponent(type) : 'null';
+        let categoryParam = category ? encodeURIComponent(category) : 'null';
+        url += `/${typeParam}/${categoryParam}`;
     }
 
-    function showMagicBall(category) {
-        $('#magic-ball').removeClass('d-none');
-        fetchJoke(category);
-    }
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response) {
+            $('#joke-text').text(response.content);
+        }
+    });
+}
 
-    function hideMagicBall() {
-        $('#magic-ball').addClass('d-none');
-    }
+function showMagicBall(type = '', category = '') {
+    $('#magic-ball').removeClass('d-none');
+    fetchContent(type, category);
+}
+
+function hideMagicBall() {
+    $('#magic-ball').addClass('d-none');
+}
+
 </script>
+
