@@ -730,6 +730,16 @@ public function ExtractImage(Request $request)
         foreach ($prompts as $promptData) {
             $slug = Str::slug($promptData['prompt_name']);
 
+            // Check if the prompt already exists by prompt_name or slug
+            $existingPrompt = PromptLibrary::where('slug', $slug)
+            ->orWhere('prompt_name', $promptData['prompt_name'])
+            ->first();
+
+            // If the prompt already exists, skip the insert
+            if ($existingPrompt) {
+            continue;  // Skip to the next iteration
+            }
+
             PromptLibrary::create([
                 'actual_prompt' => $promptData['prompt'],  // Matches single insert
                 'category_id' => $promptData['category'],
