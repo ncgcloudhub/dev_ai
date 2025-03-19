@@ -647,25 +647,26 @@ class GenerateImagesController extends Controller
         $user = auth()->user();
         $openaiModel = $user->selected_model;
         $client = new \GuzzleHttp\Client();
-
+    
         $results = [];
-
+    
         foreach ($prompts as $prompt) {
-
+    
             // Check if the actual prompt already exists in the PromptLibrary
             $existingPrompt = PromptLibrary::where('actual_prompt', $prompt)->first();
-
+    
             if ($existingPrompt) {
-
+    
                 // If exists, skip API call and use existing details
                 $results[] = [
                     'prompt' => $prompt,
                     'details' => $existingPrompt->description,
-                    'promptName' => $existingPrompt->prompt_name
+                    'promptName' => $existingPrompt->prompt_name,
+                    'subcategory' => $existingPrompt->sub_category_id
                 ];
                 continue; // Skip API call and move to the next prompt
             }
-
+    
             try {
                 $response = $client->post('https://api.openai.com/v1/chat/completions', [
                     'headers' => [
@@ -681,71 +682,92 @@ class GenerateImagesController extends Controller
                             ],
                             [
                                 "role" => "user",
-                                "content" => "Generate a brief description and a suggested prompt name for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. Format the response with two distinct sections: '**Prompt Name:**' followed by the name and '**Details:**' followed by the description."
+                                "content" => "Generate a brief description, a suggested prompt name, and a subcategory for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. The subcategory should be one of the following: Vehicle, Animals, Cinematic, Art, Urban, Natural. Format the response with three distinct sections: '**Prompt Name:**' followed by the name, '**Details:**' followed by the description, and '**Subcategory:**' followed by the subcategory."
                             ]
                         ],
                     ],
                 ]);
-
+    
                 $responseBody = json_decode($response->getBody()->getContents(), true);
                 $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
-
+    
                 // Extract Prompt Name
                 $promptNamePattern = '/\*\*Prompt Name:\*\*\s*(.*?)\s*\*\*Details:\*\*/s';
-                $detailsPattern = '/\*\*Details:\*\*\s*(.+)/s';
-
+                $detailsPattern = '/\*\*Details:\*\*\s*(.+)\s*\*\*Subcategory:\*\*/s';
+                $subcategoryPattern = '/\*\*Subcategory:\*\*\s*(.+)/s';
+    
                 $promptName = '';
                 $details = '';
-
+                $subcategory = '';
+    
                 if (preg_match($promptNamePattern, $assistantContent, $matches)) {
                     $promptName = trim($matches[1]);
                     $promptName = str_replace('-', ' ', $promptName);
                     $promptName = ucwords($promptName);
                 }
-
+    
                 if (preg_match($detailsPattern, $assistantContent, $matches)) {
                     $details = trim($matches[1]);
                 }
-
+    
+                if (preg_match($subcategoryPattern, $assistantContent, $matches)) {
+                    $subcategory = trim($matches[1]);
+                }
+    
+                // Fetch subcategory ID from the PromptLibrarySubCategory model
+                // Only look for subcategories under category_id = 44
+                $subcategoryRecord = PromptLibrarySubCategory::where('sub_category_name', $subcategory)
+                    ->where('category_id', 44) // Filter by category_id = 44
+                    ->first();
+    
+                $subcategoryId = $subcategoryRecord ? $subcategoryRecord->id : null;
+    
                 $results[] = [
                     'prompt' => $prompt,
                     'details' => $details,
-                    'promptName' => $promptName
+                    'promptName' => $promptName,
+                    'subcategory' => $subcategoryId
                 ];
-
+    
             } catch (\Exception $e) {
                 Log::error("Error fetching prompt details: " . $e->getMessage());
                 $results[] = [
                     'prompt' => $prompt,
                     'details' => 'Error generating details',
-                    'promptName' => 'Error'
+                    'promptName' => 'Error',
+                    'subcategory' => null
                 ];
             }
         }
         return response()->json($results);
     }
-
+    
     public function saveBulkPrompts(Request $request)
     {
         $prompts = $request->input('prompts');
-    
+
         foreach ($prompts as $promptData) {
             $slug = Str::slug($promptData['prompt_name']);
             $actual_prompt = ($promptData['prompt']);
 
             // Check if the prompt already exists by prompt_name or slug
             $existingPrompt = PromptLibrary::where('actual_prompt', $actual_prompt)
-            ->first();
+                ->first();
 
             // If the prompt already exists, skip the insert
             if ($existingPrompt) {
-            continue;  // Skip to the next iteration
+                continue;  // Skip to the next iteration
+            }
+
+            // If subcategory ID is null, skip saving this prompt
+            if (is_null($promptData['subcategory'])) {
+                continue;
             }
 
             PromptLibrary::create([
                 'actual_prompt' => $promptData['prompt'],  // Matches single insert
-                'category_id' => $promptData['category'],
-                'sub_category_id' => $promptData['subcategory'], // Fix: changed 'subcategory_id' to 'sub_category_id'
+                'category_id' => 44, // Hardcode category_id = 44
+                'sub_category_id' => $promptData['subcategory'], // Use the subcategory ID from the API response
                 'description' => $promptData['details'], // Fix: changed 'details' to 'description'
                 'prompt_name' => $promptData['prompt_name'],
                 'slug' => $slug
