@@ -83,8 +83,6 @@ class GenerateImagesController extends Controller
         return view('backend.image_generate.generate_image', compact('images', 'get_user', 'prompt_library', 'lastPackageId','content'));
     }
 
-
-
     public function generateImage(Request $request)
     {
         $id = Auth::user()->id;
@@ -300,36 +298,34 @@ class GenerateImagesController extends Controller
         }
     }
 
-
    // Extract Prompt From Image
-public function ExtractImage(Request $request)
-{
-    if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
-        $imageFile = $request->file('custom_image');
-        $base64Image = base64_encode(file_get_contents($imageFile));
+    public function ExtractImage(Request $request)
+    {
+        if ($request->hasFile('custom_image') && $request->file('custom_image')->isValid()) {
+            $imageFile = $request->file('custom_image');
+            $base64Image = base64_encode(file_get_contents($imageFile));
 
-        $response = callOpenAIImageAPI($base64Image);
+            $response = callOpenAIImageAPI($base64Image);
 
-        $responseArray = json_decode(json_encode($response), true);
+            $responseArray = json_decode(json_encode($response), true);
 
-        Log::info('Response as array: ' . json_encode($responseArray));
+            Log::info('Response as array: ' . json_encode($responseArray));
 
-        if (isset($responseArray['choices'][0]['message']['content'])) {
-            $extractedPrompt = $responseArray['choices'][0]['message']['content'];
+            if (isset($responseArray['choices'][0]['message']['content'])) {
+                $extractedPrompt = $responseArray['choices'][0]['message']['content'];
 
-            return response()->json([
-                'content' => $extractedPrompt,
-            ]);
+                return response()->json([
+                    'content' => $extractedPrompt,
+                ]);
+            } else {
+                Log::error('Failed to extract prompt from image analysis response');
+                return response()->json(['error' => 'Failed to extract prompt'], 500);
+            }
         } else {
-            Log::error('Failed to extract prompt from image analysis response');
-            return response()->json(['error' => 'Failed to extract prompt'], 500);
+            return response()->json(['error' => 'Invalid or missing image'], 400);
         }
-    } else {
-        return response()->json(['error' => 'Invalid or missing image'], 400);
     }
-}
 
-    
     // Call OpenAI to analyze the image and extract a prompt
     private function callOpenAIImageAPI($base64Image)
     {
@@ -351,7 +347,6 @@ public function ExtractImage(Request $request)
     
         return $response;
     }
-
 
     // Admin Manage Dalle Image
     public function DalleImageManageAdmin()
@@ -386,7 +381,7 @@ public function ExtractImage(Request $request)
         }
 
         return view('backend.image_generate.manage_favorite_dalle_image', compact('images'));
-        }
+    }
 
     public function UpdateStatus(Request $request)
     {
@@ -409,7 +404,6 @@ public function ExtractImage(Request $request)
             return response()->json(['success' => false, 'message' => 'Image not found'], 404);
         }
     }
-
 
     // EID CARD
     public function GreetingCard()
@@ -435,12 +429,8 @@ public function ExtractImage(Request $request)
         return view('backend.image_generate.eid_card', compact('images', 'user'));
     }
     
-
-
     public function GreetingCardGenerate(Request $request)
     {
-        
-
         $id = Auth::user()->id;
         $user = Auth::user();
         $creditsLeft = Auth::user()->credits_left;
@@ -622,7 +612,6 @@ public function ExtractImage(Request $request)
         return response()->json(['success' => true, 'liked' => $liked]);
     }
 
-
     // Toggle Favorite
     public function toggleFavorite(Request $request)
     {
@@ -647,7 +636,6 @@ public function ExtractImage(Request $request)
             ]);
             $favorited = true;
         }
-
         // Return response indicating success and the new favorite status
         return response()->json(['success' => true, 'favorited' => $favorited]);
     }
@@ -659,10 +647,25 @@ public function ExtractImage(Request $request)
         $user = auth()->user();
         $openaiModel = $user->selected_model;
         $client = new \GuzzleHttp\Client();
-    
+
         $results = [];
-    
+
         foreach ($prompts as $prompt) {
+
+            // Check if the actual prompt already exists in the PromptLibrary
+            $existingPrompt = PromptLibrary::where('actual_prompt', $prompt)->first();
+
+            if ($existingPrompt) {
+
+                // If exists, skip API call and use existing details
+                $results[] = [
+                    'prompt' => $prompt,
+                    'details' => $existingPrompt->description,
+                    'promptName' => $existingPrompt->prompt_name
+                ];
+                continue; // Skip API call and move to the next prompt
+            }
+
             try {
                 $response = $client->post('https://api.openai.com/v1/chat/completions', [
                     'headers' => [
@@ -683,33 +686,33 @@ public function ExtractImage(Request $request)
                         ],
                     ],
                 ]);
-    
+
                 $responseBody = json_decode($response->getBody()->getContents(), true);
                 $assistantContent = $responseBody['choices'][0]['message']['content'] ?? '';
-    
+
                 // Extract Prompt Name
                 $promptNamePattern = '/\*\*Prompt Name:\*\*\s*(.*?)\s*\*\*Details:\*\*/s';
                 $detailsPattern = '/\*\*Details:\*\*\s*(.+)/s';
-    
+
                 $promptName = '';
                 $details = '';
-    
+
                 if (preg_match($promptNamePattern, $assistantContent, $matches)) {
                     $promptName = trim($matches[1]);
                     $promptName = str_replace('-', ' ', $promptName);
                     $promptName = ucwords($promptName);
                 }
-    
+
                 if (preg_match($detailsPattern, $assistantContent, $matches)) {
                     $details = trim($matches[1]);
                 }
-    
+
                 $results[] = [
                     'prompt' => $prompt,
                     'details' => $details,
                     'promptName' => $promptName
                 ];
-    
+
             } catch (\Exception $e) {
                 Log::error("Error fetching prompt details: " . $e->getMessage());
                 $results[] = [
@@ -719,20 +722,19 @@ public function ExtractImage(Request $request)
                 ];
             }
         }
-    
         return response()->json($results);
     }
-    
+
     public function saveBulkPrompts(Request $request)
     {
         $prompts = $request->input('prompts');
     
         foreach ($prompts as $promptData) {
             $slug = Str::slug($promptData['prompt_name']);
+            $actual_prompt = ($promptData['prompt']);
 
             // Check if the prompt already exists by prompt_name or slug
-            $existingPrompt = PromptLibrary::where('slug', $slug)
-            ->orWhere('prompt_name', $promptData['prompt_name'])
+            $existingPrompt = PromptLibrary::where('actual_prompt', $actual_prompt)
             ->first();
 
             // If the prompt already exists, skip the insert
@@ -749,9 +751,6 @@ public function ExtractImage(Request $request)
                 'slug' => $slug
             ]);
         }
-    
         return response()->json(['success' => true]);
     }
-    
-   
 }
