@@ -724,23 +724,28 @@ class AIContentCreatorController extends Controller
     // GOOGLE SOCIALITE
     public function provider()
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')
+        ->scopes([
+            'https://www.googleapis.com/auth/presentations', // Required for Google Slides
+            'https://www.googleapis.com/auth/drive', // Optional, if you need Drive access
+        ])
+        ->with(['access_type' => 'offline', 'prompt' => 'consent']) // Ensure refresh token is returned
+        ->redirect();
     }
 
 
     public function callbackHandel(Request $request)
     {
-
         // Log session state and request state
         Log::info('Session state: ' . session('state'));
         Log::info('Request state: ' . $request->input('state'));
-
+    
         // Check if an error occurred during the authentication process
         if (request()->has('error') && request()->error == 'access_denied') {
             // Handle the error gracefully, such as redirecting back to the login page
             return redirect('/login')->with('error', 'Google authentication was canceled.');
         }
-
+    
         try {
             // Get user data from Google
             $googleUser = Socialite::driver('google')->user();
@@ -748,29 +753,37 @@ class AIContentCreatorController extends Controller
             Log::error('Invalid state exception: ' . $e->getMessage());
             return redirect('/login')->with('error', 'Invalid state.');
         }
-
+    
+        // Prepare the token array
+        $token = [
+            'access_token' => $googleUser->token,
+            'refresh_token' => $googleUser->refreshToken, // Include the refresh token
+            'expires_in' => $googleUser->expiresIn, // Token expiration time
+            'created' => time(), // Timestamp when the token was created
+        ];
+    
         // Check if the user exists in your database
         $user = User::where('email', $googleUser->email)->first();
-
+    
         // Attempt to retrieve user's IP address from request headers
         $ipAddress = $request->ip();
-
-         // Retrieve user's location based on IP address
-         $location = Location::get($ipAddress);
-         if ($location) {
+    
+        // Retrieve user's location based on IP address
+        $location = Location::get($ipAddress);
+        if ($location) {
             // Safely access properties if location is successfully retrieved
             $regionAndCountry = $location->regionName . ', ' . $location->countryName;
         } else {
             // Handle the case where location retrieval failed
             $regionAndCountry = 'Location not found';
         }
-
-
+    
         // If the user doesn't exist, create a new user
         if (is_null($user)) {
             $newUser = User::create([
                 'name' => $googleUser->name,
                 'email' => $googleUser->email,
+                'google_token' => json_encode($token), // Store the entire token as JSON
                 'status' => 'active',
                 'credits_left' => 30,
                 'tokens_left' => 5000,
@@ -780,16 +793,16 @@ class AIContentCreatorController extends Controller
                 'email_verified_at' => now(),
                 'country' => $regionAndCountry,
             ]);
-
+    
             // Generate a referral link for the new user
             $newUser->referral_link = route('register', ['ref' => $newUser->id]);
             $newUser->save();
-
+    
             // Check if there's a referrer ID in the query parameters
             if ($request->ref) {
                 // Extract the referrer ID from the query parameters
                 $referrerId = $request->ref;
-
+    
                 // Store referral information in the database
                 Referral::create([
                     'referrer_id' => $referrerId,
@@ -797,20 +810,23 @@ class AIContentCreatorController extends Controller
                     'status' => 'pending',
                 ]);
             }
-
+    
             // Populate the NewsLetter model
             NewsLetter::create([
                 'email' => $newUser->email,
                 'ipaddress' => $ipAddress,
             ]);
-
+    
             // Log in the new user
             Auth::login($newUser);
             // Redirect to dashboard or any other page
             return redirect('/generate/image/view');
         }
-
-        // If the user exists, log them in
+    
+        // If the user exists, update their tokens and log them in
+        $user->google_token = json_encode($token); // Update the token
+        $user->save();
+    
         Auth::login($user);
         // Redirect to dashboard or any other page
         return redirect('/generate/image/view');

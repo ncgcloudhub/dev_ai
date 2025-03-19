@@ -18,6 +18,12 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('APP_URL1') . '/google/callback',
+        'scopes' => [
+        'https://www.googleapis.com/auth/presentations', // Required for Google Slides
+        'https://www.googleapis.com/auth/drive', // Optional, if you need Drive access
+    ],
+    'access_type' => 'offline', // Ensure offline access
+    'prompt' => 'consent', // Force consent prompt
 
     ],
 

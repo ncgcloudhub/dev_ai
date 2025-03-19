@@ -23,6 +23,7 @@
                 <div class="flex-grow-1">
                     <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
                     <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
+                    
                     <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                     <div class="d-flex gap-3 mt-4">
                         <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
