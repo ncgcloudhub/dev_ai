@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Step 1: Fetch Details for all selected prompts
-        fetch(`/prompt/generate/bulk-details`, {
+        fetch('/prompt/generate/bulk-details', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -291,10 +291,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 details: data[index].details,  // Assuming API returns details in order
                 prompt_name: data[index].promptName, 
                 category: document.getElementById('category').value,
-                subcategory: document.getElementById('subcategory').value
+                subcategory: data[index].subcategory // Use the subcategory ID from the API response
             }));
 
-            return fetch(`/prompt/add/bulk-library`, {
+            return fetch('/prompt/add/bulk-library', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
