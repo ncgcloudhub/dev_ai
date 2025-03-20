@@ -544,6 +544,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
     });
+    Route::get('/education/toolContent/{id}/download', [EducationController::class, 'downloadsPdf'])->name('toolContent.download');
 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
