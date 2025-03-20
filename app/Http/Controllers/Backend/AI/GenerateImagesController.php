@@ -648,6 +648,14 @@ class GenerateImagesController extends Controller
         $openaiModel = $user->selected_model;
         $client = new \GuzzleHttp\Client();
     
+        // Fetch all subcategories under category_id = 44
+        $subcategories = PromptLibrarySubCategory::where('category_id', 44)
+            ->pluck('sub_category_name')
+            ->toArray();
+    
+        // Convert the subcategories array to a comma-separated string
+        $subcategoryList = implode(', ', $subcategories);
+    
         $results = [];
     
         foreach ($prompts as $prompt) {
@@ -682,7 +690,7 @@ class GenerateImagesController extends Controller
                             ],
                             [
                                 "role" => "user",
-                                "content" => "Generate a brief description, a suggested prompt name, and a subcategory for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. The subcategory should be one of the following: Vehicle, Animals, Cinematic, Art, Urban, Natural. Format the response with three distinct sections: '**Prompt Name:**' followed by the name, '**Details:**' followed by the description, and '**Subcategory:**' followed by the subcategory."
+                                "content" => "Generate a brief description, a suggested prompt name, and a subcategory for this prompt: \"$prompt\". Ensure the prompt name is concise, relevant, and SEO-friendly without special characters except 'dash'. The details should also be SEO optimized, free from special characters except 'dash', and have a header '**Details:**'. The subcategory should be one of the following: $subcategoryList. Format the response with three distinct sections: '**Prompt Name:**' followed by the name, '**Details:**' followed by the description, and '**Subcategory:**' followed by the subcategory."
                             ]
                         ],
                     ],
