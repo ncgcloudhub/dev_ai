@@ -916,8 +916,6 @@ Route::get('/admin/subscriptions-summary', [CheckoutController::class, 'subscrip
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 
-
-
 Route::view('success', 'backend.subscription.success')->name('success');
 
  // Catch-all dynamic page route (must be at the end)
