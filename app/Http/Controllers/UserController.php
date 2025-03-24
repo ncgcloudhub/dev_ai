@@ -33,7 +33,7 @@ class UserController extends Controller
         $eduTools = EducationTools::limit(5)->get();
         
         $prompts = PromptLibrary::inRandomOrder()
-            ->limit(10)->get();
+            ->limit(11)->get();
        
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
