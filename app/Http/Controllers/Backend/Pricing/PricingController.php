@@ -96,6 +96,8 @@ class PricingController extends Controller
             'active' => $request->active ?? 'inactive', // Assuming inactive if not provided
             'popular' => $request->popular ?? 'no', // Assuming no if not provided
             'additional_features' => $request->additional_features,
+            'stripe_prod_id' => $request->stripe_prod_id,
+            'stripe_price_id' => $request->stripe_price_id,
         ]);
 
         $notification = array(
@@ -167,6 +169,8 @@ class PricingController extends Controller
             'active' => $request->active ?? 'inactive', // Assuming inactive if not provided
             'popular' => $request->popular ?? 'no', // Assuming no if not provided
             'additional_features' => $request->additional_features,
+            'stripe_prod_id' => $request->stripe_prod_id,
+            'stripe_price_id' => $request->stripe_price_id,
         ]);
 
         $notification = [
