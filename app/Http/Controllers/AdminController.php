@@ -66,8 +66,7 @@ class AdminController extends Controller
         // Calculate the total number of likes
         $totalFav = $favImages->sum('favorites_count');
 
-        $eduTools = EducationTools::inRandomOrder()
-            ->limit(5)->get();
+        $eduTools = EducationTools::limit(5)->get();
         
         $prompts = PromptLibrary::inRandomOrder()
             ->limit(10)->get();
