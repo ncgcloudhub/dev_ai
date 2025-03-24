@@ -37,6 +37,7 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
@@ -912,6 +913,8 @@ Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 
 Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
 Route::get('/stripe/balance-report', [CheckoutController::class, 'getBalanceReport'])->name('stripe.balance.report');
 Route::get('/admin/subscriptions-summary', [CheckoutController::class, 'subscriptionSummary'])->name('stripe.admin.subscriptions.summary');
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 
 
 
