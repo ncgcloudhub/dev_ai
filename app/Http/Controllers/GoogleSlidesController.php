@@ -25,158 +25,60 @@ class GoogleSlidesController extends Controller
 
     public function createSlide(Request $request)
     {
-        // Set the access token from the authenticated user
         $user = $request->user();
-    
-        // Decode the token from JSON
         $token = json_decode($user->google_token, true);
     
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($token)) {
             throw new \Exception('Invalid token format in database.');
         }
     
-        // Set the token for the Google API client
         $this->client->setAccessToken($token);
     
-        // Refresh the token if it's expired
         if ($this->client->isAccessTokenExpired()) {
             if (empty($token['refresh_token'])) {
                 throw new \Exception('No refresh token available.');
             }
     
-            // Fetch a new access token using the refresh token
             $newToken = $this->client->fetchAccessTokenWithRefreshToken($token['refresh_token']);
             $this->client->setAccessToken($newToken);
     
-            // Update the user's tokens in the database
             $user->google_token = json_encode($newToken);
             $user->save();
         }
     
-        // Create a new Google Slides service instance
+        // Fetch content from OpenAI
+        $openAiResponse = $this->generateContentWithOpenAI();
+        $titleText = $openAiResponse['title'] ?? 'AI-Generated Title';
+        $bodyText = $openAiResponse['body'] ?? 'AI-Generated Body Text';
+    
         $slidesService = new GoogleSlides($this->client);
     
-        // Create a new presentation
         $presentation = new Presentation([
-            'title' => 'My New Presentation'
+            'title' => 'AI Generated Presentation'
         ]);
         $presentation = $slidesService->presentations->create($presentation);
     
-        // Add a slide with a title and body layout
+        // Slide Requests
         $requests = [
+            // Create First Slide (Title Slide)
             new SlidesRequest([
                 'createSlide' => [
-                    'objectId' => 'slide1', // Unique ID for the slide
-                    'insertionIndex' => 1, // Position of the slide in the presentation
+                    'objectId' => 'slide1',
+                    'insertionIndex' => 0,
                     'slideLayoutReference' => [
-                        'predefinedLayout' => 'TITLE_AND_BODY' // Use a layout with a text box
+                        'predefinedLayout' => 'TITLE'
                     ]
-                ]
-            ])
-        ];
-    
-        $batchUpdateRequest = new BatchUpdatePresentationRequest([
-            'requests' => $requests
-        ]);
-    
-        // Execute the batch update to create the slide
-        $response = $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
-    
-        // Retrieve the slide's element IDs
-        $slideId = $response->getReplies()[0]->getCreateSlide()->getObjectId();
-        $slide = $slidesService->presentations->get($presentation->presentationId, ['fields' => 'slides'])->getSlides()[0];
-    
-        // Log the slide elements for debugging
-        Log::info('Slide Elements: ', $slide->getPageElements());
-    
-        // Find the title and body placeholders
-        $titleObjectId = null;
-        $bodyObjectId = null;
-    
-        foreach ($slide->getPageElements() as $element) {
-            if ($element->getShape() && $element->getShape()->getPlaceholder()) {
-                $placeholderType = $element->getShape()->getPlaceholder()->getType();
-                if ($placeholderType === 'TITLE') {
-                    $titleObjectId = $element->getObjectId();
-                } elseif ($placeholderType === 'BODY') {
-                    $bodyObjectId = $element->getObjectId();
-                }
-            }
-        }
-    
-        // If placeholders are missing, create text boxes manually
-        if (!$titleObjectId || !$bodyObjectId) {
-            $requests = [];
-    
-            if (!$titleObjectId) {
-                $titleObjectId = 'title-box';
-                $requests[] = new SlidesRequest([
-                    'createShape' => [
-                        'objectId' => $titleObjectId,
-                        'shapeType' => 'TEXT_BOX',
-                        'elementProperties' => [
-                            'pageObjectId' => $slideId,
-                            'size' => [
-                                'width' => ['magnitude' => 500, 'unit' => 'PT'],
-                                'height' => ['magnitude' => 50, 'unit' => 'PT']
-                            ],
-                            'transform' => [
-                                'scaleX' => 1,
-                                'scaleY' => 1,
-                                'translateX' => 50,
-                                'translateY' => 50,
-                                'unit' => 'PT'
-                            ]
-                        ]
-                    ]
-                ]);
-            }
-    
-            if (!$bodyObjectId) {
-                $bodyObjectId = 'body-box';
-                $requests[] = new SlidesRequest([
-                    'createShape' => [
-                        'objectId' => $bodyObjectId,
-                        'shapeType' => 'TEXT_BOX',
-                        'elementProperties' => [
-                            'pageObjectId' => $slideId,
-                            'size' => [
-                                'width' => ['magnitude' => 500, 'unit' => 'PT'],
-                                'height' => ['magnitude' => 200, 'unit' => 'PT']
-                            ],
-                            'transform' => [
-                                'scaleX' => 1,
-                                'scaleY' => 1,
-                                'translateX' => 50,
-                                'translateY' => 150,
-                                'unit' => 'PT'
-                            ]
-                        ]
-                    ]
-                ]);
-            }
-    
-            // Execute the batch update to create text boxes
-            $batchUpdateRequest = new BatchUpdatePresentationRequest([
-                'requests' => $requests
-            ]);
-            $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
-        }
-    
-        // Insert text into the title and body placeholders
-        $requests = [
-            new SlidesRequest([
-                'insertText' => [
-                    'objectId' => $titleObjectId, // Use the correct objectId for the title placeholder
-                    'text' => 'Hello, World!', // Text to insert
-                    'insertionIndex' => 0 // Position of the text in the text box
                 ]
             ]),
+    
+            // Create Second Slide (Content Slide)
             new SlidesRequest([
-                'insertText' => [
-                    'objectId' => $bodyObjectId, // Use the correct objectId for the body placeholder
-                    'text' => 'This is the body text.', // Text to insert
-                    'insertionIndex' => 0 // Position of the text in the text box
+                'createSlide' => [
+                    'objectId' => 'slide2',
+                    'insertionIndex' => 1,
+                    'slideLayoutReference' => [
+                        'predefinedLayout' => 'TITLE_AND_BODY'
+                    ]
                 ]
             ])
         ];
@@ -185,12 +87,100 @@ class GoogleSlidesController extends Controller
             'requests' => $requests
         ]);
     
-        // Execute the batch update to insert text
+        $response = $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
+    
+        $slides = $slidesService->presentations->get($presentation->presentationId, ['fields' => 'slides'])->getSlides();
+    
+        // First Slide (Title Slide)
+        $firstSlide = $slides[0];
+        $titleObjectId = $firstSlide->getPageElements()[0]->getObjectId();
+        $subtitleObjectId = $firstSlide->getPageElements()[1]->getObjectId();
+    
+        // Second Slide (Content Slide)
+        $secondSlide = $slides[1];
+        $contentTitleObjectId = $secondSlide->getPageElements()[0]->getObjectId();
+        $contentBodyObjectId = $secondSlide->getPageElements()[1]->getObjectId();
+    
+        $requests = [
+            // First Slide: Insert Title
+            new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $titleObjectId,
+                    'text' => 'Welcome to the AI Presentation',
+                    'insertionIndex' => 0
+                ]
+            ]),
+            // First Slide: Insert Subtitle
+            new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $subtitleObjectId,
+                    'text' => 'Generated dynamically using AI',
+                    'insertionIndex' => 0
+                ]
+            ]),
+        
+             // Second Slide: Insert AI-Generated Title
+            new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $contentTitleObjectId, // Ensure this is the correct object ID
+                    'text' => $titleText,
+                    'insertionIndex' => 0
+                ]
+            ]),
+
+            // Second Slide: Insert AI-Generated Body Content
+            new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $contentBodyObjectId, // Ensure this is the correct object ID
+                    'text' => $bodyText,
+                    'insertionIndex' => 0
+                ]
+            ])
+        ];
+        
+        $batchUpdateRequest = new BatchUpdatePresentationRequest([
+            'requests' => $requests
+        ]);
+        
         $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
+        
     
         return response()->json([
-            'message' => 'Slide created successfully!',
+            'message' => 'Presentation created successfully!',
             'presentationId' => $presentation->presentationId
         ]);
     }
+    
+
+    private function generateContentWithOpenAI()
+    {
+        $apiKey = env('OPENAI_API_KEY');
+
+        $client = new \GuzzleHttp\Client();
+        $response = $client->post('https://api.openai.com/v1/chat/completions', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'model' => 'gpt-4o-mini',
+                'messages' => [
+                    ['role' => 'system', 'content' => 'You are a helpful assistant that generates slide content.'],
+                    ['role' => 'user', 'content' => 'Generate a title and a short body text for a presentation about AI advancements.']
+                ],
+                'temperature' => 0.7
+            ]
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+        $generatedText = $data['choices'][0]['message']['content'] ?? '';
+
+        $splitText = explode("\n", $generatedText, 2);
+        return [
+            'title' => trim($splitText[0]) ?? 'AI-Generated Title',
+            'body' => trim($splitText[1]) ?? 'AI-Generated Body Text'
+        ];
+    }
+
+    
 }

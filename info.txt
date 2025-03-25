@@ -155,3 +155,7 @@ in PricingPlan, add stripe_price_id character_varying
 
 17/03/25
 in jokes, add type field, and type will be text
+
+
+25/03/25
+in user, add access_token, refresh_token type=text
