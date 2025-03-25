@@ -19,6 +19,8 @@ class LowercaseUrlMiddleware
         $excludedRoutes = [
             'google/callback', // Exclude Google OAuth callback
             'google/login',    // Exclude Google OAuth login
+            'github/callback',    // Exclude Google OAuth login
+            'github/login',    // Exclude Google OAuth login
         ];
 
         // Get the current route path
