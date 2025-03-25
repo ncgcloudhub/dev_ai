@@ -223,6 +223,21 @@
                         <label for="twitter" class="form-label">Twitter</label>
                         <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
                     </div>
+
+                    <div class="col-md-12">
+                        <label for="domain" class="form-label">Domain Expiry Date</label>
+                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" placeholder="Select expiry date">
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label for="hosting" class="form-label">Hosting Expiry Date</label>
+                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" placeholder="Select expiry date">
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label for="ssl" class="form-label">SSL Expiry Date</label>
+                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" placeholder="Select expiry date">
+                    </div>
                
             </div>
         </div>
