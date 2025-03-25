@@ -18,20 +18,47 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-        <div class="card overflow-hidden" style="border-color: #be06af">
-            <div class="card-body bg-marketplace d-flex">
-                <div class="flex-grow-1">
-                    <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
-                    <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
-                    <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
-                    <div class="d-flex gap-3 mt-4">
-                        <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
-                        <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
+        <div class="row">
+            <div class="col-xl-6 col-md-12">
+                <div class="card overflow-hidden" style="border-color: #be06af">
+                    <div class="card-body bg-marketplace d-flex">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
+                            <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
+                            <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
+                            <div class="d-flex gap-3 mt-4">
+                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
+                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
+                            </div>
+                        </div>
+                        
+                        <img src="/build/images/nft/das_1.png" alt="" class="img-fluid">
                     </div>
                 </div>
-                
-                <img src="/build/images/nft/das_1.png" alt="" class="img-fluid">
             </div>
+            <div class="col-xl-3 col-md-12">
+                <div class="card overflow-hidden" style="border-color: #be06af">
+                    <div class="card-body">
+                        <div id="credits_chart"
+                        data-credits-used="{{ $user->credits_used }}"
+                        data-credits-left="{{ $user->credits_left }}"
+                        data-colors='["--vz-primary", "--vz-success"]'
+                        class="apex-charts" dir="ltr">
+                    </div>
+                    
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-12">
+                <div class="card overflow-hidden" style="border-color: #be06af">
+                    <div class="card-body">
+                       Credits
+                    </div>
+                </div>
+            </div>
+           
+    
         </div>
 
         {{-- 1st col 2nd row --}}
@@ -248,6 +275,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
+<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/clever-creator-pie.init.js') }}"></script>
 
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">

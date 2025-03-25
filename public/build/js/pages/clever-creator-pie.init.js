@@ -451,3 +451,52 @@ if(document.querySelector("#monochrome_pie_chart")){
     var chart = new ApexCharts(document.querySelector("#monochrome_pie_chart"), options);
     chart.render();
 }
+
+// New User Dashboard
+var creditsChartElement = document.getElementById("credits_chart");
+
+if (creditsChartElement) {
+    var creditsUsed = creditsChartElement.getAttribute("data-credits-used");
+    var creditsLeft = creditsChartElement.getAttribute("data-credits-left");
+
+    var creditsChartColors = getChartColorsArray("credits_chart");
+    
+    if (creditsChartColors) {
+        var creditsChartOptions = {
+            series: [parseInt(creditsUsed), parseInt(creditsLeft)],
+            labels: ['Credits Used', 'Credits Left'],
+            chart: {
+                height: 300,
+                type: 'donut',
+            },
+            plotOptions: {
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            fill: {
+                type: 'gradient',
+            },
+            title: {
+                text: 'Credits Overview',
+                style: {
+                    fontWeight: 500,
+                },
+            },
+            legend: {
+                position: 'bottom',
+                formatter: function (val, opts) {
+                    return val + " - " + opts.w.globals.series[opts.seriesIndex];
+                }
+            },
+            colors: creditsChartColors
+        };
+
+        var creditsChart = new ApexCharts(document.querySelector("#credits_chart"), creditsChartOptions);
+        creditsChart.render();
+    }
+}
