@@ -9,18 +9,24 @@ File: Pie Chart init js
 // get colors array from the string
 function getChartColorsArray(chartId) {
     if (document.getElementById(chartId) !== null) {
-        var colors = document.getElementById(chartId).getAttribute("data-colors");
+        var colors = document
+            .getElementById(chartId)
+            .getAttribute("data-colors");
         colors = JSON.parse(colors);
         return colors.map(function (value) {
             var newValue = value.replace(" ", "");
             if (newValue.indexOf(",") === -1) {
-                var color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
+                var color = getComputedStyle(
+                    document.documentElement
+                ).getPropertyValue(newValue);
                 if (color) return color;
-                else return newValue;;
+                else return newValue;
             } else {
-                var val = value.split(',');
+                var val = value.split(",");
                 if (val.length == 2) {
-                    var rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
+                    var rgbaColor = getComputedStyle(
+                        document.documentElement
+                    ).getPropertyValue(val[0]);
                     rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
                     return rgbaColor;
                 } else {
@@ -31,376 +37,448 @@ function getChartColorsArray(chartId) {
     }
 }
 
-
 //  Simple Pie Charts
 
 var chartPieBasicColors = getChartColorsArray("simple_pie_chart");
-if(chartPieBasicColors){
-var options = {
-    series: [44, 55, 13, 43, 22],
-    chart: {
-        height: 300,
-        type: 'pie',
-    },
-    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-    legend: {
-        position: 'bottom'
-    },
-    dataLabels: {
-        dropShadow: {
-            enabled: false,
-        }
-    },
-    colors: chartPieBasicColors
-};
+if (chartPieBasicColors) {
+    var options = {
+        series: [44, 55, 13, 43, 22],
+        chart: {
+            height: 300,
+            type: "pie",
+        },
+        labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
+        legend: {
+            position: "bottom",
+        },
+        dataLabels: {
+            dropShadow: {
+                enabled: false,
+            },
+        },
+        colors: chartPieBasicColors,
+    };
 
-var chart = new ApexCharts(document.querySelector("#simple_pie_chart"), options);
-chart.render();
+    var chart = new ApexCharts(
+        document.querySelector("#simple_pie_chart"),
+        options
+    );
+    chart.render();
 }
 
 // Simple Donut Charts
 var chartDonutBasicColors = getChartColorsArray("simple_dount_chart");
-if(chartDonutBasicColors){
-var options = {
-    series: [44, 55, 41, 17, 15],
-    chart: {
-        height: 300,
-        type: 'donut',
-    },
-    legend: {
-        position: 'bottom'
-    },
-    dataLabels: {
-        dropShadow: {
-            enabled: false,
-        }
-    },
-    colors: chartDonutBasicColors
-};
+if (chartDonutBasicColors) {
+    var options = {
+        series: [44, 55, 41, 17, 15],
+        chart: {
+            height: 300,
+            type: "donut",
+        },
+        legend: {
+            position: "bottom",
+        },
+        dataLabels: {
+            dropShadow: {
+                enabled: false,
+            },
+        },
+        colors: chartDonutBasicColors,
+    };
 
-var chart = new ApexCharts(document.querySelector("#simple_dount_chart"), options);
-chart.render();
+    var chart = new ApexCharts(
+        document.querySelector("#simple_dount_chart"),
+        options
+    );
+    chart.render();
 }
 
 // Updating Donut Charts
 var chartDonutupdatingColors = getChartColorsArray("updating_donut_chart");
-if(chartDonutupdatingColors){
-var options = {
-    series: [44, 55, 13, 33],
-    chart: {
-        height: 280,
-        type: 'donut',
-    },
-    dataLabels: {
-        enabled: false
-    },
-    legend: {
-        position: 'bottom'
-    },
-    colors: chartDonutupdatingColors
-};
+if (chartDonutupdatingColors) {
+    var options = {
+        series: [44, 55, 13, 33],
+        chart: {
+            height: 280,
+            type: "donut",
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            position: "bottom",
+        },
+        colors: chartDonutupdatingColors,
+    };
 
-var upadatedonutchart = new ApexCharts(document.querySelector("#updating_donut_chart"), options);
-upadatedonutchart.render();
+    var upadatedonutchart = new ApexCharts(
+        document.querySelector("#updating_donut_chart"),
+        options
+    );
+    upadatedonutchart.render();
 
-function appendData() {
-    var arr = upadatedonutchart.w.globals.series.slice()
-    arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1)
-    return arr;
-}
+    function appendData() {
+        var arr = upadatedonutchart.w.globals.series.slice();
+        arr.push(Math.floor(Math.random() * (100 - 1 + 1)) + 1);
+        return arr;
+    }
 
-function removeData() {
-    var arr = upadatedonutchart.w.globals.series.slice()
-    arr.pop()
-    return arr;
-}
+    function removeData() {
+        var arr = upadatedonutchart.w.globals.series.slice();
+        arr.pop();
+        return arr;
+    }
 
-function randomize() {
-    return upadatedonutchart.w.globals.series.map(function () {
-        return Math.floor(Math.random() * (100 - 1 + 1)) + 1
-    })
-}
+    function randomize() {
+        return upadatedonutchart.w.globals.series.map(function () {
+            return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+        });
+    }
 
-function reset() {
-    return options.series
-}
+    function reset() {
+        return options.series;
+    }
 
-document.querySelector("#randomize").addEventListener("click", function () {
-    upadatedonutchart.updateSeries(randomize())
-})
+    document.querySelector("#randomize").addEventListener("click", function () {
+        upadatedonutchart.updateSeries(randomize());
+    });
 
-document.querySelector("#add").addEventListener("click", function () {
-    upadatedonutchart.updateSeries(appendData())
-})
+    document.querySelector("#add").addEventListener("click", function () {
+        upadatedonutchart.updateSeries(appendData());
+    });
 
-document.querySelector("#remove").addEventListener("click", function () {
-    upadatedonutchart.updateSeries(removeData())
-})
+    document.querySelector("#remove").addEventListener("click", function () {
+        upadatedonutchart.updateSeries(removeData());
+    });
 
-document.querySelector("#reset").addEventListener("click", function () {
-    upadatedonutchart.updateSeries(reset())
-})
+    document.querySelector("#reset").addEventListener("click", function () {
+        upadatedonutchart.updateSeries(reset());
+    });
 }
 
 // User Donut Chart
 var chartElement = document.getElementById("gradient_chart");
-var totalUsers = chartElement.getAttribute("data-total-users");
-var verifiedEmails = chartElement.getAttribute("data-verified-emails");
-var unverifiedEmails = chartElement.getAttribute("data-unverified-emails");
-var activeUsers = chartElement.getAttribute("data-active-users");
-var inactiveUsers = chartElement.getAttribute("data-inactive-users");
+if (chartElement) {
+    // Add existence check
 
-var chartPieGradientColors = getChartColorsArray("gradient_chart");
-if (chartPieGradientColors) {
-    var options = {
-        series: [parseInt(totalUsers), parseInt(verifiedEmails), parseInt(unverifiedEmails), parseInt(activeUsers), parseInt(inactiveUsers)],
-        labels: ['Total Users', 'Verified Emails', 'Unverified Emails', 'Active Users', 'Inactive Users'],
-        chart: {
-            height: 300,
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                startAngle: -90,
-                endAngle: 270
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        fill: {
-            type: 'gradient',
-        },
-        legend: {
-            formatter: function (val, opts) {
-                return val + " - " + opts.w.globals.series[opts.seriesIndex];
-            }
-        },
-        title: {
-            text: 'User Statistics',
-            style: {
-                fontWeight: 500,
+    var totalUsers = chartElement.getAttribute("data-total-users");
+    var verifiedEmails = chartElement.getAttribute("data-verified-emails");
+    var unverifiedEmails = chartElement.getAttribute("data-unverified-emails");
+    var activeUsers = chartElement.getAttribute("data-active-users");
+    var inactiveUsers = chartElement.getAttribute("data-inactive-users");
+
+    var chartPieGradientColors = getChartColorsArray("gradient_chart");
+    if (chartPieGradientColors) {
+        var options = {
+            series: [
+                parseInt(totalUsers),
+                parseInt(verifiedEmails),
+                parseInt(unverifiedEmails),
+                parseInt(activeUsers),
+                parseInt(inactiveUsers),
+            ],
+            labels: [
+                "Total Users",
+                "Verified Emails",
+                "Unverified Emails",
+                "Active Users",
+                "Inactive Users",
+            ],
+            chart: {
+                height: 300,
+                type: "donut",
             },
-        },
-        legend: {
-            position: 'bottom'
-        },
-        colors: chartPieGradientColors
-    };
+            plotOptions: {
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                type: "gradient",
+            },
+            legend: {
+                formatter: function (val, opts) {
+                    return (
+                        val + " - " + opts.w.globals.series[opts.seriesIndex]
+                    );
+                },
+            },
+            title: {
+                text: "User Statistics",
+                style: {
+                    fontWeight: 500,
+                },
+            },
+            legend: {
+                position: "bottom",
+            },
+            colors: chartPieGradientColors,
+        };
 
-    var chart = new ApexCharts(document.querySelector("#gradient_chart"), options);
-    chart.render();
+        var chart = new ApexCharts(
+            document.querySelector("#gradient_chart"),
+            options
+        );
+        chart.render();
+    }
 }
 
 // Country Chart
 var countryChartElement = document.getElementById("country_chart");
-var countries = JSON.parse(countryChartElement.getAttribute("data-countries"));
-var countryCounts = JSON.parse(countryChartElement.getAttribute("data-country-counts"));
+if (countryChartElement) {
+    // Add existence check
 
-var countryChartColors = getChartColorsArray("country_chart");
-if (countryChartColors) {
-    var countryChartOptions = {
-        series: countryCounts.map(Number),
-        labels: countries,
-        chart: {
-            height: 300,
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                startAngle: -90,
-                endAngle: 270
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        fill: {
-            type: 'gradient',
-        },
-        legend: {
-            formatter: function (val, opts) {
-                return val + " - " + opts.w.globals.series[opts.seriesIndex];
-            }
-        },
-        title: {
-            text: 'Users by Country',
-            style: {
-                fontWeight: 500,
+    var countries = JSON.parse(
+        countryChartElement.getAttribute("data-countries")
+    );
+    var countryCounts = JSON.parse(
+        countryChartElement.getAttribute("data-country-counts")
+    );
+
+    var countryChartColors = getChartColorsArray("country_chart");
+    if (countryChartColors) {
+        var countryChartOptions = {
+            series: countryCounts.map(Number),
+            labels: countries,
+            chart: {
+                height: 300,
+                type: "donut",
             },
-        },
-        legend: {
-            position: 'bottom'
-        },
-        colors: countryChartColors
-    };
+            plotOptions: {
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                type: "gradient",
+            },
+            legend: {
+                formatter: function (val, opts) {
+                    return (
+                        val + " - " + opts.w.globals.series[opts.seriesIndex]
+                    );
+                },
+            },
+            title: {
+                text: "Users by Country",
+                style: {
+                    fontWeight: 500,
+                },
+            },
+            legend: {
+                position: "bottom",
+            },
+            colors: countryChartColors,
+        };
 
-    var countryChart = new ApexCharts(document.querySelector("#country_chart"), countryChartOptions);
-    countryChart.render();
+        var countryChart = new ApexCharts(
+            document.querySelector("#country_chart"),
+            countryChartOptions
+        );
+        countryChart.render();
+    }
 }
 
 // Credits/TOkens
 var usageChartElement = document.getElementById("usage_chart");
-var creditsUsed = usageChartElement.getAttribute("data-credits-used");
-var tokensUsed = usageChartElement.getAttribute("data-tokens-used");
-var imagesGenerated = usageChartElement.getAttribute("data-images-generated");
+if (usageChartElement) {
+    // Add existence check
 
-var usageChartColors = getChartColorsArray("usage_chart");
-if (usageChartColors) {
-    var usageChartOptions = {
-        series: [parseInt(creditsUsed), parseInt(tokensUsed), parseInt(imagesGenerated)],
-        labels: ['Credits Used', 'Tokens Used', 'Images Generated'],
+    var creditsUsed = usageChartElement.getAttribute("data-credits-used");
+    var tokensUsed = usageChartElement.getAttribute("data-tokens-used");
+    var imagesGenerated = usageChartElement.getAttribute(
+        "data-images-generated"
+    );
+
+    var usageChartColors = getChartColorsArray("usage_chart");
+    if (usageChartColors) {
+        var usageChartOptions = {
+            series: [
+                parseInt(creditsUsed),
+                parseInt(tokensUsed),
+                parseInt(imagesGenerated),
+            ],
+            labels: ["Credits Used", "Tokens Used", "Images Generated"],
+            chart: {
+                height: 300,
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                type: "gradient",
+            },
+            legend: {
+                formatter: function (val, opts) {
+                    return (
+                        val + " - " + opts.w.globals.series[opts.seriesIndex]
+                    );
+                },
+            },
+            title: {
+                text: "Usage Statistics",
+                style: {
+                    fontWeight: 500,
+                },
+            },
+            legend: {
+                position: "bottom",
+            },
+            colors: usageChartColors,
+        };
+
+        var usageChart = new ApexCharts(
+            document.querySelector("#usage_chart"),
+            usageChartOptions
+        );
+        usageChart.render();
+    }
+}
+
+// Pattern Donut chart
+var chartPiePatternColors = getChartColorsArray("pattern_chart");
+if (chartPiePatternColors) {
+    var options = {
+        series: [44, 55, 41, 17, 15],
         chart: {
             height: 300,
-            type: 'donut',
+            type: "donut",
+            dropShadow: {
+                enabled: true,
+                color: "#111",
+                top: -1,
+                left: 3,
+                blur: 3,
+                opacity: 0.2,
+            },
+        },
+        stroke: {
+            width: 0,
         },
         plotOptions: {
             pie: {
-                startAngle: -90,
-                endAngle: 270
-            }
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            showAlways: true,
+                            show: true,
+                        },
+                    },
+                },
+            },
         },
+        labels: ["Comedy", "Action", "SciFi", "Drama", "Horror"],
         dataLabels: {
-            enabled: false
+            dropShadow: {
+                blur: 3,
+                opacity: 0.8,
+            },
         },
         fill: {
-            type: 'gradient',
+            type: "pattern",
+            opacity: 1,
+            pattern: {
+                enabled: true,
+                style: [
+                    "verticalLines",
+                    "squares",
+                    "horizontalLines",
+                    "circles",
+                    "slantedLines",
+                ],
+            },
         },
-        legend: {
-            formatter: function (val, opts) {
-                return val + " - " + opts.w.globals.series[opts.seriesIndex];
-            }
+        states: {
+            hover: {
+                filter: "none",
+            },
+        },
+        theme: {
+            palette: "palette2",
         },
         title: {
-            text: 'Usage Statistics',
+            text: "Favourite Movie Type",
             style: {
                 fontWeight: 500,
             },
         },
         legend: {
-            position: 'bottom'
+            position: "bottom",
         },
-        colors: usageChartColors
+        colors: chartPiePatternColors,
     };
 
-    var usageChart = new ApexCharts(document.querySelector("#usage_chart"), usageChartOptions);
-    usageChart.render();
-}
-
-
-
-// Pattern Donut chart
-var chartPiePatternColors = getChartColorsArray("pattern_chart");
-if(chartPiePatternColors){
-var options = {
-    series: [44, 55, 41, 17, 15],
-    chart: {
-        height: 300,
-        type: 'donut',
-        dropShadow: {
-            enabled: true,
-            color: '#111',
-            top: -1,
-            left: 3,
-            blur: 3,
-            opacity: 0.2
-        }
-    },
-    stroke: {
-        width: 0,
-    },
-    plotOptions: {
-        pie: {
-            donut: {
-                labels: {
-                    show: true,
-                    total: {
-                        showAlways: true,
-                        show: true
-                    }
-                }
-            }
-        }
-    },
-    labels: ["Comedy", "Action", "SciFi", "Drama", "Horror"],
-    dataLabels: {
-        dropShadow: {
-            blur: 3,
-            opacity: 0.8
-        }
-    },
-    fill: {
-        type: 'pattern',
-        opacity: 1,
-        pattern: {
-            enabled: true,
-            style: ['verticalLines', 'squares', 'horizontalLines', 'circles', 'slantedLines'],
-        },
-    },
-    states: {
-        hover: {
-            filter: 'none'
-        }
-    },
-    theme: {
-        palette: 'palette2'
-    },
-    title: {
-        text: "Favourite Movie Type",
-        style: {
-            fontWeight: 500,
-        },
-    },
-    legend: {
-        position: 'bottom'
-    },
-    colors: chartPiePatternColors
-};
-
-var chart = new ApexCharts(document.querySelector("#pattern_chart"), options);
-chart.render();
+    var chart = new ApexCharts(
+        document.querySelector("#pattern_chart"),
+        options
+    );
+    chart.render();
 }
 
 // Pie Chart with Image Fill
 var chartPieImageColors = getChartColorsArray("image_pie_chart");
-if(chartPieImageColors){
-var options = {
-    series: [44, 33, 54, 45],
-    chart: {
-        height: 300,
-        type: 'pie',
-    },
-    colors: ['#93C3EE', '#E5C6A0', '#669DB5', '#94A74A'],
-    fill: {
-        type: 'image',
-        opacity: 0.85,
-        image: {
-            src: ['build/images/small/img-1.jpg', 'build/images/small/img-2.jpg', 'build/images/small/img-3.jpg', 'build/images/small/img-4.jpg'],
-            width: 25,
-            imagedHeight: 25
+if (chartPieImageColors) {
+    var options = {
+        series: [44, 33, 54, 45],
+        chart: {
+            height: 300,
+            type: "pie",
         },
-    },
-    stroke: {
-        width: 4
-    },
-    dataLabels: {
-        enabled: true,
-        style: {
-            colors: ['#111']
+        colors: ["#93C3EE", "#E5C6A0", "#669DB5", "#94A74A"],
+        fill: {
+            type: "image",
+            opacity: 0.85,
+            image: {
+                src: [
+                    "build/images/small/img-1.jpg",
+                    "build/images/small/img-2.jpg",
+                    "build/images/small/img-3.jpg",
+                    "build/images/small/img-4.jpg",
+                ],
+                width: 25,
+                imagedHeight: 25,
+            },
         },
-        background: {
+        stroke: {
+            width: 4,
+        },
+        dataLabels: {
             enabled: true,
-            foreColor: '#fff',
-            borderWidth: 0
-        }
-    },
-    legend: {
-        position: 'bottom'
-    }
-};
+            style: {
+                colors: ["#111"],
+            },
+            background: {
+                enabled: true,
+                foreColor: "#fff",
+                borderWidth: 0,
+            },
+        },
+        legend: {
+            position: "bottom",
+        },
+    };
 
-var chart = new ApexCharts(document.querySelector("#image_pie_chart"), options);
-chart.render();
+    var chart = new ApexCharts(
+        document.querySelector("#image_pie_chart"),
+        options
+    );
+    chart.render();
 }
 
 // monochrome_pie_chart
@@ -408,24 +486,31 @@ var options = {
     series: [25, 15, 44, 55, 41, 17],
     chart: {
         height: 300,
-        type: 'pie',
+        type: "pie",
     },
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    labels: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ],
     theme: {
         monochrome: {
             enabled: true,
-            color: '#405189',
-            shadeTo: 'light',
-            shadeIntensity: 0.6
-        }
+            color: "#405189",
+            shadeTo: "light",
+            shadeIntensity: 0.6,
+        },
     },
 
     plotOptions: {
         pie: {
             dataLabels: {
-                offset: -5
-            }
-        }
+                offset: -5,
+            },
+        },
     },
     title: {
         text: "Monochrome Pie",
@@ -436,19 +521,22 @@ var options = {
     dataLabels: {
         formatter: function (val, opts) {
             var name = opts.w.globals.labels[opts.seriesIndex];
-            return [name, val.toFixed(1) + '%'];
+            return [name, val.toFixed(1) + "%"];
         },
         dropShadow: {
             enabled: false,
-        }
+        },
     },
     legend: {
-        show: false
-    }
+        show: false,
+    },
 };
 
-if(document.querySelector("#monochrome_pie_chart")){
-    var chart = new ApexCharts(document.querySelector("#monochrome_pie_chart"), options);
+if (document.querySelector("#monochrome_pie_chart")) {
+    var chart = new ApexCharts(
+        document.querySelector("#monochrome_pie_chart"),
+        options
+    );
     chart.render();
 }
 
@@ -460,43 +548,101 @@ if (creditsChartElement) {
     var creditsLeft = creditsChartElement.getAttribute("data-credits-left");
 
     var creditsChartColors = getChartColorsArray("credits_chart");
-    
+
     if (creditsChartColors) {
         var creditsChartOptions = {
             series: [parseInt(creditsUsed), parseInt(creditsLeft)],
-            labels: ['Credits Used', 'Credits Left'],
+            labels: ["Credits Used", "Credits Left"],
             chart: {
                 height: 300,
-                type: 'donut',
+                type: "donut",
             },
             plotOptions: {
                 pie: {
                     startAngle: -90,
-                    endAngle: 270
-                }
+                    endAngle: 270,
+                },
             },
             dataLabels: {
-                enabled: false
+                enabled: false,
             },
             fill: {
-                type: 'gradient',
+                type: "gradient",
             },
             title: {
-                text: 'Credits Overview',
+                text: "Credits Overview",
                 style: {
                     fontWeight: 500,
                 },
             },
             legend: {
-                position: 'bottom',
+                position: "bottom",
                 formatter: function (val, opts) {
-                    return val + " - " + opts.w.globals.series[opts.seriesIndex];
-                }
+                    return (
+                        val + " : " + opts.w.globals.series[opts.seriesIndex]
+                    );
+                },
             },
-            colors: creditsChartColors
+            colors: creditsChartColors,
         };
 
-        var creditsChart = new ApexCharts(document.querySelector("#credits_chart"), creditsChartOptions);
+        var creditsChart = new ApexCharts(
+            document.querySelector("#credits_chart"),
+            creditsChartOptions
+        );
         creditsChart.render();
+    }
+}
+
+var tokensChartElement = document.getElementById("tokens_chart");
+
+if (tokensChartElement) {
+    var tokensUsed = tokensChartElement.getAttribute("data-tokens-used");
+    var tokensLeft = tokensChartElement.getAttribute("data-tokens-left");
+
+    var tokensChartColors = getChartColorsArray("tokens_chart");
+
+    if (tokensChartColors) {
+        var tokensChartOptions = {
+            series: [parseInt(tokensUsed), parseInt(tokensLeft)],
+            labels: ["Tokens Used", "Tokens Left"],
+            chart: {
+                height: 300,
+                type: "donut",
+            },
+            plotOptions: {
+                pie: {
+                    startAngle: -90,
+                    endAngle: 270,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                type: "gradient",
+            },
+            title: {
+                text: "Tokens Overview",
+                style: {
+                    fontWeight: 500,
+                },
+            },
+            legend: {
+                position: "bottom",
+                formatter: function (val, opts) {
+                    return (
+                        val + " : " + opts.w.globals.series[opts.seriesIndex]
+                    );
+                },
+            },
+            colors: tokensChartColors,
+        };
+
+        var tokensChart = new ApexCharts(
+            document.querySelector("#tokens_chart"),
+            tokensChartOptions
+        );
+        tokensChart.render();
     }
 }

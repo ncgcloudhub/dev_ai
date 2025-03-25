@@ -40,25 +40,26 @@
                 <div class="card overflow-hidden" style="border-color: #be06af">
                     <div class="card-body">
                         <div id="credits_chart"
-                        data-credits-used="{{ $user->credits_used }}"
-                        data-credits-left="{{ $user->credits_left }}"
-                        data-colors='["--vz-primary", "--vz-success"]'
-                        class="apex-charts" dir="ltr">
-                    </div>
-                    
-
+                            data-credits-used="{{ $user->credits_used }}"
+                            data-credits-left="{{ $user->credits_left }}"
+                            data-colors='["--vz-danger", "--vz-success"]'
+                            class="apex-charts" dir="ltr">
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
                     <div class="card-body">
-                       Credits
+                        <div id="tokens_chart"
+                            data-tokens-used="{{ $user->tokens_used }}"
+                            data-tokens-left="{{ $user->tokens_left }}"
+                            data-colors='["--vz-danger", "--vz-success"]'
+                            class="apex-charts" dir="ltr">
+                        </div>
                     </div>
                 </div>
             </div>
-           
-    
         </div>
 
         {{-- 1st col 2nd row --}}
