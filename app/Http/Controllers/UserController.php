@@ -38,7 +38,7 @@ class UserController extends Controller
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
 
-        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
+        return view('user.user_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
     }
 
     // User Export ALL
