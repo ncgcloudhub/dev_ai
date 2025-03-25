@@ -770,7 +770,7 @@ Route::get('google/login', [AIContentCreatorController::class, 'provider'])->nam
 Route::get('google/callback', [AIContentCreatorController::class, 'callbackHandel'])->name('google.login.callback');
 
 // Google Slides
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () { 
     Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
 });
 
