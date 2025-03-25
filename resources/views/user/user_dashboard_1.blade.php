@@ -18,48 +18,22 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-        <div class="row">
-            <div class="col-xl-8 col-md-12">
-                <div class="card overflow-hidden" style="border-color: #be06af">
-                    <div class="card-body bg-marketplace d-flex">
-                        <div class="flex-grow-1">
-                            <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
-                            <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
-                            <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
-                            <div class="d-flex gap-3 mt-4">
-                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
-                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
-                            </div>
-                        </div>
-                        
-                        <img src="/build/images/nft/das_1.png" alt="" class="img-fluid">
+        <div class="card overflow-hidden" style="border-color: #be06af">
+            <div class="card-body bg-marketplace d-flex">
+                <div class="flex-grow-1">
+                    <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
+                    <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
+                    <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
+                    <div class="d-flex gap-3 mt-4">
+                        <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
+                        <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
                     </div>
                 </div>
+                
+                <img src="/build/images/nft/das_1.png" alt="" class="img-fluid">
             </div>
-            <div class="col-xl-4 col-md-12">
-                <div class="card overflow-hidden" style="border-color: #be06af">
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Domain Expire:</strong>
-                                <span id="domain-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>Hosting Expire:</strong>
-                                <span id="hosting-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <strong>SSL Expire:</strong>
-                                <span id="ssl-expire"></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-           
-    
         </div>
-        
+
         {{-- 1st col 2nd row --}}
         <div class="card overflow-hidden shadow-none">
             <div class="card-body bg-success-subtle text-success fw-semibold d-flex gradient-bg">
@@ -334,38 +308,5 @@
         });
     }
     </script>
-
-<script>
-    function startCountdown(id, endDate) {
-        function updateCountdown() {
-            let now = new Date().getTime();
-            let distance = new Date(endDate).getTime() - now;
-
-            if (distance < 0) {
-                document.getElementById(id).innerHTML = "Expired";
-                return;
-            }
-
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById(id).innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-
-    // Convert Laravel dates to JavaScript
-    let domainExpire = "{{ $siteSettings->domain }}"; // Example: 2025-12-26
-    let hostingExpire = "{{ $siteSettings->hosting }}"; // Example: 2025-10-15
-    let sslExpire = "{{ $siteSettings->ssl }}"; // Example: 2025-08-30
-
-    startCountdown("domain-expire", domainExpire);
-    startCountdown("hosting-expire", hostingExpire);
-    startCountdown("ssl-expire", sslExpire);
-</script>
 
 @endsection

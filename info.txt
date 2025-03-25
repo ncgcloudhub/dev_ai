@@ -155,3 +155,8 @@ in PricingPlan, add stripe_price_id character_varying
 
 17/03/25
 in jokes, add type field, and type will be text
+
+25/03/25
+In siteSettings, add ssl timestamp without timezone
+In siteSettings, add domain timestamp without timezone
+In siteSettings, add hosting timestamp without timezone
