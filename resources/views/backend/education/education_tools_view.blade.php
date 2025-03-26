@@ -354,7 +354,7 @@
     $('form').on('submit', function (e) {
         e.preventDefault(); // Prevent the form from submitting the traditional way
 
-        showMagicBall('image'); // Show the magic ball loader
+        // showMagicBall('image'); 
 
         let formData = $(this).serialize(); // Collect the form data
 
@@ -366,7 +366,7 @@
                 onprogress: function (event) {
                     const contentChunk = event.currentTarget.responseText;
                     $('#stream-output').html(contentChunk); // Update the stream output div
-                    hideMagicBall();
+                    // hideMagicBall();
                 }
             },
            
@@ -374,7 +374,7 @@
                 console.log('Content generation completed.');
             },
             error: function (error) {
-                hideMagicBall();
+                // hideMagicBall();
                 console.error('Error during content generation:', error);
             }
         });

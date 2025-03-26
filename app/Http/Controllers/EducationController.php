@@ -690,7 +690,38 @@ public function updateContent(Request $request, $id)
     // Extract and return the image URL
     $data = $response->json();
     return $data['data'][0]['url'] ?? null;
+    }
+
+     // Function to generate images using SD
+    public function generateSDImageFromPrompt($prompt)
+{
+    $endpoint = env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3');
+    $apiKey = config('services.stablediffusion.api_key');
+    
+    $headers = [
+        'Authorization' => 'Bearer ' . $apiKey,
+        'Accept' => 'image/*'
+    ];
+
+    $data = [
+        'prompt' => $prompt,
+        'output_format' => 'jpeg',
+        'model' => 'sd3.5-large',
+        'mode' => 'text-to-image',
+    ];
+
+    $response = Http::withHeaders($headers)
+        ->asMultipart()
+        ->post($endpoint, $data);
+
+    Log::info('Stable Diffusion Image Generation Response', ['response' => $response->json()]);
+
+    $data = $response->json();
+    return $data['image_url'] ?? null;
 }
+
+
+
 
     public function ToolsGenerateContent(Request $request)
 {
@@ -753,19 +784,25 @@ $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)
 
     // If the prompt is valid, generate the image
     if (!empty($imagePrompt)) {
-        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-        
+        $imageType = $request->input('image_type', 'dalle'); // Default to DALL·E
+        $generatedImageUrl = null;
+
+        // if ($imageType === 'sd') {
+            // Stable Diffusion Image
+            Log::info('Stable Diffusion image prompt before extracted...');
+            $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+            Log::info('Stable Diffusion image prompt after extracted...');
+        // } else {
+            // DALL·E Image
+        //     $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+        // }
+
         if ($generatedImageUrl) {
-            // Download the image and save it to persistent storage
             $imageContent = file_get_contents($generatedImageUrl);
             if ($imageContent) {
-                $fileName = 'images/' . uniqid('dalle_', true) . '.png'; // Unique filename
-                Storage::disk('public')->put($fileName, $imageContent); // Save to public storage
-
-                // Generate the permanent URL for the saved image
+                $fileName = 'images/' . uniqid($imageType . '_', true) . '.png';
+                Storage::disk('public')->put($fileName, $imageContent);
                 $permanentImageUrl = url('storage/' . $fileName);
-
-                // Replace the temporary URL with the permanent URL
                 return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$permanentImageUrl})\n";
             }
         }
