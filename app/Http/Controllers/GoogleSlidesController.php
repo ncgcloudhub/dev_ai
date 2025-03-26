@@ -141,13 +141,16 @@ class GoogleSlidesController extends Controller
                 'model' => 'gpt-4o-mini',
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a helpful assistant that generates slide content.'],
-                    ['role' => 'user', 'content' => 'Generate 5 slides with a title and a short body text for a presentation about AI advancements.']
+                    ['role' => 'user', 'content' => 'Generate 2 slides with a title and a short body text for a presentation about AI advancements.']
                 ],
                 'temperature' => 0.7
             ]
         ]);
     
         $data = json_decode($response->getBody(), true);
+
+        Log::info('OpenAI Response:', $data);
+
         $generatedText = $data['choices'][0]['message']['content'] ?? '';
     
         $slides = [];
