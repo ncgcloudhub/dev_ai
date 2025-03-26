@@ -800,6 +800,10 @@ Route::post('/single/image', [GenerateImagesController::class, 'generateSingleIm
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
 
+// Fetch Tokens Usage
+Route::get('/user/monthly-usage', [UserController::class, 'getUserMonthlyUsage']);
+
+
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/events', [EventController::class, 'index']);
     Route::post('/events', [EventController::class, 'store']);

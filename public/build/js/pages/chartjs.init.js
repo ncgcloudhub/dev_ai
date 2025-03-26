@@ -120,53 +120,76 @@ var lineChart = new Chart(islinechart, {
 }
 
 // bar chart
-var isbarchart = document.getElementById('bar');
-barChartColor =  getChartColorsArray('bar');
-if(barChartColor){
-isbarchart.setAttribute("width", isbarchart.parentElement.offsetWidth);
-var barChart = new Chart(isbarchart, {
-    type: 'bar',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                label: "Sales Analytics",
-                backgroundColor: barChartColor[0],
-                borderColor: barChartColor[0],
-                borderWidth: 1,
-                hoverBackgroundColor: barChartColor[1],
-                hoverBorderColor: barChartColor[1],
-                data: [65, 59, 81, 45, 56, 80, 50,20]
-            }
-        ]
-    },
-    options: {
-        x: {
-            ticks: {
-                font: {
-                    family: 'Poppins',
-                },
-            },
-        },
-        y: {
-            ticks: {
-                font: {
-                    family: 'Poppins',
-                },
-            },
-        },
-        plugins: {
-            legend: {
-                labels: {
-                    font: {
-                        family: 'Poppins',
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/user/monthly-usage') // Ensure the route exists in Laravel
+        .then(response => response.json())
+        .then(data => {
+            var isbarchart = document.getElementById('bar');
+            var barChartColor = getChartColorsArray('bar');
+
+            if (isbarchart && barChartColor) {
+                isbarchart.setAttribute("width", isbarchart.parentElement.offsetWidth);
+
+                var barChart = new Chart(isbarchart, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels, // Month names from backend
+                        datasets: [
+                            {
+                                label: "Tokens Used",
+                                backgroundColor: barChartColor[0],
+                                borderColor: barChartColor[0],
+                                borderWidth: 1,
+                                hoverBackgroundColor: barChartColor[1],
+                                hoverBorderColor: barChartColor[1],
+                                data: data.tokens // Tokens used dynamically
+                            },
+                            {
+                                label: "Credits Used",
+                                backgroundColor: barChartColor[2],
+                                borderColor: barChartColor[2],
+                                borderWidth: 1,
+                                hoverBackgroundColor: barChartColor[3],
+                                hoverBorderColor: barChartColor[3],
+                                data: data.credits // Credits used dynamically
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                ticks: {
+                                    font: {
+                                        family: 'Poppins',
+                                    },
+                                },
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    font: {
+                                        family: 'Poppins',
+                                    },
+                                },
+                            },
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        family: 'Poppins',
+                                    }
+                                }
+                            },
+                        }
                     }
-                }
-            },
-        }
-    }
+                });
+            }
+        })
+        .catch(error => console.error('Error loading chart data:', error));
 });
-}
+
 
 // pie chart
 var ispiechart = document.getElementById('pieChart');
