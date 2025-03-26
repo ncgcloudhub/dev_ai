@@ -29,14 +29,15 @@ class GoogleSlidesController extends Controller
         $token = json_decode($user->google_token, true);
     
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($token)) {
-            throw new \Exception('Invalid token format in database.');
+            return response()->json(['error' => 'Invalid token format in database.'], 400);
         }
     
         $this->client->setAccessToken($token);
     
+        // Refresh the token if expired
         if ($this->client->isAccessTokenExpired()) {
             if (empty($token['refresh_token'])) {
-                throw new \Exception('No refresh token available.');
+                return response()->json(['error' => 'No refresh token available.'], 400);
             }
     
             $newToken = $this->client->fetchAccessTokenWithRefreshToken($token['refresh_token']);
@@ -48,115 +49,89 @@ class GoogleSlidesController extends Controller
     
         // Fetch content from OpenAI
         $openAiResponse = $this->generateContentWithOpenAI();
-        $titleText = $openAiResponse['title'] ?? 'AI-Generated Title';
-        $bodyText = $openAiResponse['body'] ?? 'AI-Generated Body Text';
+        $slidesData = $openAiResponse['slides'];
     
         $slidesService = new GoogleSlides($this->client);
     
-        $presentation = new Presentation([
-            'title' => 'AI Generated Presentation'
-        ]);
+        // Create the presentation
+        $presentation = new Presentation(['title' => 'AI Generated Presentation']);
         $presentation = $slidesService->presentations->create($presentation);
+        $presentationId = $presentation->presentationId;
     
-        // Slide Requests
-        $requests = [
-            // Create First Slide (Title Slide)
-            new SlidesRequest([
+        // Create slide requests dynamically
+        $requests = [];
+        foreach ($slidesData as $index => $slide) {
+            $requests[] = new SlidesRequest([
                 'createSlide' => [
-                    'objectId' => 'slide1',
-                    'insertionIndex' => 0,
-                    'slideLayoutReference' => [
-                        'predefinedLayout' => 'TITLE'
-                    ]
-                ]
-            ]),
-    
-            // Create Second Slide (Content Slide)
-            new SlidesRequest([
-                'createSlide' => [
-                    'objectId' => 'slide2',
-                    'insertionIndex' => 1,
+                    'objectId' => 'slide' . ($index + 1),
+                    'insertionIndex' => $index,
                     'slideLayoutReference' => [
                         'predefinedLayout' => 'TITLE_AND_BODY'
                     ]
                 ]
-            ])
-        ];
+            ]);
+        }
     
-        $batchUpdateRequest = new BatchUpdatePresentationRequest([
-            'requests' => $requests
-        ]);
+        if (empty($requests)) {
+            return response()->json(['error' => 'No slides generated.'], 400);
+        }
     
-        $response = $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
+        // Execute batch request to create slides
+        $batchUpdateRequest = new BatchUpdatePresentationRequest(['requests' => $requests]);
+        $slidesService->presentations->batchUpdate($presentationId, $batchUpdateRequest);
     
-        $slides = $slidesService->presentations->get($presentation->presentationId, ['fields' => 'slides'])->getSlides();
+        // Get created slides
+        $slides = $slidesService->presentations->get($presentationId, ['fields' => 'slides'])->getSlides();
+        if (empty($slides)) {
+            return response()->json(['error' => 'No slides found in the presentation.'], 400);
+        }
     
-        // First Slide (Title Slide)
-        $firstSlide = $slides[0];
-        $titleObjectId = $firstSlide->getPageElements()[0]->getObjectId();
-        $subtitleObjectId = $firstSlide->getPageElements()[1]->getObjectId();
+        // Prepare text insertion requests
+        $requests = [];
+        foreach ($slidesData as $index => $slideContent) {
+            if (!isset($slides[$index])) continue; // Ensure slide exists
     
-        // Second Slide (Content Slide)
-        $secondSlide = $slides[1];
-        $contentTitleObjectId = $secondSlide->getPageElements()[0]->getObjectId();
-        $contentBodyObjectId = $secondSlide->getPageElements()[1]->getObjectId();
+            $pageElements = $slides[$index]->getPageElements();
+            if (count($pageElements) < 2) continue; // Ensure title and body exist
     
-        $requests = [
-            // First Slide: Insert Title
-            new SlidesRequest([
+            $titleObjectId = $pageElements[0]->getObjectId();
+            $bodyObjectId = $pageElements[1]->getObjectId();
+    
+            $requests[] = new SlidesRequest([
                 'insertText' => [
                     'objectId' => $titleObjectId,
-                    'text' => 'Welcome to the AI Presentation',
+                    'text' => $slideContent['title'],
                     'insertionIndex' => 0
                 ]
-            ]),
-            // First Slide: Insert Subtitle
-            new SlidesRequest([
+            ]);
+            $requests[] = new SlidesRequest([
                 'insertText' => [
-                    'objectId' => $subtitleObjectId,
-                    'text' => 'Generated dynamically using AI',
+                    'objectId' => $bodyObjectId,
+                    'text' => $slideContent['body'],
                     'insertionIndex' => 0
                 ]
-            ]),
-        
-             // Second Slide: Insert AI-Generated Title
-            new SlidesRequest([
-                'insertText' => [
-                    'objectId' => $contentTitleObjectId, // Ensure this is the correct object ID
-                    'text' => $titleText,
-                    'insertionIndex' => 0
-                ]
-            ]),
-
-            // Second Slide: Insert AI-Generated Body Content
-            new SlidesRequest([
-                'insertText' => [
-                    'objectId' => $contentBodyObjectId, // Ensure this is the correct object ID
-                    'text' => $bodyText,
-                    'insertionIndex' => 0
-                ]
-            ])
-        ];
-        
-        $batchUpdateRequest = new BatchUpdatePresentationRequest([
-            'requests' => $requests
-        ]);
-        
-        $slidesService->presentations->batchUpdate($presentation->presentationId, $batchUpdateRequest);
-        
+            ]);
+        }
+    
+        if (!empty($requests)) {
+            $batchUpdateRequest = new BatchUpdatePresentationRequest(['requests' => $requests]);
+            $slidesService->presentations->batchUpdate($presentationId, $batchUpdateRequest);
+        }
     
         return response()->json([
             'message' => 'Presentation created successfully!',
-            'presentationId' => $presentation->presentationId
+            'presentationId' => $presentationId
         ]);
     }
     
-
+    /**
+     * Fetches dynamic slide content from OpenAI
+     */
     private function generateContentWithOpenAI()
     {
         $apiKey = env('OPENAI_API_KEY');
-
         $client = new \GuzzleHttp\Client();
+    
         $response = $client->post('https://api.openai.com/v1/chat/completions', [
             'headers' => [
                 'Authorization' => 'Bearer ' . $apiKey,
@@ -166,21 +141,28 @@ class GoogleSlidesController extends Controller
                 'model' => 'gpt-4o-mini',
                 'messages' => [
                     ['role' => 'system', 'content' => 'You are a helpful assistant that generates slide content.'],
-                    ['role' => 'user', 'content' => 'Generate a title and a short body text for a presentation about AI advancements.']
+                    ['role' => 'user', 'content' => 'Generate 5 slides with a title and a short body text for a presentation about AI advancements.']
                 ],
                 'temperature' => 0.7
             ]
         ]);
-
+    
         $data = json_decode($response->getBody(), true);
         $generatedText = $data['choices'][0]['message']['content'] ?? '';
-
-        $splitText = explode("\n", $generatedText, 2);
-        return [
-            'title' => trim($splitText[0]) ?? 'AI-Generated Title',
-            'body' => trim($splitText[1]) ?? 'AI-Generated Body Text'
-        ];
+    
+        $slides = [];
+        $lines = explode("\n", trim($generatedText));
+        for ($i = 0; $i < count($lines); $i += 2) {
+            if (!isset($lines[$i + 1])) break;
+            $slides[] = [
+                'title' => trim($lines[$i]),
+                'body' => trim($lines[$i + 1])
+            ];
+        }
+    
+        return ['slides' => $slides];
     }
+    
 
     
 }
