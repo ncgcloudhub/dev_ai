@@ -35,73 +35,81 @@ function getChartColorsArray(chartId) {
 
 
 // Basic Column Chart
-var chartColumnColors = getChartColorsArray("column_chart");
-if (chartColumnColors) {
-    var options = {
-        chart: {
-            height: 350,
-            type: 'bar',
-            toolbar: {
-                show: false,
-            }
-        },
-        plotOptions: {
-            bar: {
-                horizontal: false,
-                columnWidth: '45%',
-                endingShape: 'rounded'
-            },
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-        },
-        series: [{
-            name: 'Net Profit',
-            data: [46, 57, 59, 54, 62, 58, 64, 60, 66]
-        }, {
-            name: 'Revenue',
-            data: [74, 83, 102, 97, 86, 106, 93, 114, 94]
-        }, {
-            name: 'Free Cash Flow',
-            data: [37, 42, 38, 26, 47, 50, 54, 55, 43]
-        }],
-        colors: chartColumnColors,
-        xaxis: {
-            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-        },
-        yaxis: {
-            title: {
-                text: '$ (thousands)'
-            }
-        },
-        grid: {
-            borderColor: '#f1f1f1',
-        },
-        fill: {
-            opacity: 1
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/user/monthly-usage') // Ensure this route exists in Laravel
+        .then(response => response.json())
+        .then(data => {
+            var chartColumnColors = getChartColorsArray("column_chart");
 
-        },
-        tooltip: {
-            y: {
-                formatter: function(val) {
-                    return "$ " + val + " thousands"
+            if (chartColumnColors) {
+                var options = {
+                    chart: {
+                        height: 350,
+                        type: 'bar',
+                        toolbar: {
+                            show: false,
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '45%',
+                            endingShape: 'rounded'
+                        },
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    series: [
+                        {
+                            name: 'Tokens Used',
+                            data: data.tokens // Tokens per month
+                        },
+                        {
+                            name: 'Credits Used',
+                            data: data.credits // Credits per month
+                        }
+                    ],
+                    colors: chartColumnColors,
+                    xaxis: {
+                        categories: data.labels, // Month names from Laravel
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Usage Count'
+                        }
+                    },
+                    grid: {
+                        borderColor: '#f1f1f1',
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function (val) {
+                                return val + " used"
+                            }
+                        }
+                    }
                 }
+
+                var chart = new ApexCharts(
+                    document.querySelector("#column_chart"),
+                    options
+                );
+
+                chart.render();
             }
-        }
-    }
+        })
+        .catch(error => console.error('Error loading chart data:', error));
+});
 
-    var chart = new ApexCharts(
-        document.querySelector("#column_chart"),
-        options
-    );
-
-    chart.render();
-}
 
 
 // Column with Datalabels

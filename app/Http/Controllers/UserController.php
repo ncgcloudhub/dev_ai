@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Models\EducationTools;
 use App\Models\PromptLibrary;
+use App\Models\UserMonthlyUsage;
 
 class UserController extends Controller
 {
@@ -151,6 +152,35 @@ class UserController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    // Fetch Monthly Usage
+    public function getUserMonthlyUsage()
+    {
+        $user_id = Auth::id();
+
+        $data = UserMonthlyUsage::where('user_id', $user_id)
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Prepare labels & data
+        $monthlyLabels = [];
+        $tokensUsed = [];
+        $creditsUsed = [];
+
+        foreach ($data as $entry) {
+            $monthName = date("M", mktime(0, 0, 0, $entry->month, 1)); // Convert month number to short name (Jan, Feb, etc.)
+            $monthlyLabels[] = $monthName;
+            $tokensUsed[] = $entry->tokens_used;
+            $creditsUsed[] = $entry->credits_used;
+        }
+
+        return response()->json([
+            'labels' => $monthlyLabels,
+            'tokens' => $tokensUsed,
+            'credits' => $creditsUsed,
+        ]);
     }
 
  
