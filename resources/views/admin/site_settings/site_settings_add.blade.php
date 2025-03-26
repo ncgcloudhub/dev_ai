@@ -226,17 +226,20 @@
 
                     <div class="col-md-12">
                         <label for="domain" class="form-label">Domain Expiry Date</label>
-                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" placeholder="Select expiry date">
+                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" 
+                               value="{{ old('domain', \Carbon\Carbon::parse($setting->domain)->format('Y-m-d\TH:i')) }}">
                     </div>
                     
                     <div class="col-md-12">
                         <label for="hosting" class="form-label">Hosting Expiry Date</label>
-                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" placeholder="Select expiry date">
+                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" 
+                               value="{{ old('hosting', \Carbon\Carbon::parse($setting->hosting)->format('Y-m-d\TH:i')) }}">
                     </div>
-                    
+                
                     <div class="col-md-12">
                         <label for="ssl" class="form-label">SSL Expiry Date</label>
-                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" placeholder="Select expiry date">
+                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" 
+                               value="{{ old('ssl', \Carbon\Carbon::parse($setting->ssl)->format('Y-m-d\TH:i')) }}">
                     </div>
                
             </div>

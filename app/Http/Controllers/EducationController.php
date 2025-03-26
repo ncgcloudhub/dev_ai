@@ -672,11 +672,12 @@ public function updateContent(Request $request, $id)
     }
 
     // Function to generate images using DALL·E
-    public static function generateImageFromPrompt($prompt, $apiKey, $size = '256x256', $style = 'vivid', $quality = 'standard', $n = 1) {
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1) {
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $apiKey,
         'Content-Type' => 'application/json',
     ])->post('https://api.openai.com/v1/images/generations', [
+        'model' => 'dall-e-3', // Specify DALL·E 3 model
         'prompt' => $prompt,
         'size' => $size,
         'style' => $style,

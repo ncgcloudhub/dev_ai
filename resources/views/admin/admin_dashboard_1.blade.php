@@ -40,15 +40,15 @@
                 <div class="card overflow-hidden" style="border-color: #be06af">
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between">
+                            <li class="list-group-item d-flex justify-content-between" id="domain-item">
                                 <strong>Domain Expire:</strong>
                                 <span id="domain-expire"></span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between">
+                            <li class="list-group-item d-flex justify-content-between" id="hosting-item">
                                 <strong>Hosting Expire:</strong>
                                 <span id="hosting-expire"></span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between">
+                            <li class="list-group-item d-flex justify-content-between" id="ssl-item">
                                 <strong>SSL Expire:</strong>
                                 <span id="ssl-expire"></span>
                             </li>
@@ -56,8 +56,6 @@
                     </div>
                 </div>
             </div>
-           
-    
         </div>
         
         {{-- 1st col 2nd row --}}
@@ -336,7 +334,7 @@
     </script>
 
 <script>
-    function startCountdown(id, endDate) {
+    function startCountdown(id, itemId, endDate) {
         function updateCountdown() {
             let now = new Date().getTime();
             let distance = new Date(endDate).getTime() - now;
@@ -352,6 +350,12 @@
             let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             document.getElementById(id).innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            // If 30 days or less, change the border color of the specific list item
+            if (days <= 30) {
+                document.getElementById(itemId).style.borderColor = "red";
+                document.getElementById(itemId).style.color = "red"; // Optional: Change text color to red
+            }
         }
 
         updateCountdown();
@@ -363,9 +367,9 @@
     let hostingExpire = "{{ $siteSettings->hosting }}"; // Example: 2025-10-15
     let sslExpire = "{{ $siteSettings->ssl }}"; // Example: 2025-08-30
 
-    startCountdown("domain-expire", domainExpire);
-    startCountdown("hosting-expire", hostingExpire);
-    startCountdown("ssl-expire", sslExpire);
+    startCountdown("domain-expire", "domain-item", domainExpire);
+    startCountdown("hosting-expire", "hosting-item", hostingExpire);
+    startCountdown("ssl-expire", "ssl-item", sslExpire);
 </script>
 
 @endsection
