@@ -49,7 +49,7 @@ class GoogleSlidesController extends Controller
     
         // Fetch content from OpenAI
         $openAiResponse = $this->generateContentWithOpenAI();
-        $slidesData = $openAiResponse['slides'];
+        $slidesData = $this->formatSlidesData($openAiResponse['slides']); // Format slides content
     
         $slidesService = new GoogleSlides($this->client);
     
@@ -97,6 +97,7 @@ class GoogleSlidesController extends Controller
             $titleObjectId = $pageElements[0]->getObjectId();
             $bodyObjectId = $pageElements[1]->getObjectId();
     
+            // Insert Title and Body Text
             $requests[] = new SlidesRequest([
                 'insertText' => [
                     'objectId' => $titleObjectId,
@@ -127,7 +128,7 @@ class GoogleSlidesController extends Controller
     /**
      * Fetches dynamic slide content from OpenAI
      */
-    private function generateContentWithOpenAI()
+    private function generateContentWithOpenAI(): array
     {
         $apiKey = env('OPENAI_API_KEY');
         $client = new \GuzzleHttp\Client();
@@ -138,33 +139,84 @@ class GoogleSlidesController extends Controller
                 'Content-Type' => 'application/json',
             ],
             'json' => [
-                'model' => 'gpt-4o-mini',
+                'model' => 'gpt-4',
                 'messages' => [
-                    ['role' => 'system', 'content' => 'You are a helpful assistant that generates slide content.'],
-                    ['role' => 'user', 'content' => 'Generate 2 slides with a title and a short body text for a presentation about AI advancements.']
+                    [
+                        'role' => 'system', 
+                        'content' => 'Generate presentation slides with titles and body text. ' .
+                                    'Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]' .
+                                    'Separate slides with ---. Keep body text concise (3-4 bullet points).'
+                    ],
+                    [
+                        'role' => 'user', 
+                        'content' => 'Generate 3 slides about AI advancements with professional formatting.'
+                    ]
                 ],
                 'temperature' => 0.7
             ]
         ]);
     
         $data = json_decode($response->getBody(), true);
-
-        Log::info('OpenAI Response:', $data);
-
+        
         $generatedText = $data['choices'][0]['message']['content'] ?? '';
-    
         $slides = [];
-        $lines = explode("\n", trim($generatedText));
-        for ($i = 0; $i < count($lines); $i += 2) {
-            if (!isset($lines[$i + 1])) break;
+    
+        foreach (explode("---", $generatedText) as $slideText) {
+            if (empty(trim($slideText))) continue;
+    
+            preg_match('/### Title: (.*?)\n/', $slideText, $titleMatch);
+            preg_match('/\*\*Body Text:\*\*\s*(.*)/s', $slideText, $bodyMatch);
+    
             $slides[] = [
-                'title' => trim($lines[$i]),
-                'body' => trim($lines[$i + 1])
+                'title' => $titleMatch[1] ?? 'Untitled',
+                'body' => trim($bodyMatch[1] ?? '')
             ];
         }
     
         return ['slides' => $slides];
     }
+
+    private function formatSlidesData(array $openAiSlides): array
+    {
+        // Log the input for debugging
+        Log::info('Formatting slides data:', ['input' => $openAiSlides]);
+    
+        $formattedSlides = [];
+    
+        foreach ($openAiSlides as $slide) {
+            if (!isset($slide['title']) || !isset($slide['body'])) {
+                continue;
+            }
+    
+            // Clean up the title (remove "Title:" if present)
+            $title = str_replace('Title:', '', $slide['title']);
+            $title = trim($title);
+    
+            // Format the body text with proper bullet points
+            $body = $this->formatBodyText($slide['body']);
+    
+            $formattedSlides[] = [
+                'title' => $title,
+                'body' => $body
+            ];
+        }
+    
+        return $formattedSlides;
+    }
+    
+    private function formatBodyText(string $text): string
+    {
+        // Split into sentences and format as bullet points
+        $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        
+        // Trim each sentence and add bullet points
+        $formatted = array_map(function($sentence) {
+            return '• ' . trim($sentence);
+        }, $sentences);
+    
+        return implode("\n", $formatted);
+    }
+    
     
 
     
