@@ -696,7 +696,7 @@ public function updateContent(Request $request, $id)
     public function generateSDImageFromPrompt($prompt)
 {
     $endpoint = env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3');
-    $apiKey = config('services.stablediffusion.api_key');
+    $apiKey = config('services.stable_diffusion.api_key');
     
     $headers = [
         'Authorization' => 'Bearer ' . $apiKey,
@@ -790,7 +790,7 @@ $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)
         // if ($imageType === 'sd') {
             // Stable Diffusion Image
             Log::info('Stable Diffusion image prompt before extracted...');
-            $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+            $generatedImageUrl = $this->generateSDImageFromPrompt("f1 car");
             Log::info('Stable Diffusion image prompt after extracted...');
         // } else {
             // DALL·E Image
