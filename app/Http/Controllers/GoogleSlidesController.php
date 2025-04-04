@@ -9,6 +9,7 @@ use Google\Service\Slides\Presentation;
 use Google\Service\Slides\Request as SlidesRequest;
 use Google\Service\Slides\BatchUpdatePresentationRequest;
 use Illuminate\Support\Facades\Log;
+use OpenAI;
 
 class GoogleSlidesController extends Controller
 {
@@ -235,6 +236,8 @@ class GoogleSlidesController extends Controller
     
         return implode("\n", $formatted);
     }
+
+    
     
     
 

@@ -771,7 +771,10 @@ Route::get('google/callback', [AIContentCreatorController::class, 'callbackHande
 
 // Google Slides
 Route::middleware('auth')->group(function () { 
+    // POC
     Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
+    // MAIN Tool
+    Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
 });
 
 // GITHUB SOCIALITE

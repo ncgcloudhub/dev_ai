@@ -974,6 +974,49 @@ private function formatBodyText(string $text): string
     return implode("\n", $formatted);
 }
 
+// GENERATE SLIDE FREOM CONTENT START
+// Main Tool (NOT POC)
+public function generateSlidesFromContent(Request $request)
+{
+    $contentId = $request->input('content_id');
+    $content = $request->input('content');
+    $user = auth()->user();
+
+    // Check if the content is already in slide format
+    $isSlideContent = strpos($content, '### Title:') !== false && strpos($content, '**Body Text:**') !== false;
+
+    if (!$isSlideContent) {
+        // If not in slide format, transform it
+        $response = $this->transformContentToSlides($content);
+        $content = $response['content'];
+    }
+
+    // Generate slides
+    return $this->createSlidesFromContent($content, $user);
+}
+
+private function transformContentToSlides($content)
+{
+    $apiKey = config('app.openai_api_key');
+    $client = OpenAI::client($apiKey);
+
+    $response = $client->chat()->create([
+        "model" => 'gpt-4o-mini', // or your preferred model
+        'messages' => [
+            ['role' => 'system', 'content' => 'Transform this content into presentation slides. Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]. Separate slides with ---. Keep body text concise (3-4 bullet points).'],
+            ['role' => 'user', 'content' => $content],
+        ],
+    ]);
+    
+    $transformedContent = $response['choices'][0]['message']['content'];
+    
+    return [
+        'content' => $transformedContent,
+        'tokens' => $response['usage']['total_tokens']
+    ];
+}
+// GENERATE SLIDE FREOM CONTENT END
+
 
 public function toggleFavorite(Request $request)
 {
