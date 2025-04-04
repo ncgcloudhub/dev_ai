@@ -724,16 +724,23 @@ class AIContentCreatorController extends Controller
     // GOOGLE SOCIALITE
     public function provider()
 {
-    return Socialite::driver('google')
+    $isFirstLogin = !Auth::check(); // or use a smarter condition if needed
+
+    $google = Socialite::driver('google')
         ->scopes([
-            'https://www.googleapis.com/auth/presentations', // Required for Google Slides
-            'https://www.googleapis.com/auth/drive.file', // Recommended for Drive access
+            'https://www.googleapis.com/auth/presentations',
+            'https://www.googleapis.com/auth/drive.file',
         ])
         ->with([
-            'access_type' => 'offline', // Required for refresh token
-            'prompt' => 'consent' // Forces Google to re-prompt for consent, ensuring refresh_token
-        ])
-        ->redirect();
+            'access_type' => 'offline',
+        ]);
+
+    // Only force consent the first time
+    if ($isFirstLogin) {
+        $google->with(['prompt' => 'consent']);
+    }
+
+    return $google->redirect();
 }
 
 
@@ -757,16 +764,18 @@ public function callbackHandel(Request $request)
         return redirect('/login')->with('error', 'Invalid state.');
     }
 
-    // Prepare the token array
+    // Attempt to find user in the database
+    $user = User::where('email', $googleUser->email)->first();
+
+    $existingToken = json_decode($user->google_token, true) ?? [];
+
     $token = [
         'access_token' => $googleUser->token,
-        'refresh_token' => $googleUser->refreshToken ?? null, // Handle cases where refresh token is missing
+        'refresh_token' => $googleUser->refreshToken ?? ($existingToken['refresh_token'] ?? null), // preserve old refresh_token
         'expires_in' => $googleUser->expiresIn,
         'created' => time(),
     ];
 
-    // Attempt to find user in the database
-    $user = User::where('email', $googleUser->email)->first();
 
     // Retrieve user's IP address
     $ipAddress = $request->ip();
