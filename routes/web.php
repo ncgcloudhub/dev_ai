@@ -145,7 +145,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // AI Settings
-    Route::prefix('settings/OpenAI')->group(function () {
+    Route::prefix('settings/openai')->group(function () {
 
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('admin.permission:settings.AISettings');
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
@@ -156,7 +156,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // SEO Settings
-    Route::prefix('settings/SEO')->group(function () {
+    Route::prefix('settings/seo')->group(function () {
 
         Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('admin.permission:settings.SEOSettings');
 
