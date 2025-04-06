@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 class LowercaseUrlMiddleware
 {
@@ -16,27 +17,36 @@ class LowercaseUrlMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // List of routes to exclude from lowercasing
+        // Exclude specific routes from being lowercased
         $excludedRoutes = [
-            'google/callback', // Exclude Google OAuth callback
-            'google/login',    // Exclude Google OAuth login
-            'github/callback',    // Exclude Google OAuth login
-            'github/login',    // Exclude Google OAuth login
+            'google/callback',
+            'google/login',
+            'github/callback',
+            'github/login',
         ];
 
-        // Get the current route path
+        // Get the trimmed current path (no leading or trailing slashes)
         $currentPath = trim($request->path(), '/');
 
-        // If the current path is in the excluded list, bypass the middleware
+        // If exact match in excluded list, bypass middleware
         if (in_array($currentPath, $excludedRoutes)) {
             return $next($request);
         }
 
-        $currentUrl = $request->getRequestUri();
-        $lowercaseUrl = strtolower($currentUrl);
+        // Exclude entire route groups (e.g., anything starting with "checkout/")
+        if (Str::startsWith($currentPath, 'checkout')) {
+            return $next($request);
+        }
 
-        if ($currentUrl !== $lowercaseUrl) {
-            return redirect($lowercaseUrl, 301);
+        // Get path only (without query string)
+        $currentPathOnly = $request->getPathInfo(); // e.g., /SomePath/To/Lowercase
+        $lowercasePath = strtolower($currentPathOnly);
+
+        // Redirect if path has any uppercase characters
+        if ($currentPathOnly !== $lowercasePath) {
+            $queryString = $request->getQueryString(); // Leave query string unchanged
+            $redirectUrl = $lowercasePath . ($queryString ? '?' . $queryString : '');
+            return redirect($redirectUrl, 301);
         }
 
         return $next($request);
