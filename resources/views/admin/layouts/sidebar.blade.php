@@ -2,28 +2,21 @@
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
     <div class="navbar-brand-box">
-        <!-- Dark Logo-->
-        <a href="{{route('admin.dashboard')}}" class="logo logo-dark">
-            <span class="logo-sm">
-                <img src="{{ asset('backend/uploads/site/light1.jpg') }}" alt="Header Logo Dark" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_dark) }}" alt="Header Logo Dark" height="30">
-            </span>
+        <!-- Dark Logo -->
+        <a href="{{ route('admin.dashboard') }}" class="logo logo-dark">
+            <span class="logo-sm fw-bold fs-6 text-dark">CC AI</span>
+            <span class="logo-lg fw-bold fs-4 text-dark">Clever Creator AI</span>
         </a>
-        <!-- Light Logo-->
-        <a href="{{route('admin.dashboard')}}" class="logo logo-light">
-            <span class="logo-sm">
-                <img src="{{ asset('backend/uploads/site/light2.jpg') }}" alt="Header Logo Light" height="22">
-            </span>
-            <span class="logo-lg">
-                <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_dark) }}" alt="Header Logo Light" height="30">
-            </span>
+        <!-- Light Logo -->
+        <a href="{{ route('admin.dashboard') }}" class="logo logo-light">
+            <span class="logo-sm fw-bold fs-6 text-light">CC AI</span>
+            <span class="logo-lg fw-bold fs-4 text-light">Clever Creator AI</span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
+    
 
     <div id="scrollbar">
         <div class="container-fluid">

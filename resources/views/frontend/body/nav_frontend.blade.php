@@ -1,9 +1,10 @@
 <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
     <div class="container">
         <a class="navbar-brand" href="{{ URL::asset('/') }}">
-            <img src="{{ URL::asset('build/images/logo-dark1.png') }}" class="card-logo card-logo-dark" alt="logo dark" height="30">
-            <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo card-logo-light" alt="logo light" height="40">
+            <span class="fw-bold fs-4 text-dark card-logo-dark">Clever Creator AI</span>
+            <span class="fw-bold fs-4 text-light card-logo-light">Clever Creator AI</span>
         </a>
+        
         <button id="navbarToggler" class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">

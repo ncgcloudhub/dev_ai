@@ -9,7 +9,7 @@
                                 Get AI services Like
                                 <span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="AI Image Generation:AI Assistant:AI Blog Generation:AI Article Generate" data-colors="purple"></span>
                             </h2>
-                            <h1 style="color: #e900ff; font-family: Shantell Sans, cursive;">Clever Creator</h1>
+                            <h1 style="color: #e900ff; font-family: Shantell Sans, cursive;">Clever Creator AI</h1>
                             <p style="color: white">
                                 Empower Your Creativity with Our AI: Generate Images, Craft Content, and Chat Seamlessly with Our OpenAI-Powered Assistant!
                             </p>
