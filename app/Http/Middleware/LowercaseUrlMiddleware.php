@@ -16,42 +16,29 @@ class LowercaseUrlMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Exclude these named routes from being lowercased
-        $excludedRouteNames = [
-            'checkout',
+        // List of routes to exclude from lowercasing
+        $excludedRoutes = [
+            'google/callback', // Exclude Google OAuth callback
+            'google/login',    // Exclude Google OAuth login
+            'github/callback',    // Exclude Google OAuth login
+            'github/login',    // Exclude Google OAuth login
         ];
-    
-        // Exclude fixed paths
-        $excludedPaths = [
-            'google/callback',
-            'google/login',
-            'github/callback',
-            'github/login',
-        ];
-    
-        $route = $request->route();
-        if ($route && in_array($route->getName(), $excludedRouteNames)) {
-            return $next($request);
-        }
-    
+
+        // Get the current route path
         $currentPath = trim($request->path(), '/');
-        if (in_array($currentPath, $excludedPaths)) {
+
+        // If the current path is in the excluded list, bypass the middleware
+        if (in_array($currentPath, $excludedRoutes)) {
             return $next($request);
         }
-    
-        // Only lowercase the path (not query string or dynamic segments)
+
         $currentUrl = $request->getRequestUri();
-        $lowercaseUrl = preg_replace_callback(
-            '/[^?]+/',
-            fn($matches) => strtolower($matches[0]),
-            $currentUrl
-        );
-    
+        $lowercaseUrl = strtolower($currentUrl);
+
         if ($currentUrl !== $lowercaseUrl) {
             return redirect($lowercaseUrl, 301);
         }
-    
+
         return $next($request);
     }
-    
 }
