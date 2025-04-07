@@ -362,42 +362,39 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-  $(document).ready(function () {
-    $('form').on('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
+    $(document).ready(function () {
+        $('form').on('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
 
+            $('#generation-status').text('Generating...'); // Show generation status
+            showMagicBall('image'); // Show loader
 
-        $('#generation-status').text('Generating...'); // Show generation status
-        showMagicBall('image'); // Show loader
+            let formData = $(this).serialize(); // Serialize form data
 
-
-        let formData = $(this).serialize(); // Serialize form data
-
-        $.ajax({
-            type: 'POST',
-            url: '{{ route("tools.generate.content") }}',
-            data: formData,
-            xhrFields: {
-                onprogress: function (event) {
-                    const contentChunk = event.currentTarget.responseText;
-                    $('#stream-output').html(contentChunk); // Stream response
-                    hideMagicBall();
+            $.ajax({
+                type: 'POST',
+                url: '{{ route("tools.generate.content") }}',
+                data: formData,
+                xhrFields: {
+                    onprogress: function (event) {
+                        const contentChunk = event.currentTarget.responseText;
+                        $('#stream-output').html(contentChunk); // Stream response
+                        hideMagicBall();
+                    }
+                },
+                success: function (response) {
+                    $('#generation-status').text('✅ Generation completed!');
+                    console.log('Content generation completed.');
+                },
+                error: function (error) {
+                    hideMagicBall(); // Hide loader
+                    $('#generation-status').text('❌ Failed to generate content.');
+                    console.error('Error during content generation:', error);
                 }
-            },
-            success: function (response) {
-                $('#generation-status').text('✅ Generation completed!');
-                console.log('Content generation completed.');
-            },
-            error: function (error) {
-
-                hideMagicBall(); // Hide loader
-                $('#generation-status').text('❌ Failed to generate content.');
-
-                console.error('Error during content generation:', error);
-            }
+            });
         });
     });
-    });
+
 
     // Open modal and populate with content data
     function openToolContentEditorModal(contentId) {
@@ -415,7 +412,6 @@
             .catch(error => console.error('Error:', error));
     }
 
-
     // Save edited content via AJAX
     function saveEditedToolContent() {
         const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
@@ -431,12 +427,6 @@
             },
             body: JSON.stringify(updatedContent)
         })
-
-
-// Open modal and populate with content data
-function openToolContentEditorModal(contentId) {
-    fetch(`/education/toolContent/${contentId}`)
-
         .then(response => response.json())
         .then(data => {
             if (data.success) {
