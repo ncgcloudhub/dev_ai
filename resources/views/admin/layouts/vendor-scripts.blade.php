@@ -198,8 +198,8 @@
 
 </script>
 
-{{-- User Page Time --}}
-<script>
+{{-- User Page Time/ User Page timer, how long user was in the page --}}
+{{-- <script>
 
 let startTime = Date.now();
 let timeSpent = 0;
@@ -237,7 +237,7 @@ window.addEventListener('beforeunload', function () {
         console.error('Error sending time data:', error);
     });
     });
-</script>
+</script> --}}
 
 <script>
 // COpy Prompt from modal (Image)
