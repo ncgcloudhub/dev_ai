@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\MainChat;
@@ -770,6 +771,13 @@ Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->n
 Route::get('google/login', [AIContentCreatorController::class, 'provider'])->name('google.login');
 Route::get('google/callback', [AIContentCreatorController::class, 'callbackHandel'])->name('google.login.callback');
 
+// Google Slides
+Route::middleware('auth')->group(function () { 
+    // POC
+    Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
+    // MAIN Tool
+    Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
+});
 
 // GITHUB SOCIALITE
 Route::get('github/login', [AIContentCreatorController::class, 'githubprovider'])->name('github.login');
