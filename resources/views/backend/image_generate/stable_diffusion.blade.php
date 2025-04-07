@@ -73,11 +73,11 @@
                         </div>
         
                         <!-- Generate Button -->
-                        <div class="col-12 col-md-3 text-end order-2 order-md-2">
+                        <div class="col-12 col-md-3 order-2 order-md-2">
                             <button 
                             onclick="syncOffcanvasInput()" 
                             type="submit" 
-                            class="btn gradient-btn-generate btn-lg waves-effect waves-light w-100 disabled-on-load" 
+                            class="btn btn-rounded gradient-btn-generate mb-2 disabled-on-load" 
                             disabled>
                             <i class="mdi mdi-magnify me-1"></i> Generate
                         </button>

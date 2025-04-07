@@ -20,10 +20,26 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Google\Client as GoogleClient;
+use Google\Service\Slides as GoogleSlides;
+use Google\Service\Slides\Presentation;
+use Google\Service\Slides\Request as SlidesRequest;
+use Google\Service\Slides\BatchUpdatePresentationRequest;
 
 
 class EducationController extends Controller
 {
+    protected $client;
+
+    public function __construct()
+    {
+        $this->client = new GoogleClient();
+        $this->client->setAuthConfig(storage_path('app/credentials.json'));
+        $this->client->addScope(GoogleSlides::PRESENTATIONS);
+        $this->client->setAccessType('offline');
+        $this->client->setPrompt('select_account consent');
+    }
+
     // USER SECTION
     public function educationForm()
     {
@@ -735,7 +751,7 @@ public function ToolsGenerateContent(Request $request)
     set_time_limit(0);
 
     $toolId = $request->input('tool_id');
-    $tool = EducationTools::find($toolId);  // Assuming 'Tool' is your model
+    $tool = EducationTools::find($toolId);
 
     if (!$tool) {
         return response()->json(['error' => 'Tool not found'], 404);
@@ -747,15 +763,32 @@ public function ToolsGenerateContent(Request $request)
     $client = OpenAI::client($apiKey);
 
     $savedPrompt = $tool->prompt;
-
-    // Start building the final prompt by appending the saved prompt from the tool
     $prompt = $savedPrompt . " "; 
+
+    // Check if this is a slide generation tool based on slug
+    $isSlideGeneration = str_contains(strtolower($tool->slug), 'presentation') || 
+                         str_contains(strtolower($tool->slug), 'slide');
+    
+    Log::info('Slide generation check', [
+        'tool_id' => $toolId,
+        'slug' => $tool->slug,
+        'is_slide_generation' => $isSlideGeneration
+    ]);
+
+    // Modify prompt for slide generation if needed
+    if ($isSlideGeneration) {
+        $prompt .= "Format the response as a presentation with slides. " .
+                   "Each slide should have a title and body content. " .
+                   "Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]. " .
+                   "Separate slides with ---. Keep body text concise (3-4 bullet points). ";
+                   Log::info('$isSlideGeneration prompt (738)', ['$prompt' => $prompt]);
+    }
 
     // Fetch the selected grade from the `grade_id`
     if ($gradeId = $request->input('grade_id')) {
-        $grade = GradeClass::find($gradeId); // Assuming your model is `Grade`
+        $grade = GradeClass::find($gradeId);
         if ($grade) {
-            $prompt .= "Grade: " . $grade->grade . ". "; // Append the actual grade value
+            $prompt .= "Grade: " . $grade->grade . ". ";
         }
     }
 
@@ -816,32 +849,220 @@ public function ToolsGenerateContent(Request $request)
 
     Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
         
+
     // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
     
-    // Save the processed content (with images) to the database
+    // Save the processed content to the database
     $toolContent = new ToolGeneratedContent();
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
     $toolContent->prompt = $prompt;
-    $toolContent->content = $processedContent;  // Store modified content
+    $toolContent->content = $processedContent;
     $toolContent->save();
+    
+    // If this is a slide generation request, create the slides
+    if ($isSlideGeneration) {
+        return $this->createSlidesFromContent($processedContent, $user);
+    }
     
     // Stream the processed content (with images) to the view
     return response()->stream(function () use ($processedContent) {
         $chunks = explode("\n", $processedContent);
-        $parsedown = new Parsedown(); // Initialize Parsedown
+        $parsedown = new Parsedown();
     
         foreach ($chunks as $chunk) {
             $htmlChunk = $parsedown->text($chunk);
             echo $htmlChunk;
             ob_flush();
             flush();
-            sleep(1); // Simulate delay between chunks
+            sleep(1);
         }
     });
 }
+
+private function createSlidesFromContent($content, $user)
+{
+    // Parse the content into slides
+    $slides = [];
+    foreach (explode("---", $content) as $slideText) {
+        if (empty(trim($slideText))) continue;
+
+        preg_match('/### Title: (.*?)\n/', $slideText, $titleMatch);
+        preg_match('/\*\*Body Text:\*\*\s*(.*)/s', $slideText, $bodyMatch);
+
+        $slides[] = [
+            'title' => $titleMatch[1] ?? 'Untitled',
+            'body' => trim($bodyMatch[1] ?? '')
+        ];
+    }
+
+    // Check if we have valid slides
+    if (empty($slides)) {
+        return response()->json(['error' => 'No valid slide content generated.'], 400);
+    }
+
+    // Initialize Google Slides client
+    $token = json_decode($user->google_token, true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($token) || empty($token['access_token'])) {
+        return response()->json(['error' => 'Invalid or missing Google token.'], 400);
+    }
+
+    $this->client->setAccessToken($token);
+
+    // Refresh token if expired
+    if ($this->client->isAccessTokenExpired()) {
+        if (empty($token['refresh_token'])) {
+            return response()->json(['error' => 'No refresh token available. Please reauthorize Google access.'], 401);
+        }
+
+        $newToken = $this->client->fetchAccessTokenWithRefreshToken($token['refresh_token']);
+        
+        if (isset($newToken['access_token'])) {
+            $this->client->setAccessToken($newToken);
+            $user->google_token = json_encode($newToken);
+            $user->save();
+        } else {
+            return response()->json(['error' => 'Failed to refresh token.'], 400);
+        }
+    }
+
+    $slidesService = new GoogleSlides($this->client);
+
+    // Create new presentation
+    $presentation = new Presentation(['title' => 'AI Generated Presentation']);
+    $presentation = $slidesService->presentations->create($presentation);
+    $presentationId = $presentation->presentationId;
+
+    // Create slides dynamically
+    $requests = [];
+    foreach ($slides as $index => $slide) {
+        $requests[] = new SlidesRequest([
+            'createSlide' => [
+                'objectId' => 'slide' . ($index + 1),
+                'insertionIndex' => $index,
+                'slideLayoutReference' => [
+                    'predefinedLayout' => 'TITLE_AND_BODY'
+                ]
+            ]
+        ]);
+    }
+
+    if (empty($requests)) {
+        return response()->json(['error' => 'No slides generated.'], 400);
+    }
+
+    // Batch update request to create slides
+    $batchUpdateRequest = new BatchUpdatePresentationRequest(['requests' => $requests]);
+    $slidesService->presentations->batchUpdate($presentationId, $batchUpdateRequest);
+
+    // Retrieve created slides
+    $createdSlides = $slidesService->presentations->get($presentationId, ['fields' => 'slides'])->getSlides();
+    if (empty($createdSlides)) {
+        return response()->json(['error' => 'No slides found in the presentation.'], 400);
+    }
+
+    // Prepare text insertion requests
+    $requests = [];
+    foreach ($slides as $index => $slideContent) {
+        if (!isset($createdSlides[$index])) continue;
+
+        $pageElements = $createdSlides[$index]->getPageElements();
+        if (count($pageElements) < 2) continue;
+
+        $titleObjectId = $pageElements[0]->getObjectId() ?? null;
+        $bodyObjectId = $pageElements[1]->getObjectId() ?? null;
+
+        if ($titleObjectId) {
+            $requests[] = new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $titleObjectId,
+                    'text' => $slideContent['title'],
+                    'insertionIndex' => 0
+                ]
+            ]);
+        }
+
+        if ($bodyObjectId) {
+            $requests[] = new SlidesRequest([
+                'insertText' => [
+                    'objectId' => $bodyObjectId,
+                    'text' => $this->formatBodyText($slideContent['body']),
+                    'insertionIndex' => 0
+                ]
+            ]);
+        }
+    }
+
+    if (!empty($requests)) {
+        $batchUpdateRequest = new BatchUpdatePresentationRequest(['requests' => $requests]);
+        $slidesService->presentations->batchUpdate($presentationId, $batchUpdateRequest);
+    }
+
+    return response()->json([
+        'message' => 'Presentation created successfully!',
+        'presentationId' => $presentationId,
+        'content' => $content // Return the original content as well
+    ]);
+}
+
+private function formatBodyText(string $text): string
+{
+    // Split into sentences and format as bullet points
+    $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+    
+    // Trim each sentence and add bullet points
+    $formatted = array_map(function($sentence) {
+        return '• ' . trim($sentence);
+    }, $sentences);
+
+    return implode("\n", $formatted);
+}
+
+// GENERATE SLIDE FREOM CONTENT START
+// Main Tool (NOT POC)
+public function generateSlidesFromContent(Request $request)
+{
+    $contentId = $request->input('content_id');
+    $content = $request->input('content');
+    $user = auth()->user();
+
+    // Check if the content is already in slide format
+    $isSlideContent = strpos($content, '### Title:') !== false && strpos($content, '**Body Text:**') !== false;
+
+    if (!$isSlideContent) {
+        // If not in slide format, transform it
+        $response = $this->transformContentToSlides($content);
+        $content = $response['content'];
+    }
+
+    // Generate slides
+    return $this->createSlidesFromContent($content, $user);
+}
+
+private function transformContentToSlides($content)
+{
+    $apiKey = config('app.openai_api_key');
+    $client = OpenAI::client($apiKey);
+
+    $response = $client->chat()->create([
+        "model" => 'gpt-4o-mini', // or your preferred model
+        'messages' => [
+            ['role' => 'system', 'content' => 'Transform this content into presentation slides. Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]. Separate slides with ---. Keep body text concise (3-4 bullet points).'],
+            ['role' => 'user', 'content' => $content],
+        ],
+    ]);
+    
+    $transformedContent = $response['choices'][0]['message']['content'];
+    
+    return [
+        'content' => $transformedContent,
+        'tokens' => $response['usage']['total_tokens']
+    ];
+}
+// GENERATE SLIDE FREOM CONTENT END
 
 
 public function toggleFavorite(Request $request)

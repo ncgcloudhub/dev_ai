@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\MainChat;
@@ -145,7 +146,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // AI Settings
-    Route::prefix('settings/OpenAI')->group(function () {
+    Route::prefix('settings/openai')->group(function () {
 
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('admin.permission:settings.AISettings');
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
@@ -156,7 +157,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // SEO Settings
-    Route::prefix('settings/SEO')->group(function () {
+    Route::prefix('settings/seo')->group(function () {
 
         Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('admin.permission:settings.SEOSettings');
 
@@ -770,6 +771,13 @@ Route::get('/newsletter/manage', [HomeController::class, 'NewsLetterManage'])->n
 Route::get('google/login', [AIContentCreatorController::class, 'provider'])->name('google.login');
 Route::get('google/callback', [AIContentCreatorController::class, 'callbackHandel'])->name('google.login.callback');
 
+// Google Slides
+Route::middleware('auth')->group(function () { 
+    // POC
+    Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
+    // MAIN Tool
+    Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
+});
 
 // GITHUB SOCIALITE
 Route::get('github/login', [AIContentCreatorController::class, 'githubprovider'])->name('github.login');
@@ -912,7 +920,8 @@ Route::post('/clear-chat', function () {
 });
 
 // STRIPE
-Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+// Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+Route::get('checkout', CheckoutController::class)->name('checkout');
 Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
 Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
 Route::get('/stripe/balance-report', [CheckoutController::class, 'getBalanceReport'])->name('stripe.balance.report');

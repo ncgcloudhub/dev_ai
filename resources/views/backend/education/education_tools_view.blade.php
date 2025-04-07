@@ -146,7 +146,7 @@
                 <div>
                     <ul class="nav nav-pills nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#stream-output" role="tab">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#stream-output1" role="tab">
                                 Output
                             </a>
                         </li>
@@ -167,9 +167,12 @@
             <div class="card-body">
                 <div class="tab-content">
                     
-                    <div class="tab-pane active" id="stream-output" role="tabpanel">
-                        
+                    <div class="tab-pane active" id="stream-output1" role="tabpanel">
+                        <div id="stream-output"></div>
+                        <div id="generation-status" style="margin-top: 10px; font-weight: bold;"></div>
                     </div>
+                    
+
                     <!--end tab-pane-->
                     <div class="tab-pane" id="messages-1" role="tabpanel">
                         <div class="table-responsive table-card">
@@ -205,6 +208,15 @@
                                                     data-bs-target="#viewFullContentModal{{ $content->id }}">
                                                 Read More
                                             </button>
+                                              {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
+                                            @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
+                                                str_contains(strtolower($content->tool->slug), 'slide'))
+                                                <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
+                                                        data-content-id="{{ $content->id }}"
+                                                        data-content="{{ json_encode($content->content) }}">
+                                                    Generate Slides
+                                                </button>
+                                            @endif
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-primary" 
@@ -350,31 +362,37 @@
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
     $('form').on('submit', function (e) {
-        e.preventDefault(); // Prevent the form from submitting the traditional way
+        e.preventDefault(); // Prevent default form submission
 
-        showMagicBall('image'); 
 
-        let formData = $(this).serialize(); // Collect the form data
+        $('#generation-status').text('Generating...'); // Show generation status
+        showMagicBall('image'); // Show loader
+
+
+        let formData = $(this).serialize(); // Serialize form data
 
         $.ajax({
             type: 'POST',
-            url: '{{ route("tools.generate.content") }}', // Update with your route
+            url: '{{ route("tools.generate.content") }}',
             data: formData,
             xhrFields: {
                 onprogress: function (event) {
                     const contentChunk = event.currentTarget.responseText;
-                    $('#stream-output').html(contentChunk); // Update the stream output div
+                    $('#stream-output').html(contentChunk); // Stream response
                     hideMagicBall();
                 }
             },
-           
             success: function (response) {
+                $('#generation-status').text('✅ Generation completed!');
                 console.log('Content generation completed.');
             },
             error: function (error) {
-                // hideMagicBall();
+
+                hideMagicBall(); // Hide loader
+                $('#generation-status').text('❌ Failed to generate content.');
+
                 console.error('Error during content generation:', error);
             }
         });
@@ -397,6 +415,7 @@
             .catch(error => console.error('Error:', error));
     }
 
+
     // Save edited content via AJAX
     function saveEditedToolContent() {
         const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
@@ -412,6 +431,12 @@
             },
             body: JSON.stringify(updatedContent)
         })
+
+
+// Open modal and populate with content data
+function openToolContentEditorModal(contentId) {
+    fetch(`/education/toolContent/${contentId}`)
+
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -433,5 +458,80 @@
     });
 
 </script>
+
+{{-- Slides --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle slide generation
+        document.querySelectorAll('.generate-slides-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const contentId = this.getAttribute('data-content-id');
+                const content = JSON.parse(this.getAttribute('data-content'));
+
+                // Console logging
+                console.log('Generate Slides button clicked', {
+                    contentId: contentId,
+                    contentLength: content.length,
+                    button: this
+                });
+                
+                // Show loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+                this.disabled = true;
+                
+                // Call the API to generate slides
+                fetch('/education/generate-slides', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        content_id: contentId,
+                        content: content
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.presentationId) {
+                        // Open the presentation in a new tab
+                        window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
+                        
+                        // Show success message
+                        Toastify({
+                            text: "Slides generated successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
+                    } else {
+                        throw new Error(data.error || 'Failed to generate slides');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Toastify({
+                        text: error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                })
+                .finally(() => {
+                    // Restore button state
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                });
+            });
+        });
+    });
+
+</script>
+    
 
 @endsection

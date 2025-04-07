@@ -16,6 +16,10 @@
                     <div class="d-flex align-items-lg-center flex-lg-row flex-column">
                         <div class="flex-grow-1">
                             <h4 class="fs-16 mb-1" id="greeting">Good Morning, {{$user->name}}</h4>
+                            <form action="{{ route('create.slide') }}" method="POST">
+                                @csrf
+                                <button type="submit">Create Slide</button>
+                            </form>
                         </div>
                         
                     </div><!-- end card header -->
