@@ -18,6 +18,7 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
+
         <div class="row">
             <div class="col-xl-8 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
@@ -53,6 +54,7 @@
                                 <span id="ssl-expire"></span>
                             </li>
                         </ul>
+
                     </div>
                 </div>
             </div>

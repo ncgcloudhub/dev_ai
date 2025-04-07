@@ -208,6 +208,15 @@
                                                     data-bs-target="#viewFullContentModal{{ $content->id }}">
                                                 Read More
                                             </button>
+                                              {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
+                                            @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
+                                                str_contains(strtolower($content->tool->slug), 'slide'))
+                                                <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
+                                                        data-content-id="{{ $content->id }}"
+                                                        data-content="{{ json_encode($content->content) }}">
+                                                    Generate Slides
+                                                </button>
+                                            @endif
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-primary" 
@@ -439,5 +448,80 @@ document.getElementById('clearInputsButton').addEventListener('click', function(
  });
 
 </script>
+
+{{-- Slides --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle slide generation
+        document.querySelectorAll('.generate-slides-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const contentId = this.getAttribute('data-content-id');
+                const content = JSON.parse(this.getAttribute('data-content'));
+
+                // Console logging
+                console.log('Generate Slides button clicked', {
+                    contentId: contentId,
+                    contentLength: content.length,
+                    button: this
+                });
+                
+                // Show loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+                this.disabled = true;
+                
+                // Call the API to generate slides
+                fetch('/education/generate-slides', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        content_id: contentId,
+                        content: content
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.presentationId) {
+                        // Open the presentation in a new tab
+                        window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
+                        
+                        // Show success message
+                        Toastify({
+                            text: "Slides generated successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#28a745",
+                        }).showToast();
+                    } else {
+                        throw new Error(data.error || 'Failed to generate slides');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Toastify({
+                        text: error.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                })
+                .finally(() => {
+                    // Restore button state
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                });
+            });
+        });
+    });
+
+</script>
+    
 
 @endsection
