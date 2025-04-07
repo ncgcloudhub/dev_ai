@@ -706,7 +706,45 @@ public function updateContent(Request $request, $id)
     // Extract and return the image URL
     $data = $response->json();
     return $data['data'][0]['url'] ?? null;
+    }
+
+// Function to generate images using SD
+public function generateSDImageFromPrompt($prompt)
+{
+    $endpoint = env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3');
+    $apiKey = config('services.stable_diffusion.api_key');
+
+    $headers = [
+        'Authorization' => 'Bearer ' . $apiKey,
+        'Accept' => 'image/*'
+    ];
+
+    $data = [
+        'prompt' => $prompt,
+        'output_format' => 'jpeg',
+        'model' => 'sd3.5-large',
+        'mode' => 'text-to-image',
+    ];
+
+    $response = Http::withHeaders($headers)
+        ->timeout(180) // timeout in seconds
+        ->asMultipart()
+        ->post($endpoint, $data);
+
+    if ($response->ok() && strpos($response->header('Content-Type'), 'image/') !== false) {
+        $fileName = 'images/' . uniqid('sd_', true) . '.jpeg';
+        Storage::disk('public')->put($fileName, $response->body());
+        return url('storage/' . $fileName);
+    } else {
+        Log::error('Unexpected SD response', [
+            'status' => $response->status(),
+            'headers' => $response->headers(),
+            'body' => $response->body()
+        ]);
+        return null;
+    }
 }
+
 
 public function ToolsGenerateContent(Request $request)
 {
@@ -777,33 +815,41 @@ public function ToolsGenerateContent(Request $request)
     
     $content = $response['choices'][0]['message']['content'];
 
-    // Process images if not slide generation
-    if (!$isSlideGeneration) {
-        $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
-            $imagePrompt = trim($matches[1]);
-            Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);
+    // Log the content before processing
+    Log::info('Content Before Image Extraction', ['content' => $content]);
 
-            if (!empty($imagePrompt)) {
-                $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-                
-                if ($generatedImageUrl) {
-                    $imageContent = file_get_contents($generatedImageUrl);
-                    if ($imageContent) {
-                        $fileName = 'images/' . uniqid('dalle_', true) . '.png';
-                        Storage::disk('public')->put($fileName, $imageContent);
-                        $permanentImageUrl = url('storage/' . $fileName);
-                        return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$permanentImageUrl})\n";
-                    }
-                }
+    $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
+        $imagePrompt = trim($matches[1]); // Capture and clean the prompt
+        Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);  // Log the prompt
+
+        // If the prompt is valid, generate the image
+        if (!empty($imagePrompt)) {
+            $imageType = $request->input('image_type', 'dalle'); // Default to DALL·E
+            $generatedImageUrl = null;
+
+            // if ($imageType === 'sd') {
+                // Stable Diffusion Image
+                Log::info('Stable Diffusion image prompt before extracted...');
+                $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+
+                Log::info('Stable Diffusion image prompt after extracted...');
+            // } else {
+                // DALL·E Image
+            //     $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+            // }
+
+            if ($generatedImageUrl) {
+                return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
             }
-            return $matches[0];
-        }, $content);
-    } else {
-        $processedContent = $content;
-    }
+            
+        }
 
-    Log::info('Processed Content', ['content' => $processedContent]);
-    
+        return $matches[0]; // Keep the original text if no valid image prompt or generation fails
+    }, $content);
+
+    Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
+        
+
     // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
