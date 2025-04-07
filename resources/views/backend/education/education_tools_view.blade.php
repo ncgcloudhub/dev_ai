@@ -366,8 +366,10 @@
     $('form').on('submit', function (e) {
         e.preventDefault(); // Prevent default form submission
 
+
         $('#generation-status').text('Generating...'); // Show generation status
         showMagicBall('image'); // Show loader
+
 
         let formData = $(this).serialize(); // Serialize form data
 
@@ -387,65 +389,73 @@
                 console.log('Content generation completed.');
             },
             error: function (error) {
+
                 hideMagicBall(); // Hide loader
                 $('#generation-status').text('❌ Failed to generate content.');
+
                 console.error('Error during content generation:', error);
             }
         });
     });
-});
+    });
+
+    // Open modal and populate with content data
+    function openToolContentEditorModal(contentId) {
+        fetch(`/education/toolContent/${contentId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('editContent').value = data.content;
+                document.getElementById('editToolContentModal').setAttribute('data-content-id', contentId);
+
+                // Show the modal
+                var editModal = new bootstrap.Modal(document.getElementById('editToolContentModal'));
+                editModal.show();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    // Save edited content via AJAX
+    function saveEditedToolContent() {
+        const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
+        const updatedContent = {
+            content: document.getElementById('editContent').value
+        };
+
+        fetch(`/education/toolContent/${contentId}/update`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(updatedContent)
+        })
 
 
 // Open modal and populate with content data
 function openToolContentEditorModal(contentId) {
     fetch(`/education/toolContent/${contentId}`)
+
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            document.getElementById('editContent').value = data.content;
-            document.getElementById('editToolContentModal').setAttribute('data-content-id', contentId);
-
-            // Show the modal
-            var editModal = new bootstrap.Modal(document.getElementById('editToolContentModal'));
-            editModal.show();
+            if (data.success) {
+                alert('Content updated successfully!');
+                var editModal = bootstrap.Modal.getInstance(document.getElementById('editToolContentModal'));
+                editModal.hide();
+                // Optionally, update the UI with the new content
+            } else {
+                alert('Failed to update content.');
+            }
         })
         .catch(error => console.error('Error:', error));
-}
+    }
 
-// Save edited content via AJAX
-function saveEditedToolContent() {
-    const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
-    const updatedContent = {
-        content: document.getElementById('editContent').value
-    };
-
-    fetch(`/education/toolContent/${contentId}/update`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify(updatedContent)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Content updated successfully!');
-            var editModal = bootstrap.Modal.getInstance(document.getElementById('editToolContentModal'));
-            editModal.hide();
-            // Optionally, update the UI with the new content
-        } else {
-            alert('Failed to update content.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Clear all input values
-document.getElementById('clearInputsButton').addEventListener('click', function() {
-        // Reset the form (clear inputs)
-        document.getElementById('generate-content-form').reset();
- });
+    // Clear all input values
+    document.getElementById('clearInputsButton').addEventListener('click', function() {
+            // Reset the form (clear inputs)
+            document.getElementById('generate-content-form').reset();
+    });
 
 </script>
 
