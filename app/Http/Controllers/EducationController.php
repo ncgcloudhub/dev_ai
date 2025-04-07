@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Illuminate\Support\Carbon;
 use Parsedown;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -688,11 +688,12 @@ public function updateContent(Request $request, $id)
     }
 
     // Function to generate images using DALL·E
-    public static function generateImageFromPrompt($prompt, $apiKey, $size = '256x256', $style = 'vivid', $quality = 'standard', $n = 1) {
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1) {
     $response = Http::withHeaders([
         'Authorization' => 'Bearer ' . $apiKey,
         'Content-Type' => 'application/json',
     ])->post('https://api.openai.com/v1/images/generations', [
+        'model' => 'dall-e-3', // Specify DALL·E 3 model
         'prompt' => $prompt,
         'size' => $size,
         'style' => $style,
@@ -1122,7 +1123,57 @@ public function updateSubject(Request $request, $id)
                 'tools' => $tools,
             ]
         ], 200);
-    }    
+    }   
+    
+
+    public function downloadsPdf($id)
+    {
+         // Retrieve the content by ID
+        $content = ToolGeneratedContent::findOrFail($id);
+
+        // Format content with Parsedown
+        $parsedown = new Parsedown();
+        $formattedContent = $parsedown->text($content->content);
+
+        // Replace image URLs with Base64-encoded images
+        $formattedContent = preg_replace_callback(
+            '/<img[^>]+src="([^"]+)"[^>]*>/',
+            function ($matches) {
+                $imageUrl = $matches[1];
+                
+                // Extract the path from the URL (e.g., "/storage/images/dalle_...png")
+                $imagePath = parse_url($imageUrl, PHP_URL_PATH);
+                
+                // Resolve the full filesystem path
+                $fullPath = public_path($imagePath);
+
+                // Check if the file exists
+                if (file_exists($fullPath)) {
+                    // Read the image file and encode as Base64
+                    $imageData = base64_encode(file_get_contents($fullPath));
+                    $mimeType = mime_content_type($fullPath);
+                    return '<img src="data:' . $mimeType . ';base64,' . $imageData . '">';
+                }
+
+                // Fallback: Return the original image tag if file not found
+                return $matches[0];
+            },
+            $formattedContent
+        );
+
+        // Pass data to the PDF view
+        $data = [
+            'content' => $formattedContent,
+            'toolName' => $content->tool->name,
+            'prompt' => $content->prompt,
+        ];
+
+        // Generate PDF
+        $pdf = Pdf::loadView('backend.education.tool_content_pdf', $data);
+
+        // Download the PDF
+        return $pdf->download('tool_content_' . $content->id . '.pdf');
+    }
 
     public function showTool($id)
     {

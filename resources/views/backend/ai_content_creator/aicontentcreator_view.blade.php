@@ -183,6 +183,7 @@
                                                         <option value="Bold">Bold</option>
                                                         <option value="Masculine">Masculine</option>
                                                         <option value="Dramatic">Dramatic</option>
+                                                        <option value="Academic">Academic</option>
                                                 
                                                     </select>
                                                 

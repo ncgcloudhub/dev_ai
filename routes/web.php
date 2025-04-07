@@ -38,6 +38,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\MainChat;
 use App\Http\Controllers\RequestModuleFeedbackController;
 use App\Http\Controllers\StatsController;
@@ -145,7 +146,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // AI Settings
-    Route::prefix('settings/OpenAI')->group(function () {
+    Route::prefix('settings/openai')->group(function () {
 
         Route::get('/add', [AISettingsController::class, 'AIsettingsAdd'])->name('ai.settings.add')->middleware('admin.permission:settings.AISettings');
         Route::post('/store', [AISettingsController::class, 'AIsettingsStore'])->name('ai.settings.store');
@@ -156,7 +157,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     // SEO Settings
-    Route::prefix('settings/SEO')->group(function () {
+    Route::prefix('settings/seo')->group(function () {
 
         Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('admin.permission:settings.SEOSettings');
 
@@ -545,6 +546,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
     });
+    Route::get('/education/toolContent/{id}/download', [EducationController::class, 'downloadsPdf'])->name('toolContent.download');
 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
@@ -806,6 +808,10 @@ Route::post('/single/image', [GenerateImagesController::class, 'generateSingleIm
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
 
+// Fetch Tokens Usage
+Route::get('/user/monthly-usage', [UserController::class, 'getUserMonthlyUsage']);
+
+
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/events', [EventController::class, 'index']);
     Route::post('/events', [EventController::class, 'store']);
@@ -914,13 +920,14 @@ Route::post('/clear-chat', function () {
 });
 
 // STRIPE
-Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+// Route::get('checkout/{id}/{prod_id}/{price_id}', CheckoutController::class)->name('checkout');
+Route::get('checkout', CheckoutController::class)->name('checkout');
 Route::get('/subscription/success/{pricingPlanId}', [CheckoutController::class, 'handleSuccess'])->name('subscription.success');
 Route::post('/subscription/cancel/{subscriptionId}', [CheckoutController::class, 'cancelSubscription'])->name('subscription.cancel');
 Route::get('/stripe/balance-report', [CheckoutController::class, 'getBalanceReport'])->name('stripe.balance.report');
 Route::get('/admin/subscriptions-summary', [CheckoutController::class, 'subscriptionSummary'])->name('stripe.admin.subscriptions.summary');
 
-
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
 
 Route::view('success', 'backend.subscription.success')->name('success');
 

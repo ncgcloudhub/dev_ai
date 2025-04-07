@@ -18,9 +18,10 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-
+        <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
+        dir="ltr"></div>
         <div class="row">
-            <div class="col-xl-8 col-md-12">
+            <div class="col-xl-6 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
                     <div class="card-body bg-marketplace d-flex">
                         <div class="flex-grow-1">
@@ -37,29 +38,33 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-md-12">
+            <div class="col-xl-3 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
                     <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between" id="domain-item">
-                                <strong>Domain Expire:</strong>
-                                <span id="domain-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="hosting-item">
-                                <strong>Hosting Expire:</strong>
-                                <span id="hosting-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="ssl-item">
-                                <strong>SSL Expire:</strong>
-                                <span id="ssl-expire"></span>
-                            </li>
-                        </ul>
-
+                      
+                        <div id="credits_chart"
+                            data-credits-used="{{ $user->credits_used }}"
+                            data-credits-left="{{ $user->credits_left }}"
+                            data-colors='["--vz-danger", "--vz-success"]'
+                            class="apex-charts" dir="ltr">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-12">
+                <div class="card overflow-hidden" style="border-color: #be06af">
+                    <div class="card-body">
+                        <div id="tokens_chart"
+                            data-tokens-used="{{ $user->tokens_used }}"
+                            data-tokens-left="{{ $user->tokens_left }}"
+                            data-colors='["--vz-danger", "--vz-success"]'
+                            class="apex-charts" dir="ltr">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         {{-- 1st col 2nd row --}}
         <div class="card overflow-hidden shadow-none">
             <div class="card-body bg-success-subtle text-success fw-semibold d-flex gradient-bg">
@@ -274,6 +279,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
+<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/clever-creator-pie.init.js') }}"></script>
+
+<script src="{{ URL::asset('build/js/pages/apexcharts-column.init.js') }}"></script>
 
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
@@ -334,44 +343,5 @@
         });
     }
     </script>
-
-<script>
-    function startCountdown(id, itemId, endDate) {
-        function updateCountdown() {
-            let now = new Date().getTime();
-            let distance = new Date(endDate).getTime() - now;
-
-            if (distance < 0) {
-                document.getElementById(id).innerHTML = "Expired";
-                return;
-            }
-
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById(id).innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            // If 30 days or less, change the border color of the specific list item
-            if (days <= 30) {
-                document.getElementById(itemId).style.borderColor = "red";
-                document.getElementById(itemId).style.color = "red"; // Optional: Change text color to red
-            }
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-
-    // Convert Laravel dates to JavaScript
-    let domainExpire = "{{ $siteSettings->domain }}"; // Example: 2025-12-26
-    let hostingExpire = "{{ $siteSettings->hosting }}"; // Example: 2025-10-15
-    let sslExpire = "{{ $siteSettings->ssl }}"; // Example: 2025-08-30
-
-    startCountdown("domain-expire", "domain-item", domainExpire);
-    startCountdown("hosting-expire", "hosting-item", hostingExpire);
-    startCountdown("ssl-expire", "ssl-item", sslExpire);
-</script>
 
 @endsection

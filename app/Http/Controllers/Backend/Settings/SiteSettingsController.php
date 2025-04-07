@@ -145,6 +145,19 @@ class SiteSettingsController extends Controller
             $updateData['twitter'] = $request->twitter;
         }
 
+         // Add these new blocks for timestamp fields
+        if ($request->filled('domain')) {
+            $updateData['domain'] = $request->domain;
+        }
+
+        if ($request->filled('hosting')) {
+            $updateData['hosting'] = $request->hosting;
+        }
+
+        if ($request->filled('ssl')) {
+            $updateData['ssl'] = $request->ssl;
+        }
+
         SiteSettings::findOrFail(1)->update($updateData);
 
         return redirect()->back()->with('success', 'Settings updated Successfully');

@@ -80,10 +80,7 @@
                             <button type="button" class="btn gradient-btn-5" id="clearInputsButton" title="Clear all the Input values">
                             <i class="las la-undo-alt"></i>Clear Inputs
                             </button>
-                            
-                            {{-- <button type="button" class="btn gradient-btn-5" id="populateInputsButton" title="Populate inputs with placeholder values">
-                            <i class="las la-magic"></i>Populate Inputs
-                            </button> --}}
+                         
                     </div></div>
                     </div>
                
@@ -149,7 +146,7 @@
                 <div>
                     <ul class="nav nav-pills nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#stream-output" role="tab">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#stream-output1" role="tab">
                                 Output
                             </a>
                         </li>
@@ -170,9 +167,12 @@
             <div class="card-body">
                 <div class="tab-content">
                     
-                    <div class="tab-pane active" id="stream-output" role="tabpanel">
-                        
+                    <div class="tab-pane active" id="stream-output1" role="tabpanel">
+                        <div id="stream-output"></div>
+                        <div id="generation-status" style="margin-top: 10px; font-weight: bold;"></div>
                     </div>
+                    
+
                     <!--end tab-pane-->
                     <div class="tab-pane" id="messages-1" role="tabpanel">
                         <div class="table-responsive table-card">
@@ -223,6 +223,9 @@
                                                     onclick="openToolContentEditorModal({{ $content->id }})">
                                                 Edit
                                             </button>
+                                            <a href="{{ route('toolContent.download', $content->id) }}" class="btn btn-sm btn-success">
+                                                Download PDF
+                                            </a>
                                             {{-- Modal for Full Content --}}
                                             <div class="modal fade" id="viewFullContentModal{{ $content->id }}" tabindex="-1" 
                                                 aria-labelledby="viewFullContentModalLabel{{ $content->id }}" aria-hidden="true">
@@ -246,8 +249,6 @@
                                         </div>
                                         </td>
                                     </tr>
-                    
-                                    
                                     @endforeach
                                 </tbody>
                             </table>
@@ -355,226 +356,44 @@
     </div>
 </div>
 
-
-
-<div class="modal fade" id="inviteMembersModal" tabindex="-1" aria-labelledby="inviteMembersModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 ps-4 bg-primary-subtle">
-                <h5 class="modal-title" id="inviteMembersModalLabel">Team Members</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="search-box mb-3">
-                    <input type="text" class="form-control bg-light border-light" placeholder="Search here...">
-                    <i class="ri-search-line search-icon"></i>
-                </div>
-
-                <div class="mb-4 d-flex align-items-center">
-                    <div class="me-2">
-                        <h5 class="mb-0 fs-13">Members :</h5>
-                    </div>
-                    <div class="avatar-group justify-content-center">
-                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                            data-bs-trigger="hover" data-bs-placement="top" title="Tonya Noble">
-                            <div class="avatar-xs">
-                                <img src="{{ URL::asset('build/images/users/avatar-10.jpg') }}" alt="" class="rounded-circle img-fluid">
-                            </div>
-                        </a>
-                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                            data-bs-trigger="hover" data-bs-placement="top" title="Thomas Taylor">
-                            <div class="avatar-xs">
-                                <img src="{{ URL::asset('build/images/users/avatar-8.jpg') }}" alt="" class="rounded-circle img-fluid">
-                            </div>
-                        </a>
-                        <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                            data-bs-trigger="hover" data-bs-placement="top" title="Nancy Martino">
-                            <div class="avatar-xs">
-                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="rounded-circle img-fluid">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="mx-n4 px-4" data-simplebar style="max-height: 225px;">
-                    <div class="vstack gap-3">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <img src="{{ URL::asset('build/images/users/avatar-2.jpg') }}" alt="" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Nancy Martino</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <div class="avatar-title bg-primary-subtle text-primary rounded-circle">
-                                    HB
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Henry Baird</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <img src="{{ URL::asset('build/images/users/avatar-3.jpg') }}" alt="" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Frank Hook</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <img src="{{ URL::asset('build/images/users/avatar-4.jpg') }}" alt="" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Jennifer Carter</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <div class="avatar-title bg-success-subtle text-success rounded-circle">
-                                    AC
-                                </div>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Alexis Clarke</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                        <div class="d-flex align-items-center">
-                            <div class="avatar-xs flex-shrink-0 me-3">
-                                <img src="{{ URL::asset('build/images/users/avatar-7.jpg') }}" alt="" class="img-fluid rounded-circle">
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="fs-13 mb-0"><a href="javascript:void(0);"
-                                        class="text-body d-block">Joseph Parker</a></h5>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-light btn-sm">Add</button>
-                            </div>
-                        </div>
-                        <!-- end member item -->
-                    </div>
-                    <!-- end list -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary w-xs">Assigned</button>
-            </div>
-        </div>
-        <!-- end modal-content -->
-    </div>
-    <!-- modal-dialog -->
-</div>
-
-
-{{-- <div class="row">
-    <div class="col-lg-8">
-        
-        <h1>Generate for {{ $tool->name }}</h1>
-
-        <form action="" method="POST" id="generate-content-form">
-            @csrf
-            <input type="hidden" name="tool_id" value="{{ $tool->id }}">
-            <div class="form-group mb-3">
-            <select class="form-select" name="grade_id" data-choices aria-label="Default select grade">
-                <option selected="">Select Grade/Class</option>
-                @foreach($classes as $item)
-                    <option value="{{$item->id}}">{{$item->grade}}</option>
-                @endforeach
-            </select>
-            </div>
-
-            <!-- Loop through input types and labels -->
-            @foreach (json_decode($tool->input_types) as $index => $input_type)
-                <div class="form-group mb-3">
-                    <label for="input_{{ $index }}">{{ json_decode($tool->input_labels)[$index] }}</label>
-
-                    @if ($input_type == 'textarea')
-                        <textarea class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" rows="4" placeholder="{{ json_decode($tool->input_names)[$index] }}"></textarea>
-                    @else
-                        <input type="{{ $input_type }}" class="form-control" id="input_{{ $index }}" name="input_{{ $index }}" placeholder="{{ json_decode($tool->input_names)[$index] }}">
-                    @endif
-                </div>
-            @endforeach
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary">
-                <i class="ri-auction-fill align-bottom me-1"></i>Generate
-            </button>
-        </form>
-
-
-        <div id="stream-output"></div>
-</div> --}}
-
-
-
 @endsection
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
     $('form').on('submit', function (e) {
-        e.preventDefault(); // Prevent the form from submitting the traditional way
+        e.preventDefault(); // Prevent default form submission
 
-        showMagicBall('image'); // Show the magic ball loader
+        $('#generation-status').text('Generating...'); // Show generation status
+        showMagicBall('image'); // Show loader
 
-        let formData = $(this).serialize(); // Collect the form data
+        let formData = $(this).serialize(); // Serialize form data
 
         $.ajax({
             type: 'POST',
-            url: '{{ route("tools.generate.content") }}', // Update with your route
+            url: '{{ route("tools.generate.content") }}',
             data: formData,
             xhrFields: {
                 onprogress: function (event) {
                     const contentChunk = event.currentTarget.responseText;
-                    $('#stream-output').html(contentChunk); // Update the stream output div
+                    $('#stream-output').html(contentChunk); // Stream response
                     hideMagicBall();
                 }
             },
-           
-
             success: function (response) {
+                $('#generation-status').text('✅ Generation completed!');
                 console.log('Content generation completed.');
             },
             error: function (error) {
-                hideMagicBall();
+                hideMagicBall(); // Hide loader
+                $('#generation-status').text('❌ Failed to generate content.');
                 console.error('Error during content generation:', error);
             }
         });
     });
 });
-
 
 
 // Open modal and populate with content data
@@ -592,7 +411,6 @@ function openToolContentEditorModal(contentId) {
         })
         .catch(error => console.error('Error:', error));
 }
-
 
 // Save edited content via AJAX
 function saveEditedToolContent() {
@@ -628,7 +446,6 @@ document.getElementById('clearInputsButton').addEventListener('click', function(
         // Reset the form (clear inputs)
         document.getElementById('generate-content-form').reset();
  });
-
 
 </script>
 

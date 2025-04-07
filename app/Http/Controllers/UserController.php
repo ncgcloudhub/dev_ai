@@ -18,39 +18,28 @@ use App\Models\UserPageTime;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Models\EducationTools;
+use App\Models\PromptLibrary;
+use App\Models\UserMonthlyUsage;
 
 class UserController extends Controller
 {
     public function UserDashboard()
     {
         logActivity('Dashboard', 'accessed Dashboard');
-
         $user = Auth::user();
-        $templates_count = Template::count();
-        $chatbot_count = Expert::count();
-        $custom_templates_count = CustomTemplate::where('user_id', $user->id)->count();
-        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
-        $custom_templates = CustomTemplate::where('user_id', $user->id)->limit(5)->get();
-        $images = DalleImageGenerate::where('user_id', $user->id)->orderBy('id', 'desc')->limit(12)->get();
-
-        $totalUsers = User::count();
-        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-            ->whereNotNull('country') // Exclude users with NULL country
-            ->groupBy('country')
-            ->get();
-
+    
         $userId = auth()->id(); // Get the authenticated user's ID
-        $sessions = Session::with('messages') // Eager load the related messages
-            ->where('user_id', $userId)
-            ->get();
 
-        // Generate Azure Blob Storage URL for each image with SAS token
-        foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
-        }
+        $eduTools = EducationTools::limit(5)->get();
+        
+        $prompts = PromptLibrary::inRandomOrder()
+            ->limit(11)->get();
+       
+        $aiContentCreator = Template::inRandomOrder()
+            ->limit(6)->get();
 
-        // dd($templates_count);
-        return view('user.user_dashboard', compact('user', 'templates_count', 'sessions', 'custom_templates_count', 'chatbot_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'images'));
+        return view('user.user_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
     }
 
     // User Export ALL
@@ -163,6 +152,35 @@ class UserController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    // Fetch Monthly Usage
+    public function getUserMonthlyUsage()
+    {
+        $user_id = Auth::id();
+
+        $data = UserMonthlyUsage::where('user_id', $user_id)
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Prepare labels & data
+        $monthlyLabels = [];
+        $tokensUsed = [];
+        $creditsUsed = [];
+
+        foreach ($data as $entry) {
+            $monthName = date("M", mktime(0, 0, 0, $entry->month, 1)); // Convert month number to short name (Jan, Feb, etc.)
+            $monthlyLabels[] = $monthName;
+            $tokensUsed[] = $entry->tokens_used;
+            $creditsUsed[] = $entry->credits_used;
+        }
+
+        return response()->json([
+            'labels' => $monthlyLabels,
+            'tokens' => $tokensUsed,
+            'credits' => $creditsUsed,
+        ]);
     }
 
  

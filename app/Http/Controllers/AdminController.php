@@ -21,53 +21,10 @@ class AdminController extends Controller
     {
         logActivity('Dashboard', 'accessed Dashboard');
         $user = Auth::user();
-        $templates_count = Template::count();
-        $custom_templates_count = CustomTemplate::count();
-        $templates = Template::orderby('total_word_generated', 'desc')->limit(5)->get();
-        $custom_templates = CustomTemplate::limit(5)->get();
-
-        $wordCountSum = CustomTemplate::sum('total_word_generated');
-
-        $totalUsers = User::where('role', 'user')->count();
-
-        $usersByCountry = User::select('country', DB::raw('count(*) as total_users'))
-            ->whereNotNull('country') // Exclude users with NULL country
-            ->groupBy('country')
-            ->get();
-
+    
         $userId = auth()->id(); // Get the authenticated user's ID
-        $sessions = Session::with('messages') // Eager load the related messages
-            ->where('user_id', $userId)
-            ->get();
-
-        // Fetch images with their likes, order by the number of likes
-        $images = DalleImageGenerate::withCount('likes')
-            ->whereHas('likes') // Filter images that have at least one like
-            ->orderByDesc('likes_count') // Order by the number of likes in descending order
-            ->get();
-
-        foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
-        }
-
-        // Calculate the total number of likes
-        $totalLikes = $images->sum('likes_count');
-
-        //Favourite count
-        $favImages = DalleImageGenerate::withCount('favorites')
-            ->whereHas('favorites') // Filter images that have at least one like
-            ->orderByDesc('favorites_count') // Order by the number of likes in descending order
-            ->get();
-
-        foreach ($favImages as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
-        }
-
-        // Calculate the total number of likes
-        $totalFav = $favImages->sum('favorites_count');
-
-        $eduTools = EducationTools::inRandomOrder()
-            ->limit(5)->get();
+        
+        $eduTools = EducationTools::limit(5)->get();
         
         $prompts = PromptLibrary::inRandomOrder()
             ->limit(10)->get();
@@ -75,8 +32,7 @@ class AdminController extends Controller
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
 
-        // dd($templates_count);
-        return view('admin.admin_dashboard_1', compact('user', 'templates_count', 'custom_templates_count', 'templates', 'custom_templates', 'usersByCountry', 'totalUsers', 'wordCountSum', 'sessions', 'images', 'totalLikes', 'favImages', 'totalFav','eduTools','prompts','aiContentCreator'));
+        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
     }
 
     public function showChangePasswordForm(User $user)

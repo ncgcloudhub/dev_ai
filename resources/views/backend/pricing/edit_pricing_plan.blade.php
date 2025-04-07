@@ -247,6 +247,21 @@
                                     </div>
                                 </div>
                             </li>
+                            <hr>
+
+                            <!-- New Stripe fields -->
+                           <div class="flex-grow-1 d-flex align-items-center m-2">
+                               <input class="form-control form-control-sm" type="text" 
+                                   name="stripe_prod_id" placeholder="Enter Stripe Product ID" value="{{$pricing_plan->stripe_prod_id}}">
+                               <span class="ms-2">Stripe Product ID</span>
+                           </div>
+                           <div class="flex-grow-1 d-flex align-items-center m-2">
+                               <input class="form-control form-control-sm" type="text" 
+                                   name="stripe_price_id" placeholder="Enter Stripe Price ID" value="{{$pricing_plan->stripe_price_id}}">
+                               <span class="ms-2">Stripe Price ID</span>
+                           </div>
+    
+                           <hr>
                             <div class="mt-3 pt-2">
                                 <button type="submit" class="btn btn-primary w-100">Update Plan</button>
                             </div>

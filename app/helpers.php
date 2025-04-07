@@ -124,22 +124,39 @@ if (!function_exists('deductUserTokensAndCredits')) {
             return "User not authenticated";
         }
 
-        // If the user has tokens, deduct normally
+        $year = now()->year;
+        $month = now()->month;
+
+        // Find or create monthly usage record
+        $monthlyUsage = \App\Models\UserMonthlyUsage::firstOrCreate(
+            [
+                'user_id' => $user_id,
+                'year' => $year,
+                'month' => $month,
+            ],
+            [
+                'tokens_used' => 0,
+                'credits_used' => 0,
+            ]
+        );
+
+        // Deduct tokens
         if ($user->tokens_left >= $tokens) {
             $user->tokens_left = max(0, $user->tokens_left - $tokens);
-            $user->tokens_used = max(0, $user->tokens_used + $tokens);
+            $user->tokens_used += $tokens;
+            $monthlyUsage->tokens_used += $tokens;
         } else {
-            // If the user has no tokens, track free generations instead
             $user->free_tokens_used += $tokens;
         }
 
-        // Deduct credits if required
+        // Deduct credits
         if ($user->credits_left < $credits) {
             return "no-credits";
         }
 
         $user->credits_left = max(0, $user->credits_left - $credits);
-        $user->credits_used = max(0, $user->credits_used + $credits);
+        $user->credits_used += $credits;
+        $monthlyUsage->credits_used += $credits;
 
         // Increment images_generated only if credits are used
         if ($credits > 0) {
@@ -148,11 +165,11 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         // Save changes
         $user->save();
+        $monthlyUsage->save();
 
         return "deducted-successfully";
     }
 }
-
 
 
 if (!function_exists('get_days_until_next_reset')) {
