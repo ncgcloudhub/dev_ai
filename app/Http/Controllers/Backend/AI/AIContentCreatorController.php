@@ -733,12 +733,9 @@ class AIContentCreatorController extends Controller
         ])
         ->with([
             'access_type' => 'offline',
+            'prompt' => 'consent'
         ]);
 
-    // Only force consent the first time
-    if ($isFirstLogin) {
-        $google->with(['prompt' => 'consent']);
-    }
 
     return $google->redirect();
 }
