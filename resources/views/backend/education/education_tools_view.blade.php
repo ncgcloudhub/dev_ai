@@ -211,11 +211,18 @@
                                               {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
                                             @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
                                                 str_contains(strtolower($content->tool->slug), 'slide'))
+                                                @if (!is_null(auth()->user()->google_token))
                                                 <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
                                                         data-content-id="{{ $content->id }}"
                                                         data-content="{{ json_encode($content->content) }}">
                                                     Generate Slides
                                                 </button>
+                                                @else
+                                                    <a href="{{ route('google.login') }}" class="btn btn-sm btn-warning ms-1">
+                                                        Login with Google to Generate Slides
+                                                    </a>
+                                                @endif
+                                            
                                             @endif
                                         </td>
                                         <td>
