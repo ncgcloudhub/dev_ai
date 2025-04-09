@@ -721,8 +721,8 @@ class AIContentCreatorController extends Controller
     }
 
 
-    // GOOGLE SOCIALITE
-    public function provider()
+// GOOGLE SOCIALITE
+public function provider()
 {
     $isFirstLogin = !Auth::check(); // or use a smarter condition if needed
 

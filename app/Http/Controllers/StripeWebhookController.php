@@ -85,7 +85,7 @@ protected function handleInvoicePaymentSucceeded($invoice)
         'user_id' => $user->id,
         'package_id' => $pricingPlan->id,
         'invoice' => $invoice->id,
-        'package_amount' => $invoice->amount_paid / 100,
+        'package_amount' => $pricingPlan->price,
     ]);
 
     Log::info('Credits/tokens updated for user.', ['user_id' => $user->id]);
