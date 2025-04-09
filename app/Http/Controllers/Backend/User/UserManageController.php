@@ -223,17 +223,13 @@ class UserManageController extends Controller
 
     public function packageHistory()
     {
-        // $packageGroupedByUser = PackageHistory::with('user') // Assumes a 'user' relationship exists
-        //     ->select('user_id', DB::raw('COUNT(*) as package_count'))
-        //     ->groupBy('user_id')
-        //     ->get();
-
-            $packageGroupedByUser = PackageHistory::with(['user', 'package' => function($query) {
-                $query->orderBy('created_at', 'desc')->first();
-            }])
-            ->select('user_id', DB::raw('COUNT(*) as package_count'), DB::raw('MAX(created_at) as latest_package_date'))
-            ->groupBy('user_id')
-            ->get();
+        $packageGroupedByUser = PackageHistory::with(['user', 'package' => function($query) {
+            $query->orderBy('created_at', 'desc')->first();
+        }])
+        ->whereHas('user') // Ensures the user relationship exists
+        ->select('user_id', DB::raw('COUNT(*) as package_count'), DB::raw('MAX(created_at) as latest_package_date'))
+        ->groupBy('user_id')
+        ->get();
 
         return view('backend.user.package_history_user', compact('packageGroupedByUser'));
     }
