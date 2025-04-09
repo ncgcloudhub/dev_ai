@@ -725,11 +725,14 @@ public function generateSDImageFromPrompt($prompt)
         'model' => 'sd3.5-large',
         'mode' => 'text-to-image',
     ];
+    
 
     $response = Http::withHeaders($headers)
         ->timeout(180) // timeout in seconds
         ->asMultipart()
         ->post($endpoint, $data);
+
+        deductUserTokensAndCredits(0, 3);
 
     if ($response->ok() && strpos($response->header('Content-Type'), 'image/') !== false) {
         $fileName = 'images/' . uniqid('sd_', true) . '.jpeg';
