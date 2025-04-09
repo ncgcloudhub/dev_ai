@@ -538,15 +538,15 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
         Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('admin.permission:education.library') ;
-        Route::get('/toolContent/{id}', [EducationController::class, 'getToolContent']);
-        Route::post('/toolContent/{id}/update', [EducationController::class, 'updateToolContent']);
+        Route::get('/toolcontent/{id}', [EducationController::class, 'getToolContent']);
+        Route::post('/toolcontent/{id}/update', [EducationController::class, 'updateToolContent']);
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools');
         Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
     });
-    Route::get('/education/toolContent/{id}/download', [EducationController::class, 'downloadsPdf'])->name('toolContent.download');
+    Route::get('/education/toolcontent/{id}/download', [EducationController::class, 'downloadsPdf'])->name('toolContent.download');
 
     // Custom Templates
     Route::prefix('custom/ai-content-creator')->group(function () {
