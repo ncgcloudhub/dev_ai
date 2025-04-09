@@ -25,19 +25,24 @@ class SiteSettingsController extends Controller
         $updateData = [];
 
         if ($request->hasFile('favicon')) {
-            // Unlink the old favicon if it exists
-            $oldFavicon = SiteSettings::findOrFail(1)->favicon;
-            if ($oldFavicon) {
-                unlink(public_path('backend/uploads/site/' . $oldFavicon));
+            // Get current favicon from the DB
+            $siteSettings = SiteSettings::findOrFail(1);
+            $oldFavicon = $siteSettings->favicon;
+        
+            // Safely delete the old favicon if it exists
+            $oldFaviconPath = public_path('backend/uploads/site/' . $oldFavicon);
+            if ($oldFavicon && file_exists($oldFaviconPath)) {
+                @unlink($oldFaviconPath);
             }
-
+        
+            // Upload new favicon
             $favicon = $request->file('favicon');
             $faviconName = time() . '-' . uniqid() . '.' . $favicon->getClientOriginalExtension();
-            $favicon->move('backend/uploads/site', $faviconName);
-
+            $favicon->move(public_path('backend/uploads/site'), $faviconName);
+        
             $updateData['favicon'] = $faviconName;
         }
-
+        
         if ($request->hasFile('watermark')) {
             $oldwatermark = SiteSettings::findOrFail(1)->watermark;
             if ($oldwatermark) {
