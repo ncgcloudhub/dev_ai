@@ -159,7 +159,7 @@ in jokes, add type field, and type will be text
 
 
 25/03/25
-in user, add access_token, refresh_token type=text
+in user, add access_token, refresh_token, google_token type=text
 
 4/5/25 (fahmid home/Stripe prod test)
 stripe_secret: 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

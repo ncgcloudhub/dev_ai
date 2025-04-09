@@ -43,20 +43,20 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $pricingPlan = PricingPlan::findOrFail($pricingPlanId);
 
-        // Store subscription details
-        PackageHistory::insert([
-            'user_id' => $user->id,
-            'package_id' => $pricingPlan->id,
-            'invoice' => 'CC' . mt_rand(10000000, 99999999),
-            'package_amount' => $pricingPlan->price,
-            'created_at' => Carbon::now(),
-        ]);
+        // // Store subscription details
+        // PackageHistory::insert([
+        //     'user_id' => $user->id,
+        //     'package_id' => $pricingPlan->id,
+        //     'invoice' => 'CC' . mt_rand(10000000, 99999999),
+        //     'package_amount' => $pricingPlan->price,
+        //     'created_at' => Carbon::now(),
+        // ]);
 
-        // Update user's credits and tokens
-        User::where('id', $user->id)->update([
-            'credits_left' => DB::raw('credits_left + ' . $pricingPlan->images),
-            'tokens_left' => DB::raw('tokens_left + ' . $pricingPlan->tokens)
-        ]);
+        // // Update user's credits and tokens
+        // User::where('id', $user->id)->update([
+        //     'credits_left' => DB::raw('credits_left + ' . $pricingPlan->images),
+        //     'tokens_left' => DB::raw('tokens_left + ' . $pricingPlan->tokens)
+        // ]);
 
         return redirect()->route('user.dashboard')->with([
             'message' => 'Your package has been successfully purchased',

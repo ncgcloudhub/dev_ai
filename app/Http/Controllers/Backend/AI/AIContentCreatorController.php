@@ -721,8 +721,8 @@ class AIContentCreatorController extends Controller
     }
 
 
-    // GOOGLE SOCIALITE
-    public function provider()
+// GOOGLE SOCIALITE
+public function provider()
 {
     $isFirstLogin = !Auth::check(); // or use a smarter condition if needed
 
@@ -767,7 +767,12 @@ public function callbackHandel(Request $request)
     // Attempt to find user in the database
     $user = User::where('email', $googleUser->email)->first();
 
-    $existingToken = json_decode($user->google_token, true) ?? [];
+    $existingToken = [];
+    
+    if ($user) {
+        $existingToken = json_decode($user->google_token, true) ?? [];
+    }
+    
 
     $token = [
         'access_token' => $googleUser->token,
