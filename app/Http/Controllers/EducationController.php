@@ -832,13 +832,13 @@ public function ToolsGenerateContent(Request $request)
 
             // if ($imageType === 'sd') {
                 // Stable Diffusion Image
-                Log::info('Stable Diffusion image prompt before extracted...');
-                $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+                // Log::info('Stable Diffusion image prompt before extracted...');
+                // $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
 
-                Log::info('Stable Diffusion image prompt after extracted...');
+                // Log::info('Stable Diffusion image prompt after extracted...');
             // } else {
                 // DALL·E Image
-            //     $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+                 $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
             // }
 
             if ($generatedImageUrl) {
@@ -866,9 +866,9 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->save();
     
     // If this is a slide generation request, create the slides
-    if ($isSlideGeneration) {
-        return $this->createSlidesFromContent($processedContent, $user);
-    }
+    // if ($isSlideGeneration) {
+    //     return $this->createSlidesFromContent($processedContent, $user);
+    // }
     
     // Stream the processed content (with images) to the view
     return response()->stream(function () use ($processedContent) {
