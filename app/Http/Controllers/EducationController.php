@@ -693,7 +693,7 @@ public function updateContent(Request $request, $id)
         'Authorization' => 'Bearer ' . $apiKey,
         'Content-Type' => 'application/json',
     ])->post('https://api.openai.com/v1/images/generations', [
-        'model' => 'dall-e-3', // Specify DALL·E 3 model
+        // 'model' => 'dall-e-3', 
         'prompt' => $prompt,
         'size' => $size,
         'style' => $style,
@@ -864,6 +864,14 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->prompt = $prompt;
     $toolContent->content = $processedContent;
     $toolContent->save();
+
+    // Store content_id in the session for later retrieval
+    session(['edu_tool_content_id' => $toolContent->id, 'edu_tool_content_data' =>  $toolContent->content]);
+    Log::info('Returning generated content from session 870', [
+        'content_id' => session('edu_tool_content_id'),
+        'content_data' => session('edu_tool_content_data'),
+    ]);
+    
     
     // If this is a slide generation request, create the slides
     // if ($isSlideGeneration) {

@@ -391,7 +391,29 @@
                 },
                 success: function (response) {
                     $('#generation-status').text('✅ Generation completed!');
-                    console.log('Content generation completed.');
+
+                    // Now fetch the content_id and content_data stored in session
+                    $.ajax({
+                    type: 'GET',
+                    url: '{{ route("tools.get.generated.content") }}', // You need to create this route
+                    success: function (data) {
+                       
+                        const generateSlidesButton = `
+                            <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
+                                    data-content-id="${data.edu_tool_content_id}"
+                                    data-content="${JSON.stringify(data.edu_tool_content_data)}">
+                                Generate Slides
+                            </button>
+                        `;
+
+                        $('#generation-status').after(generateSlidesButton); // Insert button after the status text
+                    },
+                    error: function (error) {
+                        console.error('Error fetching content data:', error);
+                    }
+                });
+
+                console.log('Content generation completed.');
                 },
                 error: function (error) {
                     hideMagicBall(); // Hide loader
@@ -459,76 +481,70 @@
 {{-- Slides --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle slide generation
-        document.querySelectorAll('.generate-slides-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const contentId = this.getAttribute('data-content-id');
-                const content = JSON.parse(this.getAttribute('data-content'));
+        // Handle click on dynamically added "Generate Slides" buttons
+        document.addEventListener('click', function(event) {
+            const button = event.target.closest('.generate-slides-btn');
+            if (!button) return;
 
-                // Console logging
-                console.log('Generate Slides button clicked', {
-                    contentId: contentId,
-                    contentLength: content.length,
-                    button: this
-                });
-                
-                // Show loading state
-                const originalText = this.innerHTML;
-                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
-                this.disabled = true;
-                
-                // Call the API to generate slides
-                fetch('/education/generate-slides', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        content_id: contentId,
-                        content: content
-                    })
+            const contentId = button.getAttribute('data-content-id');
+            const content = JSON.parse(button.getAttribute('data-content'));
+
+            console.log('Generate Slides button clicked', {
+                contentId,
+                contentLength: content.length,
+                button
+            });
+
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+            button.disabled = true;
+
+            fetch('/education/generate-slides', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    content_id: contentId,
+                    content: content
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.presentationId) {
-                        // Open the presentation in a new tab
-                        window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
-                        
-                        // Show success message
-                        Toastify({
-                            text: "Slides generated successfully!",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "#28a745",
-                        }).showToast();
-                    } else {
-                        throw new Error(data.error || 'Failed to generate slides');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.presentationId) {
+                    window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
                     Toastify({
-                        text: error.message,
+                        text: "Slides generated successfully!",
                         duration: 3000,
                         close: true,
                         gravity: "top",
                         position: "right",
-                        backgroundColor: "#dc3545",
+                        backgroundColor: "#28a745",
                     }).showToast();
-                })
-                .finally(() => {
-                    // Restore button state
-                    this.innerHTML = originalText;
-                    this.disabled = false;
-                });
+                } else {
+                    throw new Error(data.error || 'Failed to generate slides');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Toastify({
+                    text: error.message,
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#dc3545",
+                }).showToast();
+            })
+            .finally(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
             });
         });
     });
-
 </script>
+
     
 
 @endsection
