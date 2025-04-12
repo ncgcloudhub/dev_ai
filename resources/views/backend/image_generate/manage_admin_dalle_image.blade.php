@@ -16,6 +16,10 @@
             <div class="card-header">
                 <h5 class="card-title mb-0">Admin Manage Dalle</h5>
             </div>
+            <a href="{{ route('admin.images.export') }}" class="btn btn-success mb-3">
+                Export Images as Excel
+            </a>
+                        
             <div class="card-body">
 
 <!-- Modal -->

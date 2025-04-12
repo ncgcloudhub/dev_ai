@@ -27,6 +27,8 @@ use OpenAI\Client as OpenAIClient;
 use OpenAI\Laravel\Facades\OpenAI;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use App\Exports\GeneratedImagesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GenerateImagesController extends Controller
 {
@@ -364,6 +366,11 @@ class GenerateImagesController extends Controller
         }
 
         return view('backend.image_generate.manage_admin_dalle_image', compact('images','prompt_sub_categories', 'prompt_category'));
+    }
+
+    public function exportImages()
+    {
+        return Excel::download(new GeneratedImagesExport, 'generated_images.xlsx');
     }
 
     public function ManageFavoriteImage()
