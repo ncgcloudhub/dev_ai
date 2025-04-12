@@ -866,7 +866,7 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->save();
 
     // Store content_id in the session for later retrieval
-    session(['edu_tool_content_id' => $toolContent->id, 'edu_tool_content_data' =>  $toolContent->content]);
+    session(['edu_tool_content_id' => $toolContent->id]);
     Log::info('Returning generated content from session 870', [
         'content_id' => session('edu_tool_content_id'),
         'content_data' => session('edu_tool_content_data'),
