@@ -1,0 +1,2 @@
+1. branch name: edu_tools_pptx; education tools export as pptx, downloading properly, but not opening in pptx, tells to repair, but when i export the downloaded pptx to google slides, works properly
+

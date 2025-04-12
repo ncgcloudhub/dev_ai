@@ -25,6 +25,11 @@ use Google\Service\Slides as GoogleSlides;
 use Google\Service\Slides\Presentation;
 use Google\Service\Slides\Request as SlidesRequest;
 use Google\Service\Slides\BatchUpdatePresentationRequest;
+use PhpOffice\PhpPresentation\PhpPresentation;
+use PhpOffice\PhpPresentation\IOFactory;
+use PhpOffice\PhpPresentation\Style\Alignment;
+use PhpOffice\PhpPresentation\Style\Bullet;
+use PhpOffice\PhpPresentation\Style\Color;
 
 
 class EducationController extends Controller
@@ -1043,6 +1048,94 @@ public function generateSlidesFromContent(Request $request)
 
     // Generate slides
     return $this->createSlidesFromContent($content, $user);
+}
+
+public function downloadPPTX($id)
+{
+    $content = ToolGeneratedContent::findOrFail($id);
+    $presentation = new PhpPresentation();
+
+    // Set document properties
+    $presentation->getDocumentProperties()
+        ->setCreator(auth()->user()->name)
+        ->setLastModifiedBy(auth()->user()->name)
+        ->setTitle('Generated Presentation')
+        ->setSubject('Educational Tools')
+        ->setDescription('Auto-generated presentation content');
+
+    // Split slides
+    $slidesContent = array_filter(explode('---', $content->content), 'trim');
+
+    foreach ($slidesContent as $slideContent) {
+        // Extract content with improved parsing
+        $title = 'Slide Title';
+        $body = [];
+        
+        if (preg_match('/### Title:\s*(.+?)\s*\n\n\*\*Body Text:\*\*\s*(.+)/s', $slideContent, $matches)) {
+            $title = $matches[1];
+            $body = array_filter(explode("\n", trim($matches[2])), 'trim');
+        }
+
+        // Create slide with proper layout
+        $slide = $presentation->createSlide();
+        
+        // Add title (centered)
+        $titleShape = $slide->createRichTextShape()
+            ->setHeight(50)
+            ->setWidth(600)
+            ->setOffsetX(10)
+            ->setOffsetY(10);
+        $titleShape->getActiveParagraph()
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $titleRun = $titleShape->createTextRun($title);
+        $titleRun->getFont()
+            ->setBold(true)
+            ->setSize(24)
+            ->setColor(new Color('000000'));
+
+        // Add body content with bullets
+        $bodyShape = $slide->createRichTextShape()
+            ->setHeight(400)
+            ->setWidth(600)
+            ->setOffsetX(50)
+            ->setOffsetY(70);
+
+        foreach ($body as $line) {
+            $paragraph = $bodyShape->createParagraph();
+            $paragraph->getBulletStyle()
+                ->setBulletType(Bullet::TYPE_BULLET)
+                ->setBulletChar('•');
+            
+            $paragraph->createTextRun($line)
+                ->getFont()
+                ->setSize(18)
+                ->setColor(new Color('000000'));
+        }
+    }
+
+    // Validate presentation
+    if(count($presentation->getAllSlides()) === 0) {
+        $slide = $presentation->createSlide();
+        $slide->createRichTextShape()
+            ->setOffsetY(200)
+            ->createTextRun('No content available');
+    }
+
+    // Generate valid file
+    $fileName = 'presentation-' . time() . '.pptx';
+    $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+
+    try {
+        $writer = IOFactory::createWriter($presentation, 'PowerPoint2007');
+        $writer->save($tempFile);
+    } catch (\Exception $e) {
+        return back()->withError('Failed to generate presentation: ' . $e->getMessage());
+    }
+
+    return response()->download($tempFile, $fileName, [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    ])->deleteFileAfterSend(true);
 }
 
 private function transformContentToSlides($content)

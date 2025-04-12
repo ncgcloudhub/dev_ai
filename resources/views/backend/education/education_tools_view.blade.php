@@ -216,6 +216,11 @@
                                                         data-content="{{ json_encode($content->content) }}">
                                                     Generate Slides
                                                 </button>
+                                                <a href="{{ route('toolContent.download-pptx', $content->id) }}" 
+                                                    class="btn btn-sm btn-warning">
+                                                     Download PPTX
+                                                 </a>
+                                                
                                             @endif
                                         </td>
                                         <td>

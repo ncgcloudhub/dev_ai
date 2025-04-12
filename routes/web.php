@@ -778,6 +778,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
     // MAIN Tool
     Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
+    Route::get('/tool-content/{id}/download-pptx', [EducationController::class, 'downloadPPTX'])
+    ->name('toolContent.download-pptx');
 });
 
 // GITHUB SOCIALITE
