@@ -693,7 +693,7 @@ public function updateContent(Request $request, $id)
         'Authorization' => 'Bearer ' . $apiKey,
         'Content-Type' => 'application/json',
     ])->post('https://api.openai.com/v1/images/generations', [
-        'model' => 'dall-e-3', // Specify DALL·E 3 model
+        // 'model' => 'dall-e-3', 
         'prompt' => $prompt,
         'size' => $size,
         'style' => $style,
@@ -832,13 +832,13 @@ public function ToolsGenerateContent(Request $request)
 
             // if ($imageType === 'sd') {
                 // Stable Diffusion Image
-                Log::info('Stable Diffusion image prompt before extracted...');
-                $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+                // Log::info('Stable Diffusion image prompt before extracted...');
+                // $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
 
-                Log::info('Stable Diffusion image prompt after extracted...');
+                // Log::info('Stable Diffusion image prompt after extracted...');
             // } else {
                 // DALL·E Image
-            //     $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+                 $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
             // }
 
             if ($generatedImageUrl) {
@@ -864,11 +864,19 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->prompt = $prompt;
     $toolContent->content = $processedContent;
     $toolContent->save();
+
+    // Store content_id in the session for later retrieval
+    session(['edu_tool_content_id' => $toolContent->id]);
+    Log::info('Returning generated content from session 870', [
+        'content_id' => session('edu_tool_content_id'),
+        'content_data' => session('edu_tool_content_data'),
+    ]);
+    
     
     // If this is a slide generation request, create the slides
-    if ($isSlideGeneration) {
-        return $this->createSlidesFromContent($processedContent, $user);
-    }
+    // if ($isSlideGeneration) {
+    //     return $this->createSlidesFromContent($processedContent, $user);
+    // }
     
     // Stream the processed content (with images) to the view
     return response()->stream(function () use ($processedContent) {

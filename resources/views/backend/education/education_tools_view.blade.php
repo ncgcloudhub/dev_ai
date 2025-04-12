@@ -211,11 +211,18 @@
                                               {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
                                             @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
                                                 str_contains(strtolower($content->tool->slug), 'slide'))
+                                                @if (!is_null(auth()->user()->google_token))
                                                 <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
                                                         data-content-id="{{ $content->id }}"
                                                         data-content="{{ json_encode($content->content) }}">
                                                     Generate Slides
                                                 </button>
+                                                @else
+                                                    <a href="{{ route('google.login') }}" class="btn btn-sm btn-warning ms-1">
+                                                        Login with Google to Generate Slides
+                                                    </a>
+                                                @endif
+                                            
                                             @endif
                                         </td>
                                         <td>
@@ -384,7 +391,31 @@
                 },
                 success: function (response) {
                     $('#generation-status').text('✅ Generation completed!');
-                    console.log('Content generation completed.');
+
+                    // Now fetch the content_id and content_data stored in session
+                    $.ajax({
+                    type: 'GET',
+                    url: '{{ route("tools.get.generated.content") }}', // You need to create this route
+                    success: function (data) {
+                       
+                        const button = document.createElement('button');
+                        button.className = 'btn btn-sm btn-success ms-1 generate-slides-btn';
+                        button.setAttribute('type', 'button');
+                        button.setAttribute('data-content-id', data.edu_tool_content_id);
+                        button.dataset.content = data.edu_tool_content_data;
+                        button.textContent = 'Generate Slides';
+
+                        document.querySelector('#generation-status').after(button);
+
+
+                        $('#generation-status').after(generateSlidesButton); // Insert button after the status text
+                    },
+                    error: function (error) {
+                        console.error('Error fetching content data:', error);
+                    }
+                });
+
+                console.log('Content generation completed.');
                 },
                 error: function (error) {
                     hideMagicBall(); // Hide loader
@@ -451,44 +482,34 @@
 
 {{-- Slides --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle slide generation
-        document.querySelectorAll('.generate-slides-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const contentId = this.getAttribute('data-content-id');
-                const content = JSON.parse(this.getAttribute('data-content'));
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (event) {
+            const button = event.target.closest('.generate-slides-btn');
+            if (!button) return;
 
-                // Console logging
-                console.log('Generate Slides button clicked', {
-                    contentId: contentId,
-                    contentLength: content.length,
-                    button: this
-                });
-                
-                // Show loading state
-                const originalText = this.innerHTML;
-                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
-                this.disabled = true;
-                
-                // Call the API to generate slides
-                fetch('/education/generate-slides', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        content_id: contentId,
-                        content: content
-                    })
+            const contentId = button.getAttribute('data-content-id');
+            // const content = JSON.parse(button.getAttribute('data-content'));
+            const content = button.getAttribute('data-content');
+
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+            button.disabled = true;
+
+            fetch('/education/generate-slides', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    content_id: contentId,
+                    content: content
                 })
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.presentationId) {
-                        // Open the presentation in a new tab
                         window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
-                        
-                        // Show success message
                         Toastify({
                             text: "Slides generated successfully!",
                             duration: 3000,
@@ -513,15 +534,14 @@
                     }).showToast();
                 })
                 .finally(() => {
-                    // Restore button state
-                    this.innerHTML = originalText;
-                    this.disabled = false;
+                    button.innerHTML = originalText;
+                    button.disabled = false;
                 });
-            });
         });
     });
-
 </script>
+
+
     
 
 @endsection

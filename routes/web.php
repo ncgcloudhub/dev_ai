@@ -49,6 +49,7 @@ use App\Models\PromptLibrary;
 use App\Models\SectionDesign;
 use App\Models\SeoSetting;
 use App\Models\SiteSettings;
+use App\Models\ToolGeneratedContent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
@@ -544,6 +545,24 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools');
         Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
+        Route::get('/tools/get-generated-content-id', function () {
+            $contentId = session('edu_tool_content_id');
+        
+            if (!$contentId) {
+                return response()->json(['error' => 'No content ID found in session'], 404);
+            }
+        
+            $content = ToolGeneratedContent::find($contentId);
+        
+            if (!$content) {
+                return response()->json(['error' => 'Content not found'], 404);
+            }
+        
+            return response()->json([
+                'edu_tool_content_id' => $content->id,
+                'edu_tool_content_data' => $content->content,
+            ]);
+        })->name('tools.get.generated.content');
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
     });
