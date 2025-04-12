@@ -16,7 +16,7 @@ class GeneratedImagesExport implements FromCollection, WithHeadings
                 'ID' => $image->id,
                 'Prompt' => $image->prompt,
                 'User' => $image->user ? $image->user->name : 'N/A',
-                'Image URL' => asset($image->image_url),
+                'Image URL' => asset($image->image),
                 'Status' => $image->status,
                 'Created At' => $image->created_at->format('Y-m-d H:i:s'),
             ];
