@@ -688,25 +688,38 @@ public function updateContent(Request $request, $id)
     }
 
     // Function to generate images using DALL·E
-    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1) {
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer ' . $apiKey,
-        'Content-Type' => 'application/json',
-    ])->post('https://api.openai.com/v1/images/generations', [
-        // 'model' => 'dall-e-3', 
-        'prompt' => $prompt,
-        'size' => $size,
-        'style' => $style,
-        'quality' => $quality,
-        'n' => $n,
-    ]);
-
-    Log::info('OpenAI Image Generation Response', ['response' => $response->json()]);
-
-    // Extract and return the image URL
-    $data = $response->json();
-    return $data['data'][0]['url'] ?? null;
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1, $model = null)
+    {
+        $payload = [
+            'prompt' => $prompt,
+            'size' => $size,
+            'style' => $style,
+            'quality' => $quality,
+            'n' => $n,
+        ];
+    
+          // Only include model if explicitly passed (e.g. DALL·E 3)
+        if (!is_null($model)) {
+            $payload['model'] = $model;
+        }
+    
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ])->post('https://api.openai.com/v1/images/generations', $payload);
+    
+        if ($response->successful()) {
+            return $response->json('data.0.url');
+        }
+    
+        Log::error('Image generation failed', [
+            'prompt' => $prompt,
+            'response' => $response->body()
+        ]);
+    
+        return null;
     }
+    
 
 // Function to generate images using SD
 public function generateSDImageFromPrompt($prompt)
@@ -802,6 +815,17 @@ public function ToolsGenerateContent(Request $request)
         }
     }
 
+     // ✅ Include image prompt logic only if enabled
+     $includeImages = $request->input('include_images');
+     $imageType = $request->input('image_generator'); // e.g., dalle2, dalle3, sd
+ 
+     if ($includeImages === 'yes') {
+         $prompt .= "If generate_image_prompt is set to Yes, for each page, create a highly professional, hyper-detailed, vivid, and natural realistic image prompt based on the page content. " .
+                    "By default, generate_image_prompt is set to No. If no answer is entered, the answer is null, or the answer is 'no', then do not provide the image prompt. " .
+                    "Additionally, generate the corresponding image based on the prompt using advanced 4K, photorealistic rendering techniques. " .
+                    "Ensure the image aligns perfectly with the educational or contextual purpose of the slide.";
+     }
+
     // Generate content using OpenAI API
     $response = $client->chat()->create([
         "model" => $openaiModel,
@@ -821,36 +845,45 @@ public function ToolsGenerateContent(Request $request)
     // Log the content before processing
     Log::info('Content Before Image Extraction', ['content' => $content]);
 
-    $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
-        $imagePrompt = trim($matches[1]); // Capture and clean the prompt
-        Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);  // Log the prompt
+// 🖼️ Only extract and generate images if user selected to include images
+if ($includeImages === 'yes') {
+    $content = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
+        $imagePrompt = trim($matches[1]);
 
-        // If the prompt is valid, generate the image
         if (!empty($imagePrompt)) {
-            $imageType = $request->input('image_type', 'dalle'); // Default to DALL·E
             $generatedImageUrl = null;
 
-            // if ($imageType === 'sd') {
-                // Stable Diffusion Image
-                // Log::info('Stable Diffusion image prompt before extracted...');
-                // $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
-
-                // Log::info('Stable Diffusion image prompt after extracted...');
-            // } else {
-                // DALL·E Image
-                 $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-            // }
+            // Add switch for future expansion (e.g., stable diffusion)
+            switch ($imageType) {
+                case 'sd':
+                    $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+                    break;
+            
+                case 'dalle3':
+                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
+                    break;
+            
+                case 'dalle2':
+                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1);
+                    break;
+            
+                default:
+                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+                    break;
+            }
+            
+            
 
             if ($generatedImageUrl) {
                 return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
             }
-            
         }
 
-        return $matches[0]; // Keep the original text if no valid image prompt or generation fails
+        return $matches[0]; // Keep original
     }, $content);
+}
 
-    Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
+    Log::info('Processed Content with DALL·E Images', ['content' => $content]);
         
 
     // Deduct user tokens
@@ -862,7 +895,7 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
     $toolContent->prompt = $prompt;
-    $toolContent->content = $processedContent;
+    $toolContent->content = $content;
     $toolContent->save();
 
     // Store content_id in the session for later retrieval
@@ -879,8 +912,8 @@ public function ToolsGenerateContent(Request $request)
     // }
     
     // Stream the processed content (with images) to the view
-    return response()->stream(function () use ($processedContent) {
-        $chunks = explode("\n", $processedContent);
+    return response()->stream(function () use ($content) {
+        $chunks = explode("\n", $content);
         $parsedown = new Parsedown();
     
         foreach ($chunks as $chunk) {
