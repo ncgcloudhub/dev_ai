@@ -817,7 +817,7 @@ public function ToolsGenerateContent(Request $request)
 
      // ✅ Include image prompt logic only if enabled
      $includeImages = $request->input('include_images');
-     $imageType = $request->input('image_generator'); // e.g., dalle2, dalle3, sd
+     $imageType = $request->input('image_model'); // e.g., dalle2, dalle3, sd
  
      if ($includeImages === 'yes') {
          $prompt .= "If generate_image_prompt is set to Yes, for each page, create a highly professional, hyper-detailed, vivid, and natural realistic image prompt based on the page content. " .
@@ -845,43 +845,54 @@ public function ToolsGenerateContent(Request $request)
     // Log the content before processing
     Log::info('Content Before Image Extraction', ['content' => $content]);
 
-// 🖼️ Only extract and generate images if user selected to include images
-if ($includeImages === 'yes') {
-    $content = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
-        $imagePrompt = trim($matches[1]);
+    // 🖼️ Only extract and generate images if user selected to include images
+    if ($includeImages === 'yes') {
+        $content = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
+            $imagePrompt = trim($matches[1]);
 
-        if (!empty($imagePrompt)) {
-            $generatedImageUrl = null;
+            if (!empty($imagePrompt)) {
+                $generatedImageUrl = null;
 
-            // Add switch for future expansion (e.g., stable diffusion)
-            switch ($imageType) {
-                case 'sd':
-                    $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
-                    break;
-            
-                case 'dalle3':
-                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
-                    break;
-            
-                case 'dalle2':
-                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1);
-                    break;
-            
-                default:
-                    $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-                    break;
+                // Add switch for future expansion (e.g., stable diffusion)
+                switch ($imageType) {
+                    case 'sd':
+                        Log::info('Generating image using Stable Diffusion', [
+                            'image_prompt' => $imagePrompt,
+                        ]);
+                        $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
+                        break;
+                
+                    case 'dalle3':
+                        Log::info('Generating image using DALL·E 3', [
+                            'image_prompt' => $imagePrompt,
+                        ]);
+                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
+                        break;
+                
+                    case 'dalle2':
+                        Log::info('Generating image using DALL·E 2', [
+                            'image_prompt' => $imagePrompt,
+                        ]);
+                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '512x512', 'vivid', 'standard', 1);
+                        break;
+                
+                    default:
+                        Log::info('Generating image using default method (DALL·E 2 fallback)', [
+                            'image_prompt' => $imagePrompt,
+                        ]);
+                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
+                        break;
+                }
+                
+                
+                if ($generatedImageUrl) {
+                    return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
+                }
             }
-            
-            
 
-            if ($generatedImageUrl) {
-                return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
-            }
-        }
-
-        return $matches[0]; // Keep original
-    }, $content);
-}
+            return $matches[0]; // Keep original
+        }, $content);
+    }
 
     Log::info('Processed Content with DALL·E Images', ['content' => $content]);
         
