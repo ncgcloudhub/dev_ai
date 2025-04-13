@@ -125,6 +125,32 @@
                                 @endif
                             </div>
                         @endforeach
+
+                        <!-- Image Inclusion Option -->
+                        <div class="row mb-3">
+                            <!-- Include Images -->
+                            <div class="col-md-6">
+                                <label for="include_images">Include Images?</label>
+                                <select class="form-select" name="include_images" id="include_images" required>
+                                    <option selected disabled value="">Select</option>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Image Model (Initially Hidden) -->
+                            <div class="col-md-6 d-none" id="image-model-group">
+                                <label for="image_model">Image Model</label>
+                                <select class="form-select" name="image_model" id="image_model">
+                                    <option selected disabled value="">Choose one</option>
+                                    <option value="dalle2">DALL·E 2 (1 Credit)</option>
+                                    <option value="dalle3">DALL·E 3 (2 Credits)</option>
+                                    <option value="sd">Stable Diffusion (3 Credits)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+
                     
                         <!-- Submit Button -->
                         <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
@@ -540,6 +566,19 @@
         });
     });
 </script>
+
+<script>
+    document.getElementById('include_images').addEventListener('change', function () {
+        const imgGenGroup = document.getElementById('image-model-group');
+        if (this.value === 'yes') {
+            imgGenGroup.classList.remove('d-none');
+        } else {
+            imgGenGroup.classList.add('d-none');
+            document.getElementById('image_model').value = '';
+        }
+    });
+</script>
+
 
 
     
