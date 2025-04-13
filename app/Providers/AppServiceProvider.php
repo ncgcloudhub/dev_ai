@@ -57,11 +57,23 @@ class AppServiceProvider extends ServiceProvider
             $view->with(array_merge($data, compact('selectedAiModel')));
         });
 
-         // Pass dynamic buttons to all views
-        View::composer('*', function ($view) {
-            $buttons = ButtonDesign::all(); // Fetch all buttons from the database
-            $view->with('buttons', $buttons);
-        });
+      // Pass dynamic buttons and icons to all views
+View::composer('*', function ($view) {
+    $buttons = ButtonDesign::all(); // Fetch all buttons from the database
+    
+    // Generate the icon map
+    $buttonIcons = [];
+    foreach ($buttons as $button) {
+        $buttonIcons[$button->button_type] = ($button->icon ?? '');
+    }
+
+    // Share both $buttons and $buttonIcons to all views
+    $view->with([
+        'buttons' => $buttons,
+        'buttonIcons' => $buttonIcons
+    ]);
+});
+
 
     }
 }
