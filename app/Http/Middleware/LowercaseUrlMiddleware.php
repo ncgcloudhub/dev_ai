@@ -17,38 +17,39 @@ class LowercaseUrlMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Exclude specific routes from being lowercased
         $excludedRoutes = [
             'google/callback',
             'google/login',
             'github/callback',
             'github/login',
+            'subscription/cancel', // <-- Add this line
         ];
 
-        // Get the trimmed current path (no leading or trailing slashes)
         $currentPath = trim($request->path(), '/');
 
-        // If exact match in excluded list, bypass middleware
+        // Exclude if matches explicitly
         if (in_array($currentPath, $excludedRoutes)) {
             return $next($request);
         }
 
-        // Exclude entire route groups (e.g., anything starting with "checkout/")
-        if (Str::startsWith($currentPath, 'checkout')) {
+        // Exclude patterns (e.g., route groups)
+        if (
+            Str::startsWith($currentPath, 'checkout') ||
+            Str::startsWith($currentPath, 'subscription/cancel') // <-- Add this line
+        ) {
             return $next($request);
         }
 
-        // Get path only (without query string)
-        $currentPathOnly = $request->getPathInfo(); // e.g., /SomePath/To/Lowercase
+        $currentPathOnly = $request->getPathInfo();
         $lowercasePath = strtolower($currentPathOnly);
 
-        // Redirect if path has any uppercase characters
         if ($currentPathOnly !== $lowercasePath) {
-            $queryString = $request->getQueryString(); // Leave query string unchanged
+            $queryString = $request->getQueryString();
             $redirectUrl = $lowercasePath . ($queryString ? '?' . $queryString : '');
             return redirect($redirectUrl, 301);
         }
 
         return $next($request);
     }
+
 }
