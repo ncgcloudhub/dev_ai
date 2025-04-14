@@ -19,11 +19,6 @@
                 <th>User</th>
                 <th>Email</th>
                 <th>Total Subscriptions</th>
-                <th>Active Subscriptions</th>
-                <th>Renew Count</th>
-                <th>Package Name</th>
-                <th>Package Price</th>
-                <th>End Date</th>
             </tr>
         </thead>
         <tbody>
