@@ -847,8 +847,13 @@ public function ToolsGenerateContent(Request $request)
 
     // 🖼️ Only extract and generate images if user selected to include images
     if ($includeImages === 'yes') {
-        $content = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
+        $content = preg_replace_callback('/.*image prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
             $imagePrompt = trim($matches[1]);
+        
+            // Remove special characters, keep letters, numbers, and spaces
+            $imagePrompt = preg_replace('/[^\p{L}\p{N}\s]/u', '', $imagePrompt);
+            $imagePrompt = preg_replace('/\s+/', ' ', $imagePrompt);
+            $imagePrompt = trim($imagePrompt);
 
             if (!empty($imagePrompt)) {
                 $generatedImageUrl = null;
