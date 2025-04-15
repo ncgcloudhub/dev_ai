@@ -820,11 +820,11 @@ public function ToolsGenerateContent(Request $request)
      $imageType = $request->input('image_model'); // e.g., dalle2, dalle3, sd
  
      if ($includeImages === 'yes') {
-         $prompt .= "If generate_image_prompt is set to Yes, for each page, create a highly professional, hyper-detailed, vivid, and natural realistic image prompt based on the page content. " .
-                    "By default, generate_image_prompt is set to No. If no answer is entered, the answer is null, or the answer is 'no', then do not provide the image prompt. " .
-                    "Additionally, generate the corresponding image based on the prompt using advanced 4K, photorealistic rendering techniques. " .
-                    "Ensure the image aligns perfectly with the educational or contextual purpose of the slide.";
-     }
+        $prompt .= " For each slide, after the slide content, include an image prompt named exactly as '**Image prompt:**' followed by a highly professional, hyper-detailed, vivid, and natural realistic image description based on that slide's content. " .
+                   "The image should reflect the subject accurately, be visually engaging, and align perfectly with the educational or contextual purpose of the slide. " .
+                   "Do not include any other labels, prefixes, or suffixes—only use 'Image prompt:' before each image description. Use advanced 4K, photorealistic rendering language.";
+    }
+    
 
     // Generate content using OpenAI API
     $response = $client->chat()->create([
@@ -847,14 +847,10 @@ public function ToolsGenerateContent(Request $request)
 
     // 🖼️ Only extract and generate images if user selected to include images
     if ($includeImages === 'yes') {
-        $content = preg_replace_callback('/.*image prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
+        $content = preg_replace_callback('/Image prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
             $imagePrompt = trim($matches[1]);
         
-            // Remove special characters, keep letters, numbers, and spaces
-            $imagePrompt = preg_replace('/[^\p{L}\p{N}\s]/u', '', $imagePrompt);
-            $imagePrompt = preg_replace('/\s+/', ' ', $imagePrompt);
-            $imagePrompt = trim($imagePrompt);
-
+          
             if (!empty($imagePrompt)) {
                 $generatedImageUrl = null;
 
@@ -878,7 +874,7 @@ public function ToolsGenerateContent(Request $request)
                         Log::info('Generating image using DALL·E 2', [
                             'image_prompt' => $imagePrompt,
                         ]);
-                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '512x512', 'vivid', 'standard', 1);
+                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '256x256', 'vivid', 'standard', 1);
                         break;
                 
                     default:
