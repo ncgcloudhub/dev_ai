@@ -690,6 +690,14 @@ public function updateContent(Request $request, $id)
     // Function to generate images using DALL·E
     public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1, $model = null)
     {
+
+    // ✅ Check if the user has enough credits
+    $creditCheck = checkUserHasCredits();
+
+    if (!$creditCheck['status']) {
+        return $creditCheck['message']; // Returns: "No credits left" or "User not authenticated"
+    }
+
         $payload = [
             'prompt' => $prompt,
             'size' => $size,

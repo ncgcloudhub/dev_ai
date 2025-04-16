@@ -171,6 +171,34 @@ if (!function_exists('deductUserTokensAndCredits')) {
     }
 }
 
+// CHECK IF THE USER HAS TOKENS
+if (!function_exists('checkUserHasCredits')) {
+    function checkUserHasCredits(int $requiredCredits = 1)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                'status' => false,
+                'message' => 'User not authenticated'
+            ];
+        }
+
+        if ($user->credits < $requiredCredits) {
+            return [
+                'status' => false,
+                'message' => 'No credits left'
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => 'Sufficient credits'
+        ];
+    }
+}
+
+
 
 if (!function_exists('get_days_until_next_reset')) {
     function get_days_until_next_reset($user_id = null)
