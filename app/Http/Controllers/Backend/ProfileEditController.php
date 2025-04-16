@@ -12,47 +12,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Stripe\Stripe;
-use Stripe\Subscription;
-use Stripe\Invoice;
+use Stripe\Subscription as StripeSubscription;
+use Stripe\Invoice as StripeInvoice;
 
 class ProfileEditController extends Controller
 {
-    
     public function ProfileEdit(Request $request)
     {
         $user_id = Auth::user()->id;
         $user = User::findOrFail($user_id);
-
-        // STRIPE DASHBOARD
-        // Set the Stripe API key from the .env file
+    
         Stripe::setApiKey(config('services.stripe.secret'));
-
-        // Get the authenticated user
-        $user = $request->user();
-
-        // Fetch the user's Stripe customer ID
-        $stripeCustomerId = $user->stripe_id; // Ensure this field exists in your users table
-
-        // Fetch subscriptions
-        $subscriptions = [];
+    
+        $stripeCustomerId = $user->stripe_id;
+    
+        $subscriptions = collect(); // default as collection
+        $invoices = collect();
+    
         if ($stripeCustomerId) {
-            $subscriptions = Subscription::all([
+            $stripeSubscriptions = StripeSubscription::all([
                 'customer' => $stripeCustomerId,
-                'status' => 'all', // or 'active', 'past_due', 'canceled', etc.
+                'status' => 'all',
             ]);
-        }
-
-        // Fetch invoices
-        $invoices = [];
-        if ($stripeCustomerId) {
-            $invoices = Invoice::all([
+    
+            $subscriptions = collect($stripeSubscriptions->data);
+    
+            $stripeInvoices = StripeInvoice::all([
                 'customer' => $stripeCustomerId,
             ]);
+    
+            $invoices = collect($stripeInvoices->data);
         }
     
-        return view('backend.profile.profile_edit', compact('user','subscriptions','invoices'));
+        return view('backend.profile.profile_edit', compact('user', 'subscriptions', 'invoices'));
     }
-    
 
     public function ProfileUpdate (Request $request){
 
