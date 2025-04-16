@@ -692,7 +692,7 @@ public function updateContent(Request $request, $id)
     {
 
     // ✅ Check if the user has enough credits
-    $creditCheck = checkUserHasCredits(2);
+    $creditCheck = checkUserHasCredits();
 
     if (!$creditCheck['status']) {
         return $creditCheck['message']; // Returns: "No credits left" or "User not authenticated"
