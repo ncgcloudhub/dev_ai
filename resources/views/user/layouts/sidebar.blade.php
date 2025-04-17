@@ -153,7 +153,7 @@
                 </li>
 
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('chat') ? 'active' : '' }}" href="#sidebarExpert" data-bs-toggle="collapse" role="button"
                         aria-expanded="{{ request()->routeIs('chat') ? 'true' : 'false' }}" aria-controls="sidebarExpert">
                         <i class="las la-sms"></i> <span>AI Chat</span>
@@ -169,9 +169,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
-
-            
+                </li> --}}
 
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('generate.image.view') ? 'active' : '' }}" href="#generateImage" data-bs-toggle="collapse" role="button"
@@ -191,10 +189,10 @@
                     </div>
                 </li>
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscriptions</span></li>
+                {{-- <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscriptions</span></li> --}}
 
                  {{-- Subscription --}}
-                 <li class="nav-item">
+                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}" href="#subscription" data-bs-toggle="collapse" role="button"
                         aria-expanded="{{ request()->routeIs('all.package') ? 'true' : 'false' }}" aria-controls="subscription">
                         <i class="ri-price-tag-3-line"></i> <span>Subscription</span>
@@ -210,7 +208,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
+                </li> --}}
                  {{-- End Subscription --}}
                
             </ul>
