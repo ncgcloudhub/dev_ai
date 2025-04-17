@@ -307,6 +307,9 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
+        showMagicBall('Jokes', 'image');
+
         var greetingElement = document.getElementById('greeting');
         var currentTime = new Date();
         var currentHour = currentTime.getHours();
