@@ -18,8 +18,8 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-        <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
-        dir="ltr"></div>
+        {{-- <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
+        dir="ltr"></div> --}}
         <div class="row">
             <div class="col-xl-6 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
