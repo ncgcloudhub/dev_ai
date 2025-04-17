@@ -189,10 +189,10 @@
                     </div>
                 </li>
 
-                <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscriptions</span></li>
+                {{-- <li class="menu-title"><i class="ri-more-fill"></i> <span >Subscriptions</span></li> --}}
 
                  {{-- Subscription --}}
-                 <li class="nav-item">
+                 {{-- <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}" href="#subscription" data-bs-toggle="collapse" role="button"
                         aria-expanded="{{ request()->routeIs('all.package') ? 'true' : 'false' }}" aria-controls="subscription">
                         <i class="ri-price-tag-3-line"></i> <span>Subscription</span>
@@ -208,7 +208,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
+                </li> --}}
                  {{-- End Subscription --}}
                
             </ul>
