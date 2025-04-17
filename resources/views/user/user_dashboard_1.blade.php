@@ -18,8 +18,9 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-        <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
-        dir="ltr"></div>
+        {{-- <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
+        dir="ltr"></div> --}}
+        <div id="line_chart_zoomable" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
         <div class="row">
             <div class="col-xl-6 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
@@ -250,7 +251,6 @@
 
 </div>
 
-
 @endsection
 @section('script')
 <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js')}}"></script>
@@ -283,6 +283,7 @@
 <script src="{{ URL::asset('build/js/pages/clever-creator-pie.init.js') }}"></script>
 
 <script src="{{ URL::asset('build/js/pages/apexcharts-column.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/apexcharts-line.init.js') }}"></script>
 
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">

@@ -672,6 +672,8 @@ Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps'
 
 // Fetch Tokens Usage
 Route::get('/user/monthly-usage', [UserController::class, 'getUserMonthlyUsage']);
+// Zoomable Credits/tokens 
+Route::get('/user/usage-timeseries', [UserController::class, 'getUserUsageTimeseries'])->middleware('auth');
 
 
 Route::group(['middleware' => ['auth']], function() {
