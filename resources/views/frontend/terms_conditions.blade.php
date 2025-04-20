@@ -53,10 +53,7 @@
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
-                                    <div>
-                                        <h5>Welcome to {{ $siteSettings->title }}!</h5>
-                    
-                                    </div>
+                                  
                                     <div>
                                         @foreach ($termConditions as $item)
                                             {!! $item->details !!}
