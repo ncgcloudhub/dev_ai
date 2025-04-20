@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ url($item->route) }}" class="dynamic-page-link">{{ $item->title }}</a>
+                                <a href="{{ url($item->route) }}" class="dynamic-page-link gradient-text-2">{{ $item->title }}</a>
                             </td>
                             <td>{{ $item->route }}</td>
                             <td>{{ Str::limit(strip_tags($item->content), 200) }}</td>

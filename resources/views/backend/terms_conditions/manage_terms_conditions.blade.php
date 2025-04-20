@@ -28,7 +28,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                {!! $item->details !!}
+                                {!! \Illuminate\Support\Str::limit(strip_tags($item->details), 50, '...') !!}
                             </td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 

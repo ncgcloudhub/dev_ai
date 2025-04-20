@@ -31,7 +31,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
-                                <a href="" class="fw-medium link-primary">{{ $item->name }}</a>
+                                <a href="" class="fw-medium link-primary gradient-text-2">{{ $item->name }}</a>
                             </td>
                            
                             <td>

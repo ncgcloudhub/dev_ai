@@ -263,7 +263,7 @@
     
                            <hr>
                             <div class="mt-3 pt-2">
-                                <button type="submit" class="btn btn-primary w-100">Update Plan</button>
+                                <button type="submit" class="btn gradient-btn-edit">Update Plan</button>
                             </div>
                         </ul>
                     </div>

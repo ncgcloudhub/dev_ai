@@ -1,4 +1,4 @@
-@extends('user.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
     @lang('translation.pricing')
 @endsection
@@ -17,7 +17,7 @@
     <label for="end_date">End Date:</label>
     <input type="date" id="end_date" name="end_date" required>
     
-    <button type="submit" class="btn btn-primary">Generate Report</button>
+    <button type="submit" class="btn gradient-btn-add">Generate Report</button>
 </form>
 
 <h2>Stripe Balance Report ({{ date('Y-m-d', $startDate) }} - {{ date('Y-m-d', $endDate) }})</h2>
@@ -47,4 +47,6 @@
 
 @endsection
 
-
+@section('script')
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+@endsection
