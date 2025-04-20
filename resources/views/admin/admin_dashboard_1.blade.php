@@ -29,8 +29,8 @@
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
                                 <a href="{{ route('main.chat.form') }}" class="gradient-btn-generate">
+                                    Chat
                                 </a>
-                                
                                 
                                 <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
                             </div>
