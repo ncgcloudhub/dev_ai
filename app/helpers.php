@@ -338,7 +338,7 @@ if (!function_exists('callOpenAIImageAPI')) {
                         ],
                     ],
                 ],
-                'max_tokens' => 300,
+                'max_completion_tokens' => 300,
             ]);
 
             return $response;
