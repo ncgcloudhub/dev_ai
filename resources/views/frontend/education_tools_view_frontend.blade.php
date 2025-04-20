@@ -175,7 +175,8 @@
             $('form').on('submit', function (e) {
                 e.preventDefault(); // Prevent the form from submitting the traditional way
         
-                showMagicBall('image'); // Show the magic ball loader
+                showMagicBall('Facts', 'education');
+
         
                 let formData = $(this).serialize(); // Collect the form data
         

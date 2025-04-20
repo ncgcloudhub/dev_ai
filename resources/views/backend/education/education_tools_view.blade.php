@@ -400,7 +400,7 @@
             e.preventDefault(); // Prevent default form submission
 
             $('#generation-status').text('Generating...'); // Show generation status
-            showMagicBall('image'); // Show loader
+            showMagicBall('Facts', 'education');
 
             let formData = $(this).serialize(); // Serialize form data
 

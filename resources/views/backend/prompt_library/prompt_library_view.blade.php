@@ -309,7 +309,8 @@
             var sub_category_instruction = $('#sub_category_instruction').val();
             var prompt_name = $('#prompt_name').val(); // Get the prompt name value
             $('#loader').removeClass('d-none');
-            showMagicBall('image'); // Show the magic ball loader
+            showMagicBall('Facts', 'general');
+
 
             $.ajax({
                 url: "{{ route('ask.ai.prompt') }}",

@@ -658,8 +658,8 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
       // Show the magic ball
-      showMagicBall('image');
-            // Check if already generating (toggle stop)
+      showMagicBall('Facts', 'general');
+      // Check if already generating (toggle stop)
             if (sendMessageBtn.dataset.state === 'generating') {
                 // Stop generation by aborting the request
                 if (abortController) {
