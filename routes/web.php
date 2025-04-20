@@ -556,7 +556,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     //Fixed Templates 
     Route::get('/ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
     Route::get('/ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
-    Route::get('/ai-content-creator/getContentByUser/{id}', [AIContentCreatorController::class, 'getTemplateContent'])->name('template.content');
+    Route::get('/ai-content-creator/getcontentbyuser/{id}', [AIContentCreatorController::class, 'getTemplateContent'])->name('template.content');
     // AI Content Creator Extract and Generate
     Route::get('ai-content-creator/extract', [AIContentCreatorController::class, 'AIContentCreatorExtractPromptAndGenerate'])->name('aicontentcreator.view.extract.prompt');
     Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');

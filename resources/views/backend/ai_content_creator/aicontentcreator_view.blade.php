@@ -750,7 +750,7 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
             const templateId = '{{ $Template->id }}'; // Pass the template ID dynamically
 
             // AJAX call to fetch template content
-            fetch(`/ai-content-creator/getContentByUser/${templateId}`)
+            fetch(`/ai-content-creator/getcontentbyuser/${templateId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch template content.');
