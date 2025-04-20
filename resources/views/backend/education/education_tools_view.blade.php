@@ -252,11 +252,11 @@
                                             @endif --}}
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-primary" 
+                                            <button type="button" class="gradient-btn-edit" 
                                                     onclick="openToolContentEditorModal({{ $content->id }})">
                                                 Edit
                                             </button>
-                                            <a href="{{ route('toolContent.download', $content->id) }}" class="btn btn-sm btn-success">
+                                            <a href="{{ route('toolContent.download', $content->id) }}" class="btn btn-sm gradient-btn-download">
                                                 Download PDF
                                             </a>
                                             {{-- Modal for Full Content --}}
