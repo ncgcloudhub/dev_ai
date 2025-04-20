@@ -175,7 +175,7 @@
             $('form').on('submit', function (e) {
                 e.preventDefault(); // Prevent the form from submitting the traditional way
         
-                showMagicBall('Facts', 'education');
+                showMagicBall('facts', 'education');
 
         
                 let formData = $(this).serialize(); // Collect the form data

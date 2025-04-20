@@ -643,7 +643,7 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('Facts', 'image');
+             showMagicBall('facts', 'image');
 
         
             // Create a FormData object
