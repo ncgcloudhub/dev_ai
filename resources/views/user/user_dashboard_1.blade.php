@@ -85,13 +85,10 @@
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}" alt=""
-                                class="img-fluid card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary"><i
-                                        class="ri-auction-fill align-bottom me-1"></i>Explore</a>
-                            </div>
+                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
+                                <img src="{{ asset('storage/' . $tool->image) }}" alt=""
+                                    class="img-fluid card-img-top explore-img" />
+                            </a>
                         </div>
                         <div class="card-body">
                             <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
