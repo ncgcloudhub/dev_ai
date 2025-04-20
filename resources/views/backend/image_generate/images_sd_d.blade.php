@@ -370,7 +370,7 @@
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('image');
+             showMagicBall('Facts', 'image');
 
         
             // Create a FormData object
@@ -446,7 +446,7 @@
             e.preventDefault(); // Prevent the default form submission
     
              // Show the magic ball
-             showMagicBall('Image');
+             showMagicBall('Facts', 'image');
 
             var formData = new FormData(this);
             // Manually append the offcanvas input values

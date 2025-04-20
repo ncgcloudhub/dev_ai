@@ -286,7 +286,7 @@ $(document).ready(function () {
 $(document).ready(function() {
     $('#aiGenerateBtn').click(function() {
         // Show the magic ball
-        showMagicBall();       // ✅ All
+        showMagicBall('Facts', 'general');
 
         var type = $('#type').val();
         var category = $('#category').val();

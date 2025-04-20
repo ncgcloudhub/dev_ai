@@ -331,7 +331,7 @@ $(document).ready(function() {
         e.preventDefault(); // Prevent the default form submission
 
          // Show the magic ball
-         showMagicBall('Image');
+         showMagicBall('Facts', 'image');
 
                     $('#result-li').addClass('active');
                     $('#image-li').removeClass('active');
