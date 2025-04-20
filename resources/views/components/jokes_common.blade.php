@@ -5,7 +5,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.3); /* Adjust transparency here */
+        background: rgb(0, 0, 0); /* Adjust transparency here */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -33,7 +33,9 @@
         <img src="{{ asset('backend/uploads/site/' . $siteSettings->magic_ball) }}" alt="Loading..." class="magic-ball-gif">
         @endif
        
-        <p id="joke-text">Fetching a joke...</p>
+        <p id="joke-text" class="fs-5 gradient-background-1 p-3 rounded-3 mx-3">
+            Fetching a joke...
+        </p>
     </div>
 </div>
 
