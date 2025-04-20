@@ -186,7 +186,7 @@ if (!function_exists('checkUserHasCredits')) {
             ];
         }
 
-        if ($user->credits < $requiredCredits) {
+        if ($user->credits_left < $requiredCredits) {
             return [
                 'status' => false,
                 'message' => 'No credits left'
