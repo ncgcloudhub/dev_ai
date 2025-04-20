@@ -5,7 +5,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0); /* Adjust transparency here */
+        background: rgba(0, 0, 0, 0.3); /* Adjust transparency here */
         display: flex;
         align-items: center;
         justify-content: center;
