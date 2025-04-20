@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\EducationTools;
 use App\Models\PromptLibrary;
 use App\Models\UserMonthlyUsage;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -181,6 +182,31 @@ class UserController extends Controller
             'tokens' => $tokensUsed,
             'credits' => $creditsUsed,
         ]);
+    }
+
+    // Fetch daily/Monthly Usage Zoomable
+    public function getUserUsageTimeseries()
+    {
+        $user_id = Auth::id();
+    
+        $data = UserMonthlyUsage::where('user_id', $user_id)
+            ->whereNotNull('day')
+            ->orderBy('year', 'asc')
+            ->orderBy('month', 'asc')
+            ->orderBy('day', 'asc')
+            ->get();
+    
+        $timeseriesData = [];
+        
+        foreach ($data as $entry) {
+            $timeseriesData[] = [
+                'date' => Carbon::create($entry->year, $entry->month, $entry->day)->format('Y-m-d'),
+                'value' => $entry->tokens_used // or credits_used
+            ];
+        }
+    
+        Log::info('Timeseries Data:', $timeseriesData);
+        return response()->json($timeseriesData);
     }
 
  

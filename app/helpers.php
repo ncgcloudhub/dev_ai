@@ -126,13 +126,15 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         $year = now()->year;
         $month = now()->month;
+        $day = now()->day;
 
-        // Find or create monthly usage record
-        $monthlyUsage = \App\Models\UserMonthlyUsage::firstOrCreate(
+        // Find or create daily usage record
+        $dailyUsage = \App\Models\UserMonthlyUsage::firstOrCreate(
             [
                 'user_id' => $user_id,
                 'year' => $year,
                 'month' => $month,
+                'day' => $day,
             ],
             [
                 'tokens_used' => 0,
@@ -144,7 +146,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
         if ($user->tokens_left >= $tokens) {
             $user->tokens_left = max(0, $user->tokens_left - $tokens);
             $user->tokens_used += $tokens;
-            $monthlyUsage->tokens_used += $tokens;
+            $dailyUsage->tokens_used += $tokens;
         } else {
             $user->free_tokens_used += $tokens;
         }
@@ -156,7 +158,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         $user->credits_left = max(0, $user->credits_left - $credits);
         $user->credits_used += $credits;
-        $monthlyUsage->credits_used += $credits;
+        $dailyUsage->credits_used += $credits;
 
         // Increment images_generated only if credits are used
         if ($credits > 0) {
@@ -165,7 +167,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         // Save changes
         $user->save();
-        $monthlyUsage->save();
+        $dailyUsage->save();
 
         return "deducted-successfully";
     }
