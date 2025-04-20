@@ -33,7 +33,7 @@
 
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <button class="btn btn-sm {{ $item->status ? 'btn-success' : 'btn-danger' }} toggle-status" 
+                                    <button class="btn btn-sm {{ $item->status ? 'gradient-btn-save' : 'gradient-btn-delete' }} toggle-status" 
                                         data-id="{{ $item->id }}">
                                     {{ $item->status ? 'Active' : 'Inactive' }}
                                     </button>
@@ -75,7 +75,7 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded btn-primary mb-5" value="Update">
+            <input type="submit" class="btn gradient-btn-edit" value="Update">
         </div>
     </div>
 </form>

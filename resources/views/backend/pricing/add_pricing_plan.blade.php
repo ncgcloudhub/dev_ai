@@ -258,7 +258,7 @@
     
                            <hr>
                             <div class="mt-3 pt-2">
-                                <button type="submit" class="btn btn-primary w-100">Add Plan</button>
+                                <button type="submit" class="btn gradient-btn-save">Add Plan</button>
                             </div>
                         </ul>
 

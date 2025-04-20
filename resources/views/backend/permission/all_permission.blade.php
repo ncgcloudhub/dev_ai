@@ -14,14 +14,14 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Permission  <a href="{{ route('add.permission') }}" class="btn gradient-btn-9">Add</a></h5>
+                <h5 class="card-title mb-1">Permission  <a href="{{ route('add.permission') }}" class="btn gradient-btn-add">Add</a></h5>
 
                 <div class="btn-group">
-                    <a href="{{ route('import.permission') }}" class="btn btn-warning px-5">Import </a>  
+                    <a href="{{ route('import.permission') }}" class="btn gradient-btn-import">Import </a>  
                 </div>
 
                 <div class="btn-group">
-                    <a href="{{ route('export.permission') }}" class="btn btn-danger px-5">Export </a>  
+                    <a href="{{ route('export.permission') }}" class="btn gradient-btn-export">Export </a>  
                 </div>
 
             </div>
@@ -43,7 +43,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
-                                <a href="" class="fw-medium link-primary">{{ $item->name }}</a>
+                                <a href="" class="fw-medium link-primary gradient-text-2">{{ $item->name }}</a>
                             </td>
                              <td>
                                 <div class="d-flex align-items-center">

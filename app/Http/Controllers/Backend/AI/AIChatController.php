@@ -421,7 +421,7 @@ class AIChatController extends Controller
                     ],
                 ],
             ],
-            'max_tokens' => 300,
+            'max_completion_tokens' => 300,
         ]);
 
         return $response;

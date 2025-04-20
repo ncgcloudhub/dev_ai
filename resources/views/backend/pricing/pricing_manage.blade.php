@@ -43,7 +43,7 @@ h2.mb-0.text-center i {
         <div class="col-lg-5">
             <div class="text-center mb-4">
                 <h4 class="fw-semibold fs-22">Plans & Pricing       
-                    <a href="{{ route('add.pricing.plan') }}" class="btn btn-outline-primary btn-border">
+                    <a href="{{ route('add.pricing.plan') }}" class="btn gradient-btn-add">
                         <i class="ri-add-line align-bottom me-1"></i>Add Plan
                     </a>                    
                 </h4>

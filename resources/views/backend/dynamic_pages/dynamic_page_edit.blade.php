@@ -191,7 +191,7 @@
             </div>
 
             <div class="text-end mb-4">
-                <button type="submit" class="btn btn-primary w-sm">Save Changes</button>
+                <button type="submit" class="btn gradient-btn-save">Save Changes</button>
             </div>
             <!-- end card -->
         </div>

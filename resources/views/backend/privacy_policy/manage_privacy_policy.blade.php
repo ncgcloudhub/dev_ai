@@ -29,8 +29,9 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                {!! $item->details !!}
+                                {!! \Illuminate\Support\Str::limit(strip_tags($item->details), 50, '...') !!}
                             </td>
+                            
                             <td><span class="badge rounded-pill border border-dark text-body">v{{ $item->created_at->format('dmy') }}</span></td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
@@ -42,7 +43,7 @@
                                         <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
                                     @endcan
                                     <button 
-                                        class="btn btn-sm toggle-status-btn {{ $item->status === 'active' ? 'btn-warning' : 'btn-success' }}" 
+                                        class="btn btn-sm toggle-status-btn {{ $item->status === 'active' ? 'gradient-btn-save' : 'gradient-btn-delete' }}" 
                                         data-id="{{ $item->id }}">
                                         <span class="btn-text">{{ $item->status === 'active' ? 'Deactivate' : 'Activate' }}</span>
                                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>

@@ -1,4 +1,4 @@
-@extends('user.layouts.master')
+@extends('admin.layouts.master')
 @section('title')
     @lang('translation.pricing')
 @endsection
@@ -87,3 +87,6 @@
 @endsection
 
 
+@section('script')
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+@endsection

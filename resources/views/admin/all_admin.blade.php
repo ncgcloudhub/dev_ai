@@ -38,7 +38,7 @@
                             <td>{{ $key+1 }}</td>
                             <td>
                                 <a href="{{ route('user.details', ['id' => $item->id, 'name' => Str::slug($item->name ?? $item->username ?? 'username')]) }}" 
-                                    class="fw-medium link-primary">
+                                    class="fw-medium link-primary gradient-text-2">
                                     {{$item->name}}({{$item->username}})</a>
                             </td>
                             <td>

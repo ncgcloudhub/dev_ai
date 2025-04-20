@@ -602,7 +602,7 @@ class AIContentCreatorController extends Controller
 
 
         foreach ($input->all() as $name => $inpVal) {
-            if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
+            if ($name != '_token' && $name != 'project_id' && $name != 'max_completion_tokens') {
                 $name = '{' . $name . '}';
                 if (!is_null($inpVal) && !is_null($name)) {
                     $prompt = str_replace($name, $inpVal, $prompt);
@@ -647,7 +647,7 @@ class AIContentCreatorController extends Controller
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
-            'max_tokens' => $maxTokens,
+            'max_completion_tokens' => $maxTokens,
             'messages' => $messages,
         ]);
 
