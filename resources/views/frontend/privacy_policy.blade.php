@@ -59,7 +59,6 @@
                                                 <i data-feather="check-circle" class="text-success icon-dual-success icon-xs"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <h5>Privacy Policy for Clever Creator</h5>
                                                
                                                     {!! $privacy_policy->details !!}
                                                
