@@ -20,6 +20,7 @@
                         <tr>
                             <th scope="col">Sl.</th>
                             <th scope="col">Details</th>
+                            <th scope="col">Version</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -30,6 +31,7 @@
                             <td>
                                 {!! $item->details !!}
                             </td>
+                            <td><span class="badge rounded-pill border border-dark text-body">v{{ $item->created_at->format('dmy') }}</span></td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
                                     @can('settings.privacyPolicy.edit')
@@ -39,6 +41,13 @@
                                     @can('settings.privacyPolicy.delete')
                                         <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
                                     @endcan
+                                    <button 
+                                        class="btn btn-sm toggle-status-btn {{ $item->status === 'active' ? 'btn-warning' : 'btn-success' }}" 
+                                        data-id="{{ $item->id }}">
+                                        <span class="btn-text">{{ $item->status === 'active' ? 'Deactivate' : 'Activate' }}</span>
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    </button>
+
                                    
                                 </div>
                             </td>
@@ -87,5 +96,53 @@
 @section('script')
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-status-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = button.getAttribute('data-id');
+                const btnText = button.querySelector('.btn-text');
+                const spinner = button.querySelector('.spinner-border');
+
+                // Show loading spinner
+                btnText.classList.add('d-none');
+                spinner.classList.remove('d-none');
+
+                fetch(`/privacy-policy/${id}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update button text and color
+                    if (data.status === 'active') {
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-warning');
+                        btnText.textContent = 'Deactivate';
+                    } else {
+                        button.classList.remove('btn-warning');
+                        button.classList.add('btn-success');
+                        btnText.textContent = 'Activate';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong!');
+                })
+                .finally(() => {
+                    // Hide spinner and show text again
+                    spinner.classList.add('d-none');
+                    btnText.classList.remove('d-none');
+                });
+            });
+        });
+    });
+</script>
+
+
 
 @endsection

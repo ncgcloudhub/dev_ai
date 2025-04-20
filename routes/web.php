@@ -290,6 +290,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // PRIVACY POLICY
     Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('admin.permission:settings.privacyPolicy');
+    Route::post('/privacy-policy/{id}/toggle-status', [HomeController::class, 'togglePolicyStatus'])->name('privacy.policy.toggleStatus');
+
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
     Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy')->middleware('admin.permission:settings.privacyPolicy.edit');
     Route::post('/privacy/policy/update', [HomeController::class, 'UpdatePrivacyPolicy'])->name('update.privacy.policy');
