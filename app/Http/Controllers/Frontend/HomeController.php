@@ -634,7 +634,8 @@ class HomeController extends Controller
     {
 
         $privacy_policy = PrivacyPolicy::create([
-            'details' => $request->details
+            'details' => $request->details,
+            'status' => 'inactive',
         ]);
 
         return redirect()->back();
@@ -663,6 +664,22 @@ class HomeController extends Controller
 
         return redirect(route('manage.privacy.policy'))->with($notification);
     }
+
+    public function togglePolicyStatus(Request $request, $id)
+    {
+        $policy = PrivacyPolicy::findOrFail($id);
+    
+        // Toggle logic
+        $policy->status = $policy->status === 'active' ? 'inactive' : 'active';
+        $policy->save();
+    
+        return response()->json([
+            'status' => $policy->status,
+            'message' => 'Status updated successfully'
+        ]);
+    }
+    
+
 
     public function DeletePrivacyPolicy($id)
     {
