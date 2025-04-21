@@ -285,8 +285,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::post('/prompt/generate/bulk-details', [GenerateImagesController::class, 'fetchBulkDetails']);
     Route::post('/prompt/add/bulk-library', [GenerateImagesController::class, 'saveBulkPrompts']);
     Route::get('/admin/export-images', [GenerateImagesController::class, 'exportImages'])->name('admin.images.export');
-
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
+    Route::get('/admin/dalle-image-fetch', [GenerateImagesController::class, 'fetchImages'])->name('admin.dalle.image.fetch');
+
+
 
     // PRIVACY POLICY
     Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('admin.permission:settings.privacyPolicy');
