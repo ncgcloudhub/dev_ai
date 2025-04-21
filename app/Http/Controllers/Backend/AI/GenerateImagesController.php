@@ -369,37 +369,52 @@ class GenerateImagesController extends Controller
     }
 
     public function fetchImages(Request $request)
-    {
-        $images = ModelsDalleImageGenerate::query();
-    
-        $total = $images->count();
-    
-        $images = $images->latest()
-            ->skip($request->start)
-            ->take($request->length)
-            ->get();
-    
-        $data = [];
-    
-        foreach ($images as $index => $image) {
-            $data[] = [
-                'checkbox' => '<input type="checkbox" value="' . $image->id . '">',
-                'sr_no' => $request->start + $index + 1,
-                'image' => '<img src="' . config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token') . '" width="80">',
-                'prompt' => e($image->prompt),
-                'user' => 'ID: ' . $image->user_id . ' / ' . optional($image->user)->name,
-                'status' => ucfirst($image->status),
-                'action' => '<a href="#" class="btn btn-sm btn-primary">View</a>'
-            ];
-        }
-    
-        return response()->json([
-            'draw' => intval($request->draw),
-            'recordsTotal' => $total,
-            'recordsFiltered' => $total,
-            'data' => $data
-        ]);
+{
+    $query = ModelsDalleImageGenerate::with('user');
+    $total = $query->count();
+
+    $images = $query->latest()
+        ->skip($request->start)
+        ->take($request->length)
+        ->get();
+
+    $data = [];
+
+    foreach ($images as $index => $item) {
+        $image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $item->image . '?' . config('filesystems.disks.azure.sas_token');
+
+        $data[] = [
+            'checkbox' => '<input type="checkbox" class="prompt-checkbox" value="' . $item->id . '" data-prompt="' . e($item->prompt) . '">',
+
+            'sr_no' => $request->start + $index + 1,
+
+            'image' => '<a class="image-popup" href="' . asset($image_url) . '" title="">
+                            <div class="d-flex align-items-center fw-medium">
+                                <img src="' . asset($image_url) . '" alt="" loading="lazy" class="avatar-xxs me-2">
+                            </div>
+                        </a>',
+
+            'prompt' => '<a href="#" class="prompt-link" data-prompt="' . e($item->prompt) . '">' . e($item->prompt) . '</a>',
+
+            'user' => $item->user ? $item->user->id . '/' . e($item->user->name) : 'User Not Available',
+
+            'status' => e($item->status),
+
+            'action' => '<div class="form-check form-switch form-switch-md" dir="ltr">
+                            <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd_' . $item->id . '" data-image-id="' . $item->id . '"' . ($item->status == 'active' ? ' checked' : '') . '>
+                            <label class="form-check-label" for="customSwitchsizemd_' . $item->id . '"></label>
+                        </div>',
+        ];
     }
+
+    return response()->json([
+        'draw' => intval($request->draw),
+        'recordsTotal' => $total,
+        'recordsFiltered' => $total,
+        'data' => $data
+    ]);
+}
+
 
     public function exportImages()
     {

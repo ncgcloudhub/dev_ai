@@ -23,12 +23,14 @@
 @push('styles')
 <!-- DataTables Bootstrap 5 CSS -->
 <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endpush
 
 @push('scripts')
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
 
 <script>
 $(document).ready(function () {
