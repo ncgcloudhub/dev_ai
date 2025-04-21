@@ -199,7 +199,7 @@ $(document).ready(function() {
 
 {{-- New SCRIPT --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
     const modal = new bootstrap.Modal(document.getElementById('promptModal'));
 
     document.querySelectorAll('.prompt-link').forEach(function (element) {
@@ -236,86 +236,86 @@ document.addEventListener('DOMContentLoaded', function () {
         const details = document.getElementById('details').value;
         const promptName = document.getElementById('promptName').value;
 
-        fetch(`/prompt/add/library`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ prompt: promptText, category, subcategory, details, prompt_name: promptName })
-        }).then(response => {
-            if (response.ok) {
-                alert('Prompt saved successfully!');
-                modal.hide();
-            }
-        });
-    });
-});
-
-// Bulk fetch and save
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = new bootstrap.Modal(document.getElementById('promptModal'));
-
-    // Select all checkboxes
-    document.getElementById('selectAll').addEventListener('change', function () {
-        document.querySelectorAll('.prompt-checkbox').forEach(checkbox => {
-            checkbox.checked = this.checked;
-        });
-    });
-
-    // Bulk Fetch & Save
-    document.getElementById('bulkFetchSaveButton').addEventListener('click', function () {
-        const selectedPrompts = [];
-        document.querySelectorAll('.prompt-checkbox:checked').forEach(checkbox => {
-            selectedPrompts.push({
-                id: checkbox.value,
-                prompt: checkbox.dataset.prompt
-            });
-        });
-
-        if (selectedPrompts.length === 0) {
-            alert('Please select at least one prompt.');
-            return;
-        }
-
-        // Step 1: Fetch Details for all selected prompts
-        fetch('/prompt/generate/bulk-details', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ prompts: selectedPrompts.map(p => p.prompt) }) // Send only prompt texts
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Step 2: Save all prompts with fetched details
-            const promptsWithDetails = selectedPrompts.map((p, index) => ({
-                id: p.id,
-                prompt: p.prompt,
-                details: data[index].details,  // Assuming API returns details in order
-                prompt_name: data[index].promptName, 
-                category: document.getElementById('category').value,
-                subcategory: data[index].subcategory // Use the subcategory ID from the API response
-            }));
-
-            return fetch('/prompt/add/bulk-library', {
+            fetch(`/prompt/add/library`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ prompts: promptsWithDetails })
+                body: JSON.stringify({ prompt: promptText, category, subcategory, details, prompt_name: promptName })
+            }).then(response => {
+                if (response.ok) {
+                    alert('Prompt saved successfully!');
+                    modal.hide();
+                }
             });
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('All prompts have been saved successfully!');
-                location.reload(); // Reload to reflect changes
-            }
         });
     });
-});
+
+    // Bulk fetch and save
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = new bootstrap.Modal(document.getElementById('promptModal'));
+
+        // Select all checkboxes
+        document.getElementById('selectAll').addEventListener('change', function () {
+            document.querySelectorAll('.prompt-checkbox').forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+
+        // Bulk Fetch & Save
+        document.getElementById('bulkFetchSaveButton').addEventListener('click', function () {
+            const selectedPrompts = [];
+            document.querySelectorAll('.prompt-checkbox:checked').forEach(checkbox => {
+                selectedPrompts.push({
+                    id: checkbox.value,
+                    prompt: checkbox.dataset.prompt
+                });
+            });
+
+            if (selectedPrompts.length === 0) {
+                alert('Please select at least one prompt.');
+                return;
+            }
+
+            // Step 1: Fetch Details for all selected prompts
+            fetch('/prompt/generate/bulk-details', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ prompts: selectedPrompts.map(p => p.prompt) }) // Send only prompt texts
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Step 2: Save all prompts with fetched details
+                const promptsWithDetails = selectedPrompts.map((p, index) => ({
+                    id: p.id,
+                    prompt: p.prompt,
+                    details: data[index].details,  // Assuming API returns details in order
+                    prompt_name: data[index].promptName, 
+                    category: document.getElementById('category').value,
+                    subcategory: data[index].subcategory // Use the subcategory ID from the API response
+                }));
+
+                return fetch('/prompt/add/bulk-library', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ prompts: promptsWithDetails })
+                });
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('All prompts have been saved successfully!');
+                    location.reload(); // Reload to reflect changes
+                }
+            });
+        });
+    });
 
 
 </script>
