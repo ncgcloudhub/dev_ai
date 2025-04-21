@@ -2,6 +2,8 @@
 @section('title') Manage Image @endsection
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
@@ -70,7 +72,7 @@
 </div>
 
 {{-- Modal END --}}
-                <table id="alternative-pagination" class="table responsive align-middle table-hover table-bordered" style="width:100%">
+                    <table id="dalleImageTable" class="table responsive align-middle table-hover table-bordered" style="width:100%">
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="selectAll"></th>
@@ -82,7 +84,7 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         @foreach ($images as $index => $item)
                         <tr>
                             <td>
@@ -127,7 +129,7 @@
                             @endif
                         </tr>
                         @endforeach
-                    </tbody>
+                    </tbody> --}}
                 </table>
                 <button type="button" id="bulkFetchSaveButton" class="btn btn-warning">Bulk Fetch & Save</button>
 
@@ -318,5 +320,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 </script>
+
+@push('scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    
+$(document).ready(function () {
+    if ($.fn.DataTable.isDataTable('#dalleImageTable')) {
+        $('#dalleImageTable').DataTable().destroy();
+    }
+
+    $('#dalleImageTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('admin.dalle.image.fetch') }}",
+        columns: [
+            { data: 0, orderable: false, searchable: false },
+            { data: 1 },
+            { data: 2, orderable: false, searchable: false },
+            { data: 3 },
+            { data: 4 },
+            { data: 5 },
+            { data: 6, orderable: false, searchable: false }
+        ]
+    });
+});
+</script>
+
+<script>
+    console.log('jQuery version:', $.fn.jquery);
+    console.log('DataTables loaded:', typeof $.fn.DataTable !== 'undefined');
+    </script>
+    
+@endpush
+
+
 
 @endsection

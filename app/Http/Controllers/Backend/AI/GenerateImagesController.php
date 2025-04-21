@@ -365,7 +365,40 @@ class GenerateImagesController extends Controller
             $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
         }
 
-        return view('backend.image_generate.manage_admin_dalle_image', compact('images','prompt_sub_categories', 'prompt_category'));
+        return view('backend.image_generate.generated_manage_image_test', compact('images','prompt_sub_categories', 'prompt_category'));
+    }
+
+    public function fetchImages(Request $request)
+    {
+        $images = ModelsDalleImageGenerate::query();
+    
+        $total = $images->count();
+    
+        $images = $images->latest()
+            ->skip($request->start)
+            ->take($request->length)
+            ->get();
+    
+        $data = [];
+    
+        foreach ($images as $index => $image) {
+            $data[] = [
+                'checkbox' => '<input type="checkbox" value="' . $image->id . '">',
+                'sr_no' => $request->start + $index + 1,
+                'image' => '<img src="' . config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token') . '" width="80">',
+                'prompt' => e($image->prompt),
+                'user' => 'ID: ' . $image->user_id . ' / ' . optional($image->user)->name,
+                'status' => ucfirst($image->status),
+                'action' => '<a href="#" class="btn btn-sm btn-primary">View</a>'
+            ];
+        }
+    
+        return response()->json([
+            'draw' => intval($request->draw),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $data
+        ]);
     }
 
     public function exportImages()
