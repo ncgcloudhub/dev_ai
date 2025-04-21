@@ -727,10 +727,10 @@ public function provider()
     $isFirstLogin = !Auth::check(); // or use a smarter condition if needed
 
     $google = Socialite::driver('google')
-        // ->scopes([
-        //     'https://www.googleapis.com/auth/presentations',
-        //     'https://www.googleapis.com/auth/drive.file',
-        // ])
+        ->scopes([
+            'https://www.googleapis.com/auth/presentations',
+            'https://www.googleapis.com/auth/drive.file',
+        ])
         ->with([
             'access_type' => 'offline',
         ]);
@@ -742,8 +742,6 @@ public function provider()
 
     return $google->redirect();
 }
-
-
 
 public function callbackHandel(Request $request)
 {
@@ -841,7 +839,6 @@ public function callbackHandel(Request $request)
     Auth::login($user);
     return redirect('/generate/image/view');
 }
-
 
 
     //   GITHUB
