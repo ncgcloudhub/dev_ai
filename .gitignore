@@ -20,3 +20,9 @@ yarn-error.log
 /.vscode
 /public/robots.txt
 /storage/app
+/database/*.*
+/database/*
+/errors_docs/*
+/tests/*
+notes composer install.txt
+/docs/*
