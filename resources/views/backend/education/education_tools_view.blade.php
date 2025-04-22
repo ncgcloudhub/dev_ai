@@ -235,7 +235,7 @@
                                                 Read More
                                             </button>
                                               {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
-                                            @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
+                                            {{-- @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
                                                 str_contains(strtolower($content->tool->slug), 'slide'))
                                                 @if (!is_null(auth()->user()->google_token))
                                                 <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
@@ -249,7 +249,7 @@
                                                     </a>
                                                 @endif
                                             
-                                            @endif
+                                            @endif --}}
                                         </td>
                                         <td>
                                             <button type="button" class="gradient-btn-edit" 
@@ -431,7 +431,7 @@
                         button.dataset.content = data.edu_tool_content_data;
                         button.textContent = 'Generate Slides';
 
-                        document.querySelector('#generation-status').after(button);
+                        // document.querySelector('#generation-status').after(button);
 
                         $('#generation-status').after(generateSlidesButton); // Insert button after the status text
                     },
