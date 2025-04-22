@@ -414,6 +414,12 @@ class HomeController extends Controller
     public function FrontendFreeEducation()
     {   
         $tools = EducationTools::get();
+        foreach ($tools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
        
         return view('frontend.education', compact('tools', 'categories'));
@@ -424,6 +430,12 @@ class HomeController extends Controller
         // Retrieve the tool by slug
         $tool = EducationTools::where('slug', $slug)->firstOrFail();
     
+         // Append full Azure URL
+         $tool->image = config('filesystems.disks.azure_site.url') 
+         . config('filesystems.disks.azure_site.container') 
+         . '/' . $tool->image 
+         . '?' . config('filesystems.disks.azure_site.sas_token');
+
         $classes = GradeClass::with('subjects')->get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
     

@@ -25,6 +25,8 @@ use Google\Service\Slides as GoogleSlides;
 use Google\Service\Slides\Presentation;
 use Google\Service\Slides\Request as SlidesRequest;
 use Google\Service\Slides\BatchUpdatePresentationRequest;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 
 class EducationController extends Controller
@@ -1217,6 +1219,30 @@ public function updateSubject(Request $request, $id)
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
         $newTools = EducationTools::orderBy('id', 'DESC')->limit(5)->get();
         $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();
+
+        // Append the full Azure URL to each image
+        foreach ($tools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
+
+        // Append the full Azure URL to each image
+        foreach ($newTools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
+
+        // Append the full Azure URL to each image
+        foreach ($popularTools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
     
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
     }    
@@ -1293,6 +1319,13 @@ public function updateSubject(Request $request, $id)
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);
 
+        // Append full Azure URL
+        $tool->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $tool->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+
+
         // Log the activity with the Education Tools name
         logActivity('Education Tools', 'Accessed Education Tools View for Tool: ' . $tool->name);
 
@@ -1300,6 +1333,14 @@ public function updateSubject(Request $request, $id)
         $similarTools = EducationTools::where('category', $tool->category)
             ->where('id', '!=', $id)->inRandomOrder()
             ->limit(5)->get();
+
+            // Append the full Azure URL to each image
+            foreach ($similarTools as $image) {
+                $image->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $image->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+            }
 
         $toolContent = ToolGeneratedContent::where('tool_id', $id)
             ->where('user_id', $userId)
@@ -1407,7 +1448,6 @@ public function updateSubject(Request $request, $id)
 
     public function StoreTools(Request $request)
     {
-        // dd($request);
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -1421,46 +1461,52 @@ public function updateSubject(Request $request, $id)
             'prompt' => 'nullable|string',
             'popular' => 'nullable|string',
         ]);
-
-        // Create slug from the template name
+    
+        // Create slug from the tool name
         $slug = Str::slug($validatedData['name']);
-
-        // Create new Tool instance
+    
+        // Create new tool instance
         $tool = new EducationTools();
         $tool->name = $validatedData['name'];
         $tool->slug = $slug;
-        $tool->category_id = $validatedData['category_id']; // Add category
-
-        // Handle image upload if provided
+        $tool->category_id = $validatedData['category_id'];
+    
+        // Handle image upload to Azure
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads/tools', 'public'); // Store image
-            $tool->image = $imagePath; // Save image path in the database
+            try {
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $image = $request->file('image');
+                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension(); // Folder inside blob
+                $containerName = config('filesystems.disks.azure_site.container');
+    
+                $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
+    
+                Log::info('Image successfully uploaded to Azure Blob Storage', [
+                    'image_name' => $imageName,
+                    'container' => $containerName
+                ]);
+    
+                $tool->image = $imageName; // Save blob path
+            } catch (\Exception $e) {
+                Log::error('Error uploading image to Azure Blob Storage', ['exception' => $e->getMessage()]);
+            }
         }
-
-        $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+    
+        $tool->popular = $validatedData['popular'] ?? null;
         $tool->description = $validatedData['description'];
-
-        // Save input fields as JSON arrays
         $tool->input_types = json_encode($validatedData['input_types']);
         $tool->input_names = json_encode($validatedData['input_names']);
         $tool->input_labels = json_encode($validatedData['input_labels']);
         $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
-        
-        // Save the prompt
         $tool->prompt = $validatedData['prompt'];
-
-        // Save the Tool instance
+    
         $tool->save();
-
-        // Success notification
-        $notification = array(
+    
+        return redirect()->back()->with([
             'message' => 'Tool Added Successfully',
             'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
+        ]);
     }
-
 
     public function editTools($id)
     {
@@ -1493,16 +1539,34 @@ public function updateSubject(Request $request, $id)
         $tool->slug = Str::slug($validatedData['name']);
         $tool->category_id = $validatedData['category_id'];
     
-        // Handle image upload if provided
+        // Handle image replacement on Azure
         if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($tool->image && Storage::disk('public')->exists($tool->image)) {
-                Storage::disk('public')->delete($tool->image);
-            }
+            try {
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $containerName = config('filesystems.disks.azure_site.container');
     
-            // Store the new image
-            $imagePath = $request->file('image')->store('uploads/tools', 'public');
-            $tool->image = $imagePath;
+                // Delete old image if the path exists
+                if (!empty($tool->image)) {
+                    try {
+                        $blobClient->deleteBlob($containerName, $tool->image);
+                        Log::info('Old image deleted from Azure', ['image' => $tool->image]);
+                    } catch (\Exception $e) {
+                        Log::warning('Old Azure image not found or already deleted', ['image' => $tool->image, 'error' => $e->getMessage()]);
+                    }
+                }
+    
+                // Upload new image
+                $image = $request->file('image');
+                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+    
+                $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
+    
+                Log::info('New image uploaded to Azure', ['image' => $imageName]);
+                $tool->image = $imageName;
+    
+            } catch (\Exception $e) {
+                Log::error('Azure upload failed', ['error' => $e->getMessage()]);
+            }
         }
     
         // Update other fields

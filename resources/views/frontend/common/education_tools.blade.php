@@ -7,7 +7,7 @@
             </button>
         </div>
         <div class="explore-place-bid-img">
-            <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
+            <img src="{{ $tool->image }}" alt="" class="card-img-top explore-img" />
             <div class="bg-overlay"></div>
             <div class="place-bid-btn">
                 <a href="{{ route('frontend.free.education.view', ['slug' => $tool->slug]) }}" class="btn gradient-btn-6">

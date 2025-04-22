@@ -26,6 +26,14 @@ class AdminController extends Controller
         
         $eduTools = EducationTools::limit(5)->get();
         
+            // Append the full Azure URL to each image
+            foreach ($eduTools as $image) {
+                $image->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $image->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+            }
+        
         $prompts = PromptLibrary::inRandomOrder()
             ->limit(10)->get();
        

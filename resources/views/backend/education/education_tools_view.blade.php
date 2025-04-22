@@ -18,7 +18,7 @@
             <i class="las la-arrow-left"></i>
         </button>
         <div class="explore-place-bid-img">
-        <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
+        <img src="{{ $tool->image }}" alt="" class="card-img-top explore-img" />
         </div>
         
         <!--end card-->
@@ -36,7 +36,7 @@
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $similarTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $similarTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   
