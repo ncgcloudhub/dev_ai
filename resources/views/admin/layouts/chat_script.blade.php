@@ -94,10 +94,10 @@ $(document).ready(function() {
     $('.auto-expand').on('keydown', function(e) {
         if (e.which == 13 && !e.shiftKey) { // Check if Enter is pressed without Shift
             e.preventDefault(); // Prevent the default Enter behavior (adding a new line)
-            // sendMessage(); // Call the function to send the message
+            sendMessage(); // Call the function to send the message
         }
     });
-        
+
 </script>
 
 <script>
@@ -116,6 +116,20 @@ $(document).ready(function() {
         const sessionList = document.getElementById('session-list');
         let isFirstMessage = true;
 
+        function showLoadingBubble() {
+        const loader = document.createElement('div');
+        loader.id        = 'ai-loading';
+        loader.className = 'assistant loading';
+        loader.innerHTML = '🤖 AI is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';
+        document.getElementById('users-conversation')
+                .appendChild(loader);
+        loader.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        function removeLoadingBubble() {
+        const loader = document.getElementById('ai-loading');
+        if (loader) loader.remove();
+        }
 
         function summarizeMessage(message) {
             return message.length > 20 ? message.substring(0, 20) + '...' : message;
@@ -525,12 +539,11 @@ messageInput.addEventListener('paste', handleImagePaste);
     sendMessageBtn.disabled = true; // Disable send button to prevent double sending
     sendMessageBtn.innerHTML = 'Stop';
     sendMessageBtn.dataset.state = 'generating';
-
     // Disable the "Enter" key in the message input
     messageInput.removeEventListener('keydown', handleEnterKey);
-
     // Create an AbortController instance
     abortController = new AbortController();
+    showLoadingBubble();  // Show loading bubble
 
     let assistantMessageContent = ''; // Accumulate assistant's message content
 
@@ -672,6 +685,7 @@ messageInput.addEventListener('paste', handleImagePaste);
                 if (done) {
                     console.log('Stream complete');
                     updateAssistantMessage();
+                    removeLoadingBubble();  // Remove loading bubble
                     resetButton();  // Reset the button back to "Send"
                     return;
                 }
@@ -1290,7 +1304,13 @@ function regenerateMessage(messageId, originalMessage) {
     })
     .catch(err => {
         console.error('Error during regenerate:', err);
-    });
+        removeLoadingBubble();  // Remove loading bubble
+        resetButton();
+    })
+    .finally(() => {
+        removeLoadingBubble(); // Remove loading bubble
+        isFirstMessage = false;
+      });
 }
 
 
