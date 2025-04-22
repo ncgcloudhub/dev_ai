@@ -82,7 +82,7 @@
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}" alt=""
+                            <img src="{{$tool->image }}" alt=""
                                 class="img-fluid card-img-top explore-img" />
                             <div class="bg-overlay"></div>
                             <div class="place-bid-btn">

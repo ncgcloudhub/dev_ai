@@ -86,7 +86,7 @@
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
                             <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
-                                <img src="{{ asset('storage/' . $tool->image) }}" alt=""
+                                <img src="{{ $tool->image }}" alt=""
                                     class="img-fluid card-img-top explore-img" />
                             </a>
                         </div>

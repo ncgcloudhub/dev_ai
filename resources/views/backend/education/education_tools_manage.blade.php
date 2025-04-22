@@ -39,7 +39,7 @@
                         <li>
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $newTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $newTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   
@@ -131,8 +131,8 @@
                <div class="card explore-box card-animate">
                    <div class="explore-place-bid-img">
                        <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
-                           <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
-                                alt="" class="card-img-top explore-img" loading="lazy" />
+                        <img class="card-img-top explore-img" src="{{ $tool->image }}" alt="" loading="lazy" />
+
                        </a>
            
                        @if(Auth::user()->role === 'admin')
@@ -184,7 +184,7 @@
                         <li>
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $popularTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $popularTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   

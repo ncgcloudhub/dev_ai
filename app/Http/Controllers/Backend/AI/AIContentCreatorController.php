@@ -743,8 +743,6 @@ public function provider()
     return $google->redirect();
 }
 
-
-
 public function callbackHandel(Request $request)
 {
     // Log session state and request state
@@ -841,7 +839,6 @@ public function callbackHandel(Request $request)
     Auth::login($user);
     return redirect('/generate/image/view');
 }
-
 
 
     //   GITHUB

@@ -75,6 +75,12 @@ Route::get('/', function () {
     $seo = SeoSetting::find(1);
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $tools = EducationTools::inRandomOrder()->limit(6)->get();
+    foreach ($tools as $image) {
+        $image->image = config('filesystems.disks.azure_site.url') 
+            . config('filesystems.disks.azure_site.container') 
+            . '/' . $image->image 
+            . '?' . config('filesystems.disks.azure_site.sas_token');
+    }
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')
         ->where('status', 'active')
@@ -285,8 +291,11 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::post('/prompt/generate/bulk-details', [GenerateImagesController::class, 'fetchBulkDetails']);
     Route::post('/prompt/add/bulk-library', [GenerateImagesController::class, 'saveBulkPrompts']);
     Route::get('/admin/export-images', [GenerateImagesController::class, 'exportImages'])->name('admin.images.export');
-
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
+    Route::get('/admin/dalle-image-fetch', [GenerateImagesController::class, 'fetchImages'])->name('admin.dalle.image.fetch');
+
+
 
     // PRIVACY POLICY
     Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('admin.permission:settings.privacyPolicy');
