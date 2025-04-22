@@ -33,6 +33,13 @@ class UserController extends Controller
         $userId = auth()->id(); // Get the authenticated user's ID
 
         $eduTools = EducationTools::limit(5)->get();
+
+        foreach ($eduTools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
         
         $prompts = PromptLibrary::inRandomOrder()
             ->limit(11)->get();

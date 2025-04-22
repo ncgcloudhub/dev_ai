@@ -75,6 +75,12 @@ Route::get('/', function () {
     $seo = SeoSetting::find(1);
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $tools = EducationTools::inRandomOrder()->limit(6)->get();
+    foreach ($tools as $image) {
+        $image->image = config('filesystems.disks.azure_site.url') 
+            . config('filesystems.disks.azure_site.container') 
+            . '/' . $image->image 
+            . '?' . config('filesystems.disks.azure_site.sas_token');
+    }
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')
         ->where('status', 'active')

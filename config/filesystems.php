@@ -70,6 +70,18 @@ return [
 
         ],
 
+        'azure_site' => [
+            'driver'    => 'azure',
+            'name'      => env('AZURE_STORAGE_NAME'),
+            'key'       => env('AZURE_STORAGE_KEY'),
+            'container' => env('AZURE_STORAGE_CONTAINER_SITE'),
+            'url'       => env('AZURE_STORAGE_URL'),
+            'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
+            'sas_token' => env('AZURE_STORAGE_SAS_TOKEN_SITE'),
+            
+        ],
+
+
     ],
 
     /*
