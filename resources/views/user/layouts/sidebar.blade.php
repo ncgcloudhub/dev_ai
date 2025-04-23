@@ -190,7 +190,7 @@
                 </li>
 
                 @php
-    $allowedEmails = ['fahmidh262@gmail.com', 'ifaz.alam1@gmail.com', 'clevercreatorai@gmail.com', 'ifazalam69@gmail.com', 'test.daily@gmail.com', 'test.weekly@gmail.com', 'test.monthly@gmail.com'];
+    $allowedEmails = ['fahmidh262@gmail.com', 'ifaz.alam1@gmail.com', 'clevercreatorai@gmail.com', 'ifazalam69@gmail.com', 'ifaz.alam@statait.com', 'ifazalam9@gmail.com', 'metaversetech07@gmail.com'];
 @endphp
 
 @if (auth()->check() && in_array(auth()->user()->email, $allowedEmails))
