@@ -1,3 +1,9 @@
+<!-- Highlight.js -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<!-- DOMPurify -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 
 
 <style>
@@ -77,6 +83,23 @@
     .code-block:hover .copy-button {
         opacity: 1;
     }
+    .copy-code-btn {
+        position: absolute;
+        top: 0.25rem;
+        right: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 1;
+    }
+    .copy-code-btn:focus {
+        outline: none;
+    }
+
 </style>
 
 <script>
@@ -649,42 +672,87 @@ messageInput.addEventListener('paste', handleImagePaste);
                 updateAssistantMessage();
             }, DEBOUNCE_DELAY);
         }
+        function injectCopyButton(pre) {
+            if (pre.querySelector('.copy-code-btn')) return;
+            pre.style.position = 'relative';
+            const btn = document.createElement('button');
+            btn.className   = 'copy-code-btn';
+            btn.textContent = 'Copy';
+            pre.parentNode.insertBefore(btn, pre);
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(pre.innerText).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+                });
+            });
+            }
 
-        function updateAssistantMessage() {
-    try {
-        const formattedContent = formatContent(assistantMessageContent);
-        assistantMessageElement.innerHTML = formattedContent;
 
-        // Highlight code blocks
-        assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
+    function updateAssistantMessage() {
+        try {
+            const formattedContent = formatContent(assistantMessageContent);
+            assistantMessageElement.innerHTML = formattedContent;
+
+            // 1) Highlight code blocks
+            assistantMessageElement.querySelectorAll('pre code').forEach(block => {
             hljs.highlightElement(block);
-        });
+            });
 
-        // Add responsive behavior to tables
-        assistantMessageElement.querySelectorAll('table').forEach(table => {
+            // 2) Make any tables responsive
+            assistantMessageElement.querySelectorAll('table').forEach(table => {
             if (!table.classList.contains('table')) {
-                table.classList.add('table', 'table-bordered', 'table-striped', 'table-hover');
+                table.classList.add('table','table-bordered','table-striped','table-hover');
                 const wrapper = document.createElement('div');
                 wrapper.className = 'table-responsive';
                 table.parentNode.insertBefore(wrapper, table);
                 wrapper.appendChild(table);
             }
+            });
+
+            // 3) Auto-add “Copy” buttons to every <pre> block
+            assistantMessageElement.querySelectorAll('pre').forEach(pre => {
+            // avoid duplicates
+            if (pre.querySelector('.copy-code-btn')) return;
+            
+            const btn = document.createElement('button');
+            btn.className   = 'copy-code-btn';
+            btn.textContent = 'Copy';
+
+            // position pre so the button can sit in its corner
+            pre.style.position = 'relative';  // Add relative position to pre
+            pre.parentNode.insertBefore(btn, pre);
+
+            btn.addEventListener('click', () => {
+                navigator.clipboard.writeText(pre.innerText).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+                });
+            });
         });
 
-        // Scroll to the latest message
-        let conversationList = document.getElementById('users-conversation');
-        let lastMessage = conversationList.lastElementChild;
-        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    } catch (e) {
-        console.error('Error parsing Markdown:', e);
-    }
+    // scroll to the latest message
+    const convo = document.getElementById('users-conversation');
+    const last = convo.lastElementChild;
+    last.scrollIntoView({ behavior:'smooth', block:'end' });
+  } catch (e) {
+    console.error('Error parsing Markdown:', e);
+  }
 }
+
 
         function read() {
             reader.read().then(({ done, value }) => {
                 if (done) {
                     console.log('Stream complete');
-                    updateAssistantMessage();
+                            // Now that we have the full `assistantMessageContent`,
+                    // replace the raw text with nicely formatted Markdown:
+                    assistantMessageElement.innerHTML = formatContent(assistantMessageContent);
+
+                    // Highlight & copy-buttons one final time:
+                    assistantMessageElement.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
+                    assistantMessageElement.querySelectorAll('pre').forEach(pre => injectCopyButton(pre));
+
+                    // updateAssistantMessage();
                     removeLoadingBubble();  // Remove loading bubble
                     resetButton();  // Reset the button back to "Send"
                     return;
@@ -692,6 +760,7 @@ messageInput.addEventListener('paste', handleImagePaste);
 
                 const chunk = decoder.decode(value, { stream: true });
                 receivedText += chunk;
+                assistantMessageElement.textContent = assistantMessageContent;
 
                 let lines = receivedText.split('\n');
                 receivedText = lines.pop();
@@ -999,56 +1068,87 @@ document.addEventListener('click', function(event) {
 }
 
 
-function formatContent(content) {
-    // First create a custom renderer for marked.js
-    const renderer = new marked.Renderer();
+// function formatContent(content) {
+//     // First create a custom renderer for marked.js
+//     const renderer = new marked.Renderer();
     
-    // Custom table rendering with better styling
-    renderer.table = (header, body) => {
-        return `
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-                <thead>${header}</thead>
-                <tbody>${body}</tbody>
-            </table>
-        </div>`;
-    };
+//     // Custom table rendering with better styling
+//     renderer.table = (header, body) => {
+//         return `
+//         <div class="table-responsive">
+//             <table class="table table-bordered table-striped table-hover">
+//                 <thead>${header}</thead>
+//                 <tbody>${body}</tbody>
+//             </table>
+//         </div>`;
+//     };
 
-    // Custom code block rendering with copy button
-    renderer.code = function(code, language) {
-        if (!language) language = 'plaintext';
-        language = language.trim().toLowerCase();
+//     // Custom code block rendering with copy button
+//     renderer.code = function(code, language) {
+//         if (!language) language = 'plaintext';
+//         language = language.trim().toLowerCase();
         
-        // Check if language is supported by highlight.js
-        const validLang = hljs.getLanguage(language) ? language : 'plaintext';
-        const highlighted = hljs.highlight(validLang, code).value;
+//         // Check if language is supported by highlight.js
+//         const validLang = hljs.getLanguage(language) ? language : 'plaintext';
+//         const highlighted = hljs.highlight(validLang, code).value;
         
-        return `
-        <div class="code-block position-relative">
-            <button class="btn btn-sm btn-outline-secondary copy-button position-absolute" style="right: 5px; top: 5px;">
-                Copy
-            </button>
-            <pre><code class="hljs ${validLang}">${highlighted}</code></pre>
-        </div>`;
-    };
+//         return `
+//         <div class="code-block position-relative">
+//             <button class="btn btn-sm btn-outline-secondary copy-button position-absolute" style="right: 5px; top: 5px;">
+//                 Copy
+//             </button>
+//             <pre><code class="hljs ${validLang}">${highlighted}</code></pre>
+//         </div>`;
+//     };
 
-    // Set marked.js options
-    marked.setOptions({
-        renderer: renderer,
-        breaks: true,
-        gfm: true,
-        tables: true, // Enable GitHub Flavored Markdown tables
-    });
+//     // Set marked.js options
+//     marked.setOptions({
+//         renderer: renderer,
+//         breaks: true,
+//         gfm: true,
+//         tables: true, // Enable GitHub Flavored Markdown tables
+//     });
 
-    // First sanitize the content
-    content = DOMPurify.sanitize(content);
+//     // First sanitize the content
+//     content = DOMPurify.sanitize(content);
 
-    // Then parse markdown to HTML
-    let formattedContent = marked.parse(content);
+//     // Then parse markdown to HTML
+//     let formattedContent = marked.parse(content);
 
-    return formattedContent;
+//     return formattedContent;
+// }
+
+/**
+ * Convert AI text (with ```code fences```) into sanitized <pre><code> blocks
+ * and return the resulting HTML string.
+ */
+
+function formatContent(content) {
+  const renderer = new marked.Renderer();
+  renderer.code = (code, language) => {
+    // sanitize the inside of the code snippet
+    const safeCode = DOMPurify.sanitize(code);
+    const langCls  = language ? language.trim().toLowerCase() : 'plaintext';
+    return `<pre><code class="hljs ${langCls}">${safeCode}</code></pre>`;
+  };
+
+  marked.setOptions({
+    renderer,
+    gfm:    true,
+    breaks: true,
+  });
+
+  // 1) Markdown → HTML
+  let html = marked.parse(content);
+
+  // 2) Final sanitize: allow only a minimal set of tags/attrs
+  html = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['pre', 'code', 'p', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'div', 'span'],
+    ALLOWED_ATTR: ['class', 'href', 'target']
+  });
+
+  return html;
 }
-
 
 
 </script>
@@ -1246,20 +1346,13 @@ function regenerateMessage(messageId, originalMessage) {
         let fullContent = ''; // Accumulate the full content here
         messageElement.innerHTML = ''; // Clear previous content before streaming
 
-        function processChunk({ done, value }) {
-            if (done) {
-                console.log('Stream complete');
-                // Final formatting of the complete content
-                const formattedContent = formatContent(fullContent);
-                messageElement.innerHTML = formattedContent;
-
-                // Highlight code blocks within the message element
-                messageElement.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
-
-                return;
-            }
+        function processChunk({done,value}) {
+            if (done) return onStreamComplete();
+            const chunk = decoder.decode(value, {stream:true});
+            assistantMessageContent += chunk;
+            assistantMessageElement.textContent = assistantMessageContent;
+            return reader.read().then(processChunk);
+        }
 
             buffer += decoder.decode(value, { stream: true });
             const lines = buffer.split('\n');

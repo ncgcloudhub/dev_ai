@@ -107,6 +107,30 @@
     font-size: 12px;
 }
 
+/* ─── Code block + “Copy” button styles ───────────────────────── */
+pre {
+  position:       relative;
+  background:     #2d2d2d;
+  color:          #f8f8f2;
+  padding:        1em;
+  overflow:       auto;
+  border-radius:  6px;
+  margin:         1em 0;
+}
+
+.copy-code-btn {
+  position:       absolute;
+  top:            0.5em;
+  right:          0.5em;
+  background:     #eee;
+  border:         none;
+  padding:        0.2em 0.5em;
+  font-size:      0.8em;
+  cursor:         pointer;
+  border-radius:  4px;
+  z-index:        10;
+}
+/* ─────────────────────────────────────────────────────────────── */
 
 </style>
 
