@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ExpirationController;
 use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StripeWebhookController;
@@ -256,6 +257,10 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/export/permission', 'ExportPermission')->name('export.permission');
         Route::post('/import/store', 'ImportStore')->name('import.store.permission');
     });
+
+    // Expiration
+    Route::resource('expirations', ExpirationController::class);
+
 
     // Prompt Library
     Route::prefix('prompt')->group(function () {

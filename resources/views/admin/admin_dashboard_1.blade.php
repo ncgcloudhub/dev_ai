@@ -41,25 +41,45 @@
                 </div>
             </div>
             <div class="col-xl-4 col-md-12">
-                <div class="card overflow-hidden" style="border-color: #be06af">
+                <div class="card overflow-hidden mb-4" style="border-color: #be06af">
                     <div class="card-body">
+                        <h5 class="card-title">All Expirations</h5>
                         <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between" id="domain-item">
-                                <strong>Domain Expire:</strong>
-                                <span id="domain-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="hosting-item">
-                                <strong>Hosting Expire:</strong>
-                                <span id="hosting-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="ssl-item">
-                                <strong>SSL Expire:</strong>
-                                <span id="ssl-expire"></span>
-                            </li>
+                            @foreach($expirations as $item)
+                                @php
+                                    $expiresOn = \Carbon\Carbon::parse($item->expires_on);
+                                    $today = \Carbon\Carbon::today();
+                                    $diff = $expiresOn->diffInDays($today, false); // Negative means expired
+                                @endphp
+                                
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <strong>{{ ucfirst($item->type) }} Expire:</strong>
+                                    <span class="
+                                        @if($diff > 0)
+                                            text-muted  <!-- Expired -->
+                                        @elseif($diff < 0)
+                                            text-success  <!-- More days left -->
+                                        @elseif($diff <= 30)
+                                            text-danger  <!-- Less than 30 days left -->
+                                        @else
+                                            text-warning  <!-- More than 30 days left -->
+                                        @endif
+                                    ">
+                                        @if($diff > 0)
+                                            {{ $diff }} day{{ $diff > 1 ? 's' : '' }} ago
+                                        @elseif($diff < 0)
+                                            {{ abs($diff) }} day{{ abs($diff) > 1 ? 's' : '' }} left
+                                        @else
+                                            Expires today
+                                        @endif
+                                    </span>
+                                </li>
+                            @endforeach
                         </ul>
-
+                        
                     </div>
                 </div>
+                
             </div>
         </div>
         
@@ -338,44 +358,5 @@
         });
     }
     </script>
-
-<script>
-    function startCountdown(id, itemId, endDate) {
-        function updateCountdown() {
-            let now = new Date().getTime();
-            let distance = new Date(endDate).getTime() - now;
-
-            if (distance < 0) {
-                document.getElementById(id).innerHTML = "Expired";
-                return;
-            }
-
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById(id).innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            // If 30 days or less, change the border color of the specific list item
-            if (days <= 30) {
-                document.getElementById(itemId).style.borderColor = "red";
-                document.getElementById(itemId).style.color = "red"; // Optional: Change text color to red
-            }
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-
-    // Convert Laravel dates to JavaScript
-    let domainExpire = "{{ $siteSettings->domain }}"; // Example: 2025-12-26
-    let hostingExpire = "{{ $siteSettings->hosting }}"; // Example: 2025-10-15
-    let sslExpire = "{{ $siteSettings->ssl }}"; // Example: 2025-08-30
-
-    startCountdown("domain-expire", "domain-item", domainExpire);
-    startCountdown("hosting-expire", "hosting-item", hostingExpire);
-    startCountdown("ssl-expire", "ssl-item", sslExpire);
-</script>
 
 @endsection
