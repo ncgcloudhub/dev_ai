@@ -393,6 +393,13 @@
                                         <a href="{{route('add.page.seo')}}" class="nav-link sidebar-hover {{ request()->routeIs('add.page.seo') ? 'active' : '' }}" >Page SEO Add</a>
                                     </li>
                                     @endcan
+                                    {{-- needs can --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('expirations.index') }}" class="nav-link sidebar-hover {{ request()->routeIs('expirations.index') ? 'active' : '' }}">
+                                            Expiration Tracker
+                                        </a>
+                                    </li>
+                                   
                                     @can('settings.pageSEOAdd')
                                     <li class="nav-item">
                                         <a href="{{route('stripe.balance.report')}}" class="nav-link sidebar-hover {{ request()->routeIs('stripe.balance.report') ? 'active' : '' }}" >Report Stripe</a>

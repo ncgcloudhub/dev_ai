@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\EducationTools;
+use App\Models\Expiration;
 use App\Models\PromptLibrary;
 
 class AdminController extends Controller
@@ -40,7 +41,9 @@ class AdminController extends Controller
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
 
-        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
+        $expirations = Expiration::all();
+
+        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator','expirations'));
     }
 
     public function showChangePasswordForm(User $user)
