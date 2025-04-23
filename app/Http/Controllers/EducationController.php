@@ -845,7 +845,7 @@ public function ToolsGenerateContent(Request $request)
         ],
     ]);
     
-    Log::info('OpenAI Response Edu', ['response' => $response]);
+    // Log::info('OpenAI Response Edu', ['response' => $response]);
     
     // Log the activity
     logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
@@ -905,7 +905,7 @@ public function ToolsGenerateContent(Request $request)
         }, $content);
     }
 
-    Log::info('Processed Content with DALL·E Images', ['content' => $content]);
+    // Log::info('Processed Content with DALL·E Images', ['content' => $content]);
         
 
     // Deduct user tokens
@@ -935,16 +935,18 @@ public function ToolsGenerateContent(Request $request)
     
     // Stream the processed content (with images) to the view
     return response()->stream(function () use ($content) {
-        $chunks = explode("\n", $content);
-        $parsedown = new Parsedown();
+        echo "<pre>"; // Open preformatted block
+        ob_flush(); flush();
     
-        foreach ($chunks as $chunk) {
-            $htmlChunk = $parsedown->text($chunk);
-            echo $htmlChunk;
-            ob_flush();
-            flush();
-            sleep(1);
+        $lines = explode("\n", $content);
+        foreach ($lines as $line) {
+            echo e($line) . "\n";
+            ob_flush(); flush();
+            usleep(300000); // 0.3s delay for visible streaming effect
         }
+    
+        echo "</pre>"; // Close pre block
+        ob_flush(); flush();
     });
 }
 
