@@ -42,7 +42,7 @@ class TokensRenewedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'backend.user.tokens-renewed_email_template',
+            view: 'backend.user.tokens_renewed_email_template',
         );
     }
 

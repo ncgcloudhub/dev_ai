@@ -47,7 +47,7 @@ class StripeWebhookController extends Controller
             Log::info('Handling customer.subscription.deleted event...');
             $this->handleSubscriptionDeleted($event->data->object);
             break;
-
+            
         default:
             Log::info('Unhandled event type:', ['event_type' => $event->type]);
             break;
