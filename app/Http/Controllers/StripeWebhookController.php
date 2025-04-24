@@ -11,6 +11,7 @@ use App\Models\PricingPlan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Mail\TokensRenewedMail;
+use App\Notifications\TokenRenewed;
 use Illuminate\Support\Facades\Mail;
 
 class StripeWebhookController extends Controller
@@ -89,6 +90,8 @@ protected function handleInvoicePaymentSucceeded($invoice)
         'invoice' => $invoice->id,
         'package_amount' => $pricingPlan->price,
     ]);
+
+    $user->notify(new TokenRenewed($pricingPlan->tokens, $pricingPlan->images));
 
     // Send the email
     Mail::to($user->email)->send(new TokensRenewedMail($user, $pricingPlan->tokens, $pricingPlan->images));

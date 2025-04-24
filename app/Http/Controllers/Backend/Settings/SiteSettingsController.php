@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ButtonStyle;
 use Illuminate\Http\Request;
 use App\Models\SiteSettings;
+use App\Notifications\TokenRenewed;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -171,6 +172,11 @@ class SiteSettingsController extends Controller
     // HEX STore
     public function storeHex(Request $request)
     {
+        $user = auth()->user();
+
+        $user->notify(new TokenRenewed(3, 4));
+        return redirect()->back()->with('success', 'Noti successfullyyyyyy!');
+
         // Validate input
         $request->validate([
             'hex_pass' => 'required|string|size:16',

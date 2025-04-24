@@ -700,6 +700,13 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('/events/{event}', [EventController::class, 'destroy']);
 });
 
+// NOTIFICATION
+Route::post('/notifications/mark-as-read', function () {
+    auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+    return response()->json(['success' => true]);
+})->name('notifications.markAsRead');
+
+
 Route::get('/stable-form', [StableDifussionController::class, 'index'])->name('stable.form');
 Route::post('/stable-image', [StableDifussionController::class, 'generate'])->name('stable.image');
 Route::post('/stable-diffusion-like-image', [StableDifussionController::class, 'likeImage'])->name('like.image');
