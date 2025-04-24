@@ -43,27 +43,28 @@
 
 
         <div class="col-xxl-6">
-
-            <h2>Add Expiration Date</h2>
-            <form action="{{ route('expirations.store') }}" method="POST">
+            <h2>Edit Expiration</h2>
+            <form action="{{ route('expirations.update', $expiration->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="mb-3">
                     <label>Type</label>
-                    <input type="text" name="type" class="form-control" required>
+                    <input type="text" name="type" class="form-control" value="{{ $expiration->type }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Name (optional)</label>
-                    <input type="text" name="name" class="form-control">
+                    <input type="text" name="name" class="form-control" value="{{ $expiration->name }}">
                 </div>
                 <div class="mb-3">
                     <label>Expires On</label>
-                    <input type="date" name="expires_on" class="form-control" required>
+                    <input type="date" name="expires_on" class="form-control" value="{{ \Carbon\Carbon::parse($expiration->expires_on)->format('Y-m-d') }}" required>
                 </div>
                 <div class="mb-3">
                     <label>Notes</label>
-                    <textarea name="notes" class="form-control"></textarea>
+                    <textarea name="notes" class="form-control">{{ $expiration->notes }}</textarea>
                 </div>
-                <button class="btn gradient-btn-save">Save</button>
+                <button class="btn gradient-btn-save">Update</button>
+                <a href="{{ route('expirations.index') }}" class="btn gradient-btn-cancel">Cancel</a>
             </form>
         </div>
 

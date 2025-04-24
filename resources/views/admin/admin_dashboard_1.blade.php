@@ -29,6 +29,7 @@
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
                                 <a href="{{ route('main.chat.form') }}" class="gradient-btn-generate">
+                                    {{-- <i class="{{ $buttonIcons['save'] }}"></i> --}}
                                     Chat
                                 </a>
                                 
@@ -43,7 +44,13 @@
             <div class="col-xl-4 col-md-12">
                 <div class="card overflow-hidden mb-4" style="border-color: #be06af">
                     <div class="card-body">
-                        <h5 class="card-title">All Expirations</h5>
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            All Expirations
+                            <a href="{{ route('expirations.index') }}" class="btn btn-sm gradient-btn-view">
+                                Show All
+                            </a>
+                        </h5>
+                        
                         <ul class="list-group" id="expirationList">
                             @foreach($expirations as $index => $item)
                                 @php
@@ -80,7 +87,7 @@
             
                         @if(count($expirations) > 3)
                             <div class="text-center mt-2">
-                                <a href="javascript:void(0);" id="toggleMore" class="text-primary">
+                                <a href="javascript:void(0);" id="toggleMore" class="gradient-text-2">
                                     <i class="fas fa-chevron-down"></i> Show More
                                 </a>
                             </div>
