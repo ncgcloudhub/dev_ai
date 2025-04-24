@@ -25,6 +25,30 @@
                     <div class="card-body bg-marketplace d-flex">
                         <div class="flex-grow-1">
                             <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link position-relative" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                                    <i class="bi bi-bell fs-5"></i>
+                                    @if($notifications->count() > 0)
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            {{ $notifications->count() }}
+                                        </span>
+                                    @endif
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end p-2 shadow-sm" style="min-width: 300px;">
+                                    @forelse($notifications as $notification)
+                                        <li class="mb-2">
+                                            <div class="text-dark small">
+                                                {{ $notification->data['message'] }}
+                                                <br>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </li>
+                                    @empty
+                                        <li class="text-muted small px-3">No new notifications</li>
+                                    @endforelse
+                                </ul>
+                            </li>
+                            
                             <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
@@ -282,6 +306,25 @@
     </div> 
 
 </div>
+
+@push('scripts')
+<script>
+    document.querySelector('.nav-link[data-bs-toggle="dropdown"]').addEventListener('click', function () {
+        fetch("{{ route('notifications.markAsRead') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                const badge = document.querySelector('.badge.bg-danger');
+                if (badge) badge.remove();
+            }
+        });
+    });
+</script>
+@endpush
 
 
 @endsection

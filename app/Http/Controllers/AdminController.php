@@ -44,7 +44,9 @@ class AdminController extends Controller
         $expirations = Expiration::orderBy('expires_on', 'asc')->get();
 
 
-        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator','expirations'));
+        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator','expirations','notifications'));
     }
 
     public function showChangePasswordForm(User $user)
