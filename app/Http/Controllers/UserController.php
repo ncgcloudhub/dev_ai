@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Models\EducationTools;
 use App\Models\PromptLibrary;
+use App\Models\UserFeedback;
 use App\Models\UserMonthlyUsage;
 use Carbon\Carbon;
 
@@ -216,7 +217,21 @@ class UserController extends Controller
         return response()->json($timeseriesData);
     }
 
- 
+    public function submitfeedback(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|string',
+            'message' => 'required|string|max:1000',
+        ]);
 
+        // You can store it in DB or send an email
+        UserFeedback::create([
+            'user_id' => auth()->id(),
+            'type' => $request->type,
+            'message' => $request->message,
+        ]);
+
+        return back()->with('success', 'Thank you for your feedback!');
+    }
 
 }

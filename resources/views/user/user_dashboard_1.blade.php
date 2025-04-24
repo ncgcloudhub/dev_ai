@@ -244,6 +244,37 @@
             </div><!-- end card body -->
         </div>
 
+        {{-- User Feedback Form --}}
+        <div class="card mt-4 border-color-purple">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">We Value Your Feedback</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('user.feedback.submit') }}">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="type" class="form-label gradient-text-2">Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="feedback">General Feedback</option>
+                            <option value="bug">Report a Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label gradient-text-2">Your Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you think..." required></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn gradient-btn-generate">Submit Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
     </div> 
 
 </div>
