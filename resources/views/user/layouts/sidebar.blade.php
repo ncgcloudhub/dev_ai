@@ -190,32 +190,40 @@
                 </li>
 
                 @php
-    $allowedEmails = ['fahmidh262@gmail.com', 'ifaz.alam1@gmail.com', 'clevercreatorai@gmail.com', 'ifazalam69@gmail.com', 'ifaz.alam@statait.com', 'ifazalam9@gmail.com', 'metaversetech07@gmail.com'];
-@endphp
+                    $allowedEmails = ['fahmidh262@gmail.com', 'ifaz.alam1@gmail.com', 'clevercreatorai@gmail.com', 'ifazalam69@gmail.com', 'ifaz.alam@statait.com', 'ifazalam9@gmail.com', 'metaversetech07@gmail.com'];
+                @endphp
 
-@if (auth()->check() && in_array(auth()->user()->email, $allowedEmails))
-    <li class="menu-title"><i class="ri-more-fill"></i> <span>Subscriptions</span></li>
+                @if (auth()->check() && in_array(auth()->user()->email, $allowedEmails))
+                    <li class="menu-title"><i class="ri-more-fill"></i> <span>Subscriptions</span></li>
 
-    {{-- Subscription --}}
-    <li class="nav-item">
-        <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}" href="#subscription" data-bs-toggle="collapse" role="button"
-            aria-expanded="{{ request()->routeIs('all.package') ? 'true' : 'false' }}" aria-controls="subscription">
-            <i class="ri-price-tag-3-line"></i> <span>Subscription</span>
-        </a>
-        <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('all.package') ? 'show' : '' }}" id="subscription">
-            <div class="row">
-                <div class="col-lg-4">
-                    <ul class="nav nav-sm flex-column">
-                        <li class="nav-item">
-                            <a href="{{ route('all.package') }}" class="nav-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}">Buy Package</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </li>
-    {{-- End Subscription --}}
-@endif
+                    {{-- Subscription --}}
+                    <li class="nav-item">
+                        <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}" href="#subscription" data-bs-toggle="collapse" role="button"
+                            aria-expanded="{{ request()->routeIs('all.package') ? 'true' : 'false' }}" aria-controls="subscription">
+                            <i class="ri-price-tag-3-line"></i> <span>Subscription</span>
+                        </a>
+                        <div class="collapse menu-dropdown mega-dropdown-menu {{ request()->routeIs('all.package') ? 'show' : '' }}" id="subscription">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ route('all.package') }}" class="nav-link sidebar-hover {{ request()->routeIs('all.package') ? 'active' : '' }}">Buy Package</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {{-- End Subscription --}}
+                @endif
+
+                <li class="menu-title"><i class="ri-more-fill"></i> <span>Others</span></li>
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('user.feedback.index') ? 'active' : '' }}" href="{{ route('user.feedback.index') }}">
+                        <i class="las la-id-card"></i> <span>My Feedback</span>
+                    </a>
+                </li>
                
             </ul>
 

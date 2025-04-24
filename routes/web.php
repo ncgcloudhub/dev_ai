@@ -198,6 +198,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history')->middleware('admin.permission:manageUser&Admin.manageuserPackage');
         Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request')->middleware('admin.permission:manageUser&Admin.manageFeedback');
         Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
+        Route::get('/feedback', [UserManageController::class, 'userfeedback'])->name('admin.feedback.index');
     });
 
     // REFERRAL MANAGE
@@ -414,6 +415,10 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
     Route::post('/module/feedback', [RequestModuleFeedbackController::class, 'templateFeedback'])->name('template.module.feedback');
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
+    Route::post('user/feedback/submit', [UserController::class, 'submitfeedback'])->name('user.feedback.submit');
+    Route::get('/my-feedback', [UserController::class, 'userfeedback'])->name('user.feedback.index');
+
+
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
     Route::get('/purchase/{pricingPlanId}', [SubscriptionController::class, 'Purchase'])->name('purchase.package');
