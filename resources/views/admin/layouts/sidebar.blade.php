@@ -560,7 +560,7 @@
                             
                                     @can('manageUser&Admin.manageFeedback')
                                     <li class="nav-item">
-                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.user.feedback.request') ? 'active' : '' }}" >Manage Feedback Request</a>
+                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.user.feedback.request') ? 'active' : '' }}" >Manage Content Creator Feedback Request</a>
                                     </li>
                                     @endcan
                                    
@@ -569,6 +569,10 @@
                                         <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover {{ request()->routeIs('send.email.form') ? 'active' : '' }}" >Send Email</a>
                                     </li>
                                     @endcan
+
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.feedback.index')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.feedback.index') ? 'active' : '' }}" >Manage User Feedback</a>
+                                    </li>
                                   
                                 </ul>
                             </div>

@@ -15,6 +15,7 @@ use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
 use App\Models\UserActivityLog;
+use App\Models\UserFeedback;
 use App\Models\UserPageTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -316,7 +317,11 @@ class UserManageController extends Controller
         return back()->with('success', 'Emails sent and logged successfully!');
     }
     
-
+    public function userfeedback()
+    {
+        $feedbacks = UserFeedback::with('user')->latest()->get();
+        return view('admin.userfeedback.manage_feedback', compact('feedbacks'));
+    }
 
 
     
