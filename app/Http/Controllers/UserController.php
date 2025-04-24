@@ -234,4 +234,10 @@ class UserController extends Controller
         return back()->with('success', 'Thank you for your feedback!');
     }
 
+    public function userfeedback()
+    {
+        $feedbacks = UserFeedback::where('user_id', auth()->id())->latest()->get();
+        return view('user.feedback.feedback_manage', compact('feedbacks'));
+    }
+
 }

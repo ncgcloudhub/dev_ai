@@ -415,6 +415,8 @@ Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.bloc
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
     Route::post('user/feedback/submit', [UserController::class, 'submitfeedback'])->name('user.feedback.submit');
+    Route::get('/my-feedback', [UserController::class, 'userfeedback'])->name('user.feedback.index');
+
 
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
