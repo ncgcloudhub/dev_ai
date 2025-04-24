@@ -267,9 +267,9 @@
                         <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you think..." required></textarea>
                     </div>
 
-                    <div class="d-grid">
+                    
                         <button type="submit" class="btn gradient-btn-generate">Submit Feedback</button>
-                    </div>
+                   
                 </form>
             </div>
         </div>
