@@ -41,7 +41,8 @@ class AdminController extends Controller
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
 
-        $expirations = Expiration::all();
+        $expirations = Expiration::orderBy('expires_on', 'asc')->get();
+
 
         return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator','expirations'));
     }
