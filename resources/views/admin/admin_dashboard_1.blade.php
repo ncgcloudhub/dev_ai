@@ -44,25 +44,26 @@
                 <div class="card overflow-hidden mb-4" style="border-color: #be06af">
                     <div class="card-body">
                         <h5 class="card-title">All Expirations</h5>
-                        <ul class="list-group">
-                            @foreach($expirations as $item)
+                        <ul class="list-group" id="expirationList">
+                            @foreach($expirations as $index => $item)
                                 @php
                                     $expiresOn = \Carbon\Carbon::parse($item->expires_on);
                                     $today = \Carbon\Carbon::today();
-                                    $diff = $expiresOn->diffInDays($today, false); // Negative means expired
+                                    $diff = $expiresOn->diffInDays($today, false); // Negative means not yet expired
                                 @endphp
-                                
-                                <li class="list-group-item d-flex justify-content-between">
+            
+                                <li class="list-group-item d-flex justify-content-between
+                                    {{ $index >= 3 ? 'd-none more-expirations' : '' }}">
                                     <strong>{{ ucfirst($item->type) }} Expire:</strong>
                                     <span class="
                                         @if($diff > 0)
-                                            text-muted  <!-- Expired -->
+                                            text-muted
                                         @elseif($diff < 0)
-                                            text-success  <!-- More days left -->
+                                            text-success
                                         @elseif($diff <= 30)
-                                            text-danger  <!-- Less than 30 days left -->
+                                            text-danger
                                         @else
-                                            text-warning  <!-- More than 30 days left -->
+                                            text-warning
                                         @endif
                                     ">
                                         @if($diff > 0)
@@ -76,11 +77,18 @@
                                 </li>
                             @endforeach
                         </ul>
-                        
+            
+                        @if(count($expirations) > 3)
+                            <div class="text-center mt-2">
+                                <a href="javascript:void(0);" id="toggleMore" class="text-primary">
+                                    <i class="fas fa-chevron-down"></i> Show More
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
-                
             </div>
+            
         </div>
         
         {{-- 1st col 2nd row --}}
@@ -357,6 +365,21 @@
             console.error('Error copying text: ', err);
         });
     }
-    </script>
+</script>
+
+<script>
+    document.getElementById('toggleMore').addEventListener('click', function () {
+        document.querySelectorAll('.more-expirations').forEach(item => item.classList.toggle('d-none'));
+
+        const icon = this.querySelector('i');
+        const isExpanded = icon.classList.contains('fa-chevron-up');
+
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
+
+        this.innerHTML = `<i class="fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-up'}"></i> ${isExpanded ? 'Show More' : 'Show Less'}`;
+    });
+</script>
+
 
 @endsection
