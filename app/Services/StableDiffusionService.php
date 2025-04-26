@@ -133,10 +133,19 @@ class StableDiffusionService
                 'seed' => $seedId,  // Return the seed ID
             ];
         } else {
-            return response()->json([
-                'error' => $response->json() ?? 'An error occurred during image generation.'
-            ], $response->status());
-        }
+            $errorData = $response->json();
+        
+            $errorMessage = $errorData['errors'][0] 
+                ?? $errorData['error'] 
+                ?? $response->body() 
+                ?? 'An error occurred during image generation.';
+        
+            return [
+                'error' => $errorMessage,
+                'status' => $response->status(),
+            ];
+        }        
+        
     }
 
 }
