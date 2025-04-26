@@ -32,11 +32,11 @@
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
                                         @can('customTemplate.category.edit')
-                                        <a href="{{route('custom.template.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                        <a href="{{route('custom.template.category.edit',$item->id)}}" class="gradient-btn-edit d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="{{ $buttonIcons['edit'] }}"></i> </a>
                                         @endcan
 
                                         @can('customTemplate.category.delete')
-                                        <a href="{{route('custom.template.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
+                                        <a href="{{route('custom.template.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="gradient-btn-delete d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="{{ $buttonIcons['delete'] }}"></i> </a>
                                         @endcan
 
                                     </div>
@@ -76,7 +76,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded btn-primary mb-2">Save</button>
+                                <button title="Save" class="btn btn-rounded gradient-btn-save mb-2"><i class="{{$buttonIcons['save']}}"></i></button>
                             </div>
                         </div>
                     </form>
