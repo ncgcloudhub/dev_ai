@@ -191,7 +191,7 @@
             </div>
 
             <div class="text-end mb-4">
-                <button type="submit" class="btn gradient-btn-save">Save Changes</button>
+                <button type="submit" class="btn gradient-btn-save" title="Update"><i class="{{$buttonIcons['save']}}"></i></button>
             </div>
             <!-- end card -->
         </div>

@@ -155,7 +155,7 @@
             <!-- end card body -->
         </div>
         <div class="text-end mb-4">
-            <button type="submit" class="btn gradient-btn-save">Create Page</button>
+            <button type="submit" class="btn gradient-btn-save" title="Save"><i class="{{$buttonIcons['save']}}"></i></button>
         </div>
         <!-- end card -->
     </div>

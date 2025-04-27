@@ -48,7 +48,7 @@
                 </div> 
 
 
-	 <button type="submit" class="btn gradient-btn-save me-2">Save Changes </button>
+	 <button type="submit" class="btn gradient-btn-save me-2" title="Save"><i class="{{$buttonIcons['save']}}"></i></button>
 
 			</form>
 
