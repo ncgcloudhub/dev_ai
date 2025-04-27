@@ -140,6 +140,26 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(StableDiffusionImageLike::class);
 }
 
+// check user has active stripe subscription or not
+public function hasActivePaidSubscription()
+{
+    // Check if the user has a Stripe ID and if they have any active subscription
+    if ($this->stripe_id) {
+        $stripeSubscriptions = \Stripe\Subscription::all([
+            'customer' => $this->stripe_id,
+            'status' => 'active',
+            'limit' => 1,
+        ]);
+
+        // If an active subscription is found, return true
+        if (collect($stripeSubscriptions->data)->isNotEmpty()) {
+            return true;
+        }
+    }
+
+    return false; // No active paid subscription found
+}
+
     
 
    
