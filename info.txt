@@ -169,3 +169,6 @@ In siteSettings, add hosting timestamp without timezone
 
 20/4/25
 privacy_policy ADD status (text) default-inactive
+
+27/04/25
+in user_feedback, add admin_status and admin_comment; type=text
