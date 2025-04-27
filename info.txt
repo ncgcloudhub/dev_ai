@@ -172,3 +172,4 @@ privacy_policy ADD status (text) default-inactive
 
 27/4/25
 Users ADD last_free_package_renewed_at (timestamp without timezone) 
+Command for testing(if user getting tokens or not): php artisan package:renew-free-for-non-subscribers
