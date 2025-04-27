@@ -31,8 +31,8 @@
 
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <a href="{{ route('ai.settings.edit', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('ai.settings.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this Model')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
+                                    <a href="{{ route('ai.settings.edit', $item->id) }}" title="Edit" class="gradient-btn-edit fs-15"><i class="{{$buttonIcons['edit']}}"></i></a> 
+                                    <a href="{{ route('ai.settings.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this Model')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a>
                                 </div>
                             </td>
                           
@@ -67,7 +67,7 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn gradient-btn-save" value="Add">
+            <button type="submit" class="btn gradient-btn-save" title="Save"><i class="{{$buttonIcons['save']}}"></i>
         </div>
     </div>
 </form>
