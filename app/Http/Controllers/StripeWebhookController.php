@@ -105,7 +105,10 @@ protected function handleInvoicePaymentSucceeded($invoice)
 
         if ($user) {
             // Optionally, mark the subscription as canceled in your database
-            $user->subscriptions()->where('stripe_id', $subscription->id)->delete();
+            $user->subscriptions()
+            ->where('stripe_id', $subscription->id)
+            ->update(['stripe_status' => 'canceled']);
+
         }
     }
 }

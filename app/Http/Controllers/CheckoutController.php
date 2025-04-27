@@ -29,13 +29,22 @@ class CheckoutController extends Controller
          $id = $request->input('id');
          $prod_id = $request->input('prod_id');
          $price_id = $request->input('price_id');
+         $user = $request->user();
+
+         // Check if user already has an active subscription
+         $currentSubscription = $user->subscriptions()->where('stripe_status', 'active')->first();
+
+         if ($currentSubscription) {
+            // Cancel the current subscription on Stripe
+            $currentSubscription->cancelNow(); // immediately cancel
+            // or ->cancel(); // cancel at period end if you prefer
+        }
          
-        return $request->user()
-            ->newSubscription($prod_id, $price_id)
-            ->checkout([
-                'success_url' => route('subscription.success', ['pricingPlanId' => $id]), // Redirect here after success
-                'cancel_url' => route('user.dashboard'),
-            ]);
+        return $user->newSubscription($prod_id, $price_id)
+        ->checkout([
+            'success_url' => route('subscription.success', ['pricingPlanId' => $id]),
+            'cancel_url' => route('user.dashboard'),
+        ]);
     }
 
     // Handle the successful subscription and store the package
