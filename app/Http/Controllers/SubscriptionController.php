@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Stripe\Stripe;
 
 class SubscriptionController extends Controller
 {
@@ -30,16 +32,58 @@ class SubscriptionController extends Controller
 
         $totalTemplates = Template::count();
 
-        // Get the authenticated user
-        $user = Auth::user();
-        // Get the last package bought by the user
-        $lastPackageHistory = PackageHistory::where('user_id', $user->id)
-            ->latest()
-            ->first();
+    // Get the authenticated user
+    $user = Auth::user();
 
-        $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
+    Stripe::setApiKey(config('services.stripe.secret'));
 
-        return view('backend.subscription.all_package', compact('monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates','highestDiscount'));
+    $lastPackageId = null; // default no plan selected
+
+    try {
+        if ($user->stripe_id) {
+            Log::info('Fetching subscriptions for user', ['stripe_id' => $user->stripe_id]);
+    
+            $stripeSubscriptions = \Stripe\Subscription::all([
+                'customer' => $user->stripe_id,
+                'status' => 'active',
+                'limit' => 1,
+            ]);
+    
+            Log::info('Stripe subscriptions fetched', ['subscriptions' => $stripeSubscriptions->data]);
+    
+            $currentSubscription = collect($stripeSubscriptions->data)->first();
+    
+            if ($currentSubscription) {
+                Log::info('Current active subscription found', ['currentSubscription' => $currentSubscription]);
+    
+                $stripePriceId = $currentSubscription->items->data[0]->price->id ?? null;
+    
+                if ($stripePriceId) {
+                    Log::info('Stripe price ID from active subscription', ['stripePriceId' => $stripePriceId]);
+    
+                    $pricingPlan = PricingPlan::where('stripe_price_id', $stripePriceId)->first();
+    
+                    if ($pricingPlan) {
+                        Log::info('Matched PricingPlan found', ['pricingPlanId' => $pricingPlan->id]);
+                        $lastPackageId = $pricingPlan->id;
+                    } else {
+                        Log::warning('No PricingPlan matched for Stripe price ID', ['stripePriceId' => $stripePriceId]);
+                    }
+                } else {
+                    Log::warning('No price ID found in subscription items', ['subscription' => $currentSubscription]);
+                }
+            } else {
+                Log::info('No active subscriptions found for user', ['stripe_id' => $user->stripe_id]);
+            }
+        }
+    } catch (\Exception $e) {
+        Log::error('Error fetching Stripe subscription: ' . $e->getMessage());
+        // fallback silently
+    }
+
+    return view('backend.subscription.all_package', compact(
+        'monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates', 'highestDiscount'
+    ));
     } // End Method  
 
     public function purchase($pricingPlanId)
