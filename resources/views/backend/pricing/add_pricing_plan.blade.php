@@ -258,7 +258,7 @@
     
                            <hr>
                             <div class="mt-3 pt-2">
-                                <button type="submit" class="btn gradient-btn-save">Add Plan</button>
+                                <button type="submit" class="btn gradient-btn-save" title="Save"> <i class="{{$buttonIcons['save']}}"></i></button>
                             </div>
                         </ul>
 
