@@ -6,7 +6,7 @@
 @slot('title') Open AI Edit @endslot
 @endcomponent
 
-<a href="{{route('ai.settings.add')}}" class="btn btn-secondary waves-effect waves-light mb-3" data-text="Add Menu"><span>Add AI Models</span></a>
+<a href="{{route('ai.settings.add')}}" class="btn gradient-btn-add waves-effect waves-light mb-3" data-text="Add Menu" title="Add AI Model"><span><i class="{{$buttonIcons['add']}}"></i></span></a>
 
 <div class="row">
 
@@ -37,8 +37,8 @@
                                         data-id="{{ $item->id }}">
                                     {{ $item->status ? 'Active' : 'Inactive' }}
                                     </button>
-                                    <a href="{{ route('ai.settings.edit', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('ai.settings.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this Model')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a>
+                                    <a href="{{ route('ai.settings.edit', $item->id) }}" class="gradient-btn-edit fs-15" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a> 
+                                    <a href="{{ route('ai.settings.delete', $item->id) }}" onclick="return confirm('Are you sure you want to delete this Model')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a>
                                 </div>
                             </td>
                           
@@ -67,15 +67,13 @@
                         <label for="openaimodel" class="form-label">Open AI Model</label>
                         <input type="text" name="openaimodel" value="{{$model->openaimodel}}" class="form-control" id="openaimodel" placeholder="Enter Item Name">
                     </div>
-
-                  
             </div>
         </div>
     </div>
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn gradient-btn-edit" value="Update">
+            <button type="submit" class="btn gradient-btn-edit" title="Update"><i class="{{$buttonIcons['save']}}"></i>
         </div>
     </div>
 </form>
