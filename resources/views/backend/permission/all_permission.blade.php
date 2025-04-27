@@ -14,14 +14,14 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Permission  <a href="{{ route('add.permission') }}" class="btn gradient-btn-add">Add</a></h5>
+                <h5 class="card-title mb-1">Permission  <a href="{{ route('add.permission') }}" class="btn gradient-btn-add" title="Add Permission"><i class="{{$buttonIcons['add']}}"></i></a></h5>
 
                 <div class="btn-group">
-                    <a href="{{ route('import.permission') }}" class="btn gradient-btn-import">Import </a>  
+                    <a href="{{ route('import.permission') }}" class="btn gradient-btn-import" title="Import"> <i class="{{$buttonIcons['import']}}"></i> </a>  
                 </div>
 
                 <div class="btn-group">
-                    <a href="{{ route('export.permission') }}" class="btn gradient-btn-export">Export </a>  
+                    <a href="{{ route('export.permission') }}" class="btn gradient-btn-export" title="Export"> <i class="{{$buttonIcons['export']}}"></i> </a>  
                 </div>
 
             </div>
@@ -53,13 +53,13 @@
                          
                             <td>
                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                    <a href="{{ route('edit.permission',$item->id) }}" class="text-primary d-inline-block edit-item-btn">
-                                        <i class="ri-pencil-fill fs-16"></i>
+                                    <a href="{{ route('edit.permission',$item->id) }}" class="gradient-btn-edit d-inline-block">
+                                        <i class="{{$buttonIcons['edit']}}"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <a class="text-danger d-inline-block remove-item-btn" href="{{ route('delete.permission',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                    <a class="gradient-btn-delete d-inline-block" href="{{ route('delete.permission',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
+                                        <i class="{{$buttonIcons['delete']}}"></i>
                                     </a>
                                 </li>
                             </td>
