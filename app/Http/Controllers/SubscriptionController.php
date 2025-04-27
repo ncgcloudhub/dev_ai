@@ -41,39 +41,23 @@ class SubscriptionController extends Controller
 
     try {
         if ($user->stripe_id) {
-            Log::info('Fetching subscriptions for user', ['stripe_id' => $user->stripe_id]);
-    
             $stripeSubscriptions = \Stripe\Subscription::all([
                 'customer' => $user->stripe_id,
                 'status' => 'active',
                 'limit' => 1,
             ]);
-    
-            Log::info('Stripe subscriptions fetched', ['subscriptions' => $stripeSubscriptions->data]);
-    
+
             $currentSubscription = collect($stripeSubscriptions->data)->first();
-    
+
             if ($currentSubscription) {
-                Log::info('Current active subscription found', ['currentSubscription' => $currentSubscription]);
-    
                 $stripePriceId = $currentSubscription->items->data[0]->price->id ?? null;
-    
+
                 if ($stripePriceId) {
-                    Log::info('Stripe price ID from active subscription', ['stripePriceId' => $stripePriceId]);
-    
                     $pricingPlan = PricingPlan::where('stripe_price_id', $stripePriceId)->first();
-    
                     if ($pricingPlan) {
-                        Log::info('Matched PricingPlan found', ['pricingPlanId' => $pricingPlan->id]);
                         $lastPackageId = $pricingPlan->id;
-                    } else {
-                        Log::warning('No PricingPlan matched for Stripe price ID', ['stripePriceId' => $stripePriceId]);
                     }
-                } else {
-                    Log::warning('No price ID found in subscription items', ['subscription' => $currentSubscription]);
                 }
-            } else {
-                Log::info('No active subscriptions found for user', ['stripe_id' => $user->stripe_id]);
             }
         }
     } catch (\Exception $e) {
@@ -84,6 +68,7 @@ class SubscriptionController extends Controller
     return view('backend.subscription.all_package', compact(
         'monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates', 'highestDiscount'
     ));
+    
     } // End Method  
 
     public function purchase($pricingPlanId)
