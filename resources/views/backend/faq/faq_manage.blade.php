@@ -32,8 +32,8 @@
                 <!-- Edit and Delete Buttons -->
                 <div class="button-group mt-3">
                     @can('settings.FAQ.edit')
-                    <button type="button" class="btn gradient-btn-9 me-2" data-bs-toggle="modal" data-bs-target="#editModal{{$index}}">
-                        Edit
+                    <button type="button" class="btn gradient-btn-edit me-2" data-bs-toggle="modal" data-bs-target="#editModal{{$index}}" title="Edit">
+                        <i class="{{$buttonIcons['edit']}}"></i>
                     </button>
                     @endcan
                   
@@ -41,8 +41,8 @@
                     <form action="{{ route('faq.destroy', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn gradient-btn-remove" onclick="return confirm('Are you sure you want to delete this FAQ?')">
-                            Delete
+                        <button type="submit" class="btn gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this FAQ?')" title="Delete">
+                            <i class="{{$buttonIcons['delete']}}"></i>
                         </button>
                     </form>
                     @endcan
@@ -72,7 +72,7 @@
                             <label for="answer{{$index}}" class="form-label">Answer</label>
                             <textarea class="form-control" id="tinymceExample" name="answer" rows="12" required>{!! $item->answer !!}</textarea>
                         </div>
-                        <button type="submit" class="btn gradient-btn-save">Save changes</button>
+                        <button type="submit" class="btn gradient-btn-save" title="Update"><i class="{{$buttonIcons['save']}}"></i></button>
                     </form>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                         <label for="message-text" class="col-form-label">Answer</label>
                         <textarea name="answer" class="form-control" id="tinymceExample" rows="12"></textarea>
                     </div>
-                    <button class="btn gradient-btn-save" type="submit">Submit</button>
+                    <button class="btn gradient-btn-save" type="submit" title="Save"><i class="{{$buttonIcons['save']}}"></i></button>
                 </form>
             </div>
            
