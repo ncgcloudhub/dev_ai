@@ -169,3 +169,6 @@ In siteSettings, add hosting timestamp without timezone
 
 20/4/25
 privacy_policy ADD status (text) default-inactive
+
+27/4/25
+Users ADD last_free_package_renewed_at (timestamp without timezone) 
