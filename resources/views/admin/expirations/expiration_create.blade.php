@@ -24,7 +24,7 @@
                 <tr>
                     <td>{{ $exp->type }}</td>
                     <td>{{ $exp->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('M d Y') }}</td>
                     <td>{{ $exp->notes }}</td>
                     <td>
                         <a href="{{ route('expirations.edit', $exp->id) }}" class="btn btn-sm gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a>
