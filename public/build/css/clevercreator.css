@@ -457,3 +457,22 @@
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+/* pagination css */
+
+.page-link.active,.active>.page-link{
+    background-color: rgb(182, 14, 182);
+    border-color: purple;
+}
+
+.pagination{
+    --vz-pagination-color: rgb(185, 21, 185);
+}
+.page-link:hover{
+    color: black;
+}
+
+.page-link:focus{
+    color: black;
+}
+
+/* pagination css end */

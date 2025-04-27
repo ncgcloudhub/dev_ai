@@ -131,7 +131,10 @@
             
             <div class="col-12">
                 <div class="text-end">
-                    <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
+                    <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Update">
+                        <i class="{{$buttonIcons['save']}}"></i>
+                    </button>
+                    
                 </div>
             </div>
         </form>
@@ -164,9 +167,12 @@
             
                 <div class="col-12">
                     <div class="text-end">
-                        <button type="button" class="btn btn-rounded gradient-btn-5 mb-5" id="populateBtn">AI Generate</button>
+                        <button type="button" class="btn btn-rounded gradient-btn-generate mb-5" id="populateBtn" title="Generate SEO Using AI"><i class="{{$buttonIcons['generate']}}"></i></button>
             
-                        <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
+                        <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Update">
+                            <i class="{{$buttonIcons['save']}}"></i>
+                        </button>
+                        
                     </div>
                 </div>
             </form>
