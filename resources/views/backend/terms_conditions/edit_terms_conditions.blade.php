@@ -27,12 +27,12 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                {!! $item->details !!}
+                                {!! \Illuminate\Support\Str::limit(strip_tags($item->details), 50, '...') !!}
                             </td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15 gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a> 
+                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Condition')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a> 
                                 </div>
                             </td>
                           
@@ -67,7 +67,9 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
+                <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Update">
+                    <i class="{{$buttonIcons['save']}}"></i>
+                </button>
             </div>
         </div>
     </form>

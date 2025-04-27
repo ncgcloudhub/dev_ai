@@ -100,11 +100,11 @@
 
             <div class="d-flex align-items-center">
                 <div class="ms-1 header-item d-none d-sm-flex">
-                    <span class="badge gradient-background-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
+                    <span class="badge gradient-bg-1" style="font-size: 0.8rem;">Your next renew is in {{$remainingDays}} days</span>
                 </div>
                 <div class="ms-1 header-item d-none d-sm-flex">
                     @if (!$user->phone || !$user->address)
-                    <span class="badge gradient-background-1" style="font-size: 0.8rem;">Your profile is incomplete. <a href="{{ route('edit.profile') }}">Complete it now</a>.</span>
+                    <span class="badge gradient-bg-1" style="font-size: 0.8rem;">Your profile is incomplete. <a href="{{ route('edit.profile') }}">Complete it now</a>.</span>
                                           
                     @endif
                    
@@ -123,37 +123,9 @@
                         <i class='bx bx-moon fs-22'></i>
                     </button>
                 </div>
-                
-                @include('user.layouts.activity_log')
-                <!-- User Dropdown -->
-                <div class="dropdown ms-sm-3 header-item">
-                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="d-flex align-items-center">
-                            <img class="rounded-circle header-profile-user" src="{{ Auth::user()->photo ? asset('backend/uploads/user/' . Auth::user()->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="Header Avatar">
-                            <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
-                            </span>
-                        </span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                        <!-- Dropdown Menu Items -->
-                        <h6 class="dropdown-header">Welcome {{ Auth::user()->name }}!</h6>
-                        <a class="dropdown-item" href="{{ route('edit.profile') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
-                        <a class="dropdown-item" href="{{ route('user.dashboard') }}" target="_blank"><i class="mdi mdi-home text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dashboard</span></a>
-                        <a class="dropdown-item" href="{{ route('home') }}" target="_blank"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Front-End</span></a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Plan : <b>{{ $lastPackage->package->title ?? 'Free' }}</b></span></a>
-                        <a data-bs-toggle="offcanvas"
-                        data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas" class="dropdown-item"><i class="mdi mdi-spin mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Theme Customizer</span></a>
-                        <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span>@lang('translation.logout')</span></a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </div>
-                </div>
 
-                {{-- Notification Button --}}
-                <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                 {{-- Notification Button --}}
+                 <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
                         @if(count($notifications) > 0)
@@ -223,6 +195,34 @@
                     </div>
                 </div>
                 <!-- End Notification Dropdown -->
+                
+                @include('user.layouts.activity_log')
+                <!-- User Dropdown -->
+                <div class="dropdown ms-sm-3 header-item">
+                    <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="d-flex align-items-center">
+                            <img class="rounded-circle header-profile-user" src="{{ Auth::user()->photo ? asset('backend/uploads/user/' . Auth::user()->photo) : asset('build/images/users/avatar-1.jpg') }}" alt="Header Avatar">
+                            <span class="text-start ms-xl-2">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ Auth::user()->name }}</span>
+                            </span>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- Dropdown Menu Items -->
+                        <h6 class="dropdown-header">Welcome {{ Auth::user()->name }}!</h6>
+                        <a class="dropdown-item" href="{{ route('edit.profile') }}"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                        <a class="dropdown-item" href="{{ route('user.dashboard') }}" target="_blank"><i class="mdi mdi-home text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Dashboard</span></a>
+                        <a class="dropdown-item" href="{{ route('home') }}" target="_blank"><i class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Front-End</span></a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="pages-profile"><i class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Plan : <b>{{ $lastPackage->package->title ?? 'Free' }}</b></span></a>
+                        <a data-bs-toggle="offcanvas"
+                        data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas" class="dropdown-item"><i class="mdi mdi-spin mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Theme Customizer</span></a>
+                        <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1"></i> <span>@lang('translation.logout')</span></a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

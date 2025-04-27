@@ -195,7 +195,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
              <!-- start cta -->
-             <section class="py-5 gradient-background-1 position-relative">
+             <section class="py-5 gradient-bg-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">
@@ -280,7 +280,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section class="py-5 gradient-background-1 position-relative">
+            <section class="py-5 gradient-bg-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">
@@ -343,7 +343,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
 
 
             <!-- start cta -->
-            <section id="cta-newsletter" class="py-5 gradient-background-1 position-relative">
+            <section id="cta-newsletter" class="py-5 gradient-bg-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <form method="post" action="{{ route('newsletter.store') }}#cta-newsletter">
@@ -402,7 +402,7 @@ border: 1px solid rgba(255, 255, 255, 0.99);
             <!-- end contact -->
 
             <!-- start cta -->
-            <section class="py-5 gradient-background-1 position-relative">
+            <section class="py-5 gradient-bg-1 position-relative">
                 <div class="bg-overlay bg-overlay-pattern opacity-50"></div>
                 <div class="container">
                     <div class="row align-items-center gy-4">

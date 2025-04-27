@@ -323,7 +323,19 @@ class UserManageController extends Controller
         return view('admin.userfeedback.manage_feedback', compact('feedbacks'));
     }
 
+    public function updateUserFeedback(Request $request, $id)
+    {
+        $request->validate([
+            'admin_status' => 'nullable|string|max:255',
+            'admin_comment' => 'nullable|string|max:1000',
+        ]);
 
-    
+        $feedback = UserFeedback::findOrFail($id);
+        $feedback->admin_status = $request->admin_status;
+        $feedback->admin_comment = $request->admin_comment;
+        $feedback->save();
+
+        return redirect()->route('admin.feedback.index')->with('success', 'Feedback updated successfully.');
+    }
 
 }

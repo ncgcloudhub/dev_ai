@@ -76,12 +76,12 @@
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
                                     @can('manageUser&Admin.manageAdmin.statusChange')
-                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked>
+                                        <input type="checkbox" class="form-check-input active_button" id="customSwitchsizemd" data-user-id="{{ $item->id }}" checked title="Change Status">
                                         <label class="form-check-label" for="customSwitchsizemd"></label>
                                     @endcan
                                   
                                     @can('manageUser&Admin.manageAdmin.edit')
-                                        <a href="{{ route('edit.admin',$item->id) }}" class="btn btn-inverse-warning" title="Edit"> <i data-feather="edit"></i> </a>
+                                        <a href="{{ route('edit.admin',$item->id) }}" class="btn gradient-btn-edit" title="Edit"> <i class="{{$buttonIcons['edit']}}"></i> </a>
                                     @endcan
                                   
                                     @can('manageUser&Admin.manageAdmin.delete')
@@ -89,8 +89,8 @@
                                         <form id="deleteForm" action="{{ route('admin.users.delete', ['user' => $item->id]) }}" method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm waves-effect waves-light" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                <i class="ri-delete-bin-7-fill"></i>
+                                            <button type="submit" class="btn gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this user?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                <i class="{{$buttonIcons['delete']}}"></i>
                                             </button>
                                         </form>
                                     @endcan

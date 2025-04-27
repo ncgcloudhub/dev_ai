@@ -277,6 +277,13 @@
     </div>
 </div>
 
+@endsection
+
+
+@section('script')
+
+<script src="{{ URL::asset('build/js/app.js') }}"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     function updateButtonStyle(buttonId) {
@@ -355,7 +362,5 @@ document.addEventListener("DOMContentLoaded", function() {
     ["save", "edit", "view", "delete", "cancel", "generate", "add", "remove", "copy", "download", "import", "export", "tour", "search", "filter", "others"].forEach(buttonId => updateButtonStyle(buttonId));
 });
 </script>
+
 @endsection
-
-
-
