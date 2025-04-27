@@ -5,8 +5,8 @@
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="#">Image to Video Generation</a> @endslot
-@slot('title') Generate Animated Video @endslot
+@slot('li_1') <a href="#">Image Generation</a> @endslot
+@slot('title') Generate Image @endslot
 @endcomponent
 
 <style>
@@ -453,7 +453,6 @@
             formData.append('modelVersion', $('#modelVersion').val());
             formData.append('imageFormat', $('#imageFormat').val());
             
-            
             $.ajax({
                 url: $(this).attr('action'), // Use the form's action URL
                 type: 'POST',
@@ -501,11 +500,27 @@
                     });
                 },
     
-                error: function(xhr) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     hideMagicBall();
-                    // Handle errors
-                    $('#responseMessage').html('<p>Error generating image. Please try again.</p>');
+
+                    let errorMessage = 'An error occurred.';
+
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                        errorMessage = jqXHR.responseJSON.error;
+                    } else if (jqXHR.responseText) {
+                        try {
+                            const parsed = JSON.parse(jqXHR.responseText);
+                            errorMessage = parsed.error || parsed.message || errorThrown;
+                        } catch (e) {
+                            errorMessage = errorThrown || 'A network error occurred.';
+                        }
+                    } else {
+                        errorMessage = errorThrown || 'A network error occurred.';
+                    }
+
+                    toastr.error(errorMessage);
                 }
+
             });
         });
     });

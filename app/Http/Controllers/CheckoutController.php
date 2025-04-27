@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Stripe\BalanceTransaction;
 use Stripe\Price;
 use Stripe\Product;
@@ -29,14 +30,44 @@ class CheckoutController extends Controller
          $id = $request->input('id');
          $prod_id = $request->input('prod_id');
          $price_id = $request->input('price_id');
-         
-        return $request->user()
-            ->newSubscription($prod_id, $price_id)
-            ->checkout([
-                'success_url' => route('subscription.success', ['pricingPlanId' => $id]), // Redirect here after success
-                'cancel_url' => route('user.dashboard'),
-            ]);
-    }
+         $user = $request->user();
+     
+         Stripe::setApiKey(config('services.stripe.secret'));
+     
+         try {
+             if ($user->stripe_id) {
+                 // Fetch live subscriptions from Stripe
+                 $stripeSubscriptions = \Stripe\Subscription::all([
+                     'customer' => $user->stripe_id,
+                     'status' => 'active',
+                     'limit' => 1, // just fetch one active subscription if exists
+                 ]);
+     
+                 $currentSubscription = collect($stripeSubscriptions->data)->first();
+                 
+                 Log::info("Fetched live subscription from Stripe", ['currentSubscription' => $currentSubscription]);
+     
+                 if ($currentSubscription) {
+                     // Cancel the active subscription
+                     $stripeSubscription = \Stripe\Subscription::retrieve($currentSubscription->id);
+                     $stripeSubscription->cancel();
+     
+                     Log::info("Successfully canceled Stripe subscription", ['canceledSubscription' => $stripeSubscription]);
+                 }
+             }
+         } catch (\Exception $e) {
+             Log::error("Error canceling subscription: " . $e->getMessage());
+             return redirect()->back()->with('error', 'Failed to cancel previous subscription: ' . $e->getMessage());
+         }
+     
+         // Proceed to new subscription checkout
+         return $user->newSubscription($prod_id, $price_id)
+             ->checkout([
+                 'success_url' => route('subscription.success', ['pricingPlanId' => $id]),
+                 'cancel_url' => route('user.dashboard'),
+             ]);
+     }
+     
 
     // Handle the successful subscription and store the package
     public function handleSuccess(Request $request, $pricingPlanId)

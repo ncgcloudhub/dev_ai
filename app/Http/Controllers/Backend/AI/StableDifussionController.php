@@ -106,7 +106,14 @@ class StableDifussionController extends Controller
 
     Log::info('After Request:', $result);
 
-    // Return the response as JSON
+    // If result contains an error, return it
+    if (isset($result['error'])) {
+        return response()->json([
+            'error' => $result['error'],
+        ], $result['status'] ?? 400); // use the real status if you pass it, fallback 400
+    }
+
+    // Otherwise, success response
     return response()->json([
         'image_url' => $result['image_url'] ?? null,
         'image_base64' => $result['image_base64'] ?? null,
