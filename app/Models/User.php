@@ -11,6 +11,7 @@ use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
+use Stripe\Stripe;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -143,6 +144,8 @@ class User extends Authenticatable implements MustVerifyEmail
 // check user has active stripe subscription or not
 public function hasActivePaidSubscription()
 {
+    Stripe::setApiKey(config('services.stripe.secret'));
+
     // Check if the user has a Stripe ID and if they have any active subscription
     if ($this->stripe_id) {
         $stripeSubscriptions = \Stripe\Subscription::all([
