@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-header">
                 @can('managePage.add')
-                    <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11">Create Page</a>    
+                    <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11" title="Create a New Dynamic Page">Create Page</a>    
                 @endcan            
             </div>
             
