@@ -41,11 +41,7 @@ class CheckoutController extends Controller
                  // Retrieve and cancel the subscription on Stripe
                  $stripeSubscription = Subscription::retrieve($currentSubscription->stripe_id);
                  $stripeSubscription->cancel();
-     
-                 // Optionally update the local subscription status
-                 $currentSubscription->update([
-                     'stripe_status' => 'canceled',
-                 ]);
+
              } catch (\Exception $e) {
                  return redirect()->back()->with('error', 'Failed to cancel previous subscription: ' . $e->getMessage());
              }
