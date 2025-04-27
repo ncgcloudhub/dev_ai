@@ -73,7 +73,9 @@
 
     <div class="col-12">
         <div class="text-end">
-            <button type="submit" class="btn gradient-btn-edit" title="Update"><i class="{{$buttonIcons['save']}}"></i>
+            <button type="submit" class="btn gradient-btn-edit" title="Update">
+                <i class="{{$buttonIcons['save']}}"></i>
+            </button>
         </div>
     </div>
 </form>

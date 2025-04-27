@@ -37,15 +37,15 @@
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
 
                                     @can('settings.countryBlock.edit')
-                                        <a href="{{route('block.countries.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                        <a href="{{route('block.countries.edit',$item->id)}}" class="gradient-btn-edit d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="{{ $buttonIcons['edit'] }}"></i> </a>
                                     @endcan
                                    
                                     @can('settings.countryBlock.delete')
                                         <form action="{{ route('block.countries.delete', $item->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Are you sure you want to delete this Category?')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" style="background:none; border:none; padding:0; cursor:pointer;">
-                                                <i class="ri-delete-bin-5-fill fs-16"></i>
+                                            <button type="submit" onclick="return confirm('Are you sure you want to delete this Category?')" class="gradient-btn-delete d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                <i class="{{ $buttonIcons['delete'] }}"></i>
                                             </button>
                                         </form>
                                     @endcan
@@ -85,7 +85,10 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
+            <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                <i class="{{ $buttonIcons['save'] }}"></i>
+            </button>
+            
         </div>
     </div>
 </form>

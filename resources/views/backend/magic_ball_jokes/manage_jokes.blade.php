@@ -30,12 +30,12 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $joke->type }}</td>
-                            <td> <span class="badge bg-info">{{ $joke->category }}</span></td>
+                            <td> <span class="badge gradient-btn-tour">{{ $joke->category }}</span></td>
                             <td>{{ $joke->content }}</td>
                             <td>
                                 <div class="form-check form-switch form-switch-md" dir="ltr">
                                         <a href="javascript:void(0);" 
-                                            class="text-primary d-inline-block edit-item-btn" 
+                                            class="btn gradient-btn-edit d-inline-block" 
                                             data-id="{{ $joke->id }}" 
                                             data-category="{{ $joke->category }}" 
                                             data-content="{{ $joke->content }}" 
@@ -43,11 +43,11 @@
                                             data-bs-placement="top" 
                                             title="Edit" 
                                             onclick="openEditModal(this)">
-                                            <i class="ri-pencil-fill fs-16"></i>
+                                            <i class="{{ $buttonIcons['edit'] }}"></i>
                                         </a>
                                  
-                                        <a href="{{route('jokes.delete',$joke->id)}}" onclick="return confirm('Are you sure you want to delete this Joke?')" class="text-danger mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                            <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                        <a href="{{route('jokes.delete',$joke->id)}}" onclick="return confirm('Are you sure you want to delete this Joke?')" class="btn gradient-btn-delete mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                            <i class="{{ $buttonIcons['delete'] }}"></i>
                                         </a>
                                 </div>
                             </td>    
@@ -120,8 +120,8 @@
                 </div><!-- end card body -->
                 
                 <div class="card-footer">
-                    <button type="button" class="btn gradient-btn-save" id="aiGenerateBtn">AI Generate</button>
-                    <button type="submit" class="btn gradient-btn-save">Save Joke</button>
+                    <button type="button" class="btn gradient-btn-generate" id="aiGenerateBtn" title="Generate Jokes Using AI"><i class="{{ $buttonIcons['generate'] }}"></i></button>
+                    <button type="submit" class="btn gradient-btn-save" title="Save"><i class="{{ $buttonIcons['save'] }}"></i></button>
                 </div><!-- end card footer -->
             </div><!-- end card -->
         </form>
