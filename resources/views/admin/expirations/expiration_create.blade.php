@@ -49,12 +49,12 @@
                 @csrf
                 <div class="mb-3">
                     <label>Type</label>
-                    <input type="text" name="type" class="form-control" required>
+                    <input type="text" name="type" class="form-control" placeholder="e.g. SSL, Domain, Hosting, API" required>
                 </div>
                 <div class="mb-3">
                     <label>Name (optional)</label>
-                    <input type="text" name="name" class="form-control">
-                </div>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. GoDaddy, OpenAI, Namecheap, Stable Diffusion">
+                </div>                
                 <div class="mb-3">
                     <label>Expires On</label>
                     <input type="date" name="expires_on" class="form-control" required>
