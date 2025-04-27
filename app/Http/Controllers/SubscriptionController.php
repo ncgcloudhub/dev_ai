@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Stripe\Stripe;
 
 class SubscriptionController extends Controller
 {
@@ -30,16 +32,43 @@ class SubscriptionController extends Controller
 
         $totalTemplates = Template::count();
 
-        // Get the authenticated user
-        $user = Auth::user();
-        // Get the last package bought by the user
-        $lastPackageHistory = PackageHistory::where('user_id', $user->id)
-            ->latest()
-            ->first();
+    // Get the authenticated user
+    $user = Auth::user();
 
-        $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
+    Stripe::setApiKey(config('services.stripe.secret'));
 
-        return view('backend.subscription.all_package', compact('monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates','highestDiscount'));
+    $lastPackageId = null; // default no plan selected
+
+    try {
+        if ($user->stripe_id) {
+            $stripeSubscriptions = \Stripe\Subscription::all([
+                'customer' => $user->stripe_id,
+                'status' => 'active',
+                'limit' => 1,
+            ]);
+
+            $currentSubscription = collect($stripeSubscriptions->data)->first();
+
+            if ($currentSubscription) {
+                $stripePriceId = $currentSubscription->items->data[0]->price->id ?? null;
+
+                if ($stripePriceId) {
+                    $pricingPlan = PricingPlan::where('stripe_price_id', $stripePriceId)->first();
+                    if ($pricingPlan) {
+                        $lastPackageId = $pricingPlan->id;
+                    }
+                }
+            }
+        }
+    } catch (\Exception $e) {
+        Log::error('Error fetching Stripe subscription: ' . $e->getMessage());
+        // fallback silently
+    }
+
+    return view('backend.subscription.all_package', compact(
+        'monthlyPlans', 'yearlyPlans', 'lastPackageId', 'totalTemplates', 'highestDiscount'
+    ));
+    
     } // End Method  
 
     public function purchase($pricingPlanId)
