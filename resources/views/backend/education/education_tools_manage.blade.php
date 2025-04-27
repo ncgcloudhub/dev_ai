@@ -12,7 +12,7 @@
 
 
 
-<section class="py-3 gradient-background-1 position-relative">
+<section class="py-3 gradient-bg-1 position-relative">
         <div class="row align-items-center">
             <div class="col-sm">
                 <div>

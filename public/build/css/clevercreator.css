@@ -331,24 +331,24 @@
     -webkit-text-fill-color: transparent;
 }
 
-.gradient-background-1{
+.gradient-bg-1{
     background: linear-gradient(45deg, #461b8a, #ff69b4);
     
 }
 
-.gradient-background-2{
+.gradient-bg-2{
     background: linear-gradient(45deg, #9b00ff, #e900ff);
 }
 
-.gradient-background-3{
+.gradient-bg-3{
     background: linear-gradient(45deg, #aee0f0, #d596f0);
 }
 
-.gradient-background-4{
+.gradient-bg-4{
     background: linear-gradient(45deg, #aee0f0, #dfb3f1);
 }
 
-.gradient-background-5{
+.gradient-bg-5{
     background: linear-gradient(45deg, #d2aef0, #f1b3c8);
 }
 

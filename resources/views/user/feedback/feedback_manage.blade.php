@@ -26,7 +26,7 @@
                     @foreach ($feedbacks as $index => $feedback)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><span class="badge gradient-background-1">{{ ucfirst($feedback->type) }}</span></td>
+                            <td><span class="badge gradient-bg-1">{{ ucfirst($feedback->type) }}</span></td>
                             <td>{{ $feedback->message }}</td>
                             <td>{{ $feedback->created_at->format('M d, Y H:i') }}</td>
                             <td>{{ $feedback->admin_status }}</td>
