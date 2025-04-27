@@ -35,11 +35,11 @@
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
                                         @can('aiContentCreator.category.edit')
-                                        <a href="{{route('aicontentcreator.category.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                        <a href="{{route('aicontentcreator.category.edit',$item->id)}}" class="gradient-btn-edit d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="{{$buttonIcons['edit']}}"></i> </a>
                                         @endcan
                                         
                                         @can('aiContentCreator.category.delete')
-                                        <a href="{{route('aicontentcreator.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="ri-delete-bin-5-fill fs-16"></i> </a>
+                                        <a href="{{route('aicontentcreator.category.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Category')" class="gradient-btn-delete d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"> <i class="{{$buttonIcons['delete']}}"></i> </a>
                                         @endcan
                                      
                                     </div>
@@ -81,7 +81,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled>Save</button>
+                                <button title="Save" class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled><i class="{{$buttonIcons['save']}}"></i></button>
                             </div>
                         </div>
                     </form>
