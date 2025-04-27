@@ -137,8 +137,8 @@
            
                        @if(Auth::user()->role === 'admin')
                            @can('education.manageTools.edit')
-                               <a href="{{ route('tools.edit', $tool->id) }}" class="gradient-btn-edit">
-                                   Edit
+                               <a href="{{ route('tools.edit', $tool->id) }}" class="btn gradient-btn-edit">
+                                <i class="{{$buttonIcons['edit']}}"></i>
                                </a>
                            @endcan
                        
@@ -147,7 +147,7 @@
                                    @csrf
                                    @method('DELETE')
                                    <button type="submit" class="gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                       Delete
+                                    <i class="{{$buttonIcons['delete']}}"></i>
                                    </button>
                                </form>
                            @endcan
