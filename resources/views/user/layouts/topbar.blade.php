@@ -50,7 +50,11 @@
                     $remainingDays = get_days_until_next_reset();
                     $user = Auth::user();
 
-                    $notifications = auth()->user()->notifications()->latest()->take(5)->get();
+                    $notifications = auth()->user()->unreadNotifications()
+                        ->orderBy('created_at', 'desc')
+                        ->take(5)
+                        ->get();
+
                     @endphp
                 
                     @if ($lastPackage)
@@ -173,8 +177,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <a href="{{ $notification->link ?? '#' }}" class="stretched-link">
-                                                        <h6 class="mt-0 mb-2 lh-base" 
-                                                            style="{{ is_null($notification->read_at) ? 'font-weight: bold;' : '' }}">
+                                                        <h6 class="mt-0 mb-2 lh-base">
                                                             {{ $notification->data['message'] }}
                                                         </h6>
                                                     </a>
@@ -182,6 +185,7 @@
                                                         <span><i class="mdi mdi-clock-outline"></i> {{ $notification->created_at->diffForHumans() }}</span>
                                                     </p>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     @empty
@@ -189,7 +193,6 @@
                                             No new notifications.
                                         </div>
                                     @endforelse
-
                                 </div>
                             </div>
                         </div>
@@ -228,7 +231,6 @@
         </div>
     </div>
 </header>
-
 @push('scripts')
 <script>
     document.getElementById('page-header-notifications-dropdown').addEventListener('click', function () {
@@ -240,13 +242,15 @@
             }
         }).then(response => response.json()).then(data => {
             if (data.success) {
+                // Remove the notification count badge
                 const badge = document.querySelector('.topbar-badge.bg-danger');
-                if (badge) badge.remove();
+                if (badge) badge.style.display = 'none';
             }
         });
     });
 </script>
 @endpush
+
 
 <script>
    document.addEventListener('DOMContentLoaded', function() {
