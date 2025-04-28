@@ -175,13 +175,13 @@
                             </div>
                             <div class="d-flex gap-2 mt-3">
                                 <button type="button" class="btn gradient-btn-add" title="Add Example" onclick="addExampleEditor()">
-                                    <i class="la la-plus"></i> Add
+                                    <i class="{{$buttonIcons['add']}}"></i>
                                 </button>
                                 <button id="remove-btn" type="button" class="btn gradient-btn-remove d-none" title="Remove Example" onclick="removeLastExampleEditor()">
-                                    <i class="la la-minus"></i> Remove
+                                    <i class="{{$buttonIcons['remove']}}"></i>
                                 </button>
-                                <button type="submit" title="Save Example" class="btn gradient-btn-save">
-                                    <i class="la la-save"></i> Save
+                                <button type="submit" title="Save Example" class="btn gradient-btn-save" title="Save">
+                                    <i class="{{$buttonIcons['save']}}"></i>
                                 </button>
                             </div>
                         </div>
