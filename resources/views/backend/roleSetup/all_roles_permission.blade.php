@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
-                                <a href="" class="fw-medium link-primary">{{ $item->name }}</a>
+                                <a href="" class="fw-medium gradient-text-2">{{ $item->name }}</a>
                             </td>
                             <td>{{ $item->users_count }}</td> <!-- Display user count -->
                             <td>

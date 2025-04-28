@@ -199,6 +199,8 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request')->middleware('admin.permission:manageUser&Admin.manageFeedback');
         Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
         Route::get('/feedback', [UserManageController::class, 'userfeedback'])->name('admin.feedback.index');
+        Route::post('/update/feedback/{id}', [UserManageController::class, 'updateUserFeedback'])->name('admin.feedback.update');
+
     });
 
     // REFERRAL MANAGE

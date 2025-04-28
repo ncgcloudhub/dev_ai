@@ -30,8 +30,8 @@
                             <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
-                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
-                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
+                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate" title="Chat With AI">Chat Now</a>
+                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate" title="Generate Images Using AI">Create Your Imagination</a>
                             </div>
                         </div>
                         
@@ -193,7 +193,7 @@
                     <div>
                         <h5 class="mt-0 gradient-text-1-bold">AI Content Creator</h5>
                         <p>AI content creator tools provide ready-to-use templates, making it effortless to generate captivating content, saving time while ensuring creativity and consistency across various formats.</p>
-                        <a href="{{route('aicontentcreator.manage')}}" class="gradient-btn-generate">Generate Content</a>
+                        <a href="{{route('aicontentcreator.manage')}}" class="gradient-btn-generate" title="Generate Contents from Pre-defined Content Creator Tools Using AI">Generate Content</a>
                     </div>
                 </div>
             </div>
@@ -268,7 +268,7 @@
                     </div>
 
                     
-                        <button type="submit" class="btn gradient-btn-generate">Submit Feedback</button>
+                        <button type="submit" class="btn gradient-btn-generate" title="Submit">Submit Feedback</button>
                    
                 </form>
             </div>

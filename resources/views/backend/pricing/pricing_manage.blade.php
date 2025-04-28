@@ -43,8 +43,8 @@ h2.mb-0.text-center i {
         <div class="col-lg-5">
             <div class="text-center mb-4">
                 <h4 class="fw-semibold fs-22">Plans & Pricing       
-                    <a href="{{ route('add.pricing.plan') }}" class="btn gradient-btn-add">
-                        <i class="ri-add-line align-bottom me-1"></i>Add Plan
+                    <a href="{{ route('add.pricing.plan') }}" class="btn gradient-btn-add" title="Add New Pricing Plan">
+                        <i class="{{$buttonIcons['add']}}"></i>
                     </a>                    
                 </h4>
                 <p class="text-muted mb-4 fs-15">Simple pricing. No hidden fees. Advanced features for you business.</p>
@@ -271,15 +271,15 @@ h2.mb-0.text-center i {
                         </ul>
                         <div class="d-flex">
                             @can('settings.pricing.edit')
-                                <a href="{{ route('pricing.edit', $item->slug) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                <a href="{{ route('pricing.edit', $item->slug) }}" class="gradient-btn-edit d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">  <i class="{{$buttonIcons['edit']}}"></i> </a>
                             @endcan
                           
                             @can('settings.pricing.delete')
                                 <form action="{{ route('pricing.destroy', $item->slug) }}" method="POST" class="w-100 me-2">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Plan?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                    <button type="submit" class="gradient-btn-delete d-inline-block" onclick="return confirm('Are you sure you want to delete this Plan?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                        <i class="{{$buttonIcons['delete']}}"></i>
                                     </button>
                                 </form>
                             @endcan

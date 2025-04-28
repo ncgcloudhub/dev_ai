@@ -24,14 +24,14 @@
                 <tr>
                     <td>{{ $exp->type }}</td>
                     <td>{{ $exp->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('M d Y') }}</td>
                     <td>{{ $exp->notes }}</td>
                     <td>
-                        <a href="{{ route('expirations.edit', $exp->id) }}" class="btn btn-sm gradient-btn-edit">Edit</a>
+                        <a href="{{ route('expirations.edit', $exp->id) }}" class="btn btn-sm gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a>
                         <form action="{{ route('expirations.destroy', $exp->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm gradient-btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button type="submit" class="btn btn-sm gradient-btn-delete" title="Delete" onclick="return confirm('Are you sure?')"><i class="{{$buttonIcons['delete']}}"></i></button>
                         </form>
                     </td>
                     
@@ -63,8 +63,8 @@
                     <label>Notes</label>
                     <textarea name="notes" class="form-control">{{ $expiration->notes }}</textarea>
                 </div>
-                <button class="btn gradient-btn-save">Update</button>
-                <a href="{{ route('expirations.index') }}" class="btn gradient-btn-cancel">Cancel</a>
+                <button class="btn gradient-btn-save" title="Update"><i class="{{$buttonIcons['save']}}"></i></button>
+                <a href="{{ route('expirations.index') }}" class="btn gradient-btn-cancel" title="Cancel"><i class="{{$buttonIcons['cancel']}}"></i></a>
             </form>
         </div>
 

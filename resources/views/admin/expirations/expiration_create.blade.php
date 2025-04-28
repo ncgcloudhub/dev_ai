@@ -24,14 +24,14 @@
                 <tr>
                     <td>{{ $exp->type }}</td>
                     <td>{{ $exp->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($exp->expires_on)->format('M d Y') }}</td>
                     <td>{{ $exp->notes }}</td>
                     <td>
-                        <a href="{{ route('expirations.edit', $exp->id) }}" class="btn btn-sm gradient-btn-edit">Edit</a>
+                        <a href="{{ route('expirations.edit', $exp->id) }}" class="btn btn-sm gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a>
                         <form action="{{ route('expirations.destroy', $exp->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm gradient-btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
+                            <button type="submit" class="btn btn-sm gradient-btn-delete" title="Delete" onclick="return confirm('Are you sure?')"><i class="{{$buttonIcons['delete']}}"></i></button>
                         </form>
                     </td>
                     
@@ -49,12 +49,12 @@
                 @csrf
                 <div class="mb-3">
                     <label>Type</label>
-                    <input type="text" name="type" class="form-control" required>
+                    <input type="text" name="type" class="form-control" placeholder="e.g. SSL, Domain, Hosting, API" required>
                 </div>
                 <div class="mb-3">
                     <label>Name (optional)</label>
-                    <input type="text" name="name" class="form-control">
-                </div>
+                    <input type="text" name="name" class="form-control" placeholder="e.g. GoDaddy, OpenAI, Namecheap, Stable Diffusion">
+                </div>                
                 <div class="mb-3">
                     <label>Expires On</label>
                     <input type="date" name="expires_on" class="form-control" required>
@@ -63,7 +63,7 @@
                     <label>Notes</label>
                     <textarea name="notes" class="form-control"></textarea>
                 </div>
-                <button class="btn gradient-btn-save">Save</button>
+                <button class="btn gradient-btn-save" title="Save"><i class="{{$buttonIcons['save']}}"></i></button>
             </form>
         </div>
 

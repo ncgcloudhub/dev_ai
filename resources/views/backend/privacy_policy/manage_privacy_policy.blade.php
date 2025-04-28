@@ -36,11 +36,11 @@
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
                                     @can('settings.privacyPolicy.edit')
-                                        <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
+                                        <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15 gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a> 
                                     @endcan
                                     
                                     @can('settings.privacyPolicy.delete')
-                                        <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                        <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a> 
                                     @endcan
                                     <button 
                                         class="btn btn-sm toggle-status-btn {{ $item->status === 'active' ? 'gradient-btn-save' : 'gradient-btn-delete' }}" 
@@ -82,7 +82,9 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
+                <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                    <i class="{{$buttonIcons['save']}}"></i>
+                </button>
             </div>
         </div>
     </form>
