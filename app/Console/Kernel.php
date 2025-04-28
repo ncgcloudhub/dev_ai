@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\RenewFreePackageForNonSubscribers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,14 +13,13 @@ class Kernel extends ConsoleKernel
      */
 
      protected $commands = [
-        Commands\ResetMonthlyUserTokens::class,
+     
     ];
 
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('reset:monthlyusertokens')->everyFiveMinutes();
-        // $schedule->command('inspire')->hourly();
+
     }
 
     /**

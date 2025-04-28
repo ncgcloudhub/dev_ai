@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
 use App\Models\User;
+use App\Notifications\SubscriptionCancelled;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,9 +49,16 @@ class CheckoutController extends Controller
                  Log::info("Fetched live subscription from Stripe", ['currentSubscription' => $currentSubscription]);
      
                  if ($currentSubscription) {
+
+                    // Get the subscription plan name
+                    $subscriptionPlanName = $currentSubscription->items->data[0]->plan->nickname ?? 'Unknown Plan';
+                    Log::info("plan anme line 55", ['subscriptionPlanName' => $subscriptionPlanName]);
+
                      // Cancel the active subscription
                      $stripeSubscription = \Stripe\Subscription::retrieve($currentSubscription->id);
                      $stripeSubscription->cancel();
+
+                     $user->notify(new SubscriptionCancelled($subscriptionPlanName));
      
                      Log::info("Successfully canceled Stripe subscription", ['canceledSubscription' => $stripeSubscription]);
                  }
