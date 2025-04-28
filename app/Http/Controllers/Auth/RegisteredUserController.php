@@ -80,55 +80,69 @@ class RegisteredUserController extends Controller
     // -----------------------------------
     //  STEP 1: Get the Free Monthly Package
     // -----------------------------------
-    $freePlan = PricingPlan::where('slug', 'free_monthly')->first();
+    // $freePlan = PricingPlan::where('slug', 'free_monthly')->first();
 
-    if ($freePlan) {
-        // Add credits and tokens based on free plan
-        $user->increment('credits_left', $freePlan->images ?? 0);
-        $user->increment('tokens_left', $freePlan->tokens ?? 0);
+    // if ($freePlan) {
+    //     // Add credits and tokens based on free plan
+    //     $user->increment('credits_left', $freePlan->images ?? 0);
+    //     $user->increment('tokens_left', $freePlan->tokens ?? 0);
+    //     Log::info('User credits/tokens updated from register controller:', [
+    //         'user_id' => $user->id,
+    //         'credits_left' => $user->credits_left,
+    //         'tokens_left' => $user->tokens_left,
+    //     ]);
 
-        // Save package history
-        PackageHistory::create([
-            'user_id' => $user->id,
-            'package_id' => $freePlan->id,
-            'invoice' => null, // Free users won't have Stripe invoice
-            'package_amount' => 0, // Free, so 0
-        ]);
+    //     // Save package history
+    //     PackageHistory::create([
+    //         'user_id' => $user->id,
+    //         'package_id' => $freePlan->id,
+    //         'invoice' => null, // Free users won't have Stripe invoice
+    //         'package_amount' => 0, // Free, so 0
+    //     ]);
 
-        // (Optional) Notify user about free subscription
-        $user->notify(new TokenRenewed($freePlan->tokens ?? 0, $freePlan->images ?? 0));
-    } else {
-        Log::error('Free monthly plan not found during registration!');
-    }
+    //     // (Optional) Notify user about free subscription
+    //     $user->notify(new TokenRenewed($freePlan->tokens ?? 0, $freePlan->images ?? 0));
+    // } else {
+    //     Log::error('Free monthly plan not found during registration!');
+    // }
 
     // -----------------------------------
     //  STEP 2: Create Stripe Customer & Free Subscription
     // -----------------------------------
     try {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
+    
         if (!$user->stripe_id) {
             $customer = \Stripe\Customer::create([
                 'email' => $user->email,
                 'name' => $user->name,
             ]);
-
+    
             $user->stripe_id = $customer->id;
             $user->save();
         }
-
-        // Subscribe to free plan if you have 0$ price_id setup
-        \Stripe\Subscription::create([
-            'customer' => $user->stripe_id,
-            'items' => [
-                ['price' => 'price_xxxxxxxxxxxxx'], // <-- your real free monthly Price ID
-            ],
-            'payment_behavior' => 'default_incomplete',
-            'expand' => ['latest_invoice.payment_intent'],
-        ]);
+    
+        // Fetch the free plan from the database
+        $freePlan = PricingPlan::where('slug', 'free_monthly')->first();
+    
+        if ($freePlan && $freePlan->stripe_price_id) {
+            // Subscribe user to free plan
+            \Stripe\Subscription::create([
+                'customer' => $user->stripe_id,
+                'items' => [
+                    ['price' => $freePlan->stripe_price_id],
+                ],
+                'payment_behavior' => 'default_incomplete',
+                'expand' => ['latest_invoice.payment_intent'],
+            ]);
+        } else {
+            Log::error('Free monthly plan not found or missing Stripe price ID during registration.');
+        }
+    
     } catch (\Exception $e) {
         Log::error('Stripe free subscription creation failed: ' . $e->getMessage());
     }
+    
 
     event(new Registered($user));
 
