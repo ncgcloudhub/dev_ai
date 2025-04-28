@@ -13,13 +13,13 @@ class Kernel extends ConsoleKernel
      */
 
      protected $commands = [
-        RenewFreePackageForNonSubscribers::class,
+     
     ];
 
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('package:renew-free-for-non-subscribers')->monthly();
+
     }
 
     /**
