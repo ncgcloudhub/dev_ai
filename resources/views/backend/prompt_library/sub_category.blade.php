@@ -31,17 +31,17 @@
                                 <td>{{ $item->sub_category_name }}</td>    
                                 
                                 <td>
-                                    <div class="d-flex justify-content-center">
+                                    <div class="d-flex">
 
                                         @can('promptLibrary.subcategory.edit')
-                                        <a href="{{route('prompt.subcategory.edit',$item->id)}}" class="text-primary mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> 
-                                            <i class="ri-pencil-fill fs-16"></i> 
+                                        <a href="{{route('prompt.subcategory.edit',$item->id)}}" class="gradient-btn-edit mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> 
+                                            <i class="{{$buttonIcons['edit']}}"></i>
                                         </a>
                                         @endcan
                                      
                                         @can('promptLibrary.subcategory.delete')
-                                        <a href="{{route('prompt.subcategory.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Subcategory?')" class="text-danger mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                            <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                        <a href="{{route('prompt.subcategory.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Subcategory?')" class="gradient-btn-delete mx-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                            <i class="{{$buttonIcons['delete']}}"></i>
                                         </a>
                                         @endcan
                                       
@@ -93,7 +93,7 @@
 
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled>Save</button>
+                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" title="Save" disabled><i class="{{$buttonIcons['save']}}"></i></button>
                             </div>
                         </div>
                     </form>

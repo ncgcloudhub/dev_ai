@@ -6,8 +6,7 @@
 @slot('title') Sub-Category Edit | {{$subcategory->sub_category_name}}  @endslot
 @endcomponent
 
-<a href="{{ route('prompt.subcategory.add') }}" class="btn waves-effect waves-light gradient-btn-11 mb-3">Add Sub Category
-</a>
+<a href="{{ route('prompt.subcategory.add') }}" class="btn waves-effect waves-light gradient-btn-add mb-3" title="Add Prompt Sub Category"><i class="{{$buttonIcons['add']}}"></i></a>
 
 
 <div class="row">
@@ -35,9 +34,9 @@
                                 <td>
                                     <div class="form-check form-switch form-switch-md" dir="ltr">
     
-                                        <a href="{{route('prompt.subcategory.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="ri-pencil-fill fs-16"></i> </a>
+                                        <a href="{{route('prompt.subcategory.edit',$item->id)}}" class="gradient-btn-edit d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"> <i class="{{$buttonIcons['edit']}}"></i> </a>
     
-                                        <a href="{{route('prompt.subcategory.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Customer')" class="text-danger d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="ri-delete-bin-5-fill fs-16"></i> </a>
+                                        <a href="{{route('prompt.subcategory.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Customer')" class="gradient-btn-delete d-inline-block remove-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="{{$buttonIcons['delete']}}"></i> </a>
     
                                     </div>
                                 </td>    
@@ -89,7 +88,7 @@
     
                         <div class="col-12">
                             <div class="text-end">
-                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled>Update</button>
+                                <button class="btn btn-rounded gradient-btn-save mb-2 disabled-on-load" disabled title="Update"><i class="{{$buttonIcons['save']}}"></i></button>
                             </div>
                         </div>
                     </form>
