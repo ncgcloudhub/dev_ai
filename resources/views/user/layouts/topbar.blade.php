@@ -2,6 +2,13 @@
     .gradient-button {
     background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))
 }
+    .notification-item.read {
+    background-color: #f9f9f9; /* Light background for read notifications */
+    color: #aaa; /* Dim the text color for read notifications */
+    text-decoration: none; /* Optional: Remove any underlines */
+    }
+
+
 
 </style>
 <header id="page-topbar">
@@ -50,10 +57,12 @@
                     $remainingDays = get_days_until_next_reset();
                     $user = Auth::user();
 
-                    $notifications = auth()->user()->unreadNotifications()
+                    $notifications = auth()->user()->notifications()
                         ->orderBy('created_at', 'desc')
                         ->take(5)
                         ->get();
+                    
+                    $unreadCount = auth()->user()->unreadNotifications()->count();
 
                     @endphp
                 
@@ -132,9 +141,9 @@
                  <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
-                        @if(count($notifications) > 0)
+                        @if($unreadCount > 0)
                             <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">
-                                {{ count($notifications) }}
+                                {{ $unreadCount }}
                                 <span class="visually-hidden">unread messages</span>
                             </span>
                         @endif
@@ -148,7 +157,7 @@
                                         <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
                                     </div>
                                     <div class="col-auto dropdown-tabs">
-                                        <span class="badge bg-light-subtle text-body fs-13">{{ count($notifications) }} New</span>
+                                        <span class="badge bg-light-subtle text-body fs-13">{{ $unreadCount }} New</span>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +166,7 @@
                                 <ul class="nav nav-tabs dropdown-tabs nav-tabs-custom" data-dropdown-tabs="true" id="notificationItemsTab" role="tablist">
                                     <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link active color" data-bs-toggle="tab" href="#all-noti-tab" role="tab" aria-selected="true">
-                                            All ({{ count($notifications) }})
+                                            All ({{ $unreadCount }})
                                         </a>
                                     </li>
                                 </ul>
@@ -167,8 +176,8 @@
                         <div class="tab-content position-relative" id="notificationItemsTabContent">
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
-                                    @forelse($notifications as $key => $notification)
-                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                    @foreach($notifications as $notification)
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative @if($notification->read_at) read @endif">
                                             <div class="d-flex">
                                                 <div class="avatar-xs me-3 flex-shrink-0">
                                                     <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
@@ -185,19 +194,16 @@
                                                         <span><i class="mdi mdi-clock-outline"></i> {{ $notification->created_at->diffForHumans() }}</span>
                                                     </p>
                                                 </div>
-                                                
                                             </div>
                                         </div>
-                                    @empty
-                                        <div class="text-center p-3 text-muted">
-                                            No new notifications.
-                                        </div>
-                                    @endforelse
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
+                
                 <!-- End Notification Dropdown -->
                 
                 @include('user.layouts.activity_log')
@@ -245,11 +251,17 @@
                 // Remove the notification count badge
                 const badge = document.querySelector('.topbar-badge.bg-danger');
                 if (badge) badge.style.display = 'none';
+
+                // Optionally, you could also add a class to the notification items to show they are read
+                document.querySelectorAll('.notification-item').forEach(function (item) {
+                    item.classList.add('read');
+                });
             }
         });
     });
 </script>
 @endpush
+
 
 
 <script>
