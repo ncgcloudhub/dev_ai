@@ -44,7 +44,7 @@
                         </div>
                         <!--end col-->
                         
-                        <div class="col-xxl-1 col-sm-4">
+                        {{-- <div class="col-xxl-1 col-sm-4">
                             <div>
                                 <button type="button" class="btn gradient-btn-search w-100" id="enter-button"
                                     onclick="SearchData();"> <i
@@ -52,7 +52,7 @@
                                     Search
                                 </button>
                             </div>
-                        </div>
+                        </div> --}}
                         <!--end col-->
                     </div>
                     <!--end row-->

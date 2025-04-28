@@ -21,7 +21,7 @@
                         <a href="{{ route('prompt.subcategory.add') }}" class="btn text-white gradient-btn-view mx-1 my-1 my-md-0">Sub-Category</a>
 
                     </h4>
-                    <a href="{{ route('prompt.export') }}" class="btn text-white gradient-btn-export mx-2 ">Export</a>
+                    <a href="{{ route('prompt.export') }}" class="btn text-white gradient-btn-export mx-2" title="Export"><i class="{{$buttonIcons['export']}}"></i></a>
                     <div class="flex-shrink-0 d-flex align-items-center">
                         <form id="myForm" method="POST" action="{{ route('import.store') }}" class="forms-sample d-flex align-items-center" enctype="multipart/form-data">
                             @csrf
@@ -31,7 +31,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn text-white gradient-btn-import">Import</button>
+                            <button type="submit" class="btn text-white gradient-btn-import" title="Import"><i class="{{$buttonIcons['import']}}"></i></button>
                         </form>
                         
                         @if(session('success'))
@@ -143,16 +143,16 @@
                             <td>
                                 @can('promptLibrary.edit')
                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                    <a href="{{route('prompt.edit',$item->id)}}" class="text-primary d-inline-block edit-item-btn">
-                                        <i class="ri-pencil-fill fs-16"></i>
+                                    <a href="{{route('prompt.edit',$item->id)}}" class="gradient-btn-edit d-inline-block">
+                                        <i class="{{$buttonIcons['edit']}}"></i>
                                     </a>
                                 </li>
                                 @endcan
                               
                                 @can('promptLibrary.delete')
-                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <a class="text-danger d-inline-block remove-item-btn" href="{{route('prompt.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Prompt')">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Delete">
+                                    <a class="gradient-btn-delete d-inline-block" href="{{route('prompt.delete',$item->id)}}" onclick="return confirm('Are you sure you want to delete this Prompt')">
+                                        <i class="{{$buttonIcons['delete']}}"></i>
                                     </a>
                                 </li>
                                 @endcan

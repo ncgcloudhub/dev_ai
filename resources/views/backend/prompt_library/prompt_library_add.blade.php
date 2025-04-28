@@ -64,7 +64,9 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded gradient-btn-save mb-5 disabled-on-load" disabled value="Save">
+            <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                <i class="{{$buttonIcons['save']}}"></i>
+            </button>
         </div>
     </div>
 </form>
