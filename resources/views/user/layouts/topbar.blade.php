@@ -2,13 +2,15 @@
     .gradient-button {
     background: linear-gradient(to right, rgb(10, 179, 156), rgb(64, 81, 137))
 }
-    .notification-item.read {
-    background-color: #f9f9f9; /* Light background for read notifications */
-    color: #aaa; /* Dim the text color for read notifications */
-    text-decoration: none; /* Optional: Remove any underlines */
-    }
 
+.notification-item.unread {
+    background-color: #e696e9; /* Light blue background for unread */
+    border-left: 3px solid #e08bba; /* Blue border to the left */
+}
 
+.notification-item.read {
+    background-color: #ffffff; /* Normal white background */
+}
 
 </style>
 <header id="page-topbar">
@@ -177,7 +179,8 @@
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
                                     @foreach($notifications as $notification)
-                                        <div class="text-reset notification-item d-block dropdown-item position-relative @if($notification->read_at) read @endif">
+                                    <div class="text-reset notification-item d-block dropdown-item position-relative 
+                                    {{ $notification->read_at ? 'read' : 'unread' }}">                                
                                             <div class="d-flex">
                                                 <div class="avatar-xs me-3 flex-shrink-0">
                                                     <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
