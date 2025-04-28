@@ -50,15 +50,9 @@ class CheckoutController extends Controller
      
                  if ($currentSubscription) {
 
-                    // Get the subscription plan name
-                    $subscriptionPlanName = $currentSubscription->items->data[0]->plan->nickname ?? 'Unknown Plan';
-                    Log::info("plan anme line 55", ['subscriptionPlanName' => $subscriptionPlanName]);
-
                      // Cancel the active subscription
                      $stripeSubscription = \Stripe\Subscription::retrieve($currentSubscription->id);
                      $stripeSubscription->cancel();
-
-                     $user->notify(new SubscriptionCancelled($subscriptionPlanName));
      
                      Log::info("Successfully canceled Stripe subscription", ['canceledSubscription' => $stripeSubscription]);
                  }

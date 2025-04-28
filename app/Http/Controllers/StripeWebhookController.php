@@ -107,10 +107,32 @@ protected function handleInvoicePaymentSucceeded($invoice)
         if ($user) {
             // Optionally, mark the subscription as canceled in your database
             $user->subscriptions()
-            ->where('stripe_id', $subscription->id)
-            ->update(['stripe_status' => 'canceled']);
+                ->where('stripe_id', $subscription->id)
+                ->update(['stripe_status' => 'canceled']);
+    
+            // Get price ID from subscription item
+            $priceId = $subscription->items->data[0]->price->id ?? null;
 
+            Log::info('Stripe subscription cancellation - Price ID extracted:', ['price_id' => $priceId]);
+            
+            if ($priceId) {
+                $pricingPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
+            
+                if ($pricingPlan) {
+                    $packageName = $pricingPlan->title; // Use your DB field for the name
+                    Log::info('Pricing plan found for cancellation:', ['package_name' => $packageName, 'plan_id' => $pricingPlan->id]);
+                } else {
+                    $packageName = "Unknown Package";
+                    Log::warning('No matching pricing plan found for price ID during cancellation.', ['price_id' => $priceId]);
+                }
+            } else {
+                $packageName = "Unknown Package";
+                Log::warning('No price ID found in subscription data during cancellation.');
+            }
+    
+            // Send cancellation notification with the package name
+            $user->notify(new SubscriptionCancelled($packageName));
         }
-        $user->notify(new SubscriptionCancelled("Package xyz"));
+
     }
 }
