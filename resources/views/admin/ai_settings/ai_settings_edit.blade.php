@@ -20,6 +20,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Sl.</th>
+                            <th scope="col">Display Name</th>
                             <th scope="col">Model Name</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -28,7 +29,7 @@
                         @foreach ($models as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-
+                            <td>{{$item->displayname}}</td>
                             <td>{{$item->openaimodel}}</td>
 
                             <td>
@@ -64,9 +65,15 @@
             <div class="live-preview">
                 
                     <div class="col-md-12">
-                        <label for="openaimodel" class="form-label">Open AI Model</label>
-                        <input type="text" name="openaimodel" value="{{$model->openaimodel}}" class="form-control" id="openaimodel" placeholder="Enter Item Name">
+                        <label for="displayname" class="form-label">Model Name(For Display Only)</label>
+                        <input type="text" name="displayname" value="{{$model->displayname}}" class="form-control" id="displayname" placeholder="Enter Model Value">
                     </div>
+
+                    <div class="col-md-12">
+                        <label for="openaimodel" class="form-label">Open AI Model(Actual Model Name/Value)</label>
+                        <input type="text" name="openaimodel" value="{{$model->openaimodel}}" class="form-control" id="openaimodel" placeholder="Enter Model Name">
+                    </div>
+                    
             </div>
         </div>
     </div>

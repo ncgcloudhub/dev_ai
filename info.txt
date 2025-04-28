@@ -172,3 +172,6 @@ privacy_policy ADD status (text) default-inactive
 
 27/04/25
 in user_feedback, add admin_status and admin_comment; type=text
+
+28/04/25
+in a_i_settings, add displayname; type=text
