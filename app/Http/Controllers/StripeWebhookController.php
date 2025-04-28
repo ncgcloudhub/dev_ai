@@ -11,6 +11,7 @@ use App\Models\PricingPlan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Mail\TokensRenewedMail;
+use App\Notifications\SubscriptionCancelled;
 use App\Notifications\TokenRenewed;
 use Illuminate\Support\Facades\Mail;
 
@@ -110,5 +111,6 @@ protected function handleInvoicePaymentSucceeded($invoice)
             ->update(['stripe_status' => 'canceled']);
 
         }
+        $user->notify(new SubscriptionCancelled("Package xyz"));
     }
 }
