@@ -178,12 +178,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
-                               Generated Content
+                                {{$tool->name}} Generated Content
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#profile-1" role="tab">
-                                All Contents
+                                All Educational Tools History
                             </a>
                         </li>
                     </ul>
