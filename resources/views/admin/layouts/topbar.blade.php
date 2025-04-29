@@ -39,7 +39,10 @@
                     $staticModels = AISettings::pluck('openaimodel')->filter()->unique()->values()->toArray();
                     $selectedModel = Auth::user()->selected_model ?? 'gpt-4o-mini'; // Default selected model
 
-                    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+                    $notifications = \Illuminate\Notifications\DatabaseNotification::where('notifiable_type', \App\Models\User::class)
+        ->latest()
+        ->take(50) // adjust the limit as needed
+        ->get();
                 @endphp
                 
                 <form id="adminModelForm" action="{{ route('select-model') }}" method="POST">
