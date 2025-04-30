@@ -22,25 +22,17 @@ class StripeWebhookController extends Controller
 {
     Stripe::setApiKey(config('services.stripe.secret'));
 
-    Log::info('Webhook received. Starting processing...');
 
     $payload = $request->getContent();
     $sigHeader = $request->header('Stripe-Signature');
     $endpointSecret = env('STRIPE_WEBHOOK_SECRET');
 
-    Log::info('Webhook payload:', ['payload' => $payload]);
-    Log::info('Webhook signature header:', ['sigHeader' => $sigHeader]);
-
     try {
-        Log::info('Attempting to construct Stripe event...');
         $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
-        Log::info('Stripe event constructed successfully:', ['event_id' => $event->id, 'event_type' => $event->type]);
     } catch (\Exception $e) {
         Log::error('Webhook error: ' . $e->getMessage());
         return response('Webhook error', 400);
     }
-
-    Log::info('Handling event type:', ['event_type' => $event->type]);
 
     switch ($event->type) {
         case 'invoice.payment_succeeded':
@@ -54,7 +46,6 @@ class StripeWebhookController extends Controller
             break;
             
         default:
-            Log::info('Unhandled event type:', ['event_type' => $event->type]);
             break;
     }
 
