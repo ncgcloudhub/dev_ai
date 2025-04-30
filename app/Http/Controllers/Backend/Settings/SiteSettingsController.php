@@ -174,9 +174,6 @@ class SiteSettingsController extends Controller
     {
         $user = auth()->user();
 
-        $user->notify(new TokenRenewed(3, 4));
-        return redirect()->back()->with('success', 'Noti successfullyyyyyy!');
-
         // Validate input
         $request->validate([
             'hex_pass' => 'required|string|size:16',
@@ -210,4 +207,23 @@ class SiteSettingsController extends Controller
 
     return redirect()->back()->with('success', 'Hex Password generated and saved successfully!');
     }
+
+    public function updateRolloverSetting(Request $request)
+{
+    $request->validate([
+        'rollover_enabled' => 'required|in:0,1',
+    ]);
+
+    $setting = SiteSettings::first(); // or Setting::find(1) if using a specific ID
+
+    if (!$setting) {
+        return redirect()->back()->with('error', 'Settings not found.');
+    }
+
+    $setting->rollover_enabled = $request->rollover_enabled;
+    $setting->save();
+
+    return redirect()->back()->with('success', 'Rollover setting updated successfully.');
+}
+
 }

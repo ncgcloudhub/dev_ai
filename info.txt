@@ -175,3 +175,6 @@ in user_feedback, add admin_status and admin_comment; type=text
 
 28/04/25
 in a_i_settings, add displayname; type=text
+
+30/04/25
+in site_settings, add rollover_enabled; type=boolean

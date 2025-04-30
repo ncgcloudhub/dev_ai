@@ -11,6 +11,7 @@ use App\Models\PricingPlan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Mail\TokensRenewedMail;
+use App\Models\SiteSettings;
 use App\Notifications\SubscriptionCancelled;
 use App\Notifications\TokenRenewed;
 use Illuminate\Support\Facades\Mail;
@@ -60,7 +61,8 @@ class StripeWebhookController extends Controller
 }
 
 protected function handleInvoicePaymentSucceeded($invoice)
-{
+{   
+    $settings = SiteSettings::first();
     Log::info('Handling invoice payment', ['invoice_id' => $invoice->id]);
 
     // Get user
@@ -81,8 +83,14 @@ protected function handleInvoicePaymentSucceeded($invoice)
     }
 
     // Update user credits/tokens
-    $user->increment('credits_left', $pricingPlan->images);
-    $user->increment('tokens_left', $pricingPlan->tokens);
+    if ($settings->rollover_enabled) {
+        $user->increment('credits_left', $pricingPlan->images);
+        $user->increment('tokens_left', $pricingPlan->tokens);
+    } else {
+        $user->credits_left = $pricingPlan->images;
+        $user->tokens_left = $pricingPlan->tokens;
+        $user->save();
+    }
 
     // Log to package history
     PackageHistory::create([

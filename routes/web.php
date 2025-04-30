@@ -367,6 +367,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     Route::post('/generate-hex-pass', [SiteSettingsController::class, 'storeHex'])->name('hexPass.store');
+    Route::post('/admin/settings/rollover', [SiteSettingsController::class, 'updateRolloverSetting'])->name('admin.settings.rollover.update');
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('admin.permission:settings.FAQ');
