@@ -544,6 +544,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.user')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.user') ? 'active' : '' }}" >Manage User</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.user.notification.admin')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.user.notification.admin') ? 'active' : '' }}" >Manage User Notification</a>
+                                    </li>
                                     @endcan
                                    
                                     @can('manageUser&Admin.manageAdmin')

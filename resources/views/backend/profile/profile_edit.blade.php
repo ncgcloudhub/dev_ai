@@ -498,14 +498,26 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($subscriptions as $subscription)
-                                        @php      
-                                            $product = \Stripe\Product::retrieve($subscription->items->data[0]->price->product);
-                                            $price = \Stripe\Price::retrieve($subscription->items->data[0]->price->id);
-                                            $amount = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
-
-                                            // Find the invoice related to this subscription
-                                            $invoice = collect($invoices)->firstWhere('subscription', $subscription->id);
-                                        @endphp
+                                        @php
+                                        $stripePriceId = $subscription->items->data[0]->price->id;
+                                        $stripeProductId = $subscription->items->data[0]->price->product;
+                            
+                                        $product = \Stripe\Product::retrieve($stripeProductId);
+                                        $price = \Stripe\Price::retrieve($stripePriceId);
+                            
+                                        $amount = number_format($price->unit_amount / 100, 2) . ' ' . strtoupper($price->currency);
+                                        $invoice = collect($invoices)->firstWhere('subscription', $subscription->id);
+                            
+                                        // Check if Stripe product name contains 'free'
+                                        $productName = strtolower($product->name);
+                                        $isFreeProduct = str_contains($productName, 'free');
+                            
+                                        // Check if pricing plan slug is 'free_monthly'
+                                        $pricingPlan = \App\Models\PricingPlan::where('stripe_price_id', $stripePriceId)->first();
+                                        $isFreeSlug = $pricingPlan && $pricingPlan->slug === 'free_monthly';
+                            
+                                        $isFreePlan = $isFreeProduct || $isFreeSlug;
+                                    @endphp
                                        
                                         <tr>
                                             <td>
@@ -536,27 +548,25 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($subscription->status === 'active')
-                                                    <form action="{{ route('subscription.cancel', $subscription->id) }}" method="POST" style="display:inline;">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this subscription?');">
-                                                            Cancel
-                                                        </button>
-                                                    </form>
+                                                @if (!$isFreePlan)
+                                                    @if ($subscription->status === 'active')
+                                                        <form action="{{ route('subscription.cancel', $subscription->id) }}" method="POST" style="display:inline;">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this subscription?');">
+                                                                Cancel
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <a href="{{ route('checkout', [
+                                                            'id' => $subscription->id,
+                                                            'prod_id' => $stripeProductId,
+                                                            'price_id' => $stripePriceId
+                                                        ]) }}" class="btn btn-primary btn-sm">
+                                                            Buy Again
+                                                        </a>
+                                                    @endif
                                                 @else
-                                                    {{-- Fetch product & price ID for repurchasing --}}
-                                                    @php
-                                                        $priceId = $subscription->items->data[0]->price->id ?? 'default_price_id';
-                                                        $productId = $subscription->items->data[0]->price->product ?? 'default_product_id';
-                                                    @endphp
-                                                  
-                                                    <a href="{{ route('checkout', [
-                                                        'id' => $subscription->id,
-                                                        'prod_id' => $productId,
-                                                        'price_id' => $priceId
-                                                    ]) }}" class="btn btn-primary btn-sm">
-                                                        Buy Again
-                                                    </a>
+                                                    <span class="badge bg-secondary">Free Plan</span>
                                                 @endif
                                             </td>
                                         </tr>

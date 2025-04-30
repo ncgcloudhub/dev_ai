@@ -108,10 +108,17 @@ class StableDifussionController extends Controller
 
     // If result contains an error, return it
     if (isset($result['error'])) {
+        $user = auth()->user();
+        
+        $errorMessage = ($user && $user->role === 'admin')
+            ? $result['error']
+            : 'An error occurred. Please try again later.';
+    
         return response()->json([
-            'error' => $result['error'],
-        ], $result['status'] ?? 400); // use the real status if you pass it, fallback 400
+            'error' => $errorMessage,
+        ], $result['status'] ?? 400);
     }
+    
 
     // Otherwise, success response
     return response()->json([
