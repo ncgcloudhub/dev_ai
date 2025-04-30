@@ -41,21 +41,17 @@ class CheckoutController extends Controller
                  $stripeSubscriptions = \Stripe\Subscription::all([
                      'customer' => $user->stripe_id,
                      'status' => 'active',
-                     'limit' => 1, // just fetch one active subscription if exists
                  ]);
-     
-                 $currentSubscription = collect($stripeSubscriptions->data)->first();
+                 foreach ($stripeSubscriptions->data as $subscription) {
+                    try {
+                        $stripeSub = \Stripe\Subscription::retrieve($subscription->id);
+                        $stripeSub->cancel();
+                        Log::info("Canceled existing subscription", ['id' => $subscription->id]);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to cancel existing subscription: " . $e->getMessage());
+                    }
+                }
                  
-                 Log::info("Fetched live subscription from Stripe", ['currentSubscription' => $currentSubscription]);
-     
-                 if ($currentSubscription) {
-
-                     // Cancel the active subscription
-                     $stripeSubscription = \Stripe\Subscription::retrieve($currentSubscription->id);
-                     $stripeSubscription->cancel();
-     
-                     Log::info("Successfully canceled Stripe subscription", ['canceledSubscription' => $stripeSubscription]);
-                 }
              }
          } catch (\Exception $e) {
              Log::error("Error canceling subscription: " . $e->getMessage());

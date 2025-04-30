@@ -148,10 +148,9 @@ protected function handleSubscriptionDeleted($subscription)
     $activeSubscriptions = \Stripe\Subscription::all([
         'customer' => $user->stripe_id,
         'status' => 'active',
-        'limit' => 1,
     ]);
 
-    if ($activeSubscriptions->isEmpty()) {
+    if (empty($activeSubscriptions->data)) {
         try {
             $freePlan = PricingPlan::where('slug', 'free_monthly')->first();
 
