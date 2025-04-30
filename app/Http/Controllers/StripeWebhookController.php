@@ -20,6 +20,8 @@ class StripeWebhookController extends Controller
 {
     public function handleWebhook(Request $request)
 {
+    Stripe::setApiKey(config('services.stripe.secret'));
+
     Log::info('Webhook received. Starting processing...');
 
     $payload = $request->getContent();
@@ -81,7 +83,8 @@ protected function handleInvoicePaymentSucceeded($invoice)
     foreach ($subscriptions as $subscription) {
         if ($subscription->id !== $invoice->subscription) {
             \Stripe\Subscription::update($subscription->id, ['cancel_at_period_end' => false]);
-            \Stripe\Subscription::cancel($subscription->id);
+            $stripeSubscription = \Stripe\Subscription::retrieve($subscription->id);
+            $stripeSubscription->cancel();
         }
     }
 
