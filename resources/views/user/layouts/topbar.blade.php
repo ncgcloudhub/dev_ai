@@ -73,14 +73,15 @@
                             @csrf
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle gradient-btn-8 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
+                                    {{ $selectedModel ? \App\Models\AISettings::where('openaimodel', $selectedModel)->value('displayname') : 'Select AI Model' }}
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     @foreach ($aiModels as $model)
                                         <li>
-                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
-                                                {{ $model }} 
-                                                {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model['value']) ? 'active' : '' }}" 
+                                                href="#" data-model="{{ $model['value'] }}">
+                                                {{ $model['label'] }}
+                                                {{ trim($selectedModel) === trim($model['value']) ? '🗸' : '' }}
                                             </a>
                                         </li>
                                     @endforeach
@@ -99,9 +100,10 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     @foreach ($aiModels as $model)
                                         <li>
-                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
-                                                {{ $model }} 
-                                                {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                            <a class="dropdown-item {{ trim($selectedModel) === trim($model['value']) ? 'active' : '' }}" 
+                                                href="#" data-model="{{ $model['value'] }}">
+                                                {{ $model['label'] }}
+                                                {{ trim($selectedModel) === trim($model['value']) ? '🗸' : '' }}
                                             </a>
                                         </li>
                                     @endforeach
