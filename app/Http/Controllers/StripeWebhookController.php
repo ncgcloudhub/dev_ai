@@ -111,35 +111,47 @@ protected function handleInvoicePaymentSucceeded($invoice)
 protected function handleSubscriptionDeleted($subscription)
 {
     \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    
     $user = User::where('stripe_id', $subscription->customer)->first();
 
-    if ($user) {
-        // Mark the subscription as canceled in your DB
-        $user->subscriptions()
-            ->where('stripe_id', $subscription->id)
-            ->update(['stripe_status' => 'canceled']);
+    if (!$user) {
+        Log::warning('User not found for subscription deletion.');
+        return;
+    }
 
-        $priceId = $subscription->items->data[0]->price->id ?? null;
+    // Mark the subscription as canceled in your DB
+    $user->subscriptions()
+        ->where('stripe_id', $subscription->id)
+        ->update(['stripe_status' => 'canceled']);
 
-        Log::info('Stripe subscription cancellation - Price ID extracted:', ['price_id' => $priceId]);
+    $priceId = $subscription->items->data[0]->price->id ?? null;
 
-        $packageName = "Unknown Package";
+    Log::info('Stripe subscription cancellation - Price ID extracted:', ['price_id' => $priceId]);
 
-        if ($priceId) {
-            $pricingPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
+    $packageName = "Unknown Package";
 
-            if ($pricingPlan) {
-                $packageName = $pricingPlan->title;
-                Log::info('Pricing plan found for cancellation:', ['package_name' => $packageName]);
-            } else {
-                Log::warning('No matching pricing plan found for price ID during cancellation.', ['price_id' => $priceId]);
-            }
+    if ($priceId) {
+        $pricingPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
+
+        if ($pricingPlan) {
+            $packageName = $pricingPlan->title;
+            Log::info('Pricing plan found for cancellation:', ['package_name' => $packageName]);
+        } else {
+            Log::warning('No matching pricing plan found for price ID during cancellation.', ['price_id' => $priceId]);
         }
+    }
 
-        // Notify user
-        $user->notify(new SubscriptionCancelled($packageName));
+    // Notify user
+    $user->notify(new SubscriptionCancelled($packageName));
 
-        // ✅ Subscribe user to free plan
+    // ✅ Only subscribe to free plan if no other active subscriptions exist
+    $activeSubscriptions = \Stripe\Subscription::all([
+        'customer' => $user->stripe_id,
+        'status' => 'active',
+        'limit' => 1,
+    ]);
+
+    if ($activeSubscriptions->isEmpty()) {
         try {
             $freePlan = PricingPlan::where('slug', 'free_monthly')->first();
 
@@ -153,14 +165,17 @@ protected function handleSubscriptionDeleted($subscription)
                     'expand' => ['latest_invoice.payment_intent'],
                 ]);
 
-                Log::info('User subscribed to free plan after cancellation.', ['user_id' => $user->id]);
+                Log::info('User subscribed to free plan after having no active subscriptions.', ['user_id' => $user->id]);
             } else {
-                Log::error('Free monthly plan not found or missing Stripe price ID during subscription fallback.');
+                Log::error('Free monthly plan not found or missing Stripe price ID during fallback.');
             }
         } catch (\Exception $e) {
             Log::error('Failed to resubscribe user to free plan: ' . $e->getMessage());
         }
+    } else {
+        Log::info('User has other active subscriptions. Skipping free plan subscription.', ['user_id' => $user->id]);
     }
 }
+
 
 }
