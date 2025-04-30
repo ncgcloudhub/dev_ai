@@ -179,6 +179,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // USER MANAGE
     Route::prefix('user')->group(function () {
         Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('admin.permission:manageUser&Admin.manageUser');
+        Route::get('/manage/notification/admin', [UserManageController::class, 'ManageUserNotificationAdmin'])->name('manage.user.notification.admin')->middleware('admin.permission:manageUser&Admin.manageUser');
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
         Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
