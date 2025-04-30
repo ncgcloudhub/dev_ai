@@ -33,31 +33,6 @@ class CheckoutController extends Controller
          $price_id = $request->input('price_id');
          $user = $request->user();
      
-         Stripe::setApiKey(config('services.stripe.secret'));
-     
-         try {
-             if ($user->stripe_id) {
-                 // Fetch live subscriptions from Stripe
-                 $stripeSubscriptions = \Stripe\Subscription::all([
-                     'customer' => $user->stripe_id,
-                     'status' => 'active',
-                 ]);
-                 foreach ($stripeSubscriptions->data as $subscription) {
-                    try {
-                        $stripeSub = \Stripe\Subscription::retrieve($subscription->id);
-                        $stripeSub->cancel();
-                        Log::info("Canceled existing subscription", ['id' => $subscription->id]);
-                    } catch (\Exception $e) {
-                        Log::error("Failed to cancel existing subscription: " . $e->getMessage());
-                    }
-                }
-                 
-             }
-         } catch (\Exception $e) {
-             Log::error("Error canceling subscription: " . $e->getMessage());
-             return redirect()->back()->with('error', 'Failed to cancel previous subscription: ' . $e->getMessage());
-         }
-     
          // Proceed to new subscription checkout
          return $user->newSubscription($prod_id, $price_id)
              ->checkout([

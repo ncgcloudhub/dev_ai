@@ -61,90 +61,64 @@ class StripeWebhookController extends Controller
 }
 
 protected function handleInvoicePaymentSucceeded($invoice)
-{   
+{
     $settings = SiteSettings::first();
-    Log::info('Handling invoice payment', ['invoice_id' => $invoice->id]);
-
-    // Get user
     $user = User::where('stripe_id', $invoice->customer)->first();
-    if (!$user) {
-        Log::error('User not found for Stripe customer:', ['customer' => $invoice->customer]);
-        return;
-    }
 
-    // Get price ID directly from invoice (not subscription)
+    if (!$user) return;
+
     $priceId = $invoice->lines->data[0]->price->id;
+    $newPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
 
-    // Find pricing plan
-    $pricingPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
-    if (!$pricingPlan) {
-        Log::error('Pricing plan not found for price ID:', ['price_id' => $priceId]);
-        return;
+    if (!$newPlan) return;
+
+    // ✅ Cancel any other active subscriptions EXCEPT the one that triggered this invoice
+    $subscriptions = \Stripe\Subscription::all([
+        'customer' => $user->stripe_id,
+        'status' => 'active',
+    ]);
+
+    foreach ($subscriptions as $subscription) {
+        if ($subscription->id !== $invoice->subscription) {
+            \Stripe\Subscription::update($subscription->id, ['cancel_at_period_end' => false]);
+            \Stripe\Subscription::cancel($subscription->id);
+        }
     }
 
     // Update user credits/tokens
     if ($settings->rollover_enabled) {
-        $user->increment('credits_left', $pricingPlan->images);
-        $user->increment('tokens_left', $pricingPlan->tokens);
+        $user->increment('credits_left', $newPlan->images);
+        $user->increment('tokens_left', $newPlan->tokens);
     } else {
-        $user->credits_left = $pricingPlan->images;
-        $user->tokens_left = $pricingPlan->tokens;
+        $user->credits_left = $newPlan->images;
+        $user->tokens_left = $newPlan->tokens;
         $user->save();
     }
 
     // Log to package history
     PackageHistory::create([
         'user_id' => $user->id,
-        'package_id' => $pricingPlan->id,
+        'package_id' => $newPlan->id,
         'invoice' => $invoice->id,
-        'package_amount' => $pricingPlan->price,
+        'package_amount' => $newPlan->price,
     ]);
 
-    $user->notify(new TokenRenewed($pricingPlan->tokens, $pricingPlan->images));
-
-    // Send the email
-    Mail::to($user->email)->send(new TokensRenewedMail($user, $pricingPlan->tokens, $pricingPlan->images));
-
-    Log::info('Credits/tokens updated for user.', ['user_id' => $user->id]);
+    $user->notify(new TokenRenewed($newPlan->tokens, $newPlan->images));
+    Mail::to($user->email)->send(new TokensRenewedMail($user, $newPlan->tokens, $newPlan->images));
 }
+
 
 protected function handleSubscriptionDeleted($subscription)
 {
     \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-    
     $user = User::where('stripe_id', $subscription->customer)->first();
 
-    if (!$user) {
-        Log::warning('User not found for subscription deletion.');
-        return;
-    }
+    if (!$user) return;
 
-    // Mark the subscription as canceled in your DB
     $user->subscriptions()
         ->where('stripe_id', $subscription->id)
         ->update(['stripe_status' => 'canceled']);
 
-    $priceId = $subscription->items->data[0]->price->id ?? null;
-
-    Log::info('Stripe subscription cancellation - Price ID extracted:', ['price_id' => $priceId]);
-
-    $packageName = "Unknown Package";
-
-    if ($priceId) {
-        $pricingPlan = PricingPlan::where('stripe_price_id', $priceId)->first();
-
-        if ($pricingPlan) {
-            $packageName = $pricingPlan->title;
-            Log::info('Pricing plan found for cancellation:', ['package_name' => $packageName]);
-        } else {
-            Log::warning('No matching pricing plan found for price ID during cancellation.', ['price_id' => $priceId]);
-        }
-    }
-
-    // Notify user
-    $user->notify(new SubscriptionCancelled($packageName));
-
-    // ✅ Only subscribe to free plan if no other active subscriptions exist
     $activeSubscriptions = \Stripe\Subscription::all([
         'customer' => $user->stripe_id,
         'status' => 'active',
@@ -163,18 +137,14 @@ protected function handleSubscriptionDeleted($subscription)
                     'payment_behavior' => 'default_incomplete',
                     'expand' => ['latest_invoice.payment_intent'],
                 ]);
-
-                Log::info('User subscribed to free plan after having no active subscriptions.', ['user_id' => $user->id]);
-            } else {
-                Log::error('Free monthly plan not found or missing Stripe price ID during fallback.');
+                Log::info('Subscribed user to free plan after having no active subscription.', ['user_id' => $user->id]);
             }
         } catch (\Exception $e) {
-            Log::error('Failed to resubscribe user to free plan: ' . $e->getMessage());
+            Log::error('Failed to resubscribe to free plan: ' . $e->getMessage());
         }
-    } else {
-        Log::info('User has other active subscriptions. Skipping free plan subscription.', ['user_id' => $user->id]);
     }
 }
+
 
 
 }
