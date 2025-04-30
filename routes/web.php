@@ -179,6 +179,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     // USER MANAGE
     Route::prefix('user')->group(function () {
         Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('admin.permission:manageUser&Admin.manageUser');
+        Route::get('/manage/notification/admin', [UserManageController::class, 'ManageUserNotificationAdmin'])->name('manage.user.notification.admin')->middleware('admin.permission:manageUser&Admin.manageUser');
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
         Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
@@ -366,6 +367,7 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     });
 
     Route::post('/generate-hex-pass', [SiteSettingsController::class, 'storeHex'])->name('hexPass.store');
+    Route::post('/admin/settings/rollover', [SiteSettingsController::class, 'updateRolloverSetting'])->name('admin.settings.rollover.update');
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('admin.permission:settings.FAQ');
@@ -768,7 +770,7 @@ Route::post('/generate-image-to-video', [StableDifussionController::class, 'gene
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
 // Collage Image Generator
-Route::get('/images-form', [ImageController::class, 'imageIndex'])->name('images.form');
+Route::get('/image-generator', [ImageController::class, 'imageIndex'])->name('images.form');
 Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 
 // Stable Diffusion Control(Sketch)

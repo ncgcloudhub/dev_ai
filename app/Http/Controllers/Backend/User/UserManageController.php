@@ -27,6 +27,16 @@ class UserManageController extends Controller
     {
         return view('backend.user.manage_user');
     }
+   
+    public function ManageUserNotificationAdmin()
+    {
+        $notifications = \Illuminate\Notifications\DatabaseNotification::where('notifiable_type', \App\Models\User::class)
+                    ->latest()
+                    ->take(50)
+                    ->get();
+
+        return view('backend.user.manage_user_notification_admin', compact('notifications'));
+    }
   
     public function manageBlock()
     {
