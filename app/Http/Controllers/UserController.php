@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AllUserExport1;
 use App\Exports\AllUsersExport;
+use App\Models\AISettings;
 use App\Models\CustomTemplate;
 use App\Models\Template;
 use App\Models\User;
@@ -77,29 +78,52 @@ class UserController extends Controller
         }
     }
 
-     // SELECT USER MODEL GLOBAL
-     public function selectModel(Request $request)
-     {   
-         $user_id = Auth::user()->id;
-         $user = User::findOrFail($user_id);
-        
-         if ($user->tokens_left < 5000) {
+    // SELECT USER MODEL GLOBAL
+    public function selectModel(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $selectedModel = trim($request->input('aiModel'));
+
+        // Admin can access all models
+        if ($user->hasRole('admin')) {
+            $allowedModels = AISettings::pluck('openaimodel')->filter()->unique()->toArray();
+        } else {
+            // Regular user: fetch their package's allowed models
+            $packageHistory = $user->packageHistory()
+                                ->latest()
+                                ->with('package') // <- using 'package' relationship
+                                ->first();
+
+            if (!$packageHistory || !$packageHistory->package_id || empty($packageHistory->package->open_id_model)) {
+                return redirect()->back()->with('error', 'No valid package found. Cannot change AI model.');
+            }
+            
+            $allowedModels = array_map('trim', explode(',', $packageHistory->package->open_id_model));
+        }
+
+        if (!in_array($selectedModel, $allowedModels)) {
+            return redirect()->back()->with('error', 'Invalid AI model selected.');
+        }
+
+        if ($user->tokens_left < 5000) {
             $user->selected_model = 'gpt-4o-mini';
             $user->save();
 
             log_activity('Model Changed to gpt-4o-mini.');
-            
+
             return redirect()->back()->with('error', 'You do not have enough tokens to select this model. The model has been set to gpt-4o-mini.');
-        } else {
-            // Otherwise, save the model selected by the user
-            $user->selected_model = trim($request->input('aiModel'));
-            log_activity('Model Changed to '. $request->input('aiModel'));
         }
 
-         $user->save();
- 
-         return redirect()->back()->with('success', 'Model Updated Successfully');
-     }
+        // Save the model
+        $user->selected_model = $selectedModel;
+        $user->save();
+
+        log_activity('Model Changed to ' . $selectedModel);
+
+        return redirect()->back()->with('success', 'Model Updated Successfully');
+    }
+
 
     //  Tour Status
     public function updateTourStatus(Request $request)
