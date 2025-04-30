@@ -33,36 +33,38 @@
 
                 <div class="p-3" id="select-model-tour"> 
                     @php
-                    use App\Models\AISettings;
-
-                    // Static AI models for admin
-                    $staticModels = AISettings::pluck('openaimodel')->filter()->unique()->values()->toArray();
-                    $selectedModel = Auth::user()->selected_model ?? 'gpt-4o-mini'; // Default selected model
-
-                    $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
-                @endphp
+                        use App\Models\AISettings;
                 
-                <form id="adminModelForm" action="{{ route('select-model') }}" method="POST">
-                    @csrf
-                    <div class="dropdown">
-                        <button class="btn dropdown-toggle gradient-btn-8 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ $selectedModel ? $selectedModel : 'Select AI Model' }}
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @foreach ($staticModels as $model)
-                                <li>
-                                    <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
-                                        {{ $model }} 
-                                        {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
-                </form>
+                        $models = AISettings::whereNotNull('openaimodel')
+                                    ->pluck('displayname', 'openaimodel')
+                                    ->unique()
+                                    ->toArray();
                 
+                        $selectedModel = Auth::user()->selected_model ?? 'gpt-4o-mini';
+                        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+                    @endphp
+                    
+                    <form id="adminModelForm" action="{{ route('select-model') }}" method="POST">
+                        @csrf
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle gradient-btn-8 text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ $models[$selectedModel] ?? 'Select AI Model' }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                @foreach ($models as $model => $displayName)
+                                    <li>
+                                        <a class="dropdown-item {{ trim($selectedModel) === trim($model) ? 'active' : '' }}" href="#" data-model="{{ $model }}">
+                                            {{ $displayName }} 
+                                            {{ trim($selectedModel) === trim($model) ? '🗸' : '' }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
+                    </form>
                 </div>
+                
             </div>
 
             <div class="d-flex align-items-center">

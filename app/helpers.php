@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AISettings;
 use App\Models\ButtonStyle;
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
@@ -44,49 +45,55 @@ if (!function_exists('getUserLastPackageAndModels')) {
         $user = Auth::user();
 
         if (!$user) {
-            return ['lastPackage' => null, 'aiModels' => [], 'selectedModel' => null];
+            return ['lastPackage' => null, 'aiModels' => [], 'selectedModel' => null, 'freePricingPlan' => null];
         }
 
-        // Get the user's last package
+        // Get user's last package history
         $lastPackage = PackageHistory::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->first();
 
         $freePricingPlan = PricingPlan::where('package_type', 'monthly')
-        ->where('slug', 'like', '%free%')
-        ->first();
-        
+            ->where('slug', 'like', '%free%')
+            ->first();
 
-        // Initialize the AI models array
         $aiModels = [];
+        $allSettings = AISettings::all()->keyBy('openaimodel');
 
         if ($lastPackage) {
-            // Get the PricingPlan associated with the last package
             $pricingPlan = PricingPlan::find($lastPackage->package_id);
 
-            if ($pricingPlan) {
-                // Extract AI models
+            if ($pricingPlan && !empty($pricingPlan->open_id_model)) {
                 $models = explode(',', $pricingPlan->open_id_model);
-                foreach ($models as $index => $model) {
-                    $aiModels[] =  $model;
+                foreach ($models as $model) {
+                    $model = trim($model);
+                    if (isset($allSettings[$model])) {
+                        $aiModels[] = [
+                            'value' => $model,
+                            'label' => $allSettings[$model]->displayname,
+                        ];
+                    }
                 }
             }
-        } else {   
-            if ($freePricingPlan) {
-                // Extract AI models
-                $models = explode(',', $freePricingPlan->open_id_model);
-                foreach ($models as $index => $model) {
-                    $aiModels[] =  $model;
+        } elseif ($freePricingPlan && !empty($freePricingPlan->open_id_model)) {
+            $models = explode(',', $freePricingPlan->open_id_model);
+            foreach ($models as $model) {
+                $model = trim($model);
+                if (isset($allSettings[$model])) {
+                    $aiModels[] = [
+                        'value' => $model,
+                        'label' => $allSettings[$model]->displayname,
+                    ];
                 }
             }
         }
 
-        // Get the currently selected model
         $selectedModel = $user->selected_model;
 
         return compact('lastPackage', 'aiModels', 'selectedModel', 'freePricingPlan');
     }
 }
+
 
 // Activity LOG
 if (!function_exists('log_activity')) {
