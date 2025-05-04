@@ -33,6 +33,12 @@ return [
         'redirect' => env('APP_URL1') . '/github/callback',
     ],
 
+    'heyzine' => [
+        'client_id' => env('HEYZINE_CLIENT_ID'),
+        'api_key' => env('HEYZINE_API_KEY'),
+    ],
+
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

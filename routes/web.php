@@ -37,6 +37,7 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpirationController;
+use App\Http\Controllers\FlipbookController;
 use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StripeWebhookController;
@@ -665,6 +666,8 @@ Route::get('github/callback', [AIContentCreatorController::class, 'githubcallbac
 //Contact Us Send Mail
 Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
 
+Route::get('/flipbooks/upload', [FlipbookController::class, 'showUploadForm'])->name('flipbooks.form');
+Route::post('/flipbooks/upload', [FlipbookController::class, 'upload'])->name('flipbooks.upload');
 
 Route::get('/inactive', function () {
     return view('admin.error.auth-404-basic');
