@@ -689,6 +689,36 @@ public function updateContent(Request $request, $id)
         return response()->json($subjects);
     }
 
+    public function generateImage(Request $request)
+{
+    $prompt = $request->input('prompt');
+    $model = $request->input('model');
+    $apiKey = config('app.openai_api_key');
+    
+    $imageUrl = null;
+    
+    switch ($model) {
+        case 'sd':
+            $imageUrl = $this->generateSDImageFromPrompt($prompt);
+            break;
+        case 'dalle3':
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
+            break;
+        case 'dalle2':
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey, '256x256', 'vivid', 'standard', 1);
+            break;
+        default:
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey);
+            break;
+    }
+    
+    if ($imageUrl) {
+        return response()->json(['success' => true, 'imageUrl' => $imageUrl]);
+    }
+    
+    return response()->json(['success' => false, 'message' => 'Failed to generate image'], 500);
+}
+
     // Function to generate images using DALL·E
     public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1, $model = null)
     {
@@ -703,8 +733,8 @@ public function updateContent(Request $request, $id)
         $payload = [
             'prompt' => $prompt,
             'size' => $size,
-            'style' => $style,
-            'quality' => $quality,
+            // 'style' => $style,
+            // 'quality' => $quality,
             'n' => $n,
         ];
     
@@ -791,26 +821,16 @@ public function ToolsGenerateContent(Request $request)
     $savedPrompt = $tool->prompt;
     $prompt = $savedPrompt . " "; 
 
-    // Check if this is a slide generation tool based on slug
     $isSlideGeneration = str_contains(strtolower($tool->slug), 'presentation') || 
                          str_contains(strtolower($tool->slug), 'slide');
     
-    Log::info('Slide generation check', [
-        'tool_id' => $toolId,
-        'slug' => $tool->slug,
-        'is_slide_generation' => $isSlideGeneration
-    ]);
-
-    // Modify prompt for slide generation if needed
     if ($isSlideGeneration) {
         $prompt .= "Format the response as a presentation with slides. " .
                    "Each slide should have a title and body content. " .
                    "Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]. " .
                    "Separate slides with ---. Keep body text concise (3-4 bullet points). ";
-                   Log::info('$isSlideGeneration prompt (738)', ['$prompt' => $prompt]);
     }
 
-    // Fetch the selected grade from the `grade_id`
     if ($gradeId = $request->input('grade_id')) {
         $grade = GradeClass::find($gradeId);
         if ($grade) {
@@ -825,18 +845,15 @@ public function ToolsGenerateContent(Request $request)
         }
     }
 
-     // ✅ Include image prompt logic only if enabled
-     $includeImages = $request->input('include_images');
-     $imageType = $request->input('image_model'); // e.g., dalle2, dalle3, sd
- 
-     if ($includeImages === 'yes') {
-        $prompt .= " For each slide, after the slide content, include an image prompt named exactly as '**Image prompt:**' followed by a highly professional, hyper-detailed, vivid, and natural realistic image description based on that slide's content. " .
+    $includeImages = $request->input('include_images');
+    $imageType = $request->input('image_model');
+
+    if ($includeImages === 'yes') {
+        $prompt .= "after the content, include an image prompt named exactly as '**Image prompt:**' followed by a highly professional, hyper-detailed, vivid, and natural realistic image description based on that content. " .
                    "The image should reflect the subject accurately, be visually engaging, and align perfectly with the educational or contextual purpose of the slide. " .
                    "Do not include any other labels, prefixes, or suffixes—only use 'Image prompt:' before each image description. Use advanced 4K, photorealistic rendering language.";
     }
-    
 
-    // Generate content using OpenAI API
     $response = $client->chat()->create([
         "model" => $openaiModel,
         'messages' => [
@@ -845,74 +862,33 @@ public function ToolsGenerateContent(Request $request)
         ],
     ]);
     
-    Log::info('OpenAI Response Edu', ['response' => $response]);
-    
-    // Log the activity
-    logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
-    
     $content = $response['choices'][0]['message']['content'];
 
-    // Log the content before processing
-    Log::info('Content Before Image Extraction', ['content' => $content]);
-
-    // 🖼️ Only extract and generate images if user selected to include images
+    // Extract image prompts but don't generate images yet
     if ($includeImages === 'yes') {
-        $content = preg_replace_callback('/Image prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey, $imageType) {
-            $imagePrompt = trim($matches[1]);
+        // First process the content with Markdown
+        $parsedown = new Parsedown();
+        $content = $parsedown->text($content);
         
-          
-            if (!empty($imagePrompt)) {
-                $generatedImageUrl = null;
-
-                // Add switch for future expansion (e.g., stable diffusion)
-                switch ($imageType) {
-                    case 'sd':
-                        Log::info('Generating image using Stable Diffusion', [
-                            'image_prompt' => $imagePrompt,
-                        ]);
-                        $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
-                        break;
-                
-                    case 'dalle3':
-                        Log::info('Generating image using DALL·E 3', [
-                            'image_prompt' => $imagePrompt,
-                        ]);
-                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
-                        break;
-                
-                    case 'dalle2':
-                        Log::info('Generating image using DALL·E 2', [
-                            'image_prompt' => $imagePrompt,
-                        ]);
-                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey, '256x256', 'vivid', 'standard', 1);
-                        break;
-                
-                    default:
-                        Log::info('Generating image using default method (DALL·E 2 fallback)', [
-                            'image_prompt' => $imagePrompt,
-                        ]);
-                        $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-                        break;
-                }
-                
-                
-                if ($generatedImageUrl) {
-                    return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
-                }
-            }
-
-            return $matches[0]; // Keep original
-        }, $content);
+        // Then add the HTML buttons
+        $content = preg_replace_callback('/<p><strong>Image prompt:<\/strong> (.*?)<\/p>/is', 
+            function ($matches) use ($imageType) {
+                $prompt = strip_tags($matches[1]);
+                return '<div class="image-prompt-container mb-3">' .
+                       '<p><strong>Image Prompt:</strong> ' . $matches[1] . '</p>' .
+                       '<button class="btn btn-sm btn-primary generate-image-btn" ' .
+                       'data-prompt="' . htmlspecialchars($prompt, ENT_QUOTES) . '" ' .
+                       'data-model="' . htmlspecialchars($imageType, ENT_QUOTES) . '">' .
+                       'Generate Image</button>' .
+                       '<div class="image-result mt-2"></div>' .
+                       '</div>';
+            }, 
+            $content);
     }
 
-    Log::info('Processed Content with DALL·E Images', ['content' => $content]);
-        
-
-    // Deduct user tokens
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
     
-    // Save the processed content to the database
     $toolContent = new ToolGeneratedContent();
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
@@ -920,31 +896,12 @@ public function ToolsGenerateContent(Request $request)
     $toolContent->content = $content;
     $toolContent->save();
 
-    // Store content_id in the session for later retrieval
     session(['edu_tool_content_id' => $toolContent->id]);
-    Log::info('Returning generated content from session 870', [
-        'content_id' => session('edu_tool_content_id'),
-        'content_data' => session('edu_tool_content_data'),
-    ]);
     
-    
-    // If this is a slide generation request, create the slides
-    // if ($isSlideGeneration) {
-    //     return $this->createSlidesFromContent($processedContent, $user);
-    // }
-    
-    // Stream the processed content (with images) to the view
     return response()->stream(function () use ($content) {
-        $chunks = explode("\n", $content);
-        $parsedown = new Parsedown();
-    
-        foreach ($chunks as $chunk) {
-            $htmlChunk = $parsedown->text($chunk);
-            echo $htmlChunk;
-            ob_flush();
-            flush();
-            sleep(1);
-        }
+        echo $content;
+        ob_flush();
+        flush();
     });
 }
 
