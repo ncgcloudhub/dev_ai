@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
+use App\Models\GeneratedImage;
 use App\Models\PackageHistory;
 use App\Models\SiteSettings;
 use App\Models\StableDiffusionGeneratedImage;
@@ -29,15 +30,49 @@ class ImageController extends Controller
     public function imageIndex()
     {
         $apiKey = config('services.stable_diffusion.api_key');
-        $user_id = Auth::user()->id;
-        $lastPackageHistory = PackageHistory::where('user_id', $user_id)
-        ->latest()
-        ->first();
+        $user_id = Auth::id();
+        $lastPackageHistory = PackageHistory::where('user_id', $user_id)->latest()->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
-        $images = StableDiffusionGeneratedImage::where('user_id', auth()->id())->orderBy('id', 'desc')->get();
-
-        return view('backend.image_generate.images_sd_d',compact('apiKey','lastPackageId','images'));
+    
+        // 1. Base SD images (GeneratedImage)
+        $generatedImages = GeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        foreach ($generatedImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure.sas_token');
+        }
+    
+        // 2. DALL·E Images
+        $dalleImages = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
+            ->where('user_id', $user_id)
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($dalleImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure.sas_token');
+        }
+    
+        // 3. Stable Diffusion Images
+        $sdImages = StableDiffusionGeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        foreach ($sdImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image_url 
+                . '?' . config('filesystems.disks.azure.sas_token');
+        }
+    
+        // 4. Merge all images into one collection
+        $images = $generatedImages->merge($dalleImages)->merge($sdImages);
+    
+        // Optional: sort by created_at or id descending
+        $images = $images->sortByDesc('id')->values();
+    
+        return view('backend.image_generate.images_sd_d', compact('apiKey', 'lastPackageId', 'images'));
     }
+    
 
     // Dalle Image Generate
     public function generateImageDalle(Request $request)
@@ -189,11 +224,11 @@ class ImageController extends Controller
 
         // Save image information to the database
         try {
-            $imageModel = new ModelsDalleImageGenerate;
+            $imageModel = new GeneratedImage();
             $imageModel->image = $imagePath;
             $imageModel->user_id = auth()->user()->id;
-            $imageModel->status = 'inactive';
             $imageModel->prompt = $prompt;
+            $imageModel->model = 'dall-e-3';
             $imageModel->resolution = $size;
             $imageModel->style = $userStyleImplode;
             $imageModel->save();
