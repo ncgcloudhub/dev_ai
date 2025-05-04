@@ -437,116 +437,100 @@
 
 <script>
 $(document).ready(function() {
-    // Handle form submission
+    // Form submission handler
     $('form').on('submit', function(e) {
         e.preventDefault();
         $('#generation-status').text('Generating...');
         showMagicBall('facts', 'education');
 
-        let formData = $(this).serialize();
-
         $.ajax({
             type: 'POST',
             url: '{{ route("tools.generate.content") }}',
-            data: formData,
+            data: $(this).serialize(),
             xhrFields: {
                 onprogress: function(event) {
                     $('#stream-output').html(event.currentTarget.responseText);
                     hideMagicBall();
-                    initializeImageButtons(); // Initialize buttons for new content
+                    initImageButtons();
                 }
             },
-            success: function(response) {
+            success: function() {
                 $('#generation-status').text('✅ Generation completed!');
-                initializeImageButtons();
+                initImageButtons();
                 
-                // Fetch the content_id and content_data stored in session
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ route("tools.get.generated.content") }}',
-                    success: function(data) {
-                        const button = document.createElement('button');
-                        button.className = 'btn btn-sm btn-success ms-1 generate-slides-btn';
-                        button.setAttribute('type', 'button');
-                        button.setAttribute('data-content-id', data.edu_tool_content_id);
-                        button.dataset.content = data.edu_tool_content_data;
-                        button.textContent = 'Generate Slides';
-                        document.querySelector('#generation-status').after(button);
-                    },
-                    error: function(error) {
-                        console.error('Error fetching content data:', error);
+                // Handle slide generation button if needed
+                $.get('{{ route("tools.get.generated.content") }}', function(data) {
+                    if (data.edu_tool_content_id) {
+                        const slideBtn = `<button class="btn btn-sm btn-success ms-1 generate-slides-btn"
+                                          data-content-id="${data.edu_tool_content_id}"
+                                          data-content='${JSON.stringify(data.edu_tool_content_data).replace(/'/g, "&#39;")}'>
+                                          Generate Slides</button>`;
+                        $('#generation-status').after(slideBtn);
                     }
                 });
             },
             error: function(error) {
                 hideMagicBall();
                 $('#generation-status').text('❌ Failed to generate content.');
-                console.error('Error during content generation:', error);
+                console.error('Error:', error);
             }
         });
     });
 
-    // Initialize image generation buttons
-    function initializeImageButtons() {
+    // Image generation handler
+    function initImageButtons() {
         $('.generate-image-btn').off('click').on('click', function() {
-            const button = $(this);
-            const container = button.closest('.image-prompt-container');
-            const prompt = button.data('prompt');
-            const model = button.data('model');
-            const resultDiv = container.find('.image-result');
+            const $btn = $(this);
+            const $resultDiv = $btn.next('.image-result');
             
-            // Disable button and show loading state
-            button.prop('disabled', true).html(
-                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...'
-            );
+            $btn.prop('disabled', true)
+               .html('<span class="spinner-border spinner-border-sm me-1"></span> Generating');
             
-            resultDiv.html('<div class="text-center my-2"><div class="spinner-border text-primary" role="status"></div></div>');
-            
-            // Generate image via AJAX
+            $resultDiv.html('<div class="text-center py-2"><div class="spinner-border text-muted"></div></div>');
+
             $.ajax({
                 type: 'POST',
                 url: '{{ route("tools.generate.image") }}',
                 data: {
-                    prompt: prompt,
-                    model: model,
+                    prompt: $btn.data('prompt'),
+                    model: $btn.data('model'),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     if (response.success) {
-                        resultDiv.html(`
-                            <div class="generated-image mt-2">
-                                <img src="${response.imageUrl}" class="img-fluid rounded border" alt="Generated Image">
-                                <div class="mt-2 text-end">
-                                    <a href="${response.imageUrl}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-expand"></i> View Full Size
+                        $resultDiv.html(`
+                            <div class="generated-image">
+                                <img src="${response.imageUrl}" class="img-fluid rounded mt-2" style="max-height: 400px;">
+                                <div class="text-end mt-2">
+                                    <a href="${response.imageUrl}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-external-link-alt"></i> Open Full Size
                                     </a>
                                 </div>
                             </div>
                         `);
-                        button.remove();
+                        $btn.remove();
                     } else {
-                        resultDiv.html(`
-                            <div class="alert alert-danger mt-2">
-                                <i class="fas fa-exclamation-circle"></i> Failed to generate image
-                            </div>
-                        `);
-                        button.prop('disabled', false).html('Try Again');
+                        showError($resultDiv, $btn);
                     }
                 },
                 error: function() {
-                    resultDiv.html(`
-                        <div class="alert alert-danger mt-2">
-                            <i class="fas fa-exclamation-circle"></i> Error generating image
-                        </div>
-                    `);
-                    button.prop('disabled', false).html('Try Again');
+                    showError($resultDiv, $btn);
                 }
             });
         });
     }
 
-    // Initialize buttons on page load (in case content is already loaded)
-    initializeImageButtons();
+    function showError($resultDiv, $btn) {
+        $resultDiv.html(`
+            <div class="alert alert-danger mt-2 py-2">
+                <i class="fas fa-exclamation-triangle me-1"></i> Failed to generate image
+            </div>
+        `);
+        $btn.prop('disabled', false).text('Try Again');
+    }
+
+    // Initialize any existing buttons on page load
+    initImageButtons();
 });
 
     // Open modal and populate with content data

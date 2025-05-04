@@ -863,27 +863,28 @@ public function ToolsGenerateContent(Request $request)
     ]);
     
     $content = $response['choices'][0]['message']['content'];
+    $parsedown = new Parsedown();
 
-    // Extract image prompts but don't generate images yet
+    // Process with Parsedown first
+    $processedContent = $parsedown->text($content);
+
+    // Handle image prompts if enabled
     if ($includeImages === 'yes') {
-        // First process the content with Markdown
-        $parsedown = new Parsedown();
-        $content = $parsedown->text($content);
-        
-        // Then add the HTML buttons
-        $content = preg_replace_callback('/<p><strong>Image prompt:<\/strong> (.*?)<\/p>/is', 
-            function ($matches) use ($imageType) {
+        $processedContent = preg_replace_callback(
+            '/<p><strong>Image prompt:<\/strong> (.*?)<\/p>/is',
+            function ($matches) use ($imageType, $parsedown) {
                 $prompt = strip_tags($matches[1]);
-                return '<div class="image-prompt-container mb-3">' .
-                       '<p><strong>Image Prompt:</strong> ' . $matches[1] . '</p>' .
-                       '<button class="btn btn-sm btn-primary generate-image-btn" ' .
-                       'data-prompt="' . htmlspecialchars($prompt, ENT_QUOTES) . '" ' .
-                       'data-model="' . htmlspecialchars($imageType, ENT_QUOTES) . '">' .
-                       'Generate Image</button>' .
-                       '<div class="image-result mt-2"></div>' .
-                       '</div>';
-            }, 
-            $content);
+                $escapedPrompt = htmlspecialchars($prompt, ENT_QUOTES);
+                
+                return $parsedown->text("**Image Prompt:** {$matches[1]}") . 
+                    "<button class='btn btn-sm btn-primary generate-image-btn mt-2' 
+                     data-prompt='{$escapedPrompt}' 
+                     data-model='{$imageType}'>
+                     Generate Image</button>
+                     <div class='image-result mt-2'></div>";
+            },
+            $processedContent
+        );
     }
 
     $totalTokens = $response['usage']['total_tokens'];
@@ -898,8 +899,8 @@ public function ToolsGenerateContent(Request $request)
 
     session(['edu_tool_content_id' => $toolContent->id]);
     
-    return response()->stream(function () use ($content) {
-        echo $content;
+    return response()->stream(function () use ($processedContent) {
+        echo $processedContent;
         ob_flush();
         flush();
     });
