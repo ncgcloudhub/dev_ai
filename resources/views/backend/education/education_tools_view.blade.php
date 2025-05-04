@@ -12,44 +12,32 @@
 @endcomponent
 
 <style>
-    .image-prompt-container {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #0d6efd;
-    margin: 15px 0;
-}
-
-.image-prompt-text {
-    margin-bottom: 12px;
-    color: #212529;
-    font-size: 0.95rem;
-}
-
 .generate-image-btn {
-    margin: 8px 0;
+    transition: all 0.2s;
+}
+
+.generate-image-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .image-result {
     min-height: 50px;
+    transition: all 0.3s ease;
 }
 
 .generated-image {
     background: white;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .generated-image img {
     max-width: 100%;
+    height: auto;
     border-radius: 4px;
-    margin-bottom: 8px;
-}
-
-.spinner-border {
-    width: 1.5rem;
-    height: 1.5rem;
 }
 </style>
 <div class="row">
