@@ -43,90 +43,89 @@ class StableDifussionController extends Controller
 }
 
     public function generate(Request $request)
-{
+    {
+        Log::info('Request Data:', $request->all());
+    
+        $request->validate([
+            'prompt' => 'required|string',
+            'hiddenStyle' => 'nullable|string',
+            'hiddenImageFormat' => 'nullable|string',
+            'hiddenModelVersion' => 'nullable|string',
+        ]);
 
-    Log::info('Request Data:', $request->all());
-   
-    $request->validate([
-        'prompt' => 'required|string',
-        'hiddenStyle' => 'nullable|string',
-        'hiddenImageFormat' => 'nullable|string',
-        'hiddenModelVersion' => 'nullable|string',
-    ]);
+        $prompt = $request->input('prompt');
+        $style = $request->input('hiddenStyle');
+        $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
+        $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
+        $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
+        $mode = $request->input('mode') ?? 'text-to-image'; // Default to text-to-image
+        $baseImage = $request->file('base_image'); // For image-to-image
+        $strength = $request->input('strength'); // For image-to-image
 
-    $prompt = $request->input('prompt');
-    $style = $request->input('hiddenStyle');
-    $imageFormat = $request->input('hiddenImageFormat') ?? 'jpeg';
-    $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-large';
-    $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
-    $mode = $request->input('mode') ?? 'text-to-image'; // Default to text-to-image
-    $baseImage = $request->file('base_image'); // For image-to-image
-    $strength = $request->input('strength'); // For image-to-image
+        // Set the appropriate endpoint
+        $endpoints = [
+            'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
+            'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
+            'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
+        ];
 
-    // Set the appropriate endpoint
-    $endpoints = [
-        'sd-ultra' => env('STABLE_DIFFUSION_API_URL_ULTRA', 'https://api.stability.ai/v2beta/stable-image/generate/ultra'),
-        'sd-core' => env('STABLE_DIFFUSION_API_URL_CORE', 'https://api.stability.ai/v2beta/stable-image/generate/core'),
-        'default' => env('STABLE_DIFFUSION_API_URL', 'https://api.stability.ai/v2beta/stable-image/generate/sd3'),
-    ];
+        $endpoint = $endpoints['default']; // Default to SD3 endpoint
 
-    $endpoint = $endpoints['default']; // Default to SD3 endpoint
+        if (array_key_exists($modelVersion, $endpoints)) {
+            $endpoint = $endpoints[$modelVersion];
+        }
 
-    if (array_key_exists($modelVersion, $endpoints)) {
-        $endpoint = $endpoints[$modelVersion];
-    }
+        // Log the selected model and endpoint
+        Log::info('Selected Model Version:', ['modelVersion' => $modelVersion]);
+        Log::info('Resolved Endpoint:', ['endpoint' => $endpoint]);
 
-    // Log the selected model and endpoint
-    Log::info('Selected Model Version:', ['modelVersion' => $modelVersion]);
-    Log::info('Resolved Endpoint:', ['endpoint' => $endpoint]);
+        if ($style) {
+            $prompt .= " in style:" . $style;  // Example: "coffee in Watercolor"
+        }
 
-    if ($style) {
-        $prompt .= " in " . $style;  // Example: "coffee in Watercolor"
-    }
+        if($optimizePrompt == '1'){
+            $rephrasedPrompt = rephrasePrompt($prompt);
+        }else {
+            // If not optimized, use the original prompt
+            $rephrasedPrompt = $prompt;
+        }
+        Log::info('before Requestsend to service');
+    
+        // Call the service to generate the image
+        $result = $this->stableDiffusionService->generateImage(
+            $endpoint,
+            $rephrasedPrompt,
+            $imageFormat,
+            $modelVersion,
+            $mode,
+            $baseImage,
+            $strength,
+            $style
+        );
 
-    if($optimizePrompt == '1'){
-        $rephrasedPrompt = rephrasePrompt($prompt);
-    }else {
-        // If not optimized, use the original prompt
-        $rephrasedPrompt = $prompt;
-    }
+        Log::info('After Request:', $result);
 
-    Log::info('before Requestsend to service');
- 
-     // Call the service to generate the image
-     $result = $this->stableDiffusionService->generateImage(
-        $endpoint,
-        $rephrasedPrompt,
-        $imageFormat,
-        $modelVersion,
-        $mode,
-        $baseImage,
-        $strength
-    );
-
-    Log::info('After Request:', $result);
-
-    // If result contains an error, return it
-    if (isset($result['error'])) {
-        $user = auth()->user();
+        // If result contains an error, return it
+        if (isset($result['error'])) {
+            $user = auth()->user();
+            
+            $errorMessage = ($user && $user->role === 'admin')
+                ? $result['error']
+                : 'An error occurred. Please try again later.';
         
-        $errorMessage = ($user && $user->role === 'admin')
-            ? $result['error']
-            : 'An error occurred. Please try again later.';
-    
-        return response()->json([
-            'error' => $errorMessage,
-        ], $result['status'] ?? 400);
-    }
-    
+            return response()->json([
+                'error' => $errorMessage,
+            ], $result['status'] ?? 400);
+        }
+        
 
-    // Otherwise, success response
-    return response()->json([
-        'image_url' => $result['image_url'] ?? null,
-        'image_base64' => $result['image_base64'] ?? null,
-        'prompt' => $rephrasedPrompt,
-    ]);
-}
+        // Otherwise, success response
+        return response()->json([
+            'image_url' => $result['image_url'] ?? null,
+            'image_base64' => $result['image_base64'] ?? null,
+            'prompt' => $rephrasedPrompt,
+        ]);
+    }
 
 
 public function likeImage(Request $request)
