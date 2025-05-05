@@ -911,38 +911,48 @@ public function ToolsGenerateContent(Request $request)
 
     session(['edu_tool_content_id' => $toolContent->id]);
 
-    // Process with Parsedown first
-    $processedContent = $parsedown->text($content);
-
-    // Handle image prompts if enabled
-    if ($includeImages === 'yes') {
-        $processedContent = preg_replace_callback(
-            '/<p><strong>Image prompt:<\/strong> (.*?)<\/p>/is',
-            function ($matches) use ($imageType, $parsedown) {
-                $prompt = strip_tags($matches[1]);
-                $escapedPrompt = htmlspecialchars($prompt, ENT_QUOTES);
-                
-                return $parsedown->text("**Image Prompt:** {$matches[1]}") . 
-                    "<button class='btn btn-sm btn-primary generate-image-btn mt-2' 
-                    data-prompt='{$escapedPrompt}' 
-                    data-model='{$imageType}'
-                    data-content-id='" . session('edu_tool_content_id') . "'>
-                    Generate Image</button>
-                    <div class='image-result mt-2'></div>";
-
-            },
-            $processedContent
-        );
-    }
+   
 
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
+
+    return response()->stream(function () use ($content, $includeImages, $imageType) {
+        $parsedown = new Parsedown();
+        $chunks = explode("\n", $content);
     
-    return response()->stream(function () use ($processedContent) {
-        echo $processedContent;
-        ob_flush();
-        flush();
-    });
+        foreach ($chunks as $chunk) {
+            $htmlChunk = $parsedown->text($chunk);
+    
+            // Handle image prompt inline
+            if ($includeImages === 'yes' && stripos($chunk, '**Image prompt:**') !== false) {
+                if (preg_match('/\*\*Image prompt:\*\*\s*(.+)/i', $chunk, $matches)) {
+                    $prompt = trim($matches[1]);
+                    $escapedPrompt = htmlspecialchars($prompt, ENT_QUOTES);
+                    $button = "<button class='btn btn-sm btn-primary generate-image-btn mt-2' 
+                                data-prompt='{$escapedPrompt}' 
+                                data-model='{$imageType}'
+                                data-content-id='" . session('edu_tool_content_id') . "'>
+                                Generate Image</button>
+                                <div class='image-result mt-2'></div>";
+    
+                    echo $htmlChunk . $button;
+                } else {
+                    echo $htmlChunk;
+                }
+            } else {
+                echo $htmlChunk;
+            }
+    
+            ob_flush();
+            flush();
+            sleep(1); // Optional delay
+        }
+    }, 200, [
+        'Cache-Control' => 'no-cache',
+        'Content-Type' => 'text/html; charset=utf-8',
+        'X-Accel-Buffering' => 'no' // For nginx buffering
+    ]);
+    
 }
 
 private function createSlidesFromContent($content, $user)
