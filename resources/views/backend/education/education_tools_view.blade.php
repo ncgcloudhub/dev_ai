@@ -39,6 +39,14 @@
     height: auto;
     border-radius: 4px;
 }
+
+.formatted-content-wrapper img {
+        max-width: 100%;
+        height: auto;
+        max-height: 400px;
+        display: block;
+        margin: 10px auto;
+    }
 </style>
 <div class="row">
     
@@ -300,8 +308,9 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{-- Display full formatted content --}}
-                                                        {!! $content->formatted_content !!}
+                                                        <div class="formatted-content-wrapper">
+                                                            {!! $content->formatted_content !!}
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -365,8 +374,9 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{-- Display full formatted content --}}
-                                                        {!! $content->formatted_content !!}
+                                                        <div class="formatted-content-wrapper">
+                                                            {!! $content->formatted_content !!}
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
