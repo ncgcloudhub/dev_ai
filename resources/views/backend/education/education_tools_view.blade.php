@@ -482,6 +482,7 @@ $(document).ready(function() {
                 data: {
                     prompt: $btn.data('prompt'),
                     model: $btn.data('model'),
+                    content_id: $btn.data('content-id'), // pass content ID
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {

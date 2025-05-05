@@ -711,6 +711,31 @@ public function updateContent(Request $request, $id)
             $imageUrl = self::generateImageFromPrompt($prompt, $apiKey);
             break;
     }
+
+        // ✅ If image was generated and a content ID was passed, update the content
+        if ($imageUrl && $request->has('content_id')) {
+            $contentId = $request->input('content_id');
+            $generatedContent = ToolGeneratedContent::find($contentId);
+    
+            if ($generatedContent) {
+                $originalContent = $generatedContent->content;
+                $promptText = trim($prompt);
+    
+                // Build Markdown image snippet
+                $imageMarkdown = "![Generated Image]({$imageUrl})\n  - {$promptText}";
+    
+                // Find "**Image prompt:** [prompt]" and append the image below it
+                $pattern = '/(\*\*Image prompt:\*\* ' . preg_quote($promptText, '/') . ')/i';
+                $replacement = "$1\n\n$imageMarkdown";
+    
+                $updatedContent = preg_replace($pattern, $replacement, $originalContent);
+    
+                if ($updatedContent !== null) {
+                    $generatedContent->content = $updatedContent;
+                    $generatedContent->save();
+                }
+            }
+        }
     
     if ($imageUrl) {
         return response()->json(['success' => true, 'imageUrl' => $imageUrl]);
@@ -865,6 +890,15 @@ public function ToolsGenerateContent(Request $request)
     $content = $response['choices'][0]['message']['content'];
     $parsedown = new Parsedown();
 
+    $toolContent = new ToolGeneratedContent();
+    $toolContent->tool_id = $toolId;
+    $toolContent->user_id = $user->id;
+    $toolContent->prompt = $prompt;
+    $toolContent->content = $content;
+    $toolContent->save();
+
+    session(['edu_tool_content_id' => $toolContent->id]);
+
     // Process with Parsedown first
     $processedContent = $parsedown->text($content);
 
@@ -878,10 +912,12 @@ public function ToolsGenerateContent(Request $request)
                 
                 return $parsedown->text("**Image Prompt:** {$matches[1]}") . 
                     "<button class='btn btn-sm btn-primary generate-image-btn mt-2' 
-                     data-prompt='{$escapedPrompt}' 
-                     data-model='{$imageType}'>
-                     Generate Image</button>
-                     <div class='image-result mt-2'></div>";
+                    data-prompt='{$escapedPrompt}' 
+                    data-model='{$imageType}'
+                    data-content-id='" . session('edu_tool_content_id') . "'>
+                    Generate Image</button>
+                    <div class='image-result mt-2'></div>";
+
             },
             $processedContent
         );
@@ -889,15 +925,6 @@ public function ToolsGenerateContent(Request $request)
 
     $totalTokens = $response['usage']['total_tokens'];
     deductUserTokensAndCredits($totalTokens);
-    
-    $toolContent = new ToolGeneratedContent();
-    $toolContent->tool_id = $toolId;
-    $toolContent->user_id = $user->id;
-    $toolContent->prompt = $prompt;
-    $toolContent->content = $content;
-    $toolContent->save();
-
-    session(['edu_tool_content_id' => $toolContent->id]);
     
     return response()->stream(function () use ($processedContent) {
         echo $processedContent;
