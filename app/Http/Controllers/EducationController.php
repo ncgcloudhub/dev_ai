@@ -84,7 +84,7 @@ class EducationController extends Controller
             });
         }])->whereIn('id', $gradeIds)->get();
     
-    return view('backend.education.education_tools_content_user', [
+    return view('backend.education.new_education_tools_content_user', [
             'classes' => $classes,
         ]);
     }
