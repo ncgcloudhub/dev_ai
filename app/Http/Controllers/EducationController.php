@@ -774,8 +774,19 @@ public function updateContent(Request $request, $id)
         ])->post('https://api.openai.com/v1/images/generations', $payload);
     
         if ($response->successful()) {
-            return $response->json('data.0.url');
+            $imageUrl = $response->json('data.0.url');
+    
+            if ($imageUrl) {
+                // Download the image
+                $imageContent = Http::timeout(60)->get($imageUrl)->body();
+    
+                $fileName = 'images/' . uniqid('dalle_', true) . '.jpeg';
+                Storage::disk('public')->put($fileName, $imageContent);
+    
+                return url('storage/' . $fileName);
+            }
         }
+    
     
         Log::error('Image generation failed', [
             'prompt' => $prompt,
