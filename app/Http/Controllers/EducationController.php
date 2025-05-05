@@ -716,26 +716,27 @@ public function updateContent(Request $request, $id)
         if ($imageUrl && $request->has('content_id')) {
             $contentId = $request->input('content_id');
             $generatedContent = ToolGeneratedContent::find($contentId);
-    
+        
             if ($generatedContent) {
                 $originalContent = $generatedContent->content;
                 $promptText = trim($prompt);
-    
-                // Build Markdown image snippet
-                $imageMarkdown = "![Generated Image]({$imageUrl})\n  - {$promptText}";
-    
-                // Find "**Image prompt:** [prompt]" and append the image below it
+        
+                // Build clean Markdown image snippet (without prompt text)
+                $imageMarkdown = "![Generated Image]({$imageUrl})";
+        
+                // Match "**Image prompt:** [prompt]" and append image after it
                 $pattern = '/(\*\*Image prompt:\*\* ' . preg_quote($promptText, '/') . ')/i';
                 $replacement = "$1\n\n$imageMarkdown";
-    
+        
                 $updatedContent = preg_replace($pattern, $replacement, $originalContent);
-    
+        
                 if ($updatedContent !== null) {
                     $generatedContent->content = $updatedContent;
                     $generatedContent->save();
                 }
             }
         }
+        
     
     if ($imageUrl) {
         return response()->json(['success' => true, 'imageUrl' => $imageUrl]);
