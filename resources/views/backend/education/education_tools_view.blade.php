@@ -432,6 +432,29 @@
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+     tinymce.init({
+        selector: 'textarea#editContent',
+        branding: false, // Removes "Build with TinyMCE"
+        plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
+        toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
+        autosave_restore_when_empty: true,
+        height: 400,
+        statusbar: true, // Keep the status bar for resizing
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        },
+        init_instance_callback: function (editor) {
+            setTimeout(function () {
+                document.querySelector('.tox-statusbar__path').style.display = 'none'; // Hide <p> indicator
+            }, 100);
+        }
+    });
+</script>
 
 <script>
 $(document).ready(function() {
@@ -538,7 +561,7 @@ $(document).ready(function() {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                document.getElementById('editContent').value = data.content;
+                tinymce.get('editContent').setContent(data.content); // Set TinyMCE content properly
                 document.getElementById('editToolContentModal').setAttribute('data-content-id', contentId);
 
                 // Show the modal
@@ -548,6 +571,7 @@ $(document).ready(function() {
             .catch(error => console.error('Error:', error));
     }
 
+
     // Save edited content via AJAX
     function saveEditedToolContent() {
         const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
@@ -555,7 +579,7 @@ $(document).ready(function() {
             content: document.getElementById('editContent').value
         };
 
-        fetch(`/education/toolContent/${contentId}/update`, {
+        fetch(`/education/toolcontent/${contentId}/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
