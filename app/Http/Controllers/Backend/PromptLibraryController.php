@@ -18,6 +18,8 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 
 class PromptLibraryController extends Controller
@@ -65,6 +67,42 @@ class PromptLibraryController extends Controller
         $category = PromptLibraryCategory::findOrFail($id);
         return view('backend.prompt_library.category_edit', compact('category', 'categories'));
     }
+
+    public function generateImageFromPrompt(Request $request)
+{
+    $apiKey = config('app.openai_api_key');
+    $prompt = $request->input('prompt');
+    $prompt_name = $request->input('prompt_name');
+    $style = 'vivid'; // You can adjust this
+    $size = '1024x1024'; // You can also make this configurable
+    $quality = 'standard';
+    $n = 1;
+
+    logActivity('Prompt Library', 'generated image for prompt: ' . $prompt_name);
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $apiKey,
+        'Content-Type' => 'application/json',
+    ])->post('https://api.openai.com/v1/images/generations', [
+        'model' => 'dall-e-3',
+        'prompt' => $prompt,
+        'size' => $size,
+        'style' => $style,
+        'quality' => $quality,
+        'n' => $n,
+    ]);
+
+    if ($response->failed()) {
+        return response()->json(['error' => 'Image generation failed.'], 500);
+    }
+
+    $imageUrl = $response->json()['data'][0]['url'] ?? null;
+
+    return response()->json([
+        'image_url' => $imageUrl,
+    ]);
+}
+
 
 
     public function PromptCategoryUpdate(Request $request)

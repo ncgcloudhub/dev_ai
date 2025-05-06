@@ -693,6 +693,9 @@ Route::post('/single/image', [GenerateImagesController::class, 'generateSingleIm
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
 
+// Generate Image Prompt Library
+ Route::post('/generate-image-from-prompt', [PromptLibraryController::class, 'generateImageFromPrompt'])->name('generate.image.from.prompt');
+
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
 
@@ -830,3 +833,5 @@ Route::view('success', 'backend.subscription.success')->name('success');
  Route::get('/{route}', [DynamicPageController::class, 'show'])
  ->where('route', '.*') // Matches all routes
  ->name('dynamic-pages.show');
+
+ Route::post('/generate-image-from-prompt', [PromptLibraryController::class, 'generateImageFromPrompt'])->name('generate.image.from.prompt');
