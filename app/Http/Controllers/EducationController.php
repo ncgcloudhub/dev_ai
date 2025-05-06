@@ -962,7 +962,7 @@ private function createSlidesFromContent($content, $user)
     foreach (explode("---", $content) as $slideText) {
         if (empty(trim($slideText))) continue;
 
-        preg_match('/### Title: (.*?)\n/', $slideText, $titleMatch);
+        preg_match('/### Title:\s*\*{0,2}(.*?)\*{0,2}\s*\n/', $slideText, $titleMatch);
         preg_match('/\*\*Body Text:\*\*\s*(.*)/s', $slideText, $bodyMatch);
 
         $slides[] = [
@@ -1062,7 +1062,7 @@ private function createSlidesFromContent($content, $user)
             $requests[] = new SlidesRequest([
                 'insertText' => [
                     'objectId' => $bodyObjectId,
-                    'text' => $this->formatBodyText($slideContent['body']),
+                    'text' => html_entity_decode($this->formatBodyText($slideContent['body'])),
                     'insertionIndex' => 0
                 ]
             ]);
@@ -1083,16 +1083,24 @@ private function createSlidesFromContent($content, $user)
 
 private function formatBodyText(string $text): string
 {
-    // Split into sentences and format as bullet points
-    $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-    
-    // Trim each sentence and add bullet points
-    $formatted = array_map(function($sentence) {
-        return '• ' . trim($sentence);
-    }, $sentences);
+    $lines = preg_split('/\r\n|\r|\n/', $text);
 
-    return implode("\n", $formatted);
+    $bullets = array_filter(array_map(function ($line) {
+        $trimmed = trim($line);
+        if (empty($trimmed)) return null;
+
+        // Remove markdown bullet if exists
+        if (preg_match('/^[-*]\s+(.*)/', $trimmed, $matches)) {
+            return '• ' . $matches[1];
+        }
+
+        return '• ' . $trimmed;
+    }, $lines));
+
+    return implode("\n", $bullets); // This is real newline, not "\n" string
 }
+
+
 
 // GENERATE SLIDE FREOM CONTENT START
 // Main Tool (NOT POC)
