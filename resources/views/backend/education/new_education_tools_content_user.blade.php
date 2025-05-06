@@ -225,16 +225,11 @@
         <div class="card">
             <div class="card-header border-0">
                 <div class="row g-4">
-                    <div class="col-sm-auto">
-                        <div>
-                            <a href="apps-ecommerce-add-product" class="btn btn-success" id="addproduct-btn"><i
-                                    class="ri-add-line align-bottom me-1"></i> Add Product</a>
-                        </div>
-                    </div>
+                   
                     <div class="col-sm">
                         <div class="d-flex justify-content-sm-end">
                             <div class="search-box ms-2">
-                                <input type="text" class="form-control" id="searchProductList" placeholder="Search Products...">
+                                <input type="text" class="form-control" id="searchProductList" placeholder="Search Edu Contents...">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -311,6 +306,39 @@
     </div>
 </div>
 
+{{-- Modal For View Contnt --}}
+<div class="modal fade bs-example-modal-lg modal-dialog-scrollable" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myLargeModalLabel">Content Details <span id="created" class="badge bg-primary"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div>
+                <img width="200px" height="200px" src="" alt="Generated Image" class="img-fluid" id="modal-image">
+            </div>
+            <div class="modal-body" id="modal-content-body">
+                
+            </div>
+            <div class="modal-footer">
+                  <button id="mark-complete-btn" type="button" class="btn btn-secondary incomplete" onclick="markAsComplete(contentId, this)">
+                    Mark as Complete
+                </button>               
+                <a id="download-link" href="#">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
+                        <i class="ri-download-line"></i> Download
+                    </button>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal">
+                    <i class="ri-close-line me-1 align-middle"></i> Close
+                </a>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>
 
 {{-- Scripts --}}
 @section('script')
@@ -468,6 +496,59 @@
                 }
             });
         });
+
+
+
+        // Modal Script for Content
+        function fetchContent(contentId) {
+        fetch('{{ route('education.getContentById') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ content_id: contentId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Load the content into the modal
+            document.getElementById('modal-content-body').innerHTML = `
+                <h6 class="fs-15">${data.content.topic}</h6>
+                ${data.content.generated_content}
+            `;
+
+            const createdAt = new Date(data.content.created_at).toLocaleDateString('en-US', {
+            day: 'numeric', month: 'short', year: 'numeric'
+            });
+
+            document.getElementById('created').innerHTML = `
+            ${createdAt}
+            `;
+
+            const modalImage = document.getElementById('modal-image');
+            if (data.content.image_url) {
+                modalImage.src = data.content.image_url; // Set the image URL
+                modalImage.alt = data.content.topic; // Optionally set the alt text
+                modalImage.classList.remove('d-none'); // Show the image
+            } else {
+                modalImage.classList.add('d-none'); // Hide the image if no URL is available
+            }
+
+            // Set the download link with the appropriate URL
+            const downloadLink = document.getElementById('download-link');
+            const downloadUrl = `{{ url('education/content') }}/${contentId}/download`; // Dynamic download URL
+            downloadLink.setAttribute('href', downloadUrl);
+
+            // Update the Mark as Complete button with the correct onclick event
+            const markCompleteButton = document.getElementById('mark-complete-btn');
+            markCompleteButton.setAttribute('onclick', `markAsComplete(${contentId})`);
+
+            // Show the modal
+            var contentModal = new bootstrap.Modal(document.getElementById('contentModal'));
+            contentModal.show();
+        })
+        .catch(error => console.error('Error:', error));
+    }
         </script>
         
         
