@@ -330,36 +330,123 @@
 
     {{-- FOR SUBJECTS after clicking Class --}}
     <script>
-        $(document).on('click', '.class-item', function (e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function () {
+            // Class click handler to load subject tabs
+            document.querySelectorAll('.class-item').forEach(classItem => {
+                classItem.addEventListener('click', function () {
+                    const subjects = this.getAttribute('data-subjects');
+                    const parsedSubjects = JSON.parse(subjects);
     
-            const subjects = $(this).data('subjects');
+                    const tabList = document.querySelector('.nav-tabs-custom');
+                    const tabContent = document.querySelector('.tab-content');
+                    tabList.innerHTML = '';
+                    tabContent.innerHTML = '';
     
-            let tabList = $('.nav-tabs-custom'); // Adjust if you need a more specific selector
-            tabList.empty(); // Clear existing tabs
+                    if (parsedSubjects.length > 0) {
+                        parsedSubjects.forEach(subject => {
+                            const tab = document.createElement('li');
+                            tab.classList.add('nav-item');
     
-            // Dynamically add subject tabs
-            if (subjects.length > 0) {
-                subjects.forEach(subject => {
-                    tabList.append(`
-                        <li class="nav-item">
-                            <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#subject-${subject.id}" role="tab">
-                                ${subject.name}
-                            </a>
-                        </li>
-                    `);
+                            tab.innerHTML = `
+                                <button class="nav-link fw-semibold subject-tab" data-subject-id="${subject.id}">
+                                    ${subject.name}
+                                </button>
+                            `;
+                            tabList.appendChild(tab);
+                        });
+                    } else {
+                        tabList.innerHTML = `
+                            <li class="nav-item">
+                                <span class="nav-link fw-semibold disabled">No Subjects</span>
+                            </li>
+                        `;
+                    }
                 });
-            } else {
-                tabList.append(`
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold disabled" href="#" role="tab">
-                            No Subjects
-                        </a>
-                    </li>
-                `);
-            }
+            });
+    
+            // Delegate subject tab clicks using event delegation
+            document.querySelector('.nav-tabs-custom').addEventListener('click', function (e) {
+                if (e.target && e.target.classList.contains('subject-tab')) {
+                    const subjectId = e.target.getAttribute('data-subject-id');
+    
+                    fetch('{{ route('education.getContentsBySubject.library') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ subject_id: subjectId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const contentDisplay = document.querySelector('.tab-content');
+                        contentDisplay.innerHTML = '';
+    
+                        if (data.contents.length > 0) {
+                            data.contents.forEach(content => {
+                                const contentElement = document.createElement('div');
+                                contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
+    
+                                const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                                    day: 'numeric', month: 'short', year: 'numeric'
+                                });
+                                const downloadUrl = `{{ url('education/content') }}/${content.id}/download`;
+    
+                                contentElement.innerHTML = `
+                                    <div class="neomorphic-card" data-id="${content.id}">
+                                        <div class="card-body">
+                                            <h5 class="mb-0">${content.topic}</h5>
+                                            <p class="text-muted">${content.subject.name}</p>
+                                            <p class="text-muted">${createdAt}</p>
+    
+                                            <div class="form-check">
+                                                <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
+                                                <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
+                                                <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
+                                                <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
+                                            </div>
+    
+                                            <div class="d-flex gap-2 justify-content-center mb-3">
+                                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" 
+                                                        data-bs-toggle="tooltip" 
+                                                        data-bs-placement="top" 
+                                                        title="Download" 
+                                                        onclick="downloadContent(${content.id})">
+                                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                                        <i class="ri-download-line"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
+                                                    <i class="ri-add-fill me-1 align-bottom"></i>View
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                contentDisplay.appendChild(contentElement);
+                            });
+                        } else {
+                            contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.querySelector('.tab-content').innerHTML = '<p class="text-danger">Error loading content.</p>';
+                    });
+                }
+            });
         });
     </script>
+    
+        
     
 @endsection
 
