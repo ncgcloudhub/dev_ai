@@ -665,6 +665,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
     // MAIN Tool
     Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
+    Route::post('/tools/generate-image', [EducationController::class, 'generateImage'])->name('tools.generate.image');
 });
 
 // GITHUB SOCIALITE
