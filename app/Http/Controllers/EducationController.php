@@ -1621,7 +1621,11 @@ public function updateSubject(Request $request, $id)
     public function getToolContent($id)
     {
         $content = ToolGeneratedContent::findOrFail($id);
-        return response()->json(['content' => $content->content]); // Ensure 'content' matches
+
+        $parsedown = new Parsedown();
+        $html = $parsedown->text($content->content);
+    
+        return response()->json(['content' => $html]);
     }
 
 
