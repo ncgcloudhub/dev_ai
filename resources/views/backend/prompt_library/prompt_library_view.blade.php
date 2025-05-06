@@ -9,18 +9,17 @@
 <style>
     .copy-icon {
         position: absolute;
-        right: 5%;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 10px;
+        right: 15px;
         cursor: pointer;
         color: #ff0077;
-        font-size: 1.5rem; /* Increased size */
+        font-size: 1.5rem;
         transition: transform 0.2s ease, color 0.2s ease;
     }
-    
+
     .copy-icon:hover {
-        transform: translateY(-50%) scale(1.2); /* Adds a zoom effect on hover */
-        color: #ff3399; /* Slightly lighter shade on hover */
+        transform: scale(1.2);
+        color: #ff3399;
     }
 </style>
 
@@ -86,18 +85,19 @@
                 </div>
             </div> 
         </div>
-        <div class="card">
+        <div class="card" style="position: relative;"> <!-- Ensure this has position: relative -->
             <div class="card-body"> 
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Actual Prompt</label>
-                        <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
+                        <p class="fw-medium link-primary gradient-text-2">
                             {{$prompt_library->actual_prompt}}
-                          
                         </p>
-                        <span class="copy-icon copy-toast-btn" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
                     </div>
                 </div>
+                <span class="copy-icon copy-toast-btn" onclick="copyText(this)" title="Copy">
+                    <i class="ri-file-copy-2-fill"></i>
+                </span>
             </div> 
         </div>
 
