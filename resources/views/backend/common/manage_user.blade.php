@@ -35,7 +35,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>
                         <a href="{{ route('user.details', ['id' => $item->id]) }}" 
-                            class="fw-medium link-primary">
+                            class="fw-medium link-primary gradient-text-2">
                              {{ $item->name }} ({{ $item->username }})
                          </a>                         
                     </td>

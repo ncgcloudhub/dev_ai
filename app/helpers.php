@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AISettings;
 use App\Models\ButtonStyle;
 use App\Models\PackageHistory;
 use App\Models\PricingPlan;
@@ -44,49 +45,55 @@ if (!function_exists('getUserLastPackageAndModels')) {
         $user = Auth::user();
 
         if (!$user) {
-            return ['lastPackage' => null, 'aiModels' => [], 'selectedModel' => null];
+            return ['lastPackage' => null, 'aiModels' => [], 'selectedModel' => null, 'freePricingPlan' => null];
         }
 
-        // Get the user's last package
+        // Get user's last package history
         $lastPackage = PackageHistory::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->first();
 
         $freePricingPlan = PricingPlan::where('package_type', 'monthly')
-        ->where('slug', 'like', '%free%')
-        ->first();
-        
+            ->where('slug', 'like', '%free%')
+            ->first();
 
-        // Initialize the AI models array
         $aiModels = [];
+        $allSettings = AISettings::all()->keyBy('openaimodel');
 
         if ($lastPackage) {
-            // Get the PricingPlan associated with the last package
             $pricingPlan = PricingPlan::find($lastPackage->package_id);
 
-            if ($pricingPlan) {
-                // Extract AI models
+            if ($pricingPlan && !empty($pricingPlan->open_id_model)) {
                 $models = explode(',', $pricingPlan->open_id_model);
-                foreach ($models as $index => $model) {
-                    $aiModels[] =  $model;
+                foreach ($models as $model) {
+                    $model = trim($model);
+                    if (isset($allSettings[$model])) {
+                        $aiModels[] = [
+                            'value' => $model,
+                            'label' => $allSettings[$model]->displayname,
+                        ];
+                    }
                 }
             }
-        } else {   
-            if ($freePricingPlan) {
-                // Extract AI models
-                $models = explode(',', $freePricingPlan->open_id_model);
-                foreach ($models as $index => $model) {
-                    $aiModels[] =  $model;
+        } elseif ($freePricingPlan && !empty($freePricingPlan->open_id_model)) {
+            $models = explode(',', $freePricingPlan->open_id_model);
+            foreach ($models as $model) {
+                $model = trim($model);
+                if (isset($allSettings[$model])) {
+                    $aiModels[] = [
+                        'value' => $model,
+                        'label' => $allSettings[$model]->displayname,
+                    ];
                 }
             }
         }
 
-        // Get the currently selected model
         $selectedModel = $user->selected_model;
 
         return compact('lastPackage', 'aiModels', 'selectedModel', 'freePricingPlan');
     }
 }
+
 
 // Activity LOG
 if (!function_exists('log_activity')) {
@@ -126,13 +133,15 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         $year = now()->year;
         $month = now()->month;
+        $day = now()->day;
 
-        // Find or create monthly usage record
-        $monthlyUsage = \App\Models\UserMonthlyUsage::firstOrCreate(
+        // Find or create daily usage record
+        $dailyUsage = \App\Models\UserMonthlyUsage::firstOrCreate(
             [
                 'user_id' => $user_id,
                 'year' => $year,
                 'month' => $month,
+                'day' => $day,
             ],
             [
                 'tokens_used' => 0,
@@ -144,7 +153,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
         if ($user->tokens_left >= $tokens) {
             $user->tokens_left = max(0, $user->tokens_left - $tokens);
             $user->tokens_used += $tokens;
-            $monthlyUsage->tokens_used += $tokens;
+            $dailyUsage->tokens_used += $tokens;
         } else {
             $user->free_tokens_used += $tokens;
         }
@@ -156,7 +165,7 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         $user->credits_left = max(0, $user->credits_left - $credits);
         $user->credits_used += $credits;
-        $monthlyUsage->credits_used += $credits;
+        $dailyUsage->credits_used += $credits;
 
         // Increment images_generated only if credits are used
         if ($credits > 0) {
@@ -165,11 +174,39 @@ if (!function_exists('deductUserTokensAndCredits')) {
 
         // Save changes
         $user->save();
-        $monthlyUsage->save();
+        $dailyUsage->save();
 
         return "deducted-successfully";
     }
 }
+
+// CHECK IF THE USER HAS TOKENS
+if (!function_exists('checkUserHasCredits')) {
+    function checkUserHasCredits(int $requiredCredits = 1)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return [
+                'status' => false,
+                'message' => 'User not authenticated'
+            ];
+        }
+
+        if ($user->credits_left < $requiredCredits) {
+            return [
+                'status' => false,
+                'message' => 'No credits left'
+            ];
+        }
+
+        return [
+            'status' => true,
+            'message' => 'Sufficient credits'
+        ];
+    }
+}
+
 
 
 if (!function_exists('get_days_until_next_reset')) {
@@ -308,7 +345,7 @@ if (!function_exists('callOpenAIImageAPI')) {
                         ],
                     ],
                 ],
-                'max_tokens' => 300,
+                'max_completion_tokens' => 300,
             ]);
 
             return $response;

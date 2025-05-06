@@ -49,12 +49,23 @@
     <div class="mb-3">
         <label class="form-label">Select Icon</label>
         <select id="icon-{{ $buttonId }}" class="form-select" data-button="{{ $buttonId }}">
-            <option value="fa-save" {{ $buttonStyle && $buttonStyle->icon == 'fa-save' ? 'selected' : '' }}>Save (💾)</option>
-            <option value="fa-edit" {{ $buttonStyle && $buttonStyle->icon == 'fa-edit' ? 'selected' : '' }}>Edit (✏️)</option>
-            <option value="fa-trash" {{ $buttonStyle && $buttonStyle->icon == 'fa-trash' ? 'selected' : '' }}>Delete (🗑️)</option>
-            <option value="fa-times" {{ $buttonStyle && $buttonStyle->icon == 'fa-times' ? 'selected' : '' }}>Cancel (❌)</option>
+            <option value="" {{ $buttonStyle && $buttonStyle->icon == '' ? 'selected' : '' }}>None</option>
+            <option value="ri-save-3-line" {{ $buttonStyle && $buttonStyle->icon == 'ri-save-3-line' ? 'selected' : '' }}>Save (💾)</option>
+            <option value="ri-edit-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-edit-fill' ? 'selected' : '' }}>Edit (✏️)</option>
+            <option value="ri-delete-bin-2-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-delete-bin-2-fill' ? 'selected' : '' }}>Delete (🗑️)</option>
+            <option value="ri-close-circle-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-close-circle-fill' ? 'selected' : '' }}>Cancel (❌)</option>
+            <option value="ri-eye-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-eye-fill' ? 'selected' : '' }}>View</option>
+            <option value="ri-download-2-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-download-2-fill' ? 'selected' : '' }}>Download</option>
+            <option value="ri-file-copy-2-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-file-copy-2-fill' ? 'selected' : '' }}>Copy</option>
+            <option value="las la-file-import" {{ $buttonStyle && $buttonStyle->icon == 'las la-file-import' ? 'selected' : '' }}>Import</option>
+            <option value="las la-file-export" {{ $buttonStyle && $buttonStyle->icon == 'las la-file-export' ? 'selected' : '' }}>Export</option>
+            <option value="ri-search-line" {{ $buttonStyle && $buttonStyle->icon == 'ri-search-line' ? 'selected' : '' }}>Search</option>
+            <option value="ri-filter-line" {{ $buttonStyle && $buttonStyle->icon == 'ri-filter-line' ? 'selected' : '' }}>Filter</option>
+            <option value="ri-add-box-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-add-box-fill' ? 'selected' : '' }}>Add</option>
+            <option value="ri-subtract-fill" {{ $buttonStyle && $buttonStyle->icon == 'ri-subtract-fill' ? 'selected' : '' }}>Remove</option>
+            <option value="las la-magic" {{ $buttonStyle && $buttonStyle->icon == 'las la-magic' ? 'selected' : '' }}>Generate</option>
         </select>
     </div>
 
-    <button type="button" class="btn btn-primary save-button-style" data-button="{{ $buttonId }}">Save Style</button>
+    <button type="button" class="btn gradient-btn-save save-button-style" data-button="{{ $buttonId }}">Save Style</button>
 </form>

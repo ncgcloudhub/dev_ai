@@ -53,7 +53,7 @@
             <div class="card">
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Input Information</h4>
-                    <a name="add" id="add" class="btn bg-gradient-dark mb-0"><i class="las la-plus" aria-hidden="true"></i>Add</a>
+                    <a name="add" id="add" class="btn gradient-btn-add mb-0" title="Add"> <i class="{{$buttonIcons['add']}}"></i></a>
         
                 </div><!-- end card header -->
         
@@ -143,7 +143,9 @@
             {{-- 4th Card End --}}
             <div class="col-12">
                 <div class="text-end">
-                    <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
+                    <button title="Save" type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                        <i class="{{$buttonIcons['save']}}"></i>
+                    </button>
                 </div>
             </div>
         </form>

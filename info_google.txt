@@ -1,0 +1,3 @@
+For google login, the credentials for dev.clevercreator.ai is in clevercreator gmail account under project AI Site
+
+Google changed their cloud service, in test project, need to add test users, to verify app, need to publish with informations like privacy policy and more

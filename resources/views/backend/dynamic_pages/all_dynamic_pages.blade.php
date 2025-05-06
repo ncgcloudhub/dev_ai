@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-header">
                 @can('managePage.add')
-                    <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11">Create Page</a>    
+                    <a href="{{ route('dynamic-pages.create') }}" class="btn gradient-btn-11" title="Create a New Dynamic Page">Create Page</a>    
                 @endcan            
             </div>
             
@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ url($item->route) }}" class="dynamic-page-link">{{ $item->title }}</a>
+                                <a href="{{ url($item->route) }}" class="dynamic-page-link gradient-text-2">{{ $item->title }}</a>
                             </td>
                             <td>{{ $item->route }}</td>
                             <td>{{ Str::limit(strip_tags($item->content), 200) }}</td>
@@ -52,8 +52,8 @@
                             
                             <td>
                                 @can('managePage.edit')
-                                    <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="text-primary d-inline-block edit-item-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-                                        <i class="ri-pencil-fill fs-16"></i> 
+                                    <a href="{{ route('dynamic-pages.edit', $item->id) }}" class="btn gradient-btn-edit d-inline-block" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                        <i class="{{$buttonIcons['edit']}}"></i> 
                                     </a>
                                 @endcan
                                
@@ -61,8 +61,8 @@
                                     <form action="{{ route('dynamic-pages.destroy', $item->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-danger d-inline-block remove-item-btn" onclick="return confirm('Are you sure you want to delete this Page?')" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                            <i class="ri-delete-bin-5-fill fs-16"></i> 
+                                        <button type="submit" class=" btn gradient-btn-delete d-inline-block" onclick="return confirm('Are you sure you want to delete this Page?')" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                            <i class="{{$buttonIcons['delete']}}"></i> 
                                         </button>
                                     </form>    
                                 @endcan

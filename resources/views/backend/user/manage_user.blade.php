@@ -18,8 +18,8 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-1">Manage User</h5>
-                <a href="{{ route('user.export') }}" class="btn btn-primary">Export All Data From User</a>
-                <a href="{{ route('user.export1') }}" class="btn btn-success">Export for Sending Email</a>
+                <a href="{{ route('user.export') }}" class="btn gradient-btn-export">Export All Data From User</a>
+                <a href="{{ route('user.export1') }}" class="btn gradient-btn-export">Export for Sending Email</a>
             </div>
             
            {{-- Include Table --}}

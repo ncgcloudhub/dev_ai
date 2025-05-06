@@ -19,7 +19,9 @@
            @include('frontend.body.nav_frontend')
 
            @php
-                $privacy_policy = \App\Models\PrivacyPolicy::orderBy('id', 'asc')->get();
+                $privacy_policy = \App\Models\PrivacyPolicy::where('status', 'active')
+                    ->orderBy('id', 'asc')
+                    ->first();
                 $latestPrivacyPolicy = \App\Models\PrivacyPolicy::latest()->first();
                 $lastUpdateDate = $latestPrivacyPolicy ? $latestPrivacyPolicy->created_at->format('d M, Y') : 'Unknown';
             @endphp
@@ -57,10 +59,9 @@
                                                 <i data-feather="check-circle" class="text-success icon-dual-success icon-xs"></i>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <h5>Privacy Policy for Clever Creator</h5>
-                                                @foreach ($privacy_policy as $item)
-                                                    {!! $item->details !!}
-                                                @endforeach
+                                               
+                                                    {!! $privacy_policy->details !!}
+                                               
                                             </div>
                                         </div>
                         

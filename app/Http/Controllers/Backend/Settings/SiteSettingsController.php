@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ButtonStyle;
 use Illuminate\Http\Request;
 use App\Models\SiteSettings;
+use App\Notifications\TokenRenewed;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -171,6 +172,8 @@ class SiteSettingsController extends Controller
     // HEX STore
     public function storeHex(Request $request)
     {
+        $user = auth()->user();
+
         // Validate input
         $request->validate([
             'hex_pass' => 'required|string|size:16',
@@ -204,4 +207,23 @@ class SiteSettingsController extends Controller
 
     return redirect()->back()->with('success', 'Hex Password generated and saved successfully!');
     }
+
+    public function updateRolloverSetting(Request $request)
+{
+    $request->validate([
+        'rollover_enabled' => 'required|in:0,1',
+    ]);
+
+    $setting = SiteSettings::first(); // or Setting::find(1) if using a specific ID
+
+    if (!$setting) {
+        return redirect()->back()->with('error', 'Settings not found.');
+    }
+
+    $setting->rollover_enabled = $request->rollover_enabled;
+    $setting->save();
+
+    return redirect()->back()->with('success', 'Rollover setting updated successfully.');
+}
+
 }

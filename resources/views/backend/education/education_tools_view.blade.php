@@ -11,6 +11,43 @@
 @slot('title') {{$tool->name}} @endslot
 @endcomponent
 
+<style>
+.generate-image-btn {
+    transition: all 0.2s;
+}
+
+.generate-image-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-result {
+    min-height: 50px;
+    transition: all 0.3s ease;
+}
+
+.generated-image {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.generated-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.formatted-content-wrapper img {
+        max-width: 100%;
+        height: auto;
+        max-height: 400px;
+        display: block;
+        margin: 10px auto;
+    }
+</style>
 <div class="row">
     
     <div class="col-xxl-3">
@@ -18,7 +55,7 @@
             <i class="las la-arrow-left"></i>
         </button>
         <div class="explore-place-bid-img">
-        <img src="{{ asset('storage/' . $tool->image) }}" alt="" class="card-img-top explore-img" />
+        <img src="{{ $tool->image }}" alt="" class="card-img-top explore-img" />
         </div>
         
         <!--end card-->
@@ -36,7 +73,7 @@
                         <li>
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $similarTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $similarTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   
@@ -125,6 +162,32 @@
                                 @endif
                             </div>
                         @endforeach
+
+                        <!-- Image Inclusion Option -->
+                        <div class="row mb-3">
+                            <!-- Include Images -->
+                            <div class="col-md-6">
+                                <label for="include_images">Include Images?</label>
+                                <select class="form-select" name="include_images" id="include_images" required>
+                                    <option selected disabled value="">Select</option>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Image Model (Initially Hidden) -->
+                            <div class="col-md-6 d-none" id="image-model-group">
+                                <label for="image_model">Image Model</label>
+                                <select class="form-select" name="image_model" id="image_model">
+                                    <option selected disabled value="">Choose one</option>
+                                    <option value="dalle2">DALL·E 2 (1 Credit)</option>
+                                    <option value="dalle3">DALL·E 3 (2 Credits)</option>
+                                    <option value="sd">Stable Diffusion (3 Credits)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+
                     
                         <!-- Submit Button -->
                         <button type="submit" class="btn gradient-btn-5 disabled-on-load" id="educationToolsGenerate" disabled>
@@ -152,12 +215,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
-                               Generated Content
+                                {{$tool->name}} Generated Content
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#profile-1" role="tab">
-                                All Contents
+                                All Educational Tools History
                             </a>
                         </li>
                     </ul>
@@ -211,19 +274,26 @@
                                               {{-- ONLY SHOW SLIDE BUTTON FOR PRESENTATION TOOLS --}}
                                             @if(str_contains(strtolower($content->tool->slug), 'presentation') || 
                                                 str_contains(strtolower($content->tool->slug), 'slide'))
+                                                @if (!is_null(auth()->user()->google_token))
                                                 <button type="button" class="btn btn-sm btn-success ms-1 generate-slides-btn" 
                                                         data-content-id="{{ $content->id }}"
                                                         data-content="{{ json_encode($content->content) }}">
                                                     Generate Slides
                                                 </button>
+                                                @else
+                                                    <a href="{{ route('google.login') }}" class="btn btn-sm btn-warning ms-1">
+                                                        Login with Google to Generate Slides
+                                                    </a>
+                                                @endif
+                                            
                                             @endif
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-primary" 
+                                            <button type="button" class="gradient-btn-edit" 
                                                     onclick="openToolContentEditorModal({{ $content->id }})">
                                                 Edit
                                             </button>
-                                            <a href="{{ route('toolContent.download', $content->id) }}" class="btn btn-sm btn-success">
+                                            <a href="{{ route('toolContent.download', $content->id) }}" class="btn btn-sm gradient-btn-download">
                                                 Download PDF
                                             </a>
                                             {{-- Modal for Full Content --}}
@@ -238,8 +308,9 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{-- Display full formatted content --}}
-                                                        {!! $content->formatted_content !!}
+                                                        <div class="formatted-content-wrapper">
+                                                            {!! $content->formatted_content !!}
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -303,8 +374,9 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{-- Display full formatted content --}}
-                                                        {!! $content->formatted_content !!}
+                                                        <div class="formatted-content-wrapper">
+                                                            {!! $content->formatted_content !!}
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -360,41 +432,128 @@
 
 @section('script')
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
-    $(document).ready(function () {
-        $('form').on('submit', function (e) {
-            e.preventDefault(); // Prevent default form submission
-
-            $('#generation-status').text('Generating...'); // Show generation status
-            showMagicBall('image'); // Show loader
-
-            let formData = $(this).serialize(); // Serialize form data
-
-            $.ajax({
-                type: 'POST',
-                url: '{{ route("tools.generate.content") }}',
-                data: formData,
-                xhrFields: {
-                    onprogress: function (event) {
-                        const contentChunk = event.currentTarget.responseText;
-                        $('#stream-output').html(contentChunk); // Stream response
-                        hideMagicBall();
-                    }
-                },
-                success: function (response) {
-                    $('#generation-status').text('✅ Generation completed!');
-                    console.log('Content generation completed.');
-                },
-                error: function (error) {
-                    hideMagicBall(); // Hide loader
-                    $('#generation-status').text('❌ Failed to generate content.');
-                    console.error('Error during content generation:', error);
-                }
+     tinymce.init({
+        selector: 'textarea#editContent',
+        branding: false, // Removes "Build with TinyMCE"
+        plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
+        toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
+        autosave_restore_when_empty: true,
+        height: 400,
+        statusbar: true, // Keep the status bar for resizing
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
             });
+        },
+        init_instance_callback: function (editor) {
+            setTimeout(function () {
+                document.querySelector('.tox-statusbar__path').style.display = 'none'; // Hide <p> indicator
+            }, 100);
+        }
+    });
+</script>
+
+<script>
+$(document).ready(function() {
+    // Form submission handler
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        $('#generation-status').text('Generating...');
+        showMagicBall('facts', 'education');
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ route("tools.generate.content") }}',
+            data: $(this).serialize(),
+            xhrFields: {
+                onprogress: function(event) {
+                    $('#stream-output').html(event.currentTarget.responseText);
+                    hideMagicBall();
+                    initImageButtons();
+                }
+            },
+            success: function() {
+                $('#generation-status').text('✅ Generation completed!');
+                initImageButtons();
+                
+                // Handle slide generation button if needed
+                $.get('{{ route("tools.get.generated.content") }}', function(data) {
+                    if (data.edu_tool_content_id) {
+                        const slideBtn = `<button class="btn btn-sm btn-success ms-1 generate-slides-btn"
+                                          data-content-id="${data.edu_tool_content_id}"
+                                          data-content='${JSON.stringify(data.edu_tool_content_data).replace(/'/g, "&#39;")}'>
+                                          Generate Slides</button>`;
+                        $('#generation-status').after(slideBtn);
+                    }
+                });
+            },
+            error: function(error) {
+                hideMagicBall();
+                $('#generation-status').text('❌ Failed to generate content.');
+                console.error('Error:', error);
+            }
         });
     });
 
+    // Image generation handler
+    function initImageButtons() {
+        $('.generate-image-btn').off('click').on('click', function() {
+            const $btn = $(this);
+            const $resultDiv = $btn.next('.image-result');
+            
+            $btn.prop('disabled', true)
+               .html('<span class="spinner-border spinner-border-sm me-1"></span> Generating');
+            
+            $resultDiv.html('<div class="text-center py-2"><div class="spinner-border text-muted"></div></div>');
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route("tools.generate.image") }}',
+                data: {
+                    prompt: $btn.data('prompt'),
+                    model: $btn.data('model'),
+                    content_id: $btn.data('content-id'), // pass content ID
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $resultDiv.html(`
+                            <div class="generated-image">
+                                <img src="${response.imageUrl}" class="img-fluid rounded mt-2" style="max-height: 400px;">
+                                <div class="text-end mt-2">
+                                    <a href="${response.imageUrl}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-external-link-alt"></i> Open Full Size
+                                    </a>
+                                </div>
+                            </div>
+                        `);
+                        $btn.remove();
+                    } else {
+                        showError($resultDiv, $btn);
+                    }
+                },
+                error: function() {
+                    showError($resultDiv, $btn);
+                }
+            });
+        });
+    }
+
+    function showError($resultDiv, $btn) {
+        $resultDiv.html(`
+            <div class="alert alert-danger mt-2 py-2">
+                <i class="fas fa-exclamation-triangle me-1"></i> Failed to generate image
+            </div>
+        `);
+        $btn.prop('disabled', false).text('Try Again');
+    }
+
+    // Initialize any existing buttons on page load
+    initImageButtons();
+});
 
     // Open modal and populate with content data
     function openToolContentEditorModal(contentId) {
@@ -402,7 +561,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                document.getElementById('editContent').value = data.content;
+                tinymce.get('editContent').setContent(data.content); // Set TinyMCE content properly
                 document.getElementById('editToolContentModal').setAttribute('data-content-id', contentId);
 
                 // Show the modal
@@ -412,6 +571,7 @@
             .catch(error => console.error('Error:', error));
     }
 
+
     // Save edited content via AJAX
     function saveEditedToolContent() {
         const contentId = document.getElementById('editToolContentModal').getAttribute('data-content-id');
@@ -419,7 +579,7 @@
             content: document.getElementById('editContent').value
         };
 
-        fetch(`/education/toolContent/${contentId}/update`, {
+        fetch(`/education/toolcontent/${contentId}/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -451,44 +611,34 @@
 
 {{-- Slides --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Handle slide generation
-        document.querySelectorAll('.generate-slides-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const contentId = this.getAttribute('data-content-id');
-                const content = JSON.parse(this.getAttribute('data-content'));
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (event) {
+            const button = event.target.closest('.generate-slides-btn');
+            if (!button) return;
 
-                // Console logging
-                console.log('Generate Slides button clicked', {
-                    contentId: contentId,
-                    contentLength: content.length,
-                    button: this
-                });
-                
-                // Show loading state
-                const originalText = this.innerHTML;
-                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
-                this.disabled = true;
-                
-                // Call the API to generate slides
-                fetch('/education/generate-slides', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        content_id: contentId,
-                        content: content
-                    })
+            const contentId = button.getAttribute('data-content-id');
+            // const content = JSON.parse(button.getAttribute('data-content'));
+            const content = button.getAttribute('data-content');
+
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+            button.disabled = true;
+
+            fetch('/education/generate-slides', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    content_id: contentId,
+                    content: content
                 })
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.presentationId) {
-                        // Open the presentation in a new tab
                         window.open(`https://docs.google.com/presentation/d/${data.presentationId}/edit`, '_blank');
-                        
-                        // Show success message
                         Toastify({
                             text: "Slides generated successfully!",
                             duration: 3000,
@@ -513,15 +663,27 @@
                     }).showToast();
                 })
                 .finally(() => {
-                    // Restore button state
-                    this.innerHTML = originalText;
-                    this.disabled = false;
+                    button.innerHTML = originalText;
+                    button.disabled = false;
                 });
-            });
         });
     });
-
 </script>
+
+<script>
+    document.getElementById('include_images').addEventListener('change', function () {
+        const imgGenGroup = document.getElementById('image-model-group');
+        if (this.value === 'yes') {
+            imgGenGroup.classList.remove('d-none');
+        } else {
+            imgGenGroup.classList.add('d-none');
+            document.getElementById('image_model').value = '';
+        }
+    });
+</script>
+
+
+
     
 
 @endsection

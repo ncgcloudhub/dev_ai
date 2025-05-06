@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\EducationTools;
+use App\Models\Expiration;
 use App\Models\PromptLibrary;
 
 class AdminController extends Controller
@@ -26,13 +27,26 @@ class AdminController extends Controller
         
         $eduTools = EducationTools::limit(5)->get();
         
+            // Append the full Azure URL to each image
+            foreach ($eduTools as $image) {
+                $image->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $image->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+            }
+        
         $prompts = PromptLibrary::inRandomOrder()
             ->limit(10)->get();
        
         $aiContentCreator = Template::inRandomOrder()
             ->limit(6)->get();
 
-        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator'));
+        $expirations = Expiration::orderBy('expires_on', 'asc')->get();
+
+
+        $notifications = auth()->user()->unreadNotifications()->latest()->take(5)->get();
+
+        return view('admin.admin_dashboard_1', compact('user','eduTools','prompts','aiContentCreator','expirations','notifications'));
     }
 
     public function showChangePasswordForm(User $user)

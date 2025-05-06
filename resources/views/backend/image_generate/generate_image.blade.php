@@ -70,11 +70,13 @@
                            
                             <!-- Nav tabs -->
                             <ul class="nav nav-pills nav-justified col-md-2 mb-3 m-auto" role="tablist">
-                                <li class="nav-item waves-effect waves-light">
+                                @if(Auth::user()->role === 'admin')
+                                    <li class="nav-item waves-effect waves-light">
                                         <a class="nav-link" data-bs-toggle="tab" href="#pill-justified-home-1" role="tab">
                                             Dall-E 2
-                                    </a>
-                                </li>
+                                        </a>
+                                    </li>
+                                @endif
                                 <li class="nav-item waves-effect waves-light" id="model-select-tour">
                                     <a class="nav-link active" data-bs-toggle="tab" href="#pill-justified-profile-1" role="tab">
                                         Dall-E 3
@@ -97,7 +99,7 @@
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header" id="flush-headingOne">
-                                                    <button class="accordion-button collapsed gradient-background-5" type="button" data-bs-toggle="collapse"
+                                                    <button class="accordion-button collapsed gradient-bg-5" type="button" data-bs-toggle="collapse"
                                                         data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                                         Advance Settings
                                                     </button>
@@ -220,7 +222,7 @@
                                         <div class="accordion accordion-flush col-xxl-6 m-auto mt-2" id="accordionFlushExample">
                                             <div class="accordion-item" id="advance-setting-tour">
                                                 <h2 class="accordion-header" id="flush-headingOne">
-                                                    <button class="accordion-button collapsed gradient-background-5" type="button" data-bs-toggle="collapse"
+                                                    <button class="accordion-button collapsed gradient-bg-5" type="button" data-bs-toggle="collapse"
                                                         data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                                         Advance Settings
                                                     </button>
@@ -643,7 +645,7 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('image');
+             showMagicBall('facts', 'image');
 
         
             // Create a FormData object

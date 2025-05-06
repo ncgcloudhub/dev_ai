@@ -35,7 +35,7 @@
                                 <td>{{ $group->user_id }}</td>
                                 <td>{{ $group->user->name }}</td>
                                 <td>
-                                    <a href="#" class="text-primary fw-bold" data-bs-toggle="modal" data-bs-target="#userPackageModal{{ $group->user_id }}" style="text-decoration: underline; cursor: pointer;">
+                                    <a href="#" class="gradient-text-2 fw-bold" data-bs-toggle="modal" data-bs-target="#userPackageModal{{ $group->user_id }}" style="text-decoration: underline; cursor: pointer;">
                                         {{ $group->package_count }}
                                     </a>
                                 </td>

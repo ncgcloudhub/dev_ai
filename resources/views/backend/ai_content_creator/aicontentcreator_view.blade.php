@@ -141,7 +141,7 @@
                             <div class="accordion accordion-flush" id="accordionFlushExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="flush-headingOne">
-                                        <button class="accordion-button collapsed gradient-background-5" type="button" data-bs-toggle="collapse"
+                                        <button class="accordion-button collapsed gradient-bg-5" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                                             Advance Settings
                                         </button>
@@ -363,7 +363,7 @@
                         <div class="card border border-primary">
                             <div class="card-header">
                                 <h4 class="card-title mb-0">Generated Content <button type="button" class="btn btn-outline-secondary">                            
-                                    Tokens Left: <span class="badge gradient-background-2 ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
+                                    Tokens Left: <span class="badge gradient-bg-2 ms-1" id="tokensLeft">{{ Auth::user()->tokens_left }}</span>
                             </button></h4>
                         
                             </div><!-- end card header -->
@@ -658,8 +658,8 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
       // Show the magic ball
-      showMagicBall('image');
-            // Check if already generating (toggle stop)
+      showMagicBall('facts', 'general');
+      // Check if already generating (toggle stop)
             if (sendMessageBtn.dataset.state === 'generating') {
                 // Stop generation by aborting the request
                 if (abortController) {
@@ -750,7 +750,7 @@ document.getElementById('downloadAsDoc').addEventListener('click', function () {
             const templateId = '{{ $Template->id }}'; // Pass the template ID dynamically
 
             // AJAX call to fetch template content
-            fetch(`/ai-content-creator/getContentByUser/${templateId}`)
+            fetch(`/ai-content-creator/getcontentbyuser/${templateId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch template content.');

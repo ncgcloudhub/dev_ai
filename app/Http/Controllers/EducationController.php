@@ -25,6 +25,8 @@ use Google\Service\Slides as GoogleSlides;
 use Google\Service\Slides\Presentation;
 use Google\Service\Slides\Request as SlidesRequest;
 use Google\Service\Slides\BatchUpdatePresentationRequest;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 
 
 class EducationController extends Controller
@@ -687,26 +689,114 @@ public function updateContent(Request $request, $id)
         return response()->json($subjects);
     }
 
-    // Function to generate images using DALL·E
-    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1) {
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer ' . $apiKey,
-        'Content-Type' => 'application/json',
-    ])->post('https://api.openai.com/v1/images/generations', [
-        'model' => 'dall-e-3', // Specify DALL·E 3 model
-        'prompt' => $prompt,
-        'size' => $size,
-        'style' => $style,
-        'quality' => $quality,
-        'n' => $n,
-    ]);
-
-    Log::info('OpenAI Image Generation Response', ['response' => $response->json()]);
-
-    // Extract and return the image URL
-    $data = $response->json();
-    return $data['data'][0]['url'] ?? null;
+    public function generateImage(Request $request)
+{
+    $prompt = $request->input('prompt');
+    $model = $request->input('model');
+    $apiKey = config('app.openai_api_key');
+    
+    $imageUrl = null;
+    
+    switch ($model) {
+        case 'sd':
+            $imageUrl = $this->generateSDImageFromPrompt($prompt);
+            break;
+        case 'dalle3':
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey, '1024x1024', 'vivid', 'standard', 1, 'dall-e-3');
+            break;
+        case 'dalle2':
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey, '256x256', 'vivid', 'standard', 1);
+            break;
+        default:
+            $imageUrl = self::generateImageFromPrompt($prompt, $apiKey);
+            break;
     }
+
+        // ✅ If image was generated and a content ID was passed, update the content
+        if ($imageUrl && $request->has('content_id')) {
+            $contentId = $request->input('content_id');
+            $generatedContent = ToolGeneratedContent::find($contentId);
+        
+            if ($generatedContent) {
+                $originalContent = $generatedContent->content;
+                $promptText = trim($prompt);
+        
+                // Build clean Markdown image snippet (without prompt text)
+                $imageMarkdown = "![Generated Image]({$imageUrl})";
+        
+                // Match "**Image prompt:** [prompt]" and append image after it
+                $pattern = '/(\*\*Image prompt:\*\* ' . preg_quote($promptText, '/') . ')/i';
+                $replacement = "$1\n\n$imageMarkdown";
+        
+                $updatedContent = preg_replace($pattern, $replacement, $originalContent);
+        
+                if ($updatedContent !== null) {
+                    $generatedContent->content = $updatedContent;
+                    $generatedContent->save();
+                }
+            }
+        }
+        
+    
+    if ($imageUrl) {
+        return response()->json(['success' => true, 'imageUrl' => $imageUrl]);
+    }
+    
+    return response()->json(['success' => false, 'message' => 'Failed to generate image'], 500);
+}
+
+    // Function to generate images using DALL·E
+    public static function generateImageFromPrompt($prompt, $apiKey, $size = '1024x1024', $style = 'vivid', $quality = 'standard', $n = 1, $model = null)
+    {
+
+    // // ✅ Check if the user has enough credits
+    // $creditCheck = checkUserHasCredits();
+
+    // if (!$creditCheck['status']) {
+    //     return $creditCheck['message']; // Returns: "No credits left" or "User not authenticated"
+    // }
+
+        $payload = [
+            'prompt' => $prompt,
+            'size' => $size,
+            // 'style' => $style,
+            // 'quality' => $quality,
+            'n' => $n,
+        ];
+    
+          // Only include model if explicitly passed (e.g. DALL·E 3)
+        if (!is_null($model)) {
+            $payload['model'] = $model;
+        }
+    
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type' => 'application/json',
+        ])->post('https://api.openai.com/v1/images/generations', $payload);
+    
+        if ($response->successful()) {
+            $imageUrl = $response->json('data.0.url');
+    
+            if ($imageUrl) {
+                // Download the image
+                $imageContent = Http::timeout(60)->get($imageUrl)->body();
+    
+                $fileName = 'images/' . uniqid('dalle_', true) . '.jpeg';
+                Storage::disk('public')->put($fileName, $imageContent);
+    
+                return url('storage/' . $fileName);
+            }
+        }
+    
+    
+        Log::error('Image generation failed', [
+            'prompt' => $prompt,
+            'response' => $response->body()
+        ]);
+    
+        return null;
+    }
+    
 
 // Function to generate images using SD
 public function generateSDImageFromPrompt($prompt)
@@ -768,26 +858,16 @@ public function ToolsGenerateContent(Request $request)
     $savedPrompt = $tool->prompt;
     $prompt = $savedPrompt . " "; 
 
-    // Check if this is a slide generation tool based on slug
     $isSlideGeneration = str_contains(strtolower($tool->slug), 'presentation') || 
                          str_contains(strtolower($tool->slug), 'slide');
     
-    Log::info('Slide generation check', [
-        'tool_id' => $toolId,
-        'slug' => $tool->slug,
-        'is_slide_generation' => $isSlideGeneration
-    ]);
-
-    // Modify prompt for slide generation if needed
     if ($isSlideGeneration) {
         $prompt .= "Format the response as a presentation with slides. " .
                    "Each slide should have a title and body content. " .
                    "Format each slide as: ### Title: [SLIDE_TITLE]\n\n**Body Text:** [CONTENT]. " .
                    "Separate slides with ---. Keep body text concise (3-4 bullet points). ";
-                   Log::info('$isSlideGeneration prompt (738)', ['$prompt' => $prompt]);
     }
 
-    // Fetch the selected grade from the `grade_id`
     if ($gradeId = $request->input('grade_id')) {
         $grade = GradeClass::find($gradeId);
         if ($grade) {
@@ -802,7 +882,15 @@ public function ToolsGenerateContent(Request $request)
         }
     }
 
-    // Generate content using OpenAI API
+    $includeImages = $request->input('include_images');
+    $imageType = $request->input('image_model');
+
+    if ($includeImages === 'yes') {
+        $prompt .= "after the content, include an image prompt named exactly as '**Image prompt:**' followed by a highly professional, hyper-detailed, vivid, and natural realistic image description based on that content. " .
+                   "The image should reflect the subject accurately, be visually engaging, and align perfectly with the educational or contextual purpose of the slide. " .
+                   "Do not include any other labels, prefixes, or suffixes—only use 'Image prompt:' before each image description. Use advanced 4K, photorealistic rendering language.";
+    }
+
     $response = $client->chat()->create([
         "model" => $openaiModel,
         'messages' => [
@@ -811,78 +899,60 @@ public function ToolsGenerateContent(Request $request)
         ],
     ]);
     
-    Log::info('OpenAI Response Edu', ['response' => $response]);
-    
-    // Log the activity
-    logActivity('Education Tools', 'generated content from Education Tools: ' . $tool->name);
-    
     $content = $response['choices'][0]['message']['content'];
+    $parsedown = new Parsedown();
 
-    // Log the content before processing
-    Log::info('Content Before Image Extraction', ['content' => $content]);
-
-    $processedContent = preg_replace_callback('/\*Image Prompt\:\s*(.*?)\s*(?:\n|\z)/is', function ($matches) use ($request, $apiKey) {
-        $imagePrompt = trim($matches[1]); // Capture and clean the prompt
-        Log::info('Extracted Image Prompt', ['image_prompt' => $imagePrompt]);  // Log the prompt
-
-        // If the prompt is valid, generate the image
-        if (!empty($imagePrompt)) {
-            $imageType = $request->input('image_type', 'dalle'); // Default to DALL·E
-            $generatedImageUrl = null;
-
-            // if ($imageType === 'sd') {
-                // Stable Diffusion Image
-                Log::info('Stable Diffusion image prompt before extracted...');
-                $generatedImageUrl = $this->generateSDImageFromPrompt($imagePrompt);
-
-                Log::info('Stable Diffusion image prompt after extracted...');
-            // } else {
-                // DALL·E Image
-            //     $generatedImageUrl = self::generateImageFromPrompt($imagePrompt, $apiKey);
-            // }
-
-            if ($generatedImageUrl) {
-                return "*Image Prompt: {$imagePrompt}*\n\n![Generated Image]({$generatedImageUrl})\n";
-            }
-            
-        }
-
-        return $matches[0]; // Keep the original text if no valid image prompt or generation fails
-    }, $content);
-
-    Log::info('Processed Content with DALL·E Images', ['content' => $processedContent]);
-        
-
-    // Deduct user tokens
-    $totalTokens = $response['usage']['total_tokens'];
-    deductUserTokensAndCredits($totalTokens);
-    
-    // Save the processed content to the database
     $toolContent = new ToolGeneratedContent();
     $toolContent->tool_id = $toolId;
     $toolContent->user_id = $user->id;
     $toolContent->prompt = $prompt;
-    $toolContent->content = $processedContent;
+    $toolContent->content = $content;
     $toolContent->save();
-    
-    // If this is a slide generation request, create the slides
-    if ($isSlideGeneration) {
-        return $this->createSlidesFromContent($processedContent, $user);
-    }
-    
-    // Stream the processed content (with images) to the view
-    return response()->stream(function () use ($processedContent) {
-        $chunks = explode("\n", $processedContent);
+
+    session(['edu_tool_content_id' => $toolContent->id]);
+
+   
+
+    $totalTokens = $response['usage']['total_tokens'];
+    deductUserTokensAndCredits($totalTokens);
+
+    return response()->stream(function () use ($content, $includeImages, $imageType) {
         $parsedown = new Parsedown();
+        $chunks = explode("\n", $content);
     
         foreach ($chunks as $chunk) {
             $htmlChunk = $parsedown->text($chunk);
-            echo $htmlChunk;
+    
+            // Handle image prompt inline
+            if ($includeImages === 'yes' && stripos($chunk, '**Image prompt:**') !== false) {
+                if (preg_match('/\*\*Image prompt:\*\*\s*(.+)/i', $chunk, $matches)) {
+                    $prompt = trim($matches[1]);
+                    $escapedPrompt = htmlspecialchars($prompt, ENT_QUOTES);
+                    $button = "<button class='btn btn-sm btn-primary generate-image-btn mt-2' 
+                                data-prompt='{$escapedPrompt}' 
+                                data-model='{$imageType}'
+                                data-content-id='" . session('edu_tool_content_id') . "'>
+                                Generate Image</button>
+                                <div class='image-result mt-2'></div>";
+    
+                    echo $htmlChunk . $button;
+                } else {
+                    echo $htmlChunk;
+                }
+            } else {
+                echo $htmlChunk;
+            }
+    
             ob_flush();
             flush();
-            sleep(1);
+            sleep(1); // Optional delay
         }
-    });
+    }, 200, [
+        'Cache-Control' => 'no-cache',
+        'Content-Type' => 'text/html; charset=utf-8',
+        'X-Accel-Buffering' => 'no' // For nginx buffering
+    ]);
+    
 }
 
 private function createSlidesFromContent($content, $user)
@@ -1156,6 +1226,30 @@ public function updateSubject(Request $request, $id)
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
         $newTools = EducationTools::orderBy('id', 'DESC')->limit(5)->get();
         $popularTools = EducationTools::where('popular', '1')->inRandomOrder()->limit(5)->get();
+
+        // Append the full Azure URL to each image
+        foreach ($tools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
+
+        // Append the full Azure URL to each image
+        foreach ($newTools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
+
+        // Append the full Azure URL to each image
+        foreach ($popularTools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
     
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
     }    
@@ -1232,6 +1326,13 @@ public function updateSubject(Request $request, $id)
         // Retrieve the tool by ID
         $tool = EducationTools::findOrFail($id);
 
+        // Append full Azure URL
+        $tool->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $tool->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+
+
         // Log the activity with the Education Tools name
         logActivity('Education Tools', 'Accessed Education Tools View for Tool: ' . $tool->name);
 
@@ -1239,6 +1340,14 @@ public function updateSubject(Request $request, $id)
         $similarTools = EducationTools::where('category', $tool->category)
             ->where('id', '!=', $id)->inRandomOrder()
             ->limit(5)->get();
+
+            // Append the full Azure URL to each image
+            foreach ($similarTools as $image) {
+                $image->image = config('filesystems.disks.azure_site.url') 
+                    . config('filesystems.disks.azure_site.container') 
+                    . '/' . $image->image 
+                    . '?' . config('filesystems.disks.azure_site.sas_token');
+            }
 
         $toolContent = ToolGeneratedContent::where('tool_id', $id)
             ->where('user_id', $userId)
@@ -1346,7 +1455,6 @@ public function updateSubject(Request $request, $id)
 
     public function StoreTools(Request $request)
     {
-        // dd($request);
         // Validate the incoming request
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -1360,46 +1468,52 @@ public function updateSubject(Request $request, $id)
             'prompt' => 'nullable|string',
             'popular' => 'nullable|string',
         ]);
-
-        // Create slug from the template name
+    
+        // Create slug from the tool name
         $slug = Str::slug($validatedData['name']);
-
-        // Create new Tool instance
+    
+        // Create new tool instance
         $tool = new EducationTools();
         $tool->name = $validatedData['name'];
         $tool->slug = $slug;
-        $tool->category_id = $validatedData['category_id']; // Add category
-
-        // Handle image upload if provided
+        $tool->category_id = $validatedData['category_id'];
+    
+        // Handle image upload to Azure
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads/tools', 'public'); // Store image
-            $tool->image = $imagePath; // Save image path in the database
+            try {
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $image = $request->file('image');
+                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension(); // Folder inside blob
+                $containerName = config('filesystems.disks.azure_site.container');
+    
+                $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
+    
+                Log::info('Image successfully uploaded to Azure Blob Storage', [
+                    'image_name' => $imageName,
+                    'container' => $containerName
+                ]);
+    
+                $tool->image = $imageName; // Save blob path
+            } catch (\Exception $e) {
+                Log::error('Error uploading image to Azure Blob Storage', ['exception' => $e->getMessage()]);
+            }
         }
-
-        $tool->popular = isset($validatedData['popular']) ? $validatedData['popular'] : null;
+    
+        $tool->popular = $validatedData['popular'] ?? null;
         $tool->description = $validatedData['description'];
-
-        // Save input fields as JSON arrays
         $tool->input_types = json_encode($validatedData['input_types']);
         $tool->input_names = json_encode($validatedData['input_names']);
         $tool->input_labels = json_encode($validatedData['input_labels']);
         $tool->input_placeholders = json_encode($validatedData['input_placeholders']);
-        
-        // Save the prompt
         $tool->prompt = $validatedData['prompt'];
-
-        // Save the Tool instance
+    
         $tool->save();
-
-        // Success notification
-        $notification = array(
+    
+        return redirect()->back()->with([
             'message' => 'Tool Added Successfully',
             'alert-type' => 'success'
-        );
-
-        return redirect()->back()->with($notification);
+        ]);
     }
-
 
     public function editTools($id)
     {
@@ -1432,16 +1546,34 @@ public function updateSubject(Request $request, $id)
         $tool->slug = Str::slug($validatedData['name']);
         $tool->category_id = $validatedData['category_id'];
     
-        // Handle image upload if provided
+        // Handle image replacement on Azure
         if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($tool->image && Storage::disk('public')->exists($tool->image)) {
-                Storage::disk('public')->delete($tool->image);
-            }
+            try {
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $containerName = config('filesystems.disks.azure_site.container');
     
-            // Store the new image
-            $imagePath = $request->file('image')->store('uploads/tools', 'public');
-            $tool->image = $imagePath;
+                // Delete old image if the path exists
+                if (!empty($tool->image)) {
+                    try {
+                        $blobClient->deleteBlob($containerName, $tool->image);
+                        Log::info('Old image deleted from Azure', ['image' => $tool->image]);
+                    } catch (\Exception $e) {
+                        Log::warning('Old Azure image not found or already deleted', ['image' => $tool->image, 'error' => $e->getMessage()]);
+                    }
+                }
+    
+                // Upload new image
+                $image = $request->file('image');
+                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+    
+                $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
+    
+                Log::info('New image uploaded to Azure', ['image' => $imageName]);
+                $tool->image = $imageName;
+    
+            } catch (\Exception $e) {
+                Log::error('Azure upload failed', ['error' => $e->getMessage()]);
+            }
         }
     
         // Update other fields
@@ -1489,7 +1621,11 @@ public function updateSubject(Request $request, $id)
     public function getToolContent($id)
     {
         $content = ToolGeneratedContent::findOrFail($id);
-        return response()->json(['content' => $content->content]); // Ensure 'content' matches
+
+        $parsedown = new Parsedown();
+        $html = $parsedown->text($content->content);
+    
+        return response()->json(['content' => $html]);
     }
 
 

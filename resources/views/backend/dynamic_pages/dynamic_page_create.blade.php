@@ -149,13 +149,13 @@
                     <input type="text" name="description" value="" class="form-control mb-3" id="description" placeholder="Enter description">
                     <input type="text" name="status" id="" value="draft" hidden>
                 </div>
-                <button type="button" class="btn gradient-btn-5" id="generateSeoBtn">AI Generate</button>
+                <button type="button" class="btn gradient-btn-generate" id="generateSeoBtn" title="Generate SEO Using AI"><i class="{{$buttonIcons['generate']}}"></i></button>
 
             </div>
             <!-- end card body -->
         </div>
         <div class="text-end mb-4">
-            <button type="submit" class="btn gradient-btn-save">Create Page</button>
+            <button type="submit" class="btn gradient-btn-save" title="Save"><i class="{{$buttonIcons['save']}}"></i></button>
         </div>
         <!-- end card -->
     </div>

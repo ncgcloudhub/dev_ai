@@ -37,7 +37,7 @@
 
              <!-- Token Information -->
              <div class="col-xxl-12 mb-3">
-                <div class="alert gradient-background-3 text-center">
+                <div class="alert gradient-bg-3 text-center">
                     <strong>You have <span id="tokenCount"></span> free tokens left.</strong> Experience the power of AI with features like image generation, ready-made templates, chat assistants, and more. Remember, these tokens are limited, so <strong><a href="{{ route('register') }}"><u>Sign up now for FREE</u></a></strong>
                     to unlock your creativity!
                     <br>

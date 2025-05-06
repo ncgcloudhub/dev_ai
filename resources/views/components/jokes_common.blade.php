@@ -33,7 +33,9 @@
         <img src="{{ asset('backend/uploads/site/' . $siteSettings->magic_ball) }}" alt="Loading..." class="magic-ball-gif">
         @endif
        
-        <p id="joke-text">Fetching a joke...</p>
+        <p id="joke-text" class="fs-5 gradient-bg-1 p-3 rounded-3 mx-3">
+            Fetching a joke...
+        </p>
     </div>
 </div>
 

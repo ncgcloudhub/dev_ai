@@ -25,10 +25,15 @@
                     <div class="card-body bg-marketplace d-flex">
                         <div class="flex-grow-1">
                             <h4 class="fs-18 lh-base mb-0" id="greeting"></h4>
+                          
                             <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
-                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
+                                <a href="{{ route('main.chat.form') }}" class="gradient-btn-generate">
+                                    {{-- <i class="{{ $buttonIcons['save'] }}"></i> --}}
+                                    Chat
+                                </a>
+                                
                                 <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
                             </div>
                         </div>
@@ -38,26 +43,60 @@
                 </div>
             </div>
             <div class="col-xl-4 col-md-12">
-                <div class="card overflow-hidden" style="border-color: #be06af">
+                <div class="card overflow-hidden mb-4" style="border-color: #be06af">
                     <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between" id="domain-item">
-                                <strong>Domain Expire:</strong>
-                                <span id="domain-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="hosting-item">
-                                <strong>Hosting Expire:</strong>
-                                <span id="hosting-expire"></span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between" id="ssl-item">
-                                <strong>SSL Expire:</strong>
-                                <span id="ssl-expire"></span>
-                            </li>
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            All Expirations
+                            <a href="{{ route('expirations.index') }}" class="btn btn-sm gradient-btn-view">
+                                Show All
+                            </a>
+                        </h5>
+                        
+                        <ul class="list-group" id="expirationList">
+                            @foreach($expirations as $index => $item)
+                                @php
+                                    $expiresOn = \Carbon\Carbon::parse($item->expires_on);
+                                    $today = \Carbon\Carbon::today();
+                                    $diff = $expiresOn->diffInDays($today, false); // Negative means not yet expired
+                                @endphp
+            
+                                <li class="list-group-item d-flex justify-content-between
+                                    {{ $index >= 3 ? 'd-none more-expirations' : '' }}">
+                                    <strong>{{ ucfirst($item->type) }} Expire:</strong>
+                                    <span class="
+                                        @if($diff > 0)
+                                            text-muted
+                                        @elseif($diff < 0)
+                                            text-success
+                                        @elseif($diff <= 30)
+                                            text-danger
+                                        @else
+                                            text-warning
+                                        @endif
+                                    ">
+                                        @if($diff > 0)
+                                            {{ $diff }} day{{ $diff > 1 ? 's' : '' }} ago
+                                        @elseif($diff < 0)
+                                            {{ abs($diff) }} day{{ abs($diff) > 1 ? 's' : '' }} left
+                                        @else
+                                            Expires today
+                                        @endif
+                                    </span>
+                                </li>
+                            @endforeach
                         </ul>
-
+            
+                        @if(count($expirations) > 3)
+                            <div class="text-center mt-2">
+                                <a href="javascript:void(0);" id="toggleMore" class="gradient-text-2">
+                                    <i class="fas fa-chevron-down"></i> Show More
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
+            
         </div>
         
         {{-- 1st col 2nd row --}}
@@ -79,11 +118,11 @@
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}" alt=""
+                            <img src="{{$tool->image }}" alt=""
                                 class="img-fluid card-img-top explore-img" />
                             <div class="bg-overlay"></div>
                             <div class="place-bid-btn">
-                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary"><i
+                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn gradient-btn-view"><i
                                         class="ri-auction-fill align-bottom me-1"></i>Explore</a>
                             </div>
                         </div>
@@ -303,6 +342,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
         var greetingElement = document.getElementById('greeting');
         var currentTime = new Date();
         var currentHour = currentTime.getHours();
@@ -333,45 +373,21 @@
             console.error('Error copying text: ', err);
         });
     }
-    </script>
+</script>
 
 <script>
-    function startCountdown(id, itemId, endDate) {
-        function updateCountdown() {
-            let now = new Date().getTime();
-            let distance = new Date(endDate).getTime() - now;
+    document.getElementById('toggleMore').addEventListener('click', function () {
+        document.querySelectorAll('.more-expirations').forEach(item => item.classList.toggle('d-none'));
 
-            if (distance < 0) {
-                document.getElementById(id).innerHTML = "Expired";
-                return;
-            }
+        const icon = this.querySelector('i');
+        const isExpanded = icon.classList.contains('fa-chevron-up');
 
-            let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
 
-            document.getElementById(id).innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            // If 30 days or less, change the border color of the specific list item
-            if (days <= 30) {
-                document.getElementById(itemId).style.borderColor = "red";
-                document.getElementById(itemId).style.color = "red"; // Optional: Change text color to red
-            }
-        }
-
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-
-    // Convert Laravel dates to JavaScript
-    let domainExpire = "{{ $siteSettings->domain }}"; // Example: 2025-12-26
-    let hostingExpire = "{{ $siteSettings->hosting }}"; // Example: 2025-10-15
-    let sslExpire = "{{ $siteSettings->ssl }}"; // Example: 2025-08-30
-
-    startCountdown("domain-expire", "domain-item", domainExpire);
-    startCountdown("hosting-expire", "hosting-item", hostingExpire);
-    startCountdown("ssl-expire", "ssl-item", sslExpire);
+        this.innerHTML = `<i class="fas ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-up'}"></i> ${isExpanded ? 'Show More' : 'Show Less'}`;
+    });
 </script>
+
 
 @endsection

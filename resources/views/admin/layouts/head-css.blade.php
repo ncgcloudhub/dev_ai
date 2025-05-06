@@ -17,12 +17,17 @@
 
 @php
     $cssRules = '';
+    // $buttonIcons should now be available globally from the view composer
+
     foreach ($buttons as $button) {
         $classes = json_decode($button->classes, true);
         $bgColor = '';
         $gradientColor = '';
 
-        // Extracting the colors from the background property
+        // Save the icon (no need to redefine $buttonIcons as it's passed already)
+        $buttonIcons[$button->button_type] = ($button->icon ?? '');
+
+        // Extract colors for hover
         if (isset($classes['background']) && preg_match_all('/#([a-f0-9]{6}|[a-f0-9]{3})/i', $classes['background'], $matches)) {
             if (isset($matches[0][0])) {
                 $bgColor = $matches[0][0];
@@ -38,7 +43,6 @@
         }
         $cssRules .= "} ";
 
-        // Adding hover effect by swapping background colors
         if ($bgColor && $gradientColor) {
             $cssRules .= ".gradient-btn-{$button->button_type}:hover { ";
             $cssRules .= "background: linear-gradient(45deg, {$gradientColor}, {$bgColor}); ";

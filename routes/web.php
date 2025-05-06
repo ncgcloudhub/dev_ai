@@ -36,6 +36,7 @@ use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ExpirationController;
 use App\Http\Controllers\GoogleSlidesController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\StripeWebhookController;
@@ -49,6 +50,7 @@ use App\Models\PromptLibrary;
 use App\Models\SectionDesign;
 use App\Models\SeoSetting;
 use App\Models\SiteSettings;
+use App\Models\ToolGeneratedContent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Auth\EmailVerificationPromptController;
 use Illuminate\Support\Facades\Redirect;
@@ -74,6 +76,12 @@ Route::get('/', function () {
     $seo = SeoSetting::find(1);
     $templates = Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $tools = EducationTools::inRandomOrder()->limit(6)->get();
+    foreach ($tools as $image) {
+        $image->image = config('filesystems.disks.azure_site.url') 
+            . config('filesystems.disks.azure_site.container') 
+            . '/' . $image->image 
+            . '?' . config('filesystems.disks.azure_site.sas_token');
+    }
     $promptLibrary = PromptLibrary::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();
     $images_slider = DalleImageGenerate::where('resolution', '1024x1024')
         ->where('status', 'active')
@@ -158,31 +166,23 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
     // SEO Settings
     Route::prefix('settings/seo')->group(function () {
-
         Route::get('/add', [SEOController::class, 'SeosettingsAdd'])->name('seo.settings.add')->middleware('admin.permission:settings.SEOSettings');
-
         Route::put('/store', [SEOController::class, 'SeosettingsStore'])->name('seo.settings.store');
     });
 
     // Site Settings
     Route::prefix('settings/site')->group(function () {
-
         Route::get('/add', [SiteSettingsController::class, 'SitesettingsAdd'])->name('site.settings.add')->middleware('admin.permission:settings.siteSettings');
-
         Route::post('/store', [SiteSettingsController::class, 'SitesettingsStore'])->name('site.settings.store');
     });
 
     // USER MANAGE
     Route::prefix('user')->group(function () {
-
         Route::get('/manage', [UserManageController::class, 'ManageUser'])->name('manage.user')->middleware('admin.permission:manageUser&Admin.manageUser');
-
+        Route::get('/manage/notification/admin', [UserManageController::class, 'ManageUserNotificationAdmin'])->name('manage.user.notification.admin')->middleware('admin.permission:manageUser&Admin.manageUser');
         Route::post('/update/status', [UserManageController::class, 'UpdateUserStatus'])->name('update.user.status');
-
         Route::put('/update/stats/{id}', [UserManageController::class, 'UpdateUserStats'])->name('update.user.stats');
-
         Route::get('/details/{id}', [UserManageController::class, 'UserDetails'])->name('user.details');
-
         // Block User
         Route::put('/{user}/block', [UserManageController::class, 'blockUser'])->name('admin.users.block');
         Route::post('/users/bulk-block', [UserManageController::class, 'bulkBlock'])->name('admin.users.bulkBlock')->middleware('admin.permission:manageUser&Admin.manageUser.block');
@@ -195,59 +195,39 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::post('/countries/block/update', [UserManageController::class, 'updateCountry'])->name('block.countries.update');
         Route::delete('/countries/{id}', [UserManageController::class, 'countryDestroy'])->name('block.countries.delete')->middleware('admin.permission:settings.countryBlock.delete');
 
-
         Route::post('/users/bulk-status-change', [UserManageController::class, 'bulkStatusChange'])->name('admin.users.bulkStatusChange')->middleware('admin.permission:manageUser&Admin.manageUser.statusChange');
-
         Route::get('/package/history', [UserManageController::class, 'packageHistory'])->name('admin.user.package.history')->middleware('admin.permission:manageUser&Admin.manageuserPackage');
-     
         Route::get('/module/feedback/request', [UserManageController::class, 'ModuleFeedbackRequest'])->name('admin.user.feedback.request')->middleware('admin.permission:manageUser&Admin.manageFeedback');
-
         Route::post('/update-feedback-request-status', [UserManageController::class, 'updateStatus'])->name('update.feedback-request-status');
-
+        Route::get('/feedback', [UserManageController::class, 'userfeedback'])->name('admin.feedback.index');
+        Route::post('/update/feedback/{id}', [UserManageController::class, 'updateUserFeedback'])->name('admin.feedback.update');
 
     });
 
     // REFERRAL MANAGE
     Route::get('/referral/manage', [UserManageController::class, 'ManageReferral'])->name('manage.referral')->middleware('admin.permission:manageRefferal.menu');
 
-
     // Templates
     Route::prefix('ai-content-creator')->group(function () {
-
         Route::get('/category/add', [AIContentCreatorController::class, 'AIContentCreatorCategoryAdd'])->name('aicontentcreator.category.add')->middleware('admin.permission:aiContentCreator.category');
-
         Route::post('/category/store', [AIContentCreatorController::class, 'AIContentCreatorCategoryStore'])->name('aicontentcreator.category.store');
-
         Route::get('/category/edit/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryEdit'])->name('aicontentcreator.category.edit')->middleware('admin.permission:aiContentCreator.category.edit');
-
         Route::post('/category/update', [AIContentCreatorController::class, 'AIContentCreatorCategoryUpdate'])->name('aicontentcreator.category.update');
-
         Route::get('/category/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorCategoryDelete'])->name('aicontentcreator.category.delete')->middleware('admin.permission:aiContentCreator.category.delete');
-
         Route::get('/add', [AIContentCreatorController::class, 'AIContentCreatorAdd'])->name('aicontentcreator.add')->middleware('admin.permission:aiContentCreator.add');
-
         Route::post('store', [AIContentCreatorController::class, 'AIContentCreatorStore'])->name('aicontentcreator.store');
-
         Route::get('/edit/{slug}', [AIContentCreatorController::class, 'AIContentCreatorEdit'])->name('aicontentcreator.edit')->middleware('admin.permission:aiContentCreator.edit');
-        
         Route::get('/delete/{id}', [AIContentCreatorController::class, 'AIContentCreatorDelete'])->name('aicontentcreator.delete')->middleware('admin.permission:aiContentCreator.delete');
-
         Route::post('/update', [AIContentCreatorController::class, 'AIContentCreatorUpdate'])->name('aicontentcreator.update');
-
         Route::post('/seo/update', [AIContentCreatorController::class, 'AIContentCreatorSEOUpdate'])->name('aicontentcreator.seo.update');
-
         Route::get('/seo/fetch/{id}/{modelType}', [AIContentCreatorController::class, 'fetchTemplate'])->name('aicontentcreator.seo.fetch');
-
         Route::get('/select/design', [AIContentCreatorController::class, 'getDesign'])->name('getDesign')->middleware('admin.permission:settings.frontEndDesign');
-
         Route::post('/update-design', [AIContentCreatorController::class, 'updateDesign'])->name('user.update_design');
     });
 
     Route::get('/admin/button-styles', [ButtonStyleController::class, 'index'])->name('admin.button-styles');
     Route::post('/button-styles/store', [ButtonStyleController::class, 'store'])->name('button.styles.store');
     Route::delete('/button-styles/{id}', [ButtonStyleController::class, 'destroy'])->name('button.styles.destroy');
-
-
 
     //  Permission
     Route::controller(RoleController::class)->group(function () {
@@ -282,164 +262,112 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
         Route::post('/import/store', 'ImportStore')->name('import.store.permission');
     });
 
+    // Expiration
+    Route::resource('expirations', ExpirationController::class);
+
+
     // Prompt Library
     Route::prefix('prompt')->group(function () {
 
         Route::get('/category/add', [PromptLibraryController::class, 'PromptCategoryAdd'])->name('prompt.category.add')->middleware('admin.permission:promptLibrary.category');
-
         Route::post('/category/store', [PromptLibraryController::class, 'PromptCategoryStore'])->name('prompt.category.store');
-
         Route::get('/category/edit/{id}', [PromptLibraryController::class, 'PromptCategoryEdit'])->name('prompt.category.edit')->middleware('admin.permission:promptLibrary.category.edit');
-
         Route::post('/category/update', [PromptLibraryController::class, 'PromptCategoryUpdate'])->name('prompt.category.update');
-
         Route::get('/category/delete/{id}', [PromptLibraryController::class, 'PromptCategoryDelete'])->name('prompt.category.delete')->middleware('admin.permission:promptLibrary.category.delete');
-
         Route::get('/subcategory/add', [PromptLibraryController::class, 'PromptSubCategoryAdd'])->name('prompt.subcategory.add')->middleware('admin.permission:promptLibrary.subcategory');
-
         Route::post('/subcategory/store', [PromptLibraryController::class, 'PromptSubCategoryStore'])->name('prompt.subcategory.store');
-
         Route::get('/subcategory/edit/{id}', [PromptLibraryController::class, 'PromptSubCategoryEdit'])->name('prompt.subcategory.edit')->middleware('admin.permission:promptLibrary.subcategory.edit');
-
         Route::post('/subcategory/update', [PromptLibraryController::class, 'PromptSubCategoryUpdate'])->name('prompt.subcategory.update');
-
         Route::get('/subcategory/delete/{id}', [PromptLibraryController::class, 'PromptSubCategoryDelete'])->name('prompt.subcategory.delete')->middleware('admin.permission:promptLibrary.subcategory.delete');
-
         Route::get('/add', [PromptLibraryController::class, 'PromptAdd'])->name('prompt.add')->middleware('admin.permission:promptLibrary.add');
-
         Route::post('store', [PromptLibraryController::class, 'PromptStore'])->name('prompt.store');
-
         Route::get('/edit/{id}', [PromptLibraryController::class, 'PromptEdit'])->name('prompt.edit')->middleware('admin.permission:promptLibrary.edit');
-
         Route::post('/update', [PromptLibraryController::class, 'PromptUpdate'])->name('prompt.update');
-
         Route::post('/seo/update', [PromptLibraryController::class, 'PromptSEOUpdate'])->name('prompt.seo.update');
-
         Route::get('/delete/{id}', [PromptLibraryController::class, 'PromptDelete'])->name('prompt.delete')->middleware('admin.permission:promptLibrary.delete');
-
         // Route for deleting an example
         Route::delete('/example/{example}', [PromptLibraryController::class, 'delete'])->name('prompt.example.delete');
-
         // Route for updating an example (if not defined already)
         Route::put('/example/{id}',  [PromptLibraryController::class, 'update'])->name('prompt.example.update');
-
         Route::get('/seo/fetch/{id}', [PromptLibraryController::class, 'fetchPrompt'])->name('promptLibrary.seo.fetch');
-
         Route::post('/generate/details', [PromptLibraryController::class, 'GenerateDetails']);
         Route::post('/add/library', [PromptLibraryController::class, 'saveToLibrary'])->name('prompt.add.library');
 
     });
 
-
     // Dalle Manage Image
     Route::get('/image/manage', [GenerateImagesController::class, 'DalleImageManageAdmin'])->name('manage.dalle.image.admin')->middleware('admin.permission:cleverImageCreator.manage');
     Route::post('/prompt/generate/bulk-details', [GenerateImagesController::class, 'fetchBulkDetails']);
     Route::post('/prompt/add/bulk-library', [GenerateImagesController::class, 'saveBulkPrompts']);
-
-
+    Route::get('/admin/export-images', [GenerateImagesController::class, 'exportImages'])->name('admin.images.export');
     Route::post('/update/image/status', [GenerateImagesController::class, 'UpdateStatus'])->name('update.status.dalle.image.admin');
+
+    Route::get('/admin/dalle-image-fetch', [GenerateImagesController::class, 'fetchImages'])->name('admin.dalle.image.fetch');
+
 
 
     // PRIVACY POLICY
     Route::get('/privacy/policy', [HomeController::class, 'ManagePrivacyPolicy'])->name('manage.privacy.policy')->middleware('admin.permission:settings.privacyPolicy');
+    Route::post('/privacy-policy/{id}/toggle-status', [HomeController::class, 'togglePolicyStatus'])->name('privacy.policy.toggleStatus');
 
     Route::post('/privacy/policy/store', [HomeController::class, 'StorePrivacyPolicy'])->name('store.privacy.policy');
-
     Route::get('/privacy/policy/edit/{id}', [HomeController::class, 'EditPrivacyPolicy'])->name('edit.privacy.policy')->middleware('admin.permission:settings.privacyPolicy.edit');
-
     Route::post('/privacy/policy/update', [HomeController::class, 'UpdatePrivacyPolicy'])->name('update.privacy.policy');
-
     Route::get('/privacy/policy/delete/{id}', [HomeController::class, 'DeletePrivacyPolicy'])->name('delete.privacy.policy')->middleware('admin.permission:settings.privacyPolicy.delete');
 
     // Magic Ball (Jokes) | Middleware Must be added
     Route::get('/jokes', [HomeController::class, 'MagicBallJokes'])->name('magic.ball.jokes');
-
     Route::post('/store/jokes', [HomeController::class, 'MagicBallJokeStore'])->name('jokes.store');
-
     Route::get('/jokes/edit/{id}', [HomeController::class, 'MagicBallJokeEdit'])->name('jokes.edit');
-
     Route::post('/jokes/update', [HomeController::class, 'MagicBallJokeUpdate'])->name('jokes.update');
-
     Route::get('/jokes/delete/{id}', [HomeController::class, 'MagicBallJokeDelete'])->name('jokes.delete');
-
     Route::post('/ai/generate', [HomeController::class, 'generateAiJoke'])->name('jokes.ai.generate');
-
-
 
     // TERMS & CONDITIONS
     Route::get('/terms/condition', [HomeController::class, 'ManageTermsCondition'])->name('manage.terms.condition')->middleware('admin.permission:settings.termsAndConditions');
-
     Route::post('/terms/condition/store', [HomeController::class, 'StoreTermsCondition'])->name('store.terms.condition');
-
     Route::get('/terms/condition/edit/{id}', [HomeController::class, 'EditTermsCondition'])->name('edit.terms.condition')->middleware('admin.permission:settings.termsAndConditions.edit');
-
     Route::post('/terms/condition/update', [HomeController::class, 'UpdateTermsCondition'])->name('update.terms.condition');
-
     Route::get('/terms/condition/delete/{id}', [HomeController::class, 'DeleteTermsCondition'])->name('delete.terms.condition')->middleware('admin.permission:settings.termsAndConditions.delete');
-
 
     // Pricing Plans
     Route::get('/pricing-plan', [PricingController::class, 'ManagePricingPlan'])->name('manage.pricing')->middleware('admin.permission:settings.pricing');
-
     Route::delete('/pricing/{slug}', [PricingController::class, 'destroy'])->name('pricing.destroy')->middleware('admin.permission:settings.pricing.delete');
-
     Route::get('/add/pricing/plan', [PricingController::class, 'addPricingPlan'])->name('add.pricing.plan');
-
     Route::post('/store/pricing', [PricingController::class, 'StorePricingPlan'])->name('store.pricing.plan');
-
     Route::get('/pricing/{slug}', [PricingController::class, 'EditPricing'])->name('pricing.edit')->middleware('admin.permission:settings.pricing.edit');
-
     Route::put('/update/pricing-plans/{pricingPlan}', [PricingController::class, 'UpdatePricing'])->name('pricing.update');
 
     // EDUCATION        
     Route::prefix('education')->group(function () {
 
         Route::get('/add/class/subject', [EducationController::class, 'manageGradeSubject'])->name('manage.grade.subject')->middleware('admin.permission:education.manageGradeSubject');
-
         Route::post('/store/grade/class', [EducationController::class, 'StoreGradeClass'])->name('store.grade.class');
-
         Route::post('update-grade/{id}', [EducationController::class, 'updateGrade'])->name('update.grade');
-
         Route::post('update-subject/{id}', [EducationController::class, 'updateSubject'])->name('update.subject');
-
         Route::post('delete-grade/{id}', [EducationController::class, 'deleteGrade'])->name('delete.grade')->middleware('admin.permission:education.manageGradeSubject.gradeDelete');
-
         Route::post('delete-subject/{id}', [EducationController::class, 'deleteSubject'])->name('delete.subject')->middleware('admin.permission:education.manageGradeSubject.subjectDelete');
-        
         Route::get('/add/tools', [EducationController::class, 'AddTools'])->name('add.education.tools')->middleware('admin.permission:education.manageTools.add');
-
         Route::post('/store/tools', [EducationController::class, 'StoreTools'])->name('store.education.tools');
-
         Route::post('/seo/update', [EducationController::class, 'EduToolsSEOUpdate'])->name('edu.tools.seo.update');
-
         // Education Tools Category
-
         Route::get('/tools/category/add', [EducationController::class, 'EducationToolsCategoryAdd'])->name('education.tools.category.add');
-
         Route::post('/tools/category/store', [EducationController::class, 'EducationToolsCategoryStore'])->name('education.tools.category.store');
-
         Route::get('/tools/category/edit/{id}', [EducationController::class, 'EducationToolsCategoryEdit'])->name('education.tools.category.edit');
-
         Route::post('/tools/category/update', [EducationController::class, 'EducationToolsCategoryUpdate'])->name('education.tools.category.update');
-
         Route::get('/tools/category/delete/{id}', [EducationController::class, 'EducationToolsCategoryDelete'])->name('education.tools.category.delete');
-
-
         //Education Tools category End
-
         // Route to show the form for editing a specific tool (edit)
         Route::get('/tools/{id}/edit', [EducationController::class, 'editTools'])->name('tools.edit')->middleware('admin.permission:education.manageTools.edit');
-
         // Route to update a specific tool (update)
         Route::put('/tools/{id}', [EducationController::class, 'updateTools'])->name('tools.update');
-
         // Route to delete a specific tool (destroy)
         Route::delete('/tools/{id}', [EducationController::class, 'destroyTools'])->name('tools.destroy')->middleware('admin.permission:education.manageTools.delete');
 
     });
 
     Route::post('/generate-hex-pass', [SiteSettingsController::class, 'storeHex'])->name('hexPass.store');
-
+    Route::post('/admin/settings/rollover', [SiteSettingsController::class, 'updateRolloverSetting'])->name('admin.settings.rollover.update');
 
     // FAQ
     Route::get('/faq', [FAQController::class, 'ManageFaq'])->name('manage.faq')->middleware('admin.permission:settings.FAQ');
@@ -457,35 +385,26 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
     Route::get('/manage-job/applications', [JobController::class, 'manageJobApplication'])->name('manage.job.applications')->middleware('admin.permission:jobs.manageJobApplication');
     Route::get('/download-cv/{id}', [JobController::class, 'downloadCV'])->name('download.cv');
     Route::get('/job/details/{slug}', [JobController::class, 'detailsJob'])->name('job.details');
-
     // DYNAMIC PAGE
     Route::resource('dynamic-pages', DynamicPageController::class)->except(['show']);
     Route::post('/dynamic-pages/seo/generate', [DynamicPageController::class, 'generateSeoContent'])
     ->name('dynamic-pages.seo.generate');
     Route::get('/dynamic-pages/check-route', [DynamicPageController::class, 'checkRouteAvailability'])->name('dynamic-pages.check-route');
-
-
-   
-
     // PAGE SEO Admin
     Route::get('/add-seo', [PageSeoController::class, 'addPageSeo'])->name('add.page.seo')->middleware('admin.permission:settings.pageSEOAdd');
     Route::get('/get-seo-details', [PageSeoController::class, 'getPageSeoDetails'])->name('get.page.seo.details');
     Route::post('/seo/page/store', [PageSeoController::class, 'storePageSeo'])->name('page.seo.store');
-
     // Change User's Password by ADMIN
     Route::get('/admin/users/{user}/change-password', [AdminController::class, 'showChangePasswordForm'])
         ->name('admin.users.changePassword.view')->middleware('admin.permission:manageUser&Admin.manageUser.changePassword');
 
     Route::put('/admin/users/{user}/change-password', [AdminController::class, 'changeUserPassword'])
         ->name('admin.users.updatePassword');
-
     // RESEND EMAIL VERIFICATION
     Route::post('/users/{user}/send-verification-email', [UserController::class, 'sendVerificationEmail'])->name('user.send-verification-email');
-
     // Delete user from admin manage user table
     Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.users.delete')->middleware('admin.permission:manageUser&Admin.manageAdmin.delete');
     Route::post('/users/bulk-delete', [AdminController::class, 'bulkDelete'])->name('admin.users.bulkDelete')->middleware('admin.permission:manageUser&Admin.manageUser.delete');
-
     // SEND EMAIL
     Route::get('/send/email', [UserManageController::class, 'sendEmailForm'])->name('send.email.form')->middleware('admin.permission:manageUser&Admin.sendEmail'); 
     Route::get('/manage/send/email', [UserManageController::class, 'manageSendEmail'])->name('manage.email.send')->middleware('admin.permission:manageUser&Admin.sendEmail.manage');
@@ -496,26 +415,21 @@ Route::middleware(['auth', 'roles:admin', 'check.blocked.ip'])->group(function (
 
 // User Middleware
 Route::middleware(['auth', 'verified', 'roles:user', 'check.status', 'check.blocked.ip'])->group(function () {
-    
     // Feedback Request
     Route::post('/module/feedback', [RequestModuleFeedbackController::class, 'templateFeedback'])->name('template.module.feedback');
-
     // User Routes
     Route::get('/user/dashboard', [UserController::class, 'UserDashboard'])->name('user.dashboard');
+    Route::post('user/feedback/submit', [UserController::class, 'submitfeedback'])->name('user.feedback.submit');
+    Route::get('/my-feedback', [UserController::class, 'userfeedback'])->name('user.feedback.index');
 
-   
 
     // Subscriptions
     Route::get('/all/subscription', [SubscriptionController::class, 'AllPackage'])->name('all.package');
-
     Route::get('/purchase/{pricingPlanId}', [SubscriptionController::class, 'Purchase'])->name('purchase.package');
-
     Route::post('/store/subscription/plan', [SubscriptionController::class, 'StoreSubscriptionPlan'])->name('store.subscription.plan');
-
 }); //End User Middleware
 
 Route::post('/generate-images', [EducationController::class, 'generateImages']);
-
 
 
 Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->group(function () {
@@ -543,6 +457,24 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools');
         Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');
         Route::post('/tools/generate-content', [EducationController::class, 'ToolsGenerateContent'])->name('tools.generate.content');
+        Route::get('/tools/get-generated-content-id', function () {
+            $contentId = session('edu_tool_content_id');
+        
+            if (!$contentId) {
+                return response()->json(['error' => 'No content ID found in session'], 404);
+            }
+        
+            $content = ToolGeneratedContent::find($contentId);
+        
+            if (!$content) {
+                return response()->json(['error' => 'Content not found'], 404);
+            }
+        
+            return response()->json([
+                'edu_tool_content_id' => $content->id,
+                'edu_tool_content_data' => $content->content,
+            ]);
+        })->name('tools.get.generated.content');
         Route::post('/toggle-favorite', [EducationController::class, 'toggleFavorite'])->name('toggle.favorite');
         
     });
@@ -552,76 +484,51 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::prefix('custom/ai-content-creator')->group(function () {
 
         Route::get('/category/add', [CustomTemplateController::class, 'CustomTemplateCategoryAdd'])->name('custom.template.category.add')->middleware('admin.permission:customTemplate.category');
-
         Route::post('/category/store', [CustomTemplateController::class, 'CustomTemplateCategoryStore'])->name('custom.template.category.store');
-
         Route::get('/category/edit/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryEdit'])->name('custom.template.category.edit')->middleware('admin.permission:customTemplate.category.edit');
-
         Route::post('/category/update', [CustomTemplateController::class, 'CustomTemplateCategoryUpdate'])->name('custom.template.category.update');
-
         Route::get('/category/delete/{id}', [CustomTemplateController::class, 'CustomTemplateCategoryDelete'])->name('custom.template.category.delete')->middleware('admin.permission:customTemplate.category.delete');
-
         Route::get('/add', [CustomTemplateController::class, 'CustomTemplateAdd'])->name('custom.template.add')->middleware('admin.permission:customTemplate.add');
-
         Route::post('store', [CustomTemplateController::class, 'CustomTemplateStore'])->name('custom.template.store');
-
         Route::get('/edit/{slug}', [CustomTemplateController::class, 'CustomTemplateEdit'])->name('custom.template.edit')->middleware('admin.permission:customTemplate.edit');
-
         Route::post('/update', [CustomTemplateController::class, 'CustomTemplateUpdate'])->name('custom.template.update');
-        
         Route::get('/delete/{id}', [CustomTemplateController::class, 'CustomTemplateDelete'])->name('custom.template.delete')->middleware('admin.permission:customTemplate.delete');
-
         Route::get('/manage', [CustomTemplateController::class, 'CustomTemplateManage'])->name('custom.template.manage')->middleware('admin.permission:customTemplate.manage');
-
         Route::get('/view/{id}', [CustomTemplateController::class, 'CustomTemplateView'])->name('custom.template.view');
-
         Route::post('/generate', [CustomTemplateController::class, 'customtemplategenerate'])->name('custom.template.generate');
     });
 
     // Stats
     Route::prefix('statistics')->group(function () {
         Route::get('/view', [StatsController::class, 'StatsView'])->name('stats.view');
-    
     });
 
     Route::post('/save-time', [UserController::class, 'saveTime'])->name('save-time');
-
     // Template Rating
     Route::post('/rate-template', [RatingController::class, 'store'])->name('rate.template');
-
 
      // Global Select Model
      Route::post('/select-model', [UserController::class, 'selectModel'])->name('select-model');
 
-
     // Main Chat
     // Custom Templates
     Route::prefix('main')->group(function () {
-
         // NEW SESSION
         Route::post('/new-session', [MainChat::class, 'MainNewSession']);
-
         Route::post('/chat/send', [MainChat::class, 'send']);
-
         // Title Edit
         Route::post('/session/edit', [MainChat::class, 'TitleEdit']);
-
         Route::post('/session/delete', [MainChat::class, 'delete']);
     });
 
     Route::get('/chat', [MainChat::class, 'MainChatForm'])->name('main.chat.form')->middleware('admin.permission:chattermate.menu');
-
     Route::post('/save-seen-tour-steps', [MainChat::class, 'saveSeenSteps'])->middleware('auth');
-
     // Like Image
     Route::post('/like', [GenerateImagesController::class, 'toggleLike'])->name('image.like');
-
     // Favorite Image
     Route::post('/favorite', [GenerateImagesController::class, 'toggleFavorite'])->name('image.favorite');
-
     // Dalle Manage Image
     Route::get('/favorite/image/manage', [GenerateImagesController::class, 'ManageFavoriteImage'])->name('manage.favourite.image');
-
     // Image to Image
     Route::post('/generate-image-variation', [GenerateImagesController::class, 'generateImageVariation']);
 
@@ -644,11 +551,8 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 
         // GET MESSAGES TEST
         Route::get('/sessions/{id}/messages', [AIChatController::class, 'getSessionMessages']);
-
         // CHECK SESSION
         Route::get('/check-session', [AIChatController::class, 'checkUserSession']);
-
-
         // NEW SESSION
         Route::post('/new-session', [AIChatController::class, 'newSession']);
     });
@@ -669,40 +573,27 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 
     //Profile 
     Route::prefix('profile')->middleware(['check.status'])->group(function () {
-
         Route::get('/edit', [ProfileEditController::class, 'ProfileEdit'])->name('edit.profile');
-
         Route::post('/update', [ProfileEditController::class, 'ProfileUpdate'])->name('update.profile');
-
         Route::post('/update/photo', [ProfileEditController::class, 'ProfilePhotoUpdate'])->name('update.profile.photo');
     });
 
     //Fixed Templates 
-    Route::get('ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
-
-    Route::get('ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
-
-    Route::get('/ai-content-creator/getContentByUser/{id}', [AIContentCreatorController::class, 'getTemplateContent'])->name('template.content');
-    
+    Route::get('/ai-content-creator/manage', [AIContentCreatorController::class, 'AIContentCreatorManage'])->name('aicontentcreator.manage')->middleware('admin.permission:aiContentCreator.manage');
+    Route::get('/ai-content-creator/view/{slug}', [AIContentCreatorController::class, 'AIContentCreatorView'])->name('aicontentcreator.view');
+    Route::get('/ai-content-creator/getcontentbyuser/{id}', [AIContentCreatorController::class, 'getTemplateContent'])->name('template.content');
     // AI Content Creator Extract and Generate
     Route::get('ai-content-creator/extract', [AIContentCreatorController::class, 'AIContentCreatorExtractPromptAndGenerate'])->name('aicontentcreator.view.extract.prompt');
     Route::post('ai-content-creator/generate', [AIContentCreatorController::class, 'AIContentCreatorgenerate'])->name('aicontentcreator.generate');
-
     //Fixed Prompt Library 
-    Route::get('prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage')->middleware('admin.permission:promptLibrary.manage');
-
-    Route::get('prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
-
+    Route::get('/prompt/manage', [PromptLibraryController::class, 'PromptManage'])->name('prompt.manage')->middleware('admin.permission:promptLibrary.manage');
+    Route::get('/prompt/view/{slug}', [PromptLibraryController::class, 'PromptView'])->name('prompt.view');
     // Category Filter Prompt Library
-    Route::get('prompt/category/{id}', [PromptLibraryController::class, 'PromptCatgeoryView'])->name('category.prompt.library.view');
-    
+    Route::get('/prompt/category/{id}', [PromptLibraryController::class, 'PromptCatgeoryView'])->name('category.prompt.library.view');
     // Sub Category Filter Prompt Library
-    Route::get('prompt/subcategory/{id}', [PromptLibraryController::class, 'PromptSubCatgeoryView'])->name('sub.category.prompt.library.view');
-
+    Route::get('/prompt/subcategory/{id}', [PromptLibraryController::class, 'PromptSubCatgeoryView'])->name('sub.category.prompt.library.view');
     Route::post('/prompt-examples/{promptLibrary}', [PromptLibraryController::class, 'PromptExampleStore'])->name('prompt_examples.store');
-
     Route::put('/prompt-examples/{promptExample}', [PromptLibraryController::class, 'updatePromptExample'])->name('prompt_examples.update');
-
     // Export Prompt
     Route::get('/export', [PromptLibraryController::class, 'Export'])->name('prompt.export');
     // Import Prompt
@@ -714,9 +605,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
 
     // EID Card
     Route::get('/greeting/card', [GenerateImagesController::class, 'GreetingCard'])->name('greeting.card')->middleware('admin.permission:greetingCard.menu');
-
     Route::post('/greeting/card/generate', [GenerateImagesController::class, 'GreetingCardGenerate'])->name('generate.greeting.card');
-
 
     // GET SUB CATEGORY
     Route::get('/prompt/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
@@ -756,7 +645,6 @@ Route::get('/all-jobs', [HomeController::class, 'AllJobs'])->name('all.jobs');
 // Route::get('/job/detail/{slug}', [HomeController::class, 'detailsJob'])->name('job.detail');
 Route::get('/jobs/{id}', [HomeController::class, 'JobDetails'])->name('jobs.details.frontend');
 
-
 // Privacy Policy Page
 Route::get('/privacy-policy', [HomeController::class, 'PrivacyPolicy'])->name('privacy.policy');
 
@@ -777,6 +665,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/create-slide', [GoogleSlidesController::class, 'createSlide'])->name('create.slide');
     // MAIN Tool
     Route::post('/education/generate-slides', [EducationController::class, 'generateSlidesFromContent'])->name('education.generate-slides');
+    Route::post('/tools/generate-image', [EducationController::class, 'generateImage'])->name('tools.generate.image');
 });
 
 // GITHUB SOCIALITE
@@ -795,7 +684,6 @@ Route::get('/ip-blocked', function () {
     return view('admin.error.ip_block_error_page');
 })->name('blocked.page');
 
-
 // Frontend Job Apply
 Route::post('/submit-form', [JobController::class, 'JobApplicationStore'])->name('job.apply');
 
@@ -810,6 +698,8 @@ Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps'
 
 // Fetch Tokens Usage
 Route::get('/user/monthly-usage', [UserController::class, 'getUserMonthlyUsage']);
+// Zoomable Credits/tokens 
+Route::get('/user/usage-timeseries', [UserController::class, 'getUserUsageTimeseries'])->middleware('auth');
 
 
 Route::group(['middleware' => ['auth']], function() {
@@ -818,9 +708,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::put('/events/drag/{event}', [EventController::class, 'updateDrag'])->name('events.update.drag');
     Route::delete('/events/{event}', [EventController::class, 'destroy']);
-
-
 });
+
+// NOTIFICATION
+Route::post('/notifications/mark-as-read', function () {
+    auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+    return response()->json(['success' => true]);
+})->name('notifications.markAsRead');
+
 
 Route::get('/stable-form', [StableDifussionController::class, 'index'])->name('stable.form');
 Route::post('/stable-image', [StableDifussionController::class, 'generate'])->name('stable.image');
@@ -876,7 +771,7 @@ Route::post('/generate-image-to-video', [StableDifussionController::class, 'gene
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
 
 // Collage Image Generator
-Route::get('/images-form', [ImageController::class, 'imageIndex'])->name('images.form');
+Route::get('/image-generator', [ImageController::class, 'imageIndex'])->name('images.form');
 Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 
 // Stable Diffusion Control(Sketch)
@@ -935,4 +830,3 @@ Route::view('success', 'backend.subscription.success')->name('success');
  Route::get('/{route}', [DynamicPageController::class, 'show'])
  ->where('route', '.*') // Matches all routes
  ->name('dynamic-pages.show');
-

@@ -12,7 +12,7 @@
 
 
 
-<section class="py-3 gradient-background-1 position-relative">
+<section class="py-3 gradient-bg-1 position-relative">
         <div class="row align-items-center">
             <div class="col-sm">
                 <div>
@@ -39,7 +39,7 @@
                         <li>
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $newTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $newTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   
@@ -131,14 +131,14 @@
                <div class="card explore-box card-animate">
                    <div class="explore-place-bid-img">
                        <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
-                           <img src="{{ asset('storage/' . $tool->image) }}?v={{ $tool->image_version }}" 
-                                alt="" class="card-img-top explore-img" loading="lazy" />
+                        <img class="card-img-top explore-img" src="{{ $tool->image }}" alt="" loading="lazy" />
+
                        </a>
            
                        @if(Auth::user()->role === 'admin')
                            @can('education.manageTools.edit')
-                               <a href="{{ route('tools.edit', $tool->id) }}" class="gradient-btn-edit">
-                                   Edit
+                               <a href="{{ route('tools.edit', $tool->id) }}" title="Edit" class="btn gradient-btn-edit">
+                                <i class="{{$buttonIcons['edit']}}"></i>
                                </a>
                            @endcan
                        
@@ -146,8 +146,8 @@
                                <form action="{{ route('tools.destroy', $tool->id) }}" method="POST" style="display:inline;">
                                    @csrf
                                    @method('DELETE')
-                                   <button type="submit" class="gradient-btn-delete" onclick="return confirm('Are you sure you want to delete this tool?');">
-                                       Delete
+                                   <button type="submit" class="gradient-btn-delete" title="Delete" onclick="return confirm('Are you sure you want to delete this tool?');">
+                                    <i class="{{$buttonIcons['delete']}}"></i>
                                    </button>
                                </form>
                            @endcan
@@ -184,7 +184,7 @@
                         <li>
                             <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ asset('storage/' . $popularTool->image) }}" alt="" class="avatar-xs rounded-3">
+                                    <img src="{{ $popularTool->image }}" alt="" class="avatar-xs rounded-3">
                                 </div>
                                 <div class="flex-grow-1 ms-2">
                                   

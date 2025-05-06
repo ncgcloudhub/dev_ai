@@ -15,6 +15,7 @@ use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
 use App\Models\UserActivityLog;
+use App\Models\UserFeedback;
 use App\Models\UserPageTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,16 @@ class UserManageController extends Controller
     public function ManageUser()
     {
         return view('backend.user.manage_user');
+    }
+   
+    public function ManageUserNotificationAdmin()
+    {
+        $notifications = \Illuminate\Notifications\DatabaseNotification::where('notifiable_type', \App\Models\User::class)
+                    ->latest()
+                    ->take(50)
+                    ->get();
+
+        return view('backend.user.manage_user_notification_admin', compact('notifications'));
     }
   
     public function manageBlock()
@@ -316,9 +327,25 @@ class UserManageController extends Controller
         return back()->with('success', 'Emails sent and logged successfully!');
     }
     
+    public function userfeedback()
+    {
+        $feedbacks = UserFeedback::with('user')->latest()->get();
+        return view('admin.userfeedback.manage_feedback', compact('feedbacks'));
+    }
 
+    public function updateUserFeedback(Request $request, $id)
+    {
+        $request->validate([
+            'admin_status' => 'nullable|string|max:255',
+            'admin_comment' => 'nullable|string|max:1000',
+        ]);
 
+        $feedback = UserFeedback::findOrFail($id);
+        $feedback->admin_status = $request->admin_status;
+        $feedback->admin_comment = $request->admin_comment;
+        $feedback->save();
 
-    
+        return redirect()->route('admin.feedback.index')->with('success', 'Feedback updated successfully.');
+    }
 
 }

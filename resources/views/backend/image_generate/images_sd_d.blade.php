@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
 @section('title') Image to Video @endsection
 @section('css')
-    <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection
 @section('content')
 @component('admin.components.breadcrumb')
-@slot('li_1') <a href="#">Image to Video Generation</a> @endslot
-@slot('title') Generate Animated Video @endslot
+@slot('li_1') <a href="#">Image Generation</a> @endslot
+@slot('title') Generate Image @endslot
 @endcomponent
 
 <style>
@@ -26,8 +26,23 @@
     } */
 
     .selected-background {
-        background: linear-gradient(to right, #700000, #3a0750); /* Choose a color you like for the selected card */
+        background: linear-gradient(to right, #ac13ac, #3a0750); /* Choose a color you like for the selected card */
     }
+
+    .model-switcher .model-btn {
+        min-width: 150px;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .model-switcher .model-btn.active {
+        background: linear-gradient(90deg, #7b2ff7, #f107a3);
+        color: white;
+        border-color: transparent;
+    }
+
 </style>
 
 <div class="container-fluid py-5 px-5">
@@ -57,10 +72,7 @@
                     </div>
                     <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
-                
                 <br>
-
-                
             </form>
 
             <!-- Stable Diffusion Form (Hidden by Default) -->
@@ -90,27 +102,27 @@
                     </div>
                     <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
-                
                 <br>
-                
             </form>
                      
-            
             {{-- USE CASES --}}
             <h3 class="text-white">Use Cases</h3>
             <p>Attain heightened levels of clarity and intricacy in your AI creations, photographs, and illustrations.</p>
-            <div class="d-flex justify-content-center flex-wrap">
-                <button class="use-case-btn" data-target="dalleForm">DALL-E</button>
-                <button class="use-case-btn" data-target="sdForm">Stable Diffusion</button>
-                <button class="use-case-btn" data-target="designForm">Design</button>
-                <button class="use-case-btn" data-target="foodForm">Food</button>
-                <button class="use-case-btn" data-target="moreForm">More</button>
+            <div class="model-switcher text-center my-4">
+                <p class="text-light mb-2 fw-semibold">Select Image Generation Model:</p>
+                <div class="btn-group toggle-model-buttons" role="group" aria-label="AI Model Switcher">
+                    <button type="button" class="btn btn-outline-light model-btn active" data-target="dalleForm">
+                        🎨 DALL·E
+                    </button>
+                    <button type="button" class="btn btn-outline-light model-btn" data-target="sdForm">
+                        🧠 Stable Diffusion
+                    </button>
+                </div>
             </div>
-
+            
             <br>
         </div>
 
-       
 
         <div class="col-md-6" id="image-container">    
                 <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
@@ -212,13 +224,13 @@
                 </select>
 
                 <select name="quality" class="form-select" id="quality" data-choices>
-                    <option disabled selected="">Enter Image Quality</option>
+                    <option disabled>Enter Image Quality</option>
                     <option value="standard">Standard</option>
                     <option value="hd">HD</option>
                 </select>
 
                 <select name="image_res" class="form-select upgrade_option" id="image_res" data-choices>
-                    <option disabled selected="">Enter Image Resolution</option>
+                    <option disabled >Enter Image Resolution</option>
                     <option value="1024x1024">1024x1024</option>
                     @if ($lastPackageId)
                         <option value="1792x1024">1792x1024</option>
@@ -240,10 +252,7 @@
             <div class="offcanvas-body">
                 <!-- Stable Diffusion specific options -->
                 <select name="modelVersion" id="modelVersion" class="form-select" data-choices onchange="syncModelVersion()">
-                    <option value="" disabled selected>Select Model</option>
-                    <option value="sd3-medium">sd3-medium</option>
-                    <option value="sd3-large-turbo">sd3-large-turbo</option>
-                    <option value="sd3-large">sd3-large</option>
+                    <option value="" disabled>Select Model</option>
                     <option value="sd3.5-medium">sd3.5-medium</option>
                     <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                     <option value="sd3.5-large">sd3.5-large</option>
@@ -252,7 +261,7 @@
                 </select>
 
                 <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
-                    <option value="" disabled selected>Select format</option>
+                    <option value="" disabled>Select format</option>
                     <option value="jpeg">JPEG</option>
                     <option value="png">PNG</option>
                     <option value="webp">WEBP</option>
@@ -335,7 +344,29 @@
 @section('script')
 
 <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+<script>
+    document.querySelectorAll('.model-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active state from all
+            document.querySelectorAll('.model-btn').forEach(btn => btn.classList.remove('active'));
+
+            // Set active on clicked
+            button.classList.add('active');
+
+            // Get target form ID
+            const target = button.getAttribute('data-target');
+
+            // Show the target form, hide the others
+            document.querySelectorAll('.image-form').forEach(form => {
+                form.style.display = form.id === target ? 'block' : 'none';
+            });
+        });
+    });
+</script>
+
 
 <!-- JavaScript to Toggle Forms -->
 <script>
@@ -370,7 +401,7 @@
             event.preventDefault(); // Prevent default form submission
             
              // Show the magic ball
-             showMagicBall('image');
+             showMagicBall('facts', 'image');
 
         
             // Create a FormData object
@@ -446,13 +477,12 @@
             e.preventDefault(); // Prevent the default form submission
     
              // Show the magic ball
-             showMagicBall('Image');
+             showMagicBall('facts', 'image');
 
             var formData = new FormData(this);
             // Manually append the offcanvas input values
             formData.append('modelVersion', $('#modelVersion').val());
             formData.append('imageFormat', $('#imageFormat').val());
-            
             
             $.ajax({
                 url: $(this).attr('action'), // Use the form's action URL
@@ -501,11 +531,27 @@
                     });
                 },
     
-                error: function(xhr) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     hideMagicBall();
-                    // Handle errors
-                    $('#responseMessage').html('<p>Error generating image. Please try again.</p>');
+
+                    let errorMessage = 'An error occurred.';
+
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                        errorMessage = jqXHR.responseJSON.error;
+                    } else if (jqXHR.responseText) {
+                        try {
+                            const parsed = JSON.parse(jqXHR.responseText);
+                            errorMessage = parsed.error || parsed.message || errorThrown;
+                        } catch (e) {
+                            errorMessage = errorThrown || 'A network error occurred.';
+                        }
+                    } else {
+                        errorMessage = errorThrown || 'A network error occurred.';
+                    }
+
+                    toastr.error(errorMessage);
                 }
+
             });
         });
     });

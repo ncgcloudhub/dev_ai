@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\GeneratedImage;
 use App\Models\SiteSettings;
 use App\Models\StableDiffusionGeneratedImage;
 use Illuminate\Support\Facades\Http;
@@ -25,14 +26,13 @@ class StableDiffusionService
         $this->siteSettings = SiteSettings::find(1);
     }
 
-    public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null)
+    public function generateImage($endpoint, $prompt, $imageFormat, $modelVersion, $mode = 'text-to-image', $baseImage = null, $strength = null, $style)
     {
         // Set up headers and payload
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
             'Accept' => 'image/*'
         ];
-    
         // Prepare the data payload
         $data = [
             'prompt' => $prompt,
@@ -40,7 +40,6 @@ class StableDiffusionService
             'model' => $modelVersion,
             'mode' => $mode,
         ];
-    
         // Include base image and strength for image-to-image mode
 
         // if ($mode === 'image-to-image') {
@@ -110,12 +109,12 @@ class StableDiffusionService
             $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($tempImagePath), new CreateBlockBlobOptions());
     
             // Save the image data to the database
-            $imageModel = StableDiffusionGeneratedImage::create([
+            $imageModel = GeneratedImage::create([
                 'user_id' => auth()->id(),
                 'prompt' => $prompt,
-                'status' => 'generated',
-                'in_frontend' => false,
-                'image_url' => $imagePath, // Save only the image name
+                'model' => $modelVersion,
+                'style' => $style,
+                'image' => $imagePath, // Save only the image name
                 'seed' => $seedId,
             ]);
     
@@ -133,10 +132,19 @@ class StableDiffusionService
                 'seed' => $seedId,  // Return the seed ID
             ];
         } else {
-            return response()->json([
-                'error' => $response->json() ?? 'An error occurred during image generation.'
-            ], $response->status());
-        }
+            $errorData = $response->json();
+        
+            $errorMessage = $errorData['errors'][0] 
+                ?? $errorData['error'] 
+                ?? $response->body() 
+                ?? 'An error occurred during image generation.';
+        
+            return [
+                'error' => $errorMessage,
+                'status' => $response->status(),
+            ];
+        }        
+        
     }
 
 }

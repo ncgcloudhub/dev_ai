@@ -160,7 +160,7 @@
                     {{-- Magic Ball --}}
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Magic Bal (Loading Screen)</h4>
+                            <h4 class="card-title mb-0">Magic Ball (Loading Screen)</h4>
                         </div><!-- end card header -->
 
                         <div class="card-body">
@@ -248,7 +248,9 @@
 
     <div class="col-12">
         <div class="text-end">
-            <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
+            <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                <i class="{{$buttonIcons['save']}}"></i>
+            </button>
         </div>
     </div>
 </form>
@@ -276,12 +278,49 @@
                         <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
+                <p style="font-style: italic">* First Generate a Hex Key and then Save</p>
 
                 <!-- Generate HexPass Button -->
-                <button type="button" class="btn btn-rounded gradient-btn-1" id="generateHexPassBtn">Generate</button>
+                <button type="submit" class="btn btn-rounded gradient-btn-generate mb-5" title="Generate">
+                    <i class="{{$buttonIcons['generate']}}"></i>
+                </button>
 
-                <button type="submit" class="btn btn-rounded gradient-btn-save">Save</button>
+                <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                    <i class="{{$buttonIcons['save']}}"></i>
+                </button>
             </form>
+        </div><!-- end card-body -->
+    </div><!-- end card -->
+    
+    {{-- Subscription Carry Over --}}
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Subscription Carry Over</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            <form method="POST" action="{{ route('admin.settings.rollover.update') }}">
+                @csrf
+            
+                <div class="mb-4">
+                    <label class="form-label"><strong>Renewal Behavior for Tokens & Credits</strong></label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rollover_enabled" id="carry_over" value="1" {{ old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="carry_over">Carry Over (+=)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="rollover_enabled" id="replace" value="0" {{ !old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="replace">Replace (=)</label>
+                    </div>
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </form>
+            
         </div><!-- end card-body -->
     </div><!-- end card -->
 </div>

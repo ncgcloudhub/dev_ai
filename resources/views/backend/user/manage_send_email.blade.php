@@ -39,7 +39,7 @@
                                 </a>
                             </td>
                             
-                            <td>{{ $email->created_at->format('d M Y \a\t g A') }}</td>
+                            <td>{{ $email->created_at->format('M d Y \a\t g A') }}</td>
 
                         </tr>
                     @endforeach

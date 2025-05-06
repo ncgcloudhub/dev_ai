@@ -108,7 +108,7 @@
                                                             <a href="{{ url($recent->route) }}">
                                                                 <h6 class="text-truncate fs-14">{{$recent->title}}</h6>
                                                             </a>
-                                                            <p class="text-muted mb-0">{{ $recent->created_at->format('d M Y') }}
+                                                            <p class="text-muted mb-0">{{ $recent->created_at->format('M d Y') }}
                                                             </p>
                                                         </div>
                                                     </div>

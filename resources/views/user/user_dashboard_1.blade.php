@@ -18,8 +18,9 @@
 <div class="row">
     {{-- First Col --}}
     <div class="col-xl-8 col-md-12">
-        <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
-        dir="ltr"></div>
+         {{-- <div id="column_chart" data-colors='["--vz-info", "--vz-primary", "--vz-success"]' class="apex-charts"
+        dir="ltr"></div> --}} 
+        <div id="line_chart_zoomable" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
         <div class="row">
             <div class="col-xl-6 col-md-12">
                 <div class="card overflow-hidden" style="border-color: #be06af">
@@ -29,8 +30,8 @@
                             <h4 class="gradient-text-1-bold">{{$user->name}}</h4>
                             <p class="mb-0 mt-2 pt-1 gradient-text-2">Empowering creativity with AI-driven content generation and innovative design tools.</p>
                             <div class="d-flex gap-3 mt-4">
-                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate">Chat Now</a>
-                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate">Create Your Imagination</a>
+                                <a href="{{route('main.chat.form')}}" class="gradient-btn-generate" title="Chat With AI">Chat Now</a>
+                                <a href="{{route('generate.image.view')}}" class="gradient-btn-generate" title="Generate Images Using AI">Create Your Imagination</a>
                             </div>
                         </div>
                         
@@ -84,13 +85,10 @@
                 <div class="swiper-slide">
                     <div class="card explore-box card-animate rounded">
                         <div class="explore-place-bid-img">
-                            <img src="{{ asset('storage/' . $tool->image) }}" alt=""
-                                class="img-fluid card-img-top explore-img" />
-                            <div class="bg-overlay"></div>
-                            <div class="place-bid-btn">
-                                <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}" class="btn btn-primary"><i
-                                        class="ri-auction-fill align-bottom me-1"></i>Explore</a>
-                            </div>
+                            <a href="{{ route('tool.show', ['id' => $tool->id, 'slug' => $tool->slug]) }}">
+                                <img src="{{ $tool->image }}" alt=""
+                                    class="img-fluid card-img-top explore-img" />
+                            </a>
                         </div>
                         <div class="card-body">
                             <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i>
@@ -195,7 +193,7 @@
                     <div>
                         <h5 class="mt-0 gradient-text-1-bold">AI Content Creator</h5>
                         <p>AI content creator tools provide ready-to-use templates, making it effortless to generate captivating content, saving time while ensuring creativity and consistency across various formats.</p>
-                        <a href="{{route('aicontentcreator.manage')}}" class="gradient-btn-generate">Generate Content</a>
+                        <a href="{{route('aicontentcreator.manage')}}" class="gradient-btn-generate" title="Generate Contents from Pre-defined Content Creator Tools Using AI">Generate Content</a>
                     </div>
                 </div>
             </div>
@@ -246,10 +244,40 @@
             </div><!-- end card body -->
         </div>
 
+        {{-- User Feedback Form --}}
+        <div class="card mt-4 border-color-purple">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1 gradient-text-1-bold">We Value Your Feedback</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('user.feedback.submit') }}">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="type" class="form-label gradient-text-2">Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="feedback">General Feedback</option>
+                            <option value="bug">Report a Bug</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label gradient-text-2">Your Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you think..." required></textarea>
+                    </div>
+
+                    
+                        <button type="submit" class="btn gradient-btn-generate" title="Submit">Submit Feedback</button>
+                   
+                </form>
+            </div>
+        </div>
+
+
     </div> 
 
 </div>
-
 
 @endsection
 @section('script')
@@ -283,6 +311,7 @@
 <script src="{{ URL::asset('build/js/pages/clever-creator-pie.init.js') }}"></script>
 
 <script src="{{ URL::asset('build/js/pages/apexcharts-column.init.js') }}"></script>
+<script src="{{ URL::asset('build/js/pages/apexcharts-line.init.js') }}"></script>
 
 <script type="text/javascript" async
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">

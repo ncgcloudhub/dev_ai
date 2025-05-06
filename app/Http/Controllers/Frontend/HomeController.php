@@ -339,7 +339,7 @@ class HomeController extends Controller
         }
 
         foreach ($input->all() as $name => $inpVal) {
-            if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
+            if ($name != '_token' && $name != 'project_id' && $name != 'max_completion_tokens') {
                 $name = '{' . $name . '}';
                 if (!is_null($inpVal) && !is_null($name)) {
                     $prompt = str_replace($name, $inpVal, $prompt);
@@ -377,7 +377,7 @@ class HomeController extends Controller
             "top_p" => $top_p_value,
             "frequency_penalty" => $frequency_penalty_value,
             "presence_penalty" => $presence_penalty_value,
-            'max_tokens' => $max_result_length_value,
+            'max_completion_tokens' => $max_result_length_value,
             'messages' => $messages,
         ]);
 
@@ -414,6 +414,12 @@ class HomeController extends Controller
     public function FrontendFreeEducation()
     {   
         $tools = EducationTools::get();
+        foreach ($tools as $image) {
+            $image->image = config('filesystems.disks.azure_site.url') 
+                . config('filesystems.disks.azure_site.container') 
+                . '/' . $image->image 
+                . '?' . config('filesystems.disks.azure_site.sas_token');
+        }
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
        
         return view('frontend.education', compact('tools', 'categories'));
@@ -424,6 +430,12 @@ class HomeController extends Controller
         // Retrieve the tool by slug
         $tool = EducationTools::where('slug', $slug)->firstOrFail();
     
+         // Append full Azure URL
+         $tool->image = config('filesystems.disks.azure_site.url') 
+         . config('filesystems.disks.azure_site.container') 
+         . '/' . $tool->image 
+         . '?' . config('filesystems.disks.azure_site.sas_token');
+
         $classes = GradeClass::with('subjects')->get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
     
@@ -634,7 +646,8 @@ class HomeController extends Controller
     {
 
         $privacy_policy = PrivacyPolicy::create([
-            'details' => $request->details
+            'details' => $request->details,
+            'status' => 'inactive',
         ]);
 
         return redirect()->back();
@@ -663,6 +676,22 @@ class HomeController extends Controller
 
         return redirect(route('manage.privacy.policy'))->with($notification);
     }
+
+    public function togglePolicyStatus(Request $request, $id)
+    {
+        $policy = PrivacyPolicy::findOrFail($id);
+    
+        // Toggle logic
+        $policy->status = $policy->status === 'active' ? 'inactive' : 'active';
+        $policy->save();
+    
+        return response()->json([
+            'status' => $policy->status,
+            'message' => 'Status updated successfully'
+        ]);
+    }
+    
+
 
     public function DeletePrivacyPolicy($id)
     {

@@ -14,7 +14,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-1">Role  <a href="{{ route('add.roles') }}" class="btn gradient-btn-9">Add</a></h5>
+                <h5 class="card-title mb-1">Role  <a href="{{ route('add.roles') }}" class="btn gradient-btn-add" title="Add Role"><i class="{{$buttonIcons['add']}}"></i></a></h5>
             </div>
 
             <div class="card-body">
@@ -31,18 +31,18 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>
-                                <a href="" class="fw-medium link-primary">{{ $item->name }}</a>
+                                <a href="" class="fw-medium link-primary gradient-text-2">{{ $item->name }}</a>
                             </td>
                            
                             <td>
                                 <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                    <a href="{{ route('edit.roles',$item->id) }}" class="text-primary d-inline-block edit-item-btn">
-                                        <i class="ri-pencil-fill fs-16"></i>
+                                    <a href="{{ route('edit.roles',$item->id) }}" class="gradient-btn-edit d-inline-block">
+                                        <i class="{{$buttonIcons['edit']}}"></i>
                                     </a>
                                 </li>
                                 <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                    <a class="text-danger d-inline-block remove-item-btn" href="{{ route('delete.roles',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
-                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                    <a class="gradient-btn-delete d-inline-block" href="{{ route('delete.roles',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Prompt')">
+                                        <i class="{{$buttonIcons['delete']}}"></i>
                                     </a>
                                 </li>
                             </td>

@@ -393,6 +393,13 @@
                                         <a href="{{route('add.page.seo')}}" class="nav-link sidebar-hover {{ request()->routeIs('add.page.seo') ? 'active' : '' }}" >Page SEO Add</a>
                                     </li>
                                     @endcan
+                                    {{-- needs can --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('expirations.index') }}" class="nav-link sidebar-hover {{ request()->routeIs('expirations.index') ? 'active' : '' }}">
+                                            Expiration Tracker
+                                        </a>
+                                    </li>
+                                   
                                     @can('settings.pageSEOAdd')
                                     <li class="nav-item">
                                         <a href="{{route('stripe.balance.report')}}" class="nav-link sidebar-hover {{ request()->routeIs('stripe.balance.report') ? 'active' : '' }}" >Report Stripe</a>
@@ -537,6 +544,9 @@
                                     <li class="nav-item">
                                         <a href="{{route('manage.user')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.user') ? 'active' : '' }}" >Manage User</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('manage.user.notification.admin')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.user.notification.admin') ? 'active' : '' }}" >Manage User Notification</a>
+                                    </li>
                                     @endcan
                                    
                                     @can('manageUser&Admin.manageAdmin')
@@ -553,7 +563,7 @@
                             
                                     @can('manageUser&Admin.manageFeedback')
                                     <li class="nav-item">
-                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.user.feedback.request') ? 'active' : '' }}" >Manage Feedback Request</a>
+                                        <a href="{{route('admin.user.feedback.request')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.user.feedback.request') ? 'active' : '' }}" >Manage Content Creator Feedback Request</a>
                                     </li>
                                     @endcan
                                    
@@ -562,6 +572,10 @@
                                         <a href="{{route('send.email.form')}}" class="nav-link sidebar-hover {{ request()->routeIs('send.email.form') ? 'active' : '' }}" >Send Email</a>
                                     </li>
                                     @endcan
+
+                                    <li class="nav-item">
+                                        <a href="{{route('admin.feedback.index')}}" class="nav-link sidebar-hover {{ request()->routeIs('admin.feedback.index') ? 'active' : '' }}" >Manage User Feedback</a>
+                                    </li>
                                   
                                 </ul>
                             </div>

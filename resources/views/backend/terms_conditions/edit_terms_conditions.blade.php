@@ -1,12 +1,11 @@
 @extends('admin.layouts.master')
-@section('title') Edit Terms & COnditions @endsection
+@section('title') Edit Terms & Conditions @endsection
 
 @section('content')
 @component('admin.components.breadcrumb')
 @slot('li_1') <a href="{{route('manage.terms.condition')}}">Terms & Conditions</a> @endslot
 @slot('title') Edit @endslot
 @endcomponent
-
 
 <div class="row">
     <div class="col-xxl-6">
@@ -28,12 +27,12 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                {!! $item->details !!}
+                                {!! \Illuminate\Support\Str::limit(strip_tags($item->details), 50, '...') !!}
                             </td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
-                                    <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
-                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                    <a href="{{ route('edit.terms.condition', $item->id) }}" class="fs-15 gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a> 
+                                    <a href="{{ route('delete.terms.condition',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Condition')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a> 
                                 </div>
                             </td>
                           
@@ -60,7 +59,7 @@
     
                         <div class="col-md-12">
                             <label class="form-label">Details</label>
-                            <textarea name="details" value="{{$terms_conditions->details}}" class="form-control" id="tinymceExample" rows="10">{{$terms_conditions->details}}</textarea>
+                            <textarea name="details" value="{{$terms_conditions->details}}" class="form-control" id="myeditorinstance">{{$terms_conditions->details}}</textarea>
                         </div>
                 </div>
             </div>
@@ -68,7 +67,9 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Update">
+                <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Update">
+                    <i class="{{$buttonIcons['save']}}"></i>
+                </button>
             </div>
         </div>
     </form>
@@ -77,11 +78,34 @@
 
 @endsection
 
-@include('admin.layouts.datatables')
-
-
 @section('script')
 
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+     tinymce.init({
+        selector: 'textarea#myeditorinstance',
+        branding: false, // Removes "Build with TinyMCE"
+        plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
+        toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
+        autosave_restore_when_empty: true,
+        height: 400,
+        statusbar: true, // Keep the status bar for resizing
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        },
+        init_instance_callback: function (editor) {
+            setTimeout(function () {
+                document.querySelector('.tox-statusbar__path').style.display = 'none'; // Hide <p> indicator
+            }, 100);
+        }
+    });
+</script>
+
+@include('admin.layouts.datatables')
+
 
 @endsection

@@ -19,12 +19,14 @@ class AISettingsController extends Controller
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
+            'displayname' => 'required|string',
             'openaimodel' => 'required|string',
         ]);
 
         // Store the item in the database
         $item = new AISettings();
       
+        $item->displayname = $validatedData['displayname'];
         $item->openaimodel = $validatedData['openaimodel'];
 
         $item->save();
@@ -47,6 +49,7 @@ class AISettingsController extends Controller
         // Validate the incoming request data
         $validatedData = $request->validate([
             
+            'displayname' => 'required|string',
             'openaimodel' => 'required|string',
            
         ]);
@@ -55,6 +58,7 @@ class AISettingsController extends Controller
         $item = AISettings::findOrFail($request->id);
 
         // Update the text fields
+        $item->displayname = $validatedData['displayname'];
         $item->openaimodel = $validatedData['openaimodel'];
       
         // Save the changes to the about us record

@@ -11,6 +11,7 @@ use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\DB;
 use Laravel\Cashier\Billable;
+use Stripe\Stripe;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -140,9 +141,4 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(StableDiffusionImageLike::class);
 }
 
-    
-
-   
-
-    
 }

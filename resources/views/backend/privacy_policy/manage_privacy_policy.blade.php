@@ -20,6 +20,7 @@
                         <tr>
                             <th scope="col">Sl.</th>
                             <th scope="col">Details</th>
+                            <th scope="col">Version</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -28,17 +29,26 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                {!! $item->details !!}
+                                {!! \Illuminate\Support\Str::limit(strip_tags($item->details), 50, '...') !!}
                             </td>
+                            
+                            <td><span class="badge rounded-pill border border-dark text-body">v{{ $item->created_at->format('dmy') }}</span></td>
                             <td>
                                 <div class="hstack gap-3 flex-wrap"> 
                                     @can('settings.privacyPolicy.edit')
-                                        <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15"><i class="ri-edit-2-line"></i></a> 
+                                        <a href="{{ route('edit.privacy.policy', $item->id) }}" class="fs-15 gradient-btn-edit" title="Edit"><i class="{{$buttonIcons['edit']}}"></i></a> 
                                     @endcan
                                     
                                     @can('settings.privacyPolicy.delete')
-                                        <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="link-danger fs-15"><i class="ri-delete-bin-line"></i></a> 
+                                        <a href="{{ route('delete.privacy.policy',$item->id) }}" onclick="return confirm('Are you sure you want to delete this Policy')" class="gradient-btn-delete fs-15" title="Delete"><i class="{{$buttonIcons['delete']}}"></i></a> 
                                     @endcan
+                                    <button 
+                                        class="btn btn-sm toggle-status-btn {{ $item->status === 'active' ? 'gradient-btn-save' : 'gradient-btn-delete' }}" 
+                                        data-id="{{ $item->id }}">
+                                        <span class="btn-text">{{ $item->status === 'active' ? 'Deactivate' : 'Activate' }}</span>
+                                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    </button>
+
                                    
                                 </div>
                             </td>
@@ -64,7 +74,7 @@
     
                         <div class="col-md-12">
                             <label class="form-label">Details</label>
-                            <textarea name="details" class="form-control" id="tinymceExample" rows="10"></textarea>
+                            <textarea id="myeditorinstance" class="form-control" name="details" required></textarea>
                         </div>
                 </div>
             </div>
@@ -72,7 +82,9 @@
     
         <div class="col-12">
             <div class="text-end">
-                <input type="submit" class="btn btn-rounded gradient-btn-save mb-5" value="Save">
+                <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                    <i class="{{$buttonIcons['save']}}"></i>
+                </button>
             </div>
         </div>
     </form>
@@ -81,11 +93,82 @@
 
 @endsection
 
-@include('admin.layouts.datatables')
 
 
 @section('script')
-
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="https://cdn.tiny.cloud/1/du2qkfycvbkcbexdcf9k9u0yv90n9kkoxtth5s6etdakoiru/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+     tinymce.init({
+        selector: 'textarea#myeditorinstance',
+        branding: false, // Removes "Build with TinyMCE"
+        plugins: 'code table lists image media autosave emoticons fullscreen preview quickbars wordcount codesample',
+        toolbar: 'undo redo | blocks fontsizeinput | bold italic backcolor emoticons | alignleft aligncenter alignright alignjustify blockquote | bullist numlist outdent indent | removeformat | code codesample fullscreen | image media | restoredraft preview quickimage wordcount',
+        autosave_restore_when_empty: true,
+        height: 400,
+        statusbar: true, // Keep the status bar for resizing
+        setup: function (editor) {
+            editor.on('change', function () {
+                tinymce.triggerSave();
+            });
+        },
+        init_instance_callback: function (editor) {
+            setTimeout(function () {
+                document.querySelector('.tox-statusbar__path').style.display = 'none'; // Hide <p> indicator
+            }, 100);
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.toggle-status-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = button.getAttribute('data-id');
+                const btnText = button.querySelector('.btn-text');
+                const spinner = button.querySelector('.spinner-border');
+
+                // Show loading spinner
+                btnText.classList.add('d-none');
+                spinner.classList.remove('d-none');
+
+                fetch(`/privacy-policy/${id}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update button text and color
+                    if (data.status === 'active') {
+                        button.classList.remove('btn-success');
+                        button.classList.add('btn-warning');
+                        btnText.textContent = 'Deactivate';
+                    } else {
+                        button.classList.remove('btn-warning');
+                        button.classList.add('btn-success');
+                        btnText.textContent = 'Activate';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong!');
+                })
+                .finally(() => {
+                    // Hide spinner and show text again
+                    spinner.classList.add('d-none');
+                    btnText.classList.remove('d-none');
+                });
+            });
+        });
+    });
+</script>
+
+@include('admin.layouts.datatables')
+
 
 @endsection

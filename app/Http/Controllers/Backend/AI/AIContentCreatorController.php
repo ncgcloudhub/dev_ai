@@ -602,7 +602,7 @@ class AIContentCreatorController extends Controller
 
 
         foreach ($input->all() as $name => $inpVal) {
-            if ($name != '_token' && $name != 'project_id' && $name != 'max_tokens') {
+            if ($name != '_token' && $name != 'project_id' && $name != 'max_completion_tokens') {
                 $name = '{' . $name . '}';
                 if (!is_null($inpVal) && !is_null($name)) {
                     $prompt = str_replace($name, $inpVal, $prompt);
@@ -647,7 +647,7 @@ class AIContentCreatorController extends Controller
             "top_p" => floatval($top_p_value),
             "frequency_penalty" => floatval($frequency_penalty_value),
             "presence_penalty" => floatval($presence_penalty_value),
-            'max_tokens' => $maxTokens,
+            'max_completion_tokens' => $maxTokens,
             'messages' => $messages,
         ]);
 
@@ -743,8 +743,6 @@ public function provider()
     return $google->redirect();
 }
 
-
-
 public function callbackHandel(Request $request)
 {
     // Log session state and request state
@@ -777,7 +775,11 @@ public function callbackHandel(Request $request)
     $token = [
         'access_token' => $googleUser->token,
         'refresh_token' => $googleUser->refreshToken ?? ($existingToken['refresh_token'] ?? null), // preserve old refresh_token
+<<<<<<< HEAD
         'expires_in' => 86400,
+=======
+        'expires_in' => 86400, // 1 day
+>>>>>>> 99c3dd396ec9f20df862da37db8263d89cd288ec
         'created' => time(),
     ];
 
@@ -841,7 +843,6 @@ public function callbackHandel(Request $request)
     Auth::login($user);
     return redirect('/generate/image/view');
 }
-
 
 
     //   GITHUB

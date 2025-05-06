@@ -1,7 +1,82 @@
+
+
 <style>
-    .btn i {
+        .btn i {
     pointer-events: none;  /* Prevents icon clicks from stopping the button's click */
 }
+
+    /* Table styling */
+    .table-responsive {
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        background: white;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-align: left;
+        padding: 12px 15px;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table td {
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        vertical-align: top;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0,0,0,.02);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.05);
+    }
+
+    /* Responsive table adjustments */
+    @media (max-width: 768px) {
+        .table {
+            font-size: 0.85rem;
+        }
+        .table th, 
+        .table td {
+            padding: 8px 10px;
+        }
+    }
+
+    /* Code block styling */
+    .code-block {
+        position: relative;
+        margin: 1rem 0;
+        border-radius: 6px;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    .code-block pre {
+        margin: 0;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    .code-block .copy-button {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .code-block:hover .copy-button {
+        opacity: 1;
+    }
 </style>
 
 <script>
@@ -563,21 +638,34 @@ messageInput.addEventListener('paste', handleImagePaste);
         }
 
         function updateAssistantMessage() {
-            try {
-                const formattedContent = formatContent(assistantMessageContent);
-                assistantMessageElement.innerHTML = formattedContent;
+    try {
+        const formattedContent = formatContent(assistantMessageContent);
+        assistantMessageElement.innerHTML = formattedContent;
 
-                assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
+        // Highlight code blocks
+        assistantMessageElement.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+        });
 
-                let conversationList = document.getElementById('users-conversation');
-                let lastMessage = conversationList.lastElementChild;
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            } catch (e) {
-                console.error('Error parsing Markdown:', e);
+        // Add responsive behavior to tables
+        assistantMessageElement.querySelectorAll('table').forEach(table => {
+            if (!table.classList.contains('table')) {
+                table.classList.add('table', 'table-bordered', 'table-striped', 'table-hover');
+                const wrapper = document.createElement('div');
+                wrapper.className = 'table-responsive';
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
             }
-        }
+        });
+
+        // Scroll to the latest message
+        let conversationList = document.getElementById('users-conversation');
+        let lastMessage = conversationList.lastElementChild;
+        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    } catch (e) {
+        console.error('Error parsing Markdown:', e);
+    }
+}
 
         function read() {
             reader.read().then(({ done, value }) => {
@@ -897,45 +985,55 @@ document.addEventListener('click', function(event) {
 }
 
 
-    function formatContent(content) {
-    // Preprocess content to replace triple backticks with code block tags
-    content = content.replace(/```(\w+)?([\s\S]*?)```/g, function(_, lang, code) {
-        // If a language is provided, use it, otherwise default to 'plaintext'
-        lang = lang ? lang.trim().toLowerCase() : 'plaintext';
-        // Sanitize code to prevent XSS
-        code = DOMPurify.sanitize(code);
-        return `<pre><code class="hljs ${lang}">${code}</code></pre>`;
-    });
-
-    // Use marked.js to parse Markdown to HTML
+function formatContent(content) {
+    // First create a custom renderer for marked.js
     const renderer = new marked.Renderer();
-
-    // Configure renderer to use highlight.js for code blocks
-    renderer.code = function(code, language) {
-        console.log('Language detected:', language); // Debugging line
-        if (!language) {
-            language = 'plaintext';
-        } else {
-            language = language.trim().toLowerCase();
-            language = hljs.getLanguage(language) ? language : 'plaintext';
-        }
-        const highlighted = hljs.highlight(language, code).value;
-        return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+    
+    // Custom table rendering with better styling
+    renderer.table = (header, body) => {
+        return `
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>${header}</thead>
+                <tbody>${body}</tbody>
+            </table>
+        </div>`;
     };
 
+    // Custom code block rendering with copy button
+    renderer.code = function(code, language) {
+        if (!language) language = 'plaintext';
+        language = language.trim().toLowerCase();
+        
+        // Check if language is supported by highlight.js
+        const validLang = hljs.getLanguage(language) ? language : 'plaintext';
+        const highlighted = hljs.highlight(validLang, code).value;
+        
+        return `
+        <div class="code-block position-relative">
+            <button class="btn btn-sm btn-outline-secondary copy-button position-absolute" style="right: 5px; top: 5px;">
+                Copy
+            </button>
+            <pre><code class="hljs ${validLang}">${highlighted}</code></pre>
+        </div>`;
+    };
+
+    // Set marked.js options
     marked.setOptions({
         renderer: renderer,
-        breaks: true, // Enable line breaks
-        gfm: true,    // Enable GitHub Flavored Markdown
+        breaks: true,
+        gfm: true,
+        tables: true, // Enable GitHub Flavored Markdown tables
     });
 
+    // First sanitize the content
+    content = DOMPurify.sanitize(content);
+
+    // Then parse markdown to HTML
     let formattedContent = marked.parse(content);
 
-    // Sanitize the HTML to prevent XSS attacks
-    formattedContent = DOMPurify.sanitize(formattedContent);
-
     return formattedContent;
-    }
+}
 
 
 

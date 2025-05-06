@@ -271,7 +271,7 @@
     $(document).ready(function() {
         $('form').submit(function(event) {
             event.preventDefault(); // Prevent default form submission
-            showMagicBall('image'); // Show the magic ball loader
+            showMagicBall('facts', 'image');
 
             // Show loader
         $('#loader').removeClass('d-none');
