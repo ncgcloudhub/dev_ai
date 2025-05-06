@@ -331,29 +331,34 @@
     {{-- FOR SUBJECTS after clicking Class --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Class click handler to load subject tabs
+            // Load subject tabs
             document.querySelectorAll('.class-item').forEach(classItem => {
                 classItem.addEventListener('click', function () {
                     const subjects = this.getAttribute('data-subjects');
                     const parsedSubjects = JSON.parse(subjects);
-    
+        
                     const tabList = document.querySelector('.nav-tabs-custom');
                     const tabContent = document.querySelector('.tab-content');
                     tabList.innerHTML = '';
                     tabContent.innerHTML = '';
-    
+        
                     if (parsedSubjects.length > 0) {
-                        parsedSubjects.forEach(subject => {
-                            const tab = document.createElement('li');
-                            tab.classList.add('nav-item');
-    
-                            tab.innerHTML = `
-                                <button class="nav-link fw-semibold subject-tab" data-subject-id="${subject.id}">
-                                    ${subject.name}
-                                </button>
+                        parsedSubjects.forEach((subject, index) => {
+                            const li = document.createElement('li');
+                            li.classList.add('nav-item');
+
+                            li.innerHTML = `
+                                <a class="nav-link subject-tab ${index === 0 ? 'active' : ''}" 
+                                data-subject-id="${subject.id}" 
+                                data-bs-toggle="pill" 
+                                href="#" 
+                                role="tab">
+                                ${subject.name}
+                                </a>
                             `;
-                            tabList.appendChild(tab);
+                            tabList.appendChild(li);
                         });
+
                     } else {
                         tabList.innerHTML = `
                             <li class="nav-item">
@@ -363,12 +368,23 @@
                     }
                 });
             });
-    
-            // Delegate subject tab clicks using event delegation
+        
+            // Handle subject tab click
             document.querySelector('.nav-tabs-custom').addEventListener('click', function (e) {
                 if (e.target && e.target.classList.contains('subject-tab')) {
                     const subjectId = e.target.getAttribute('data-subject-id');
-    
+        
+                    // Show loading spinner
+                    const contentDisplay = document.querySelector('.tab-content');
+                    contentDisplay.innerHTML = `
+                        <div class="d-flex justify-content-center my-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    `;
+        
+                    // Fetch contents
                     fetch('{{ route('education.getContentsBySubject.library') }}', {
                         method: 'POST',
                         headers: {
@@ -379,73 +395,81 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        const contentDisplay = document.querySelector('.tab-content');
-                        contentDisplay.innerHTML = '';
-    
+                        contentDisplay.innerHTML = ''; // Clear loader
+        
                         if (data.contents.length > 0) {
+                            const row = document.createElement('div');
+                            row.classList.add('row', 'g-4');
+        
                             data.contents.forEach(content => {
-                                const contentElement = document.createElement('div');
-                                contentElement.classList.add('col-12', 'col-md-6', 'col-lg-3');
-    
+                                const col = document.createElement('div');
+                                col.classList.add('col-12', 'col-md-6', 'col-xl-3');
+        
                                 const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
                                     day: 'numeric', month: 'short', year: 'numeric'
                                 });
+        
                                 const downloadUrl = `{{ url('education/content') }}/${content.id}/download`;
-    
-                                contentElement.innerHTML = `
-                                    <div class="neomorphic-card" data-id="${content.id}">
+        
+                                col.innerHTML = `
+                                    <div class="card card-height-100">
                                         <div class="card-body">
-                                            <h5 class="mb-0">${content.topic}</h5>
-                                            <p class="text-muted">${content.subject.name}</p>
-                                            <p class="text-muted">${createdAt}</p>
-    
-                                            <div class="form-check">
+                                            <h6 class="text-primary mb-2">${content.topic}</h6>
+                                            <p class="text-muted mb-1"><i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}</p>
+                                            <p class="text-muted"><i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}</p>
+        
+                                            <div class="form-check mb-1">
                                                 <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
                                                 <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
                                             </div>
-                                            <div class="form-check">
+                                            <div class="form-check mb-1">
                                                 <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
                                                 <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
                                             </div>
-                                            <div class="form-check">
+                                            <div class="form-check mb-3">
                                                 <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
                                                 <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
                                             </div>
-    
-                                            <div class="d-flex gap-2 justify-content-center mb-3">
-                                                <button type="button" class="btn avatar-xs p-0 neomorphic-avatar" 
-                                                        data-bs-toggle="tooltip" 
-                                                        data-bs-placement="top" 
-                                                        title="Download" 
-                                                        onclick="downloadContent(${content.id})">
-                                                    <span class="avatar-title rounded-circle bg-light text-body">
-                                                        <i class="ri-download-line"></i>
-                                                    </span>
+        
+                                            <div class="d-flex justify-content-between">
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
+                                                    <i class="ri-download-line"></i> Download
                                                 </button>
-                                            </div>
-                                            <div>
-                                                <button type="button" class="btn btn-neomorphic" onclick="fetchContent(${content.id})">
-                                                    <i class="ri-add-fill me-1 align-bottom"></i>View
+                                                <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
+                                                    <i class="ri-eye-line"></i> View
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 `;
-                                contentDisplay.appendChild(contentElement);
+        
+                                row.appendChild(col);
                             });
+        
+                            contentDisplay.appendChild(row);
                         } else {
-                            contentDisplay.innerHTML = '<p>No content available for this subject.</p>';
+                            contentDisplay.innerHTML = `
+                                <div class="text-center text-muted py-5">
+                                    <i class="ri-folder-warning-line display-4"></i>
+                                    <p class="mt-3">No content available for this subject.</p>
+                                </div>
+                            `;
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        document.querySelector('.tab-content').innerHTML = '<p class="text-danger">Error loading content.</p>';
+                        contentDisplay.innerHTML = `
+                            <div class="text-center text-danger py-5">
+                                <i class="ri-error-warning-line display-4"></i>
+                                <p class="mt-3">Error loading content.</p>
+                            </div>
+                        `;
                     });
                 }
             });
         });
-    </script>
-    
+        </script>
+        
         
     
 @endsection
