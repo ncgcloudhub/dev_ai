@@ -65,7 +65,8 @@
     {{-- Filter End --}}
 
     {{-- SUBJECTS Start --}}
-    <div class="row g-4">
+    <div class="row">
+        <h5 class="mt-3 gradient-text-1-bold">Subjects</h5>
         @foreach ($subjects as $subject)
         <div class="col-xxl-4">
             <div class="card bg-success text-white text-center p-3">
