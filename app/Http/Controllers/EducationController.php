@@ -173,7 +173,7 @@ class EducationController extends Controller
     {
         $query = EducationContent::query();
 
-        // Check the route or a specific flag to apply different filters
+        // // Check the route or a specific flag to apply different filters
         if (request()->routeIs('education.tools.contents')) {
             // For /education/tools/library route
             $query->where('add_to_library', true); // Filter by added to library
@@ -223,6 +223,34 @@ class EducationController extends Controller
 
         return response()->json($results);
     }
+
+    public function searchLibrary(Request $request)
+    {
+        // Get the search query
+        $query = $request->get('q');
+
+        // Validate the query
+        if ($query) {
+            // Convert the query to lowercase to ensure case-insensitive search
+            $query = strtolower($query);
+
+            // Fetch the contents that match the search query (by topic or subject name)
+            $contents = EducationContent::with('subject')
+                ->whereRaw('LOWER(topic) LIKE ?', ['%' . $query . '%'])
+                ->orWhereRaw('LOWER(generated_content) LIKE ?', ['%' . $query . '%'])
+                ->orWhereHas('subject', function ($q) use ($query) {
+                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%']);
+                })
+                ->get();
+        } else {
+            // If no query is provided, return an empty array
+            $contents = [];
+        }
+
+        // Return the results as JSON
+        return response()->json(['contents' => $contents]);
+    }
+
 
     public function getContent($id)
 {

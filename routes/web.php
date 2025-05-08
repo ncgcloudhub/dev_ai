@@ -438,6 +438,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('admin.permission:education.educationWizard');      
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');     
         Route::get('/search', [EducationController::class, 'search'])->name('educationContent.search');  
+        Route::get('/library/search', [EducationController::class, 'searchLibrary'])->name('educationLibrary.search');  
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');

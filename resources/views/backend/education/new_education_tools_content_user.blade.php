@@ -102,6 +102,7 @@
 
     {{-- 2nd Col --}}
     <div class="col-xxl-8">
+        <div id="contentDisplay"></div>
         <div class="card">
             <div class="card-header border-0">
                 <div class="row g-4">
@@ -109,7 +110,7 @@
                     <div class="col-sm">
                         <div class="d-flex justify-content-sm-end">
                             <div class="search-box ms-2">
-                                <input type="text" class="form-control" id="searchProductList" placeholder="Search Edu Contents...">
+                                <input type="text" class="form-control" id="searchContent" placeholder="Search Edu Contents...">
                                 <i class="ri-search-line search-icon"></i>
                             </div>
                         </div>
@@ -556,7 +557,6 @@
         })
         .catch(error => console.error('Error:', error));
     }
-
         // Function to handle downloading with options
         function downloadContent(contentId) {
             const includeGrade = document.getElementById(`include-grade-${contentId}`).checked;
@@ -573,11 +573,99 @@
             window.location.href = downloadUrl;
         }
 
-     
-    
+
     </script>
         
-        
+
+        <script>
+
+    let searchTimeout = null;
+
+    document.getElementById('searchContent').addEventListener('input', function () {
+        const query = this.value.trim();
+
+        // Debounce the input (wait 300ms after last key press)
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            if (query.length > 0) {
+                fetch(`/education/library/search?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        renderContents(data.contents);
+                    })
+                    .catch(err => {
+                        console.error('Search error:', err);
+                        renderContents([]); // Show no results
+                    });
+            } else {
+                // If input is cleared, clear content
+                renderContents([]);
+            }
+        }, 300);
+    });
+
+    function renderContents(contents) {
+        const contentDisplay = document.getElementById('contentDisplay');
+        contentDisplay.innerHTML = '';
+
+        if (contents.length > 0) {
+            const row = document.createElement('div');
+            row.classList.add('row', 'g-4');
+
+            contents.forEach(content => {
+                const col = document.createElement('div');
+                col.classList.add('col-12', 'col-md-6', 'col-xl-3');
+
+                const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
+
+                col.innerHTML = `
+                    <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
+                        <div class="position-relative">
+                            <img class="card-img-top img-fluid" src="/path/to/img.jpg" alt="Card image" style="height: 180px; object-fit: cover;">
+                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 px-3 py-1">
+                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="text-primary mb-2">${content.topic}</h6>
+                            <p class="text-muted mb-1"><i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}</p>
+                            <p class="text-muted"><i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}</p>
+
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" id="include-grade-${content.id}" checked>
+                                <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
+                            </div>
+                            <div class="form-check mb-1">
+                                <input class="form-check-input" type="checkbox" id="include-subject-${content.id}" checked>
+                                <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="include-date-${content.id}" checked>
+                                <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white d-flex">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
+                                <i class="ri-download-line"></i>
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
+                                <i class="ri-eye-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                row.appendChild(col);
+            });
+
+            contentDisplay.appendChild(row);
+        } else {
+            contentDisplay.innerHTML = `<div class="text-center text-muted">No contents found.</div>`;
+        }
+    }
+        </script>
     
 @endsection
 
