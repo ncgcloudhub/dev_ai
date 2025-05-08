@@ -129,7 +129,7 @@
         <div class="card">
             <div class="d-flex justify-content-sm-end">
                 <div class="search-box ms-2">
-                    <input type="text" class="form-control" id="searchContent" placeholder="Search Edu Contents...">
+                    <input type="text" class="form-control border-color-purple" id="searchContent" placeholder="Search Edu Contents...">
                     <i class="ri-search-line search-icon"></i>
                 </div>
             </div>
@@ -176,7 +176,7 @@
                 </div>
                 <div class="card-body">
                   
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
                         <span class="text-muted">Sold: 4187</span>
@@ -197,7 +197,7 @@
                 </div>
                 <div class="card-body">
                   
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
                         <span class="text-muted">Sold: 4187</span>
@@ -218,7 +218,7 @@
                 </div>
                 <div class="card-body">
                   
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
                         <span class="text-muted">Sold: 4187</span>
@@ -239,29 +239,7 @@
                 </div>
                 <div class="card-body">
                   
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
-                    <div>
-                        <span class="text-muted float-end">Available: 436</span>
-                        <span class="text-muted">Sold: 4187</span>
-                        <div class="progress progress-sm mt-2">
-                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div><!-- end -->
-
-            <div class="swiper-slide">
-               <div class="card explore-box card-animate">
-                <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
-                    <div class="discount-time">
-                        <h5 id="auction-time-1" class="mb-0 text-white"></h5>
-                    </div>
-                </div>
-                <div class="card-body">
-                  
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
                         <span class="text-muted">Sold: 4187</span>
@@ -283,7 +261,29 @@
                 </div>
                 <div class="card-body">
                   
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
+                    <div>
+                        <span class="text-muted float-end">Available: 436</span>
+                        <span class="text-muted">Sold: 4187</span>
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- end -->
+
+            <div class="swiper-slide">
+               <div class="card explore-box card-animate">
+                <div class="position-relative rounded overflow-hidden">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
+                    <div class="discount-time">
+                        <h5 id="auction-time-1" class="mb-0 text-white"></h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                  
+                    <h6 class="fs-15 mb-3 gradient-text-2"><a href="apps-nft-item-details" class="text-body">Clever Creator Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
                         <span class="text-muted">Sold: 4187</span>
@@ -371,7 +371,7 @@
                             li.classList.add('nav-item');
 
                             li.innerHTML = `
-                                <a class="nav-link subject-tab ${index === 0 ? 'active' : ''}" 
+                                <a class="nav-link subject-tab gradient-text-2 ${index === 0 ? 'active' : ''}" 
                                 data-subject-id="${subject.id}" 
                                 data-bs-toggle="pill" 
                                 href="#" 
