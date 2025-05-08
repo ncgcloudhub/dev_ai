@@ -93,7 +93,30 @@
             </div>
         </div>
         
-</div>
+    </div>
+
+    {{-- Authors and writer start--}}
+    <div class="row">
+    <h5 class="mt-3 gradient-text-1-bold">Authors and Writers</h5>
+    @foreach ($educationContents as $content)
+    <div class="col-xxl-6">
+        <div class="card card-body">
+            <div class="d-flex mb-4 align-items-center">
+                <div class="flex-shrink-0">
+                    <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-sm rounded-circle">
+                </div>
+                <div class="flex-grow-1 ms-2">
+                    <h5 class="card-title mb-1">Author: {{ $content->user->name }}</h5>
+                    <p class="text-muted mb-0">({{ $content->user->role ?? 'Author' }})</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="btn btn-primary btn-sm">See Details</a>
+        </div>
+
+    </div>
+    @endforeach
+    </div>
+    {{-- authors and writers END --}}
     
 
 
