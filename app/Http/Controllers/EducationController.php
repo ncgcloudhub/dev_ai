@@ -88,6 +88,33 @@ class EducationController extends Controller
             'classes' => $classes,
         ]);
     }
+   
+    public function toolsLibraryold()
+    {
+        $userId = auth()->id(); 
+
+        $educationContents = EducationContent::where('add_to_library', true)
+            ->with('gradeClass', 'subject')
+            ->get();
+    
+        // Group by grade and get related subjects
+        $grades = $educationContents->groupBy('grade_id');
+        $gradeIds = $grades->keys(); // Get grade IDs
+    
+        // Get classes with subjects related to those grades
+        $classes = GradeClass::with(['subjects' => function ($query) use ($gradeIds) {
+            $query->whereIn('id', function ($subQuery) use ($gradeIds) {
+                $subQuery->select('subject_id')
+                    ->from('education_contents')
+                    ->whereIn('grade_id', $gradeIds)
+                    ->distinct();
+            });
+        }])->whereIn('id', $gradeIds)->get();
+    
+    return view('backend.education.education_tools_content_user', [
+            'classes' => $classes,
+        ]);
+    }
 
     public function getUserContents()
     {

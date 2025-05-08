@@ -37,12 +37,12 @@
                     <div>
                         <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Grade/Class</p>
                         <ul class="list-unstyled mb-0 filter-list">
-                            @foreach ($classes as $class)
+                            @foreach ($classes as $index => $class)
                                 <li>
-                                    <a href="#" class="d-flex py-1 align-items-center class-item"
-                                       data-id="{{ $class->id }}"
-                                       data-grade="{{ $class->grade }}"
-                                       data-subjects='@json($class->subjects)'>
+                                    <a href="#" class="d-flex py-1 align-items-center class-item {{ $loop->first ? 'active' : '' }}"
+                                    data-id="{{ $class->id }}"
+                                    data-grade="{{ $class->grade }}"
+                                    data-subjects='@json($class->subjects)'>
                                         <div class="flex-grow-1">
                                             <h5 class="fs-13 mb-0 listname">{{ $class->grade }}</h5>
                                         </div>
@@ -54,6 +54,7 @@
                                     </a>
                                 </li>
                             @endforeach
+
                         </ul>
                         
                     </div>
@@ -241,24 +242,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#productnav-all"
-                                    role="tab">
-                                    All <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">12</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#productnav-published"
-                                    role="tab">
-                                    Published <span class="badge bg-danger-subtle text-danger align-middle rounded-pill ms-1">5</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#productnav-draft"
-                                    role="tab">
-                                    Draft
-                                </a>
-                            </li>
+                          
                         </ul>
                     </div>
                     <div class="col-auto">
@@ -274,26 +258,7 @@
             <div class="card-body">
 
                 <div class="tab-content text-muted">
-                    <div class="tab-pane active" id="productnav-all" role="tabpanel">
-                        <div id="table-product-list-all" class="table-card gridjs-border-none"></div>
-                    </div>
-                    <!-- end tab pane -->
-
-                    <div class="tab-pane" id="productnav-published" role="tabpanel">
-                        <div id="table-product-list-published" class="table-card gridjs-border-none"></div>
-                    </div>
-                    <!-- end tab pane -->
-
-                    <div class="tab-pane" id="productnav-draft" role="tabpanel">
-                        <div class="py-4 text-center">
-                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
-                                trigger="loop" colors="primary:#405189,secondary:#0ab39c"
-                                style="width:72px;height:72px">
-                            </lord-icon>
-                            <h5 class="mt-4">Sorry! No Result Found</h5>
-                        </div>
-                    </div>
-                    <!-- end tab pane -->
+                  
                 </div>
                 <!-- end tab content -->
 
@@ -387,6 +352,12 @@
                             tabList.appendChild(li);
                         });
 
+                        // Auto-click the first subject tab
+                        const firstSubjectTab = tabList.querySelector('.subject-tab');
+                        if (firstSubjectTab) {
+                            firstSubjectTab.click();
+                        }
+
                     } else {
                         tabList.innerHTML = `
                             <li class="nav-item">
@@ -438,14 +409,25 @@
                                 });
         
                                 const downloadUrl = `{{ url('education/content') }}/${content.id}/download`;
-        
+                                
                                 col.innerHTML = `
-                                    <div class="card card-height-100">
+                                    <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
+                                        <div class="position-relative">
+                                            <img class="card-img-top img-fluid" src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="Card image cap" style="height: 180px; object-fit: cover;">
+                                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 px-3 py-1">
+                                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
+                                            </span>
+                                        </div>
+                                        
                                         <div class="card-body">
                                             <h6 class="text-primary mb-2">${content.topic}</h6>
-                                            <p class="text-muted mb-1"><i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}</p>
-                                            <p class="text-muted"><i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}</p>
-        
+                                            <p class="text-muted mb-1">
+                                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
+                                            </p>
+                                            <p class="text-muted">
+                                                <i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}
+                                            </p>
+
                                             <div class="form-check mb-1">
                                                 <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
                                                 <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
@@ -458,18 +440,19 @@
                                                 <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
                                                 <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
                                             </div>
-        
-                                            <div class="d-flex justify-content-between">
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
-                                                    <i class="ri-download-line"></i> Download
-                                                </button>
-                                                <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
-                                                    <i class="ri-eye-line"></i> View
-                                                </button>
-                                            </div>
+                                        </div>
+
+                                        <div class="card-footer bg-white d-flex">
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 `;
+
         
                                 row.appendChild(col);
                             });
@@ -495,9 +478,14 @@
                     });
                 }
             });
+
+        // For active class item
+        const firstClassItem = document.querySelector('.class-item');
+                if (firstClassItem) {
+                    firstClassItem.click();
+                }
+
         });
-
-
 
         // Modal Script for Content
         function fetchContent(contentId) {
@@ -549,7 +537,26 @@
         })
         .catch(error => console.error('Error:', error));
     }
-        </script>
+
+        // Function to handle downloading with options
+        function downloadContent(contentId) {
+            const includeGrade = document.getElementById(`include-grade-${contentId}`).checked;
+            const includeSubject = document.getElementById(`include-subject-${contentId}`).checked;
+            const includeDate = document.getElementById(`include-date-${contentId}`).checked;
+
+            const queryString = new URLSearchParams({
+                include_grade: includeGrade ? 1 : 0,
+                include_subject: includeSubject ? 1 : 0,
+                include_date: includeDate ? 1 : 0
+            }).toString();
+
+            const downloadUrl = `{{ url('education/content') }}/${contentId}/download?${queryString}`;
+            window.location.href = downloadUrl;
+        }
+
+     
+    
+    </script>
         
         
     
