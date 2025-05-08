@@ -83,9 +83,16 @@ class EducationController extends Controller
                     ->distinct();
             });
         }])->whereIn('id', $gradeIds)->get();
+
+        $subjects = Subject::whereHas('educationContents', function ($query) {
+            $query->where('add_to_library', true);
+        })->withCount(['educationContents as contents_count' => function ($query) {
+            $query->where('add_to_library', true);
+        }])->get();
     
     return view('backend.education.new_education_tools_content_user', [
             'classes' => $classes,
+            'subjects' => $subjects,
         ]);
     }
    

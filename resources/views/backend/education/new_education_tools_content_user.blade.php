@@ -60,21 +60,79 @@
                     </div>
                 </div>
 
-                <div class="card-body border-bottom">
-                    <p class="text-muted text-uppercase fs-12 fw-medium mb-4">Price</p>
-
-                    <div id="product-price-range"></div>
-                    <div class="formCost d-flex gap-2 align-items-center mt-3">
-                        <input class="form-control form-control-sm" type="text" id="minCost" value="0" /> <span class="fw-semibold text-muted">to</span> <input
-                            class="form-control form-control-sm" type="text" id="maxCost" value="1000" />
-                    </div>
-                </div>
-
             </div>
         </div>
     {{-- Filter End --}}
 
-     {{-- Swiper Slider --}}
+    <div class="row g-4">
+        @foreach ($subjects as $subject)
+        <div class="col-xxl-4">
+            <div class="card bg-success text-white text-center p-3">
+                <blockquote class="card-blockquote m-0">
+                    <p>{{ $subject->name }}</p>
+                    <footer class="blockquote-footer text-white font-size-12 mt-0 mb-0">
+                        Total Contents: {{ $subject->contents_count }}
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+    @endforeach
+    
+    
+    </div>
+    
+
+
+    </div>
+    
+
+    {{-- 2nd Col --}}
+    <div class="col-xxl-8">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row g-4">
+                   
+                    <div class="col-sm">
+                        <div class="d-flex justify-content-sm-end">
+                            <div class="search-box ms-2">
+                                <input type="text" class="form-control" id="searchProductList" placeholder="Search Edu Contents...">
+                                <i class="ri-search-line search-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
+                          
+                        </ul>
+                    </div>
+                    <div class="col-auto">
+                        <div id="selection-element">
+                            <div class="my-n1 d-flex align-items-center text-muted">
+                                Select <div id="select-content" class="text-body fw-semibold px-1"></div> Result <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeItemModal">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card header -->
+            <div class="card-body">
+
+                <div class="tab-content text-muted">
+                  
+                </div>
+                <!-- end tab content -->
+
+            </div>
+            <!-- end card body -->
+        </div>
+
+
+        {{-- Swiper Slider --}}
      <div class="swiper cryptoSlider">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
@@ -210,62 +268,9 @@
                     </div>
                 </div>
             </div>
-            </div><!-- end -->
-
-            
+            </div><!-- end --> 
         </div>
     </div><!-- end swiper wrapper -->
-
-
-
-    </div>
-    
-
-    {{-- 2nd Col --}}
-    <div class="col-xxl-8">
-        <div class="card">
-            <div class="card-header border-0">
-                <div class="row g-4">
-                   
-                    <div class="col-sm">
-                        <div class="d-flex justify-content-sm-end">
-                            <div class="search-box ms-2">
-                                <input type="text" class="form-control" id="searchProductList" placeholder="Search Edu Contents...">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-header">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <ul class="nav nav-tabs-custom card-header-tabs border-bottom-0" role="tablist">
-                          
-                        </ul>
-                    </div>
-                    <div class="col-auto">
-                        <div id="selection-element">
-                            <div class="my-n1 d-flex align-items-center text-muted">
-                                Select <div id="select-content" class="text-body fw-semibold px-1"></div> Result <button type="button" class="btn btn-link link-danger p-0 ms-3" data-bs-toggle="modal" data-bs-target="#removeItemModal">Remove</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end card header -->
-            <div class="card-body">
-
-                <div class="tab-content text-muted">
-                  
-                </div>
-                <!-- end tab content -->
-
-            </div>
-            <!-- end card body -->
-        </div>
-
 
 
     </div>
