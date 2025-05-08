@@ -22,7 +22,7 @@
 @section('content')
 
 <div class="row">
-    <h4 class="gradient-text-1-bold">Education Contents</h4>
+    <h4 class="gradient-text-1-bold">Education Library</h4>
     {{-- 1st Col --}}
     <div class="col-xxl-4">
     {{-- Filter Start --}}
@@ -64,6 +64,7 @@
         </div>
     {{-- Filter End --}}
 
+    {{-- SUBJECTS Start --}}
     <div class="row g-4">
         @foreach ($subjects as $subject)
         <div class="col-xxl-4">
@@ -77,9 +78,22 @@
             </div>
         </div>
     @endforeach
-    
-    
     </div>
+    {{-- Subjects END --}}
+
+    <div class="card border-color-purple">
+        <div class="card-body">
+            <div class="d-flex flex-column flex-md-row position-relative">
+                <img src="/build/images/nft/friends.png" class="flex-shrink-0 mb-3 mb-md-0 me-md-3 avatar-xl rounded" alt="...">
+                <div>
+                    <h5 class="mt-0 gradient-text-1-bold">Referral Link</h5>
+                    <p>Share this link to your friends to get more Free tokens and credits.</p>
+                    <a onclick="copyText(this)" class="btn gradient-btn-3"></a>
+                </div>
+            </div>
+        </div>
+        
+</div>
     
 
 
