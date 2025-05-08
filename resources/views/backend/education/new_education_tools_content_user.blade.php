@@ -103,7 +103,7 @@
         <div class="card card-body">
             <div class="d-flex mb-4 align-items-center">
                 <div class="flex-shrink-0">
-                    <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-sm rounded-circle">
+                    <img src="{{ asset('build/images/users/avatar-5.jpg') }}" alt="" class="avatar-sm rounded-circle">
                 </div>
                 <div class="flex-grow-1 ms-2">
                     <h5 class="card-title mb-1">Author: {{ $content->user->name }}</h5>
