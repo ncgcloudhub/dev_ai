@@ -26,16 +26,15 @@
     {{-- 1st Col --}}
     <div class="col-xxl-4">
     {{-- Filter Start --}}
-        <div class="card">
-            <div class="card-header">
-               xxxxx
+        <div class="card border-color-purple">
+            <div class="card-header border-color-purple">
+                Grade/Class
             </div>
 
             <div class="accordion accordion-flush filter-accordion">
 
-                <div class="card-body border-bottom">
+                <div class="card-body bg-marketplace">
                     <div>
-                        <p class="text-muted text-uppercase fs-12 fw-medium mb-2">Grade/Class</p>
                         <ul class="list-unstyled mb-0 filter-list">
                             @foreach ($classes as $index => $class)
                                 <li>
@@ -44,11 +43,11 @@
                                     data-grade="{{ $class->grade }}"
                                     data-subjects='@json($class->subjects)'>
                                         <div class="flex-grow-1">
-                                            <h5 class="fs-13 mb-0 listname">{{ $class->grade }}</h5>
+                                            <h5 class="fs-13 mb-0 listname gradient-text-2">{{ $class->grade }}</h5>
                                         </div>
                                         @if ($class->subjects->count())
                                             <div class="flex-shrink-0 ms-2">
-                                                <span class="badge bg-light text-muted">{{ $class->subjects->count() }}</span>
+                                                <span class="badge gradient-bg text-white">{{ $class->subjects->count() }}</span>
                                             </div>
                                         @endif
                                     </a>
@@ -69,9 +68,9 @@
         <h5 class="mt-3 gradient-text-1-bold">Subjects</h5>
         @foreach ($subjects as $subject)
         <div class="col-xxl-4">
-            <div class="card bg-success text-white text-center p-3">
+            <div class="card gradient-bg text-white text-center p-3">
                 <blockquote class="card-blockquote m-0">
-                    <p>{{ $subject->name }}</p>
+                    <p><strong>{{ $subject->name }}</strong></p>
                     <footer class="blockquote-footer text-white font-size-12 mt-0 mb-0">
                         Total Contents: {{ $subject->contents_count }}
                     </footer>
@@ -101,17 +100,17 @@
     <h5 class="mt-3 gradient-text-1-bold">Authors and Writers</h5>
     @foreach ($educationContents as $content)
     <div class="col-xxl-6">
-        <div class="card card-body">
+        <div class="card card-body border-color-purple">
             <div class="d-flex mb-4 align-items-center">
                 <div class="flex-shrink-0">
                     <img src="{{ asset('build/images/users/avatar-5.jpg') }}" alt="" class="avatar-sm rounded-circle">
                 </div>
                 <div class="flex-grow-1 ms-2">
-                    <h5 class="card-title mb-1">Author: {{ $content->user->name }}</h5>
+                    <h5 class="card-title mb-1 gradient-text-2">Author: {{ $content->user->name }}</h5>
                     <p class="text-muted mb-0">({{ $content->user->role ?? 'Author' }})</p>
                 </div>
             </div>
-            <a href="javascript:void(0)" class="btn btn-primary btn-sm">See Details</a>
+            <a href="javascript:void(0)" class="btn btn gradient-btn-3 btn-sm">See Details</a>
         </div>
 
     </div>
@@ -128,17 +127,10 @@
     <div class="col-xxl-8">
         <div id="contentDisplay"></div>
         <div class="card">
-            <div class="card-header border-0">
-                <div class="row g-4">
-                   
-                    <div class="col-sm">
-                        <div class="d-flex justify-content-sm-end">
-                            <div class="search-box ms-2">
-                                <input type="text" class="form-control" id="searchContent" placeholder="Search Edu Contents...">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="d-flex justify-content-sm-end">
+                <div class="search-box ms-2">
+                    <input type="text" class="form-control" id="searchContent" placeholder="Search Edu Contents...">
+                    <i class="ri-search-line search-icon"></i>
                 </div>
             </div>
 
@@ -177,14 +169,13 @@
             <div class="swiper-slide">
                <div class="card explore-box card-animate">
                 <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
                     <div class="discount-time">
                         <h5 id="auction-time-1" class="mb-0 text-white"></h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
+                  
                     <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
@@ -199,14 +190,13 @@
             <div class="swiper-slide">
                <div class="card explore-box card-animate">
                 <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
                     <div class="discount-time">
                         <h5 id="auction-time-1" class="mb-0 text-white"></h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
+                  
                     <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
@@ -221,14 +211,13 @@
             <div class="swiper-slide">
                <div class="card explore-box card-animate">
                 <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
                     <div class="discount-time">
                         <h5 id="auction-time-1" class="mb-0 text-white"></h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
+                  
                     <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
@@ -243,37 +232,13 @@
             <div class="swiper-slide">
                <div class="card explore-box card-animate">
                 <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
                     <div class="discount-time">
                         <h5 id="auction-time-1" class="mb-0 text-white"></h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
-                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
-                    <div>
-                        <span class="text-muted float-end">Available: 436</span>
-                        <span class="text-muted">Sold: 4187</span>
-                        <div class="progress progress-sm mt-2">
-                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div><!-- end -->
-
-            <div class="swiper-slide">
-               <div class="card explore-box card-animate">
-                <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
-                    <div class="discount-time">
-                        <h5 id="auction-time-1" class="mb-0 text-white"></h5>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
+                  
                     <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
@@ -289,14 +254,35 @@
             <div class="swiper-slide">
                <div class="card explore-box card-animate">
                 <div class="position-relative rounded overflow-hidden">
-                    <img src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="" class="card-img-top explore-img">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
                     <div class="discount-time">
                         <h5 id="auction-time-1" class="mb-0 text-white"></h5>
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="fw-medium mb-0 float-end"><i class="mdi mdi-heart text-danger align-middle"></i> 19.29k </p>
-                    <h5 class="text-primary"><i class="mdi mdi-ethereum"></i> 97.8 ETH </h5>
+                  
+                    <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
+                    <div>
+                        <span class="text-muted float-end">Available: 436</span>
+                        <span class="text-muted">Sold: 4187</span>
+                        <div class="progress progress-sm mt-2">
+                            <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 67%;" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div><!-- end -->
+
+            <div class="swiper-slide">
+               <div class="card explore-box card-animate">
+                <div class="position-relative rounded overflow-hidden">
+                    <img src="{{URL::asset('build/images/nft/book-cover-2.png')}}" alt="" class="card-img-top explore-img">
+                    <div class="discount-time">
+                        <h5 id="auction-time-1" class="mb-0 text-white"></h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                  
                     <h6 class="fs-15 mb-3"><a href="apps-nft-item-details" class="text-body">Abstract Face Painting</a></h6>
                     <div>
                         <span class="text-muted float-end">Available: 436</span>
@@ -457,14 +443,14 @@
                                 col.innerHTML = `
                                     <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
                                         <div class="position-relative">
-                                            <img class="card-img-top img-fluid" src="{{URL::asset('build/images/nft/img-01.jpg')}}" alt="Card image cap" style="height: 180px; object-fit: cover;">
-                                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 px-3 py-1">
+                                            <img class="card-img-top img-fluid" src="{{URL::asset('build/images/nft/book-cover-1.png')}}" alt="Card image cap" style="height: 180px; object-fit: cover;">
+                                            <span class="badge gradient-bg position-absolute top-0 start-0 m-2 px-3 py-1">
                                                 <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
                                             </span>
                                         </div>
                                         
                                         <div class="card-body">
-                                            <h6 class="text-primary mb-2">${content.topic}</h6>
+                                            <h6 class="gradient-text-2 mb-2">${content.topic}</h6>
                                             <p class="text-muted mb-1">
                                                 <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
                                             </p>
@@ -474,26 +460,28 @@
 
                                             <div class="form-check mb-1">
                                                 <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
-                                                <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
+                                                <label class="form-check-label gradient-text-2" for="include-grade-${content.id}">Include Grade</label>
                                             </div>
                                             <div class="form-check mb-1">
                                                 <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
-                                                <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
+                                                <label class="form-check-label gradient-text-2" for="include-subject-${content.id}">Include Subject</label>
                                             </div>
                                             <div class="form-check mb-3">
-                                                <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked>
-                                                <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
-                                            </div>
+                                            <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked onchange="toggleLabelStyle(this)">
+                                            <label class="form-check-label gradient-text-2" for="include-date-${content.id}">Include Date</label>
                                         </div>
 
-                                        <div class="card-footer bg-white d-flex">
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
+                                        </div>
+
+                                        <div class="card-footer gradient-bg d-flex px-2 py-1">
+                                            <button class="btn text-white p-1" onclick="downloadContent(${content.id})">
                                                 <i class="ri-download-line"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
+                                            <button class="btn text-white ms-2 p-1" onclick="fetchContent(${content.id})">
                                                 <i class="ri-eye-line"></i>
                                             </button>
                                         </div>
+
                                     </div>
                                 `;
 
@@ -671,10 +659,10 @@
                             </div>
                         </div>
                         <div class="card-footer bg-white d-flex">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadContent(${content.id})">
+                            <button class="btn gradient-btn-3 btn-sm" onclick="downloadContent(${content.id})">
                                 <i class="ri-download-line"></i>
                             </button>
-                            <button class="btn btn-sm btn-primary" onclick="fetchContent(${content.id})">
+                            <button class="btn gradient-btn-3 btn-sm" onclick="fetchContent(${content.id})">
                                 <i class="ri-eye-line"></i>
                             </button>
                         </div>
