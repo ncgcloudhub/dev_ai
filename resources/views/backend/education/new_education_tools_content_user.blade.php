@@ -697,6 +697,16 @@
     const authorId = $(this).data('author-id');
     const authorName = $(this).data('author-name');
 
+    // Show loading spinner
+    const contentDisplay = document.querySelector('.tab-content');
+                    contentDisplay.innerHTML = `
+                        <div class="d-flex justify-content-center my-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    `;
+        
     // Fetch subjects and contents by this author
     $.ajax({
         url: '/education/get-author-subjects/' + authorId,
@@ -714,7 +724,7 @@
 
                 tabsHtml += `
                     <li class="nav-item">
-                        <a class="nav-link ${activeClass}" data-bs-toggle="tab" href="#subject-${subject.id}" role="tab">
+                        <a class="nav-link gradient-text-2 ${activeClass}" data-bs-toggle="tab" href="#subject-${subject.id}" role="tab">
                             ${subject.name}
                         </a>
                     </li>
