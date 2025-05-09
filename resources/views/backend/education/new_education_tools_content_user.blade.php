@@ -87,7 +87,7 @@
                 <img src="/build/images/nft/friends.png" class="flex-shrink-0 mb-3 mb-md-0 me-md-3 avatar-xl rounded" alt="...">
                 <div>
                     <h5 class="mt-0 gradient-text-1-bold">Referral Link</h5>
-                    <p>Share this link to your friends to get more Free tokens and credits.</p>
+                    <p>Share this link to your friends to get <strong>$100</strong> worth of Tokens and Credits.</p>
                     <a onclick="copyText(this)" class="btn gradient-btn-3"></a>
                 </div>
             </div>
@@ -632,42 +632,50 @@
                     day: 'numeric', month: 'short', year: 'numeric'
                 });
 
-                col.innerHTML = `
-                    <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
-                        <div class="position-relative">
-                            <img class="card-img-top img-fluid" src="/path/to/img.jpg" alt="Card image" style="height: 180px; object-fit: cover;">
-                            <span class="badge bg-dark position-absolute top-0 start-0 m-2 px-3 py-1">
-                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
-                            </span>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="text-primary mb-2">${content.topic}</h6>
-                            <p class="text-muted mb-1"><i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}</p>
-                            <p class="text-muted"><i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}</p>
+                                                    col.innerHTML = `
+                                    <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
+                                        <div class="position-relative">
+                                            <img class="card-img-top img-fluid" src="{{URL::asset('build/images/nft/book-cover-1.png')}}" alt="Card image cap" style="height: 180px; object-fit: cover;">
+                                            <span class="badge gradient-bg position-absolute top-0 start-0 m-2 px-3 py-1">
+                                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="card-body">
+                                            <h6 class="gradient-text-2 mb-2">${content.topic}</h6>
+                                            <p class="text-muted mb-1">
+                                                <i class="ri-book-2-line me-1 align-middle"></i> ${content.subject.name}
+                                            </p>
+                                            <p class="text-muted">
+                                                <i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}
+                                            </p>
 
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" id="include-grade-${content.id}" checked>
-                                <label class="form-check-label" for="include-grade-${content.id}">Include Grade</label>
-                            </div>
-                            <div class="form-check mb-1">
-                                <input class="form-check-input" type="checkbox" id="include-subject-${content.id}" checked>
-                                <label class="form-check-label" for="include-subject-${content.id}">Include Subject</label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="include-date-${content.id}" checked>
-                                <label class="form-check-label" for="include-date-${content.id}">Include Date</label>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-white d-flex">
-                            <button class="btn gradient-btn-3 btn-sm" onclick="downloadContent(${content.id})">
-                                <i class="ri-download-line"></i>
-                            </button>
-                            <button class="btn gradient-btn-3 btn-sm" onclick="fetchContent(${content.id})">
-                                <i class="ri-eye-line"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
+                                                <label class="form-check-label gradient-text-2" for="include-grade-${content.id}">Include Grade</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
+                                                <label class="form-check-label gradient-text-2" for="include-subject-${content.id}">Include Subject</label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                            <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked onchange="toggleLabelStyle(this)">
+                                            <label class="form-check-label gradient-text-2" for="include-date-${content.id}">Include Date</label>
+                                        </div>
+
+                                        </div>
+
+                                        <div class="card-footer gradient-bg d-flex px-2 py-1">
+                                            <button class="btn text-white p-1" onclick="downloadContent(${content.id})">
+                                                <i class="ri-download-line"></i>
+                                            </button>
+                                            <button class="btn text-white ms-2 p-1" onclick="fetchContent(${content.id})">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                `;
 
                 row.appendChild(col);
             });
