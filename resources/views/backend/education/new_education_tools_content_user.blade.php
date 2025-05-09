@@ -98,23 +98,25 @@
     {{-- Authors and writer start--}}
     <div class="row">
     <h5 class="mt-3 gradient-text-1-bold">Authors and Writers</h5>
-    @foreach ($educationContents as $content)
-    <div class="col-xxl-6">
-        <div class="card card-body border-color-purple">
-            <div class="d-flex mb-4 align-items-center">
-                <div class="flex-shrink-0">
-                    <img src="{{ asset('build/images/users/avatar-5.jpg') }}" alt="" class="avatar-sm rounded-circle">
+    @foreach ($authors as $author)
+        <div class="col-xxl-6">
+            <div class="card card-body border-color-purple">
+                <div class="d-flex mb-4 align-items-center">
+                    <div class="flex-shrink-0">
+                        <img src="{{ asset('build/images/users/avatar-5.jpg') }}" alt="" class="avatar-sm rounded-circle">
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                        <h5 class="card-title mb-1 gradient-text-2">Author: {{ $author->name }}</h5>
+                        <p class="text-muted mb-0">({{ $author->role ?? 'Author' }})</p>
+                    </div>
                 </div>
-                <div class="flex-grow-1 ms-2">
-                    <h5 class="card-title mb-1 gradient-text-2">Author: {{ $content->user->name }}</h5>
-                    <p class="text-muted mb-0">({{ $content->user->role ?? 'Author' }})</p>
-                </div>
+                <a href="javascript:void(0)" class="btn btn gradient-btn-3 btn-sm">See Details</a>
             </div>
-            <a href="javascript:void(0)" class="btn btn gradient-btn-3 btn-sm">See Details</a>
         </div>
-
-    </div>
     @endforeach
+
+
+
     </div>
     {{-- authors and writers END --}}
     

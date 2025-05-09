@@ -69,7 +69,8 @@ class EducationController extends Controller
         $educationContents = EducationContent::where('add_to_library', true)
             ->with('gradeClass', 'subject', 'user')
             ->get();
-    
+        
+        $authors = $educationContents->pluck('user')->unique('id');
         // Group by grade and get related subjects
         $grades = $educationContents->groupBy('grade_id');
         $gradeIds = $grades->keys(); // Get grade IDs
@@ -93,7 +94,7 @@ class EducationController extends Controller
     return view('backend.education.new_education_tools_content_user', [
             'classes' => $classes,
             'subjects' => $subjects,
-            'educationContents' => $educationContents,
+            'authors' => $authors,
         ]);
     }
    
