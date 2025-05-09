@@ -407,7 +407,9 @@
             document.querySelector('.nav-tabs-custom').addEventListener('click', function (e) {
                 if (e.target && e.target.classList.contains('subject-tab')) {
                     const subjectId = e.target.getAttribute('data-subject-id');
-        
+                    
+                    $('.author-details-heading').remove();
+                    
                     // Show loading spinner
                     const contentDisplay = document.querySelector('.tab-content');
                     contentDisplay.innerHTML = `
@@ -718,6 +720,16 @@
             let tabsHtml = '';
             let contentHtml = '';
 
+            $('.author-details-heading').remove();
+            const authorHeading = `
+            <p class="author-details-heading gradient-text-2 mb-4">
+                Showing subjects by ${response.author_name}
+            </p>
+            `;
+            
+            // Append the author heading directly above the subject tabs
+            $('.nav-tabs-custom').before(authorHeading);
+
             subjects.forEach((subject, index) => {
                 const activeClass = index === 0 ? 'active' : '';
                 const showClass = index === 0 ? 'show active' : '';
@@ -794,7 +806,7 @@
 
             $('.nav-tabs-custom').html(tabsHtml);
             $('.tab-content').html(contentHtml);
-            $('#select-content').text(authorName);
+            $('#select-content').text(response.author_name);
         }
     });
 });

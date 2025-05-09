@@ -9,6 +9,7 @@ use App\Models\EducationToolsFavorite;
 use App\Models\GradeClass;
 use App\Models\Subject;
 use App\Models\ToolGeneratedContent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
@@ -99,7 +100,9 @@ class EducationController extends Controller
     }
 
     public function getAuthorSubjects($authorId)
-    {
+    {   
+        $author = User::findOrFail($authorId);
+
         $subjects = Subject::whereHas('educationContents', function ($query) use ($authorId) {
             $query->where('user_id', $authorId)->where('add_to_library', true);
         })->with(['educationContents' => function ($query) use ($authorId) {
@@ -108,7 +111,10 @@ class EducationController extends Controller
                   ->with('subject'); // ✅ Include the subject inside each content
         }])->get();
     
-        return response()->json(['subjects' => $subjects]);
+        return response()->json([
+            'author_name' => $author->name, // Add the author's name to the response
+            'subjects' => $subjects
+        ]);
     }
     
 
