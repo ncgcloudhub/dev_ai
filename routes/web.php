@@ -455,6 +455,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('admin.permission:education.library');
         Route::get('/tools/library/old', [EducationController::class, 'toolsLibraryold'])->name('education.tools.contents.old')->middleware('admin.permission:education.library');
         Route::get('/toolcontent/{id}', [EducationController::class, 'getToolContent']);
+        Route::get('/get-author-subjects/{id}', [EducationController::class, 'getAuthorSubjects']);
         Route::post('/toolcontent/{id}/update', [EducationController::class, 'updateToolContent']);
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools');
         Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');

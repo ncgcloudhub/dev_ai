@@ -97,6 +97,21 @@ class EducationController extends Controller
             'authors' => $authors,
         ]);
     }
+
+    public function getAuthorSubjects($authorId)
+    {
+        $subjects = Subject::whereHas('educationContents', function ($query) use ($authorId) {
+            $query->where('user_id', $authorId)->where('add_to_library', true);
+        })->with(['educationContents' => function ($query) use ($authorId) {
+            $query->where('user_id', $authorId)
+                  ->where('add_to_library', true)
+                  ->with('subject'); // ✅ Include the subject inside each content
+        }])->get();
+    
+        return response()->json(['subjects' => $subjects]);
+    }
+    
+
    
     public function toolsLibraryold()
     {
