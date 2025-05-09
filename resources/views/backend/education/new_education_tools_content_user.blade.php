@@ -408,7 +408,7 @@
                 if (e.target && e.target.classList.contains('subject-tab')) {
                     const subjectId = e.target.getAttribute('data-subject-id');
                     
-                    $('.author-details-heading').remove();
+                    $('.author-details-card').remove();
                     
                     // Show loading spinner
                     const contentDisplay = document.querySelector('.tab-content');
@@ -720,11 +720,16 @@
             let tabsHtml = '';
             let contentHtml = '';
 
-            $('.author-details-heading').remove();
+            $('.author-details-card').remove();
             const authorHeading = `
-            <p class="author-details-heading gradient-text-2 mb-4">
-                Showing subjects by ${response.author_name}
-            </p>
+            <div class="card explore-box card-animate rounded border-color-purple-left author-details-card mb-4">
+                <div class="card-body">
+                    <h5 class="mb-1">
+                        Showing subjects by <span class="text-body">${response.author_name}</span>
+                    </h5>
+                    <p class="text-muted mb-0">These are all the subjects and resources uploaded by this author.</p>
+                </div>
+            </div>
             `;
             
             // Append the author heading directly above the subject tabs
