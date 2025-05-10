@@ -116,6 +116,26 @@ class EducationController extends Controller
             'subjects' => $subjects
         ]);
     }
+
+    public function getSubjectGrades($subjectId)
+    {
+        $subject = Subject::findOrFail($subjectId);
+
+        // Get all grades that have content for this subject
+        $grades = GradeClass::whereHas('educationContents', function ($query) use ($subjectId) {
+            $query->where('subject_id', $subjectId)->where('add_to_library', true);
+        })->with(['educationContents' => function ($query) use ($subjectId) {
+            $query->where('subject_id', $subjectId)
+                ->where('add_to_library', true)
+                ->with('gradeClass'); // include grade info
+        }])->get();
+
+        return response()->json([
+            'subject_name' => $subject->name,
+            'grades' => $grades
+        ]);
+    }
+
     
 
    

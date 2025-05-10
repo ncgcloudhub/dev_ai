@@ -67,8 +67,8 @@
     <div class="row">
         <h5 class="mt-3 gradient-text-1-bold">Subjects</h5>
         @foreach ($subjects as $subject)
-        <div class="col-xxl-4">
-            <div class="card gradient-bg text-white text-center p-3">
+       <div class="col-xxl-4">
+            <div class="card gradient-bg text-white text-center p-3 subject-card" data-subject-id="{{ $subject->id }}" data-subject-name="{{ $subject->name }}">
                 <blockquote class="card-blockquote m-0">
                     <p><strong>{{ $subject->name }}</strong></p>
                     <footer class="blockquote-footer text-white font-size-12 mt-0 mb-0">
@@ -77,6 +77,7 @@
                 </blockquote>
             </div>
         </div>
+
     @endforeach
     </div>
     {{-- Subjects END --}}
@@ -596,7 +597,7 @@
     </script>
         
 
-        <script>
+    <script>
 
     let searchTimeout = null;
 
@@ -815,10 +816,129 @@
         }
     });
 });
+// Author wise filter END
 
+// Subject wise filter START
+$('.subject-card').on('click', function () {
+    const subjectId = $(this).data('subject-id');
+    const subjectName = $(this).data('subject-name');
 
-    // Author wise filter END
-        </script>
+    // Show loading spinner
+    const contentDisplay = document.querySelector('.tab-content');
+    contentDisplay.innerHTML = `
+        <div class="d-flex justify-content-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `;
+
+    // Fetch grades and their contents for this subject
+    $.ajax({
+        url: '/education/get-subject-grades/' + subjectId,
+        method: 'GET',
+        success: function (response) {
+            const grades = response.grades;
+
+            let tabsHtml = '';
+            let contentHtml = '';
+
+            $('.author-details-card').remove();
+            const subjectHeading = `
+            <div class="card explore-box card-animate rounded border-color-purple-left author-details-card mb-4">
+                <div class="card-body">
+                    <h5 class="mb-1">
+                        Showing grades for subject: <span class="text-body">${response.subject_name}</span>
+                    </h5>
+                    <p class="text-muted mb-0">These are all the grades and resources under this subject.</p>
+                </div>
+            </div>
+            `;
+
+            $('.nav-tabs-custom').before(subjectHeading);
+
+            grades.forEach((grade, index) => {
+                const activeClass = index === 0 ? 'active' : '';
+                const showClass = index === 0 ? 'show active' : '';
+
+                tabsHtml += `
+                    <li class="nav-item">
+                        <a class="nav-link gradient-text-2 ${activeClass}" data-bs-toggle="tab" href="#grade-${grade.id}" role="tab">
+                            ${grade.grade}
+                        </a>
+                    </li>
+                `;
+
+                let contentItems = '';
+                grade.education_contents.forEach(content => {
+                    const createdAt = new Date(content.created_at).toLocaleDateString('en-US', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+
+                    contentItems += `
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="card card-height-100 shadow-sm border-0 position-relative overflow-hidden">
+                                <div class="position-relative">
+                                    <img class="card-img-top img-fluid" src="{{URL::asset('build/images/nft/book-cover-1.png')}}" alt="Card image cap" style="height: 180px; object-fit: cover;">
+                                    <span class="badge gradient-bg position-absolute top-0 start-0 m-2 px-3 py-1">
+                                        <i class="ri-book-2-line me-1 align-middle"></i> ${response.subject_name}
+                                    </span>
+                                </div>
+
+                                <div class="card-body">
+                                    <h6 class="gradient-text-2 mb-2">${content.topic}</h6>
+                                    <p class="text-muted mb-1">
+                                        <i class="ri-graduation-cap-line me-1 align-middle"></i> ${grade.name}
+                                    </p>
+                                    <p class="text-muted">
+                                        <i class="ri-calendar-line me-1 align-middle"></i> ${createdAt}
+                                    </p>
+
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input include-grade" type="checkbox" id="include-grade-${content.id}" checked>
+                                        <label class="form-check-label gradient-text-2" for="include-grade-${content.id}">Include Grade</label>
+                                    </div>
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input include-subject" type="checkbox" id="include-subject-${content.id}" checked>
+                                        <label class="form-check-label gradient-text-2" for="include-subject-${content.id}">Include Subject</label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input include-date" type="checkbox" id="include-date-${content.id}" checked onchange="toggleLabelStyle(this)">
+                                        <label class="form-check-label gradient-text-2" for="include-date-${content.id}">Include Date</label>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer gradient-bg d-flex px-2 py-1">
+                                    <button class="btn text-white p-1" onclick="downloadContent(${content.id})">
+                                        <i class="ri-download-line"></i>
+                                    </button>
+                                    <button class="btn text-white ms-2 p-1" onclick="fetchContent(${content.id})">
+                                        <i class="ri-eye-line"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                contentHtml += `
+                    <div class="tab-pane fade ${showClass}" id="grade-${grade.id}" role="tabpanel">
+                        <div class="row g-4">
+                            ${contentItems}
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('.nav-tabs-custom').html(tabsHtml);
+            $('.tab-content').html(contentHtml);
+            $('#select-content').text(response.subject_name);
+        }
+    });
+});
+// Subject wise filter END
+
+</script>
     
 @endsection
 
