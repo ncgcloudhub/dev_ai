@@ -775,11 +775,7 @@ public function callbackHandel(Request $request)
     $token = [
         'access_token' => $googleUser->token,
         'refresh_token' => $googleUser->refreshToken ?? ($existingToken['refresh_token'] ?? null), // preserve old refresh_token
-<<<<<<< HEAD
-        'expires_in' => 86400,
-=======
         'expires_in' => 86400, // 1 day
->>>>>>> 99c3dd396ec9f20df862da37db8263d89cd288ec
         'created' => time(),
     ];
 
