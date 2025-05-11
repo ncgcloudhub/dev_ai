@@ -40,7 +40,7 @@
         "price": "3.167"
     },{
         "id": 5,
-        "productImg": "build/images/nft/img-01.jpg",
+        "productImg": "build/images/nft/book-cover-2.png",
         "like": false,
         "salesType": "Has Offers",
         "title": "Abstract Face Painting",
@@ -120,7 +120,7 @@
         "price": "324.26"
     },{
         "id": 13,
-        "productImg": "build/images/nft/img-01.jpg",
+        "productImg": "build/images/nft/book-cover-2.png",
         "like": false,
         "salesType": "Has Offers",
         "title": "Abstract Face Painting",

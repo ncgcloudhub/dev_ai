@@ -42,10 +42,12 @@
 @show
     <!-- Begin page -->
     <div id="layout-wrapper">
+        @if (!isset($hideTopbar) || !$hideTopbar)
         @if (Auth::user()->role === 'admin')
         @include('admin.layouts.topbar')
         @else
         @include('user.layouts.topbar') 
+        @endif
         @endif
        
        
@@ -58,7 +60,7 @@
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        <div class="main-content">
+        <div class="main-content @if(isset($hideTopbar) && $hideTopbar) no-topbar @endif"">
             <div class="page-content">
                                  
             @include('admin.layouts.alerts')
