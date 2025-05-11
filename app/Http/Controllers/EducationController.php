@@ -722,7 +722,7 @@ public function updateContent(Request $request, $id)
                 $promptText = trim($prompt);
         
                 // Build clean Markdown image snippet (without prompt text)
-                $imageMarkdown = "![Generated Image]({$imageUrl})";
+                $imageMarkdown = "![Generated Image]({$imageUrl['url']})";
         
                 // Match "**Image prompt:** [prompt]" and append image after it
                 $pattern = '/(\*\*Image prompt:\*\* ' . preg_quote($promptText, '/') . ')/i';
@@ -778,16 +778,33 @@ public function updateContent(Request $request, $id)
             $imageUrl = $response->json('data.0.url');
     
             if ($imageUrl) {
-                // Download the image
+                // Download the image content
                 $imageContent = Http::timeout(60)->get($imageUrl)->body();
     
-                $fileName = 'images/' . uniqid('dalle_', true) . '.jpeg';
-                Storage::disk('public')->put($fileName, $imageContent);
+                // Create Azure Blob client
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $containerName = config('filesystems.disks.azure_site.container');
+                
+                $fileName = 'edutoolsgeneratedimage/' . time() . '-' . uniqid() . '.jpeg';
     
-                return url('storage/' . $fileName);
+                // Upload to Azure
+                $blobClient->createBlockBlob($containerName, $fileName, $imageContent, new CreateBlockBlobOptions());
+    
+                Log::info('Image uploaded to Azure Blob Storage', [
+                    'image_name' => $fileName,
+                    'container' => $containerName
+                ]);
+    
+                $baseUrl = config('filesystems.disks.azure_site.url');
+                $containerName = config('filesystems.disks.azure_site.container');
+                $sasToken = config('filesystems.disks.azure_site.sas_token');
+
+                return [
+                    'url' => "{$baseUrl}{$containerName}/{$fileName}?{$sasToken}",
+                ];
+          
             }
         }
-    
     
         Log::error('Image generation failed', [
             'prompt' => $prompt,

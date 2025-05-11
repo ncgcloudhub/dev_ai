@@ -524,11 +524,13 @@
                     },
                     success: function(response) {
                         if (response.success) {
+                            const imageUrl = response.imageUrl.url; // ✅ Extract the actual URL
+
                             $resultDiv.html(`
                                 <div class="generated-image">
-                                    <img src="${response.imageUrl}" class="img-fluid rounded mt-2" style="max-height: 400px;">
+                                    <img src="${imageUrl}" class="img-fluid rounded mt-2" style="max-height: 400px;">
                                     <div class="text-end mt-2">
-                                        <a href="${response.imageUrl}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        <a href="${imageUrl}" target="_blank" class="btn btn-sm btn-outline-secondary">
                                             <i class="fas fa-external-link-alt"></i> Open Full Size
                                         </a>
                                     </div>
