@@ -6,21 +6,21 @@
 <link href="{{ URL::asset('build/libs/quill/quill.snow.css') }}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 
+<link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 <style>
     .copy-icon {
         position: absolute;
-        right: 5%;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 10px;
+        right: 15px;
         cursor: pointer;
         color: #ff0077;
-        font-size: 1.5rem; /* Increased size */
+        font-size: 1.5rem;
         transition: transform 0.2s ease, color 0.2s ease;
     }
-    
+
     .copy-icon:hover {
-        transform: translateY(-50%) scale(1.2); /* Adds a zoom effect on hover */
-        color: #ff3399; /* Slightly lighter shade on hover */
+        transform: scale(1.2);
+        color: #ff3399;
     }
 </style>
 
@@ -86,18 +86,19 @@
                 </div>
             </div> 
         </div>
-        <div class="card">
+        <div class="card" style="position: relative;"> <!-- Ensure this has position: relative -->
             <div class="card-body"> 
                 <div class="live-preview">
                     <div class="col-md-12">
                         <label for="language" class="form-label">Actual Prompt</label>
-                        <p class="fw-medium link-primary gradient-text-2" style="position: relative;">
+                        <p class="fw-medium link-primary gradient-text-2">
                             {{$prompt_library->actual_prompt}}
-                          
                         </p>
-                        <span class="copy-icon copy-toast-btn" onclick="copyText(this)" title="Copy"><i class=" ri-file-copy-2-fill"></i></span>
                     </div>
                 </div>
+                <span class="copy-icon copy-toast-btn" onclick="copyText(this)" title="Copy">
+                    <i class="ri-file-copy-2-fill"></i>
+                </span>
             </div> 
         </div>
 
@@ -206,8 +207,19 @@
                         <input type="hidden" id="prompt_name" value="{{$prompt_library->prompt_name}}"> <!-- Added hidden input -->
 
                         <div class="col-md-3" id="generate-button-tour">
-                            <button type="button" id="ask" class="btn gradient-btn-generate disabled-on-load" disabled><span class="d-none d-sm-inline-block me-2">Ask</span> <i class="mdi mdi-send float-end"></i></button>
+                            @if($prompt_library->category && $prompt_library->category->category_name === 'Image')
+                                <button type="button" id="generate-image" class="btn gradient-btn-generate disabled-on-load" disabled>
+                                    <span class="d-none d-sm-inline-block me-2">Generate Image</span>
+                                    <i class="mdi mdi-image float-end"></i>
+                                </button>
+                            @else
+                                <button type="button" id="ask" class="btn gradient-btn-generate disabled-on-load" disabled>
+                                    <span class="d-none d-sm-inline-block me-2">Ask</span>
+                                    <i class="mdi mdi-send float-end"></i>
+                                </button>
+                            @endif
                         </div>
+                        
                         {{-- Loader --}}
                         <div class="hstack flex-wrap gap-2 mb-3 mb-lg-0 d-none" id="loader">
                             <button class="btn btn-outline-primary btn-load">
@@ -271,6 +283,8 @@
 <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.4/dist/purify.min.js"></script>
 <!-- Include FileSaver.js for saving files -->
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
+
 
 
 <script>
@@ -347,6 +361,59 @@
                 }
             });
         });
+
+        $('#generate-image').click(function() {
+    var prompt = $('#ask_ai').val(); // same input
+    var prompt_name = $('#prompt_name').val();
+    var sub_category_instruction = $('#sub_category_instruction').val();
+
+    $('#loader').removeClass('d-none');
+    showMagicBall('image', 'dalle');
+
+    $.ajax({
+        url: "{{ route('generate.image.from.prompt') }}",
+        type: "POST",
+        data: {
+            prompt: prompt,
+            prompt_name: prompt_name,
+            sub_category_instruction: sub_category_instruction,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response) {
+            hideMagicBall();
+            $('#loader').addClass('d-none');
+
+            if (response.image_url) {
+                const imageUrl = response.image_url;
+                const prompt = $('#ask_ai').val().trim();
+
+                $('#formattedContentDisplay').html(`
+                    <div class="text-center">
+                        <a href="${imageUrl}" class="image-popup glightbox" data-title="${prompt}">
+                            <img src="${imageUrl}" alt="${prompt}" class="img-fluid rounded shadow-sm mb-2" style="max-width: 100%; height: auto; cursor: zoom-in;" />
+                        </a>
+                        
+                    </div>
+                `);
+
+                // Re-initialize GLightbox
+                if (window.glightboxInstance) {
+                    window.glightboxInstance.destroy();
+                }
+                window.glightboxInstance = GLightbox({ selector: '.glightbox' });
+            } else {
+                $('#formattedContentDisplay').html(`<p class="text-danger">No image generated.</p>`);
+            }
+
+        },
+        error: function(xhr) {
+            hideMagicBall();
+            console.error(xhr.responseText);
+            $('#loader').addClass('d-none');
+        }
+    });
+});
+
 
 
         function formatContent(content) {

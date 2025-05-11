@@ -438,6 +438,7 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::get('/add/content', [EducationController::class, 'educationForm'])->name('education.form')->middleware('admin.permission:education.educationWizard');      
         Route::post('/content', [EducationController::class, 'educationContent'])->name('education.content');     
         Route::get('/search', [EducationController::class, 'search'])->name('educationContent.search');  
+        Route::get('/library/search', [EducationController::class, 'searchLibrary'])->name('educationLibrary.search');  
         Route::get('/get-subjects/{gradeId}', [EducationController::class, 'getSubjects']);
         Route::get('/get-content', [EducationController::class, 'getUserContents'])->name('user_generated_education_content');
         Route::post('/get-contents/subject', [EducationController::class, 'getContentsBySubject'])->name('education.getContentsBySubject');
@@ -451,8 +452,11 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
         Route::post('/content/{id}/add-to-library', [EducationController::class, 'addToLibrary'])->name('content.add.library');
         Route::get('/content/{id}/edit', [EducationController::class, 'edit'])->name('education.content.edit');
         Route::post('/content/update', [EducationController::class, 'update'])->name('education.content.update');
-        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('admin.permission:education.library') ;
+        Route::get('/tools/library', [EducationController::class, 'toolsLibrary'])->name('education.tools.contents')->middleware('admin.permission:education.library');
+        Route::get('/tools/library/old', [EducationController::class, 'toolsLibraryold'])->name('education.tools.contents.old')->middleware('admin.permission:education.library');
         Route::get('/toolcontent/{id}', [EducationController::class, 'getToolContent']);
+        Route::get('/get-author-subjects/{id}', [EducationController::class, 'getAuthorSubjects']);
+        Route::get('/get-subject-grades/{subjectId}', [EducationController::class, 'getSubjectGrades']);
         Route::post('/toolcontent/{id}/update', [EducationController::class, 'updateToolContent']);
         Route::get('/manage/tools', [EducationController::class, 'manageTools'])->name('manage.education.tools')->middleware('admin.permission:education.manageTools');
         Route::get('/tool/{id}/{slug}', [EducationController::class, 'showTool'])->name('tool.show');
@@ -693,6 +697,9 @@ Route::post('/single/image', [GenerateImagesController::class, 'generateSingleIm
  // ASK AI PROMPT LIBRARY
  Route::post('/ask/ai/send', [PromptLibraryController::class, 'AskAiPromptLibrary'])->name('ask.ai.prompt');
 
+// Generate Image Prompt Library
+ Route::post('/generate-image-from-prompt', [PromptLibraryController::class, 'generateImageFromPrompt'])->name('generate.image.from.prompt');
+
 // Tour Status
 Route::post('/save-seen-tour-steps', [UserController::class, 'saveSeenTourSteps']);
 
@@ -830,3 +837,5 @@ Route::view('success', 'backend.subscription.success')->name('success');
  Route::get('/{route}', [DynamicPageController::class, 'show'])
  ->where('route', '.*') // Matches all routes
  ->name('dynamic-pages.show');
+
+ Route::post('/generate-image-from-prompt', [PromptLibraryController::class, 'generateImageFromPrompt'])->name('generate.image.from.prompt');

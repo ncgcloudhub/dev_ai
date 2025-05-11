@@ -9,6 +9,7 @@ use App\Models\EducationToolsFavorite;
 use App\Models\GradeClass;
 use App\Models\Subject;
 use App\Models\ToolGeneratedContent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +64,82 @@ class EducationController extends Controller
     }
 
     public function toolsLibrary()
+    {
+        $userId = auth()->id(); 
+
+        $educationContents = EducationContent::where('add_to_library', true)
+            ->with('gradeClass', 'subject', 'user')
+            ->get();
+        
+        $authors = $educationContents->pluck('user')->unique('id');
+        // Group by grade and get related subjects
+        $grades = $educationContents->groupBy('grade_id');
+        $gradeIds = $grades->keys(); // Get grade IDs
+    
+        // Get classes with subjects related to those grades
+        $classes = GradeClass::with(['subjects' => function ($query) use ($gradeIds) {
+            $query->whereIn('id', function ($subQuery) use ($gradeIds) {
+                $subQuery->select('subject_id')
+                    ->from('education_contents')
+                    ->whereIn('grade_id', $gradeIds)
+                    ->distinct();
+            });
+        }])->whereIn('id', $gradeIds)->get();
+
+        $subjects = Subject::whereHas('educationContents', function ($query) {
+            $query->where('add_to_library', true);
+        })->withCount(['educationContents as contents_count' => function ($query) {
+            $query->where('add_to_library', true);
+        }])->get();
+    
+    return view('backend.education.new_education_tools_content_user', [
+            'classes' => $classes,
+            'subjects' => $subjects,
+            'authors' => $authors,
+        ]);
+    }
+
+    public function getAuthorSubjects($authorId)
+    {   
+        $author = User::findOrFail($authorId);
+
+        $subjects = Subject::whereHas('educationContents', function ($query) use ($authorId) {
+            $query->where('user_id', $authorId)->where('add_to_library', true);
+        })->with(['educationContents' => function ($query) use ($authorId) {
+            $query->where('user_id', $authorId)
+                  ->where('add_to_library', true)
+                  ->with('subject'); // ✅ Include the subject inside each content
+        }])->get();
+    
+        return response()->json([
+            'author_name' => $author->name, // Add the author's name to the response
+            'subjects' => $subjects
+        ]);
+    }
+
+    public function getSubjectGrades($subjectId)
+    {
+        $subject = Subject::findOrFail($subjectId);
+
+        // Get all grades that have content for this subject
+        $grades = GradeClass::whereHas('educationContents', function ($query) use ($subjectId) {
+            $query->where('subject_id', $subjectId)->where('add_to_library', true);
+        })->with(['educationContents' => function ($query) use ($subjectId) {
+            $query->where('subject_id', $subjectId)
+                ->where('add_to_library', true)
+                ->with('gradeClass'); // include grade info
+        }])->get();
+
+        return response()->json([
+            'subject_name' => $subject->name,
+            'grades' => $grades
+        ]);
+    }
+
+    
+
+   
+    public function toolsLibraryold()
     {
         $userId = auth()->id(); 
 
@@ -139,7 +216,7 @@ class EducationController extends Controller
     {
         $query = EducationContent::query();
 
-        // Check the route or a specific flag to apply different filters
+        // // Check the route or a specific flag to apply different filters
         if (request()->routeIs('education.tools.contents')) {
             // For /education/tools/library route
             $query->where('add_to_library', true); // Filter by added to library
@@ -189,6 +266,34 @@ class EducationController extends Controller
 
         return response()->json($results);
     }
+
+    public function searchLibrary(Request $request)
+    {
+        // Get the search query
+        $query = $request->get('q');
+
+        // Validate the query
+        if ($query) {
+            // Convert the query to lowercase to ensure case-insensitive search
+            $query = strtolower($query);
+
+            // Fetch the contents that match the search query (by topic or subject name)
+            $contents = EducationContent::with('subject')
+                ->whereRaw('LOWER(topic) LIKE ?', ['%' . $query . '%'])
+                ->orWhereRaw('LOWER(generated_content) LIKE ?', ['%' . $query . '%'])
+                ->orWhereHas('subject', function ($q) use ($query) {
+                    $q->whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%']);
+                })
+                ->get();
+        } else {
+            // If no query is provided, return an empty array
+            $contents = [];
+        }
+
+        // Return the results as JSON
+        return response()->json(['contents' => $contents]);
+    }
+
 
     public function getContent($id)
 {
@@ -962,7 +1067,7 @@ private function createSlidesFromContent($content, $user)
     foreach (explode("---", $content) as $slideText) {
         if (empty(trim($slideText))) continue;
 
-        preg_match('/### Title: (.*?)\n/', $slideText, $titleMatch);
+        preg_match('/### Title:\s*\*{0,2}(.*?)\*{0,2}\s*\n/', $slideText, $titleMatch);
         preg_match('/\*\*Body Text:\*\*\s*(.*)/s', $slideText, $bodyMatch);
 
         $slides[] = [
@@ -1062,7 +1167,7 @@ private function createSlidesFromContent($content, $user)
             $requests[] = new SlidesRequest([
                 'insertText' => [
                     'objectId' => $bodyObjectId,
-                    'text' => $this->formatBodyText($slideContent['body']),
+                    'text' => html_entity_decode($this->formatBodyText($slideContent['body'])),
                     'insertionIndex' => 0
                 ]
             ]);
@@ -1083,16 +1188,24 @@ private function createSlidesFromContent($content, $user)
 
 private function formatBodyText(string $text): string
 {
-    // Split into sentences and format as bullet points
-    $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
-    
-    // Trim each sentence and add bullet points
-    $formatted = array_map(function($sentence) {
-        return '• ' . trim($sentence);
-    }, $sentences);
+    $lines = preg_split('/\r\n|\r|\n/', $text);
 
-    return implode("\n", $formatted);
+    $bullets = array_filter(array_map(function ($line) {
+        $trimmed = trim($line);
+        if (empty($trimmed)) return null;
+
+        // Remove markdown bullet if exists
+        if (preg_match('/^[-*]\s+(.*)/', $trimmed, $matches)) {
+            return '• ' . $matches[1];
+        }
+
+        return '• ' . $trimmed;
+    }, $lines));
+
+    return implode("\n", $bullets); // This is real newline, not "\n" string
 }
+
+
 
 // GENERATE SLIDE FREOM CONTENT START
 // Main Tool (NOT POC)
