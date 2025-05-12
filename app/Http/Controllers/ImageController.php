@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+
 
 class ImageController extends Controller
 {
@@ -220,7 +222,11 @@ class ImageController extends Controller
         // Save the compressed watermarked image to Azure Blob Storage
         try {
             $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-            $imageName = time() . '-' . uniqid() . '.webp';
+            $source = 'dalle';
+            $userName = Str::slug(auth()->user()->name);
+            $timestamp = now()->format('YmdHis');
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
             $containerName = config('filesystems.disks.azure.container');
             $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
 
