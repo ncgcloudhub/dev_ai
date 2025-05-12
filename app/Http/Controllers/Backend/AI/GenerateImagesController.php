@@ -69,7 +69,7 @@ class GenerateImagesController extends Controller
 
         // Generate Azure Blob Storage URL for each image with SAS token and check like/favorite status
         foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
             
             // Check if the image is liked or favorited by the current user
             $image->liked_by_user = LikedImagesDalle::where('user_id', $user_id)->where('image_id', $image->id)->exists();
@@ -262,7 +262,12 @@ class GenerateImagesController extends Controller
         // Save the compressed watermarked image to Azure Blob Storage
         try {
             $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-            $imageName = time() . '-' . uniqid() . '.webp';
+$source = 'dalle';
+$userName = Str::slug(auth()->user()->name);
+$timestamp = now()->format('YmdHis');
+$imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
+
             $containerName = config('filesystems.disks.azure.container');
             $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
 
