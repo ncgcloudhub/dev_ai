@@ -183,4 +183,25 @@ class ChatController extends Controller
             })
         ]);
     }
+
+// DELETE CONVERSATION
+    public function deleteConversation($id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $conversation = ChatConversation::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if (!$conversation) {
+            return response()->json(['error' => 'Conversation not found'], 404);
+        }
+
+        $conversation->delete();
+
+        return response()->json(['success' => true]);
+    }
+
 }

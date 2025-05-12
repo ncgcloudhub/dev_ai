@@ -55,11 +55,24 @@
         .sidebar-visible {
             transform: translateX(0);
         }
+        .conversation-item {
+            transition: background-color 0.2s ease;
+        }
+
+        .delete-conversation-btn {
+            transition: opacity 0.2s ease, color 0.2s ease;
+        }
+
+        .delete-conversation-btn:hover {
+            color: #ef4444 !important; /* red-500 */
+        }
         @media (min-width: 768px) {
             .sidebar {
                 transform: translateX(0);
             }
         }
+
+
     </style>
 </head>
 <body class="bg-gray-50">
@@ -221,12 +234,20 @@
                 chatHistory.innerHTML = `
                     <div class="space-y-2">
                         ${data.map(chat => `
-                            <div class="p-3 rounded-md hover:bg-gray-800 cursor-pointer flex items-center conversation-item ${currentConversationId === chat.id ? 'bg-gray-800' : ''}" 
-                                 data-id="${chat.id}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="truncate">${chat.title}</span>
+                            <div class="p-3 rounded-md hover:bg-gray-800 cursor-pointer flex items-center justify-between group conversation-item ${currentConversationId === chat.id ? 'bg-gray-800' : ''}" 
+                                data-id="${chat.id}">
+                                <div class="flex items-center flex-1 min-w-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="truncate">${chat.title}</span>
+                                </div>
+                                <button class="delete-conversation-btn opacity-0 group-hover:opacity-100 text-gray-400 hover:text-white transition-opacity" 
+                                        data-id="${chat.id}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         `).join('')}
                     </div>
@@ -527,6 +548,43 @@
         messageInput.addEventListener('input', () => {
             messageInput.style.height = 'auto';
             messageInput.style.height = `${Math.min(messageInput.scrollHeight, 150)}px`;
+        });
+
+        // Handle conversation deletion
+        document.addEventListener('click', async (e) => {
+            if (e.target.closest('.delete-conversation-btn')) {
+                const button = e.target.closest('.delete-conversation-btn');
+                const id = button.getAttribute('data-id');
+                
+                if (confirm('Are you sure you want to delete this conversation?')) {
+                    try {
+                        const response = await fetch(`/delete-conversation/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Remove the conversation from the sidebar
+                            button.closest('.conversation-item').remove();
+                            
+                            // If we deleted the current conversation, start a new one
+                            if (currentConversationId === id) {
+                                newConversation();
+                            }
+                        } else {
+                            alert('Failed to delete conversation');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting conversation:', error);
+                        alert('Error deleting conversation');
+                    }
+                }
+            }
         });
     </script>
 </body>
