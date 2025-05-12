@@ -11,8 +11,9 @@ class ChatMessage extends Model
     use HasFactory;
     protected $guarded = [];
 
-     public function conversation(): BelongsTo
-    {
-        return $this->belongsTo(ChatConversation::class, 'conversation_id');
-    }
+    public function conversation(): BelongsTo
+{
+    return $this->belongsTo(ChatConversation::class, 'conversation_id', 'id');
+    // foreignKey, ownerKey
+}
 }

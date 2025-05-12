@@ -11,8 +11,9 @@ class ChatConversation extends Model
     use HasFactory;
     protected $guarded = [];
 
-     public function messages(): HasMany
-    {
-        return $this->hasMany(ChatMessage::class);
-    }
+    public function messages(): HasMany
+{
+    return $this->hasMany(ChatMessage::class, 'conversation_id', 'id');
+    // foreignKey, localKey
+}
 }
