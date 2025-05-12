@@ -10,6 +10,7 @@ use App\Models\DynamicPage;
 use App\Models\EducationTools;
 use App\Models\EducationToolsCategory;
 use App\Models\FavoriteImageDalle;
+use App\Models\GeneratedImage;
 use App\Models\GradeClass;
 use App\Models\Job;
 use App\Models\Jokes;
@@ -32,6 +33,8 @@ use OpenAI;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use Parsedown;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 
 class HomeController extends Controller
@@ -39,47 +42,72 @@ class HomeController extends Controller
     // Image Gallery Front End Page
     public function AIImageGallery(Request $request)
     {
-        $query = DalleImageGenerate::withCount(['likes', 'favorites']);
-        // $stableImagesQuery = StableDiffusionGeneratedImage::withCount('stableDiffusionLike');
+        $userId = Auth::id();
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
-            // $stableImagesQuery->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($search) . '%']);
+        // === Query DALL·E Images ===
+        $dalleQuery = DalleImageGenerate::withCount(['likes', 'favorites']);
+
+        if ($request->filled('search')) {
+            $dalleQuery->whereRaw('LOWER(prompt) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
-    
-        if ($request->has('resolution') && !empty($request->input('resolution'))) {
-            $resolution = $request->input('resolution');
-            $query->where('resolution', $resolution);
+
+        if ($request->filled('resolution')) {
+            $dalleQuery->where('resolution', $request->input('resolution'));
         }
-    
-        if ($request->has('style') && !empty($request->input('style'))) {
-            $style = $request->input('style');
-            $query->where('style', 'LIKE', '%' . $style . '%');
+
+        if ($request->filled('style')) {
+            $dalleQuery->where('style', 'LIKE', '%' . $request->input('style') . '%');
         }
-    
-    
-        $images = $query->latest()->paginate(20);
-        // $stableImages = $stableImagesQuery->latest()->paginate(20);
-    
-        // Generate Azure Blob Storage URL for each image with SAS token
-        foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
-            $image->liked_by_user = LikedImagesDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
-            $image->favorited_by_user = FavoriteImageDalle::where('user_id', Auth::id())->where('image_id', $image->id)->exists();
+
+        $dalleImages = $dalleQuery->get()->map(function ($image) use ($userId) {
+            $image->type = 'dalle';
+            $image->image_url = config('filesystems.disks.azure.url')
+                . config('filesystems.disks.azure.container') . '/' . $image->image;
+            $image->liked_by_user = LikedImagesDalle::where('user_id', $userId)->where('image_id', $image->id)->exists();
+            $image->favorited_by_user = FavoriteImageDalle::where('user_id', $userId)->where('image_id', $image->id)->exists();
+            return $image;
+        });
+
+        $generatedImages = GeneratedImage::where('user_id', $userId)->get()->map(function ($image) {
+            $image->type = 'generated';
+            $image->image_url = config('filesystems.disks.azure.url')
+                . config('filesystems.disks.azure.container') . '/' . $image->image;
+            return $image;
+        });
+
+        $merged = collect();
+
+        foreach ($dalleImages as $image) {
+            $merged->push($image);
         }
-    
+
+        foreach ($generatedImages as $image) {
+            $merged->push($image);
+        }
+
+        // === Sort by created_at or id ===
+        $sorted = $merged->sortByDesc('id')->values();
+
+        // === Manual Pagination ===
+        $perPage = 20;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $sorted->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $paginated = new LengthAwarePaginator($currentPageItems, $sorted->count(), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
+
         if ($request->ajax()) {
-            $imageGalleryPartial = view('frontend.image_gallery_partial', compact('images'))->render();
-            // $stableImagesPartial = view('frontend.stable_images_partial_frontend', compact('stableImages'))->render();
+            $imageGalleryPartial = view('frontend.image_gallery_partial', ['images' => $paginated])->render();
+
             return response()->json([
                 'imagesPartial' => $imageGalleryPartial,
-                // 'stableImagesPartial' => $stableImagesPartial,
             ]);
         }
-    
-        return view('frontend.ai_image_gallery', compact('images'));
+
+        return view('frontend.ai_image_gallery', ['images' => $paginated]);
     }
+
     
     //Jokes (Magic Ball)
     public function MagicBallJokes()
