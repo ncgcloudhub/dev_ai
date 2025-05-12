@@ -400,7 +400,7 @@
                         },
                         body: JSON.stringify({
                             title: 'New Chat',
-                            messages: conversation
+                            messages: []
                         })
                     });
                     

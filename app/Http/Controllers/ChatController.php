@@ -75,19 +75,23 @@ class ChatController extends Controller
                     ->first();
 
                 if ($conversation) {
+                    // Only save if this is NOT the first message
                     // Save user message
-                    ChatMessage::create([
-                        'conversation_id' => $conversation->id,
-                        'role' => 'user',
-                        'content' => $request->message
-                    ]);
+                    if (count($request->conversation ?? []) > 0) {
+                        // Save user message
+                        ChatMessage::create([
+                            'conversation_id' => $conversation->id,
+                            'role' => 'user',
+                            'content' => $request->message
+                        ]);
 
-                    // Save assistant message
-                    ChatMessage::create([
-                        'conversation_id' => $conversation->id,
-                        'role' => 'assistant',
-                        'content' => $fullContent
-                    ]);
+                        // Save assistant message
+                        ChatMessage::create([
+                            'conversation_id' => $conversation->id,
+                            'role' => 'assistant',
+                            'content' => $fullContent
+                        ]);
+                    }
 
                     // Update conversation title if it's the first message
                     if ($conversation->title === 'New Chat') {
