@@ -415,10 +415,9 @@ class HomeController extends Controller
     {   
         $tools = EducationTools::get();
         foreach ($tools as $image) {
-            $image->image = config('filesystems.disks.azure_site.url') 
-                . config('filesystems.disks.azure_site.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure_site.sas_token');
+            $image->image = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
         }
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();
        
@@ -431,10 +430,9 @@ class HomeController extends Controller
         $tool = EducationTools::where('slug', $slug)->firstOrFail();
     
          // Append full Azure URL
-         $tool->image = config('filesystems.disks.azure_site.url') 
-         . config('filesystems.disks.azure_site.container') 
-         . '/' . $tool->image 
-         . '?' . config('filesystems.disks.azure_site.sas_token');
+         $tool->image = config('filesystems.disks.azure.url') 
+         . config('filesystems.disks.azure.container') 
+         . '/' . $tool->image;
 
         $classes = GradeClass::with('subjects')->get();
         $categories = EducationToolsCategory::orderBy('id', 'ASC')->get();

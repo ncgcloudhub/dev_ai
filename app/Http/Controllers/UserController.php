@@ -37,10 +37,9 @@ class UserController extends Controller
         $eduTools = EducationTools::limit(5)->get();
 
         foreach ($eduTools as $image) {
-            $image->image = config('filesystems.disks.azure_site.url') 
-                . config('filesystems.disks.azure_site.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure_site.sas_token');
+            $image->image = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
         }
         
         $prompts = PromptLibrary::inRandomOrder()
