@@ -28,6 +28,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use App\Exports\GeneratedImagesExport;
+use App\Models\GeneratedImage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GenerateImagesController extends Controller
@@ -137,7 +138,10 @@ class GenerateImagesController extends Controller
             }
         }
 
+        $usedModel = null;
+
         if ($request->dall_e_2) {
+            $usedModel = 'dall-e-2';
             Log::info($request->all());
             Log::info('Inside Dalle 2 prompt: ' . $prompt);
 
@@ -179,6 +183,7 @@ class GenerateImagesController extends Controller
         // DAll-e 2 End
 
         if ($request->dall_e_3) {
+            $usedModel = 'dall-e-3';
             Log::info($request->all());
             Log::info('Inside Dalle 3 prompt: ' . $prompt);
             if ($request->quality) {
@@ -262,11 +267,10 @@ class GenerateImagesController extends Controller
         // Save the compressed watermarked image to Azure Blob Storage
         try {
             $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-$source = 'dalle';
-$userName = Str::slug(auth()->user()->name);
-$timestamp = now()->format('YmdHis');
-$imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
-
+            $source = 'dalle';
+            $userName = Str::slug(auth()->user()->name);
+            $timestamp = now()->format('YmdHis');
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
 
             $containerName = config('filesystems.disks.azure.container');
             $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
@@ -281,11 +285,11 @@ $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
 
         // Save image information to the database
         try {
-            $imageModel = new ModelsDalleImageGenerate;
+            $imageModel = new GeneratedImage();
             $imageModel->image = $imagePath;
             $imageModel->user_id = auth()->user()->id;
-            $imageModel->status = 'inactive';
             $imageModel->prompt = $prompt;
+            $imageModel->model = $usedModel;
             $imageModel->resolution = $size;
             $imageModel->style = $userStyleImplode;
             $imageModel->save();
