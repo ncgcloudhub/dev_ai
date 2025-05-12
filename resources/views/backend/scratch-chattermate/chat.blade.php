@@ -161,7 +161,7 @@
                         </button>
                     </form>
                     <p class="text-xs text-gray-500 mt-2 text-center">
-                        ChatGPT can make mistakes. Consider checking important information.
+                       <strong>Clever Creator AI</strong> can make mistakes. Consider checking important information.
                     </p>
                 </div>
             </div>
