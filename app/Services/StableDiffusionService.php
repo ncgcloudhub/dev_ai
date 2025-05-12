@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
+use Illuminate\Support\Str;
 
 class StableDiffusionService
 {
@@ -86,7 +87,11 @@ class StableDiffusionService
     
         if ($response->status() == 200) {
             // Generate the image name in the desired format
-            $imageName = time() . '-' . uniqid() . '.webp';
+            $source = 'sd';
+            $userName = Str::slug(auth()->user()->name);
+            $timestamp = now()->format('YmdHis');
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
             $imagePath = $imageName;
     
             // Create an instance of Intervention Image from the response content
