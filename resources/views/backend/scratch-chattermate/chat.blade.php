@@ -373,7 +373,7 @@
         }
         
         // Add a message to the chat
-        function addMessage(role, content) {
+       function addMessage(role, content) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
             
@@ -382,26 +382,37 @@
             
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
-            contentDiv.innerHTML = marked.parse(content);
+            
+            if (role === 'user') {
+                // For user messages, display raw text without Markdown/HTML processing
+                contentDiv.textContent = content;
+            } else {
+                // For assistant messages, process with Markdown
+                contentDiv.innerHTML = marked.parse(content);
+                
+                // Add copy buttons to code blocks
+                addCopyButtonsToCodeBlocks();
+                
+                // Highlight code blocks
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            }
             
             bubbleDiv.appendChild(contentDiv);
             messageDiv.appendChild(bubbleDiv);
             
-            const messagesContainer = chatContainer.querySelector('.space-y-4');
+            const messagesContainer = chatContainer.querySelector('.space-y-4') || document.createElement('div');
+            if (!chatContainer.querySelector('.space-y-4')) {
+                messagesContainer.className = 'space-y-4';
+                chatContainer.appendChild(messagesContainer);
+            }
             messagesContainer.appendChild(messageDiv);
-            
-            // Add copy buttons to all code blocks
-            addCopyButtonsToCodeBlocks();
             
             // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            // Highlight code blocks
-            document.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
         }
-        
+
         // Function to add copy buttons to all code blocks
         function addCopyButtonsToCodeBlocks() {
             document.querySelectorAll('pre').forEach((preElement) => {
