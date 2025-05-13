@@ -592,19 +592,25 @@ class GenerateImagesController extends Controller
                     // Save the compressed image to Azure Blob Storage
                     $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
 
-                    $imageName = time() . '-' . uniqid() . '.jpg';
+                    $source = 'dalle-greeting-card';
+                    $userName = Str::slug(auth()->user()->name);
+                    $timestamp = now()->format('YmdHis');
+                    $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
                     $containerName = config('filesystems.disks.azure.container');
                     $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
 
                     $imagePath = $imageName;
 
                     // Save image information to database
-                    $imageModel = new ModelsDalleImageGenerate;
+
+                    $imageModel = new GeneratedImage();
                     $imageModel->image = $imagePath;
-                    $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
-                    $imageModel->status = 'inactive'; // Set the status as per your requirements
-                    $imageModel->prompt = $finalPrompt; // Set the prompt if needed
-                    $imageModel->resolution = $size; // Set the resolution if needed
+                    $imageModel->user_id = auth()->user()->id;
+                    $imageModel->prompt = $finalPrompt;
+                    $imageModel->model = 'dall-e-3';
+                    $imageModel->resolution = $size;
+                    $imageModel->style = $style;
                     $imageModel->festival = 'yes'; // Set Festive Status
                     $imageModel->save();
                 }
