@@ -50,7 +50,7 @@
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
-                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#dalleOffcanvas" role="button"><i class="bx bx-wrench"></i></a>
+                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#dalleOffcanvas" role="button" title="Advance Settings"><i class="bx bx-wrench"></i></a>
                 </h1>
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
@@ -63,7 +63,7 @@
                             <i class="ri-hammer-line fs-4"></i>
                         </a>
                         <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
-                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y" title="Speech to Text">
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
                     </div>
@@ -79,7 +79,7 @@
                 @csrf
                 <h1 id="sdHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | Stable Diffusion</strong>
-                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#sdOffcanvas" role="button"><i class="bx bx-wrench"></i></a>
+                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#sdOffcanvas" role="button" title="Advance Settings"><i class="bx bx-wrench"></i></a>
                 </h1>
                 <h2 id="sdSubheading" class="gradient-text-3">Transform your Text into stunning images with Stable Diffusion</h2>
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
@@ -95,7 +95,7 @@
                             <i class="ri-hammer-line fs-4"></i>
                         </a>
                         <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="sdPrompt" placeholder="Write prompt to generate Image"></textarea>
-                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y">
+                        <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y" title="Speech to Text">
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
                     </div>
@@ -112,10 +112,10 @@
             <div class="model-switcher text-center my-4">
                 <p class="text-light mb-2 fw-semibold">Select Image Generation Model:</p>
                 <div class="btn-group toggle-model-buttons" role="group" aria-label="AI Model Switcher">
-                    <button type="button" class="btn btn-outline-light model-btn active" data-target="dalleForm">
+                    <button type="button" class="btn btn-outline-light model-btn active" data-target="dalleForm" title="Generate Images using DALL-E">
                         🎨 DALL·E
                     </button>
-                    <button type="button" class="btn btn-outline-light model-btn" data-target="sdForm">
+                    <button type="button" class="btn btn-outline-light model-btn" data-target="sdForm" title="Generate Images using Stable Diffusion">
                         🧠 Stable Diffusion
                     </button>
                 </div>
@@ -159,13 +159,13 @@
                                         <div class="d-flex gap-3">
                                         <button type="button"
                                             class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 like-button"
-                                            data-image-id="{{ $item->id }}">
+                                            data-image-id="{{ $item->id }}" title="Like Image">
                                             <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
                                             <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
                                         </button>
                                         <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}"
                                             class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button"
-                                            onclick="incrementDownloadCount({{ $item->id }})">
+                                            onclick="incrementDownloadCount({{ $item->id }})" title="Download Image">
                                             <i class="ri-download-fill text-muted align-bottom me-1"></i> <span class="download-count">{{ $item->downloads }} </span>
                                         </a>
                                         
