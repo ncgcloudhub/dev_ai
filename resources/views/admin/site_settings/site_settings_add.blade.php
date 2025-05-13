@@ -4,8 +4,7 @@
 <link href="{{ URL::asset('build/libs/dropzone/dropzone.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ URL::asset('build/libs/filepond/filepond.min.css') }}" type="text/css" />
 <link rel="stylesheet"
-    href="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
-@endsection
+    href="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">@endsection
 
 @section('content')
 @component('admin.components.breadcrumb')
@@ -14,251 +13,334 @@
 @endcomponent
 
 <div class="row">
-<div class="col-xxl-6">
-    <form method="POST" action="{{route('site.settings.store')}}" class="row g-3" enctype="multipart/form-data">
-        @csrf
-    <div class="card">
-        <div class="card-header align-items-center d-flex">
-            <h4 class="card-title mb-0 flex-grow-1">Site Settings</h4>
-        </div><!-- end card header -->
-
-        <div class="card-body">
-            <div class="live-preview">
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Favicon Picture Selection</h4>
-                    </div><!-- end card header -->
-                    
-                    <div class="card-body">
-                      
-                        <div class="avatar-xl mx-auto">
-                            <input type="file"
-                                   class="filepond filepond-input-circle"
-                                   name="favicon"
-                                   accept="image/png, image/jpeg, image/gif"/>
-                        </div>
-                
-                        <!-- Display current favicon image -->
-                        <div class="mt-3">
-                            @if($setting->favicon)
-                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->favicon) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
-                            @else
-                                <p></p>
-                            @endif
-                        </div>
-                    </div>
-                    <!-- end card body -->
+    <div class="col-xxl-6">
+        <form method="POST" action="{{route('site.settings.store')}}" class="row g-3" enctype="multipart/form-data">
+            @csrf
+            
+            {{-- Tab Navigation --}}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#site-settings" role="tab">
+                                <i class="ri-global-line fs-20"></i> Site
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#frontend-settings" role="tab">
+                                <i class="ri-paint-brush-line fs-20"></i> Frontend
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#dashboard-settings" role="tab">
+                                <i class="ri-dashboard-line fs-20"></i> Dashboard
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0">Watermark (Images)</h4>
-                    </div><!-- end card header -->
-                    
-                    <div class="card-body">
-                      
-                        <div class="avatar-xl mx-auto">
-                            <input type="file"
-                                   class="filepond filepond-input-circle"
-                                   name="watermark"
-                                   accept="image/png, image/jpeg, image/gif"/>
-                        </div>
-                
-                        <!-- Display current watermark image -->
-                        <div class="mt-3">
-                            @if($setting->watermark)
-                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->watermark) }}" alt="Current watermark" width="100px" class="img-fluid"/>
-                            @else
-                                <p></p>
-                            @endif
-                        </div>
-                    </div>
-                    <!-- end card body -->
-                </div>
-
-                    <div class="col-md-12">
-                        <label for="title" class="form-label">Title</label>
-                        <input type="text" name="title" class="form-control mb-3" id="title" value="{{$setting->title}}" placeholder="Enter Character Name">
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Header Logo when Background is Light</h4>
-                        </div><!-- end card header -->
-                
-                        <div class="card-body">
-                          
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="header_logo_light"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-                            <!-- Display current favicon image -->
-                            <div class="mt-3">
-                                @if($setting->header_logo_light)
-                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_light) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
-                                @else
-                                    <p></p>
-                                @endif
-                            </div>
-                
-                        </div>
-                        <!-- end card body -->
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Header Logo when Background is Dark</h4>
-                        </div><!-- end card header -->
-                
-                        <div class="card-body">
-                          
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="header_logo_dark"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-
-                            <div class="mt-3">
-                                @if($setting->header_logo_dark)
-                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_dark) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
-                                @else
-                                    <p></p>
-                                @endif
-                            </div>
-                
-                        </div>
-                        <!-- end card body -->
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Banner Image</h4>
-                        </div><!-- end card header -->
-                
-                        <div class="card-body">
-                          
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="banner_img"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-                
-                        </div>
-                        <!-- end card body -->
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="Banner Text" class="form-label">Banner Text</label>
-                        <input type="text" name="banner_text" class="form-control mb-3" id="banner_text" value="{{$setting->banner_text}}" placeholder="Enter Role">
-                    </div>
-
-                    {{-- Magic Ball --}}
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Magic Ball (Loading Screen)</h4>
-                        </div><!-- end card header -->
-
-                        <div class="card-body">
-                        
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="magic_ball"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-
-                        </div>
-                        <!-- end card body -->
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title mb-0">Footer Logo</h4>
-                        </div><!-- end card header -->
-                
-                        <div class="card-body">
-                          
-                            <div class="avatar-xl mx-auto">
-                                <input type="file"
-                                class="filepond filepond-input-circle"
-                                name="footer_logo"
-                                accept="image/png, image/jpeg, image/gif"/>
-                            </div>
-                
-                        </div>
-                        <!-- end card body -->
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <label for="footer_text" class="form-label">Footer Text</label>
-                        <input type="text" name="footer_text" class="form-control mb-3" id="footer_text" value="{{$setting->footer_text}}" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="facebook" class="form-label">Facebook</label>
-                        <input type="text" name="facebook" class="form-control mb-3" id="facebook" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="instagram" class="form-label">Instagram</label>
-                        <input type="text" name="instagram" class="form-control mb-3" id="instagram" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="youtube" class="form-label">Youtube</label>
-                        <input type="text" name="youtube" class="form-control mb-3" id="youtube" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="linkedin" class="form-label">LinkedIn</label>
-                        <input type="text" name="linkedin" class="form-control mb-3" id="linkedin" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="twitter" class="form-label">Twitter</label>
-                        <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
-                    </div>
-
-                    <div class="col-md-12">
-                        <label for="domain" class="form-label">Domain Expiry Date</label>
-                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" 
-                               value="{{ old('domain', \Carbon\Carbon::parse($setting->domain)->format('Y-m-d\TH:i')) }}">
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <label for="hosting" class="form-label">Hosting Expiry Date</label>
-                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" 
-                               value="{{ old('hosting', \Carbon\Carbon::parse($setting->hosting)->format('Y-m-d\TH:i')) }}">
-                    </div>
-                
-                    <div class="col-md-12">
-                        <label for="ssl" class="form-label">SSL Expiry Date</label>
-                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" 
-                               value="{{ old('ssl', \Carbon\Carbon::parse($setting->ssl)->format('Y-m-d\TH:i')) }}">
-                    </div>
-               
             </div>
-        </div>
+
+            {{-- Tab Content --}}
+            <div class="tab-content">
+                
+                {{-- Site Settings Tab --}}
+                <div class="tab-pane active" id="site-settings" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body">
+                           <div class="live-preview">
+                
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Favicon Picture Selection</h4>
+                                    </div><!-- end card header -->
+                                    
+                                    <div class="card-body">
+                                    
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="favicon"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                        </div>
+                                
+                                        <!-- Display current favicon image -->
+                                        <div class="mt-3">
+                                            @if($setting->favicon)
+                                                <img style="border-radius: 50%" src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->favicon }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                            @else
+                                                <p></p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Watermark (Images)</h4>
+                                    </div><!-- end card header -->
+                                    
+                                    <div class="card-body">
+                                    
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="watermark"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                        </div>
+                                
+                                        <!-- Display current watermark image -->
+                                        <div class="mt-3">
+                                            @if($setting->watermark)
+                                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->watermark) }}" alt="Current watermark" width="100px" class="img-fluid"/>
+                                            @else
+                                                <p></p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+
+                                    <div class="col-md-12">
+                                        <label for="title" class="form-label">Title</label>
+                                        <input type="text" name="title" class="form-control mb-3" id="title" value="{{$setting->title}}" placeholder="Enter Character Name">
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Header Logo when Background is Light</h4>
+                                        </div><!-- end card header -->
+                                
+                                        <div class="card-body">
+                                        
+                                            <div class="avatar-xl mx-auto">
+                                                <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="header_logo_light"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+                                            <!-- Display current favicon image -->
+                                            <div class="mt-3">
+                                                @if($setting->header_logo_light)
+                                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_light) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                @else
+                                                    <p></p>
+                                                @endif
+                                            </div>
+                                
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Header Logo when Background is Dark</h4>
+                                        </div><!-- end card header -->
+                                
+                                        <div class="card-body">
+                                        
+                                            <div class="avatar-xl mx-auto">
+                                                <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="header_logo_dark"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+
+                                            <div class="mt-3">
+                                                @if($setting->header_logo_dark)
+                                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_dark) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                @else
+                                                    <p></p>
+                                                @endif
+                                            </div>
+                                
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Banner Image</h4>
+                                        </div><!-- end card header -->
+                                
+                                        <div class="card-body">
+                                        
+                                            <div class="avatar-xl mx-auto">
+                                                <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="banner_img"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+                                
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="Banner Text" class="form-label">Banner Text</label>
+                                        <input type="text" name="banner_text" class="form-control mb-3" id="banner_text" value="{{$setting->banner_text}}" placeholder="Enter Role">
+                                    </div>
+
+                                    {{-- Magic Ball --}}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Magic Ball (Loading Screen)</h4>
+                                        </div><!-- end card header -->
+
+                                        <div class="card-body">
+                                        
+                                            <div class="avatar-xl mx-auto">
+                                                <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="magic_ball"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title mb-0">Footer Logo</h4>
+                                        </div><!-- end card header -->
+                                
+                                        <div class="card-body">
+                                        
+                                            <div class="avatar-xl mx-auto">
+                                                <input type="file"
+                                                class="filepond filepond-input-circle"
+                                                name="footer_logo"
+                                                accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+                                
+                                        </div>
+                                        <!-- end card body -->
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <label for="footer_text" class="form-label">Footer Text</label>
+                                        <input type="text" name="footer_text" class="form-control mb-3" id="footer_text" value="{{$setting->footer_text}}" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="facebook" class="form-label">Facebook</label>
+                                        <input type="text" name="facebook" class="form-control mb-3" id="facebook" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="instagram" class="form-label">Instagram</label>
+                                        <input type="text" name="instagram" class="form-control mb-3" id="instagram" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="youtube" class="form-label">Youtube</label>
+                                        <input type="text" name="youtube" class="form-control mb-3" id="youtube" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="linkedin" class="form-label">LinkedIn</label>
+                                        <input type="text" name="linkedin" class="form-control mb-3" id="linkedin" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="twitter" class="form-label">Twitter</label>
+                                        <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <label for="domain" class="form-label">Domain Expiry Date</label>
+                                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" 
+                                            value="{{ old('domain', \Carbon\Carbon::parse($setting->domain)->format('Y-m-d\TH:i')) }}">
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <label for="hosting" class="form-label">Hosting Expiry Date</label>
+                                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" 
+                                            value="{{ old('hosting', \Carbon\Carbon::parse($setting->hosting)->format('Y-m-d\TH:i')) }}">
+                                    </div>
+                                
+                                    <div class="col-md-12">
+                                        <label for="ssl" class="form-label">SSL Expiry Date</label>
+                                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" 
+                                            value="{{ old('ssl', \Carbon\Carbon::parse($setting->ssl)->format('Y-m-d\TH:i')) }}">
+                                    </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Frontend Settings Tab --}}
+                <div class="tab-pane" id="frontend-settings" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="frontend_theme" class="form-label">Theme Color</label>
+                                    <input type="color" name="frontend_theme" class="form-control form-control-color" 
+                                           id="frontend_theme" value="{{ $setting->frontend_theme ?? '#ffffff' }}">
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <label for="homepage_text" class="form-label">Homepage Welcome Text</label>
+                                    <textarea class="form-control" name="homepage_text" id="homepage_text" 
+                                              rows="3">{{ $setting->homepage_text ?? '' }}</textarea>
+                                </div>
+                                
+                                {{-- Add more frontend fields --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Dashboard Settings Tab --}}
+                <div class="tab-pane" id="dashboard-settings" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="dashboard_theme" class="form-label">Dashboard Theme</label>
+                                    <select class="form-select" name="dashboard_theme" id="dashboard_theme">
+                                        <option value="light" {{ ($setting->dashboard_theme ?? '') === 'light' ? 'selected' : '' }}>Light</option>
+                                        <option value="dark" {{ ($setting->dashboard_theme ?? '') === 'dark' ? 'selected' : '' }}>Dark</option>
+                                        <option value="system" {{ ($setting->dashboard_theme ?? '') === 'system' ? 'selected' : '' }}>System Default</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="analytics_enabled" 
+                                               name="analytics_enabled" {{ ($setting->analytics_enabled ?? false) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="analytics_enabled">
+                                            Enable Analytics Tracking
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                {{-- Add more dashboard fields --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Submit Button --}}
+            <div class="col-12 mt-4">
+                <div class="text-end">
+                    <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
+                        <i class="{{$buttonIcons['save']}}"></i> Save All Settings
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="col-12">
-        <div class="text-end">
-            <button type="submit" class="btn btn-rounded gradient-btn-save mb-5" title="Save">
-                <i class="{{$buttonIcons['save']}}"></i>
-            </button>
-        </div>
-    </div>
-</form>
-</div>
-
-<div class="col-xxl-6">
-    <div class="card">
-        <div class="card-header">
+    {{-- Right Column (Existing Hex Password and Subscription Sections) --}}
+    <div class="col-xxl-6">
+        {{-- Your existing right column content --}}
+        <div class="card">
+                    <div class="card-header">
             <h4 class="card-title">Generate Hex Password</h4>
         </div><!-- end card header -->
 
@@ -290,79 +372,54 @@
                 </button>
             </form>
         </div><!-- end card-body -->
-    </div><!-- end card -->
-    
-    {{-- Subscription Carry Over --}}
-    <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Subscription Carry Over</h4>
-        </div><!-- end card header -->
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h4 class="card-title">Subscription Carry Over</h4>
+            </div><!-- end card header -->
 
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
+            <div class="card-body">
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
-            <form method="POST" action="{{ route('admin.settings.rollover.update') }}">
-                @csrf
-            
-                <div class="mb-4">
-                    <label class="form-label"><strong>Renewal Behavior for Tokens & Credits</strong></label><br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rollover_enabled" id="carry_over" value="1" {{ old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="carry_over">Carry Over (+=)</label>
+                <form method="POST" action="{{ route('admin.settings.rollover.update') }}">
+                    @csrf
+                
+                    <div class="mb-4">
+                        <label class="form-label"><strong>Renewal Behavior for Tokens & Credits</strong></label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rollover_enabled" id="carry_over" value="1" {{ old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="carry_over">Carry Over (+=)</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rollover_enabled" id="replace" value="0" {{ !old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="replace">Replace (=)</label>
+                        </div>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="rollover_enabled" id="replace" value="0" {{ !old('rollover_enabled', $setting->rollover_enabled) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="replace">Replace (=)</label>
-                    </div>
-                </div>
-            
-                <button type="submit" class="btn btn-primary">Save Settings</button>
-            </form>
-            
-        </div><!-- end card-body -->
-    </div><!-- end card -->
-</div>
+                
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </form>
+                
+            </div><!-- end card-body -->
+        </div>
+    </div>
 </div>
 @endsection
 
-
 @section('script')
-<script src="{{ URL::asset('build/libs/dropzone/dropzone-min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/filepond/filepond.min.js') }}"></script>
-<script src="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js') }}">
-</script>
-<script
-    src="{{ URL::asset('build/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}">
-</script>
-<script
-    src="{{ URL::asset('build/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}">
-</script>
-<script src="{{ URL::asset('build/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
-
-<script src="{{ URL::asset('build/js/pages/form-file-upload.init.js') }}"></script>
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
-
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.3/mammoth.browser.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-
-
-{{-- HEX PAss Generator --}}
+{{-- Your existing scripts --}}
 <script>
-    document.getElementById('generateHexPassBtn').addEventListener('click', function() {
-        const hex = generateHexPassword();
-        document.getElementById('hex_pass').value = hex;
-    });
-
-    function generateHexPassword() {
-        let hex = '';
-        const characters = 'abcdef0123456789';
-        for (let i = 0; i < 16; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            hex += characters[randomIndex];
-        }
-        return hex;
-    }
+    // Initialize Bootstrap tabs
+    var triggerTabList = [].slice.call(document.querySelectorAll('a[data-bs-toggle="tab"]'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+        
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
 </script>
 @endsection
