@@ -45,7 +45,7 @@
 <div class="container-fluid py-5 px-5">
     <div class="row">
         <div class="col-md-6">
-            <!-- DALL-E Form -->
+           <!-- DALL-E Form -->
             <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
@@ -69,6 +69,8 @@
                     </div>
                     <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
+                <!-- Error message for empty prompt -->
+                <div id="dalleError" class="text-danger mt-2" style="display: none;">Please write a prompt to generate an image.</div>
                 <br>
             </form>
 
@@ -81,7 +83,7 @@
                 </h1>
                 <h2 id="sdSubheading" class="gradient-text-3">Transform your Text into stunning images with Stable Diffusion</h2>
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
-                
+
                 {{-- Fields SD--}}
                 <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_sd">
                 <input type="hidden" name="hiddenStyle" id="hiddenStyle">
@@ -99,6 +101,8 @@
                     </div>
                     <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
                 </div>
+                <!-- Error message for empty prompt -->
+                <div id="sdError" class="text-danger mt-2" style="display: none;">Please write a prompt to generate an image.</div>
                 <br>
             </form>
                      
@@ -397,17 +401,25 @@
         });
     </script>
 
-    {{-- Dalle SCRIPTS Start--}}
+   {{-- Dalle SCRIPTS Start --}}
     <script>
         $(document).ready(function() {
-
             $('#dalleForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
                 
+                var prompt = $('#dallePrompt').val().trim();
+                
+                if (!prompt) {
+                    // Show error message if prompt is empty
+                    $('#dalleError').show();
+                    return; // Prevent form submission
+                } else {
+                    $('#dalleError').hide(); // Hide error message if prompt is filled
+                }
+
                 // Show the magic ball
                 showMagicBall('facts', 'image');
 
-            
                 // Create a FormData object
                 var formData = new FormData(this);
 
@@ -431,18 +443,17 @@
                     processData: false, // Prevent jQuery from automatically processing the data
                     contentType: false,
                     success: function(response) {
-                    // Hide the magic ball after content loads
-                    hideMagicBall();
+                        // Hide the magic ball after content loads
+                        hideMagicBall();
 
                         console.log(response);
-                    
+
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
                             // Create an image element
                             var temp = `<a class="image-popup" href="${imageData.url}" title="">
                                             <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${imageData.url}" alt="" />
-                                        </a>
-                                        `;
+                                        </a>`;
 
                             // Append the image to the container
                             $('#image-container').append(temp);
@@ -456,10 +467,9 @@
                                 loop: true
                             });
                         });
-                
+
                         var credits_left = response.credit_left;
                         $('.credit-left').text(credits_left);
-
                     },
                     error: function(xhr, status, error) {
                         // Handle error response
@@ -471,15 +481,25 @@
             });
         });
     </script>
-    {{-- Dalle SCRIPTS END--}}
+    {{-- Dalle SCRIPTS END --}}
 
-    {{-- SD SCRIPTS Start --}}
+
+   {{-- SD SCRIPTS Start --}}
     <script>
         $(document).ready(function() {
-        
             $('#sdForm').on('submit', function(e) {
                 e.preventDefault(); // Prevent the default form submission
-        
+
+                var prompt = $('#sdPrompt').val().trim();
+                
+                if (!prompt) {
+                    // Show error message if prompt is empty
+                    $('#sdError').show();
+                    return; // Prevent form submission
+                } else {
+                    $('#sdError').hide(); // Hide error message if prompt is filled
+                }
+
                 // Show the magic ball
                 showMagicBall('facts', 'image');
 
@@ -487,7 +507,7 @@
                 // Manually append the offcanvas input values
                 formData.append('modelVersion', $('#modelVersion').val());
                 formData.append('imageFormat', $('#imageFormat').val());
-                
+
                 $.ajax({
                     url: $(this).attr('action'), // Use the form's action URL
                     type: 'POST',
@@ -496,12 +516,11 @@
                     contentType: false, // Ensure the correct content type for files
                     
                     success: function(response) {
-                        
                         hideMagicBall();
-                        
+
                         var promptValue = $('#prompt').val();
-                        $('#promptDisplay').text(promptValue); 
-                        
+                        $('#promptDisplay').text(promptValue);
+
                         // Clear previous images
                         $('#image-container').empty();
 
@@ -517,7 +536,7 @@
 
                         } else if (response.image_base64) {
                             hideMagicBall();
-                            
+
                             var base64Image = `data:image/jpeg;base64,${response.image_base64}`;
                             var imageElement = `
                                 <a class="image-popup" href="${base64Image}" title="Generated Image">
@@ -527,6 +546,7 @@
                             `;
                             $('#image-container').append(imageElement);
                         }
+
                         // Initialize GLightbox (Reinitialize after new images are added)
                         const lightbox = GLightbox({
                             selector: '.image-popup',
@@ -534,7 +554,7 @@
                             loop: true
                         });
                     },
-        
+
                     error: function(jqXHR, textStatus, errorThrown) {
                         hideMagicBall();
 
@@ -562,18 +582,19 @@
 
         // SD Style Selection
         function selectStyle(styleName, element) {
-        // Set the selected style value in the hidden input field
-        document.getElementById('hiddenStyle').value = styleName;
-        console.log('Selected Style: ' + styleName); // You can log it to see the selected style
-        
-        // Remove 'selected-border' class from all image boxes
-        const imageBoxes = document.querySelectorAll('.image-box');
-        imageBoxes.forEach(box => box.classList.remove('selected-background'));
-        
-        // Add 'selected-border' class to the clicked element only
-        element.classList.add('selected-background');
+            // Set the selected style value in the hidden input field
+            document.getElementById('hiddenStyle').value = styleName;
+            console.log('Selected Style: ' + styleName); // You can log it to see the selected style
+
+            // Remove 'selected-border' class from all image boxes
+            const imageBoxes = document.querySelectorAll('.image-box');
+            imageBoxes.forEach(box => box.classList.remove('selected-background'));
+
+            // Add 'selected-border' class to the clicked element only
+            element.classList.add('selected-background');
         }
     </script>
     {{-- SD SCRIPTS END --}}
+
 
 @endsection
