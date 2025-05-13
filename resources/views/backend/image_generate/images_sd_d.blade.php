@@ -1,13 +1,10 @@
 @extends('admin.layouts.master')
 @section('title') Image to Video @endsection
+@section('sidebar-size', 'sm') <!-- This sets the sidebar size for this page -->
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection
 @section('content')
-@component('admin.components.breadcrumb')
-@slot('li_1') <a href="#">Image Generation</a> @endslot
-@slot('title') Generate Image @endslot
-@endcomponent
 
 <style>
     body {
@@ -123,15 +120,15 @@
         </div>
 
         <div class="col-md-6" id="image-container">    
-                <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
-                    alt="Before and After"
-                    class="before-after img-fluid rounded shadow-sm"
-                    style="max-width: 100%; height: auto;">
-                    <br><br>
-                    <blockquote class="blockquote rounded mb-0">
-                        <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
-                        <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
-                    </blockquote>
+            <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
+                alt="Before and After"
+                class="before-after img-fluid rounded shadow-sm"
+                style="max-width: 100%; height: auto;">
+                <br><br>
+                <blockquote class="blockquote rounded mb-0">
+                    <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
+                    <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
+                </blockquote>
         </div>
 
         <div class="col">
@@ -229,8 +226,7 @@
                     <div class="form-group mb-4">
                         <label class="form-label text-muted small mb-2">Output Quality</label>
                         <select name="quality" class="form-select border-secondary" id="quality" data-choices>
-                            <option value="" disabled selected>Select Quality Level</option>
-                            <option value="standard">Standard Quality</option>
+                            <option value="standard" selected>Standard Quality</option>
                             <option value="hd">HD Quality</option>
                         </select>
                         <small class="form-text text-muted">HD uses 2x credits</small>
@@ -273,97 +269,78 @@
 
         {{-- Offcanvas SD --}}
         <div class="offcanvas offcanvas-start" tabindex="-1" id="sdOffcanvas" aria-labelledby="sdOffcanvasLabel">
-            <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title text-white" id="sdOffcanvasLabel">Stable Diffusion Options</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="offcanvas-header border-bottom bg-dark">
+                <h5 class="offcanvas-title text-white fs-4" id="sdOffcanvasLabel">
+                    <i class="fas fa-sliders-h me-2"></i>Stable Diffusion Settings
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body">
-                <!-- Stable Diffusion specific options -->
-                <select name="modelVersion" id="modelVersion" class="form-select" data-choices onchange="syncModelVersion()">
-                    <option value="" disabled>Select Model</option>
-                    <option value="sd3.5-medium">sd3.5-medium</option>
-                    <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
-                    <option value="sd3.5-large">sd3.5-large</option>
-                    <option value="sd-ultra">SD Ultra</option>
-                    <option value="sd-core">SD Core</option>
-                </select>
 
-                <select name="imageFormat" id="imageFormat" class="form-select" data-choices onchange="syncImageFormat()">
-                    <option value="" disabled>Select format</option>
-                    <option value="jpeg">JPEG</option>
-                    <option value="png">PNG</option>
-                    <option value="webp">WEBP</option>
-                </select>
+            <div class="offcanvas-body bg-light">
+                <!-- Model Version -->
+                <div class="mb-4">
+                    <h6 class="text-dark mb-3 fw-bold"><i class="fas fa-cogs me-2"></i>Model & Format</h6>
 
-                {{-- Style SD--}}
-                <div class="d-flex flex-wrap justify-content-between gap-1">
-                    <!-- Image Box 1 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Animation', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/animation.jpg') }}" alt="Animation" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Animation</p>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label text-muted small mb-2">Model Version</label>
+                        <select name="modelVersion" id="modelVersion" class="form-select form-select-sm border-secondary" data-choices onchange="syncModelVersion()">
+                            <option value="sd3.5-medium" selected>sd3.5-medium</option>
+                            <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
+                            <option value="sd3.5-large">sd3.5-large</option>
+                            <option value="sd-ultra">SD Ultra</option>
+                            <option value="sd-core">SD Core</option>
+                        </select>
                     </div>
-            
-                    <!-- Image Box 2 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cinematic', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/cinematic.jpg') }}" alt="Cinematic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Cinematic</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 3 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Comic', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/comic.jpg') }}" alt="Comic" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Comic</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 4 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Cyberpunk', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/cyberpunk.jpg') }}" alt="Cyberpunk" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Cyberpunk</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 5 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Futurism', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/futurism.jpeg') }}" alt="Futurism" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Futurism</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 6 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Doodle Art', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/doodle_art.jpg') }}" alt="Doodle Art" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Doodle Art</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 7 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Graffiti', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/graffiti.jpg') }}" alt="Graffiti" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Graffiti</p>
-                        </div>
-                    </div>
-            
-                    <!-- Image Box 8 -->
-                    <div class="col-3 mb-3">
-                        <div class="image-box border p-2 text-center d-flex flex-column align-items-center justify-content-between" onclick="selectStyle('Sketch', this)" style="height: 150px;">
-                            <img src="{{ asset('build/images/stable/sketch.jpg') }}" alt="Sketch" class="img-fluid mb-2" style="height: 100px; width: 100%; object-fit: cover;" loading="lazy">
-                            <p class="mb-0 text-white">Sketch</p>
-                        </div>
+
+                    <div class="form-group">
+                        <label class="form-label text-muted small mb-2">Image Format</label>
+                        <select name="imageFormat" id="imageFormat" class="form-select form-select-sm border-secondary" data-choices onchange="syncImageFormat()">
+                            <option value="png" selected>PNG</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="webp">WEBP</option>
+                        </select>
                     </div>
                 </div>
 
+                <hr>
+
+                <!-- Styles -->
+                <div class="pt-4">
+                    <h6 class="text-dark mb-3 fw-bold"><i class="fas fa-palette me-2"></i>Choose a Style</h6>
+                    <div class="row g-2">
+                        @php
+                            $styles = [
+                                ['name' => 'Animation', 'image' => 'animation.jpg'],
+                                ['name' => 'Cinematic', 'image' => 'cinematic.jpg'],
+                                ['name' => 'Comic', 'image' => 'comic.jpg'],
+                                ['name' => 'Cyberpunk', 'image' => 'cyberpunk.jpg'],
+                                ['name' => 'Futurism', 'image' => 'futurism.jpeg'],
+                                ['name' => 'Doodle Art', 'image' => 'doodle_art.jpg'],
+                                ['name' => 'Graffiti', 'image' => 'graffiti.jpg'],
+                                ['name' => 'Sketch', 'image' => 'sketch.jpg'],
+                            ];
+                        @endphp
+
+                        @foreach($styles as $style)
+                            <div class="col-6 col-md-3">
+                                <div class="image-box border p-2 text-center bg-dark-subtle rounded shadow-sm"
+                                    onclick="selectStyle('{{ $style['name'] }}', this)"
+                                    style="cursor: pointer; height: 150px;">
+                                    <img src="{{ asset('build/images/stable/' . $style['image']) }}"
+                                        alt="{{ $style['name'] }}"
+                                        class="img-fluid mb-2 rounded"
+                                        style="height: 100px; width: 100%; object-fit: cover;"
+                                        loading="lazy">
+                                    <p class="mb-0 text-dark small fw-semibold">{{ $style['name'] }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <small class="form-text text-muted mt-2 d-block">Click on a style to apply it</small>
+                </div>
             </div>
         </div>
+
         
     </div>
 </div>
