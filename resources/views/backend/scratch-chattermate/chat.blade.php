@@ -71,7 +71,34 @@
                 transform: translateX(0);
             }
         }
-
+                /* Add these new styles to your existing style section */
+        .code-block-container {
+            position: relative;
+        }
+        .code-block-container:hover .copy-code-button {
+            opacity: 1;
+        }
+        .copy-code-button {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            background-color: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .copy-code-button:hover {
+            background-color: #e1e4e8;
+        }
+        .copy-code-button.copied {
+            background-color: #e6ffed;
+            border-color: #2ea043;
+            color: #2ea043;
+        }
 
     </style>
 </head>
@@ -152,7 +179,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  
             
             <!-- Input area -->
             <div class="p-4 bg-white border-t">
@@ -363,12 +390,59 @@
             const messagesContainer = chatContainer.querySelector('.space-y-4');
             messagesContainer.appendChild(messageDiv);
             
+            // Add copy buttons to all code blocks
+            addCopyButtonsToCodeBlocks();
+            
             // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
             
             // Highlight code blocks
             document.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
+            });
+        }
+        
+        // Function to add copy buttons to all code blocks
+        function addCopyButtonsToCodeBlocks() {
+            document.querySelectorAll('pre').forEach((preElement) => {
+                // Skip if we've already added a copy button
+                if (preElement.querySelector('.copy-code-button')) return;
+                
+                // Create container div
+                const container = document.createElement('div');
+                container.className = 'code-block-container';
+                
+                // Wrap the pre element in the container
+                preElement.parentNode.insertBefore(container, preElement);
+                container.appendChild(preElement);
+                
+                // Create and add the copy button
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-code-button';
+                copyButton.textContent = 'Copy';
+                copyButton.title = 'Copy to clipboard';
+                container.appendChild(copyButton);
+                
+                // Get the code content
+                const code = preElement.querySelector('code')?.innerText || preElement.innerText;
+                
+                // Add click event
+                copyButton.addEventListener('click', () => {
+                    navigator.clipboard.writeText(code).then(() => {
+                        copyButton.textContent = 'Copied!';
+                        copyButton.classList.add('copied');
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copy';
+                            copyButton.classList.remove('copied');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                        copyButton.textContent = 'Failed';
+                        setTimeout(() => {
+                            copyButton.textContent = 'Copy';
+                        }, 2000);
+                    });
+                });
             });
         }
         
@@ -490,6 +564,9 @@
                                 if (data.content) {
                                     fullResponse += data.content;
                                     assistantContent.innerHTML = marked.parse(fullResponse);
+
+                                    // Add copy buttons to any new code blocks that appeared
+                                    addCopyButtonsToCodeBlocks();
                                     
                                     // Scroll to bottom as content is added
                                     chatContainer.scrollTop = chatContainer.scrollHeight;
