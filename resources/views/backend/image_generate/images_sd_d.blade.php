@@ -67,7 +67,7 @@
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
                     </div>
-                    <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
+                    <button type="submit" class="btn gradient-btn-generate" title="Generate Image"><i class="{{$buttonIcons['generate']}} fs-4"></i></button>
                 </div>
                 <!-- Error message for empty prompt -->
                 <div id="dalleError" class="text-danger mt-2" style="display: none;">Please write a prompt to generate an image.</div>
@@ -99,7 +99,7 @@
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
                     </div>
-                    <button type="submit" class="btn gradient-btn-3"><i class="bx bxs-magic-wand fs-4"></i></button>
+                    <button type="submit" class="btn gradient-btn-generate" title="Generate Image"><i class="{{$buttonIcons['generate']}} fs-4"></i></button>
                 </div>
                 <!-- Error message for empty prompt -->
                 <div id="sdError" class="text-danger mt-2" style="display: none;">Please write a prompt to generate an image.</div>
