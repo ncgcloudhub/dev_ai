@@ -83,9 +83,9 @@
                                             </form>
                                             
                                             <br>
-                                            <div class="row gallery-wrapper justify-content-center" id="image-container">
+                                            {{-- <div class="row gallery-wrapper justify-content-center" id="image-container">
                                                 @include('frontend.stable_images_partial_frontend', ['stableImages' => $stableImages])
-                                            </div>
+                                            </div> --}}
                                             <div class="row gallery-wrapper justify-content-center" id="image-container1">
                                                 @include('frontend.image_gallery_partial', ['images' => $images])
                                             </div>

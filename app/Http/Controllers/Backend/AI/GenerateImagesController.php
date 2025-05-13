@@ -28,6 +28,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use App\Exports\GeneratedImagesExport;
+use App\Models\GeneratedImage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class GenerateImagesController extends Controller
@@ -69,7 +70,7 @@ class GenerateImagesController extends Controller
 
         // Generate Azure Blob Storage URL for each image with SAS token and check like/favorite status
         foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
             
             // Check if the image is liked or favorited by the current user
             $image->liked_by_user = LikedImagesDalle::where('user_id', $user_id)->where('image_id', $image->id)->exists();
@@ -137,7 +138,10 @@ class GenerateImagesController extends Controller
             }
         }
 
+        $usedModel = null;
+
         if ($request->dall_e_2) {
+            $usedModel = 'dall-e-2';
             Log::info($request->all());
             Log::info('Inside Dalle 2 prompt: ' . $prompt);
 
@@ -179,6 +183,7 @@ class GenerateImagesController extends Controller
         // DAll-e 2 End
 
         if ($request->dall_e_3) {
+            $usedModel = 'dall-e-3';
             Log::info($request->all());
             Log::info('Inside Dalle 3 prompt: ' . $prompt);
             if ($request->quality) {
@@ -262,7 +267,11 @@ class GenerateImagesController extends Controller
         // Save the compressed watermarked image to Azure Blob Storage
         try {
             $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-            $imageName = time() . '-' . uniqid() . '.webp';
+            $source = 'dalle';
+            $userName = Str::slug(auth()->user()->name);
+            $timestamp = now()->format('YmdHis');
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
             $containerName = config('filesystems.disks.azure.container');
             $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
 
@@ -276,11 +285,11 @@ class GenerateImagesController extends Controller
 
         // Save image information to the database
         try {
-            $imageModel = new ModelsDalleImageGenerate;
+            $imageModel = new GeneratedImage();
             $imageModel->image = $imagePath;
             $imageModel->user_id = auth()->user()->id;
-            $imageModel->status = 'inactive';
             $imageModel->prompt = $prompt;
+            $imageModel->model = $usedModel;
             $imageModel->resolution = $size;
             $imageModel->style = $userStyleImplode;
             $imageModel->save();
@@ -474,19 +483,40 @@ class GenerateImagesController extends Controller
     
         $user = Auth::user(); // Get the authenticated user
         $user_id = $user->id;
-    
-        // Fetch images related to the user and festival
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)
-            ->where('festival', 'yes')
-            ->get();
-    
-        // Append the full image URL
-        foreach ($images as $image) {
+
+        // 1. Base SD images (GeneratedImage)
+        $generatedImages = GeneratedImage::where('user_id', $user_id)->where('festival', 'yes')->orderBy('id', 'desc')->get();
+        foreach ($generatedImages as $image) {
             $image->image_url = config('filesystems.disks.azure.url') 
                 . config('filesystems.disks.azure.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure.sas_token');
+                . '/' . $image->image;
         }
+    
+        // 2. DALL·E Images
+        $dalleImages = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
+            ->where('user_id', $user_id)
+            ->where('festival', 'yes')
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($dalleImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
+        }
+    
+        // 4. Merge all images into one collection
+        $merged = collect();
+
+        foreach ($dalleImages as $image) {
+            $merged->push($image);
+        }
+
+        foreach ($generatedImages as $image) {
+            $merged->push($image);
+        }
+    
+        // Optional: sort by created_at or id descending
+        $images = $merged->sortByDesc('id')->values();
     
         return view('backend.image_generate.eid_card', compact('images', 'user'));
     }
@@ -562,19 +592,25 @@ class GenerateImagesController extends Controller
                     // Save the compressed image to Azure Blob Storage
                     $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
 
-                    $imageName = time() . '-' . uniqid() . '.jpg';
+                    $source = 'dalle-greeting-card';
+                    $userName = Str::slug(auth()->user()->name);
+                    $timestamp = now()->format('YmdHis');
+                    $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
                     $containerName = config('filesystems.disks.azure.container');
                     $blobClient->createBlockBlob($containerName, $imageName, $imageDataBinaryCompressed, new CreateBlockBlobOptions());
 
                     $imagePath = $imageName;
 
                     // Save image information to database
-                    $imageModel = new ModelsDalleImageGenerate;
+
+                    $imageModel = new GeneratedImage();
                     $imageModel->image = $imagePath;
-                    $imageModel->user_id = auth()->user()->id; // Assuming you have a logged-in user
-                    $imageModel->status = 'inactive'; // Set the status as per your requirements
-                    $imageModel->prompt = $finalPrompt; // Set the prompt if needed
-                    $imageModel->resolution = $size; // Set the resolution if needed
+                    $imageModel->user_id = auth()->user()->id;
+                    $imageModel->prompt = $finalPrompt;
+                    $imageModel->model = 'dall-e-3';
+                    $imageModel->resolution = $size;
+                    $imageModel->style = $style;
                     $imageModel->festival = 'yes'; // Set Festive Status
                     $imageModel->save();
                 }

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+
 
 class ImageController extends Controller
 {
@@ -56,19 +58,29 @@ class ImageController extends Controller
         }
     
         // 3. Stable Diffusion Images
-        $sdImages = StableDiffusionGeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
-        foreach ($sdImages as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') 
-                . config('filesystems.disks.azure.container') 
-                . '/' . $image->image_url 
-                . '?' . config('filesystems.disks.azure.sas_token');
+        // $sdImages = StableDiffusionGeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        // foreach ($sdImages as $image) {
+        //     $image->image_url = config('filesystems.disks.azure.url') 
+        //         . config('filesystems.disks.azure.container') 
+        //         . '/' . $image->image_url 
+        //         . '?' . config('filesystems.disks.azure.sas_token');
+        // }
+
+        // 4. Merge all images into one collection
+        $merged = collect();
+
+        foreach ($dalleImages as $image) {
+            $merged->push($image);
+        }
+
+        foreach ($generatedImages as $image) {
+            $merged->push($image);
         }
     
-        // 4. Merge all images into one collection
-        $images = $generatedImages->merge($dalleImages)->merge($sdImages);
+        
     
         // Optional: sort by created_at or id descending
-        $images = $images->sortByDesc('id')->values();
+        $images = $merged->sortByDesc('id')->values();
     
         return view('backend.image_generate.images_sd_d', compact('apiKey', 'lastPackageId', 'images'));
     }
@@ -210,7 +222,11 @@ class ImageController extends Controller
         // Save the compressed watermarked image to Azure Blob Storage
         try {
             $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
-            $imageName = time() . '-' . uniqid() . '.webp';
+            $source = 'dalle';
+            $userName = Str::slug(auth()->user()->name);
+            $timestamp = now()->format('YmdHis');
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+
             $containerName = config('filesystems.disks.azure.container');
             $blobClient->createBlockBlob($containerName, $imageName, $compressedImage->__toString(), new CreateBlockBlobOptions());
 

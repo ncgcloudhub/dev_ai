@@ -1342,26 +1342,23 @@ public function updateSubject(Request $request, $id)
 
         // Append the full Azure URL to each image
         foreach ($tools as $image) {
-            $image->image = config('filesystems.disks.azure_site.url') 
-                . config('filesystems.disks.azure_site.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure_site.sas_token');
+            $image->image = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
         }
 
         // Append the full Azure URL to each image
         foreach ($newTools as $image) {
-            $image->image = config('filesystems.disks.azure_site.url') 
-                . config('filesystems.disks.azure_site.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure_site.sas_token');
+            $image->image = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
         }
 
         // Append the full Azure URL to each image
         foreach ($popularTools as $image) {
-            $image->image = config('filesystems.disks.azure_site.url') 
-                . config('filesystems.disks.azure_site.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure_site.sas_token');
+            $image->image = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
         }
     
         return view('backend.education.education_tools_manage', compact('tools', 'categories', 'newTools', 'popularTools'));
@@ -1440,10 +1437,9 @@ public function updateSubject(Request $request, $id)
         $tool = EducationTools::findOrFail($id);
 
         // Append full Azure URL
-        $tool->image = config('filesystems.disks.azure_site.url') 
-                    . config('filesystems.disks.azure_site.container') 
-                    . '/' . $tool->image 
-                    . '?' . config('filesystems.disks.azure_site.sas_token');
+        $tool->image = config('filesystems.disks.azure.url') 
+                    . config('filesystems.disks.azure.container') 
+                    . '/' . $tool->image;
 
 
         // Log the activity with the Education Tools name
@@ -1456,10 +1452,9 @@ public function updateSubject(Request $request, $id)
 
             // Append the full Azure URL to each image
             foreach ($similarTools as $image) {
-                $image->image = config('filesystems.disks.azure_site.url') 
-                    . config('filesystems.disks.azure_site.container') 
-                    . '/' . $image->image 
-                    . '?' . config('filesystems.disks.azure_site.sas_token');
+                $image->image = config('filesystems.disks.azure.url') 
+                    . config('filesystems.disks.azure.container') 
+                    . '/' . $image->image;
             }
 
         $toolContent = ToolGeneratedContent::where('tool_id', $id)
@@ -1594,10 +1589,10 @@ public function updateSubject(Request $request, $id)
         // Handle image upload to Azure
         if ($request->hasFile('image')) {
             try {
-                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
                 $image = $request->file('image');
-                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension(); // Folder inside blob
-                $containerName = config('filesystems.disks.azure_site.container');
+                $imageName = 'edu-tools-thumbnail-images/' . $image->getClientOriginalName(); // Folder inside blob
+                $containerName = config('filesystems.disks.azure.container');
     
                 $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
     
@@ -1662,8 +1657,8 @@ public function updateSubject(Request $request, $id)
         // Handle image replacement on Azure
         if ($request->hasFile('image')) {
             try {
-                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure_site.connection_string'));
-                $containerName = config('filesystems.disks.azure_site.container');
+                $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+                $containerName = config('filesystems.disks.azure.container');
     
                 // Delete old image if the path exists
                 if (!empty($tool->image)) {
@@ -1677,7 +1672,7 @@ public function updateSubject(Request $request, $id)
     
                 // Upload new image
                 $image = $request->file('image');
-                $imageName = 'eduTools/' . time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $imageName = 'edu-tools-thumbnail-images/' . $image->getClientOriginalName();
     
                 $blobClient->createBlockBlob($containerName, $imageName, file_get_contents($image), new CreateBlockBlobOptions());
     
