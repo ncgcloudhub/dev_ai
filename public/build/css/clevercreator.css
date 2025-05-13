@@ -384,10 +384,10 @@
 
 :root[data-topbar=gradient]{--vz-header-bg: linear-gradient(90deg, #aee0f0, #d596f0);--vz-header-item-color: rgba(1, 13, 14, 0.85);--vz-header-item-bg: #42acd6;--vz-header-item-sub-color: #050d14;--vz-topbar-user-bg: #64b3db;--vz-topbar-search-bg: rgba(148, 205, 228, 0.733);--vz-topbar-search-color: #fff;--vz-header-border: #133b50}
 
-:root[data-sidebar=gradient]{--vz-vertical-menu-bg: linear-gradient(45deg, #461b8a, #ff69b4);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
-:root[data-sidebar=gradient-2]{--vz-vertical-menu-bg: linear-gradient(45deg, #60aec9, #9547b6);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
-:root[data-sidebar=gradient-3]{--vz-vertical-menu-bg: linear-gradient(90deg, #940fec, #e418a0);--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
-:root[data-sidebar=gradient-4]{--vz-vertical-menu-bg: linear-gradient(to top, rgb(112, 114, 245), rgb(201, 18, 201));--vz-vertical-menu-border: var(--vz-success);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient]{--vz-vertical-menu-bg: linear-gradient(45deg, #461b8a, #ff69b4);--vz-vertical-menu-border: var(--vz-pink);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-2]{--vz-vertical-menu-bg: linear-gradient(to right, #1a0a24, #3a0750);--vz-vertical-menu-border: var(--vz-dark);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-3]{--vz-vertical-menu-bg: linear-gradient(90deg, #940fec, #e418a0);--vz-vertical-menu-border: var(--vz-purple);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
+:root[data-sidebar=gradient-4]{--vz-vertical-menu-bg: linear-gradient(to top, rgb(112, 114, 245), rgb(201, 18, 201));--vz-vertical-menu-border: var(--vz-dark);--vz-twocolumn-menu-iconview-bg: var(--vz-info)}
 
 /* Gradient Background for Login and Register Pages top image */
 .auth-one-bg .bg-overlay{background:linear-gradient(to right,#6180d8, #da39d7);opacity:.9}

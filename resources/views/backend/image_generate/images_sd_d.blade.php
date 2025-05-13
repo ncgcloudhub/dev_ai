@@ -1,6 +1,7 @@
 @extends('admin.layouts.master')
 @section('title') Image to Video @endsection
 @section('sidebar-size', 'sm') <!-- This sets the sidebar size for this page -->
+@section('sidebar-color', 'gradient-2') <!-- This sets the sidebar color for this page -->
 @section('css')
 <link rel="stylesheet" href="{{ URL::asset('build/libs/glightbox/css/glightbox.min.css') }}">
 @endsection
