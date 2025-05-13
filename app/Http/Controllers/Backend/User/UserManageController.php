@@ -14,6 +14,7 @@ use App\Mail\UserNotification;
 use App\Models\DalleImageGenerate as ModelsDalleImageGenerate;
 use App\Models\blockCountry;
 use App\Models\EmailSend;
+use App\Models\GeneratedImage;
 use App\Models\UserActivityLog;
 use App\Models\UserFeedback;
 use App\Models\UserPageTime;
@@ -129,7 +130,26 @@ class UserManageController extends Controller
     public function UserDetails($id)
     {
         $user = User::findOrFail($id);
-        $images = ModelsDalleImageGenerate::where('user_id', $id)->get();
+        $user_id = Auth::id();
+
+         // 1. Base SD images (GeneratedImage)
+        $generatedImages = GeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+        foreach ($generatedImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
+        }
+    
+        // 2. DALL·E Images
+        $dalleImages = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
+            ->where('user_id', $user_id)
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($dalleImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
+        }
 
         $logs = UserActivityLog::where('user_id', $id)
         ->latest()
@@ -141,10 +161,19 @@ class UserManageController extends Controller
         ->take(20)
         ->get();
 
-        // Generate Azure Blob Storage URL for each image with SAS token
-        foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+         // 4. Merge all images into one collection
+        $merged = collect();
+
+        foreach ($dalleImages as $image) {
+            $merged->push($image);
         }
+
+        foreach ($generatedImages as $image) {
+            $merged->push($image);
+        }
+    
+        // Optional: sort by created_at or id descending
+        $images = $merged->sortByDesc('id')->values();
 
         return view('backend.user.user_details', compact('user','images', 'logs','time'));
     }
