@@ -10,6 +10,11 @@ use App\Notifications\TokenRenewed;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Log;
+
 
 class SiteSettingsController extends Controller
 {
@@ -21,102 +26,84 @@ class SiteSettingsController extends Controller
         return view('admin.site_settings.site_settings_add', compact('setting','buttonStyles'));
     }
 
+    private function uploadImageToAzure($file, $azureFileName)
+    {
+        try {
+            $image = Image::make($file)
+                ->resize(1920, null, function ($c) {
+                    $c->aspectRatio();
+                    $c->upsize();
+                })
+                ->encode('webp', 80);
+
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $container = config('filesystems.disks.azure.container');
+
+            $blobClient->createBlockBlob(
+                $container,
+                "site-settings/$azureFileName.webp",
+                $image->__toString(),
+                new CreateBlockBlobOptions()
+            );
+
+            return "site-settings/$azureFileName.webp";
+        } catch (\Exception $e) {
+            Log::error("Azure upload failed for $azureFileName", ['error' => $e->getMessage()]);
+            return null;
+        }
+    }
+
     public function SitesettingsStore(Request $request)
     {
         $updateData = [];
 
         if ($request->hasFile('favicon')) {
-            // Get current favicon from the DB
-            $siteSettings = SiteSettings::findOrFail(1);
-            $oldFavicon = $siteSettings->favicon;
-        
-            // Safely delete the old favicon if it exists
-            $oldFaviconPath = public_path('backend/uploads/site/' . $oldFavicon);
-            if ($oldFavicon && file_exists($oldFaviconPath)) {
-                @unlink($oldFaviconPath);
+            $uploadedPath = $this->uploadImageToAzure($request->file('favicon'), 'favicon');
+            if ($uploadedPath) {
+                $updateData['favicon'] = $uploadedPath;
             }
-        
-            // Upload new favicon
-            $favicon = $request->file('favicon');
-            $faviconName = time() . '-' . uniqid() . '.' . $favicon->getClientOriginalExtension();
-            $favicon->move(public_path('backend/uploads/site'), $faviconName);
-        
-            $updateData['favicon'] = $faviconName;
         }
-        
-        if ($request->hasFile('watermark')) {
-            $oldwatermark = SiteSettings::findOrFail(1)->watermark;
-            if ($oldwatermark) {
-                unlink(public_path('backend/uploads/site/' . $oldwatermark));
-            }
 
-            $watermark = $request->file('watermark');
-            $watermark_Name = time() . '-' . uniqid() . '.' . $watermark->getClientOriginalExtension();
-            $watermark->move('backend/uploads/site', $watermark_Name);
-            $updateData['watermark'] = $watermark_Name;
+        if ($request->hasFile('banner_img')) {
+            $uploadedPath = $this->uploadImageToAzure($request->file('banner_img'), 'banner');
+            if ($uploadedPath) {
+                $updateData['banner_img'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('watermark')) {
+            $uploadedPath = $this->uploadImageToAzure($request->file('watermark'), 'watermark');
+            if ($uploadedPath) {
+                $updateData['watermark'] = $uploadedPath;
+            }
         }
 
         if ($request->hasFile('header_logo_dark')) {
-            $oldHeaderLogoDark = SiteSettings::findOrFail(1)->header_logo_dark;
-            if ($oldHeaderLogoDark) {
-                unlink(public_path('backend/uploads/site/' . $oldHeaderLogoDark));
+            $uploadedPath = $this->uploadImageToAzure($request->file('header_logo_dark'), 'header_logo_dark');
+            if ($uploadedPath) {
+                $updateData['header_logo_dark'] = $uploadedPath;
             }
-
-            $header_logo_dark = $request->file('header_logo_dark');
-            $header_logo_dark_Name = time() . '-' . uniqid() . '.' . $header_logo_dark->getClientOriginalExtension();
-            $header_logo_dark->move('backend/uploads/site', $header_logo_dark_Name);
-            $updateData['header_logo_dark'] = $header_logo_dark_Name;
         }
 
         if ($request->hasFile('header_logo_light')) {
-            // Retrieve the old header logo name from the database
-            $oldHeaderLogoLight = SiteSettings::findOrFail(1)->header_logo_light;
-        
-            // Check if the old header logo exists before trying to unlink it
-            if ($oldHeaderLogoLight && file_exists(public_path('backend/uploads/site/' . $oldHeaderLogoLight))) {
-                unlink(public_path('backend/uploads/site/' . $oldHeaderLogoLight));
+            $uploadedPath = $this->uploadImageToAzure($request->file('header_logo_light'), 'header_logo_light');
+            if ($uploadedPath) {
+                $updateData['header_logo_light'] = $uploadedPath;
             }
-        
-            $header_logo_light = $request->file('header_logo_light');
-            $header_logo_light_Name = time() . '-' . uniqid() . '.' . $header_logo_light->getClientOriginalExtension();
-            $header_logo_light->move('backend/uploads/site', $header_logo_light_Name);
-        
-            $updateData['header_logo_light'] = $header_logo_light_Name;
-        }
-        
-
-        if ($request->hasFile('banner_img')) {
-            $oldBannerImg = SiteSettings::findOrFail(1)->banner_img;
-            if ($oldBannerImg) {
-                unlink(public_path('backend/uploads/site/' . $oldBannerImg));
-            }
-
-            $banner_img = $request->file('banner_img');
-            $banner_img_Name = time() . '-' . uniqid() . '.' . $banner_img->getClientOriginalExtension();
-            $banner_img->move('backend/uploads/site', $banner_img_Name);
-            $updateData['banner_img'] = $banner_img_Name;
         }
 
         if ($request->hasFile('magic_ball')) {
-            $oldmagic_ball = SiteSettings::findOrFail(1)->magic_ball;
-            if ($oldmagic_ball) {
-                unlink(public_path('backend/uploads/site/' . $oldmagic_ball));
+            $uploadedPath = $this->uploadImageToAzure($request->file('magic_ball'), 'magic_ball');
+            if ($uploadedPath) {
+                $updateData['magic_ball'] = $uploadedPath;
             }
-            $magic_ball = $request->file('magic_ball');
-            $magic_ball_Name = time() . '-' . uniqid() . '.' . $magic_ball->getClientOriginalExtension();
-            $magic_ball->move('backend/uploads/site', $magic_ball_Name);
-            $updateData['magic_ball'] = $magic_ball_Name;
         }
 
         if ($request->hasFile('footer_logo')) {
-            $oldFooterLogo = SiteSettings::findOrFail(1)->footer_logo;
-            if ($oldFooterLogo) {
-                unlink(public_path('backend/uploads/site/' . $oldFooterLogo));
+            $uploadedPath = $this->uploadImageToAzure($request->file('footer_logo'), 'footer_logo');
+            if ($uploadedPath) {
+                $updateData['footer_logo'] = $uploadedPath;
             }
-            $footer_logo = $request->file('footer_logo');
-            $footer_logo_Name = time() . '-' . uniqid() . '.' . $footer_logo->getClientOriginalExtension();
-            $footer_logo->move('backend/uploads/site', $footer_logo_Name);
-            $updateData['footer_logo'] = $footer_logo_Name;
         }
 
         if ($request->filled('title')) {
