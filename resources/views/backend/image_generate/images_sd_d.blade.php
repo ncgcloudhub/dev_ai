@@ -186,55 +186,88 @@
     <div class="text-center mt-5">
         {{-- Offcanvas Dalle--}}
         <div class="offcanvas offcanvas-start" tabindex="-1" id="dalleOffcanvas" aria-labelledby="dalleOffcanvasLabel">
-            <div class="offcanvas-header border-bottom">
-                <h5 class="offcanvas-title text-white" id="dalleOffcanvasLabel">DALL-E Options</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="offcanvas-header border-bottom bg-dark">
+                <h5 class="offcanvas-title text-white fs-4" id="dalleOffcanvasLabel">
+                    <i class="fas fa-palette me-2"></i>DALL-E Advanced Settings
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body">
-                <!-- DALL-E specific options -->
-                <select name="style[]" class="form-select" data-choices data-choices-removeItem multiple id="style">                                                   
-                    <option value="natural">Natural</option>
-                    <option value="vivid">Vivid</option>
-                    <option value="none">NONE</option>
-                    <option value="cinematic">CINEMATIC</option>
-                    <option value="analog-film">ANALOG FILM</option>
-                    <option value="animation">ANIMATION</option>
-                    <option value="comic">COMIC</option>
-                    <option value="craft-clay">CRAFT CLAY</option>
-                    <option value="fantasy">FANTASY</option>
-                    <option value="line-art">LINE ART</option>
-                    <option value="cyberpunk">CYBERPUNK</option>
-                    <option value="pixel-art">PIXEL ART</option>
-                    <option value="photograph">PHOTOGRAPH</option>
-                    <option value="graffiti">GRAFFITI</option>
-                    <option value="game-gta">GAME GTA</option>
-                    <option value="3d-character">3D CHARACTER</option>
-                    <option value="baroque">BAROQUE</option>
-                    <option value="caricature">CARICATURE</option>
-                    <option value="colored-pencil">COLORED PENCIL</option>
-                    <option value="doddle-art">DODDLE ART</option>
-                    <option value="futurism">FUTURISM</option>
-                    <option value="sketch">SKETCH</option>
-                    <option value="surrealism">SURREALISM</option>
-                    <option value="sticker-designs">STICKER DESIGNS</option>
-                </select>
-
-                <select name="quality" class="form-select" id="quality" data-choices>
-                    <option disabled>Enter Image Quality</option>
-                    <option value="standard">Standard</option>
-                    <option value="hd">HD</option>
-                </select>
-
-                <select name="image_res" class="form-select upgrade_option" id="image_res" data-choices>
-                    <option disabled >Enter Image Resolution</option>
-                    <option value="1024x1024">1024x1024</option>
-                    @if ($lastPackageId)
-                        <option value="1792x1024">1792x1024</option>
-                        <option value="1024x1792">1024x1792</option>
-                    @else
-                        <option value="upgrade">Upgrade to access more options</option>
-                    @endif
-                </select>
+            
+            <div class="offcanvas-body bg-light">
+                <div class="mb-4">
+                    <h6 class="text-dark mb-3 fw-bold"><i class="fas fa-brush me-2"></i>Style Options</h6>
+                    <div class="form-group mb-3">
+                        <label class="form-label text-muted small mb-2">Select Art Styles (Multiple selection allowed)</label>
+                        <select name="style[]" class="form-select form-select-sm border-secondary" 
+                                data-choices data-choices-removeItem multiple id="style"
+                                style="min-height: 120px">
+                            <optgroup label="Basic Styles">
+                                <option value="natural">Natural</option>
+                                <option value="vivid">Vivid</option>
+                                <option value="none">None</option>
+                            </optgroup>
+                            <optgroup label="Artistic Styles">
+                                <option value="cinematic">Cinematic</option>
+                                <option value="analog-film">Analog Film</option>
+                                <option value="animation">Animation</option>
+                                <option value="comic">Comic</option>
+                                <option value="craft-clay">Craft Clay</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="line-art">Line Art</option>
+                                <option value="cyberpunk">Cyberpunk</option>
+                                <option value="pixel-art">Pixel Art</option>
+                                <option value="photograph">Photograph</option>
+                            </optgroup>
+                        </select>
+                        <small class="form-text text-muted">Combine different styles for unique effects</small>
+                    </div>
+                </div>
+                <hr>
+                <div class="pt-4">
+                    <h6 class="text-dark mb-3 fw-bold"><i class="fas fa-cog me-2"></i>Image Settings</h6>
+                    
+                    <div class="form-group mb-4">
+                        <label class="form-label text-muted small mb-2">Output Quality</label>
+                        <select name="quality" class="form-select border-secondary" id="quality" data-choices>
+                            <option value="" disabled selected>Select Quality Level</option>
+                            <option value="standard">Standard Quality</option>
+                            <option value="hd">HD Quality</option>
+                        </select>
+                        <small class="form-text text-muted">HD uses 2x credits</small>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label class="form-label text-muted small mb-2">Image Resolution</label>
+                        <select name="image_res" class="form-select border-secondary upgrade_option" id="image_res" data-choices>
+                            @if(Auth::user()->role === 'admin')
+                                <!-- Admin sees all options -->
+                                <option value="1024x1024">Square (1024×1024)</option>
+                                <option value="1792x1024">Landscape (1792×1024)</option>
+                                <option value="1024x1792">Portrait (1024×1792)</option>
+                            @elseif($lastPackageId)
+                                <!-- Paid User Options -->
+                                <option value="1024x1024">Square (1024×1024)</option>
+                                <option value="1792x1024">Landscape (1792×1024)</option>
+                                <option value="1024x1792">Portrait (1024×1792)</option>
+                            @else
+                                <!-- Free User Options -->
+                                <option value="1024x1024" selected>Square (1024×1024) - Free</option>
+                                <option disabled class="text-muted">
+                                    🔒 Upgrade for Landscape/Portrait Resolutions
+                                </option>
+                            @endif
+                        </select>
+                        <small class="form-text text-muted">
+                            @if(Auth::user()->role === 'admin')
+                                Admins have access to all resolutions
+                            @elseif($lastPackageId)
+                                Higher resolutions use more credits
+                            @else
+                                Free users get standard square resolution
+                            @endif
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
 
