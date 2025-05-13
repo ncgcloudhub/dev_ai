@@ -483,19 +483,40 @@ class GenerateImagesController extends Controller
     
         $user = Auth::user(); // Get the authenticated user
         $user_id = $user->id;
-    
-        // Fetch images related to the user and festival
-        $images = ModelsDalleImageGenerate::where('user_id', $user_id)
-            ->where('festival', 'yes')
-            ->get();
-    
-        // Append the full image URL
-        foreach ($images as $image) {
+
+        // 1. Base SD images (GeneratedImage)
+        $generatedImages = GeneratedImage::where('user_id', $user_id)->where('festival', 'yes')->orderBy('id', 'desc')->get();
+        foreach ($generatedImages as $image) {
             $image->image_url = config('filesystems.disks.azure.url') 
                 . config('filesystems.disks.azure.container') 
-                . '/' . $image->image 
-                . '?' . config('filesystems.disks.azure.sas_token');
+                . '/' . $image->image;
         }
+    
+        // 2. DALL·E Images
+        $dalleImages = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
+            ->where('user_id', $user_id)
+            ->where('festival', 'yes')
+            ->orderBy('id', 'desc')
+            ->get();
+        foreach ($dalleImages as $image) {
+            $image->image_url = config('filesystems.disks.azure.url') 
+                . config('filesystems.disks.azure.container') 
+                . '/' . $image->image;
+        }
+    
+        // 4. Merge all images into one collection
+        $merged = collect();
+
+        foreach ($dalleImages as $image) {
+            $merged->push($image);
+        }
+
+        foreach ($generatedImages as $image) {
+            $merged->push($image);
+        }
+    
+        // Optional: sort by created_at or id descending
+        $images = $merged->sortByDesc('id')->values();
     
         return view('backend.image_generate.eid_card', compact('images', 'user'));
     }
