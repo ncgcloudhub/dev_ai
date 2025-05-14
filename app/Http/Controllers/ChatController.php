@@ -32,7 +32,7 @@ class ChatController extends Controller
         Log::debug('Sending to OpenAI', ['messages' => $messages]);
 
         $response = OpenAI::chat()->createStreamed([
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4.1-nano',
             'messages' => $messages,
             'stream' => true,
         ]);
