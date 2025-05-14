@@ -8,6 +8,19 @@
 @section('content')
 
 <style>
+
+    .navbar-header .user-name-text{
+        color: white;
+    }
+
+    .navbar-header .btn-topbar{
+        color: white
+    }
+
+    #page-topbar {
+        background: linear-gradient(to right, #1a0a24, #3a0750);; /* Use 'background' instead of 'background-color' */
+    }
+
     body {
         background: linear-gradient(to right, #1a0a24, #3a0750);
         color: white;
