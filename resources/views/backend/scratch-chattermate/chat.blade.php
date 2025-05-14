@@ -16,6 +16,8 @@
             padding: 16px;
             margin: 12px 0;
             overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         .message-content code {
             background-color: rgba(175,184,193,0.2);
@@ -71,7 +73,7 @@
                 transform: translateX(0);
             }
         }
-                /* Add these new styles to your existing style section */
+        /* Add these new styles to your existing style section */
         .code-block-container {
             position: relative;
         }
@@ -99,7 +101,29 @@
             border-color: #2ea043;
             color: #2ea043;
         }
-
+        
+        /* New styles for textarea and input area */
+        .input-area {
+            position: relative;
+            width: 100%;
+        }
+        #message-input {
+            resize: none;
+            min-height: 44px;
+            max-height: 200px;
+            overflow-y: auto;
+            line-height: 1.5;
+            padding-right: 60px; /* Space for the send button */
+        }
+        #send-button {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+        }
+        .user-message {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -184,25 +208,31 @@
             <!-- Input area -->
             <div class="p-4 bg-white border-t">
                 <div class="max-w-3xl mx-auto">
-                    <form id="chat-form" class="flex space-x-2">
+                    <form id="chat-form" class="relative">
                         @csrf
-                        <input 
-                            type="text" 
-                            id="message-input" 
-                            placeholder="Type your message..." 
-                            class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            autocomplete="off"
-                        >
-                        <button 
-                            type="submit" 
-                            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            Send
-                        </button>
+                        <div class="input-area">
+                            <textarea 
+                                id="message-input" 
+                                placeholder="Type your message..." 
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                autocomplete="off"
+                                rows="1"
+                            ></textarea>
+                            <button 
+                                type="submit" 
+                                id="send-button"
+                                class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                                disabled
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2 text-center">
+                           <strong>Clever Creator AI</strong> can make mistakes. Consider checking important information.
+                        </p>
                     </form>
-                    <p class="text-xs text-gray-500 mt-2 text-center">
-                       <strong>Clever Creator AI</strong> can make mistakes. Consider checking important information.
-                    </p>
                 </div>
             </div>
         </div>
@@ -219,9 +249,11 @@
         const sidebar = document.getElementById('sidebar');
         const emptyState = document.getElementById('empty-state');
         const examplePrompts = document.querySelectorAll('.example-prompt');
+        const sendButton = document.getElementById('send-button');
         
         let currentConversationId = null;
         let conversation = [];
+        let isWaitingForResponse = false;
         
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
@@ -234,6 +266,9 @@
             if (conversationId) {
                 loadConversation(conversationId);
             }
+            
+            // Focus the textarea on page load
+            messageInput.focus();
         });
         
         // Toggle sidebar on mobile
@@ -370,10 +405,13 @@
             document.querySelectorAll('.conversation-item').forEach(item => {
                 item.classList.remove('bg-gray-800');
             });
+            
+            // Focus the input
+            messageInput.focus();
         }
         
         // Add a message to the chat
-       function addMessage(role, content) {
+        function addMessage(role, content) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
             
@@ -381,10 +419,10 @@
             bubbleDiv.className = `max-w-[85%] rounded-lg p-4 ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-white border'}`;
             
             const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
+            contentDiv.className = role === 'user' ? 'user-message' : 'message-content';
             
             if (role === 'user') {
-                // For user messages, display raw text without Markdown/HTML processing
+                // For user messages, preserve whitespace and newlines
                 contentDiv.textContent = content;
             } else {
                 // For assistant messages, process with Markdown
@@ -457,12 +495,18 @@
             });
         }
         
+        // Auto-resize textarea based on content
+        function resizeTextarea() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = `${Math.min(messageInput.scrollHeight, 200)}px`;
+        }
+        
         // Handle form submission
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const message = messageInput.value.trim();
-            if (!message) return;
+            if (!message || isWaitingForResponse) return;
             
             // Hide empty state if it's visible
             emptyState.style.display = 'none';
@@ -473,8 +517,10 @@
             // Add to conversation history
             conversation.push({ role: 'user', content: message });
             
-            // Clear input
+            // Clear input and reset textarea height
             messageInput.value = '';
+            resizeTextarea();
+            sendButton.disabled = true;
             
             // Create assistant message element
             const assistantDiv = document.createElement('div');
@@ -523,6 +569,7 @@
             
             // Stream response from OpenAI
             try {
+                isWaitingForResponse = true;
                 let fullResponse = '';
                 
                 const response = await fetch('/chatss', {
@@ -610,6 +657,9 @@
                 retryButton.textContent = 'Retry';
                 retryButton.onclick = () => chatForm.dispatchEvent(new Event('submit'));
                 assistantContent.appendChild(retryButton);
+            } finally {
+                isWaitingForResponse = false;
+                messageInput.focus();
             }
         });
         
@@ -620,6 +670,8 @@
         examplePrompts.forEach(prompt => {
             prompt.addEventListener('click', () => {
                 messageInput.value = prompt.textContent.trim().replace(/"/g, '');
+                resizeTextarea();
+                sendButton.disabled = false;
                 chatForm.dispatchEvent(new Event('submit'));
             });
         });
@@ -634,8 +686,17 @@
         
         // Auto-resize textarea as user types
         messageInput.addEventListener('input', () => {
-            messageInput.style.height = 'auto';
-            messageInput.style.height = `${Math.min(messageInput.scrollHeight, 150)}px`;
+            resizeTextarea();
+            sendButton.disabled = messageInput.value.trim() === '';
+        });
+
+        // Handle paste events to maintain formatting
+        messageInput.addEventListener('paste', (e) => {
+            // Let the paste happen first
+            setTimeout(() => {
+                resizeTextarea();
+                sendButton.disabled = messageInput.value.trim() === '';
+            }, 0);
         });
 
         // Handle conversation deletion
