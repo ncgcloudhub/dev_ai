@@ -16,6 +16,7 @@ use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class ImageController extends Controller
@@ -28,63 +29,49 @@ class ImageController extends Controller
         $this->stableDiffusionService = $stableDiffusionService;
         $this->siteSettings = SiteSettings::find(1);
     }
-    
-    public function imageIndex()
+
+    public function imageIndex(Request $request)
     {
         $apiKey = config('services.stable_diffusion.api_key');
         $user_id = Auth::id();
         $lastPackageHistory = PackageHistory::where('user_id', $user_id)->latest()->first();
         $lastPackageId = $lastPackageHistory ? $lastPackageHistory->package_id : null;
-    
-        // 1. Base SD images (GeneratedImage)
+
         $generatedImages = GeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
         foreach ($generatedImages as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') 
-                . config('filesystems.disks.azure.container') 
-                . '/' . $image->image 
+            $image->image_url = config('filesystems.disks.azure.url')
+                . config('filesystems.disks.azure.container') . '/' . $image->image
                 . '?' . config('filesystems.disks.azure.sas_token');
         }
-    
-        // 2. DALL·E Images
-        $dalleImages = ModelsDalleImageGenerate::withCount(['likes', 'favorites'])
-            ->where('user_id', $user_id)
-            ->orderBy('id', 'desc')
-            ->get();
+
+        $dalleImages = ModelsDalleImageGenerate::where('user_id', $user_id)
+            ->orderBy('id', 'desc')->get();
         foreach ($dalleImages as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') 
-                . config('filesystems.disks.azure.container') 
-                . '/' . $image->image 
+            $image->image_url = config('filesystems.disks.azure.url')
+                . config('filesystems.disks.azure.container') . '/' . $image->image
                 . '?' . config('filesystems.disks.azure.sas_token');
         }
-    
-        // 3. Stable Diffusion Images
-        // $sdImages = StableDiffusionGeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
-        // foreach ($sdImages as $image) {
-        //     $image->image_url = config('filesystems.disks.azure.url') 
-        //         . config('filesystems.disks.azure.container') 
-        //         . '/' . $image->image_url 
-        //         . '?' . config('filesystems.disks.azure.sas_token');
-        // }
 
-        // 4. Merge all images into one collection
         $merged = collect();
-
         foreach ($dalleImages as $image) {
             $merged->push($image);
         }
-
         foreach ($generatedImages as $image) {
             $merged->push($image);
         }
-    
-        
-    
-        // Optional: sort by created_at or id descending
-        $images = $merged->sortByDesc('id')->values();
-    
+
+        $merged = $merged->sortByDesc('id')->values();
+
+        $perPage = $request->get('perPage', 24); // default is 24
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $merged->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $images = new LengthAwarePaginator($currentItems, $merged->count(), $perPage, $currentPage, [
+            'path' => request()->url(),
+            'query' => request()->query(),
+        ]);
+
         return view('backend.image_generate.images_sd_d', compact('apiKey', 'lastPackageId', 'images'));
     }
-    
 
     // Dalle Image Generate
     public function generateImageDalle(Request $request)

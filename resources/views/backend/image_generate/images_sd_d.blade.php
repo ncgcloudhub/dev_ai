@@ -144,44 +144,54 @@
             {{-- Gallery Loaded START --}}
             <h3 class="text-white">Generated Images</h3>
             <div class="gallery-light">
-                <div class="row">
+                <div class="d-flex justify-content-end mb-3">
+                    <form id="perPageForm" method="GET" action="{{ route('images.form') }}">
+                        <label for="perPage" class="me-2">Images per page:</label>
+                        <select name="perPage" id="perPage" class="form-select form-select-sm w-auto d-inline-block">
+                            @foreach([12, 24, 48, 100] as $count)
+                                <option value="{{ $count }}" {{ request('perPage', 24) == $count ? 'selected' : '' }}>
+                                    {{ $count }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
+
+                <div class="row" id="image-gallery">
                     @foreach($images as $item)
                         <div class="col-xl-2 col-lg-4 col-sm-6">
-                        <div class="gallery-box card">
-                            <div class="gallery-container">
-                                <a class="image-popup" href="{{ $item->image_url }}" title="">
-                                    <img class="gallery-img img-fluid mx-auto"
-                                        src="{{ $item->image_url }}" alt="" loading="lazy" />
-                                    <div class="gallery-overlay">
-                                        <h5 class="overlay-caption">{{ $item->prompt }}</h5>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="box-content">
-                                <div class="d-flex align-items-center mt-2">
-                                
-                                    <div class="flex-shrink-0">
-                                        <div class="d-flex gap-3">
-                                        <button type="button"
-                                            class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 like-button"
-                                            data-image-id="{{ $item->id }}" title="Like Image">
-                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i>
-                                            <span class="like-count">{{ $item->likes_count ?? 0 }}</span>
-                                        </button>
-                                        <a href="{{ $item->image_url }}" download="{{ basename($item->image_url) }}"
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="{{ $item->image_url }}" title="">
+                                        <img class="gallery-img img-fluid mx-auto"
+                                            src="{{ $item->image_url }}" alt="" loading="lazy" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">{{ $item->prompt }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-2">
+                                        <div class="flex-shrink-0">
+                                            <a href="{{ $item->image_url }}"
+                                            download="{{ basename($item->image_url) }}"
                                             class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 download-button"
                                             onclick="incrementDownloadCount({{ $item->id }})" title="Download Image">
-                                            <i class="ri-download-fill text-muted align-bottom me-1"></i> <span class="download-count">{{ $item->downloads }} </span>
-                                        </a>
-                                        
+                                                <i class="ri-download-fill text-muted align-bottom me-1"></i>
+                                                <span class="download-count">{{ $item->downloads }}</span>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
                     @endforeach
                 </div>
+
+                <div class="d-flex justify-content-center mt-4" id="pagination-links">
+                    {{ $images->links('pagination::bootstrap-5') }}
+                </div>
+
                 <!--end row-->
             </div>
             {{-- Gallery Loaded END --}}
@@ -360,6 +370,46 @@
     <script src="{{ URL::asset('build/libs/glightbox/js/glightbox.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/gallery.init.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const lightbox = GLightbox({
+                selector: '.glightbox'
+            });
+        });
+    </script>
+
+
+    <script>
+        document.getElementById('perPage').addEventListener('change', function () {
+            document.getElementById('perPageForm').submit();
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#pagination-links a', function (e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    beforeSend: function () {
+                        $('#image-gallery').html('<div class="text-center w-100 p-5">Loading...</div>');
+                    },
+                    success: function (data) {
+                        $('#image-gallery').html($(data).find('#image-gallery').html());
+                        $('#pagination-links').html($(data).find('#pagination-links').html());
+                    },
+                    error: function () {
+                        alert('Failed to load images.');
+                    }
+                });
+            });
+        });
+    </script>
+
 
     <script>
         document.querySelectorAll('.model-btn').forEach(button => {
