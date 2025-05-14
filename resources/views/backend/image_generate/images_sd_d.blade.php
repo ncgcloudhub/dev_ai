@@ -41,11 +41,43 @@
         border-color: transparent;
     }
 
+    #image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+
+    #image-container img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
 </style>
 
 <div class="container-fluid py-5 px-5">
     <div class="row">
         <div class="col-md-6">
+             <!-- New Header Section with Buttons -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <a href="{{ route('aicontentcreator.view', ['slug' => 'image-prompt-idea']) }}" class="btn gradient-btn-others btn-load">
+                        <span class="d-flex align-items-center">
+                            <span class="spinner-grow spinner-grow-sm" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </span>
+                            <span class="ms-2">Get Image Prompt Ideas</span>
+                        </span>
+                    </a>
+                    <button type="button" class="btn gradient-btn-others" data-bs-toggle="modal" data-bs-target="#exampleModalScrollable">
+                        Prompt Library
+                    </button>
+                </div>
+            </div>
            <!-- DALL-E Form -->
            <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
@@ -147,17 +179,18 @@
             <br>
         </div>
 
-        <div class="col-md-6" id="image-container">    
-            <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
-                alt="Before and After"
-                class="before-after img-fluid rounded shadow-sm"
-                style="max-width: 100%; height: auto;">
-                <br><br>
-                <blockquote class="blockquote rounded mb-0">
-                    <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
-                    <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
-                </blockquote>
-        </div>
+      <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center" id="image-container">
+        <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
+            alt="Before and After"
+            class="before-after img-fluid rounded shadow-sm mb-3"
+            style="max-width: 100%; height: auto;">
+        
+        <blockquote class="blockquote rounded mb-0">
+            <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
+            <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
+        </blockquote>
+    </div>
+
 
         <div class="col">
             {{-- Gallery Loaded START --}}
@@ -537,12 +570,12 @@
 
                         $('#image-container').empty(); // Clear previous images if any
                         response.data.forEach(function(imageData) {
-                            // Create an image element
-                            var temp = `<a class="image-popup" href="${imageData.url}" title="">
-                                            <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${imageData.url}" alt="" />
+                            var temp = `<a class="image-popup d-block mb-3" href="${imageData.url}" title="">
+                                            <img class="gallery-img img-fluid mx-auto d-block rounded shadow-sm" 
+                                                style="max-width: 60%; height: auto;" 
+                                                src="${imageData.url}" alt="" />
                                         </a>`;
 
-                            // Append the image to the container
                             $('#image-container').append(temp);
                         });
 
@@ -615,7 +648,7 @@
                             // Append the image with GLightbox support
                             var imageElement = `
                                 <a class="image-popup" href="${response.image_url}" title="Generated Image">
-                                    <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${response.image_url}" alt="Generated Image" />
+                                    <img class="gallery-img img-fluid mx-autod-block rounded shadow-sm" style="max-width: 60%; height: auto;" src="${response.image_url}" alt="Generated Image" />
                                 </a>
                                 <p>${response.prompt}</p>
                             `;
@@ -627,7 +660,7 @@
                             var base64Image = `data:image/jpeg;base64,${response.image_base64}`;
                             var imageElement = `
                                 <a class="image-popup" href="${base64Image}" title="Generated Image">
-                                    <img class="gallery-img img-fluid mx-auto" style="height: 283px; width:283px" src="${base64Image}" alt="Generated Image" />
+                                    <img class="gallery-img img-fluid mx-autod-block rounded shadow-sm" style="max-width: 60%; height: auto;" src="${base64Image}" alt="Generated Image" />
                                 </a>
                                 <p>${response.prompt}</p>
                             `;
