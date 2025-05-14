@@ -248,7 +248,11 @@ class ImageController extends Controller
             logActivity('Image Generation', 'Image generated using ' . ($request->dall_e_2 ? 'DALL-E 2' : 'DALL-E 3'));
 
                 // Return successful response
-                return response()->json(['data' => $responseData['data']]);
+                return response()->json([
+                    'data' => $responseData['data'],
+                    'prompt' => $prompt, // Include the final used prompt
+]);
+
            
         } else {
             Log::error('Failed to generate image', ['error' => $response->body()]);

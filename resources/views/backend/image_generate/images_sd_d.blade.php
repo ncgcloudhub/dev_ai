@@ -522,7 +522,7 @@
     </script>
 
    {{-- Dalle SCRIPTS Start --}}
-   <script>
+    <script>
         $(document).ready(function() {
             $('#dalleForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
@@ -582,13 +582,22 @@
                         console.log(response);
 
                         $('#image-container').empty(); // Clear previous images if any
-                        response.data.forEach(function(imageData) {
-                            var temp = `<a class="image-popup d-block mb-3" href="${imageData.url}" title="">
-                                            <img class="gallery-img img-fluid mx-auto d-block rounded shadow-sm" 
-                                                style="max-width: 60%; height: auto;" 
-                                                src="${imageData.url}" alt="" />
-                                        </a>`;
+                        var promptText = response.prompt || prompt || 'Prompt not available.';
 
+                        // Build HTML for image + prompt
+                        response.data.forEach(function(imageData) {
+                            var temp = `
+                                <a class="image-popup d-block mb-3" href="${imageData.url}" title="">
+                                    <img class="gallery-img img-fluid mx-auto d-block rounded shadow-sm" 
+                                        style="max-width: 60%; height: auto;" 
+                                        src="${imageData.url}" alt="" />
+                                </a>
+
+                                <blockquote class="blockquote rounded mb-0 text-center">
+                                    <p class="text-white mb-2">${promptText}</p>
+                                    <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
+                                </blockquote>
+                            `;
                             $('#image-container').append(temp);
                         });
 
