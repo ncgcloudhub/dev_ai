@@ -177,6 +177,15 @@
         <!-- Sidebar -->
         <div class="sidebar bg-gray-900 text-white w-64 flex-shrink-0 fixed md:relative h-full z-10 sidebar-visible" id="sidebar">
             <div class="p-4 flex flex-col h-full">
+                <a href="{{ route('user.dashboard') }}" class="flex items-center justify-between w-full p-3 rounded-md border border-gray-700 hover:bg-gray-800 mb-4">
+                    <span class="flex items-center text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10.707 1.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 9h1v7a1 1 0 001 1h4a1 1 0 001-1V13h2v3a1 1 0 001 1h4a1 1 0 001-1V9h1a1 1 0 00.707-1.707l-7-7z" />
+                        </svg>
+                        Dashboard
+                    </span>
+                </a>
+
                 <button id="new-chat-btn" class="flex items-center justify-between w-full p-3 rounded-md border border-gray-700 hover:bg-gray-800 mb-4">
                     <span class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
