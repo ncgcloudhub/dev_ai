@@ -201,13 +201,39 @@
                     </div>
                 </div>
                 
-                <div class="pt-2 border-t border-gray-700">
-                    <div class="p-3 rounded-md hover:bg-gray-800 cursor-pointer flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                <div class="pt-2 border-t border-gray-700 relative">
+                    <div id="dropdownTrigger" class="p-3 rounded-md hover:bg-gray-800 cursor-pointer flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 01.993.883L11 3v1.071A7.002 7.002 0 0116.938 9H18a1 1 0 01.117 1.993L18 11h-1.071A7.002 7.002 0 0111 16.938V18a1 1 0 01-1.993.117L9 18v-1.071A7.002 7.002 0 013.062 11H2a1 1 0 01-.117-1.993L2 9h1.071A7.002 7.002 0 019 3.062V2a1 1 0 011-1zm0 5a3 3 0 100 6 3 3 0 000-6z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-gray-200">
+                                {{ $selectedModel ? \App\Models\AISettings::where('openaimodel', $selectedModel)->value('displayname') : 'Select AI Model' }}
+                            </span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
-                        <span>Settings</span>
                     </div>
+
+                    <form id="modelForm" action="{{ route('select-model') }}" method="POST" class="absolute bottom-full mb-2 left-0 w-full z-20 hidden" id="modelDropdown">
+                        @csrf
+                        <ul class="bg-gray-800 text-white rounded-md border border-gray-700 overflow-hidden shadow-lg">
+                            @foreach ($aiModels as $model)
+                                <li>
+                                    <a href="#" 
+                                    data-model="{{ $model['value'] }}"
+                                    class="dropdown-item block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 {{ trim($selectedModel) === trim($model['value']) ? 'bg-gray-700 font-semibold' : '' }}">
+                                        {{ $model['label'] }}
+                                        @if(trim($selectedModel) === trim($model['value']))
+                                            <span class="ml-2 text-green-400">🗸</span>
+                                        @endif
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <input type="hidden" name="aiModel" id="aiModelInput" value="{{ $selectedModel }}">
+                    </form>
                 </div>
             </div>
         </div>
@@ -821,5 +847,38 @@
             }
         });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const trigger = document.getElementById('dropdownTrigger');
+    const dropdown = document.getElementById('modelForm');
+    const dropdownItems = document.querySelectorAll('.dropdown-item[data-model]');
+    const modelInput = document.getElementById('aiModelInput');
+    const modelForm = document.getElementById('modelForm');
+
+    trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+    });
+
+    dropdownItems.forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const model = this.getAttribute('data-model');
+            modelInput.value = model;
+            modelForm.submit();
+        });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target) && !trigger.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+});
+</script>
+
+
 </body>
 </html>

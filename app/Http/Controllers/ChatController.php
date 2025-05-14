@@ -13,7 +13,12 @@ use App\Models\ChatMessage;
 class ChatController extends Controller
 {
     public function chat(Request $request)
-    {
+    {   
+         $user = auth()->user();
+         $openaiModel = $user->selected_model;
+
+         Log::debug('openaiModel Model', ['openaiModel' => $openaiModel]);
+
         Log::info('Chat endpoint hit', [
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
@@ -32,7 +37,7 @@ class ChatController extends Controller
         Log::debug('Sending to OpenAI', ['messages' => $messages]);
 
         $response = OpenAI::chat()->createStreamed([
-            'model' => 'gpt-4.1-nano',
+            'model' => $openaiModel,
             'messages' => $messages,
             'stream' => true,
         ]);
