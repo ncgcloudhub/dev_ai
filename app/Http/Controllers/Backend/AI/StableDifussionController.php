@@ -49,14 +49,14 @@ class StableDifussionController extends Controller
         $request->validate([
             'prompt' => 'required|string',
             'hiddenStyle' => 'nullable|string',
-            'hiddenImageFormat' => 'nullable|string',
-            'hiddenModelVersion' => 'nullable|string',
+            'imageFormat' => 'nullable|string',
+            'modelVersion' => 'nullable|string',
         ]);
 
         $prompt = $request->input('prompt');
         $style = $request->input('hiddenStyle');
-        $imageFormat = $request->input('hiddenImageFormat') ?? 'png';
-        $modelVersion = $request->input('hiddenModelVersion') ?? 'sd3.5-medium';
+        $imageFormat = $request->input('imageFormat') ?? 'webp';
+        $modelVersion = $request->input('modelVersion') ?? 'sd3.5-medium';
         $optimizePrompt = $request->input('hiddenPromptOptimize') ?? '0';
         $mode = $request->input('mode') ?? 'text-to-image'; // Default to text-to-image
         $baseImage = $request->file('base_image'); // For image-to-image

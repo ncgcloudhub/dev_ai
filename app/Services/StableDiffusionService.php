@@ -37,7 +37,6 @@ class StableDiffusionService
         // Prepare the data payload
         $data = [
             'prompt' => $prompt,
-            'output_format' => $imageFormat,
             'model' => $modelVersion,
             'mode' => $mode,
         ];
@@ -90,7 +89,9 @@ class StableDiffusionService
             $source = 'sd';
             $userName = Str::slug(auth()->user()->name);
             $timestamp = now()->format('YmdHis');
-            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.webp";
+            $imageExtension = $imageFormat === 'jpeg' ? 'jpg' : $imageFormat;
+            $imageName = "generated-images/{$source}-{$userName}-{$timestamp}.{$imageExtension}";
+
 
             $imagePath = $imageName;
     

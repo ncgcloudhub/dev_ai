@@ -302,7 +302,7 @@
 
                     <div class="form-group mb-3">
                         <label class="form-label text-muted small mb-2">Model Version</label>
-                        <select name="modelVersion" id="modelVersion" class="form-select form-select-sm border-secondary" data-choices onchange="syncModelVersion()">
+                        <select name="modelVersion" id="modelVersion" class="form-select form-select-sm border-secondary">
                             <option value="sd3.5-medium" selected>sd3.5-medium</option>
                             <option value="sd3.5-large-turbo">sd3.5-large-turbo</option>
                             <option value="sd3.5-large">sd3.5-large</option>
@@ -313,10 +313,10 @@
 
                     <div class="form-group">
                         <label class="form-label text-muted small mb-2">Image Format</label>
-                        <select name="imageFormat" id="imageFormat" class="form-select form-select-sm border-secondary" data-choices onchange="syncImageFormat()">
-                            <option value="png" selected>PNG</option>
+                        <select name="imageFormat" id="imageFormat" class="form-select form-select-sm border-secondary">
+                            <option value="webp" selected>WEBP</option>
+                            <option value="png">PNG</option>
                             <option value="jpeg">JPEG</option>
-                            <option value="webp">WEBP</option>
                         </select>
                     </div>
                 </div>
