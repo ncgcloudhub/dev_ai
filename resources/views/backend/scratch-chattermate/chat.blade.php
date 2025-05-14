@@ -124,10 +124,56 @@
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        /* Message action buttons */
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .message-action-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid transparent;
+        }
+
+        .copy-all-button {
+            background-color: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #374151;
+        }
+
+        .copy-all-button:hover {
+            background-color: #e5e7eb;
+        }
+
+        .regenerate-button {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .regenerate-button:hover {
+            background-color: #2563eb;
+        }
+
+        /* Existing messages might need some spacing adjustment */
+        .bg-white.border {
+            padding-bottom: 32px; /* Make space for buttons */
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen">
+        
         <!-- Sidebar -->
         <div class="sidebar bg-gray-900 text-white w-64 flex-shrink-0 fixed md:relative h-full z-10 sidebar-visible" id="sidebar">
             <div class="p-4 flex flex-col h-full">
@@ -411,45 +457,118 @@
         }
         
         // Add a message to the chat
-        function addMessage(role, content) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+       function addMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+        
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.className = `max-w-[85%] rounded-lg p-4 ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-white border'} relative`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = role === 'user' ? 'user-message' : 'message-content';
+        
+        if (role === 'user') {
+            // For user messages, preserve whitespace and newlines
+            contentDiv.textContent = content;
+        } else {
+            // For assistant messages, process with Markdown
+            contentDiv.innerHTML = marked.parse(content);
             
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.className = `max-w-[85%] rounded-lg p-4 ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-white border'}`;
+            // Create action buttons container
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'message-actions';
             
-            const contentDiv = document.createElement('div');
-            contentDiv.className = role === 'user' ? 'user-message' : 'message-content';
+            // Copy entire message button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'message-action-btn copy-all-button';
+            copyButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                </svg>
+                Copy
+            `;
             
-            if (role === 'user') {
-                // For user messages, preserve whitespace and newlines
-                contentDiv.textContent = content;
-            } else {
-                // For assistant messages, process with Markdown
-                contentDiv.innerHTML = marked.parse(content);
-                
-                // Add copy buttons to code blocks
-                addCopyButtonsToCodeBlocks();
-                
-                // Highlight code blocks
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
+            // Regenerate response button
+            const regenerateButton = document.createElement('button');
+            regenerateButton.className = 'message-action-btn regenerate-button';
+            regenerateButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                </svg>
+                Regenerate
+            `;
+
+            // Copy full message handler
+            copyButton.addEventListener('click', () => {
+                const textToCopy = contentDiv.textContent;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyButton.innerHTML = 'Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                            </svg>
+                            Copy
+                        `;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text:', err);
+                    copyButton.textContent = 'Failed to copy!';
                 });
-            }
+            });
             
-            bubbleDiv.appendChild(contentDiv);
-            messageDiv.appendChild(bubbleDiv);
+
+            // Regenerate handler
+            regenerateButton.addEventListener('click', () => {
+                if (isWaitingForResponse) return;
+
+                // Remove the current assistant message
+                messageDiv.remove();
+
+                // Remove the last user message and assistant response from conversation
+                if (conversation.length >= 2) {
+                    conversation.splice(-2, 2);
+                }
+
+                // Get the last user message
+                const lastUserMessage = conversation[conversation.length - 1];
+                if (lastUserMessage && lastUserMessage.role === 'user') {
+                    // Trigger new submission
+                    messageInput.value = lastUserMessage.content;
+                    resizeTextarea();
+                    sendButton.disabled = false;
+                    chatForm.dispatchEvent(new Event('submit'));
+                }
+            });
+
+            actionsDiv.appendChild(copyButton);
+            actionsDiv.appendChild(regenerateButton);
+            bubbleDiv.appendChild(actionsDiv);
+
+            // Add copy buttons to code blocks
+            addCopyButtonsToCodeBlocks();
             
-            const messagesContainer = chatContainer.querySelector('.space-y-4') || document.createElement('div');
-            if (!chatContainer.querySelector('.space-y-4')) {
-                messagesContainer.className = 'space-y-4';
-                chatContainer.appendChild(messagesContainer);
-            }
-            messagesContainer.appendChild(messageDiv);
-            
-            // Scroll to bottom
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            // Highlight code blocks
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
         }
+        
+        bubbleDiv.appendChild(contentDiv);
+        messageDiv.appendChild(bubbleDiv);
+        
+        const messagesContainer = chatContainer.querySelector('.space-y-4') || document.createElement('div');
+        if (!chatContainer.querySelector('.space-y-4')) {
+            messagesContainer.className = 'space-y-4';
+            chatContainer.appendChild(messagesContainer);
+        }
+        messagesContainer.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
         // Function to add copy buttons to all code blocks
         function addCopyButtonsToCodeBlocks() {
