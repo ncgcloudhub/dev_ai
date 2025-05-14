@@ -51,7 +51,9 @@
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
-                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#dalleOffcanvas" role="button" title="Advance Settings"><i class="bx bx-wrench"></i></a>
+                    <button type="button" class="btn gradient-btn-others" data-bs-toggle="offcanvas" href="#dalleOffcanvas" role="button" title="Advanced Settings">
+                        <i class="bx bx-slider-alt"></i> Advanced Settings
+                    </button>
                 </h1>
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
@@ -80,7 +82,9 @@
                 @csrf
                 <h1 id="sdHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | Stable Diffusion</strong>
-                    <a class="use-case-btn" data-bs-toggle="offcanvas" href="#sdOffcanvas" role="button" title="Advance Settings"><i class="bx bx-wrench"></i></a>
+                     <button type="button" class="btn gradient-btn-others" data-bs-toggle="offcanvas" href="#sdOffcanvas" role="button" title="Advanced Settings">
+                        <i class="bx bx-slider-alt"></i> Advanced Settings
+                    </button>
                 </h1>
                 <h2 id="sdSubheading" class="gradient-text-3">Transform your Text into stunning images with Stable Diffusion</h2>
                 <p id="sdParagraph">Elevate your creativity with Stable Diffusion, an AI tool that converts text into high-quality images.</p>
