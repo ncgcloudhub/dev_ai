@@ -47,7 +47,7 @@
     <div class="row">
         <div class="col-md-6">
            <!-- DALL-E Form -->
-            <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
+           <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
@@ -57,10 +57,17 @@
                 </h1>
                 <h2 id="dalleSubheading" class="gradient-text-3">Transform your Text into stunning images with DALL-E</h2>
                 <p id="dalleParagraph">Elevate your creativity with DALL-E, an AI tool that converts text into high-quality images.</p>
-                {{-- Fields Dalle--}}
                 <input type="hidden" name="hiddenPromptOptimize" id="hiddenPromptOptimize_dalle3">
+
+                <!-- Image Upload Toggle -->
+                <div class="form-check form-switch form-switch-md d-flex align-items-center mb-3" id="image-to-image-tour">
+                    <input class="form-check-input me-2" type="checkbox" id="image_to_image" name="image_to_image">
+                    <label class="form-check-label fw-bold" for="image_to_image">Generate from Image</label>
+                </div>
+
                 <div class="d-flex gap-2 align-items-center w-100">
-                    <div class="search-box position-relative flex-grow-1">
+                    <!-- Text Prompt Section -->
+                    <div class="search-box position-relative flex-grow-1" id="text_prompt_container">
                         <a title="Optimize Prompt" class="btn btn-optimize position-absolute top-50 translate-middle-y"
                         onclick="toggleOptimize('dalle3')" id="optimizeIcon_dalle3">
                             <i class="ri-hammer-line fs-4"></i>
@@ -70,9 +77,21 @@
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
                     </div>
+
+                    <!-- Image Upload Section (Initially Hidden) -->
+                    <div class="form-group flex-grow-1" id="image_upload" style="display: none;">
+                        <input type="file" class="form-control" name="custom_image" id="custom_image" aria-label="Upload image" onchange="previewImage(event)">
+                    </div>
+
                     <button type="submit" class="btn gradient-btn-generate" title="Generate Image"><i class="{{$buttonIcons['generate']}} fs-4"></i></button>
                 </div>
-                <!-- Error message for empty prompt -->
+
+                <!-- Image Preview -->
+                <div id="image_preview" style="display: none; margin-top: 10px;">
+                    <img id="preview_img" src="" alt="Image Preview" class="img-fluid rounded shadow-sm" style="max-width: 20%; height: auto;">
+                </div>
+
+                <!-- Error Message -->
                 <div id="dalleError" class="text-danger mt-2" style="display: none;">Please write a prompt to generate an image.</div>
                 <br>
             </form>
@@ -457,19 +476,24 @@
     </script>
 
    {{-- Dalle SCRIPTS Start --}}
-    <script>
+   <script>
         $(document).ready(function() {
             $('#dalleForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
                 
                 var prompt = $('#dallePrompt').val().trim();
-                
-                if (!prompt) {
-                    // Show error message if prompt is empty
+                var imageToImage = document.getElementById('image_to_image').checked;
+                var imageInput = document.getElementById('custom_image').files[0];
+
+                // Correct validation logic
+                if (imageToImage && !imageInput) {
+                    $('#dalleError').text('Please upload an image for image-to-image generation.').show();
+                    return;
+                } else if (!imageToImage && !prompt) {
                     $('#dalleError').show();
-                    return; // Prevent form submission
+                    return;
                 } else {
-                    $('#dalleError').hide(); // Hide error message if prompt is filled
+                    $('#dalleError').hide(); // Hide error message
                 }
 
                 // Show the magic ball
@@ -478,7 +502,15 @@
                 // Create a FormData object
                 var formData = new FormData(this);
 
-                // Manually append the offcanvas input values
+                // If using image-to-image, add the image to the FormData
+                if (imageToImage && imageInput) {
+                    formData.append('image', imageInput);
+                } else {
+                    // Otherwise, send the prompt as usual
+                    formData.append('prompt', prompt);
+                }
+
+                // Manually append other input values
                 formData.append('quality', $('#quality').val());
                 formData.append('image_res', $('#image_res').val());
 
@@ -528,7 +560,6 @@
                     },
                     error: function(xhr, status, error) {
                         // Handle error response
-                        // Hide the magic ball after content loads
                         hideMagicBall();
                         console.error(xhr.responseText);
                     }
@@ -536,6 +567,7 @@
             });
         });
     </script>
+
     {{-- Dalle SCRIPTS END --}}
 
 
@@ -651,5 +683,39 @@
     </script>
     {{-- SD SCRIPTS END --}}
 
+    <script>
+        // Toggle between text prompt and image upload
+        document.getElementById('image_to_image').addEventListener('change', function() {
+            const textPrompt = document.getElementById('text_prompt_container');
+            const imageUpload = document.getElementById('image_upload');
+            if (this.checked) {
+                textPrompt.style.display = 'none';
+                imageUpload.style.display = 'block';
+            } else {
+                textPrompt.style.display = 'block';
+                imageUpload.style.display = 'none';
+                // Clear preview and file input when unchecked
+                document.getElementById('custom_image').value = '';
+                document.getElementById('image_preview').style.display = 'none';
+            }
+        });
+
+        // Image preview function
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview_img');
+            const previewContainer = document.getElementById('image_preview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+    </script>
 
 @endsection
