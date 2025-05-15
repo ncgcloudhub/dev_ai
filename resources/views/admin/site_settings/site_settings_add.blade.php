@@ -205,10 +205,19 @@
                                             </div>
 
                                              <div class="mt-3">
-                                                @if($setting->magic_ball)
-                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->magic_ball }}" alt="Current Favicon" width="100px" class="img-fluid"/>
-                                                @else
-                                                    <p></p>
+                                               @if ($siteSettings->magic_ball)
+                                                    @php
+                                                        $ext = pathinfo($siteSettings->magic_ball, PATHINFO_EXTENSION);
+                                                    @endphp
+
+                                                    @if ($ext === 'webm')
+                                                        <video autoplay loop muted playsinline class="magic-ball-video">
+                                                            <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->magic_ball }}" type="video/webm">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @elseif ($ext === 'gif')
+                                                        <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->magic_ball }}" width="200px" alt="Loading..." class="magic-ball-gif">
+                                                    @endif
                                                 @endif
                                             </div>
 

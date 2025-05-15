@@ -26,6 +26,37 @@ class SiteSettingsController extends Controller
         return view('admin.site_settings.site_settings_add', compact('setting','buttonStyles'));
     }
 
+    private function uploadVideoToAzure($file, $azureFileName)
+    {
+        try {
+            $mime = $file->getMimeType();
+
+            if (!in_array($mime, ['video/webm', 'image/gif'])) {
+                throw new \Exception("Invalid file type: {$mime}. Only GIF and WebM are allowed.");
+            }
+
+            $extension = $mime === 'image/gif' ? 'gif' : 'webm';
+
+            $content = file_get_contents($file->getPathname());
+
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $container = config('filesystems.disks.azure.container');
+
+            $blobClient->createBlockBlob(
+                $container,
+                "site-settings/{$azureFileName}.{$extension}",
+                $content,
+                new CreateBlockBlobOptions()
+            );
+
+            return "site-settings/{$azureFileName}.{$extension}";
+        } catch (\Exception $e) {
+            Log::error("Magic Ball video upload failed: " . $e->getMessage());
+            return null;
+        }
+    }
+
+
     private function uploadImageToAzure($file, $azureFileName)
     {
         try {
@@ -93,7 +124,7 @@ class SiteSettingsController extends Controller
         }
 
         if ($request->hasFile('magic_ball')) {
-            $uploadedPath = $this->uploadImageToAzure($request->file('magic_ball'), 'magic_ball');
+            $uploadedPath = $this->uploadVideoToAzure($request->file('magic_ball'), 'magic_ball');
             if ($uploadedPath) {
                 $updateData['magic_ball'] = $uploadedPath;
             }
