@@ -98,8 +98,13 @@
                         <span class="badge bg-danger ms-2">AI Chat</span>
                     </a>
                 </li>
-                      
 
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('chat.new') ? 'active' : '' }}" href="{{route('chat.new')}}">
+                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span> <span class="badge bg-danger ms-2">NEW</span>
+                    </a>
+                </li>
+                     
                  {{-- Greeting Card --}}
                  <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('greeting.card') ? 'active' : '' }}" href="{{ route('greeting.card') }}">
@@ -187,6 +192,12 @@
                             </div>
                         </div>
                     </div>
+                </li>
+
+                 <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('images.form') ? 'active' : '' }}" href="{{route('images.form')}}">
+                        <i class="lab la-rocketchat"></i> <span >Image generator</span> <span class="badge bg-danger ms-2">NEW</span>
+                    </a>
                 </li>
 
                 @php
