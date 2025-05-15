@@ -8,7 +8,7 @@
     <meta content="Clever Creator" name="description" />
     <meta content="Clever_Creator" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->favicon }}">
         @include('admin.layouts.head-css')
   </head>
 

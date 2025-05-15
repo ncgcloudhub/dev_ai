@@ -99,7 +99,7 @@ class StableDiffusionService
             $image = Image::make($response->body());
     
             // Define the watermark path
-            $watermarkPath = public_path('backend/uploads/site/' . $this->siteSettings->watermark);
+            $watermarkPath = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $this->siteSettings->watermark;
             $watermark = Image::make($watermarkPath); // Create an instance of the watermark image
     
             // Apply watermark at the bottom-right corner with 10px offset

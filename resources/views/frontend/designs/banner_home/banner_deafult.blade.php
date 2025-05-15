@@ -25,22 +25,22 @@
                                     // Define routes and button labels
                                     $cards = [
                                         [
-                                            'video' => 'bb5.webm',
+                                            'video' => $siteSettings->generate_image_webm,
                                             'route' => auth()->check() ? route('generate.image.view') : route('login'),
                                             'label' => 'Generate Images',
                                         ],
                                         [
-                                            'video' => 'bb1.webm',
+                                            'video' => $siteSettings->generate_content_webm,
                                             'route' => auth()->check() ? route('aicontentcreator.manage') : route('login'),
                                             'label' => 'Generate Contents',
                                         ],
                                         [
-                                            'video' => 'bb4.webm',
+                                            'video' => $siteSettings->prompt_library_webm,
                                             'route' => auth()->check() ? route('prompt.manage') : route('frontend.free.prompt.library'),
                                             'label' => 'Prompt Library',
                                         ],
                                         [
-                                            'video' => 'bb3.webm',
+                                            'video' => $siteSettings->chat_bot_webm,
                                             'route' => auth()->check() ? route('main.chat.form') : route('login'),
                                             'label' => 'Chat Bot',
                                         ],
@@ -48,19 +48,30 @@
                                 @endphp
 
                                 @foreach ($cards as $card)
-                                <div class="col d-flex flex-column">
-                                    <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
-                                        <video autoplay loop muted playsinline
-                                            class="lazy-video w-100 h-100 position-absolute" 
-                                            data-src="{{ asset('build/images/' . $card['video']) }}" 
-                                            muted playsinline loop 
-                                            style="object-fit: cover; top: 0; left: 0; z-index: -1;">
-                                        </video>
-                                        <a href="{{ $card['route'] }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">
-                                            {{ $card['label'] }}
-                                        </a>
+                                    @php
+                                        $ext = pathinfo($card['video'], PATHINFO_EXTENSION);
+                                        $videoUrl = Str::startsWith($card['video'], ['http', 'https'])
+                                            ? $card['video']
+                                            : config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $card['video'];
+                                    @endphp
+                                    <div class="col d-flex flex-column">
+                                        <div class="card card-body glass flex-grow-1 d-flex flex-column justify-content-between card-background-common" style="min-height: 200px; position: relative; overflow: hidden;">
+                                            @if ($ext === 'webm')
+                                                <video autoplay loop muted playsinline
+                                                    class="lazy-video w-100 h-100 position-absolute" 
+                                                    src="{{ $videoUrl }}"
+                                                    style="object-fit: cover; top: 0; left: 0; z-index: -1;">
+                                                </video>
+                                            @elseif ($ext === 'gif')
+                                                <img src="{{ $videoUrl }}" class="lazy-video w-100 h-100 position-absolute" style="object-fit: cover; top: 0; left: 0; z-index: -1;" />
+                                            @else
+                                                {{-- fallback if needed --}}
+                                            @endif
+                                            <a href="{{ $card['route'] }}" class="btn gradient-btn-5 waves-effect waves-light mt-auto">
+                                                {{ $card['label'] }}
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
                                 @endforeach
                             </div>
                             {{-- UI Card End --}}

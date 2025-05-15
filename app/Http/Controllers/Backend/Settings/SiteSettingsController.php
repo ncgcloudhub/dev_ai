@@ -26,6 +26,37 @@ class SiteSettingsController extends Controller
         return view('admin.site_settings.site_settings_add', compact('setting','buttonStyles'));
     }
 
+    private function uploadVideoToAzure($file, $azureFileName)
+    {
+        try {
+            $mime = $file->getMimeType();
+
+            if (!in_array($mime, ['video/webm', 'image/gif'])) {
+                throw new \Exception("Invalid file type: {$mime}. Only GIF and WebM are allowed.");
+            }
+
+            $extension = $mime === 'image/gif' ? 'gif' : 'webm';
+
+            $content = file_get_contents($file->getPathname());
+
+            $blobClient = BlobRestProxy::createBlobService(config('filesystems.disks.azure.connection_string'));
+            $container = config('filesystems.disks.azure.container');
+
+            $blobClient->createBlockBlob(
+                $container,
+                "site-settings/{$azureFileName}.{$extension}",
+                $content,
+                new CreateBlockBlobOptions()
+            );
+
+            return "site-settings/{$azureFileName}.{$extension}";
+        } catch (\Exception $e) {
+            Log::error("Magic Ball video upload failed: " . $e->getMessage());
+            return null;
+        }
+    }
+
+
     private function uploadImageToAzure($file, $azureFileName)
     {
         try {
@@ -93,7 +124,7 @@ class SiteSettingsController extends Controller
         }
 
         if ($request->hasFile('magic_ball')) {
-            $uploadedPath = $this->uploadImageToAzure($request->file('magic_ball'), 'magic_ball');
+            $uploadedPath = $this->uploadVideoToAzure($request->file('magic_ball'), 'magic_ball');
             if ($uploadedPath) {
                 $updateData['magic_ball'] = $uploadedPath;
             }
@@ -105,6 +136,35 @@ class SiteSettingsController extends Controller
                 $updateData['footer_logo'] = $uploadedPath;
             }
         }
+
+        if ($request->hasFile('generate_image_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('generate_image_webm'), 'generate_image_webm');
+            if ($uploadedPath) {
+                $updateData['generate_image_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('generate_content_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('generate_content_webm'), 'generate_content_webm');
+            if ($uploadedPath) {
+                $updateData['generate_content_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('prompt_library_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('prompt_library_webm'), 'prompt_library_webm');
+            if ($uploadedPath) {
+                $updateData['prompt_library_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('chat_bot_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('chat_bot_webm'), 'chat_bot_webm');
+            if ($uploadedPath) {
+                $updateData['chat_bot_webm'] = $uploadedPath;
+            }
+        }
+
 
         if ($request->filled('title')) {
             $updateData['title'] = $request->title;

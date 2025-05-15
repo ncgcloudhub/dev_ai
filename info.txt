@@ -178,3 +178,6 @@ in a_i_settings, add displayname; type=text
 
 30/04/25
 in site_settings, add rollover_enabled; type=boolean
+
+15/5/25
+in site_settings, add generate_image_webm, generate_content_webm, prompt_library_webm, chat_bot_webm; type=text

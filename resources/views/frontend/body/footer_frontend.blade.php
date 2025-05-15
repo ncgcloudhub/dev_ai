@@ -4,7 +4,7 @@
             <div class="col-lg-3 mt-4">
                 <div>
                     <div>
-                        <img src="{{ URL::asset('build/images/logo-light1.png') }}" class="card-logo " alt="logo light"
+                        <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->footer_logo }}" class="card-logo " alt="logo light"
                 height="40">
                     </div>
                     <div class="mt-4 fs-13">

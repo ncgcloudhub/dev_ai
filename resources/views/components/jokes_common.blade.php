@@ -30,8 +30,21 @@
 <div id="magic-ball" class="magic-ball-overlay d-none">
     <div class="magic-ball-content">
         @if ($siteSettings->magic_ball)
-        <img src="{{ asset('backend/uploads/site/' . $siteSettings->magic_ball) }}" alt="Loading..." class="magic-ball-gif">
+            @php
+                $ext = pathinfo($siteSettings->magic_ball, PATHINFO_EXTENSION);
+            @endphp
+
+            @if ($ext === 'webm')
+                <video autoplay loop muted playsinline class="magic-ball-video">
+                    <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->magic_ball }}" type="video/webm">
+                    Your browser does not support the video tag.
+                </video>
+            @elseif ($ext === 'gif')
+                <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->magic_ball }}" alt="Loading..." class="magic-ball-gif">
+            @endif
         @endif
+
+
        
         <p id="joke-text" class="fs-5 gradient-bg-1 p-3 rounded-3 mx-3">
             Fetching a joke...

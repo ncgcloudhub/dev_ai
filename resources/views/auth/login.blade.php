@@ -27,7 +27,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="{{route('home')}}" class="d-inline-block auth-logo">
-                                    <img src="{{ asset('backend/uploads/site/' . $siteSettings->header_logo_dark) }}" alt="" height="40">
+                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->header_logo_dark }}" alt="" height="40">
                                 </a>
                             </div>
                            
