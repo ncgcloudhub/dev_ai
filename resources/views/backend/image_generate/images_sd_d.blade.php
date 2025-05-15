@@ -8,7 +8,6 @@
 @section('content')
 
 <style>
-
     .navbar-header .user-name-text{
         color: white;
     }
@@ -193,18 +192,17 @@
             <br>
         </div>
 
-      <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center" id="image-container">
-        <img id="before_after_img" style="max-width: 60%; height: auto;" src="https://wallpapercave.com/wp/wp4471392.jpg"
-            alt="Before and After"
-            class="before-after img-fluid rounded shadow-sm mb-3"
-            style="max-width: 100%; height: auto;">
-        
-        <blockquote class="blockquote rounded mb-0">
-            <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
-            <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
-        </blockquote>
-    </div>
-
+        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center" id="image-container">
+            <img id="before_after_img" style="max-width: 60%; height: auto;" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
+                alt="Before and After"
+                class="before-after img-fluid rounded shadow-sm mb-3"
+                style="max-width: 100%; height: auto;">
+            
+            <blockquote class="blockquote rounded mb-0">
+                <p class="text-white mb-2">This image features a chameleon surrounded by vibrant, colorful foliage. The chameleon is displaying a striking combination of blue and purple hues, with the surrounding plants also displaying vivid pink and blue lighting, creating a surreal and visually captivating scene.</p>
+                <footer class="blockquote-footer mt-0"><cite title="Image Prompt">Prompt</cite></footer>
+            </blockquote>
+        </div>
 
         <div class="col">
             {{-- Gallery Loaded START --}}
@@ -257,12 +255,10 @@
                 <div class="d-flex justify-content-center mt-4" id="pagination-links">
                     {{ $images->links('pagination::bootstrap-5') }}
                 </div>
-
                 <!--end row-->
             </div>
             {{-- Gallery Loaded END --}}
         </div>
-        
     </div>
 
     <div class="text-center mt-5">
@@ -386,9 +382,7 @@
                         </select>
                     </div>
                 </div>
-
                 <hr>
-
                 <!-- Styles -->
                 <div class="pt-4">
                     <h6 class="text-dark mb-3 fw-bold"><i class="fas fa-palette me-2"></i>Choose a Style</h6>
@@ -425,7 +419,6 @@
                 </div>
             </div>
         </div>
-
         
     </div>
 </div>
@@ -444,7 +437,6 @@
             });
         });
     </script>
-
 
     <script>
         document.getElementById('perPage').addEventListener('change', function () {
@@ -467,6 +459,12 @@
                     success: function (data) {
                         $('#image-gallery').html($(data).find('#image-gallery').html());
                         $('#pagination-links').html($(data).find('#pagination-links').html());
+
+                        // Re-initialize GLightbox after content is loaded
+                        lightbox.destroy(); // Destroy old instance
+                        lightbox = GLightbox({
+                            selector: '.image-popup'
+                        });
                     },
                     error: function () {
                         alert('Failed to load images.');
@@ -475,7 +473,6 @@
             });
         });
     </script>
-
 
     <script>
         document.querySelectorAll('.model-btn').forEach(button => {
@@ -649,11 +646,9 @@
             });
         });
     </script>
-
     {{-- Dalle SCRIPTS END --}}
 
-
-   {{-- SD SCRIPTS Start --}}
+    {{-- SD SCRIPTS Start --}}
     <script>
         $(document).ready(function() {
             $('#sdForm').on('submit', function(e) {
