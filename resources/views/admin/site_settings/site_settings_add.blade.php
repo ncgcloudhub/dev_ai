@@ -92,7 +92,7 @@
                                         <!-- Display current watermark image -->
                                         <div class="mt-3">
                                             @if($setting->watermark)
-                                                <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->watermark) }}" alt="Current watermark" width="100px" class="img-fluid"/>
+                                                <img style="border-radius: 50%" src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->watermark }}" alt="Current watermark" width="100px" class="img-fluid"/>
                                             @else
                                                 <p></p>
                                             @endif
@@ -122,7 +122,7 @@
                                             <!-- Display current favicon image -->
                                             <div class="mt-3">
                                                 @if($setting->header_logo_light)
-                                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_light) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                    <img style="border-radius: 50%" src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->header_logo_light }}" alt="Current Favicon" width="100px" class="img-fluid"/>
                                                 @else
                                                     <p></p>
                                                 @endif
@@ -148,7 +148,7 @@
 
                                             <div class="mt-3">
                                                 @if($setting->header_logo_dark)
-                                                    <img style="border-radius: 50%" src="{{ asset('backend/uploads/site/' . $setting->header_logo_dark) }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                    <img style="border-radius: 50%" src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->header_logo_dark }}" alt="Current Favicon" width="100px" class="img-fluid"/>
                                                 @else
                                                     <p></p>
                                                 @endif
@@ -170,6 +170,14 @@
                                                 class="filepond filepond-input-circle"
                                                 name="banner_img"
                                                 accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+
+                                             <div class="mt-3">
+                                                @if($setting->banner_img)
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->banner_img }}" alt="Current Favicon" width="200px" class="img-fluid"/>
+                                                @else
+                                                    <p></p>
+                                                @endif
                                             </div>
                                 
                                         </div>
@@ -196,6 +204,14 @@
                                                 accept="image/png, image/jpeg, image/gif"/>
                                             </div>
 
+                                             <div class="mt-3">
+                                                @if($setting->magic_ball)
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->magic_ball }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                @else
+                                                    <p></p>
+                                                @endif
+                                            </div>
+
                                         </div>
                                         <!-- end card body -->
                                     </div>
@@ -212,6 +228,14 @@
                                                 class="filepond filepond-input-circle"
                                                 name="footer_logo"
                                                 accept="image/png, image/jpeg, image/gif"/>
+                                            </div>
+
+                                            <div class="mt-3">
+                                                @if($setting->footer_logo)
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->footer_logo }}" alt="Current Favicon" width="100px" class="img-fluid"/>
+                                                @else
+                                                    <p></p>
+                                                @endif
                                             </div>
                                 
                                         </div>
@@ -247,25 +271,6 @@
                                         <label for="twitter" class="form-label">Twitter</label>
                                         <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
                                     </div>
-
-                                    <div class="col-md-12">
-                                        <label for="domain" class="form-label">Domain Expiry Date</label>
-                                        <input type="datetime-local" name="domain" class="form-control mb-3" id="domain" 
-                                            value="{{ old('domain', \Carbon\Carbon::parse($setting->domain)->format('Y-m-d\TH:i')) }}">
-                                    </div>
-                                    
-                                    <div class="col-md-12">
-                                        <label for="hosting" class="form-label">Hosting Expiry Date</label>
-                                        <input type="datetime-local" name="hosting" class="form-control mb-3" id="hosting" 
-                                            value="{{ old('hosting', \Carbon\Carbon::parse($setting->hosting)->format('Y-m-d\TH:i')) }}">
-                                    </div>
-                                
-                                    <div class="col-md-12">
-                                        <label for="ssl" class="form-label">SSL Expiry Date</label>
-                                        <input type="datetime-local" name="ssl" class="form-control mb-3" id="ssl" 
-                                            value="{{ old('ssl', \Carbon\Carbon::parse($setting->ssl)->format('Y-m-d\TH:i')) }}">
-                                    </div>
-                            
                             </div>
                         </div>
                     </div>
