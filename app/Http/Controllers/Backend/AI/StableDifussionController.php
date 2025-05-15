@@ -35,8 +35,7 @@ class StableDifussionController extends Controller
     foreach ($images as $image) {
         $image->image_url = config('filesystems.disks.azure.url') 
             . config('filesystems.disks.azure.container') 
-            . '/' . $image->image_url 
-            . '?' . config('filesystems.disks.azure.sas_token');
+            . '/' . $image->image_url;
     }
 
     return view('backend.image_generate.stable_diffusion', compact('images', 'prompt_library'));

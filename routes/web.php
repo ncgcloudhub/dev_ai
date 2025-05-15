@@ -70,7 +70,7 @@ Route::get('/', function () {
         ->get();
 
     foreach ($images as $image) {
-        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
     }
 
     $seo = SeoSetting::find(1);
@@ -92,7 +92,7 @@ Route::get('/', function () {
         ->get();
 
     foreach ($images_slider as $image) {
-        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
     }
 
     $faqs = FAQ::latest()->get();

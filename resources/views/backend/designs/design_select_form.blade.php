@@ -7,14 +7,14 @@
     $images_slider = App\Models\DalleImageGenerate::where('resolution', '1024x1024')->where('status', 'active')->inRandomOrder()->limit(14)->get();
 
     foreach ($images_slider as $image) {
-        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
     }
 
 
     $images = App\Models\DalleImageGenerate::where('status', 'active')->inRandomOrder()->limit(16)->get();
 
     foreach ($images as $image) {
-        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+        $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
     }
 
     $templates = App\Models\Template::where('inFrontEnd', 'yes')->inRandomOrder()->limit(8)->get();

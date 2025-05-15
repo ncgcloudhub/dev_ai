@@ -130,8 +130,7 @@ class StableDiffusionService
             // Construct the full Azure URL for the response
             $imageUrl = config('filesystems.disks.azure.url') 
                 . config('filesystems.disks.azure.container') 
-                . '/' . $imageName 
-                . '?' . config('filesystems.disks.azure.sas_token');
+                . '/' . $imageName;
     
             return [
                 'image_url' => $imageUrl, // Return the full Azure URL
