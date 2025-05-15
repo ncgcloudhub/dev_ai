@@ -617,6 +617,10 @@ Route::middleware(['auth', 'verified', 'check.status', 'check.blocked.ip'])->gro
     Route::get('/prompt/subcategories/{category_id}', [PromptLibraryController::class, 'getPromptSubCategory']);
 
     Route::get('/prompt/filter-prompts', [PromptLibraryController::class, 'filterPrompts']);
+
+    // Collage Image Generator
+    Route::get('/image-generator', [ImageController::class, 'imageIndex'])->name('images.form');
+    Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 }); //End Auth Middleware
 
 // FrontEnd
@@ -778,10 +782,6 @@ Route::post('/check-generation-status', [StableDifussionController::class, 'chec
 Route::get('/stable-video-form', [StableDifussionController::class, 'Videoindex'])->name('stable.video.form');
 Route::post('/generate-image-to-video', [StableDifussionController::class, 'generateVideo'])->name('generate.image_to_video');
 Route::get('/get-video-result/{generationId}', [StableDifussionController::class, 'getVideoResult']);
-
-// Collage Image Generator
-Route::get('/image-generator', [ImageController::class, 'imageIndex'])->name('images.form');
-Route::post('/image/generate/dalle', [ImageController::class, 'generateImageDalle'])->name('generate.image.dalle');
 
 // Stable Diffusion Control(Sketch)
 Route::get('/stable-control-sketch-form', [StableDifussionController::class, 'controlSketchForm']);
