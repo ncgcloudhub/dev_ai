@@ -27,6 +27,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#social-settings" role="tab">
+                                <i class="ri-share-line fs-20"></i> Socials
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#frontend-settings" role="tab">
                                 <i class="ri-paint-brush-line fs-20"></i> Frontend
                             </a>
@@ -255,31 +260,40 @@
                                         <label for="footer_text" class="form-label">Footer Text</label>
                                         <input type="text" name="footer_text" class="form-control mb-3" id="footer_text" value="{{$setting->footer_text}}" placeholder="Enter Role">
                                     </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                    <div class="col-md-12">
-                                        <label for="facebook" class="form-label">Facebook</label>
-                                        <input type="text" name="facebook" class="form-control mb-3" id="facebook" placeholder="Enter Role">
-                                    </div>
+                {{-- Social Settings Tab --}}
+                <div class="tab-pane" id="social-settings" role="tabpanel">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label for="facebook" class="form-label">Facebook</label>
+                                    <input type="text" name="facebook" class="form-control mb-3" id="facebook" placeholder="Enter Role">
+                                </div>
 
-                                    <div class="col-md-12">
-                                        <label for="instagram" class="form-label">Instagram</label>
-                                        <input type="text" name="instagram" class="form-control mb-3" id="instagram" placeholder="Enter Role">
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="instagram" class="form-label">Instagram</label>
+                                    <input type="text" name="instagram" class="form-control mb-3" id="instagram" placeholder="Enter Role">
+                                </div>
 
-                                    <div class="col-md-12">
-                                        <label for="youtube" class="form-label">Youtube</label>
-                                        <input type="text" name="youtube" class="form-control mb-3" id="youtube" placeholder="Enter Role">
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="youtube" class="form-label">Youtube</label>
+                                    <input type="text" name="youtube" class="form-control mb-3" id="youtube" placeholder="Enter Role">
+                                </div>
 
-                                    <div class="col-md-12">
-                                        <label for="linkedin" class="form-label">LinkedIn</label>
-                                        <input type="text" name="linkedin" class="form-control mb-3" id="linkedin" placeholder="Enter Role">
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="linkedin" class="form-label">LinkedIn</label>
+                                    <input type="text" name="linkedin" class="form-control mb-3" id="linkedin" placeholder="Enter Role">
+                                </div>
 
-                                    <div class="col-md-12">
-                                        <label for="twitter" class="form-label">Twitter</label>
-                                        <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
-                                    </div>
+                                <div class="col-md-12">
+                                    <label for="twitter" class="form-label">Twitter</label>
+                                    <input type="text" name="twitter" class="form-control mb-3" id="twitter" placeholder="Enter Role">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -290,16 +304,160 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-12">
-                                    <label for="frontend_theme" class="form-label">Theme Color</label>
-                                    <input type="color" name="frontend_theme" class="form-control form-control-color" 
-                                           id="frontend_theme" value="{{ $setting->frontend_theme ?? '#ffffff' }}">
+
+                                {{-- Banner Image --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Banner Image</h4>
+                                    </div><!-- end card header -->
+                            
+                                    <div class="card-body">
+                                    
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                            class="filepond filepond-input-circle"
+                                            name="banner_img"
+                                            accept="image/png, image/jpeg, image/gif"/>
+                                        </div>
+
+                                            <div class="mt-3">
+                                            @if($setting->banner_img)
+                                                <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $setting->banner_img }}" alt="Current Favicon" width="200px" class="img-fluid"/>
+                                            @else
+                                                <p></p>
+                                            @endif
+                                        </div>
+                            
+                                    </div>
+                                    <!-- end card body -->
                                 </div>
-                                
-                                <div class="col-md-12">
-                                    <label for="homepage_text" class="form-label">Homepage Welcome Text</label>
-                                    <textarea class="form-control" name="homepage_text" id="homepage_text" 
-                                              rows="3">{{ $setting->homepage_text ?? '' }}</textarea>
+
+                                {{-- Webm/gif for generate images --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Generate Image Webm/gif</h4>
+                                    </div><!-- end card header -->
+                                    <div class="card-body">
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                            class="filepond filepond-input-circle"
+                                            name="generate_image_webm"
+                                            accept="image/gif, video/webm"/>
+                                        </div>
+                                            <div class="mt-3">
+                                            @if ($siteSettings->generate_image_webm)
+                                                @php
+                                                    $ext = pathinfo($siteSettings->generate_image_webm, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                @if ($ext === 'webm')
+                                                    <video autoplay loop muted playsinline class="generate-image-video">
+                                                        <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->generate_image_webm }}" type="video/webm">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @elseif ($ext === 'gif')
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->generate_image_webm }}" width="200px" alt="Loading..." class="generate-image-webm">
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+
+                                {{-- Webm/gif for generate contents --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Generate Content Webm/gif</h4>
+                                    </div><!-- end card header -->
+                                    <div class="card-body">
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                            class="filepond filepond-input-circle"
+                                            name="generate_content_webm"
+                                            accept="image/gif, video/webm"/>
+                                        </div>
+                                            <div class="mt-3">
+                                            @if ($siteSettings->generate_content_webm)
+                                                @php
+                                                    $ext = pathinfo($siteSettings->generate_content_webm, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                @if ($ext === 'webm')
+                                                    <video autoplay loop muted playsinline class="generate-content-video">
+                                                        <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->generate_content_webm }}" type="video/webm">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @elseif ($ext === 'gif')
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->generate_content_webm }}" width="200px" alt="Loading..." class="generate-content-webm">
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+
+                                {{-- Webm/gif for prompt library --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Prompt Library Webm/gif</h4>
+                                    </div><!-- end card header -->
+                                    <div class="card-body">
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                            class="filepond filepond-input-circle"
+                                            name="prompt_library_webm"
+                                            accept="image/gif, video/webm"/>
+                                        </div>
+                                            <div class="mt-3">
+                                            @if ($siteSettings->prompt_library_webm)
+                                                @php
+                                                    $ext = pathinfo($siteSettings->prompt_library_webm, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                @if ($ext === 'webm')
+                                                    <video autoplay loop muted playsinline class="prompt-library-video">
+                                                        <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->prompt_library_webm }}" type="video/webm">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @elseif ($ext === 'gif')
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->prompt_library_webm }}" width="200px" alt="Loading..." class="prompt-library-webm">
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
+                                </div>
+
+                                {{-- Webm/gif for chatbot --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title mb-0">Chat Bot Webm/gif</h4>
+                                    </div><!-- end card header -->
+                                    <div class="card-body">
+                                        <div class="avatar-xl mx-auto">
+                                            <input type="file"
+                                            class="filepond filepond-input-circle"
+                                            name="chat_bot_webm"
+                                            accept="image/gif, video/webm"/>
+                                        </div>
+                                            <div class="mt-3">
+                                            @if ($siteSettings->chat_bot_webm)
+                                                @php
+                                                    $ext = pathinfo($siteSettings->chat_bot_webm, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                @if ($ext === 'webm')
+                                                    <video autoplay loop muted playsinline class="chat-bot-video">
+                                                        <source src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->chat_bot_webm }}" type="video/webm">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @elseif ($ext === 'gif')
+                                                    <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->chat_bot_webm }}" width="200px" alt="Loading..." class="chat-bot-webm">
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <!-- end card body -->
                                 </div>
                                 
                                 {{-- Add more frontend fields --}}

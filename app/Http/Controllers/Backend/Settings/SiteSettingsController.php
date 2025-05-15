@@ -137,6 +137,35 @@ class SiteSettingsController extends Controller
             }
         }
 
+        if ($request->hasFile('generate_image_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('generate_image_webm'), 'generate_image_webm');
+            if ($uploadedPath) {
+                $updateData['generate_image_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('generate_content_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('generate_content_webm'), 'generate_content_webm');
+            if ($uploadedPath) {
+                $updateData['generate_content_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('prompt_library_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('prompt_library_webm'), 'prompt_library_webm');
+            if ($uploadedPath) {
+                $updateData['prompt_library_webm'] = $uploadedPath;
+            }
+        }
+
+        if ($request->hasFile('chat_bot_webm')) {
+            $uploadedPath = $this->uploadVideoToAzure($request->file('chat_bot_webm'), 'chat_bot_webm');
+            if ($uploadedPath) {
+                $updateData['chat_bot_webm'] = $uploadedPath;
+            }
+        }
+
+
         if ($request->filled('title')) {
             $updateData['title'] = $request->title;
         }
