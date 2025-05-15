@@ -91,8 +91,8 @@
                     </button>
                 </div>
             </div>
-           <!-- DALL-E Form -->
-           <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
+            <!-- DALL-E Form -->
+            <form action="{{route('generate.image.dalle')}}" method="POST" enctype="multipart/form-data" id="dalleForm" class="image-form">
                 @csrf
                 <h1 id="dalleHeading" class="text-white d-flex align-items-center gap-4">
                     <strong>Text to Image | DALL-E</strong>
@@ -118,6 +118,7 @@
                             <i class="ri-hammer-line fs-4"></i>
                         </a>
                         <textarea class="form-control search ps-5 mt-1" name="prompt" rows="1" id="dallePrompt" placeholder="Write prompt to generate Image"></textarea>
+
                         <button type="button" class="speech-btn btn btn-link position-absolute top-50 end-0 translate-middle-y" title="Speech to Text">
                             <i class="mic-icon ri-mic-line fs-4"></i>
                         </button>
@@ -193,7 +194,7 @@
         </div>
 
       <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center" id="image-container">
-        <img id="before_after_img" src="https://img.freepik.com/free-photo/view-chameleon-with-bright-neon-colors_23-2151682699.jpg"
+        <img id="before_after_img" style="max-width: 60%; height: auto;" src="https://wallpapercave.com/wp/wp4471392.jpg"
             alt="Before and After"
             class="before-after img-fluid rounded shadow-sm mb-3"
             style="max-width: 100%; height: auto;">
@@ -517,6 +518,32 @@
                         }
                     }
                 });
+            });
+        });
+    </script>
+
+    {{-- Textarea Auto-Resize and Enter Key Handling --}}
+    <script>
+        $(document).ready(function() {
+            // Handle both textareas
+            const textareas = $('#dallePrompt, #sdPrompt');
+            
+            function autoResize() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            }
+
+            // Apply to both textareas
+            textareas.on('input', autoResize).trigger('input');
+
+            // Handle Enter key for both forms
+            textareas.on('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    // Determine which form to submit based on textarea ID
+                    const formId = $(this).attr('id') === 'sdPrompt' ? 'sdForm' : 'dalleForm';
+                    $('#' + formId).submit();
+                }
             });
         });
     </script>
