@@ -211,13 +211,56 @@
                 </div>
                 
                 <div class="pt-2 border-t border-gray-700 relative">
+                    @php
+                        use App\Models\AISettings;
+                        
+                        // Common variables
+                        $selectedLabel = 'Select AI Model';
+                        $aiModels = [];
+                        $selectedModel = null;
+
+                        if (Auth::check()) {
+                            if (Auth::user()->role === 'admin') {
+                                // Admin: Get all available models
+                                $models = AISettings::whereNotNull('openaimodel')
+                                    ->pluck('displayname', 'openaimodel')
+                                    ->unique()
+                                    ->toArray();
+
+                                $selectedModel = Auth::user()->selected_model ?? 'gpt-4o-mini';
+                                $aiModels = collect($models)->map(function($label, $value) {
+                                    return ['value' => $value, 'label' => $label];
+                                })->values()->toArray();
+                                
+                                $selectedLabel = $models[$selectedModel] ?? 'Select AI Model';
+                            } else {
+                                // Regular user: Get models from package or free plan
+                                $data = getUserLastPackageAndModels();
+                                $lastPackage = $data['lastPackage'];
+                                $freePricingPlan = $data['freePricingPlan'];
+                                
+                                // If no last package but free plan exists, use free plan models
+                                if (!$lastPackage && $freePricingPlan) {
+                                    $aiModels = $data['aiModels'];
+                                    $selectedModel = $data['selectedModel'];
+                                } else {
+                                    $aiModels = $data['aiModels'];
+                                    $selectedModel = $data['selectedModel'];
+                                }
+                                
+                                $selectedLabel = collect($aiModels)->firstWhere('value', $selectedModel)['label'] ?? 'Select AI Model';
+                            }
+                        }
+                    @endphp
+
+                    <!-- Rest of the template remains the same -->
                     <div id="dropdownTrigger" class="p-3 rounded-md hover:bg-gray-800 cursor-pointer flex items-center justify-between">
-                        <div class="flex items-center">
+                            <div class="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 2a1 1 0 01.993.883L11 3v1.071A7.002 7.002 0 0116.938 9H18a1 1 0 01.117 1.993L18 11h-1.071A7.002 7.002 0 0111 16.938V18a1 1 0 01-1.993.117L9 18v-1.071A7.002 7.002 0 013.062 11H2a1 1 0 01-.117-1.993L2 9h1.071A7.002 7.002 0 019 3.062V2a1 1 0 011-1zm0 5a3 3 0 100 6 3 3 0 000-6z" clip-rule="evenodd" />
                             </svg>
                             <span class="text-gray-200">
-                                {{ $selectedModel ? \App\Models\AISettings::where('openaimodel', $selectedModel)->value('displayname') : 'Select AI Model' }}
+                                {{ $selectedLabel }}
                             </span>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,7 +268,7 @@
                         </svg>
                     </div>
 
-                    <form id="modelForm" action="{{ route('select-model') }}" method="POST" class="absolute bottom-full mb-2 left-0 w-full z-20 hidden" id="modelDropdown">
+                    <form id="modelForm" action="{{ route('select-model') }}" method="POST" class="absolute bottom-full mb-2 left-0 w-full z-20 hidden">
                         @csrf
                         <ul class="bg-gray-800 text-white rounded-md border border-gray-700 overflow-hidden shadow-lg">
                             @foreach ($aiModels as $model)
@@ -235,7 +278,7 @@
                                     class="dropdown-item block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 {{ trim($selectedModel) === trim($model['value']) ? 'bg-gray-700 font-semibold' : '' }}">
                                         {{ $model['label'] }}
                                         @if(trim($selectedModel) === trim($model['value']))
-                                            <span class="ml-2 text-green-400">🗸</span>
+                                            <span class="ml-2 text-green-400">✓</span>
                                         @endif
                                     </a>
                                 </li>
