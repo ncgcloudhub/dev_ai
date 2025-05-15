@@ -42,15 +42,21 @@
                     </a>
                 </li>
                 @endcan
-                
 
                 <li class="menu-title"><i class="ri-more-fill"></i> <span >AI Tools</span></li>
-
 
                 @can('chattermate.menu')
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('main.chat.form') ? 'active' : '' }}" href="{{route('main.chat.form')}}">
-                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span>
+                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span><span class="badge bg-primary ms-2">OLD</span>
+                    </a>
+                </li>
+                @endcan
+                
+                @can('chattermate.menu')
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('chat.new') ? 'active' : '' }}" href="{{route('chat.new')}}">
+                        <i class="lab la-rocketchat"></i> <span >ChatterMate</span> <span class="badge bg-danger ms-2">NEW</span>
                     </a>
                 </li>
                 @endcan
@@ -298,8 +304,7 @@
                                   
                                     <li class="nav-item">
                                         <a href="{{route('manage.favourite.image')}}" class="nav-link sidebar-hover {{ request()->routeIs('manage.favourite.image') ? 'active' : '' }}" >Manage Favorite Image</a>
-                                    </li>
-                                   
+                                    </li>   
                                 </ul>
                             </div>
       
@@ -307,6 +312,12 @@
                     </div>
                 </li>
                 @endcan
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link sidebar-hover {{ request()->routeIs('images.form') ? 'active' : '' }}" href="{{route('images.form')}}">
+                        <i class="lab la-rocketchat"></i> <span >Image generator</span> <span class="badge bg-danger ms-2">NEW</span>
+                    </a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebar-hover" href="#stableDiffusion" data-bs-toggle="collapse" role="button"
