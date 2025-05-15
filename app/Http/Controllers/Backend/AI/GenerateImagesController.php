@@ -371,7 +371,7 @@ class GenerateImagesController extends Controller
 
         // Generate Azure Blob Storage URL for each image with SAS token
         foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
         }
 
         return view('backend.image_generate.generated_manage_image_test', compact('images','prompt_sub_categories', 'prompt_category'));
@@ -403,7 +403,7 @@ class GenerateImagesController extends Controller
         $data = [];
     
         foreach ($images as $index => $item) {
-            $image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $item->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $item->image;
     
             $data[] = [
                 'checkbox' => '<input type="checkbox" class="prompt-checkbox" value="' . $item->id . '" data-prompt="' . e($item->prompt) . '">',
@@ -448,7 +448,7 @@ class GenerateImagesController extends Controller
 
         // Modify each image to include the Azure Blob Storage URL with SAS token
         foreach ($images as $image) {
-            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image . '?' . config('filesystems.disks.azure.sas_token');
+            $image->image_url = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $image->image;
         }
 
         return view('backend.image_generate.manage_favorite_dalle_image', compact('images'));

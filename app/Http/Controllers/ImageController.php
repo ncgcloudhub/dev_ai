@@ -41,16 +41,14 @@ class ImageController extends Controller
         $generatedImages = GeneratedImage::where('user_id', $user_id)->orderBy('id', 'desc')->get();
         foreach ($generatedImages as $image) {
             $image->image_url = config('filesystems.disks.azure.url')
-                . config('filesystems.disks.azure.container') . '/' . $image->image
-                . '?' . config('filesystems.disks.azure.sas_token');
+                . config('filesystems.disks.azure.container') . '/' . $image->image;
         }
 
         $dalleImages = ModelsDalleImageGenerate::where('user_id', $user_id)
             ->orderBy('id', 'desc')->get();
         foreach ($dalleImages as $image) {
             $image->image_url = config('filesystems.disks.azure.url')
-                . config('filesystems.disks.azure.container') . '/' . $image->image
-                . '?' . config('filesystems.disks.azure.sas_token');
+                . config('filesystems.disks.azure.container') . '/' . $image->image;
         }
 
         $merged = collect();
