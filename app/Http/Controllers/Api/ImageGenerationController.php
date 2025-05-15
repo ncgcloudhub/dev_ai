@@ -184,7 +184,7 @@ class ImageGenerationController extends Controller
         }
 
         // Load watermark
-        $watermarkPath = public_path('backend/uploads/site/' . $this->siteSettings->watermark); // Path to your watermark image
+        $watermarkPath = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $this->siteSettings->watermark; // Path to your watermark image
         Log::info('Loading watermark', ['watermark_path' => $watermarkPath]);
 
         try {
