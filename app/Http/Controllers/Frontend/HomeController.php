@@ -68,7 +68,7 @@ class HomeController extends Controller
             return $image;
         });
 
-        $generatedImages = GeneratedImage::where('user_id', $userId)->get()->map(function ($image) {
+        $generatedImages = GeneratedImage::all()->map(function ($image) {
             $image->type = 'generated';
             $image->image_url = config('filesystems.disks.azure.url')
                 . config('filesystems.disks.azure.container') . '/' . $image->image;
