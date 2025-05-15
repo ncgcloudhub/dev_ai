@@ -30,7 +30,7 @@
 <div id="magic-ball" class="magic-ball-overlay d-none">
     <div class="magic-ball-content">
         @if ($siteSettings->magic_ball)
-        <img src="{{ asset('backend/uploads/site/' . $siteSettings->magic_ball) }}" alt="Loading..." class="magic-ball-gif">
+        <img src="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->magic_ball }}" alt="Loading..." class="magic-ball-gif">
         @endif
        
         <p id="joke-text" class="fs-5 gradient-bg-1 p-3 rounded-3 mx-3">
