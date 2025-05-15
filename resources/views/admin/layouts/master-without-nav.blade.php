@@ -29,7 +29,7 @@
 
     <meta content="Clever_Creator" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}">
+    <link rel="shortcut icon" href="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->favicon }}">
 
     <!-- Open Graph meta tags for sharing -->
     <meta property="og:title" content="Clever Creator AI" />
@@ -37,7 +37,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://clevercreator.ai/">
     <meta property="og:description" content="Clever Creator AI" />
-    <meta property="og:image" content="{{ asset('backend/uploads/site/' . $siteSettings->favicon) }}" />
+    <meta property="og:image" content="{{ config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->favicon }}" />
     
 
     

@@ -26,7 +26,7 @@
     overflow-x: hidden; /* Prevent horizontal scroll */
 }
     .banner{
-	background: url({{ asset('build/images/banner1.webp') }}) no-repeat center top;
+	background: url({{ $bannerImageUrl }}) no-repeat center top;
 	background-attachment:fixed;
 	background-size:cover;
 	height:auto;

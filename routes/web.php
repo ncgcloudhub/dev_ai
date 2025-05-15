@@ -107,8 +107,11 @@ Route::get('/', function () {
     $image_gallery = SectionDesign::where('section_name', 'image_gallery')->value('selected_design');
     $content_creator = SectionDesign::where('section_name', 'content_creator')->value('selected_design');
     $prompt_library = SectionDesign::where('section_name', 'prompt_library')->value('selected_design');
+    $siteSettings = SiteSettings::find(1);
 
-    return view('frontend.index', compact('images', 'templates', 'tools', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
+    $bannerImageUrl = config('filesystems.disks.azure.url') . config('filesystems.disks.azure.container') . '/' . $siteSettings->banner_img;
+
+    return view('frontend.index', compact('images', 'bannerImageUrl', 'templates', 'tools', 'images_slider', 'faqs', 'seo', 'promptLibrary','how_it_works','banner', 'features', 'services', 'image_generate', 'image_slider', 'image_gallery', 'content_creator', 'prompt_library'));
 })->name('home');
 
 
